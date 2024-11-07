@@ -1,0 +1,98 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context ID="VI_ITShop_ShoppingCartPatternOverview" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;1CF884F0-42C1-4280-9866-890CB209F522&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Templates&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_Template_ManagerCondition" Description="translate('#LDS#Employees authorized to approve shopping cart templates')" LongDescription="" Type="SQL" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="ShoppingCartPattern" Class="ShoppingCartPattern" WhereClauseSQL="sqlcompareuid(&quot;uid_person&quot;, from user select uid_person)" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartPatternPublic" Class="ShoppingCartPattern" WhereClauseSQL="sqland(&#xD;&#xA;sqlcompare(&quot;ispublicpattern&quot;, true, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;&#xD;&#xA;-- Eigene Vorlagen hier ausblenden&#xD;&#xA;sqlcompare(&quot;uid_person&quot;, from user select uid_person, &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&#xD;&#xA;if not (IsTemplateManager()) then&#xD;&#xA; sqlcompare(&quot;isqualified&quot;, true, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;)" ScriptItemUID="DataTableDbObject2">
+        <ActionSequence ScriptItemUID="Action2" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartPatternItem" Class="ShoppingCartPatternItem" WhereClauseSQL="&quot;uid_shoppingcartpattern in ( select uid_shoppingcartpattern from shoppingcartpattern where &quot;+sqlor(&#xD;&#xA;whereclause(shoppingcartpattern),&#xD;&#xA;whereclause(shoppingcartpatternpublic),&#xD;&#xA;)+&quot;)&quot;" ScriptItemUID="DataTableDbObject3">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="AccProduct" Class="AccProduct" WhereClauseSQL="&quot;uid_accproduct in ( select uid_accproduct from shoppingcartpatternitem where &quot;+whereclause(shoppingcartpatternitem)+&quot;)&quot;" ScriptItemUID="DataTableDbObject4">
+        <ActionSequence ScriptItemUID="Action4" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartItem" Class="ShoppingCartItem" WhereClauseSQL="sqland(&#xD;&#xA;sqlcompareuid( &quot;uid_personinserted&quot;,  from user select uid_person),&#xD;&#xA;SqlEmpty(&quot;uid_shoppingcartorder&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="DataTableDbObject5">
+        <ActionSequence ScriptItemUID="Action5" />
+        <Column Name="DisplayProduct" Expression="objectwalker(&quot;FK(uid_accproduct).ident_accproduct&quot;)+&quot;&quot;" DataSource="Expression" ScriptItemUID="Column1" DataType="System.String" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="IsTemplateManager()" Expression="exists(&quot;person&quot;, variable(sqland(IsNullOrEmpty( getconfig(&quot;VI_ITShop_Template_ManagerCondition&quot;), &quot;uid_person in ( select uid_person from QER_VEditEmployee where uid_personhead = '%useruid%')&quot;))))" DataType="System.Boolean" ScriptItemUID="Function1" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action6">
+      <LoadTable DataTable="ShoppingCartItem" ScriptItemUID="LoadTable1">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+      </LoadTable>
+      <LoadTable DataTable="ShoppingCartPattern" ScriptItemUID="LoadTable2">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+      </LoadTable>
+      <LoadTable DataTable="ShoppingCartPatternPublic" ScriptItemUID="LoadTable3">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+      </LoadTable>
+      <LoadTable DataTable="ShoppingCartPatternItem" ScriptItemUID="LoadTable4">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+      </LoadTable>
+      <LoadTable DataTable="AccProduct" ScriptItemUID="LoadTable5">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+      </LoadTable>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Cart Templates')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action7" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <Label Text="translate('#LDS#Heading Cart Templates')" ScriptItemUID="Label1" />
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+              <ControlReferenceContainer ID="VI_ITShop_CartPatternEdit" ScriptItemUID="ControlRef2">
+                <VirtualTableMapping VirtualTable="ShoppingCartPattern" DataTable="ShoppingCartPattern" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualTableMapping VirtualTable="ShoppingCartPatternItem" DataTable="ShoppingCartPatternItem" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualFunctionMapping ID="AllowDelete()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="AllowEdit()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="AllowMergeShoppingCartItemsToPattern()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping3" />
+                <VirtualFunctionMapping ID="IsTemplateManager()" Value="IsTemplateManager()" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="IsShowPersonalTemplates()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+                <VirtualFunctionMapping ID="isExpanded()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+              </ControlReferenceContainer>
+            </Container>
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container4">
+              <ControlReferenceContainer ID="VI_ITShop_CartPatternEdit" ScriptItemUID="ControlRef3">
+                <VirtualTableMapping VirtualTable="ShoppingCartPattern" DataTable="ShoppingCartPatternPublic" ScriptItemUID="VirtualTableMapping4" />
+                <VirtualTableMapping VirtualTable="ShoppingCartPatternItem" DataTable="ShoppingCartPatternItem" ScriptItemUID="VirtualTableMapping5" />
+                <VirtualFunctionMapping ID="AllowDelete()" Value="false" ScriptItemUID="VirtualFunctionMapping8" />
+                <VirtualFunctionMapping ID="AllowEdit()" Value="false" ScriptItemUID="VirtualFunctionMapping9" />
+                <VirtualFunctionMapping ID="AllowMergeShoppingCartItemsToPattern()" Value="false" ScriptItemUID="VirtualFunctionMapping10" />
+                <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping6" />
+                <VirtualFunctionMapping ID="IsTemplateManager()" Value="IsTemplateManager()" ScriptItemUID="VirtualFunctionMapping11" />
+                <VirtualFunctionMapping ID="IsShowPersonalTemplates()" Value="false" ScriptItemUID="VirtualFunctionMapping12" />
+                <VirtualFunctionMapping ID="isExpanded()" Value="false" ScriptItemUID="VirtualFunctionMapping13" />
+              </ControlReferenceContainer>
+            </Container>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList5">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef5">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Text()" Value="translate('#LDS#This pages displays an overview of available templates.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,75 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c460eba9-3091-5b5c-b186-891709f38679">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Delegation_HistoryGrid" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridBand DataTable="DELEGATION_D" ScriptItemUID="GridBand1" DisplayHeader="Always" DataSourceType="Database" DBWhereClause="DbWhereClause()" DbOrderBy="" EnableCustomAttributes="true" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_Delegation">
+        <HtmlAttributes />
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_Delegation_ListView_FirstLevel" ScriptItemUID="ControlRef7">
+              <VirtualTableMapping VirtualTable="DE" DataTable="DELEGATION_D" ScriptItemUID="VirtualTableMapping4">
+                <VirtualColumnMapping VirtualColumn="TargetDisplay" DataColumn="TargetDisplay" />
+                <VirtualColumnMapping VirtualColumn="ObjectKeyToDelegate" DataColumn="TargetDisplay" />
+                <VirtualColumnMapping VirtualColumn="sourcekey" DataColumn="TargetPrimaryKey" />
+              </VirtualTableMapping>
+              <VirtualTableMapping VirtualTable="DO" DataTable="DELEGATIONOBJECTS_D" ScriptItemUID="VirtualTableMapping5" />
+              <VirtualTableMapping VirtualTable="SUBD" DataTable="DELEGATION_D" ScriptItemUID="VirtualTableMapping6" />
+              <VirtualFunctionMapping ID="readOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+              <VirtualFunctionMapping ID="ShowAdditionalColumns()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+              <VirtualFunctionMapping ID="showreceiver()" Value="showreceiver()" ScriptItemUID="VirtualFunctionMapping7" />
+              <VirtualFunctionMapping ID="getUIDPerson()" Value="getUIDPerson()" ScriptItemUID="VirtualFunctionMapping8" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <ControlReferenceGridColumnGroup ID="VI_Delegation_GridColums_FirstLevel" DataTable="DELEGATION_D" ScriptItemUID="wctl1">
+          <VirtualTableMapping VirtualTable="DE" DataTable="DELEGATION_D" ScriptItemUID="VirtualTableMapping1">
+            <VirtualColumnMapping VirtualColumn="TargetDisplay" DataColumn="TargetDisplay" />
+            <VirtualColumnMapping VirtualColumn="ObjectKeyToDelegate" DataColumn="TargetDisplay" />
+            <VirtualColumnMapping VirtualColumn="sourcekey" DataColumn="TargetPrimaryKey" />
+          </VirtualTableMapping>
+          <VirtualTableMapping VirtualTable="DO" DataTable="DELEGATIONOBJECTS_D" ScriptItemUID="VirtualTableMapping2" />
+          <VirtualTableMapping VirtualTable="SUBD" DataTable="DELEGATION_D" ScriptItemUID="VirtualTableMapping3" />
+          <VirtualFunctionMapping ID="readOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="ShowAdditionalColumns()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="showreceiver()" Value="showreceiver()" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="getUIDPerson()" Value="getUIDPerson()" ScriptItemUID="VirtualFunctionMapping4" />
+        </ControlReferenceGridColumnGroup>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetUIDObject2FromObjectkeyAssignment(String objectkey, String uidobject1)" Expression="{{&#xD;&#xA;string _res = &quot;&quot;;&#xD;&#xA;try{&#xD;&#xA;   var DB = new DbObjectKey(objectkey);&#xD;&#xA;   if(uidobject1.Equals(DB.Keys[0]))&#xD;&#xA;      _res = DB.Keys[1];&#xD;&#xA;   else if(uidobject1.Equals(DB.Keys[1]))&#xD;&#xA;      _res = DB.Keys[0];&#xD;&#xA;}&#xD;&#xA;catch{}&#xD;&#xA;@return _res;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DELEGATION_D" Class="Delegation" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="TargetDisplay" DataType="System.String" />
+        <VirtualColumn Name="OrderThis" DataType="System.Boolean" />
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn Name="ValidFrom" DataType="System.DateTime" />
+        <VirtualColumn Name="ValidUntil" DataType="System.DateTime" />
+        <VirtualColumn Name="DateActivated" DataType="System.DateTime" />
+        <VirtualColumn Name="DateDeActivated" DataType="System.DateTime" />
+        <Column Name="TargetPrimaryKey" DataType="System.String" ScriptItemUID="Column48" DataSource="Expression" Expression="GetUIDObject2FromObjectkeyAssignment(ObjectKeyDelegated, UID_PersonSender)" />
+      </VirtualTable>
+      <VirtualTable Name="DELEGATIONOBJECTS_D" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+        <VirtualColumn Name="sourcekey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="showreceiver()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="getUIDPerson()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="Vars" ScriptItemUID="VirtualTable3" RequiresCursor="true">
+        <VirtualColumn Name="UID_Delegation" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

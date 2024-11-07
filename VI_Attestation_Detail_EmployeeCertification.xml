@@ -1,0 +1,233 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_Detail_EmployeeCertification">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <LoadTable DataTable="Person" RemoveDeleted="false" WhereClause="SqlAnd(&#xD;&#xA;   sqlcompareuid(&quot;xobjectkey&quot;, from attestationcase select current objectkeybase),&#xD;&#xA;   SqlOr(&#xD;&#xA;      sqlcompare(&quot;IsExternal&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;	  SqlEmpty(&quot;ContactEmail&quot;,&quot;string&quot;)&#xD;&#xA;	)	  &#xD;&#xA;)" ScriptItemUID="LoadTable4" RevertExisting="false">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" />
+          <InsertValue DataColumn="UID_PersonHeadInsteadOf" Value="if(isreadonly()) then getnull() else uid_personhead" />
+        </LoadTable>
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var dict = (System.Collections.Generic.Dictionary&lt;IDataRow, IDbObjectRow&gt;)
+	_AttestationCase_Current.Row.Table.ExtendedProperties
+	.GetOrAdd("EmployeeCertification", _ =&gt; new System.Collections.Generic.Dictionary&lt;IDataRow, IDbObjectRow&gt;());
+	
+	var personRow = Person.OfType&lt;IDbObjectRow&gt;().FirstOrDefault();
+	if (personRow != null)
+	  dict[_AttestationCase_Current.Row] = personRow;
+</CodeLiteral>
+        <CallAction ActionID="TriggerActions" ScriptItemUID="Call2" />
+        <LoadTable DataTable="AttestationCaseWithDecisionByPersonAdmin" Type="LimitedSQL" ScriptItemUID="LoadTable5" IdentLimitedSQL="&quot;Webportal.VI_Attestation_Edit_EmployeeCertification.AdminD&quot;" />
+        <ActionSequence Condition="not(IsReadOnly())" ScriptItemUID="Action6">
+          <LoadTable DataTable="AttestationHelper" RemoveDeleted="false" ScriptItemUID="LoadTable6">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <ContainerTemplate DataTable="Person" WhereClause="xobjectkey = ( select current objectkeybase from attestationcase)" ScriptItemUID="ContainerTemplate1">
+          <Container ItemUID="NOT MANAGER" Condition="select current isdecisionbypersonadmin from attestationcase" ScriptItemUID="Container11">
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping1" IsPropertyList="true">
+                <ColumnList ScriptItemUID="ColumnList1">
+                  <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="UID_PersonHead" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Person" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+          <Container ItemUID="MANAGER" Condition="select current not(isdecisionbypersonadmin) from attestationcase" ScriptItemUID="Container12">
+            <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping2" IsPropertyList="true">
+                <ColumnList ScriptItemUID="ColumnList2">
+                  <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="UID_PersonHead" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Person" ScriptItemUID="VirtualTableMapping2" />
+            </ControlReferenceContainer>
+            <Container Condition="not(isreadonly())&#xD;&#xA;and&#xD;&#xA;not(&#xD;&#xA;1 = (from AttestationHelper select count()&#xD;&#xA;where &#xD;&#xA;IsFromDelegation and&#xD;&#xA;UID_AttestationCase = (select current UID_AttestationCase from AttestationCase)&#xD;&#xA;and NOT&#xD;&#xA;(select current IsReserved from AttestationCase)&#xD;&#xA;))" ScriptItemUID="Container36" Layout="'VI_Styles_Container_Paragraph'">
+              <Label Text="translate(&quot;#LDS#Report incorrect information&quot;, from person select current display())" Action="Redirect" ScriptItemUID="ctl22">
+                <ServerActionCall ScriptItemUID="ctl23">
+                  <CallAction ActionID="VI_Popup" ScriptItemUID="ctl24">
+                    <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container14">
+                        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15">
+                          <Label Text="translate(&quot;#LDS#If you are not the manager of {0}, please supply the correct information.&quot;, from person select current display())" ScriptItemUID="Label6" />
+                        </Container>
+                        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container16">
+                          <Label Text="translate(&quot;#LDS#Please click here if you do not know who this employee's manager is.&quot;, from person select current display())" Action="Redirect" ScriptItemUID="Label7">
+                            <ServerActionCall ScriptItemUID="ServerActionCall6">
+                              <ActionSequence ScriptItemUID="Action1">
+                                <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction5">
+                                  <VirtualControlMapping VirtualControl="OnOK" ContainerType="ActionComponent">
+                                    <ActionComponent ScriptItemUID="Action3">
+                                      <LoadTable DataTable="AttestationCaseSingle" WhereClause="format(&quot;uid_attestationcase = {0}&quot;, sqlformatvalue(select current uid_attestationcase from attestationcase, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable2">
+                                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+                                      </LoadTable>
+                                      <Update DataTable="Person" DataColumn="UID_PersonHead" Value="getnull()" WhereClause="primarykey() = select current primarykey() from person" ScriptItemUID="Update1" />
+                                      <Save DataTable="Person" WhereClause="primarykey() = select current primarykey() from person" ScriptItemUID="Save1" ReloadAfterSave="NoReload" />
+                                      <Method DataTable="AttestationCaseSingle" Method="MakeDecision">
+                                        <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                                        <MethodParameter Name="'bDecision'" Value="false" />
+                                        <MethodParameter Name="'strReasonText'" Value="translate(&quot;#LDS#Unknown manager&quot;)" />
+                                      </Method>
+                                      <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction6">
+                                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The information for {0} has been saved.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping11" />
+                                        <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping12" />
+                                      </CallAction>
+                                      <Delete DataTable="AttestationCase" WhereClause="primarykey() = ( select current primarykey() from attestationcase)" ScriptItemUID="Delete1" />
+                                      <CodeLiteral ScriptItemUID="CodeLiteral3">// Trigger grid reload
+AttestationCase_Current.Row.Table.TableStore.Invalidate();</CodeLiteral>
+                                    </ActionComponent>
+                                  </VirtualControlMapping>
+                                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Please confirm that you are not the manager of {0} and you do not know who the correct manager should be.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping13" />
+                                  <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping14" />
+                                  <VirtualFunctionMapping ID="ShowCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping15" />
+                                  <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from person select current display()" ScriptItemUID="VirtualFunctionMapping16" />
+                                </CallAction>
+                              </ActionSequence>
+                            </ServerActionCall>
+                          </Label>
+                        </Container>
+                        <LayoutPanel Layout="'VI_Styles_LayoutPanel_Default'" ScriptItemUID="LayoutPanel1">
+                          <Label Text="datacaption(&quot;person&quot;, &quot;uid_personhead&quot;)" ScriptItemUID="Label8" />
+                          <Container ScriptItemUID="Container18">
+                            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container19">
+                              <ColumnEditor DataTable="Person" DataColumn="UID_PersonHeadInsteadOf" ScriptItemUID="ColumnEditor2" />
+                            </Container>
+                            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container20">
+                              <Button Text="translate(&quot;#LDS#Set new manager&quot;)" EnabledCondition="from person select current (uid_personhead&lt;&gt;uid_personheadinsteadof)" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button4">
+                                <ServerActionCall ScriptItemUID="ServerActionCall7">
+                                  <LoadTable DataTable="AttestationCaseSingle" WhereClause="format(&quot;uid_attestationcase = {0}&quot;, sqlformatvalue(select current uid_attestationcase from attestationcase, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable3">
+                                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" />
+                                  </LoadTable>
+                                  <Method DataTable="AttestationCaseSingle" Method="AddInsteadOf">
+                                    <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                                    <MethodParameter Name="'strUID_PersonInsteadOf'" Value="from person select current uid_personheadinsteadof" />
+                                    <MethodParameter Name="'strReasonText'" Value="translate(&quot;#LDS#I am not the correct manager&quot;)" />
+                                  </Method>
+                                  <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction7">
+                                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The information for {0} has been saved.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping17" />
+                                    <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping18" />
+                                  </CallAction>
+                                  <Delete DataTable="AttestationCase" WhereClause="primarykey() = ( select current primarykey() from attestationcase)" ScriptItemUID="Delete2" />
+                                  <Update DataTable="Person" DataColumn="UID_PersonHead" Value="from person select current uid_personheadinsteadof" WhereClause="primarykey() = select current primarykey() from person" ScriptItemUID="Update2" />
+                                  <Save DataTable="Person" WhereClause="primarykey() = select current primarykey() from person" ScriptItemUID="Save2" />
+                                  <ActionOnControl />
+                                  <CodeLiteral ScriptItemUID="CodeLiteral4">// Trigger grid reload
+AttestationCase_Current.Row.Table.TableStore.Invalidate();</CodeLiteral>
+                                </ServerActionCall>
+                              </Button>
+                            </Container>
+                          </Container>
+                        </LayoutPanel>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                      <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container21">
+                        <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef4" />
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="from person select current display()" ScriptItemUID="VirtualFunctionMapping19" />
+                    <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping20" />
+                  </CallAction>
+                </ServerActionCall>
+              </Label>
+            </Container>
+            <Container Condition="not(isreadonly())&#xD;&#xA;and&#xD;&#xA;1 = (from AttestationHelper select count()&#xD;&#xA;where &#xD;&#xA;IsFromDelegation&#xD;&#xA;and&#xD;&#xA;UID_AttestationCase = (select current UID_AttestationCase from AttestationCase)&#xD;&#xA;and NOT&#xD;&#xA;(select current IsReserved from AttestationCase)&#xD;&#xA;)" ScriptItemUID="Container22" Layout="'VI_Styles_Container_Paragraph'">
+              <Label Text="translate(&quot;#LDS#Report incorrect information&quot;, from person select current display())" Action="Redirect" ScriptItemUID="Label9">
+                <ServerActionCall ScriptItemUID="ServerActionCall9">
+                  <CallAction ActionID="VI_Action_DenyApproval" ScriptItemUID="CallAction8">
+                    <VirtualTableMapping VirtualTable="Action" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping4" />
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Please enter your reason for denying approval.&quot;)" ScriptItemUID="VirtualFunctionMapping21" />
+                  </CallAction>
+                </ServerActionCall>
+              </Label>
+            </Container>
+          </Container>
+          <Container Condition="&quot;&quot; &lt;&gt; (from Person select isnull(Sponsor,&quot;&quot;) where XObjectKey = (select current objectkeybase from attestationcase))" ItemUID="View sponsor information" ScriptItemUID="Container23" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container23style" Value="'padding-top: 4px;'" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#View sponsor information&quot;)" ScriptItemUID="Label1" Action="Redirect">
+              <ServerActionCall ScriptItemUID="ServerActionCall10">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#View sponsor information&quot;)" ScriptItemUID="VirtualFunctionMapping22" />
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container24">
+                      <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer3">
+                        <VirtualFunctionMapping ID="HeadLine()" Value="DataDescription(&quot;Person&quot;,&quot;Sponsor&quot;)" ScriptItemUID="VirtualFunctionMapping23" />
+                        <VirtualFunctionMapping ID="Text()" Value="DataCaption(&quot;Person&quot;,&quot;Sponsor&quot;) + &quot;: &quot; + from Person select current IsNullOrEmpty(Sponsor,translate('#LDS#No information entered'))" ScriptItemUID="VirtualFunctionMapping24" />
+                      </ControlReferenceContainer>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUID="Buttonpanel" ItemUIDReference="Default Button" ScriptItemUID="Container25">
+                      <Button Text="translate('#LDS#Ok')" ItemUID="Default Button" ScriptItemUID="Button1">
+                        <ServerActionCall ScriptItemUID="ServerActionCall11">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="TableName()" Value="DBTable(AttestationCase)" ScriptItemUID="VirtualFunctionMapping25" />
+                </CallAction>
+              </ServerActionCall>
+            </Label>
+          </Container>
+          <Container ItemUID="NOT MANAGER" Condition="select current isdecisionbypersonadmin from attestationcase" ScriptItemUID="Container27" Layout="'VI_Styles_Container_ButtonBar'">
+            <Button Text="translate(&quot;#LDS#Save&quot;)" Layout="'VI_Styles_Button_Primary'" EnableCustomAttributes="true" ScriptItemUID="Button6" EnabledCondition="from person select current ischanged()">
+              <HtmlAttributes>
+                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute5" />
+                <HtmlAttribute Name="&quot;title&quot;" ScriptItemUID="HtmlAttribute1" Value="translate(&quot;#LDS#Save new manager assignment for {0}&quot;, from person select current display())" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall12">
+                <Save DataTable="Person" WhereClause="uid_person = ( select current uid_person from person)" ScriptItemUID="Save3" />
+                <CallAction ActionID="TriggerActions" ScriptItemUID="Call1" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </ContainerTemplate>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="UID_PersonHeadInsteadOf" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" ScriptItemUID="Column1" DataType="System.String" TriggerUpdates="Updates" FKWhereClause="" />
+        </DataTableDbObject>
+        <DataTableSQL Table="AttestationCaseWithDecisionByPersonAdmin" ScriptItemUID="DataTableLimitedSQL1">
+          <ActionSequence ScriptItemUID="Action9" />
+          <Column Name="UID_AttestationCase" ScriptItemUID="Column3" DataType="System.String" />
+        </DataTableSQL>
+        <DataTableDbObject Class="AttestationHelper" Table="AttestationHelper" WhereClauseSQL="format(&quot;UID_AttestationHelper in (&#xD;&#xA;select ah.UID_AttestationHelper from AttestationHelper ah&#xD;&#xA;join AttestationCase ac on ac.UID_AttestationCase = ah.UID_AttestationCase&#xD;&#xA;and ac.DecisionLevel = ah.LevelNumber&#xD;&#xA;where ah.uid_personhead = '{1}' and {0})&quot;,&#xD;&#xA;sqlcompareuid(&quot;ac.UID_AttestationCase&quot;, from attestationcase select current uid_attestationcase),&#xD;&#xA;GetUser())" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCaseSingle" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="TriggerActions">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">var list = (System.Collections.Generic.List&lt;System.Action&gt;)
+	_AttestationCase_Current.Row.Table.ExtendedProperties
+	.GetOrAdd("EmployeeCertificationAction", _=&gt; new System.Collections.Generic.List&lt;System.Action&gt;());
+	
+// trigger event-like delegates
+foreach(var a in list)
+   a();</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_AttestationCase_Detail">
+      <VirtualTableExtension Name="AttestationCase" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="IsDecisionByPersonAdmin" Expression="uid_attestationcase in ( select uid_attestationcase from attestationcasewithdecisionbypersonadmin )" DataSource="Expression" ScriptItemUID="Column4" DataType="System.Boolean" TriggerUpdates="Never" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

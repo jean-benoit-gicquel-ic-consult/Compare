@@ -1,0 +1,446 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3cebb972-fae4-0607-0b4b-d818a5639d86">
+  <GlobalControl ID="VI_UserLogon" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" IsInSessionScope="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="QBM.CompositionApi.UserConfig" />
+        <AssemblyReference Assembly="QBM.CompositionApi.dll" />
+        <ObjectInclude ObjectIncludeID="QBM_Logout" />
+        <AssemblyReference Assembly="VI.Web.ConfigBase.dll" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="General settings" Description="translate(&quot;#LDS#General settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_ProductLogo" Description="translate(&quot;#LDS#Product logo&quot;)" LongDescription="translate(&quot;#LDS#You can use your product logo here.&quot;)" Type="Image" />
+        <ConfigParam Key="VI_Common_CompanyLogo" Description="translate(&quot;#LDS#Company logo&quot;)" LongDescription="translate(&quot;#LDS#You can use your company logo here.&quot;)" Type="Image" />
+        <ConfigParam Key="VI_Common_CompanyLink" Description="translate(&quot;#LDS#Company link&quot;)" LongDescription="translate(&quot;#LDS#The browser will follow this link by clicking on your company logo.&quot;)" Type="Text" />
+        <ConfigParam Key="VI_Common_DarkIcons" Description="translate(&quot;#LDS#Dark Icons&quot;)" LongDescription="translate(&quot;#LDS#Changes the Icons to dark blue for light headers.&quot;)" />
+        <ConfigParam Key="VI_Common_ShowLinksToProductSite" Description="translate(&quot;#LDS#Show links to support and community&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action5">
+        <LoadTable DataTable="DialogDatabase" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container12" Layout="'VI_Styles_Container_Masthead'">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action2">
+            <CodeLiteral ScriptItemUID="CodeLiteral5">var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IBookmarkProvider&gt;();
+
+// check if UserConfiguration is enabled
+var bookmarkProvider = provider as BookmarkProvider;
+if (bookmarkProvider == null || !bookmarkProvider.IsEnabled()) return;
+
+var bookmarks = provider.Get();
+Bookmarks.ObjectList.Clear();
+foreach (var bookmark in bookmarks)
+{
+   Bookmarks.ObjectList.Add(bookmark);
+}</CodeLiteral>
+          </Action>
+        </Activator>
+        <Literal Expression="-- Skip to main content&#xA;'&lt;div id=&quot;skip&quot;&gt;&lt;a class=&quot;accessible&quot; href=&quot;#main&quot; accesskey=&quot;1&quot;&gt;'+translate(&quot;#LDS#Skip to main content&quot;)+'&lt;/a&gt;&lt;/div&gt;'" />
+        <Container ScriptItemUID="Container17" EnableCustomAttributes="true" ItemUID="Menu dropdown for phones and other small devices">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute20" Name="&quot;menu-dropdown&quot;" Value="&quot;&quot;" />
+            <HtmlAttribute ScriptItemUID="HtmlAttribute21" Name="&quot;class&quot;" Value="&quot;imx-mobile-mobileonly imx-inlineblock&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container21" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute28" Name="&quot;class&quot;" Value="&quot;imx-menudropdown&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="VI_UserMenu" ScriptItemUID="ControlRef3" />
+          </Container>
+        </Container>
+        <Container ScriptItemUID="Container1" ItemUID="product and company logo" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-company-product-logo&quot;" />
+          </HtmlAttributes>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="not(isnullorempty(getconfig(&quot;VI_Common_CompanyLogo&quot;)))" ItemUID="CompanyLogo">
+              <LinkContainer ScriptItemUID="Image2Link">
+                <ControlList ScriptItemUID="Image2Ctl">
+                  <Image Source="File" FileName="getconfig(&quot;VI_Common_CompanyLogo&quot;)" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Company page&quot;)" />
+                    </HtmlAttributes>
+                  </Image>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <Redirect Target="Link" NoLinkObjectID="true" HREF="getconfig(&quot;VI_Common_CompanyLink&quot;)" ScriptItemUID="Redirect2" AbortExecution="false" />
+                </ServerActionCall>
+              </LinkContainer>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2">
+              <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="variable(&quot;display: inline-block; line-height: %headerheight%px; max-height: %headerheight%px; overflow: hidden;&quot;)" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-logoWithProduct&quot;" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </SwitchContainerCase>
+          </SwitchContainer>
+          <SwitchContainer ScriptItemUID="Switch2">
+            <SwitchContainerCase ScriptItemUID="Case3" Condition="not(isnullorempty(getconfig(&quot;VI_Common_ProductLogo&quot;)))">
+              <LinkContainer ScriptItemUID="Image1Link" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;display: inline-block;&quot;" />
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute40" Value="'imx-mobile-nomobile'" />
+                </HtmlAttributes>
+                <ControlList ScriptItemUID="Image1Ctl">
+                  <Image Source="File" FileName="getconfig(&quot;VI_Common_ProductLogo&quot;)" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Home page&quot;)" />
+                    </HtmlAttributes>
+                  </Image>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Update DataTable="UserMenu" DataColumn="IsExpanded" Value="false" ScriptItemUID="Update1" />
+                  <Redirect Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect1" AbortExecution="false" />
+                </ServerActionCall>
+              </LinkContainer>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case4">
+              <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute34" Value="'imx-mobile-nomobile'" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label1" Text="variable(&quot;%PRODUCTNAMESHORT%&quot;)" EnableCustomAttributes="true" UseForeignWordsTagger="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="variable(&quot;font-size: large; line-height: %headerheight%px;&quot;)" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </Container>
+        <Container ScriptItemUID="Container13" ItemUID="user navigation" EnableCustomAttributes="true" Layout="'QBM_Styles_Container_InlineFlex'">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container13style" Value="variable('position: absolute; right: 0; top: 0; line-height: %headerheight%px; width: calc(100% - 43px);')" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_Inline'" ItemUID="ProductionLevel" Condition="from dialogdatabase select top 1 (cansee(productionlevel) and productionlevel&lt;&gt;2) -- do not show for production environments" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container11style" Value="if(from dialogdatabase select top 1 (cansee(ElementColor) and isnull(ElementColor,'')&lt;&gt;'')) then&#xD;&#xA;format('color: #{0}; padding-right: 10px; ',from dialogdatabase select top 1 ElementColor)&#xD;&#xA;else variable('color: %VI_Common_Color_ColorBase1%; padding-right: 10px; ')" />
+            </HtmlAttributes>
+            <Label Text="from dialogdatabase&#xD;&#xA;select top 1 displayvalue(productionlevel)&#xD;&#xA;+(if(isupdatepending) then &quot; - &quot;+translate(&quot;#LDS#Updates pending&quot;))&#xD;&#xA;+(if(ispreviewbranch) then &quot; - &quot;+translate(&quot;#LDS#Preview&quot;))" ScriptItemUID="Label2" />
+          </Container>
+          <Container ScriptItemUID="Container4" ItemUID="Search" IsBeginNewValidationGroup="true" EnableCustomAttributes="true" ItemUIDReference="SearchbtnHeader">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute9" Value="'imx-search imx-mobile-nomobile'" />
+              <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;search&quot;" />
+              <Property Name="TagName" Value="span" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="QBM_SearchBox" ScriptItemUID="ControlRef4" />
+          </Container>
+          <Container ScriptItemUID="Container8" ItemUID="Alert">
+            <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton4" DisplayType="Controls">
+              <Menu ScriptItemUID="Menu4">
+                <MenuElement Text="if  ( (from CountOpenDatabaseItems select OpenPWO) &gt; 0 ) then &#xD;&#xA;  (translate('#LDS#Heading Pending Requests') + ' (' + from CountOpenDatabaseItems select OpenPWO + ')' )&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Pending Requests')" ScriptItemUID="MenuElement16" Condition="ispreprop(&quot;ITSHOP&quot;)">
+                  <ServerActionCall ScriptItemUID="ServerActionCall25">
+                    <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_ITShop_Approvals" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect13" />
+                  </ServerActionCall>
+                </MenuElement>
+                <MenuElement ScriptItemUID="MenuElement14" Text="if  ( (from CountOpenDatabaseItems select OpenInquiries) &gt; 0 ) then &#xD;&#xA;  (translate('#LDS#Heading Request Inquiries') + ' (' +from CountOpenDatabaseItems select OpenInquiries + ')' )&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Request Inquiries')" Condition="ispreprop(&quot;ITSHOP&quot;)&#xD;&#xA;and&#xD;&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')">
+                  <ServerActionCall ScriptItemUID="ServerActionCall23">
+                    <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_ITShop_AnswerQuestions" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect10">
+                      <RedirectParameter Value="true" Name="'isRequest'" />
+                    </Redirect>
+                  </ServerActionCall>
+                </MenuElement>
+                <MenuElement ScriptItemUID="MenuElement10" Text="translate(&quot;#LDS#My Processes&quot;) + ' (' + from CountOpenDatabaseItems select NewProcesses + ')' " Condition="{{&#xD;&#xA;var lastLookupProvider = new VI.WebRuntime.Util.LastLookupDateProvider(VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserConfiguration&gt;());&#xD;&#xA;@return !(lastLookupProvider == null || !lastLookupProvider.IsEnabled());&#xD;&#xA;}}">
+                  <ServerActionCall ScriptItemUID="ServerActionCall16">
+                    <Redirect ScriptItemUID="Redirect11" Target="Context" AllowReturnToThisContext="true" ContextID="QBM_MyProcesses" NoLinkBackToThisForm="true" NoLinkObjectID="true" />
+                  </ServerActionCall>
+                </MenuElement>
+              </Menu>
+              <ControlList ScriptItemUID="ControlList5">
+                <Label ScriptItemUID="Label3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute15" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--bell&quot;" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute24" Name="&quot;title&quot;" Value="translate('#LDS#Information')" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;style&quot;" Value="if (from CountOpenDatabaseItems select AllOpenDecisions &gt; 0) then&#xD;&#xA;  (variable(&quot;color: %VI_Common_Color_Badge_Warning%; font-size: 1.3em;&quot;))&#xD;&#xA;else&#xD;&#xA;  (variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.3em;&quot;))" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall19" />
+            </ToolbarButton>
+            <SwitchContainer ScriptItemUID="Switch3">
+              <SwitchContainerCase ScriptItemUID="Case5" ItemUID="polling?" Condition="convert( getconfig(&quot;VI_Common_NotificationPollingInterval&quot;), &quot;System.Int32&quot;)&gt;0">
+                <Button ScriptItemUID="Button2" Text="&quot;&lt;hidden&gt;&quot;" EnableCustomAttributes="true" ItemUID="imx_polling">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;aria-hidden&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;true&quot;" />
+                    <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute6" Value="&quot;imx-hidden&quot;" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;data-imx-noremoveinvalid&quot;" Value="&quot;true&quot;" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;imx-nopendingchanges&quot;" Value="&quot;true&quot;" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall18" />
+                </Button>
+                <Literal Expression="&quot;&lt;script type=&quot;&quot;text/javascript&quot;&quot;&gt;&#xD;&#xA;&#xD;&#xA;var fnPolling;&#xD;&#xA;var fnPollingSchedule = function() {&#xD;&#xA;   setTimeout(fnPolling, &quot;+ getconfig(&quot;VI_Common_NotificationPollingInterval&quot;)+&quot;);&#xD;&#xA;};&#xD;&#xA;&#xD;&#xA;fnPolling = function() {&#xD;&#xA;   $('[data-imx-identifier=&quot;&quot;imx_polling&quot;&quot;]').trigger('click');&#xD;&#xA;   fnPollingSchedule();&#xD;&#xA;};&#xD;&#xA;&#xD;&#xA;fnPollingSchedule();&#xD;&#xA;&lt;/script&gt;&quot;" />
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+          <Container ScriptItemUID="Container27" EnableCustomAttributes="true" ItemUID="Search - Cart - User - Bookmarks - Help">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute29" Name="&quot;class&quot;" Value="&quot;imx-toggleContainer&quot;" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container23" EnableCustomAttributes="true" ItemUID="Global search">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute37" Name="&quot;menu-dropdown&quot;" Value="&quot;cux-icon cux-icon--search&quot;" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-mobile-mobileonly&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container28" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute30" Name="&quot;class&quot;" Value="&quot;imx-menudropdown&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container25" ItemUID="Search" IsBeginNewValidationGroup="true" EnableCustomAttributes="true" ItemUIDReference="SearchbtnHeader">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute36" Value="'imx-search'" />
+                    <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute33" Value="&quot;search&quot;" />
+                  </HtmlAttributes>
+                  <ControlReferenceContainer ID="QBM_SearchBox" ScriptItemUID="ControlRef6" />
+                </Container>
+              </Container>
+            </Container>
+            <Container ItemUID="User" ScriptItemUID="Container10">
+              <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton3" DisplayType="Controls">
+                <Menu ScriptItemUID="Menu3">
+                  <MenuElement Text="translate('#LDS#Heading My Profile')" ScriptItemUID="MenuElement7">
+                    <ServerActionCall ScriptItemUID="ServerActionCall12">
+                      <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_MyData_PersonHyperView" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect6" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement ScriptItemUID="MenuElement13" Text="translate(&quot;#LDS#Heading My Password&quot;)" Condition="isnull(getconfig(&quot;VI_MyData_MyPassword_QPM&quot;), &quot;false&quot;)=&quot;true&quot; and&#xD;&#xA;&#xD;&#xA;exists(&quot;person&quot;, variable(sqland(&quot;uid_person = '%useruid%'&quot;, isnull( getconfig(&quot;VI_PersonalData_MyPassword_Filter&quot;), &quot;1=1&quot;))))">
+                    <ServerActionCall ScriptItemUID="ServerActionCall24">
+                      <Redirect Target="Context" NoLinkBackToThisForm="true" ContextID="QBM_QPM_PasswordOverview" AllowReturnToThisContext="true" ScriptItemUID="Redirect14" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate('#LDS#My Settings')" ScriptItemUID="MenuElement6" CssClassName="&quot;imx-mobile-mobileonly&quot;">
+                    <ServerActionCall ScriptItemUID="ServerActionCall10">
+                      <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_MyData_PersonalData" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect7" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate(&quot;#LDS#Heading White Pages&quot;)" ScriptItemUID="MenuElement12">
+                    <ServerActionCall ScriptItemUID="ServerActionCall20">
+                      <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_MyData_WhitePages" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect8" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate(&quot;#LDS#Heading Log Off&quot;)" ScriptItemUID="MenuElement8">
+                    <ServerActionCall ScriptItemUID="ServerActionCall13">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction3">
+                        <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action1">
+                            <CodeLiteral ScriptItemUID="CodeLiteral3">
+// when the user explicitly logs off from the web application, set a flag on the session
+// to tell the web application not to automatically log in again using SSO
+
+System.Web.HttpContext.Current.Session[VI.WebRuntime.Communication.RequestAuthenticationModule.DO_NOT_SINGLE_SIGN_ON_MARKER] = "true";
+</CodeLiteral>
+                            <CodeLiteral ScriptItemUID="CodeLiteral4">// end OAuth session
+
+var hasOAuth = _UserSession.SessionObjects.ContainsKey("OAuth");
+if (hasOAuth)
+{
+	var client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
+    var url = client.GetLogoutUrl(_Database);
+	_UserSession.Dispose();
+	if (!string.IsNullOrEmpty(url))
+	{
+	    System.Web.HttpContext.Current.Response.Redirect(url, false);
+    }
+}
+else
+{
+	if(_UserSession.IsFromSingleSignOn)
+	{
+		IConfigDocument _localConfig = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IConfigDocument&gt;();
+		var logoffUrl = _localConfig.RedirectOnLogout;
+		_UserSession.Dispose();
+		System.Web.HttpContext.Current.Response.Redirect(logoffUrl + "&amp;IsFromSingleSignOn=1", false);		
+	}
+	else{
+		_UserSession.Logout();
+	}	
+}</CodeLiteral>
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log off?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                        <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log off&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </MenuElement>
+                </Menu>
+                <ControlList ScriptItemUID="ControlList2">
+                  <Label ScriptItemUID="Label5" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute17" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--user&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.3em;&quot;)" />
+                      <Property Name="TagName" Value="i" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute23" Name="&quot;title&quot;" Value="from user select display()" />
+                    </HtmlAttributes>
+                  </Label>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall14" />
+              </ToolbarButton>
+            </Container>
+            <Container ScriptItemUID="Container9" ItemUID="Bookmarks">
+              <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton2" DisplayType="Controls">
+                <Menu ScriptItemUID="Menu2">
+                  <MenuElementIteration DataTable="Bookmarks" ScriptItemUID="MenuElementIteration1" Label="from Bookmarks select current display" OrderBy="'Display'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall17" EnableRedirectByUrl="true">
+                      <RedirectByUrl>
+                        <Redirect ScriptItemUID="Redirect5a" Target="Link" HREF="from bookmarks select current url" />
+                      </RedirectByUrl>
+                      <Redirect ScriptItemUID="Redirect5" Target="Link" HREF="from bookmarks select current url" />
+                    </ServerActionCall>
+                  </MenuElementIteration>
+                </Menu>
+                <ControlList ScriptItemUID="ControlList6">
+                  <Label ScriptItemUID="Label7" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute19" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--bookmark&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute18" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.3em;&quot;)" />
+                      <Property Name="TagName" Value="i" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;title&quot;" Value="translate('#LDS#Bookmarks')" />
+                    </HtmlAttributes>
+                  </Label>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall9" />
+              </ToolbarButton>
+            </Container>
+            <Container ItemUID="Help" ScriptItemUID="Container5">
+              <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton1" DisplayType="Controls">
+                <Menu ScriptItemUID="Menu1">
+                  <MenuElement Text="translate('#LDS#Help')" ScriptItemUID="MenuElement1">
+                    <ServerActionCall ScriptItemUID="ServerActionCall3">
+                      <Code ClassName="VI.WebRuntime.ShowHelpAction, VI.WebRuntime" ScriptItemUID="Code1">
+                        <ControlList ScriptItemUID="ControlList1" />
+                      </Code>
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate('#LDS#Support')" Condition="getconfig(&quot;VI_Common_ShowLinksToProductSite&quot;) ='True'" ScriptItemUID="MenuElement2">
+                    <ServerActionCall ScriptItemUID="ServerActionCall4">
+                      <Redirect Target="Link" NoLinkObjectID="true" HREF="'https://support.oneidentity.com/identity-manager/'" ScriptItemUID="Redirect3" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate('#LDS#Community')" Condition="getconfig(&quot;VI_Common_ShowLinksToProductSite&quot;) ='True'" ScriptItemUID="MenuElement3">
+                    <ServerActionCall ScriptItemUID="ServerActionCall5">
+                      <Redirect Target="Link" HREF="'https://www.oneidentity.com/community/identity-manager'" NoLinkObjectID="true" ScriptItemUID="Redirect4" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate(&quot;#LDS#Connection&quot;)" ScriptItemUID="MenuElement9">
+                    <ServerActionCall ScriptItemUID="ServerActionCall15">
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="Container14">
+                            <CodeLiteral ScriptItemUID="CodeLiteral2">var currentConnectionControl = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.WebControls.Angular.INgController&gt;("CurrentConnectionControl");
+Container14.Controls.Add( (System.Web.UI.Control) currentConnectionControl);</CodeLiteral>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container ScriptItemUID="Container15" Layout="'VI_Styles_Container_ButtonPanel'">
+                            <Container ScriptItemUID="Container18" Layout="'VI_Styles_Container_Inline'">
+                              <ControlReferenceContainer ID="VI_Common_LanguageInfo" ScriptItemUID="ControlRef5" />
+                            </Container>
+                            <Container ScriptItemUID="Container19" Layout="'VI_Styles_Container_Inline'">
+                              <ControlReferenceContainer ID="VI_Common_TimeZoneInfo" ScriptItemUID="ControlRef7" />
+                            </Container>
+                            <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef2" />
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Connection&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                        <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping5" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate('#LDS#About')" ScriptItemUID="MenuElement4">
+                    <ServerActionCall ScriptItemUID="ServerActionCall6">
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="Container6">
+                            <ControlReferenceContainer ID="VI_AboutDialog" ScriptItemUID="ControlReferenceContainer1" />
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container ScriptItemUID="Container7">
+                            <Button Text="translate('#LDS#Close')" AssociatedWithEscapeKey="true" ScriptItemUID="Button1">
+                              <ServerActionCall ScriptItemUID="ServerActionCall7">
+                                <ActionOnControl />
+                              </ServerActionCall>
+                            </Button>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate('#LDS#Language')" ScriptItemUID="MenuElement5">
+                    <ServerActionCall ScriptItemUID="ServerActionCall11">
+                      <CallAction ScriptItemUID="Call4" ActionID="VI_Common_LanguageInfo_PopUp" />
+                    </ServerActionCall>
+                  </MenuElement>
+                  <MenuElement Text="translate('#LDS#Time zone')" ScriptItemUID="MenuElement11" Condition="{{ _UserSession.IsAuthenticated }}">
+                    <ServerActionCall ScriptItemUID="ServerActionCall21">
+                      <CallAction ScriptItemUID="Call2" ActionID="VI_Common_TimeZoneInfo_PopUp" />
+                    </ServerActionCall>
+                  </MenuElement>
+                </Menu>
+                <ControlList ScriptItemUID="ControlList3">
+                  <Label ScriptItemUID="Label6" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-help&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.6em;&quot;)" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;title&quot;" Value="translate('#LDS#Help')" />
+                      <Property Name="TagName" Value="i" />
+                    </HtmlAttributes>
+                  </Label>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall8" />
+              </ToolbarButton>
+            </Container>
+          </Container>
+          <Container ScriptItemUID="Container24" ItemUID="ToggleButton" Layout="'QBM_Styles_Container_ToggleButton'" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'toggle-target'" ScriptItemUID="HtmlAttribute41" Value="'.masthead'" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container26" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="a" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute25" Name="&quot;class&quot;" Value="&quot;imx-dropdown&quot;" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute26" Name="&quot;href&quot;" Value="&quot;javascript:void(0);&quot;" />
+              </HtmlAttributes>
+              <Label ScriptItemUID="Label9" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute35" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--ellipsis-v&quot;" />
+                  <Property Name="TagName" Value="i" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute27" Name="&quot;title&quot;" Value="translate('#LDS#Toggle menu')" />
+                </HtmlAttributes>
+              </Label>
+            </Container>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="currentTimeZone" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="displayName" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="id" DataType="System.String" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="DialogDatabase" Table="DialogDatabase" ScriptItemUID="DataTableDbObject1" WhereClauseSQL="sqlcompare(&quot;ismaindatabase&quot;,true, &quot;bool&quot;, &quot;equal&quot;)">
+          <ActionSequence ScriptItemUID="Action6" />
+          <Column Name="IsUpdatePending" DataType="System.Boolean" ScriptItemUID="Column4" DataSource="Expression" Expression="productionlevel = 0&#xA;and&#xA;true =&#xA;{{&#xA;var handler = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IAutoUpdateHandler&gt;();&#xA;@return handler.UpdatesAvailable();&#xA;}}" />
+          <Column Name="IsPreviewBranch" DataType="System.Boolean" ScriptItemUID="Column5" DataSource="Expression" Expression="true =&#xD;&#xA;{{&#xD;&#xA;var handler = _UserSession;&#xD;&#xA;@return !string.IsNullOrEmpty(handler.ApplicationInfo.BranchId);&#xD;&#xA;}}" />
+        </DataTableDbObject>
+        <DataTableObjectView Table="Bookmarks" ElementType="QBM.CompositionApi.UserConfig.IBookmark, QBM.CompositionApi" ScriptItemUID="DataTableObjectView1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

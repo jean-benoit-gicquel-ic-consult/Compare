@@ -1,0 +1,50 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="8391a72c-0c71-c4ec-6f6d-dd35d98eb22f">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Attestation_EditCases" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" Class="AttestationCase" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <VirtualColumn Name="AttestationStateDisplay" DataType="System.String" />
+        <ColumnProxy DataColumn="StructureDisplay1" Name="StructureDisplay1Helper" ScriptItemUID="ColumnProxy1" Caption="from AttestationObject select current displayvalue(Structuredisplay1)" />
+        <ColumnProxy DataColumn="StructureDisplay2" Name="StructureDisplay2Helper" ScriptItemUID="ColumnProxy2" Caption="from AttestationObject select current displayvalue(Structuredisplay2)" />
+        <ColumnProxy DataColumn="StructureDisplay3" Name="StructureDisplay3Helper" ScriptItemUID="ColumnProxy3" Caption="from AttestationObject select current displayvalue(Structuredisplay3)" />
+        <ColumnProxy DataColumn="PropertyInfo1" Name="PropertyInfo1Helper" ScriptItemUID="ColumnProxy4" Caption="from AttestationObject select current displayvalue(PropertyInfo1)">
+          <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="if(from AttestationObject select current isnullorempty(PropertyInfo1)) then &quot;false&quot; else &quot;true&quot;" ScriptItemUID="ParameterFree1" />
+        </ColumnProxy>
+        <ColumnProxy DataColumn="PropertyInfo2" Name="PropertyInfo2Helper" ScriptItemUID="ColumnProxy5" Caption="from AttestationObject select current displayvalue(PropertyInfo2)">
+          <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="if(from AttestationObject select current isnullorempty(PropertyInfo2)) then &quot;false&quot; else &quot;true&quot;" ScriptItemUID="ParameterFree2" />
+        </ColumnProxy>
+        <ColumnProxy DataColumn="PropertyInfo3" Name="PropertyInfo3Helper" ScriptItemUID="ColumnProxy6" Caption="from AttestationObject select current displayvalue(PropertyInfo3)">
+          <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="if(from AttestationObject select current isnullorempty(PropertyInfo3)) then &quot;false&quot; else &quot;true&quot;" ScriptItemUID="ParameterFree3" />
+        </ColumnProxy>
+        <ColumnProxy DataColumn="PropertyInfo4" Name="PropertyInfo4Helper" ScriptItemUID="ColumnProxy7" Caption="from AttestationObject select current displayvalue(PropertyInfo4)">
+          <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="if(from AttestationObject select current isnullorempty(PropertyInfo4)) then &quot;false&quot; else &quot;true&quot;" ScriptItemUID="ParameterFree4" />
+        </ColumnProxy>
+      </VirtualTable>
+      <VirtualFunction Signature="OptionalAttestationCaseFilter()" DataType="System.String" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="AttestationPolicy" Class="AttestationPolicy" RequiresCursor="true" ScriptItemUID="VirtualTable2" TriggerUpdates="Never">
+        <Column Name="IsPDFBased" DataType="System.Boolean" ScriptItemUID="Column2" DataSource="Expression" Expression="from attestationobject select top 1 (not(isnullorempty(ObjectKeyReport))) where uid_attestationobject = ( select current uid_attestationobject from attestationpolicy)" />
+      </VirtualTable>
+      <VirtualTable Name="AttestationObject" Class="AttestationObject" ScriptItemUID="VirtualTable3" TriggerUpdates="Never" RequiresCursor="true" />
+      <VirtualFunction Signature="HidePropertyInfo()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HideStructureInfo()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="Vars" ScriptItemUID="VirtualTable4" RequiresCursor="true">
+        <VirtualColumn Name="UID_AttestationCaseSelected" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="DialogParameter" ScriptItemUID="VirtualTable5" Class="DialogParameter" />
+      <VirtualTable Name="DialogParameterSet" ScriptItemUID="VirtualTable6" Class="DialogParameterSet" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

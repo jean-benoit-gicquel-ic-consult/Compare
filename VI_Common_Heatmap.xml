@@ -1,0 +1,113 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl ID="VI_Common_Heatmap" MetamodelVersion="2016-05-08" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.WebControls.IHeatmapControl" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action8">
+        <ForeachRow DataTable="HeatmapInfo" ScriptItemUID="ForeachRow1">
+          <CallAction ActionID="VI_Common_HeatmapLoadData" ScriptItemUID="CallAction1">
+            <VirtualFunctionMapping ID="Take()" Value="30" ScriptItemUID="VirtualFunctionMapping1" />
+          </CallAction>
+        </ForeachRow>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="DashboardDef" WithoutParentContainer="true">
+          <Container ScriptItemUID="Container2" Condition="select count() from dashboardcontent &gt;0 and not (from heatmapinfo select top 1 second)" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;grayBackground&quot;" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="variable(&quot;height: 100px; margin:5px; position: relative;padding: 10px; width: 180px; display: inline-block;&quot;)" />
+            </HtmlAttributes>
+            <Label Text="from dashboarddef select current Title" ScriptItemUID="Label1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;IconChartDescriptionLabel&quot;" />
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="&quot;position:absolute;  padding-top:3px; top:0; padding-left:7px; margin-top:3px;&quot;" />
+                <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="from dashboarddef select current Title" />
+                <Property Name="TagName" Value="h4" />
+              </HtmlAttributes>
+            </Label>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="'margin-top: 25px;'" />
+              </HtmlAttributes>
+              <Heatmap DataTable="DashboardContent" Color="ElementValue" Size="ObjectCount" ScriptItemUID="Heatmap1" SliderFilter="false" HasLegend="false" Tooltip="from dashboardcontent select current ElementTooltip" Width="160" Height="75" SingleClickEvent="true" ValueForRed="from heatmapinfo select top 1 RedLimit" ValueForGreen="from heatmapinfo select top 1 GreenLimit" BoxSideLength="" EqualSizedBoxes="from heatmapinfo select top 1 equalSized" ValueForYellow="" SliderCaption="">
+                <ServerActionCall ScriptItemUID="ServerActionCall3">
+                  <Redirect ScriptItemUID="Redirect1" Target="FormModule">
+                    <RedirectFormModule ID="VI_Common_Heatmap_Detail" ScriptItemUID="RedirectForm1" />
+                  </Redirect>
+                </ServerActionCall>
+              </Heatmap>
+            </Container>
+          </Container>
+          <Container ScriptItemUID="Container1" Condition="select count() from dashboardcontent &gt;0  and from heatmapinfo select top 1 second" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="variable(&quot;height: 550px; margin:5px; position: relative;padding: 10px; width: 100%; display: inline-block;&quot;)" />
+            </HtmlAttributes>
+            <Label Text="from dashboarddef select current Title" ScriptItemUID="Label2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute7" Value="&quot;position:absolute;  padding-top:3px; top:0; padding-left:7px; margin-top:3px; font-weight: lighter; line-height: 1.5em; font-size: 1.4em; margin-right: inherit;&quot;" />
+                <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute6" Value="from dashboarddef select current Title" />
+                <Property Name="TagName" Value="h3" />
+              </HtmlAttributes>
+            </Label>
+            <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute5" Value="'margin-top: 25px; padding-right: 25px'" />
+              </HtmlAttributes>
+              <Heatmap DataTable="DashboardContent" Color="ElementValue" Size="ObjectCount" ScriptItemUID="Heatmap2" SliderFilter="false" HasLegend="false" Tooltip="from dashboardcontent select current ElementTooltip" SingleClickEvent="true" ValueForRed="from heatmapinfo select top 1 RedLimit" ValueForGreen="from heatmapinfo select top 1 GreenLimit" BoxSideLength="" EqualSizedBoxes="from heatmapinfo select top 1 equalSized" ValueForYellow="" SliderCaption="" Height="500" Text="from dashboardcontent select current ElementText">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Redirect ScriptItemUID="Redirect2" Target="FormModule">
+                    <RedirectFormModule ID="VI_Common_Heatmap_Detail" ScriptItemUID="RedirectForm2" />
+                  </Redirect>
+                </ServerActionCall>
+              </Heatmap>
+            </Container>
+          </Container>
+        </ContainerTemplate>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="DashboardDef" Class="DialogDashBoardDef" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action13" />
+          <Column Name="IsSelected" DataType="System.Boolean" ScriptItemUID="Column11" />
+          <Column Name="IsIconStyle" DataType="System.Boolean" ScriptItemUID="Column6" />
+          <Column Name="Title" DataType="System.String" ScriptItemUID="Column12" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{&#xD;&#xA;string myResult = String.Empty;&#xD;&#xA;if (this.HeatmapInfo.FirstOrDefault()!=null)&#xD;&#xA;{&#xD;&#xA;&#xD;&#xA;var theInfo = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)this.HeatmapInfo.FirstOrDefault()).TargetObject;&#xD;&#xA;&#xD;&#xA;myResult = theInfo.computeTitle(queryRow,null,null); &#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return myResult;&#xD;&#xA;}}&#xD;&#xA;" />
+          <Column Name="SizeValueTerm" DataType="System.String" ScriptItemUID="Column13" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{&#xD;&#xA;string myResult = String.Empty;&#xD;&#xA;if (this.HeatmapInfo.FirstOrDefault()!=null)&#xD;&#xA;{&#xD;&#xA;&#xD;&#xA;var theSizeValueTerm = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)this.HeatmapInfo.FirstOrDefault()).TargetObject.SizeValueTerm;&#xD;&#xA;&#xD;&#xA;myResult =  ( theSizeValueTerm ==null ? String.Empty : theSizeValueTerm());&#xD;&#xA;}&#xD;&#xA;@return myResult;&#xD;&#xA;}}&#xD;&#xA;" />
+          <Column Name="ColorValueTerm" DataType="System.String" ScriptItemUID="Column22" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{&#xD;&#xA;string myResult = String.Empty;&#xD;&#xA;if (this.HeatmapInfo.FirstOrDefault()!=null)&#xD;&#xA;{&#xD;&#xA;&#xD;&#xA;var theColorValueTerm = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)this.HeatmapInfo.FirstOrDefault()).TargetObject.ColorValueTerm;&#xD;&#xA;&#xD;&#xA;myResult =  ( theColorValueTerm ==null ? String.Empty : theColorValueTerm());&#xD;&#xA;}&#xD;&#xA;@return myResult;&#xD;&#xA;}}&#xD;&#xA;" />
+          <Column Name="ColorValueTermHistoric" DataType="System.String" ScriptItemUID="Column24" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{&#xD;&#xA;string myResult = String.Empty;&#xD;&#xA;if (this.HeatmapInfo.FirstOrDefault()!=null)&#xD;&#xA;{&#xD;&#xA;&#xD;&#xA;var theColorValueTerm = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)this.HeatmapInfo.FirstOrDefault()).TargetObject.ColorValueTermHistoric;&#xD;&#xA;&#xD;&#xA;myResult =  ( theColorValueTerm ==null ? String.Empty : theColorValueTerm());&#xD;&#xA;}&#xD;&#xA;@return myResult;&#xD;&#xA;}}&#xD;&#xA;" />
+        </DataTableDbObject>
+        <DataTableCustom Table="DashboardContent" ScriptItemUID="DataTableCustom1">
+          <Column Name="uid_dialogdashboarddef" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="ElementName" ScriptItemUID="Column5" DataType="System.String" />
+          <Column Name="ElementObjectKey" Comment="Empty on aggregate statistics" ScriptItemUID="Column7" DataType="System.String" />
+          <Column Name="ElementValue" ScriptItemUID="Column8" DataType="System.Double" />
+          <Column Name="ElementValue100" ScriptItemUID="Column25" DataType="System.Double" />
+          <Column Name="ElementOrder" DataType="System.Int32" ScriptItemUID="Column27" />
+          <Column Name="HistoryNumber" DataType="System.Int32" ScriptItemUID="Column28" />
+          <Column Name="ElementDate" DataType="System.DateTime" ScriptItemUID="Column29" />
+          <Column Name="isactive" Expression="isnull(elementobjectkey,'')=''&#xD;&#xA;or(&#xD;&#xA;0 &lt; select count() from ReferencedObjects where (key = ( select current elementobjectkey from dashboardcontent)))" DataSource="Expression" ScriptItemUID="Column32" DataType="System.Boolean" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column33" />
+          <Column Name="ElementObjectKeyTable" Expression="if(isnullorempty(elementobjectkey)) then getnull() else getobjectkeytable(elementobjectkey)" DataSource="Expression" ScriptItemUID="Column34" DataType="System.String" />
+          <Column Name="ElementText" DataType="System.String" ScriptItemUID="Column36" />
+          <Column Name="ElementTooltip" DataType="System.String" ScriptItemUID="Column37" />
+          <Column Name="ObjectCount" DataType="System.Int32" ScriptItemUID="Column38" />
+          <Column Name="ObjectDisplay" DataType="System.String" ScriptItemUID="Column39" DataSource="Expression" Expression="from ReferencedObjects select display() where key= (from dashboardcontent select current elementobjectkey)" />
+          <Column Name="ObjectDisplayLong" DataType="System.String" ScriptItemUID="Column40" DataSource="Expression" Expression="from ReferencedObjects select displaylong() where key= (from dashboardcontent select current elementobjectkey)" />
+          <Column Name="ElementValueDelta" ScriptItemUID="Column41" DataType="System.Double" />
+        </DataTableCustom>
+        <DataTableGeneric Table="ReferencedObjects" ScriptItemUID="DataTableGeneric1">
+          <Column Name="TableName" ScriptItemUID="Column30" DataType="System.String" />
+          <Column Name="key" ScriptItemUID="Column31" DataType="System.String" />
+          <Column Name="SourceKey" ScriptItemUID="Column35" DataType="System.String" />
+        </DataTableGeneric>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="HeatmapInfo" ElementType="VI.WebRuntime.WebControls.HeatmapControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

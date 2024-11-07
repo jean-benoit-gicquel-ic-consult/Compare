@@ -1,0 +1,32 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="AAD_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="165">
+        <ConfigEntry Key="VI_ObjectView_AADDirectoryRole_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="AADConfigEntry1">
+          <SingleColumn DataColumn="UID_AADOrganization" ScriptItemUID="AADSingleColumn1" />
+          <SingleColumn DataColumn="UID_AADDirectoryRole" ScriptItemUID="AADSingleColumn2" />
+          <SingleColumn DataColumn="RiskIndex" ScriptItemUID="AADSingleColumn3" />
+          <SingleColumn DataColumn="Description" ScriptItemUID="AADSingleColumn4" />
+          <SingleColumn DataColumn="Id" ScriptItemUID="AADSingleColumn5" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="15">
+        <ConfigParam Key="VI_ObjectView_AADDirectoryRole_Fields" Type="ColumnList" DatabaseTable="AADDirectoryRole" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;AADDirectoryRole&quot;))" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="135">
+        <ConfigEntry Key="VI_ObjectView_AADGroup_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="AADConfigEntry2">
+          <SingleColumn DataColumn="UID_AADGroup" ScriptItemUID="AADSingleColumn6" />
+          <SingleColumn DataColumn="UID_AADOrganization" ScriptItemUID="AADSingleColumn7" />
+          <SingleColumn DataColumn="Description" ScriptItemUID="AADSingleColumn8" />
+          <SingleColumn DataColumn="RiskIndex" ScriptItemUID="AADSingleColumn9" />
+          <SingleColumn DataColumn="GroupTypes" ScriptItemUID="AADSingleColumn10" />
+          <SingleColumn DataColumn="DisplayName" ScriptItemUID="AADSingleColumn11" />
+          <SingleColumn DataColumn="Id" ScriptItemUID="AADSingleColumn12" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="15">
+        <ConfigParam Key="VI_ObjectView_AADGroup_Fields" Type="ColumnList" DatabaseTable="AADGroup" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;AADGroup&quot;))" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ID="QBM_Common_Redirector" ScriptItemUID="Context1" AllowPreLoginAccess="true" AllowUrlNavigation="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" ScriptItemUID="Form1" PageFileName="VI_FormTemplate_FullScreen" SkipNavigation="true" NavigationTitle="&quot;Redirector&quot;">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+          <CodeLiteral ScriptItemUID="CodeLiteral2">var code = System.Web.HttpContext.Current.Request["code"];
+
+if (!string.IsNullOrEmpty(code))
+{
+    code = System.Web.HttpUtility.UrlEncode(code);
+	var loginPageUrl = WebApplication.Instance.AbsoluteApplicationPath + WebApplication.Instance.VirtualApplicationPath + VI.WebRuntime.Communication.WebPage.GenericPageHandler + "?code="+code;
+   WebSql.RaiseAjaxCommand(new AjaxScriptCommand("window.top.location.href = '" + loginPageUrl + "';"));
+}</CodeLiteral>
+          <Literal Expression="variable('&lt;style type=&quot;text/css&quot;&gt;&#xA;body { background-color: %QBM_Primary_Blue%; }&#xA;&lt;/style&gt;')" />
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

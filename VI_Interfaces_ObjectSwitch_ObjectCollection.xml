@@ -1,0 +1,34 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="915deccf-028f-f40d-f1d7-da1b1064f373">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_ObjectCollection" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="HierarchyTable" ScriptItemUID="VirtualTable1" TriggerUpdates="Never" />
+      <VirtualControl ID="ElementSelected" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="HierarchyTable" />
+      </VirtualControl>
+      <VirtualFunction Signature="TableName()" DataType="System.String" />
+      <VirtualFunction Signature="CssClass()" FilterForTable="HierarchyTable" DataType="System.String" />
+      <VirtualFunction Signature="IsNonSelectable()" DataType="System.Boolean" FilterForTable="HierarchyTable" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="StatusDescriptor()" DataType="System.String" FilterForTable="HierarchyTable" />
+      <VirtualFunction Signature="DisplayType()" DataType="System.String" VirtualFunctionHasLimitedValues="true" TriggerUpdates="Never" DefaultValue="&quot;Display&quot;">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Display" Comment="" />
+          <VirtualFunctionLimitedValue Name="SingleSelect" Comment="" />
+          <VirtualFunctionLimitedValue Name="MultiSelect" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction DataType="System.String" Signature="AdditionalDisplayColumns()" PropertyListForTable="HierarchyTable" TriggerUpdates="Never" IsWithoutRow="true" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

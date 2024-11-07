@@ -1,0 +1,1072 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <Context ID="VI_ITShop_Approvals" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="if(IsEscalationApproval())&#xD;&#xA;then&#xD;&#xA;&quot;ca3f302c-7907-422f-80c6-d4202ec4bb62&quot;&#xD;&#xA;else&#xD;&#xA;&quot;20251F94-39DD-4B2C-82DD-FB382472DFBD&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember ItemUID="AddHistoryEntryTermsOfUse">public void AddHistoryEntryTermsOfUse(string pwoWhereClause)
+{
+	
+	var conn = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;().UserDataConnection;
+
+	var colPwo = conn.CreateCol("PersonWantsOrg");
+	colPwo.Prototype.WhereClause = pwoWhereClause;
+	colPwo.Load();
+	foreach (ISingleDbObject pwo in colPwo.Select(d =&gt; d.Create()))
+	{
+		var eData = new VI.DB.Entities.Transport.EntityData();
+		eData.Key = new VI.DB.Entities.Transport.KeyData{ Table = "PWODecisionHistory"};
+		eData.PutValue("UID_QERJustification", "QER-95f268209082426aa7d8b5e6d5e0d242"); // "The recipient has accepted the terms of use."
+		eData.PutValue("UID_PersonWantsOrg", pwo.GetValue("UID_PersonWantsOrg").String);
+		eData.PutValue("DisplayPersonHead", "#LDS#Automatic approval.");
+		eData.PutValue("OrderState", pwo.GetValue("OrderState").String);
+             
+		pwo.Custom.CallMethod("AddHistoryEntry", eData.ToXml(false));
+		pwo.Save();
+	}
+
+}</TypeMember>
+        <NamespaceImport Namespace="VI.DB.Entities.Transport" />
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="UID_PersonWantsOrg" IsMandatory="false" />
+        <Parameter Name="aeweb_UID_PWOHelperPWO" IsMandatory="false" />
+        <Parameter Name="aeweb_decision" IsMandatory="false" />
+        <Parameter Name="IsEscalationApproval" IsMandatory="false" />
+        <Parameter Name="aeweb_UID_PersonWantsOrg" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_ApproverReasonMandatoryOnDeny" Description="translate('#LDS#Approver must enter a reason for rejection of a request') + &quot; (&quot; +DataCaption(&quot;PersonWantsOrg&quot;) + &quot;)&quot;" LongDescription="translate('#LDS#Approver must enter a reason for the rejection of an request.')" />
+        <ConfigParam Key="VI_ITShop_ApproverCanSetValidUntil" Description="translate('#LDS#Approver may change end date of a request')" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_WantSeeQueryToPerson" Description="translate('#LDS#Approver may ask a colleague for help regarding a decision')" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_ExpiringOrders_WarningTime" Type="Text" Description="translate('#LDS#Warn &lt;x&gt; days before a request expires')" LongDescription="translate('#LDS#How many days before expiration of a request the user should be informed.')" />
+        <ConfigParam Key="VI_ITShop_ApprovalAdditionalWhereClause" Description="translate(&quot;#LDS#Additional filter for requests to be approved&quot;)" Type="SQL" DatabaseTable="PersonWantsOrg" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Approvals_InteractiveApproval" Description="translate(&quot;#LDS#Filter for requests that require user interaction during approval&quot;)" Type="SQL" DatabaseTable="PersonWantsOrg" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_ApproverCanSetValidFrom" Description="translate('#LDS#Approver may change start date of a request')" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableFKView Table="AccProduct" ViewFKDataTable="ITShopOrg" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView4" TriggerUpdates="Never">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        <Column Name="IsActivated" DataType="System.Boolean" ScriptItemUID="Column1" />
+        <Column Name="CountAll" Expression="from pwotodecide select count() where uid_accproduct = (select current uid_accproduct from accproduct)" DataSource="Expression" ScriptItemUID="Column6" DataType="System.Int32" />
+        <Column Name="UID_AccProductParamCategoryEffective" Expression="isnullorempty(&#xD;&#xA;   uid_accproductparamcategory,&#xD;&#xA;   if(not(isnullorempty(uid_accproductgroup)))then&#xD;&#xA;      objectwalker(&quot;FK(uid_accproductgroup).uid_accproductparamcategory&quot;)+&quot;&quot;&#xD;&#xA;)&#xD;&#xA;" DataSource="Expression" ScriptItemUID="Column3" DataType="System.String" />
+        <Column Name="HelperIsReusable" DataType="System.Boolean" ScriptItemUID="Column47" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossible : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+        <Column Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" ScriptItemUID="Column48" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossibleUnsubscribe : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+      </DataTableFKView>
+      <DataTableCRView Table="PWODecisionHistory" Class="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PWOToDecide" ScriptItemUID="DataTableCRView2" TriggerUpdates="Never">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+      </DataTableCRView>
+      <DataTableFKView Table="ITShopOrg" ViewFKDataTable="PWOToDecide" ViewFKDataColumn="UID_Org" ScriptItemUID="DataTableFKView2">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+      </DataTableFKView>
+      <DataTableDbObject Table="PWOToDecide" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject6">
+        <ActionSequence ScriptItemUID="Action6" />
+        <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="Column10" />
+        <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="Column11" />
+        <Column Name="ReasonForDecision" ScriptItemUID="Column12" DataType="System.String" Caption="translate(&quot;#LDS#Approval reasons&quot;)" />
+        <Column Name="ValidUntilNew" DataType="System.DateTime" ScriptItemUID="Column13">
+          <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;DateTime&quot;" ScriptItemUID="ParameterFree1" />
+        </Column>
+        <Column Name="UID_AccProduct" Expression="from ITShopOrg select top 1 uid_accproduct where uid_itshoporg = ( select current uid_org from pwotodecide)" DataSource="Expression" ScriptItemUID="Column14" DataType="System.String" TriggerUpdates="Never" />
+        <Column Name="IsValidOptionalFields" DataType="System.Boolean" ScriptItemUID="Column16" />
+        <Column Name="EnterSpecificReason" DataType="System.Boolean" ScriptItemUID="Column17" />
+        <Column Name="IsAdditionalAllowed" Expression="1 = &#xD;&#xA;(from QERWorkingStep select count()&#xD;&#xA;where IsAdditionalAllowed and UID_QERWorkingStep in (from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from PWOToDecide)))" DataSource="Expression" ScriptItemUID="Column20" DataType="System.Boolean" />
+        <Column Name="isInsteadOfAllowed" Expression="1 = &#xD;&#xA;(from QERWorkingStep select count()&#xD;&#xA;where isInsteadOfAllowed and UID_QERWorkingStep in (from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from PWOToDecide)))" DataSource="Expression" ScriptItemUID="Column21" DataType="System.Boolean" />
+        <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column22" />
+        <Column Name="DisplayPersonDeny" Expression="from pwodecisionhistory select top 1 displayvalue(uid_personhead) where (not(isdecisionbysystem) and decisiontype = 'Dismiss' and uid_personwantsorg = ( select current uid_personwantsorg from pwotodecide)) order by datehead desc" DataSource="Expression" ScriptItemUID="Column23" DataType="System.String" TriggerUpdates="Never" />
+        <Column Name="LastDecisionDateDismiss" Expression="from pwodecisionhistory select top 1 datehead where (decisiontype = 'Dismiss' and uid_personwantsorg = ( select current uid_personwantsorg from pwotodecide)) order by datehead desc" DataSource="Expression" ScriptItemUID="Column24" DataType="System.DateTime" TriggerUpdates="Never" />
+        <Column Name="LastDecisionDateApproveManual" Expression="from pwodecisionhistory select top 1 datehead where (decisiontype = 'Grant' and uid_personwantsorg = ( select current uid_personwantsorg from pwotodecide)) order by datehead desc" DataSource="Expression" ScriptItemUID="Column25" DataType="System.DateTime" TriggerUpdates="Never" />
+        <Column Name="LastDecisionText" Expression="from pwotodecide select current &#xA;(&#xA;-- if there has been a negative decision after the most recent manual positive decision&#xA;if(isnull(lastdecisiondateapprovemanual) or LastDecisionDateDismiss &gt; LastDecisionDateApproveManual)&#xA;then&#xA;(from pwodecisionhistory select top 1 displayvalue(reasonhead) where (decisiontype = 'Dismiss' and uid_personwantsorg = ( select current uid_personwantsorg from pwotodecide)) order by datehead desc)&#xA;else&#xA;getnull()&#xA;)" DataSource="Expression" ScriptItemUID="Column26" DataType="System.String" TriggerUpdates="Never" />
+        <Column Name="LastDecisionByPersonText" Expression="from pwodecisionhistory select top 1 displayvalue(reasonhead) where (not(isdecisionbysystem) and decisiontype = 'Dismiss' and uid_personwantsorg = ( select current uid_personwantsorg from pwotodecide)) order by datehead desc" DataSource="Expression" ScriptItemUID="Column27" DataType="System.String" TriggerUpdates="Never" />
+        <Column Name="CheckStatusSemaphor" DataType="System.Int32" Comment="increment this field to trigger recalculation of check status" ScriptItemUID="Column28" />
+        <Column Name="ApproverCanEditParameters" Expression="--direct and indirect assigned category&#xD;&#xA;exists(&quot;accproductparameter&quot;, format(&quot;uid_accproductparamcategory = '{0}' and {1}&quot;,&#xD;&#xA;from AccProduct select UID_AccProductParamCategoryEffective where uid_accProduct = (from pwotodecide select current uid_accproduct)&#xD;&#xA;, sqlcompare(&quot;approvercanedit&quot;, true, &quot;bool&quot;, &quot;equal&quot;)))" DataSource="Expression" ScriptItemUID="Column4" DataType="System.Boolean" TriggerUpdates="Never" />
+        <Column Name="UID_QERJustificationSelected" DataType="System.String" ScriptItemUID="Column8" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, if(from pwotodecide select current doapprove) then 4 else 16, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)&#xD;&#xA;)" />
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column9" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, this.TableStore.GetLocalColumn(this.PWOToDecide, &quot;UID_AccProduct&quot;).GetValue(queryRow)).Result.TableName }}+&quot;&quot;" />
+        <Column Name="MustApproveTermsOfUse" DataType="System.Boolean" ScriptItemUID="Column32" DataSource="Expression" Expression="uid_personordered = getuser() and uid_accproduct in (select uid_accproduct from accproduct where not(isnullorempty(uid_qertermsofuse))) and not(uid_personwantsorg in ( select uid_personwantsorg from pwodecisionhistory where uid_qerjustification = 'QER-95f268209082426aa7d8b5e6d5e0d242'))&#xD;&#xA;-- user has already approved terms of use" />
+        <Column Name="ValidFromNew" DataType="System.DateTime" ScriptItemUID="Column35">
+          <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;DateTime&quot;" ScriptItemUID="ParameterFree2" />
+        </Column>
+        <Column DataType="System.Boolean" Name="QERJustificationRequiresText" ScriptItemUID="Column36n" DataSource="Expression" Expression="Exists(&quot;QERJustification&quot;,SqlAnd(SqlCompareUid(&quot;UID_QERJustification&quot;,UID_QERJustificationSelected),SqlCompare(&quot;RequiresText&quot;, 1,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;)))" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="ReasonApprove" ScriptItemUID="Column37" DataType="System.String" Caption="translate(&quot;#LDS#Reason for approvals&quot;)" />
+        <Column Name="ReasonDeny" ScriptItemUID="Column38" DataType="System.String" Caption="translate(&quot;#LDS#Reason for denials&quot;)" />
+        <Column Name="UID_PWOSelected" DataType="System.String" ScriptItemUID="Column2" />
+        <Column Name="UID_QERJustificationApprove" DataType="System.String" ScriptItemUID="Column5" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 4, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)&#xD;&#xA;)" />
+        <Column Name="UID_QERJustificationDeny" DataType="System.String" ScriptItemUID="Column7" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 16, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)&#xD;&#xA;)" />
+        <Column Name="FilterPersonOrdered" DataType="System.String" ScriptItemUID="Column18" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;UID_PersonOrdered&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+        <Column Name="FilterPersonInserted" DataType="System.String" ScriptItemUID="Column29" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;UID_PersonInserted&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+        <Column Name="FilterProduct" DataType="System.String" ScriptItemUID="Column31" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;DisplayOrg&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;AccProduct&quot;" DBColumnName="&quot;UID_AccProduct&quot;" FKWhereClause="" />
+        <Column Name="FilterDocumentNumber" DataType="System.String" ScriptItemUID="Column30" Caption="datacaption(&quot;ShoppingCartOrder&quot;, &quot;DocumentNumber&quot;)" />
+        <Column Name="HasApproveJustifications" DataType="System.Boolean" ScriptItemUID="Column33" DataSource="Expression" Expression="0 &lt; DbCount(&quot;QERJustification&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 4, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;))&#xD;&#xA;)" />
+        <Column Name="HasDenyJustifications" DataType="System.Boolean" ScriptItemUID="Column40" DataSource="Expression" Expression="0 &lt; DbCount(&quot;QERJustification&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 16, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;))&#xD;&#xA;)" />
+        <Column DataType="System.String" Name="UID_PersonWantsOrg" ScriptItemUID="Column36" />
+        <Column DataType="System.Boolean" Name="QERJustificationApproveRequiresText" DataSource="Expression" Expression="Exists(&quot;QERJustification&quot;,SqlAnd(SqlCompareUid(&quot;UID_QERJustification&quot;,UID_QERJustificationApprove),SqlCompare(&quot;RequiresText&quot;, 1,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;)))" ScriptItemUID="Column44" />
+        <Column DataType="System.Boolean" Name="QERJustificationDenyRequiresText" DataSource="Expression" Expression="Exists(&quot;QERJustification&quot;,SqlAnd(SqlCompareUid(&quot;UID_QERJustification&quot;,UID_QERJustificationDeny),SqlCompare(&quot;RequiresText&quot;, 1,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;)))" ScriptItemUID="Column43" />
+      </DataTableSingleRow>
+      <DataTableCRView Table="PWOHelperPWO" Class="PWOHelperPWO" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PWOToDecide" ScriptItemUID="DataTableCRView3" RelationDBWhereClause="format(&quot;UID_PWOHelperPWO in (&#xD;&#xA;select pwoh.UID_PWOHelperPWO from PWOHelperPWO pwoh&#xD;&#xA;join PersonWantsOrg pwo on pwo.UID_PersonWantsOrg = pwoh.UID_PersonWantsOrg&#xD;&#xA;and pwo.DecisionLevel = pwoh.LevelNumber where {0})&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;   sqlcompareuid(&quot;pwoh.UID_PersonHead&quot;,GetUser()),&#xD;&#xA;   SqlEmpty(&quot;pwoh.Decision&quot;,&quot;string&quot;),&#xD;&#xA;   if(IsEscalationApproval())then&#xD;&#xA;      sqlcompare(&quot;pwoh.RulerLevel&quot;, 2, &quot;int&quot;, &quot;Equal&quot;)&#xD;&#xA;   else&#xD;&#xA;      sqlcompare(&quot;pwoh.RulerLevel&quot;, 2, &quot;int&quot;, &quot;NotEqual&quot;)&#xD;&#xA;)&#xD;&#xA;)" TriggerUpdates="Never">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+      </DataTableCRView>
+      <DataTableFKView Table="QERWorkingStep" ViewFKDataTable="PWOHelperPWO" ViewFKDataColumn="UID_QERWorkingStep" ScriptItemUID="DataTableFKView1" TriggerUpdates="Never">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+      </DataTableFKView>
+      <DataTableCRView Class="PWOHelperPWO" Table="PWOHelperPWOForRecallQuery" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PWOToDecide" RelationDBWhereClause="&quot;Decision = 'Q'&quot;" ViewFKWhereClause="IsReserved and UID_PersonHead = GetUser()" ScriptItemUID="DataTableCRView4">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+      </DataTableCRView>
+      <DataTableDbObject Table="AccProductParamCategory" Class="AccProductParamCategory" WhereClauseSQL="" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+      <DataTableFKView Table="QERTermsOfUse" ViewFKDataTable="AccProduct" ViewFKDataColumn="UID_QERTermsOfUse" ScriptItemUID="DataTableFKView5" ViewFKWhereClause="uid_accproduct in ( select uid_accproduct from pwotodecide where mustapprovetermsofuse)">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" ConvertToInteractive="false" />
+      </DataTableFKView>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject2" Table="PWODONE" Class="PersonWantsOrg">
+        <ActionSequence ScriptItemUID="Action7" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="PWOHelperPWOAllReadyDone" Class="PWOHelperPWO" WhereClauseSQL="format(&quot;UID_PWOHelperPWO in (&#xD;&#xA;select pwoh.UID_PWOHelperPWO from PWOHelperPWO pwoh&#xD;&#xA;join PersonWantsOrg pwo on pwo.UID_PersonWantsOrg = pwoh.UID_PersonWantsOrg&#xD;&#xA;and pwo.DecisionLevel = pwoh.LevelNumber where {0})&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;   SqlIn(&quot;pwoh.Decision&quot;,&quot;string&quot;,Split(&quot;P,N&quot;,&quot;,&quot;,false)),&#xD;&#xA;   SqlInWithFormat(&quot;pwo.UID_PersonWantsOrg&quot;,&quot;string&quot;,&quot;NonUnicodeLiterals&quot;,from PWOToDecide select UID_PersonWantsOrg where ((Doapprove or DoReject) and UID_PersonWantsOrg in (select UID_PersonWantsOrg from SubLevelCounter where States &gt; 1)))&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="DataTableDbObject3">
+        <ActionSequence ScriptItemUID="Action39" />
+      </DataTableDbObject>
+      <DataTableView Table="SubLevelCounter" ViewExpression="select distinct (UID_PersonWantsOrg,Len(SubLevelNumberConcat(UID_PersonWantsOrg)) as States) from PWOHelperPWO" PrimaryKeyColumn="UID_PersonWantsOrg" ScriptItemUID="DataTableView1">
+        <Column DataType="System.String" Name="UID_PersonWantsOrg" ScriptItemUID="Column470" />
+        <Column DataType="System.Int32" Name="States" ScriptItemUID="Column480" />
+      </DataTableView>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="FilterEscalationPWO">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList4">
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef10">
+              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                <ColumnList ScriptItemUID="ColumnList4">
+                  <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="FilterPersonInserted" />
+                  <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="FilterPersonOrdered" />
+                  <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="FilterDocumentNumber" />
+                  <SingleColumn ScriptItemUID="SingleColumn10" DataColumn="FilterProduct" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceContainer>
+          </ControlList>
+        </LocalControlContext>
+      </Control>
+      <Control ID="Col_DisplayOrg">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList6">
+            <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = ( select current uid_accproduct from pwotodecide)" ScriptItemUID="ContainerTemplate4">
+              <Container ScriptItemUID="Container39">
+                <AccProductSwitchContainer ActionType="Details_PersonWantsOrg" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from accproduct" ScriptItemUID="ProductRef2">
+                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping22" />
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+                </AccProductSwitchContainer>
+              </Container>
+              <Container Condition="isnull(request(&quot;UID_PersonWantsOrg&quot;),&quot;&quot;)&lt;&gt;&quot;&quot; and (1= select count() from pwotodecide)" ItemUID="Warning if person has denied or other dismiss decision and directlink to this decision" ScriptItemUID="Container29">
+                <Container Condition="select current (not(isnullorempty(displaypersondeny))) from pwotodecide" Layout="'VI_Styles_Container_Paragraph'" ItemUID="Warning if person has denied" ScriptItemUID="Container38">
+                  <Label Text="from pwotodecide select current &#xD;&#xA;translate(&quot;#LDS#Denied by {0}: {1}&quot;, displaypersondeny, isnullorempty(lastdecisionbypersontext, translate(&quot;#LDS#No reason entered&quot;)))" ScriptItemUID="Label11" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute6" Value="&quot;imx-icon imx-icon-Information&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+                <Container Condition="select current (not(isnullorempty(lastdecisiontext)) and lastdecisiontext&lt;&gt;lastdecisionbypersontext) from pwotodecide" Layout="'VI_Styles_Container_Paragraph'" ItemUID="Warning if other dismiss decision" ScriptItemUID="Container37">
+                  <Label Text="from pwotodecide select current  lastdecisiontext" ScriptItemUID="Label10" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute5" Value="&quot;imx-icon imx-icon-warning&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+              </Container>
+            </ContainerTemplate>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor3" />
+      </Control>
+      <Control ID="Col_State">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList7">
+            <Container Condition="select current doapprove from PWOToDecide" ScriptItemUID="Container25">
+              <Image ScriptItemUID="Image3" Source="File" FileName="variable('%permanentlink%img=24_approve_selected.png')" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute7" Value="translate(&quot;#LDS#Approve&quot;)" />
+                </HtmlAttributes>
+              </Image>
+            </Container>
+            <Container Condition="select current doreject from PWOToDecide" ScriptItemUID="Container44">
+              <Image ScriptItemUID="Image4" Source="File" FileName="variable('%permanentlink%img=24_deny_selected.png')" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute8" Value="translate('#LDS#Deny')" />
+                </HtmlAttributes>
+              </Image>
+            </Container>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor4" />
+      </Control>
+      <Control ID="Col_ValidFrom">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList12">
+            <Container Condition="from PWOToDecide select current DoApprove" ScriptItemUID="Container45">
+              <SwitchContainer ScriptItemUID="Switch3">
+                <SwitchContainerCase ScriptItemUID="Case6" Condition="(getconfig(&quot;VI_ITShop_ApproverCanSetValidFrom&quot;)=&quot;true&quot;)&#xD;&#xA;and&#xD;&#xA;not(from PWOToDecide select current OrderState = 'OrderUnsubscribe')">
+                  <Label Text="from PWOToDecide select current&#xD;&#xA;&#xD;&#xA;if(DateEmpty(validfromnew)) then&#xD;&#xA;(if( DateEmpty(validfrom) ) then translate(&quot;#LDS#immediately&quot;) else formatdate(Validfrom, &quot;d&quot;))&#xD;&#xA;else formatdate(validfromnew,&quot;d&quot;)" Action="Redirect" ScriptItemUID="Label23">
+                    <ServerActionCall ScriptItemUID="ServerActionCall22">
+                      <ActionSequence ScriptItemUID="Action28">
+                        <CallAction ActionID="VI_Popup" ScriptItemUID="Call11">
+                          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                            <Container ScriptItemUID="Container47">
+                              <Validator ScriptItemUID="Validator1" DisplayType="Generic">
+                                <ValidationModifier Condition="CheckTheDates()" ID="Datecheck" Text="translate(&quot;#LDS#The specified validity period is invalid. The validity end date is before the validity start date. Please change the validity period.&quot;)" />
+                              </Validator>
+                              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container48">
+                                <Label Text="translate(&quot;#LDS#You may set the start date of the validity of this request.&quot;)" ScriptItemUID="Label26" />
+                              </Container>
+                              <LayoutPanel ScriptItemUID="LayoutPanel4">
+                                <FormItemLabel DataTable="PWOToDecide" DataColumn="ValidFromNew" ScriptItemUID="FormItemLabel3">
+                                  <Label Text="datacaption(pwotodecide,validfrom)" ScriptItemUID="Label25" />
+                                </FormItemLabel>
+                                <DateControl DataTable="PWOToDecide" DataColumn="ValidFromNew" ScriptItemUID="DateControl3" DefaultTime="" Type="FromColumn" />
+                              </LayoutPanel>
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container46">
+                              <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef17" />
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="PopupTitle()" Value="select current display() from pwotodecide" ScriptItemUID="VirtualFunctionMapping46" />
+                        </CallAction>
+                      </ActionSequence>
+                    </ServerActionCall>
+                  </Label>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case5">
+                  <Label Text="from PWOToDecide select current if( isnull(validfrom) ) then translate(&quot;#LDS#immediately&quot;) else formatdate(ValidFrom, &quot;d&quot;)" ScriptItemUID="Label13" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor5" />
+      </Control>
+      <Control ID="Col_ValidUntil">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList13">
+            <Container Condition="from PWOToDecide select Current DoApprove&#xD;&#xA;Or HasExpiredValidUntilWithDeny()" ScriptItemUID="Container31">
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="(&#xD;&#xA;((getconfig(&quot;VI_ITShop_ApproverCanSetValidUntil&quot;)=&quot;true&quot;) And Not(from PWOToDecide select Current OrderState = 'OrderUnsubscribe'))&#xD;&#xA;Or HasExpiredValidUntilWithDeny()&#xD;&#xA;)&#xD;&#xA;And(&#xD;&#xA;   (isnull(getconfig(&quot;VI_ITShop_DisableHideValidUntilQERReuse&quot;),&quot;false&quot;)=&quot;true&quot;)&#xD;&#xA;   Or&#xD;&#xA;   (isnull(getconfig(&quot;VI_ITShop_DisableHideValidUntilQERReuse&quot;),&quot;false&quot;)=&quot;false&quot; And &quot;QERReuse&quot; &lt;&gt; from PWOToDecide select Current TableName )&#xD;&#xA;)">
+                  <Label Text="from PWOToDecide select current&#xD;&#xA;&#xD;&#xA;if(DateEmpty(validuntilnew)) then&#xD;&#xA;(if( DateEmpty(validuntil) ) then translate(&quot;#LDS#unlimited&quot;) else formatdate(ValidUntil, &quot;d&quot;))&#xD;&#xA;else formatdate(validuntilnew,&quot;d&quot;)" Action="Redirect" ScriptItemUID="Label18">
+                    <ServerActionCall ScriptItemUID="ServerActionCall25">
+                      <ActionSequence ScriptItemUID="Action22">
+                        <CallAction ActionID="VI_Popup" ScriptItemUID="Call12">
+                          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                            <Container ScriptItemUID="Container41">
+                              <Validator ScriptItemUID="Validator2" DisplayType="Generic">
+                                <ValidationModifier Condition="CheckTheDates()" ID="Datecheck" Text="translate(&quot;#LDS#The specified validity period is invalid. The validity end date is before the validity start date. Please change the validity period.&quot;)" />
+                              </Validator>
+                              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container42">
+                                <Label Text="translate(&quot;#LDS#You may set the end date of the validity of this request.&quot;)" ScriptItemUID="Label20" />
+                              </Container>
+                              <Container ScriptItemUID="Container18" Condition="0 &lt; GetMaxValidDays(from PWOToDecide select Current UID_Org)" EnableCustomAttributes="true" ItemUID="Display MaxValidDays info">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute9" Value="&quot;imx-message&quot;" />
+                                </HtmlAttributes>
+                                <Label ScriptItemUID="Label9" Text="translate(&quot;#LDS#This product can only be requested for {0} days.&quot;, GetMaxValidDays(from PWOToDecide select Current UID_Org))" />
+                              </Container>
+                              <LayoutPanel ScriptItemUID="LayoutPanel1">
+                                <FormItemLabel DataTable="PWOToDecide" DataColumn="ValidUntilNew" ScriptItemUID="FormItemLabel1">
+                                  <Label Text="datacaption(pwotodecide,validuntil)" ScriptItemUID="Label19" />
+                                </FormItemLabel>
+                                <DateControl DataTable="PWOToDecide" DataColumn="ValidUntilNew" ScriptItemUID="DateControl2" DefaultTime="" Type="FromColumn" />
+                              </LayoutPanel>
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container40">
+                              <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef13" />
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="PopupTitle()" Value="select current display() from pwotodecide" ScriptItemUID="VirtualFunctionMapping48" />
+                        </CallAction>
+                      </ActionSequence>
+                    </ServerActionCall>
+                  </Label>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case2">
+                  <Label Text="from PWOToDecide select current if( isnull(validuntil) ) then translate(&quot;#LDS#unlimited&quot;) else formatdate(ValidUntil, &quot;d&quot;)" ScriptItemUID="Label21" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor6" />
+      </Control>
+      <Control ID="Col_Reason">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList14">
+            <Label Text="from PWOToDecide select current IsNullOrEmpty(DisplayValue(UID_QERJustificationSelected),IsNullOrEmpty(ReasonForDecision,translate(&quot;#LDS#Enter a reason&quot;)))" Action="Redirect" ScriptItemUID="Label14">
+              <ServerActionCall ScriptItemUID="ServerActionCall3">
+                <ActionSequence ScriptItemUID="Action18">
+                  <CallAction ActionID="VI_Popup" ScriptItemUID="Call5">
+                    <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container33" RefreshTriggerExpression="from PWOToDecide select current UID_QERJustificationSelected">
+                        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container34">
+                          <Label Text="translate(&quot;#LDS#Please enter a reason for your decision.&quot;)" ScriptItemUID="Label15" />
+                        </Container>
+                        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef20">
+                          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping47">
+                            <ColumnList ScriptItemUID="ColumnList8">
+                              <SingleColumn ScriptItemUID="SingleColumn14" ColumnComponentEdit="VI_Edit_TextLong" DataColumn="ReasonForDecision" Condition="from PWOToDecide select current QERJustificationRequiresText" MinLength="1" />
+                              <SingleColumn ScriptItemUID="SingleColumn19" ColumnComponentEdit="VI_Edit_TextLong" DataColumn="ReasonForDecision" Condition="not(from PWOToDecide select current QERJustificationRequiresText)" />
+                              <SingleColumn ScriptItemUID="SingleColumn13" DataColumn="UID_QERJustificationSelected" ColumnComponentEdit="VI_Edit_FKByComboBox" Condition="if(doapprove) then HasApproveJustifications() else HasDenyJustifications()" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping18" />
+                        </ControlReferenceContainer>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                      <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container32">
+                        <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef19" />
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="select current display() from pwotodecide" ScriptItemUID="VirtualFunctionMapping30" />
+                  </CallAction>
+                </ActionSequence>
+              </ServerActionCall>
+            </Label>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor7" />
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="CanDelegateOrAddApprover()" Expression="NOT (select current IsReserved from pwotodecide)&#xD;&#xA;and (&#xD;&#xA;      (not(from PWOHelperPWO select top 1 IsFromDelegation where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from pwotodecide)))&#xD;&#xA;     and&#xD;&#xA;      ('' = (from PWOHelperPWO select top 1 isnull(UID_PersonAdditional,'') where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from pwotodecide)))&#xD;&#xA;     and&#xD;&#xA;       ('' = (from PWOHelperPWO select top 1 isnull(UID_PersonInsteadOf,'') where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from pwotodecide)))&#xD;&#xA;    )" DataType="System.Boolean" ScriptItemUID="Function2">
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor1" />
+      </Function>
+      <Function Name="SqlFilterNotNextDecisionMaker()" Expression="format(&quot;UID_Person not in (select UID_PersonHead from {0} where OrderNumber = 1)&quot;, sqlfunctioncalltable(&quot;QER&quot;,&quot;GITShop&quot;, &quot;FTPwoNextDecisionMaker&quot;,sqlformatvalue(from pwotodecide select current UID_PersonWantsOrg,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" DataType="System.String" ScriptItemUID="Function3">
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor2" />
+      </Function>
+      <Function Name="DbWhereClause()" Expression="if(IsEscalationApproval()) then&#xD;&#xA;DbWhereClauseEscalation()&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;sqland(&#xD;&#xA;getconfig(&quot;VI_ITShop_ApprovalAdditionalWhereClause&quot;),&#xD;&#xA;&#xD;&#xA;&quot;uid_personwantsorg in (select uid_personwantsorg from QER_VITShopDecisionPerson where &quot;+&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;rulerlevel&quot;, 2, &quot;int&quot;, &quot;NotEqual&quot;),&#xD;&#xA;sqlcompare(&quot;decisionorcomment&quot;, &quot;D&quot;,&quot;string&quot;,&quot;equal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, select uid_person from user),&#xD;&#xA;&#xD;&#xA;(if(isnull(request(&quot;UID_Personwantsorg&quot;),'')&lt;&gt;&quot;&quot;) then&#xD;&#xA;sqlcompareuid(&quot;uid_personwantsorg&quot;, request(&quot;UID_Personwantsorg&quot;))&#xD;&#xA;else &quot;&quot;),&#xD;&#xA;&#xD;&#xA;(if(isnull(request(&quot;aeweb_UID_PWOHelperPWO&quot;),'')&lt;&gt;&quot;&quot;) then&#xD;&#xA;sqland(&#xD;&#xA;&quot;uid_personwantsorg in (select uid_personwantsorg from pwohelperpwo where &quot;+&#xD;&#xA;sqlcompareuid(&quot;uid_pwohelperpwo&quot;, request(&quot;aeweb_UID_PWOHelperPWO&quot;))&#xD;&#xA;+&quot;)&quot;) else getnull()))&#xD;&#xA;&#xD;&#xA;+&quot;)&quot;&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function4" />
+      <Function Name="FormTitle()" Expression="if(IsEscalationApproval())&#xA;then&#xA;translate('#LDS#IT Shop Escalation Approval')&#xA;else&#xA;translate('#LDS#Heading Pending Requests')" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="IsEscalationApproval()" Expression="request(&quot;IsEscalation&quot;)=&quot;true&quot;" DataType="System.Boolean" ScriptItemUID="Function5" TriggerUpdates="Never" />
+      <Function Name="DbWhereClauseEscalation()" Expression="-- at least one filter must be applied&#xD;&#xA;from vars select (if(isnullorempty(FilterDocumentNumber) and isnullorempty(FilterProduct) and isnullorempty(FilterPersonOrdered) and isnullorempty(FilterPersonInserted)) then &quot;1=0&quot;&#xD;&#xA;else&#xD;&#xA;sqland(&#xD;&#xA;if(not(isnullorempty(filterproduct))) then format(&quot;uid_org in ( select uid_itshoporg from itshoporg where uid_accproduct = {0})&quot;, sqlformatvalue(filterproduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;if(not(isnullorempty(filterdocumentnumber))) then format(&quot;uid_shoppingcartorder in ( select uid_shoppingcartorder from shoppingcartorder where documentnumber = {0})&quot;, sqlformatvalue(filterdocumentnumber, &quot;string&quot;)),&#xD;&#xA;if(not(isnullorempty(filterpersonordered))) then sqlcompareuid(&quot;uid_personordered&quot;, filterpersonordered),&#xD;&#xA;if(not(isnullorempty(filterpersoninserted))) then sqlcompareuid(&quot;uid_personinserted&quot;, filterpersoninserted),&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;getconfig(&quot;VI_ITShop_ApprovalAdditionalWhereClause&quot;),&#xD;&#xA;&#xD;&#xA;&quot;uid_personwantsorg in (select uid_personwantsorg from QER_VITShopInterventionPerson where &quot;+&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;rulerlevel&quot;, 2, &quot;int&quot;, &quot;Equal&quot;),&#xD;&#xA;sqlcompare(&quot;decisionorcomment&quot;, &quot;D&quot;,&quot;string&quot;,&quot;equal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, select uid_person from user)&#xD;&#xA;)&#xD;&#xA;+&quot;)&quot;&#xD;&#xA;))" DataType="System.String" ScriptItemUID="Function6" />
+      <Function Name="GetUidPwoListWithTermsOfUse(string uidAccProduct)" DataType="System.String" ScriptItemUID="Function7" FunctionType="FunctionValueList">
+        <FunctionValueList ScriptItemUID="FunctionValueList1">
+          <FunctionValue Expression="from pwotodecide select uid_personwantsorg where mustapprovetermsofuse and uid_accproduct = uidAccProduct" />
+        </FunctionValueList>
+      </Function>
+      <Function Name="HasApproveJustifications()" Expression="from Vars select HasApproveJustifications" DataType="System.Boolean" ScriptItemUID="Function8" />
+      <Function Name="HasDenyJustifications()" Expression="from Vars select HasDenyJustifications" DataType="System.Boolean" ScriptItemUID="Function11" />
+      <Function Name="DateEmpty(datetime d)" DataType="System.Boolean" Expression="isnullorempty(d,#1899-12-30#) &lt; #1900-01-01#" ScriptItemUID="Function9" />
+      <Function ScriptItemUID="Function10" Name="AllowAutoApprove()" DataType="System.Boolean" Expression="canedit(DoApprove) and not(exists(&quot;personwantsorg&quot;, format(&quot;uid_personwantsorg = '{0}' and {1}&quot;, uid_personwantsorg, getconfig(&quot;VI_ITShop_Approvals_InteractiveApproval&quot;))))" FilterForTable="PWOToDecide" />
+      <Function Name="SubLevelNumberConcat(string UID)" DataType="System.String" Expression="Concat(from PWOHelperPWO select distinct SubLevelNumber where UID_PersonWantsOrg = UID,&quot;&quot;)" ScriptItemUID="Function13" />
+      <Function Name="GetNextSubLevelNumber()" DataType="System.Int32" Expression="if(0 = from PWOHelperPWO select count() where UID_PersonWantsOrg = (from PWOToDecide select current UID_PersonWantsOrg) and not(SubLevelNumber in(from PWOHelperPWOAllReadyDone select SubLevelNumber where UID_PersonWantsOrg = (from PWOToDecide select current (UID_PersonWantsOrg)))))then&#xD;&#xA;   -1&#xD;&#xA;else&#xD;&#xA;   from PWOHelperPWO select Min(SubLevelNumber) where UID_PersonWantsOrg = (from PWOToDecide select current UID_PersonWantsOrg) and not(SubLevelNumber in(from PWOHelperPWOAllReadyDone select SubLevelNumber where UID_PersonWantsOrg = (from PWOToDecide select current (UID_PersonWantsOrg))))  " ScriptItemUID="Function14">
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor8" />
+      </Function>
+      <Function ScriptItemUID="Function12" Name="UseTempQueue()" DataType="System.Boolean" Expression="10 &lt;= select count() from PWOToDecide where (doapprove or doreject)" />
+      <Function ScriptItemUID="Function15" Name="CheckTheDates()" DataType="System.Boolean" Expression="from PWOToDecide select Current (IsNullOrEmpty(ValidFromNew,#1899-12-30#) &gt; IsNullOrEmpty(ValidUntilNew,#9999-12-31#))">
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor9" />
+      </Function>
+      <Function ScriptItemUID="Function16" Name="HasExpiredValidUntilWithDeny()" DataType="System.Boolean" Expression="(from PWOToDecide select Current OrderState = 'OrderUnsubscribe') And (from PWOToDecide select Current ValidUntil &lt; GetDate()) And (from PWOToDecide select Current DoReject) And (from PWOToDecide select Current DateEmpty(ValidUntilProlongation))">
+        <DataTableCursor DataTable="PWOToDecide" ScriptItemUID="DataTableCursor10" />
+      </Function>
+      <Function Name="GetMaxValidDays(string UID)" DataType="System.Int32" Expression="from AccProduct select MaxValidDays Where UID_AccProduct in (from ITShopOrg select UID_AccProduct Where UID_ITShopOrg = UID)" ScriptItemUID="Function17" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="PWOToDecide" ScriptItemUID="DataEventHandler2" Operation="Update">
+        <ActionSequence ScriptItemUID="Action37">
+          <Update DataColumn="UID_QERJustificationSelected" DataTable="PWOToDecide" ScriptItemUID="Update17" WhereClause="-- NULL field when type of decision changes&#xD;&#xA;uid_personwantsorg = (select current uid_personwantsorg from pwotodecide)" />
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="DoApprove" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action11">
+      <ReadOnlyTableModifier DataTable="PWOToDecide" ScriptItemUID="TermsOfUseModifier" WhereClause="MustApproveTermsOfUse">
+        <ColumnList ScriptItemUID="ColumnList5">
+          <SingleColumn ScriptItemUID="SingleColumn11" DataColumn="DoApprove" />
+        </ColumnList>
+      </ReadOnlyTableModifier>
+      <CodeLiteral ScriptItemUID="CodeLiteral3">TableStore.Invalidating += (s,e) =&gt;
+{
+	PWOHelperPWO.Load(new VI.WebRuntime.DbObjectLoadInfo("PWOHelperPWO",PWOHelperPWO.DefaultWhereClause(), null), new VI.WebRuntime.LoadTableOptions());
+};</CodeLiteral>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Approvals" PageFileName="VI_FormTemplate_Standard" NavigationTitle="FormTitle()" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action19">
+          <ActionSequence Condition="isnull(request(&quot;UID_PersonWantsOrg&quot;),&quot;&quot;)&lt;&gt;&quot;&quot;" ItemUID="Decision for parameter UID_PersonWantsOrg" ScriptItemUID="Action12">
+            <LoadTable DataTable="PWOToDecide" ScriptItemUID="LoadTable3" WhereClause="DbWhereClause()">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType10" />
+            </LoadTable>
+            <ActionSequence ScriptItemUID="Action5" Condition="(1= from pwotodecide select count())&#xD;&#xA;and&#xD;&#xA;-- interactive approval allowed?&#xD;&#xA;from pwotodecide select top 1 AllowAutoApprove()">
+              <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="true" ScriptItemUID="Update2" />
+              <Redirect FormID="Approvals_Detail" ScriptItemUID="Redirect1" />
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence Condition="isnull(request(&quot;aeweb_UID_PWOHelperPWO&quot;),&quot;&quot;)&lt;&gt;&quot;&quot;" ItemUID="Decision for parameter aeweb_UID_PWOHelperPWO" ScriptItemUID="Action13">
+            <LoadTable DataTable="PWOToDecide" ScriptItemUID="LoadTable4" WhereClause="DbWhereClause()">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType11" />
+            </LoadTable>
+            <ActionSequence ScriptItemUID="Action2" ItemUID="Allready done?" Condition="0 = (from PWOToDecide select count()) and isnull(request(&quot;aeweb_UID_PersonWantsOrg&quot;),&quot;&quot;)&lt;&gt;&quot;&quot;">
+              <Update DataColumn="UID_PersonWantsOrg" DataTable="Vars" ScriptItemUID="Update16" Value="request(&quot;aeweb_UID_PersonWantsOrg&quot;)" />
+              <Redirect ScriptItemUID="Redirect14" FormID="SHOWPWO" NoLinkBackToThisForm="true" NoLinkObjectID="true" />
+            </ActionSequence>
+            <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="true" ScriptItemUID="Update3" />
+            <ActionSequence Condition="request(&quot;aeweb_decision&quot;) = 'DenyDecision'" ScriptItemUID="Action14">
+              <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="false" ScriptItemUID="Update4" />
+              <Update DataTable="PWOToDecide" DataColumn="DoReject" Value="false" ScriptItemUID="Update5" />
+              <Method DataTable="PWOToDecide" Method="DenyDecision">
+                <MethodParameter Name="'uid_personhead'" Value="select uid_person from user" />
+                <MethodParameter Name="'strReasonText'" Value="&quot;&quot;" />
+              </Method>
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call1">
+                <VirtualFunctionMapping ID="MessageText()" Value="from pwotodecide select top 1 (&#xA;translate(&quot;#LDS#You have denied the approval of the product {0} for {1}.&quot;, displayvalue(uid_org), displayvalue(uid_personordered)))&#xA;" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping3" />
+              </CallAction>
+              <Redirect Target="Context" NoLinkBackToThisForm="true" ContextID="VI_ITShop_Approvals" ScriptItemUID="Redirect2" AllowReturnToThisContext="false" />
+            </ActionSequence>
+            <ActionSequence Condition="((&quot;true&quot; &lt;&gt; getconfig(&quot;VI_ITShop_ApproverReasonMandatoryOnDeny&quot;) and request(&quot;aeweb_decision&quot;) = 'Deny')&#xD;&#xA;or&#xD;&#xA;(request(&quot;aeweb_decision&quot;) = 'Approve'))&#xD;&#xA;and&#xD;&#xA;from pwotodecide select top 1 AllowAutoApprove()" ScriptItemUID="Action15">
+              <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="request(&quot;aeweb_decision&quot;) = 'Approve'" ScriptItemUID="Update6" />
+              <Update DataTable="PWOToDecide" DataColumn="DoReject" Value="request(&quot;aeweb_decision&quot;) = 'Deny'" ScriptItemUID="Update7" />
+              <Method DataTable="PWOToDecide" WhereClause="doapprove or doreject" Method="MakeDecision">
+                <MethodParameter Name="'uid_personhead'" Value="select uid_person from user" />
+                <MethodParameter Name="'bDecision'" Value="select current doapprove from pwotodecide" />
+                <MethodParameter Name="'strReasonText'" Value="&quot;&quot;" />
+              </Method>
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                <VirtualFunctionMapping ID="MessageText()" Value="( from pwotodecide select top 1 (&#xD;&#xA;if( doapprove) then&#xD;&#xA;translate(&quot;#LDS#You have approved the request of the product {0} for {1}.&quot;, displayvalue(uid_org), displayvalue(uid_personordered))&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#You have denied the request of the product {0} for {1}.&quot;, displayvalue(uid_org), displayvalue(uid_personordered))))&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping5" />
+              </CallAction>
+              <Redirect Target="Context" NoLinkBackToThisForm="true" ContextID="VI_ITShop_Approvals" ScriptItemUID="Redirect3" AllowReturnToThisContext="false" />
+            </ActionSequence>
+            <ActionSequence Condition="isnull(request(&quot;aeweb_decision&quot;),&quot;&quot;) in ('Deny')&#xD;&#xA;and&#xD;&#xA;&quot;true&quot; = getconfig(&quot;VI_ITShop_ApproverReasonMandatoryOnDeny&quot;)" ScriptItemUID="Action78">
+              <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="false" ScriptItemUID="Update35" />
+              <Update DataTable="PWOToDecide" DataColumn="DoReject" Value="true" ScriptItemUID="Update34" />
+              <Redirect FormID="Approvals_Detail" ScriptItemUID="Redirect78" />
+            </ActionSequence>
+            <ActionSequence Condition="not(isnull(request(&quot;aeweb_decision&quot;),&quot;&quot;) in ( 'Approve', 'Deny' ) )" ScriptItemUID="Action16">
+              <Redirect FormID="Approvals_Detail" ScriptItemUID="Redirect4" />
+            </ActionSequence>
+          </ActionSequence>
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="FormTitle()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer5" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList5">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef12">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping45" ID="Text()" Value="if(IsEscalationApproval())&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#Enter at least one of the filters to view pending requests.&quot;)&#xD;&#xA;else&#xD;&#xA;translate('#LDS#You are entitled to approve or deny the following requests.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ItemUID="Open decisions" ScriptItemUID="Container3">
+              <Container ScriptItemUID="Container26" Condition="IsEscalationApproval()">
+                <ControlReferenceControlList ID="FilterEscalationPWO" ScriptItemUID="ControlRef9" />
+              </Container>
+              <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                <HtmlAttributes />
+                <MasterPane ScriptItemUID="MasterPane1">
+                  <Container ScriptItemUID="Container9">
+                    <Grid AllowExport="true" ScriptItemUID="Grid1" ExportFileName="" ExportTitle="">
+                      <ControlReferenceGridBand ID="VI_ITShop_ApprovalItem" ItemUID="GridPersonPWO" ScriptItemUID="ControlRef2" DataTable="PWOToDecide">
+                        <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping2" />
+                        <VirtualFunctionMapping ID="DbWhereClause()" Value="DbWhereClause()" ScriptItemUID="VirtualFunctionMapping7" />
+                        <VirtualControlMapping VirtualControl="AdditionalControls" ContainerType="Container">
+                          <Container ScriptItemUID="Container5">
+                            <Container Condition="select current (not(isnullorempty(displaypersondeny))) from pwotodecide" ItemUID="Warning if person has denied" ScriptItemUID="Container6" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute10" Value="&quot;paragraph imx-icon&quot;" />
+                              </HtmlAttributes>
+                              <Label Text="from pwotodecide select current &#xD;&#xA;translate(&quot;#LDS#Denied by {0}: {1}&quot;, displaypersondeny, isnullorempty(lastdecisionbypersontext, translate(&quot;#LDS#No reason entered&quot;)))" ScriptItemUID="Label2" />
+                            </Container>
+                            <Container Condition="select current (not(isnullorempty(lastdecisiontext)) and lastdecisiontext&lt;&gt;lastdecisionbypersontext) from pwotodecide" ItemUID="Warning if other dismiss decision" ScriptItemUID="Container7" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute11" Value="&quot;paragraph imx-icon&quot;" />
+                              </HtmlAttributes>
+                              <Label Text="from pwotodecide select current  lastdecisiontext" ScriptItemUID="Label3" />
+                            </Container>
+                            <Container Condition="select current mustapprovetermsofuse from pwotodecide" ItemUID="Does the user need to accept terms of use?" ScriptItemUID="Container27" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute12" Value="&quot;paragraph imx-icon&quot;" />
+                              </HtmlAttributes>
+                              <Label Text="translate(&quot;#LDS#You must accept the terms of use before proceeding.&quot;)" ScriptItemUID="Label8" />
+                            </Container>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="TriggerRecalculateCompliance" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action20">
+                            <Update DataTable="PWOToDecide" DataColumn="CheckStatusSemaphor" Value="checkstatussemaphor+1" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from pwotodecide)" ScriptItemUID="Update8" />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                      </ControlReferenceGridBand>
+                    </Grid>
+                  </Container>
+                </MasterPane>
+                <DetailPane ScriptItemUID="DetailPane1">
+                  <Container ScriptItemUID="Container1">
+                    <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="PWOToDecide" WhereClause="uid_personwantsorg = ( from vars select uid_pwoselected)">
+                      <ObjectSwitchContainer ObjectKey="from pwotodecide select current getobjectkey(&quot;AccProduct&quot;, uid_accproduct, &quot;&quot;)" ActionType="Edit_PersonWantsOrg" ScriptItemUID="ObjectSwitchContainer1">
+                        <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping3" />
+                        <VirtualControlMapping VirtualControl="AdditionalActions" ContainerType="ControlList">
+                          <ControlList ScriptItemUID="ControlList3">
+                            <Container ScriptItemUID="Container28" Layout="'VI_Styles_Container_Inline'" ItemUID="Accept Terms Of Use" Condition="from pwotodecide select current mustapprovetermsofuse">
+                              <Button ScriptItemUID="Button8" Text="datacaptionsingle(&quot;QERTermsOfUse&quot;)" Layout="'VI_Styles_Button_Default'">
+                                <ServerActionCall ScriptItemUID="ServerActionCall18">
+                                  <Redirect ScriptItemUID="Redirect12" Target="FormModule">
+                                    <RedirectFormModule ID="QER_ITShop_AcceptTermsOfUse" ScriptItemUID="RedirectForm2">
+                                      <VirtualFunctionMapping ID="HeaderText()" Value="translate(&quot;#LDS#You must accept the terms of use before proceeding.&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                                      <VirtualFunctionMapping ID="AccProductFilter()" Value="uid_accproduct = (from pwotodecide select current uid_accproduct)" ScriptItemUID="VirtualFunctionMapping9" />
+                                      <VirtualControlMapping VirtualControl="OnTermsOfUseAccepted" ContainerType="ActionComponent">
+                                        <ActionComponent ScriptItemUID="Action9">
+                                          <CodeLiteral ScriptItemUID="CodeLiteral2">
+DataContext.AddHistoryEntryTermsOfUse(_Connection.SqlFormatter.InClause("uid_personwantsorg", VI.Base.ValType.String,
+DataContext.GetUidPwoListWithTermsOfUse(this.TableStore.GetLocalColumn(this.DataContext.PWOToDecide, "UID_AccProduct").GetValue(PWOToDecide_Current.Row).String)));
+
+
+// trigger reload of decision history
+DataContext.PWODecisionHistory.Invalidate();
+
+</CodeLiteral>
+                                          <Redirect ScriptItemUID="Redirect13" FormID="Approvals" />
+                                        </ActionComponent>
+                                      </VirtualControlMapping>
+                                    </RedirectFormModule>
+                                  </Redirect>
+                                </ServerActionCall>
+                              </Button>
+                            </Container>
+                            <Container ScriptItemUID="Container17" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;dropup&quot;" />
+                              </HtmlAttributes>
+                              <ToolbarButton Text="translate(&quot;#LDS#More&quot;)" Tooltip="translate(&quot;#LDS#More information about this request&quot;)" ScriptItemUID="ToolbarButton1" Layout="'VI_Styles_ToolbarButton_Dropup'">
+                                <Menu ScriptItemUID="Menu1">
+                                  <MenuElement Text="translate(&quot;#LDS#Send inquiry&quot;)" Tooltip="translate(&quot;#LDS#Send inquiry for this request to another employee&quot;)" Condition="convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')&#xD;&#xA;and&#xD;&#xA;0 = (from PWOHelperPWOForRecallQuery select count() where UID_PersonWantsOrg = (from pwotodecide select current UID_PersonWantsOrg))" ScriptItemUID="MenuElement2">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall2">
+                                      <ActionSequence ScriptItemUID="Action3">
+                                        <CallAction ActionID="VI_ITShop_QueryToPerson" ScriptItemUID="CallAction3">
+                                          <VirtualTableMapping VirtualTable="PWO" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping4" />
+                                          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping5" />
+                                          <VirtualFunctionMapping ID="get_Uid_PersonWantsOrg()" Value="select current uid_personwantsorg from pwotodecide" ScriptItemUID="VirtualFunctionMapping10" />
+                                        </CallAction>
+                                      </ActionSequence>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Additional information&quot;)" Condition="from pwotodecide select current approvercaneditparameters" ScriptItemUID="MenuElement3">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall14">
+                                      <ActionSequence ScriptItemUID="Action4">
+                                        <ConvertInteractiveEntity DataTable="PWOToDecide" />
+                                        <Checkpoint ActionType="SetCheckpoint" DataTable="PWOToDecide" WhereClause="PrimaryKey() = from PWOToDecide select current PrimaryKey()" />
+                                        <LoadTable DataTable="AccProductParamCategory" WhereClause="SqlCompareUid(&quot;UID_AccProductParamCategory&quot;, from AccProduct select UID_AccProductParamCategoryEffective where UID_AccProduct = (select current uid_accproduct from pwotodecide))" ScriptItemUID="LoadTable1">
+                                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType12" ConvertToInteractive="false" />
+                                        </LoadTable>
+                                        <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction4">
+                                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Request information&quot;)" ScriptItemUID="VirtualFunctionMapping11" />
+                                          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                            <Container ScriptItemUID="Container11">
+                                              <Container Condition="not IsNullOrEmpty(from AccProductParamCategory select Description)" ItemUID="AccProductParamCategory has a description" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container16">
+                                                <Label Text="from AccProductParamCategory select DisplayValue(Description)" ScriptItemUID="Label5" />
+                                              </Container>
+                                              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlReferenceContainer2">
+                                                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping12">
+                                                  <ColumnList ScriptItemUID="ColumnList2">
+                                                    <ExpressionColumnList ColumnList="GetAccProductParams(select current uid_accproduct from pwotodecide, sqlcompare(&quot;approvercanedit&quot;,true,&quot;bool&quot;,&quot;equal&quot;)&#xA;)" ScriptItemUID="ExpressionColumnList1" />
+                                                  </ColumnList>
+                                                </VirtualFunctionMapping>
+                                                <VirtualFunctionMapping ID="IsReadOnly()" Value="false" ScriptItemUID="VirtualFunctionMapping13" />
+                                                <VirtualTableMapping VirtualTable="EditTable" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping6" />
+                                              </ControlReferenceContainer>
+                                            </Container>
+                                          </VirtualControlMapping>
+                                          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container10">
+                                              <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button7">
+                                                <HtmlAttributes>
+                                                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Apply&quot;)" ScriptItemUID="HtmlAttribute3" />
+                                                </HtmlAttributes>
+                                                <ServerActionCall ScriptItemUID="ServerActionCall4">
+                                                  <ActionOnControl ActionType="PerformValidation" />
+                                                  <ActionOnControl />
+                                                  <Checkpoint ActionType="CheckpointCommit" />
+                                                </ServerActionCall>
+                                              </Button>
+                                              <Button Text="translate(&quot;#LDS#Cancel&quot;)" ItemUID="Cancel Button" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button2" AssociatedWithEscapeKey="true">
+                                                <HtmlAttributes>
+                                                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute2" />
+                                                </HtmlAttributes>
+                                                <ServerActionCall ScriptItemUID="ServerActionCall16">
+                                                  <ActionOnControl />
+                                                  <Checkpoint ActionType="Rollback" />
+                                                </ServerActionCall>
+                                              </Button>
+                                            </Container>
+                                          </VirtualControlMapping>
+                                        </CallAction>
+                                      </ActionSequence>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Show entire request&quot;)" Condition="(GetConfig('VI_ITShop_ApproverCanSeeShoppingCartOrder') = 'True' )" Tooltip="translate(&quot;#LDS#Show entire request with which this product was requested&quot;)" ScriptItemUID="MenuElement4">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall7">
+                                      <Redirect ScriptItemUID="Redirect9" Target="FormModule">
+                                        <RedirectFormModule ID="VI_ITShop_PWOOverviewForShoppingCartOrder" ScriptItemUID="RedirectForm1">
+                                          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping7" />
+                                          <VirtualControlMapping VirtualControl="AdditionalButtons" ContainerType="ControlList">
+                                            <ControlList ScriptItemUID="ControlList1">
+                                              <Container Layout="'VI_Styles_Container_Inline'" Condition="isnull( getconfig(&quot;VI_ITShop_ApproverCanAddToShoppingCartOrder&quot;), &quot;true&quot;) =&quot;true&quot;" ScriptItemUID="Container4">
+                                                <Button Text="translate(&quot;#LDS#Add items to this request&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button6">
+                                                  <ServerActionCall ScriptItemUID="ServerActionCall15">
+                                                    <Redirect Target="Context" ContextID="VI_ITShop_ProductSelection" AllowReturnToThisContext="true" ScriptItemUID="Redirect11">
+                                                      <RedirectParameter Name="'UID_Person'" Value="from pwotodecide select current uid_personordered" />
+                                                      <RedirectParameter Name="'UID_ShoppingCartOrder'" Value="from pwotodecide select current uid_shoppingcartorder" />
+                                                      <RedirectParameter Name="'ShoppingCartOrderDocumentNumber'" Value="from pwotodecide select current objectwalker(&quot;fk(uid_shoppingcartorder).DocumentNumber&quot;)" />
+                                                      <RedirectParameter Name="'addingToExistingCart'" Value="true" />
+                                                    </Redirect>
+                                                  </ServerActionCall>
+                                                </Button>
+                                              </Container>
+                                              <Button Text="translate('#LDS#Approve all')" ScriptItemUID="Button5" Layout="'VI_Styles_Button_Default'">
+                                                <ServerActionCall ScriptItemUID="ServerActionCall8">
+                                                  <Update DataTable="PWOToDecide" DataColumn="DoApprove" WhereClause="UID_ShoppingCartOrder = (from pwotodecide select current UID_ShoppingCartOrder) and not(DoNotAllowApprove)" Value="true" ScriptItemUID="Update9" />
+                                                  <Redirect ScriptItemUID="Redirect10" FormID="Approvals_Detail" />
+                                                </ServerActionCall>
+                                              </Button>
+                                            </ControlList>
+                                          </VirtualControlMapping>
+                                        </RedirectFormModule>
+                                      </Redirect>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Reroute approval&quot;)" Condition="0 &lt; (&#xD;&#xA;from QERWorkingStep select count() where &#xD;&#xA;   trim(IsNullOrEmpty(DirectSteps,'')) &lt;&gt; '' &#xD;&#xA;   and &#xD;&#xA;   trim(IsNullOrEmpty(DirectSteps,'')) &lt;&gt; '0'&#xD;&#xA;   and&#xD;&#xA;   UID_QERWorkingStep in (&#xD;&#xA;      from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (&#xD;&#xA;	     from pwotodecide select current UID_PersonWantsOrg&#xD;&#xA;      )&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;" Tooltip="translate(&quot;#LDS#Reroute approval for this request&quot;)" ScriptItemUID="MenuElement5">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall9">
+                                      <CallAction ActionID="VI_ITShop_DirectDecision" ScriptItemUID="CallAction6">
+                                        <VirtualTableMapping VirtualTable="QERWorkingStep" DataTable="QERWorkingStep" ScriptItemUID="VirtualTableMapping8" />
+                                        <VirtualTableMapping VirtualTable="PWOHelperPWO" DataTable="PWOHelperPWO" ScriptItemUID="VirtualTableMapping9" />
+                                        <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping10" />
+                                        <VirtualFunctionMapping ID="Title()" Value="Translate('#LDS#If you do not wish to approve this request, you may reroute the approval to one of the following steps.')" ScriptItemUID="VirtualFunctionMapping14" />
+                                      </CallAction>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Add approver&quot;)" Condition="-- check whether it is allowed to add approvers&#xA;select current IsAdditionalAllowed from pwotodecide&#xA;and CanDelegateOrAddApprover()" Tooltip="translate(&quot;#LDS#Add additional approver for this request&quot;)" ScriptItemUID="MenuElement6">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall10">
+                                      <CallAction ActionID="VI_Action_AdditionalApprover" ScriptItemUID="CallAction7">
+                                        <VirtualFunctionMapping ID="PersonFilter()" Value="SqlAnd(&#xD;&#xA;GetConfig(&quot;VI_ITShop_ApprovalItem_AdditionalToApprover&quot;),&#xD;&#xA;SqlFilterNotNextDecisionMaker()&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping15" />
+                                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Please enter the reason for adding an approver&quot;)" ScriptItemUID="VirtualFunctionMapping16" />
+                                        <VirtualTableMapping VirtualTable="Action" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping11" />
+                                        <VirtualTableMapping VirtualTable="ActionHelper" DataTable="PWOHelperPWO" ScriptItemUID="VirtualTableMapping12" />
+                                      </CallAction>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Delegate approval&quot;)" Condition="-- check whether it is allowed to delegate approvals&#xA;select current IsInsteadOfAllowed from pwotodecide&#xA;-- check whether I can approve due to a delegation&#xA;-- and check whether I can further delegate a delegated approval&#xA;and CanDelegateOrAddApprover()" Tooltip="translate(&quot;#LDS#Delegate approval for this request to another approver&quot;)" ScriptItemUID="MenuElement7">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall11">
+                                      <CallAction ActionID="VI_Action_InsteadOfApprover" ScriptItemUID="CallAction8">
+                                        <VirtualFunctionMapping ID="PersonFilter()" Value="SqlAnd(&#xD;&#xA;GetConfig(&quot;VI_ITShop_ApprovalItem_InsteadOfApprover&quot;),&#xD;&#xA;SqlFilterNotNextDecisionMaker()&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping17" />
+                                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Please enter the reason for delegating this request&quot;)" ScriptItemUID="VirtualFunctionMapping18" />
+                                        <VirtualTableMapping VirtualTable="Action" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping13" />
+                                        <VirtualTableMapping VirtualTable="ActionHelper" DataTable="PWOHelperPWO" ScriptItemUID="VirtualTableMapping14" />
+                                      </CallAction>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Reject approval&quot;)" Condition="1 = (from PWOHelperPWO select count()&#xD;&#xA;where &#xD;&#xA;IsFromDelegation And RulerLevel &lt;&gt; 2&#xD;&#xA;and&#xD;&#xA;UID_PersonWantsOrg = (select current UID_PersonWantsOrg from pwotodecide)&#xD;&#xA;and NOT&#xD;&#xA;(select current IsReserved from pwotodecide)&#xD;&#xA;)&#xD;&#xA;" Tooltip="translate(&quot;#LDS#Reject approval for this request and send it back to orignal approver&quot;)" ScriptItemUID="MenuElement8">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall12">
+                                      <CallAction ActionID="VI_Action_DenyApproval" ScriptItemUID="CallAction9">
+                                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Please enter the reason for denying the decision&quot;)" ScriptItemUID="VirtualFunctionMapping19" />
+                                        <VirtualTableMapping VirtualTable="Action" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping15" />
+                                      </CallAction>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Escalate approval&quot;)" Tooltip="translate(&quot;#LDS#Escalate approval so that a fallback approver or member of the chief approval team can decide on this request&quot;)" ScriptItemUID="MenuElement9" Condition="Exists(&quot;QERWorkingStep&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompare(&quot;EscalationSteps&quot;, 0, &quot;int&quot;, &quot;NotEqual&quot;),&#xD;&#xA;      format(&#xD;&#xA;	     &quot;UID_QERWorkingStep in(select UID_QERWorkingStep from QER_VITShopDecisionPerson where {0})&quot;,&#xD;&#xA;         SqlAnd(&#xD;&#xA;            SqlCompareUid(&quot;UID_Person&quot;,GetUser()),&#xD;&#xA;            SqlCompareUid(&quot;UID_PersonWantsOrg&quot;,from PWOToDecide select current UID_PersonWantsOrg),&#xD;&#xA;            SqlCompare(&quot;DecisionLevel&quot;, from PWOToDecide select current DecisionLevel, &quot;int&quot;, &quot;equal&quot;)&#xD;&#xA;            -- Only for Escalation? Comment In!&#xD;&#xA;            -- ,SqlCompare(&quot;RulerLevel&quot;, 2, &quot;int&quot;, &quot;Equal&quot;) &#xD;&#xA;         )&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall17">
+                                      <CallAction ActionID="VI_Action_Escalate" ScriptItemUID="Call4">
+                                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Enter a reason for escalating this request&quot;)" ScriptItemUID="VirtualFunctionMapping31" />
+                                        <VirtualTableMapping VirtualTable="PWO" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping23" />
+                                      </CallAction>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                  <MenuElement Text="translate(&quot;#LDS#Change priority&quot;)" ScriptItemUID="MenuElement1" Tooltip="translate(&quot;#LDS#Set the priority for this request&quot;)">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall19">
+                                      <ActionSequence ScriptItemUID="Action10">
+                                        <ConvertInteractiveEntity DataTable="PWOToDecide" />
+                                        <Checkpoint ActionType="SetCheckpoint" DataTable="PWOToDecide" WhereClause="PrimaryKey() = from PWOToDecide select current PrimaryKey()" />
+                                        <CallAction ActionID="VI_Popup" ScriptItemUID="Call10">
+                                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Set the priority for this request&quot;)" ScriptItemUID="VirtualFunctionMapping44" />
+                                          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                            <Container ScriptItemUID="Container35">
+                                              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef11">
+                                                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping43">
+                                                  <ColumnList ScriptItemUID="ColumnList6">
+                                                    <SingleColumn ScriptItemUID="SingleColumn12" DataColumn="PWOPriority" />
+                                                  </ColumnList>
+                                                </VirtualFunctionMapping>
+                                                <VirtualFunctionMapping ID="IsReadOnly()" Value="false" ScriptItemUID="VirtualFunctionMapping42" />
+                                                <VirtualTableMapping VirtualTable="EditTable" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping21" />
+                                              </ControlReferenceContainer>
+                                            </Container>
+                                          </VirtualControlMapping>
+                                          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container30">
+                                              <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button10">
+                                                <HtmlAttributes>
+                                                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Apply&quot;)" ScriptItemUID="HtmlAttribute14" />
+                                                </HtmlAttributes>
+                                                <ServerActionCall ScriptItemUID="ServerActionCall21">
+                                                  <ActionOnControl ActionType="PerformValidation" />
+                                                  <ActionOnControl />
+                                                  <Checkpoint ActionType="CheckpointCommit" />
+                                                </ServerActionCall>
+                                              </Button>
+                                              <Button Text="translate(&quot;#LDS#Cancel&quot;)" ItemUID="Cancel Button" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button9" AssociatedWithEscapeKey="true">
+                                                <HtmlAttributes>
+                                                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute13" />
+                                                </HtmlAttributes>
+                                                <ServerActionCall ScriptItemUID="ServerActionCall20">
+                                                  <ActionOnControl />
+                                                  <Checkpoint ActionType="Rollback" />
+                                                </ServerActionCall>
+                                              </Button>
+                                            </Container>
+                                          </VirtualControlMapping>
+                                        </CallAction>
+                                      </ActionSequence>
+                                    </ServerActionCall>
+                                  </MenuElement>
+                                </Menu>
+                                <ServerActionCall ScriptItemUID="ServerActionCall13" />
+                              </ToolbarButton>
+                            </Container>
+                          </ControlList>
+                        </VirtualControlMapping>
+                      </ObjectSwitchContainer>
+                    </ContainerTemplate>
+                  </Container>
+                  <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                    <ControlList ScriptItemUID="ControlList2">
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="PWOToDecide" WhereClause="uid_personwantsorg = ( from vars select uid_pwoselected)">
+                        <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef3">
+                          <VirtualFunctionMapping ID="Caption1()" Value="datacaption(PWOToDecide,displayorg)" ScriptItemUID="VirtualFunctionMapping20" />
+                          <VirtualFunctionMapping ID="Value1()" Value="from PWOToDecide select current displayvalue(uid_org)  " ScriptItemUID="VirtualFunctionMapping21" />
+                          <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot;+(from PWOToDecide select current tablename)" ScriptItemUID="VirtualFunctionMapping22" />
+                        </ControlReferenceControlList>
+                      </ContainerTemplate>
+                    </ControlList>
+                  </DetailPaneHeader>
+                </DetailPane>
+              </MasterDetailControl>
+              <Container ItemUID="Buttonpanel" ScriptItemUID="Container8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                </HtmlAttributes>
+                <Button Text="translate('#LDS#Next')" EnabledCondition="0 &lt; select count() from PWOToDecide where (DoApprove or DoReject)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate('#LDS#Save decisions to database')" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <ActionSequence Condition="0 = select count() from pwotodecide where (doapprove or doreject)" ScriptItemUID="Action21">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call3">
+                        <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping23" />
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#You have not made any decisions.')" ScriptItemUID="VirtualFunctionMapping24" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#No decisions were made')" ScriptItemUID="VirtualFunctionMapping25" />
+                        <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping26" />
+                      </CallAction>
+                      <EndExecution AlsoAbortWaitingThreads="false" />
+                    </ActionSequence>
+                    <ActionSequence ScriptItemUID="Action42">
+                      <ActionSequence ItemUID="SetValidUntilNew" ScriptItemUID="Action8">
+                        <Update DataTable="PWOToDecide" DataColumn="ValidUntilNew" Value="if (not DateEmpty(validuntilprolongation)) then&#xD;&#xA;  validuntilprolongation&#xD;&#xA;else if (not DateEmpty(validuntil)) then&#xD;&#xA;  validuntil&#xD;&#xA;-- else leave the validuntilnew empty&#xD;&#xA; " WhereClause="not (IsNullOrEmpty(validuntil) and IsNullOrEmpty(validuntilprolongation))" ScriptItemUID="Update1" />
+                      </ActionSequence>
+                      <ActionSequence ItemUID="SetValidFromNew" ScriptItemUID="Action24">
+                        <Update DataTable="PWOToDecide" DataColumn="ValidFromNew" Value="if (not DateEmpty(validfrom)) then&#xD;&#xA;  validfrom&#xD;&#xA; " WhereClause="not IsNullOrEmpty(validfrom)" ScriptItemUID="Update14" />
+                      </ActionSequence>
+                    </ActionSequence>
+                    <Redirect FormID="Approvals_Detail" ScriptItemUID="Redirect5" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ID="Approvals_Detail" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Approvals')" ScriptItemUID="Form2">
+        <ActionSequence ScriptItemUID="Action23" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+          <Container ScriptItemUID="Container12">
+            <Label Text="FormTitle() + &quot; - &quot; + translate('#LDS#Approvals')" ScriptItemUID="Label4" />
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+          <Container ScriptItemUID="Container13">
+            <Container ScriptItemUID="Container14">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ItemUID="Head" ScriptItemUID="ControlRef5">
+                <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Please supply a reason for your decisions. You may enter one reason for all decisions as well as specific reasons for every decision.')" ScriptItemUID="VirtualFunctionMapping27" />
+              </ControlReferenceContainer>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15" RefreshTriggerExpression="Union(from Vars select QERJustificationApproveRequiresText,from Vars select QERJustificationDenyRequiresText)">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef6">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping28">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="ReasonApprove" Condition="(0 &lt; select count() from pwotodecide where doapprove)&#xD;&#xA;and&#xD;&#xA;from Vars select QERJustificationApproveRequiresText" ColumnComponentEdit="VI_Edit_TextLong" MinLength="1" />
+                      <SingleColumn ScriptItemUID="SingleColumn17" DataColumn="ReasonApprove" Condition="(0 &lt; select count() from pwotodecide where doapprove)&#xD;&#xA;and&#xD;&#xA;not(from Vars select QERJustificationApproveRequiresText)" ColumnComponentEdit="VI_Edit_TextLong" />
+                      <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_QERJustificationApprove" Condition="0 &lt; select count() from pwotodecide where doapprove and HasApproveJustifications()" ColumnComponentEdit="VI_Edit_FKByComboBox" />
+                      <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ReasonDeny" Condition="(0 &lt; select count() from pwotodecide where doreject)&#xD;&#xA;and&#xD;&#xA;from Vars select QERJustificationDenyRequiresText" ColumnComponentEdit="VI_Edit_TextLong" MinLength="1" />
+                      <SingleColumn ScriptItemUID="SingleColumn18" DataColumn="ReasonDeny" Condition="(0 &lt; select count() from pwotodecide where doreject)&#xD;&#xA;and&#xD;&#xA;not(from Vars select QERJustificationDenyRequiresText)" ColumnComponentEdit="VI_Edit_TextLong" />
+                      <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_QERJustificationDeny" Condition="0 &lt; select count() from pwotodecide where doreject and HasDenyJustifications()" ColumnComponentEdit="VI_Edit_FKByComboBox" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping17" />
+                </ControlReferenceContainer>
+              </Container>
+              <Grid ScriptItemUID="Grid2" AllowExport="true" ExportFileName="" ExportTitle="">
+                <GridBand DataTable="PWOToDecide" DisplayHeader="Always" WhereClause="doapprove or doreject" ScriptItemUID="GridBand1">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                    <ControlList ScriptItemUID="ControlList8">
+                      <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef21">
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                          <ControlList ScriptItemUID="ControlList11">
+                            <ControlReferenceControlList ID="Col_DisplayOrg" ScriptItemUID="ControlRef15" />
+                          </ControlList>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                          <ControlList ScriptItemUID="ControlList10">
+                            <ControlReferenceControlList ID="Col_State" ScriptItemUID="ControlRef16" />
+                          </ControlList>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                          <ControlList ScriptItemUID="ControlList9">
+                            <LayoutPanel ScriptItemUID="LayoutPanel3">
+                              <ContainerColumnTemplate DataTable="PWOToDecide" ScriptItemUID="ContainerColumnTemplate2">
+                                <ColumnList ScriptItemUID="ColumnList7">
+                                  <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" />
+                                  <SingleColumn ScriptItemUID="SingleColumn16" DataColumn="UID_PersonOrdered" />
+                                  <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="ValidFrom" />
+                                  <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="ValidUntil" />
+                                  <SingleColumn ScriptItemUID="SingleColumn15" DataColumn="ReasonForDecision" />
+                                </ColumnList>
+                                <Container ScriptItemUID="Container22" ItemUID="Title column">
+                                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef27">
+                                    <VirtualTableMapping VirtualTable="EditTable" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping30">
+                                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                    </VirtualTableMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="IsAlwaysReadOnly()" Value="true" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container21" ItemUID="Value column">
+                                  <SwitchContainer ScriptItemUID="Switch4">
+                                    <SwitchContainerCase ScriptItemUID="Case3" Condition="{{_currentColumn.ColumnName == &quot;ValidFrom&quot;}}">
+                                      <ControlReferenceControlList ID="Col_ValidFrom" ScriptItemUID="ControlRef8" />
+                                    </SwitchContainerCase>
+                                    <SwitchContainerCase ScriptItemUID="Case10" Condition="{{_currentColumn.ColumnName == &quot;ValidUntil&quot;}}">
+                                      <ControlReferenceControlList ID="Col_ValidUntil" ScriptItemUID="ControlRef4" />
+                                    </SwitchContainerCase>
+                                    <SwitchContainerCase ScriptItemUID="Case4" Condition="{{_currentColumn.ColumnName == &quot;ReasonForDecision&quot;}}">
+                                      <ControlReferenceControlList ID="Col_Reason" ScriptItemUID="ControlRef23" />
+                                    </SwitchContainerCase>
+                                    <SwitchContainerCase ScriptItemUID="Case8">
+                                      <ColumnEditor DataTable="PWOToDecide" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1">
+                                        <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping49" />
+                                      </ColumnEditor>
+                                    </SwitchContainerCase>
+                                  </SwitchContainer>
+                                </Container>
+                              </ContainerColumnTemplate>
+                            </LayoutPanel>
+                          </ControlList>
+                        </VirtualControlMapping>
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </GridBandListView>
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn HasHeaderCell="false" Width="&quot;50px&quot;" ScriptItemUID="Column41">
+                    <Cell ScriptItemUID="Cell1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Cell1style" Value="'vertical-align: middle;'" />
+                      </HtmlAttributes>
+                      <Container ScriptItemUID="Container20">
+                        <ControlReferenceControlList ID="Col_State" ScriptItemUID="ControlRef14" />
+                      </Container>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn SortColumn="DisplayOrg" ScriptItemUID="Column42">
+                    <GridColumnHeader ScriptItemUID="wctl2">
+                      <Label Text="datacaption(pwotodecide, uid_org)" ScriptItemUID="Label7" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell2">
+                      <Container ScriptItemUID="Container24">
+                        <ControlReferenceControlList ID="Col_DisplayOrg" ScriptItemUID="ControlRef1" />
+                      </Container>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumnSimple ScriptItemUID="Column39" Column="UID_PersonOrdered" Width="'160px'" />
+                  <GridColumn Width="'120px'" SortColumn="ValidFrom" ScriptItemUID="Column34">
+                    <GridColumnHeader ScriptItemUID="wctl6">
+                      <Label Text="translate(&quot;#LDS#Valid from&quot;)" ScriptItemUID="Label24" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell3">
+                      <ControlReferenceControlList ID="Col_ValidFrom" ScriptItemUID="ControlRef18" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn Width="'120px'" SortColumn="ValidUntil" ScriptItemUID="Column45">
+                    <GridColumnHeader ScriptItemUID="wctl4">
+                      <Label Text="translate(&quot;#LDS#Valid until&quot;)" ScriptItemUID="Label12" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell5">
+                      <ControlReferenceControlList ID="Col_ValidUntil" ScriptItemUID="ControlRef7" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn Width="'200px'" ScriptItemUID="Column46">
+                    <GridColumnHeader ScriptItemUID="wctl5">
+                      <Label Text="translate(&quot;#LDS#Reason&quot;)" ScriptItemUID="Label17" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell6">
+                      <ControlReferenceControlList ID="Col_Reason" ScriptItemUID="ControlRef22" />
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+              <Container Layout="'VI_Styles_Container_ButtonBar'" Condition="0 &lt; select count() from pwotodecide" ItemUID="Buttonpanel" ScriptItemUID="Container43">
+                <Button Text="translate('#LDS#Save')" ScriptItemUID="Button3">
+                  <ServerActionCall ScriptItemUID="ServerActionCall5">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <ActionSequence Condition="0 = select count() from pwotodecide where (doapprove or doreject)" ItemUID="No decisions made" ScriptItemUID="Action25">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call6">
+                        <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping33" />
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#You have not made any decisions.')" ScriptItemUID="VirtualFunctionMapping34" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#No decisions were made')" ScriptItemUID="VirtualFunctionMapping35" />
+                        <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping36" />
+                      </CallAction>
+                      <EndExecution AlsoAbortWaitingThreads="false" />
+                    </ActionSequence>
+                    <ActionSequence Condition="(0 &lt; select count() from pwotodecide where (doreject and isnull(ReasonForDecision,'')='' and IsNull(UID_QERJustificationSelected,'')=''))&#xA;and&#xA;(from vars select isnull(ReasonDeny,'')='')&#xA;and&#xA;(from vars select isnull(UID_QERJustificationDeny,'')='')&#xA;and&#xA;(&quot;true&quot;=getconfig(&quot;VI_ITShop_ApproverReasonMandatoryOnDeny&quot;))" ItemUID="Enter mandatory reason" ScriptItemUID="Action27">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call7">
+                        <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping37" />
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Please supply a reason when denying a request.')" ScriptItemUID="VirtualFunctionMapping38" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Reason missing')" ScriptItemUID="VirtualFunctionMapping39" />
+                      </CallAction>
+                      <EndExecution AlsoAbortWaitingThreads="false" />
+                    </ActionSequence>
+                    <ActionSequence ItemUID="Call ProductEditors" ScriptItemUID="Action29">
+                      <Update DataTable="PWOToDecide" DataColumn="IsValidOptionalFields" Value="true" WhereClause="doapprove or doreject" ScriptItemUID="Update10" />
+                      <ForeachRow DataTable="PWOToDecide" WhereClause="doapprove or doreject" ScriptItemUID="ForeachRow1">
+                        <ConvertInteractiveEntity DataTable="PWOToDecide" />
+                        <AccProductSwitchCallAction ActionType="VerifyDecision_PersonWantsOrg" ReferenceType="AccProduct" UIDAccProduct="select current uID_AccProduct from pwotodecide" ScriptItemUID="wctl1">
+                          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOToDecide" ScriptItemUID="VirtualTableMapping20" />
+                        </AccProductSwitchCallAction>
+                      </ForeachRow>
+                    </ActionSequence>
+                    <ActionSequence Condition="0 &lt; select count() from pwotodecide where (isnull(doapprove,false) or isnull(doreject,false))" ItemUID="Make Decision" ScriptItemUID="Action30">
+                      <ForeachRow DataTable="PWOToDecide" WhereClause="doapprove or doreject" ScriptItemUID="ForeachRow2">
+                        <ActionSequence ItemUID="Set ValidFrom" ScriptItemUID="Action26">
+                          <Update DataTable="PWOToDecide" DataColumn="ValidFrom" WhereClause="uid_personwantsorg = (select current uid_personwantsorg from pwotodecide)" Value="validfromnew" ScriptItemUID="Update15" />
+                        </ActionSequence>
+                        <ActionSequence Condition="IsNullOrEmpty(from PWOToDecide select current ValidUntilProlongation)" ItemUID="Set ValidUntil" ScriptItemUID="Action31">
+                          <Update DataTable="PWOToDecide" DataColumn="ValidUntil" WhereClause="uid_personwantsorg = (select current uid_personwantsorg from pwotodecide)" Value="validuntilnew" ScriptItemUID="Update11" />
+                        </ActionSequence>
+                        <ActionSequence ItemUID="Set ValidUntilProlongation" Condition="not (IsNullOrEmpty(from PWOToDecide select current ValidUntilProlongation))" ScriptItemUID="Action32">
+                          <Update DataTable="PWOToDecide" DataColumn="ValidUntilProlongation" WhereClause="uid_personwantsorg = (select current uid_personwantsorg from pwotodecide)" Value="validuntilnew" ScriptItemUID="Update12" />
+                        </ActionSequence>
+                      </ForeachRow>
+                      <Update DataTable="PWOToDecide" DataColumn="OrderDetail1" WhereClause="-- special handling for manager change&#xD;&#xA;-- when the new manager denies, reset the new manager value&#xD;&#xA;doreject and uid_accproduct = 'QER-9F7E5C3156D54C979C427FDB081C7056'" ScriptItemUID="Update13" />
+                      <ActionSequence ScriptItemUID="Action38">
+                        <ActionSequence Condition="0 &lt; from SubLevelCounter select count() where States &gt; 1" ItemUID="Is there a decision with more then one SubLevelNumber?" ScriptItemUID="Action40">
+                          <LoadTable DataTable="PWOHelperPWOAllReadyDone" ScriptItemUID="LoadTable2">
+                            <DbObjectLoadType LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" ConvertToInteractive="false" ScriptItemUID="DbObjectLoadType9" LoadTypeSlim="true" />
+                            <FillTableDisplayColumn DataColumn="SubLevelNumber" />
+                          </LoadTable>
+                        </ActionSequence>
+                        <CodeLiteral ScriptItemUID="StartTempQueue">var useTempQueue = DataContext.UseTempQueue();
+
+if (useTempQueue)
+{
+	Logger.Debug("StartTempQueue to process bulk approvals");
+	await _Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+    await _Database.StartTempQueueAsync(ct).ConfigureAwait(false);
+}
+try
+{</CodeLiteral>
+                        <Method DataTable="PWOToDecide" Method="MakeDecision" WhereClause="doapprove or doreject" SaveAfterAction="false">
+                          <MethodParameter Name="'uid_personhead'" Value="select uid_person from user" />
+                          <MethodParameter Name="'bDecision'" Value="select current doapprove from pwotodecide" />
+                          <MethodParameter Name="'strReasonText'" Value="select current (if( isnull(reasonfordecision,'')&lt;&gt;'') then&#xD;&#xA;reasonfordecision else&#xD;&#xA;&#xD;&#xA;-- Generellen Begründungstext übernehmen&#xD;&#xA;if( doapprove ) then&#xD;&#xA;(from vars select isnull(reasonapprove,''))&#xD;&#xA;else&#xD;&#xA;(from vars select isnull(reasondeny,''))&#xD;&#xA;&#xD;&#xA;) from pwotodecide" />
+                          <MethodParameter Name="&quot;uidJustification&quot;" Value="if not(from PWOToDecide select current IsNullOrEmpty(UID_QERJustificationSelected))then(&#xD;&#xA;   from PWOToDecide select current UID_QERJustificationSelected&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;if(from PWOToDecide select current DoApprove)then&#xD;&#xA;(from vars select isnull(UID_QERJustificationApprove,''))&#xD;&#xA;else&#xD;&#xA;(from vars select isnull(UID_QERJustificationDeny,''))&#xD;&#xA;)" />
+                          <MethodParameter Name="'subLevel'" Value="GetNextSubLevelNumber()" />
+                        </Method>
+                        <Save DataTable="PWOToDecide" ScriptItemUID="Save1" WhereClause="doapprove or doreject" ReloadAfterSave="NoReload" />
+                        <CodeLiteral ScriptItemUID="EndTempQueue">	if (useTempQueue)
+	{
+		await _Database.CommitTransactionAsync(ct).ConfigureAwait(false);
+	}
+}
+catch
+{
+	if (useTempQueue)
+	{
+		_Database.RollbackTransactionAsync(ct).Wait();
+	}
+	throw;
+}</CodeLiteral>
+                      </ActionSequence>
+                      <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call8">
+                        <VirtualFunctionMapping ID="MessageText()" Value="if(&#xD;&#xA;1 = from PWOToDecide select count() where (DoApprove or DoReject)&#xD;&#xA;)&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Your decision has been saved.')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#{0} decisions have been saved.', from PWOToDecide select count() where (doapprove or doreject))" ScriptItemUID="VirtualFunctionMapping40" />
+                        <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping41" />
+                      </CallAction>
+                      <ActionSequence ScriptItemUID="Action33">
+                        <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call9" />
+                        <CodeLiteral ScriptItemUID="CodeLiteral1">
+DataContext.PWOToDecide.Delete();
+
+// invalidate the table store --&gt; reload all data
+TableStore.Invalidate();</CodeLiteral>
+                        <ActionSequence ScriptItemUID="Action41" ItemUID="Empty reasons">
+                          <Update DataColumn="ReasonApprove" DataTable="Vars" ScriptItemUID="Update18" />
+                          <Update DataColumn="ReasonDeny" DataTable="Vars" ScriptItemUID="Update19" />
+                          <Update DataColumn="UID_QERJustificationApprove" DataTable="Vars" ScriptItemUID="Update20" />
+                          <Update DataColumn="UID_QERJustificationDeny" DataTable="Vars" ScriptItemUID="Update21" />
+                        </ActionSequence>
+                      </ActionSequence>
+                      <Redirect FormID="Approvals" ScriptItemUID="Redirect6" />
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Back&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ScriptItemUID="Button4">
+                  <ServerActionCall ScriptItemUID="ServerActionCall6">
+                    <ActionSequence ItemUID="Show form from ApprovalPage" Condition="isnull(request(&quot;UID_PersonWantsOrg&quot;),&quot;&quot;) = &quot;&quot;" ScriptItemUID="Action34">
+                      <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect7" />
+                    </ActionSequence>
+                    <ActionSequence ItemUID="Show form from Startpage QuickLink" Condition="isnull(request(&quot;UID_PersonWantsOrg&quot;),&quot;&quot;) &lt;&gt; &quot;&quot;" ScriptItemUID="Action35">
+                      <Redirect Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect8" />
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ScriptItemUID="Form3" ID="SHOWPWO">
+        <ActionSequence ScriptItemUID="Action36" />
+        <PagePartContainer ScriptItemUID="PagePartContainer6" ID="Title">
+          <ControlList ScriptItemUID="ControlList16">
+            <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#The request was already processed.&quot;)" />
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer8" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList17">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef25">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="Text()" Value="translate(&quot;#LDS#The request was already processed. See below for more information about the current status of the request.&quot;)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer7" ID="Main">
+          <ControlList ScriptItemUID="ControlList15">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef26">
+              <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#See below for more information about the current status of the request.&quot;)" ScriptItemUID="VirtualFunctionMapping50" />
+            </ControlReferenceContainer>
+            <ControlReferenceControlList ID="VI_ITShop_PWO_MasterDetail" ScriptItemUID="ControlRef24">
+              <VirtualFunctionMapping ID="DbWhereClause()" Value="SqlCompareUid(&quot;UID_PersonWantsOrg&quot;,from Vars select UID_PersonWantsOrg)" ScriptItemUID="VirtualFunctionMapping51" />
+              <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWODONE" ScriptItemUID="VirtualTableMapping19" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,42 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PWOOverviewWithFilter" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceControlList ID="VI_ITShop_PWO_MasterDetail" ScriptItemUID="ControlRef3">
+          <VirtualFunctionMapping ID="ShowCancelOrder()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="DbWhereClause()" Value="from vars select pwowhereclause" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrgO" ScriptItemUID="VirtualTableMapping2" />
+          <VirtualControlMapping ContainerType="ControlList" VirtualControl="HeaderControls">
+            <ControlList ScriptItemUID="ControlList1">
+              <ControlReferenceContainer ID="VI_ITShop_OrderHistory_Filter" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                  <VirtualColumnMapping VirtualColumn="WhereClause" DataColumn="PWOWhereClause" />
+                </VirtualTableMapping>
+                <VirtualFunctionMapping ID="setuseraudit()" Value="UIDPerson()" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+            </ControlList>
+          </VirtualControlMapping>
+        </ControlReferenceControlList>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="PersonWantsOrgO" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column8" DataSource="Expression" Expression="true" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="PWOWhereClause" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="UIDPerson()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

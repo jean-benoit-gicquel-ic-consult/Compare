@@ -1,0 +1,24 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_BusinessOwner_ChartSummary_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigEntry3" ObjectType="ConfigEntryObjects">
+        <ConfigEntryObject ScriptItemUID="TSBConfigEntryObject1">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;UNSAccount2PersonNotOrdered_By_Department&lt;/DisplayName&gt;&lt;SortOrder&gt;3&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;RpsReport&gt;User accounts without requests&lt;/RpsReport&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;/Object&gt;</ConfigEntryObject>
+        <ConfigEntryObject ScriptItemUID="TSBConfigEntryObject2">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;InactivePersonsWithActiveAccount_By_Department&lt;/DisplayName&gt;&lt;SortOrder&gt;2&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;RpsReport&gt;Inactive employees with enabled user accounts&lt;/RpsReport&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection">
+        <ConfigEntry Key="VI_Start_UNSGroup_Charts" ScriptItemUID="TSBConfigEntry1" Type="ConfigEntryObjects" ObjectType="ConfigEntryObjects" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition">
+        <ConfigParam Key="VI_Start_UNSGroup_Charts" Description="translate(&quot;#LDS#System entitlement dashboard&quot;)" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" />
+      </AddObject>
+      <AddObject ObjectID="Action6" ObjectType="ActionSequence">
+        <Insert ScriptItemUID="TSBInsert2" DataTable="Ownerships">
+          <ActionSequence ScriptItemUID="TSBAction2" />
+          <InsertValue Value="&quot;UNSGroup&quot;" DataColumn="TableName" />
+          <InsertValue Value="dbcount(&quot;UNSGroup&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_UNSGroup&quot;)))" DataColumn="Count" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=SystemEntitlements&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

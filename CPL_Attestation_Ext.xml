@@ -1,0 +1,19 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Attestation_Ext" RequiredDbModules="CPL,ATT">
+    <Extensions>
+      <AddObject ObjectID="Action14" ObjectType="ActionSequence" SortOrder="15">
+        <ActionSequence ItemUID="Set UID_QERJustification if HasComplianceRuleNoResolve" ScriptItemUID="CPLAction1">
+          <Update DataColumn="UID_QERJustificationSelected" DataTable="AttestationCase" WhereClause="doreject and HasComplianceRuleNoResolve()" Value="'CPL-Denied-Attestation'" ScriptItemUID="CPLUpdate1" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="175">
+        <Function Name="GetUIDFromObjectKey(String objectkey)" Expression="Substring(Convert(objectkey,&quot;System.String&quot;),IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7,(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/P&gt;&lt;/Key&gt;&quot;,0)-(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7)))" DataType="System.String" ScriptItemUID="CPLFunction2" />
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="165">
+        <Function Name="HasComplianceRuleNoResolve()" DataType="System.Boolean" Expression="from AttestationCase select current&#xD;&#xA;if(getObjectKeyTable(ObjectKey1) = &quot;Person&quot; or getObjectKeyTable(ObjectKey3) = &quot;Person&quot;)then(&#xD;&#xA;   if(getObjectKeyTable(ObjectKeyBase) in (&quot;PersonInDepartment&quot;,&quot;PersonInProfitCenter&quot;,&quot;PersonInLocality&quot;,&quot;PersonInAERole&quot;,&quot;PersonHasEset&quot;))then&#xD;&#xA;      Exists(&quot;ComplianceRule&quot;, format(&quot;IsExceptionAllowed = 0 and uid_compliancerule in (select uid_compliancerule from CPL_VCCSPersonCheckDetail where uid_person ='{0}' and objectkeyelement = '{1}')&quot;,GetUIDFromObjectKey(ObjectKey1),ObjectKey2))&#xD;&#xA;   else if(not(isnullOrEmpty(ObjectKey3)))then&#xD;&#xA;      Exists(&quot;ComplianceRule&quot;, format(&quot;EXISTS(SELECT 1 FROM UNSAccountInUNSGroup where XObjectKey = '{2}') and IsExceptionAllowed = 0 and uid_compliancerule in (select uid_compliancerule from CPL_VCCSPersonCheckDetail where uid_person ='{0}' and objectkeyelement = '{1}')&quot;,GetUIDFromObjectKey(ObjectKey3),ObjectKey1,ObjectKeyBase))&#xD;&#xA;)" ScriptItemUID="CPLFunction1">
+          <DataTableCursor DataTable="AttestationCase" ScriptItemUID="CPLDataTableCursor1" />
+        </Function>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

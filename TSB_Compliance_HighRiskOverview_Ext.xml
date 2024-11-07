@@ -1,0 +1,130 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Compliance_HighRiskOverview_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableDbObject Class="UNSGroup" Table="UNSGroup" WhereClauseSQL="if (getsystem()=&quot;ORACLE&quot;) then&#xD;&#xA;Format(&quot;UID_UNSGroup in (select UID_UNSGroup from(select UID_UNSGroup from UNSGroup where RiskIndex &gt; {1} order by RiskIndex desc) where rownum &lt; {0})&quot;,havecount()+1, threshold())&#xD;&#xA;else&#xD;&#xA;Format(&quot;UID_UNSGroup in (select top {0} UID_UNSGroup from UNSGroup where RiskIndex &gt; {1} order by RiskIndex desc)&quot;,havecount(), threshold())" ScriptItemUID="TSBDataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="TSBAction1" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="UNSAccount" Table="UNSAccount" WhereClauseSQL="if (getsystem()=&quot;ORACLE&quot;) then&#xA;Format(&quot;UID_UNSAccount in (select UID_UNSAccount from(select UID_UNSAccount from UNSAccount where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated  desc) where rownum &lt; {0})&quot;,havecount()+1, threshold())&#xA;else&#xA;Format(&quot;UID_UNSAccount in (select top {0} UID_UNSAccount from UNSAccount where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated  desc)&quot;,havecount(), threshold())" ScriptItemUID="TSBDataTableDbObject2" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="TSBAction2" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList" SortOrder="20">
+        <FunctionValue Expression="from UnsGroup select (PrimaryKey() as PK, DisplayLong() as Display, getobjectkeytable(xobjectkey) as Type, RiskIndex as RiskIndex, xobjectkey)&#xD;&#xA;" />
+        <FunctionValue Expression="from UnsAccount select (PrimaryKey() as PK, DisplayLong() as Display, getobjectkeytable(xobjectkey) as Type, RiskIndexCalculated as RiskIndex, xobjectkey)" />
+      </AddObject>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="40">
+        <TabPage ItemUID="UNSGroup" Condition="GetConfigParm(&quot;TargetSystem\UNS&quot;)=&quot;1&quot; and 0 &lt; select count() from unsgroup" ScriptItemUID="TSBTabPage1">
+          <ControlsHeader ScriptItemUID="TSBContainer1">
+            <Label Text="mkdesc(datacaption(&quot;UNSGroup&quot;))" ScriptItemUID="TSBLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="TSBContainer3">
+            <Grid AllowExport="true" ExportTitle="mkdesc(datacaption(&quot;UNSGroup&quot;))" ScriptItemUID="TSBGrid1" ExportFileName="">
+              <GridBand DataTable="UNSGroup" OrderBy="'RiskIndex desc, DisplayName'" ScriptItemUID="TSBGridBand1" RowSelection="Action" RowSelectionActive="">
+                <GridBandListView ScriptItemUID="TSBGridBandListView1" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="TSBServerActionCall3">
+                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="TSBRedirect3">
+                    <RedirectParameter Name="'ObjectKey'" Value="from unsgroup select current xobjectkey" />
+                  </Redirect>
+                </SelectionAction>
+                <GridFilters ScriptItemUID="TSBGridFilters1" />
+                <GridRows />
+                <GridColumnColumnTemplate DataTable="UNSGroup" ScriptItemUID="TSBGridColumnColumnTemplate1">
+                  <ColumnList ScriptItemUID="TSBColumnList1">
+                    <SingleColumn ScriptItemUID="TSBSingleColumn7" DataColumn="__Display" />
+                    <SingleColumn DataColumn="GroupType" ScriptItemUID="TSBSingleColumn1" />
+                    <SingleColumn DataColumn="RiskIndex" ScriptItemUID="TSBSingleColumn2" />
+                  </ColumnList>
+                  <GridColumnGroup DataTable="UNSGroup" ScriptItemUID="TSBGridColumnGroup1">
+                    <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" Width="if(DataColumnName(UNSGroup,currentcolumn) = 'RiskIndex') then &quot;150px;&quot;" ScriptItemUID="TSBColumn2">
+                      <GridColumnHeader ScriptItemUID="TSBwctl2">
+                        <Container ScriptItemUID="TSBContainer5">
+                          <Label Text="datacaption(UNSGroup, currentcolumn)" ScriptItemUID="TSBLabel4" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="TSBCell2">
+                        <Container ScriptItemUID="TSBContainer6">
+                          <Container Condition="not(from UNSGroup select current DataColumnName(UNSGroup,currentcolumn) = 'RiskIndex')" ScriptItemUID="TSBContainer7">
+                            <Label Text="select current displayvalue(currentcolumn) from UNSGroup" ScriptItemUID="TSBLabel5" />
+                          </Container>
+                          <Container Condition="from UNSGroup select current DataColumnName(UNSGroup,currentcolumn) = 'RiskIndex'" ScriptItemUID="TSBContainer8">
+                            <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="TSBControlRef1">
+                              <VirtualTableMapping VirtualTable="Object" DataTable="UNSGroup" ScriptItemUID="TSBVirtualTableMapping1">
+                                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                              </VirtualTableMapping>
+                            </ControlReferenceContainer>
+                          </Container>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                  </GridColumnGroup>
+                </GridColumnColumnTemplate>
+              </GridBand>
+            </Grid>
+          </ControlsBody>
+        </TabPage>
+        <TabPage ItemUID="UNSAccount" Condition="GetConfigParm(&quot;TargetSystem\UNS&quot;)=&quot;1&quot; and 0 &lt; select count() from unsaccount" ScriptItemUID="TSBTabPage2">
+          <ControlsHeader ScriptItemUID="TSBContainer9">
+            <Label Text="mkdesc(datacaption(&quot;UNSAccount&quot;))" ScriptItemUID="TSBLabel6" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="TSBContainer11">
+            <Grid AllowExport="true" ExportTitle="mkdesc(datacaption(&quot;UNSAccount&quot;))" ScriptItemUID="TSBGrid2" ExportFileName="">
+              <GridBand DataTable="UNSAccount" OrderBy="'RiskIndexCalculated desc, AccountName, cn'" ScriptItemUID="TSBGridBand2" RowSelection="Action" RowSelectionActive="">
+                <GridBandListView ScriptItemUID="TSBGridBandListView2" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="TSBServerActionCall1">
+                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="TSBRedirect1">
+                    <RedirectParameter Name="'ObjectKey'" Value="from unsaccount select current xobjectkey" />
+                  </Redirect>
+                </SelectionAction>
+                <GridFilters ScriptItemUID="TSBGridFilters2" />
+                <GridRows />
+                <GridColumnColumnTemplate DataTable="UNSAccount" ScriptItemUID="TSBGridColumnColumnTemplate2">
+                  <ColumnList ScriptItemUID="TSBColumnList2">
+                    <SingleColumn ScriptItemUID="TSBSingleColumn8" DataColumn="AccountName" />
+                    <SingleColumn DataColumn="cn" ScriptItemUID="TSBSingleColumn3" />
+                    <SingleColumn DataColumn="UID_Person" ScriptItemUID="TSBSingleColumn4" />
+                    <SingleColumn DataColumn="UID_UNSContainer" ScriptItemUID="TSBSingleColumn5" />
+                    <SingleColumn DataColumn="RiskIndexCalculated" ScriptItemUID="TSBSingleColumn6" />
+                  </ColumnList>
+                  <GridColumnGroup DataTable="UNSAccount" ScriptItemUID="TSBGridColumnGroup2">
+                    <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" Width="if(DataColumnName(UNSAccount,currentcolumn) = 'RiskIndexCalculated') then &quot;150px;&quot;" ScriptItemUID="TSBColumn4">
+                      <GridColumnHeader ScriptItemUID="TSBwctl4">
+                        <Container ScriptItemUID="TSBContainer13">
+                          <Label Text="datacaption(UNSAccount, currentcolumn)" ScriptItemUID="TSBLabel9" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="TSBCell4">
+                        <Container ScriptItemUID="TSBContainer14">
+                          <Container Condition="not(from UNSAccount select current DataColumnName(UNSAccount,currentcolumn) = 'RiskIndexCalculated')" ScriptItemUID="TSBContainer15">
+                            <Label Text="select current displayvalue(currentcolumn) from UNSAccount" ScriptItemUID="TSBLabel10" />
+                          </Container>
+                          <Container Condition="from UNSAccount select current DataColumnName(UNSAccount,currentcolumn) = 'RiskIndexCalculated'" ScriptItemUID="TSBContainer16">
+                            <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="TSBControlRef2">
+                              <VirtualTableMapping VirtualTable="Object" DataTable="UNSAccount" ScriptItemUID="TSBVirtualTableMapping2">
+                                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexCalculated" />
+                              </VirtualTableMapping>
+                            </ControlReferenceContainer>
+                          </Container>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                  </GridColumnGroup>
+                </GridColumnColumnTemplate>
+              </GridBand>
+            </Grid>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Action10" ObjectType="ActionSequence" SortOrder="10">
+        <ActionSequence Condition="GetConfigParm(&quot;TargetSystem\UNS&quot;)=&quot;1&quot;" ScriptItemUID="TSBAction3">
+          <LoadTable DataTable="UNSGroup" ScriptItemUID="TSBLoadTable1">
+            <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+          <LoadTable DataTable="UNSAccount" ScriptItemUID="TSBLoadTable2">
+            <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

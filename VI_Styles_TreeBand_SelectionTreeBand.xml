@@ -1,0 +1,7 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_TreeBand_SelectionTreeBand" Type="TreeBand" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+  </LayoutObject>
+</WebDesigner>

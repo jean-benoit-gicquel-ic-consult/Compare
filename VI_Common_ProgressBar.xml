@@ -1,0 +1,50 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="Dr/gLPBSWzS4wuO2FREumA==" TdnsHash="4da96f52-cf84-6bf4-64a8-a37adc5c1c3d">
+  <GlobalControl ID="VI_Common_ProgressBar" MetamodelVersion="2015-01-01" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" Comment="A component showing a horizontal progress bar.&#xD;&#xA;The filling of the bar can be adjusted by specifying a double (virtual function Progress()) between 0.0 (0%) and 1.0 (100%).&#xD;&#xA;&#xD;&#xA;The filling will be colored in one of three colors depending on the progress.&#xD;&#xA;The colors itself are fix but user configurable. &#xD;&#xA;&#xD;&#xA;Default coloring:&#xD;&#xA;- low progress: %VI_Common_Color_Badge_Important%&#xD;&#xA;- medium progress: %VI_Common_Color_Badge_Warning%&#xD;&#xA;- high progress: %VI_Common_Color_Badge_Success%&#xD;&#xA;&#xD;&#xA;You can interchange the coloring for low and high progress by specifying WarningOnHighValues() = true.&#xD;&#xA;This can be useful when low values are better than high values (e.g. RiskIndex).&#xD;&#xA;&#xD;&#xA;By default &quot;low progress&quot; means progress values less than or equal to 0.25 - specify LowerLimit() to override this default.&#xD;&#xA;By default &quot;high progress&quot; means progress value greater than 0.5 - specify UpperLimit() to override this default.&#xD;&#xA;Values that are in between, i.e. neither low nor high are regarded &quot;medium&quot;.&#xD;&#xA;&#xD;&#xA;Right next to the progress bar a label is shown that displays the percantage of the progress by default.&#xD;&#xA;You can use Label() to specify a different text to display.&#xD;&#xA;By default the width reserved for the label is 35px. If you need a different width you can specify LabelWidth().&#xD;&#xA;The width of the progress bar is always flexible. You can specify a fixed width using HasFlexibleProgressbar()=false and optionally ProgressbarWidth() (the default is 50px, so the total width will be 50+LabelWidth() +2*ProgressbarBorderWidth() px (normally 87px).&#xD;&#xA;&#xD;&#xA;By default no tooltip will be shown but you can specify a tooltip using Tooltip().">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ItemUID="Progress Bar and Label" ScriptItemUID="Container1" CustomStyle="format('{0}', if (HasFlexibleProgressbar())&#xD;&#xA;then ''&#xD;&#xA;else format('display: inline-block; min-width:{0}px;', TotalWidth())&#xD;&#xA;)">
+        <Container CustomStyle="variable(format('width: calc(100% - {0}px); height: 14px; border: solid {1}px %VI_Common_Color_Gray%; display:inline-block;', LabelWidth()+(2*ProgressbarBorderWidth()), ProgressbarBorderWidth() ))" Tooltip="Tooltip()" ItemUID="Progress bar outer frame" ScriptItemUID="Container2">
+          <Container CustomStyle="format('background-color: {0}; color: {0}; display: block; overflow: hidden; width: {1}%; height: 14px;', &#xA;ColorFilling(), convert(100*EffectiveProgress(), 'System.Int32'))" ItemUID="Progress bar inner filling" ScriptItemUID="Container3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="span" />
+            </HtmlAttributes>
+          </Container>
+        </Container>
+        <Label Text="EffectiveLabel()" CustomStyle="format(&quot;vertical-align: top; text-align:right; float:right; width:{0}px;&quot;, LabelWidth())" ItemUID="Progress label" ScriptItemUID="Label1" />
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="ColorFilling()" Expression="if(not IsNullOrEmpty(OverWriteColor()))then(&#xD;&#xA;   OverWriteColor()&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   if (IsHigh()) then ColorHigh() else (if IsLow() then ColorLow() else ColorMedium())&#xD;&#xA;)" Comment="Returns the filling color to be taken depending on the progress." DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="ColorHigh()" Expression="if (EffectiveWarningOnHighValues()) &#xA;then variable('%VI_Common_Color_Badge_Important%')&#xA;else variable('%VI_Common_Color_Badge_Success%') " Comment="Returns the progress bar filling color for high progress values." DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="ColorLow()" Expression="if (EffectiveWarningOnHighValues()) &#xA;then variable('%VI_Common_Color_Badge_Success%') &#xA;else variable('%VI_Common_Color_Badge_Important%')" Comment="Returns the progress bar filling color for low progress values." DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="ColorMedium()" Expression="variable('%VI_Common_Color_Badge_Warning%')" Comment="Returns the progress bar filling color for medium progress values." DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="EffectiveLabel()" Expression="IsNull(Label(), format(&quot;{0} %&quot;, Percentage()))" Comment="Returns the label text (if specified) otherwise the default label text (progress percentage)." DataType="System.String" ScriptItemUID="Function5" />
+        <Function Name="EffectiveProgress()" Expression="if (IsNull(Progress()) or Progress() &lt; 0.0) then 0.0 else (if Progress() &gt; 1.0 then 1.0 else Progress())" DataType="System.Double" Comment="Returns the effective progress value. &#xD;&#xA;Includes minor error corrections, i.e. progress null or less than zero will be treated as zero and progress greater than 1 will be treated as 1." ScriptItemUID="Function6" />
+        <Function Name="EffectiveWarningOnHighValues()" Expression="WarningOnHighValues()" DataType="System.Boolean" Comment="Return the WarningOnHighValues() or false (the default) if WarningOnHighValues is not specified." ScriptItemUID="Function7" />
+        <Function Name="IsHigh()" Expression="EffectiveProgress() &gt; IsNull(UpperLimit(), Convert(0.5, &quot;double&quot;))" DataType="System.Boolean" Comment="Returns whether the given progress is high." ScriptItemUID="Function8" />
+        <Function Name="IsLow()" Expression="EffectiveProgress() &lt;= LowerLimit()" DataType="System.Boolean" Comment="Returns whether the given progress is low." ScriptItemUID="Function9" />
+        <Function Name="Percentage()" Expression="Floor(100.0*EffectiveProgress())" DataType="System.Int32" Comment="Returns the progress as percentage.&#xD;&#xA;As 100% SHOULD only be displayed for 1 (i.e. no rounding up here), we simply always round down." ScriptItemUID="Function11" />
+        <Function Name="TotalWidth()" Expression="if (LabelWidth() &gt;= 0) then (ProgressBarWidth() + LabelWidth()+ (2*ProgressBarBorderWidth())) else ProgressBarWidth() " DataType="System.Int32" Comment="Returns the total width of progress bar and label." ScriptItemUID="Function13" />
+        <Function ScriptItemUID="Function14" Name="Floor(double d)" DataType="System.Int32" Expression="{{(int)Math.Floor(d)}}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="Label()" Comment="Optional value overriding the default label text that displays the progress percentage." DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="LabelWidth()" DataType="System.Int32" Comment="Default value is 35 (meaning 35 px)" DefaultValue="35" TriggerUpdates="Never" />
+      <VirtualFunction Signature="LowerLimit()" DataType="System.Double" Comment="Optional. Specify a value if you want to override default lower limit of 0.25&#xD;&#xA;Progress values that are less or equal to this value will be marked with the lower color." DefaultValue="0.25" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Progress()" DataType="System.Double" Comment="The progress as double value between 0.0  (0%) and 1.0 (100%)" DefaultValue="0.0" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Tooltip()" Comment="Optional tool tip on the progress bar." DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UpperLimit()" DataType="System.Double" Comment="Optional. Specify a value if you want to override the default upper limit of 0.5&#xD;&#xA;Progress values that are greater than this value will be marked with the high color." TriggerUpdates="Never" />
+      <VirtualFunction Signature="WarningOnHighValues()" DataType="System.Boolean" Comment="Default behaviour is to apply warning colors for low values (high values are good, low values are bad).&#xD;&#xA;You can (optionally) specify WarningOnHighValues = true, if you want to invert this behavior." TriggerUpdates="Never" />
+      <VirtualFunction Signature="ProgressbarWidth()" DataType="System.Int32" Comment="Default value is 50 (meaning 50 px). If HasFlexibleProgressbar()=true this width will be ignored and the remaining space will be used." DefaultValue="50" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HasFlexibleProgressbar()" DataType="System.Boolean" Comment="Default value is true (meaning the progress bar has a flexible width, if set to false it has a fixed width - see ProgressBarWidth())" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ProgressbarBorderWidth()" DataType="System.Int32" Comment="Optional. Default value is 1 (meaning 1px)" DefaultValue="1" />
+      <VirtualFunction DataType="System.String" Signature="OverWriteColor()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

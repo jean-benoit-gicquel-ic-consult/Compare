@@ -1,0 +1,68 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_Person" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectView" Description="translate('#LDS#Object details')" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ObjectCollection_Person_Fields" Type="ColumnList" Description="translate('#LDS#Grid display columns for table {0}', datacaption(&quot;Person&quot;))" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Grid ScriptItemUID="Grid1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;data-imx-grid-displaytype&quot;" Value="DisplayType()" />
+          </HtmlAttributes>
+          <GridBand DataTable="HierarchyTable" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Action" RowSelectionActive="select current not(isnonselectable()) from hierarchytable">
+            <HtmlAttributes>
+              <Property Name="RenderImmediately" Value="true" />
+              <Property Name="ApplyFilledHeight" Value="true" />
+              <Property Name="IsSearchActive" Value="true" />
+            </HtmlAttributes>
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <SelectionAction ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="ElementSelected" ScriptItemUID="CallAction1" />
+            </SelectionAction>
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn ScriptItemUID="GridColumn1" SortColumn="__Display">
+              <GridColumnHeader ScriptItemUID="wctl2">
+                <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label1" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute2" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                  <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;checkbox&quot;" />
+                </HtmlAttributes>
+                <Label Text="select current display() from hierarchytable" ScriptItemUID="Label52" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="select current cssclass() from hierarchytable" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+            <GridColumnColumnTemplate ScriptItemUID="GridColumnColumnTemplate1" DataTable="HierarchyTable">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" ColumnList="AdditionalDisplayColumns()" />
+              </ColumnList>
+              <GridColumnGroup ScriptItemUID="GridColumnGroup1" DataTable="HierarchyTable">
+                <GridColumnSimple ScriptItemUID="Column1" Column="currentcolumn" />
+              </GridColumnGroup>
+            </GridColumnColumnTemplate>
+            <ControlReferenceGridColumnGroup ID="VI_ObjectCollection_Person_GridColumns" DataTable="HierarchyTable" ScriptItemUID="wctl1">
+              <VirtualTableMapping VirtualTable="Person" DataTable="HierarchyTable" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceGridColumnGroup>
+          </GridBand>
+        </Grid>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="HierarchyTable" Class="Person" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

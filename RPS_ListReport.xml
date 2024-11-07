@@ -1,0 +1,98 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c318c42c-64a7-cfef-3a6f-7967dafbf6ee">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RPS_ListReport">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <FillDialogParameter TargetTableParameterSet="DialogParameterSet" TargetTableParameter="DialogParameter" Mode="CreateAdhocParameter" ParentObjectKeyAdhoc="singleproperty(&quot;RPSReport&quot;, &quot;XObjectKey&quot;, sqlcompare(&quot;ident_rpsreport&quot;, IdentListReport(), &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;))" />
+        <CodeLiteral ScriptItemUID="CodeLiteral2">if (ElementObjectKey != null)
+{
+	var dprow = DialogParameter.FirstOrDefault(r =&gt; Equals("ElementObjectKey", r.GetValue("ParameterName").String));
+	if (dprow != null)
+	{
+	    dprow.SetValue("ParameterValue", ElementObjectKey);
+	}
+}</CodeLiteral>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container5" Condition="RequiresParameters() and not(from vars select IsresultView)" ItemUID="ParameterView">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Text()" Value="translate(&quot;#LDS#Please enter the following information.&quot;)" />
+          </ControlReferenceContainer>
+          <ContainerTemplate DataTable="DialogParameterSet" ScriptItemUID="ContainerTemplate1">
+            <ControlReferenceContainer ID="VI_Reporting_ParameterEdit" ScriptItemUID="ControlRef5">
+              <VirtualTableMapping VirtualTable="DialogParameter" DataTable="DialogParameter" ScriptItemUID="VirtualTableMapping5" />
+              <VirtualTableMapping VirtualTable="DialogParameterSet" DataTable="DialogParameterSet" ScriptItemUID="VirtualTableMapping6" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="DialogParameterFilter()" Value="not(IsObjectKeyParameter)" />
+            </ControlReferenceContainer>
+          </ContainerTemplate>
+          <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_ButtonBar'">
+            <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#View report&quot;)">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <ActionOnControl ActionType="PerformValidation" />
+                <Update DataColumn="IsResultView" DataTable="Vars" ScriptItemUID="Update1" Value="true" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+        <Container ScriptItemUID="Container6" Condition="not(RequiresParameters()) or from vars select IsresultView" ItemUID="ResultView">
+          <Container ScriptItemUID="Container2" Condition="RequiresParameters()" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute5" Value="&quot;margin-bottom: 10px;&quot;" />
+            </HtmlAttributes>
+            <LinkContainer ScriptItemUID="LinkContainer1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Image StockImage="Back" ScriptItemUID="Image1" StockImageSize="Medium" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;presentation&quot;" />
+                  </HtmlAttributes>
+                </Image>
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall3">
+                <Update DataTable="Vars" DataColumn="IsResultView" ScriptItemUID="Update24" Value="false" />
+              </ServerActionCall>
+            </LinkContainer>
+            <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Back to report settings&quot;)" />
+          </Container>
+          <CodeLiteral ScriptItemUID="CodeLiteral1">var ctl = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;ListReportControl&gt;();
+ctl.IdentRpsReport = IdentListReport;
+var dpsrow = DialogParameterSet.FirstOrDefault();
+if (dpsrow != null)
+{
+	var parameterSet = DialogParameterObjectProxy.GetParameterSet(DialogParameter, _Database, dpsrow.GetValue("UID_DialogParameterSet"));
+	ctl.AddParameters(_Database, parameterSet);
+	
+	var parameters = this.DialogParameter.Where(dp =&gt; 
+		!TableStore.GetLocalColumn(this.DialogParameter, "IsObjectKeyParameter").GetValue(dp).Bool);
+	ctl.SetParameterDescription(parameters);
+	
+}
+
+_targetContainer2.Controls.Add(ctl);</CodeLiteral>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="DialogParameter" Table="DialogParameter" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action1" />
+          <Column DataType="System.Boolean" Name="IsObjectKeyParameter" ScriptItemUID="Column2" DataSource="Expression" Expression="not(isnullorempty(ElementObjectKey())) and parametername = &quot;ElementObjectKey&quot;" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogParameterSet" Table="DialogParameterSet" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.Boolean" Name="IsResultView" ScriptItemUID="Column1" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="RequiresParameters()" DataType="System.Boolean" Expression="0 &lt; from dialogparameter select count() where not(IsObjectKeyParameter)" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ElementObjectKey()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IdentListReport()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

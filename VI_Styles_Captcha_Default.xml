@@ -1,0 +1,11 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Captcha_Default" Type="Captcha" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="captcha" Comment="" />
+    <CssDocument CssName="CSS">.captcha table { table-layout: auto; }</CssDocument>
+    <Property Name="RecaptchaPublicKey" Value="" Comment="" />
+    <Property Name="RecaptchaPrivateKey" Value="" Comment="" />
+  </LayoutObject>
+</WebDesigner>

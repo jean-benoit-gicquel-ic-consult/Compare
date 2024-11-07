@@ -1,0 +1,92 @@
+﻿<WebDesigner>
+  <GlobalControl ID="VI_ITShop_WebPart_StateMessages" MetamodelVersion="2015-01-01" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Table CustomStyle="variable('width: %WebPartWidth%px;')" ScriptItemUID="Table1">
+          <Row ItemUID="Header" ScriptItemUID="Row1">
+            <Cell ScriptItemUID="Cell1">
+              <Container Layout="'VI_Styles_Container_Heading_Underline'" ScriptItemUID="Container2">
+                <Label Text="translate(&quot;#LDS#Status messages&quot;)" Layout="'VI_Styles_Label_TableHeader'" ScriptItemUID="Label1" />
+              </Container>
+            </Cell>
+          </Row>
+          <Row Condition="not(OptionalShowOnlyLastOrders())" ScriptItemUID="Row2">
+            <Cell ScriptItemUID="Cell2">
+              <Container Layout="'VI_Styles_Container_Heading_Small'" ScriptItemUID="Container3">
+                <Label Text="translate('#LDS#Requests expiring soon')" ScriptItemUID="Label2" />
+              </Container>
+            </Cell>
+          </Row>
+          <Row Condition="not(OptionalShowOnlyLastOrders())" ScriptItemUID="Row3">
+            <Cell ScriptItemUID="Cell3">
+              <Container ScriptItemUID="Container4">
+                <RoundedCorners Width="" ColorStart="" AlphaStart="" ColorEnd="" AlphaEnd="" ScriptItemUID="RoundedCorners1">
+                  <Container ScriptItemUID="Container5">
+                    <Table CustomStyle="'width: 100%;'" ScriptItemUID="Table2">
+                      <ControlReferenceRowGroup ID="VI_ITShop_WebPart_StateMessagesOrders" ScriptItemUID="ControlRef1">
+                        <VirtualFunctionMapping ID="validuntilorders()" Value="true" />
+                      </ControlReferenceRowGroup>
+                    </Table>
+                  </Container>
+                </RoundedCorners>
+              </Container>
+            </Cell>
+          </Row>
+          <Row Condition="not(OptionalShowOnlyLastOrders())" ScriptItemUID="Row4">
+            <Cell ScriptItemUID="Cell4">
+              <Container Layout="'VI_Styles_Container_Heading_Small'" ScriptItemUID="Container6">
+                <Label Text="translate('#LDS#My pending requests')" ScriptItemUID="Label3" />
+              </Container>
+            </Cell>
+          </Row>
+          <Row Condition="not(OptionalShowOnlyLastOrders())" ScriptItemUID="Row5">
+            <Cell ScriptItemUID="Cell5">
+              <Container ScriptItemUID="Container7">
+                <RoundedCorners Width="" ColorStart="" AlphaStart="" ColorEnd="" AlphaEnd="" ScriptItemUID="RoundedCorners2">
+                  <Container ScriptItemUID="Container8">
+                    <Table CustomStyle="'width: 100%;'" ScriptItemUID="Table3">
+                      <ControlReferenceRowGroup ID="VI_ITShop_WebPart_StateMessagesOrders" ScriptItemUID="ControlRef2">
+                        <VirtualFunctionMapping ID="openorders()" Value="true" />
+                      </ControlReferenceRowGroup>
+                    </Table>
+                  </Container>
+                </RoundedCorners>
+              </Container>
+            </Cell>
+          </Row>
+          <Row ScriptItemUID="Row6">
+            <Cell ScriptItemUID="Cell6">
+              <Container Layout="'VI_Styles_Container_Heading_Small'" ScriptItemUID="Container9">
+                <Label Text="translate('#LDS#My most recent requests')" ScriptItemUID="Label4" />
+              </Container>
+            </Cell>
+          </Row>
+          <Row ScriptItemUID="Row7">
+            <Cell ScriptItemUID="Cell7">
+              <Container ScriptItemUID="Container10">
+                <RoundedCorners Width="" ColorStart="" AlphaStart="" ColorEnd="" AlphaEnd="" ScriptItemUID="RoundedCorners3">
+                  <Container ScriptItemUID="Container11">
+                    <Table CustomStyle="'width: 100%;'" ScriptItemUID="Table4">
+                      <ControlReferenceRowGroup ID="VI_ITShop_WebPart_StateMessagesOrders" ScriptItemUID="ControlRef3" />
+                    </Table>
+                  </Container>
+                </RoundedCorners>
+              </Container>
+            </Cell>
+          </Row>
+        </Table>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualFunction Signature="OptionalShowOnlyLastOrders()" DataType="System.Boolean" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

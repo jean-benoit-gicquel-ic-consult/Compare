@@ -1,0 +1,53 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QBM_Logout" AllowUrlNavigation="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Form">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Main">
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action4">
+              <CodeLiteral ScriptItemUID="CodeLiteral3">
+// when the user explicitly logs off from the web application, set a flag on the session
+// to tell the web application not to automatically log in again using SSO
+
+System.Web.HttpContext.Current.Session[VI.WebRuntime.Communication.RequestAuthenticationModule.DO_NOT_SINGLE_SIGN_ON_MARKER] = "true";
+</CodeLiteral>
+              <CodeLiteral ScriptItemUID="CodeLiteral4">// end OAuth session
+
+var hasOAuth = _UserSession.SessionObjects.ContainsKey("OAuth");
+if (hasOAuth)
+{
+	var client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
+	var url = client.GetLogoutUrl(_Database);
+	if (!string.IsNullOrEmpty(url))
+	{
+		// only Dispose(), no redirect
+   	    _UserSession.Dispose();
+	    System.Web.HttpContext.Current.Response.Redirect(url, false);
+	}
+	else
+	{
+		// Logout() also redirects the response to the defined RedirectAfterLogout
+		_UserSession.Logout();
+	}
+}
+else
+{
+	_UserSession.Logout();
+}</CodeLiteral>
+            </Action>
+          </Activator>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

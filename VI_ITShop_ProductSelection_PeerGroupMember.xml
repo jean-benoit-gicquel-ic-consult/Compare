@@ -1,0 +1,240 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_ProductSelection_PeerGroupMember" MigrationNotes="DIALOGCONFIGPARM;" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_Find_Products_By_Peer_Group" Description="translate('#LDS#Peer group requests')" LongDescription="translate('#LDS#Activates requests via peer groups. All users can view and request products of their own peer group.')" />
+        <ConfigParam Key="VI_ITShop_Manager_Find_Products_By_Peer_Group" Description="translate('#LDS#Peer group requests for others')" LongDescription="translate('#LDS#Activates requests via peer groups. Managers can view and request products of the peer group of an employee they are responsible for.')" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action7" />
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="PeerGroupOrders" NavigationTitle="translate(&quot;#LDS#Requests for&quot;)+&quot; &quot;+(from Person select top 1 display())" PageFileName="VI_FormTemplate_Standard" ScriptItemUID="Form1">
+          <ActionSequence ScriptItemUID="Action1" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+            <Container ScriptItemUID="Container3" RefreshTriggerExpression="from Person select Count()">
+              <Label Text="translate('#LDS#Products other employees requested',from Person select top 1 display())" ScriptItemUID="Label1" />
+            </Container>
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+            <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+              <Action ScriptItemUID="Action2" Condition="(getconfig(&quot;VI_ITShop_Manager_Find_Products_By_Peer_Group&quot;)=&quot;True&quot; and (OrderPerson() &lt;&gt; GetUser()))&#xD;&#xA;or&#xD;&#xA;((getconfig(&quot;VI_ITShop_Find_Products_By_Peer_Group&quot;)=&quot;True&quot;) and (OrderPerson() = GetUser()))">
+                <LoadTable DataTable="Person" ScriptItemUID="LoadTable2" WhereClause="SqlCompareUid(&quot;UID_Person&quot;,OrderPerson()) ">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+                </LoadTable>
+                <Update DataColumn="PeerGroupCount" DataTable="Vars" ScriptItemUID="Update2" Value="IsNullOrEmpty(DbCount(&quot;Person&quot;,format(&quot;UID_Person in ({0})&quot;,QER_PeerGroupSelect(OrderPerson(), &quot;QER\ITShop\PeerGroupAnalysis&quot;)),false),0)" />
+                <LoadTable DataTable="AccProduct" ScriptItemUID="LoadTable1" LoadLimit="120">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                </LoadTable>
+              </Action>
+            </Activator>
+            <Container Condition="0 &lt; select count() from AccProduct" ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer1">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Other employees of the peer group of {0} requested the following products. Please select the products you would also like to request.&quot;, from Person select top 1 display())" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ItemUID="PRODUCTS" ScriptItemUID="Container2">
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="AccProduct" EntriesPerPage="10" ScriptItemUID="GridBand1" RowSelection="Action" RowSelectionActive="" OrderBy="'Counter desc, SortOrder, Ident_AccProduct'" WhereClause=" ">
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                            <ControlList ScriptItemUID="ControlList7">
+                              <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from AccProduct select current tablename" />
+                                </HtmlAttributes>
+                                <Label ScriptItemUID="Label8" Text="from AccProduct select current Display()" />
+                              </Container>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                            <ControlList ScriptItemUID="ControlList8">
+                              <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef1">
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="IsReadOnly()" Value="not(select current orderablestatus from AccProduct)" />
+                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping6" VirtualTable="EditTable" DataTable="AccProduct">
+                                  <VirtualColumnMapping DataColumn="RequestThis" VirtualColumn="DoSelect" />
+                                </VirtualTableMapping>
+                              </ControlReferenceControlList>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                            <ControlList ScriptItemUID="ControlList9">
+                              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef5">
+                                <VirtualTableMapping VirtualTable="EditTable" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping8" />
+                                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping11">
+                                  <ColumnList ScriptItemUID="ColumnList3">
+                                    <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="UID_AccProductGroup" />
+                                    <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_OrgRuler" />
+                                    <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="Description" />
+                                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Counter" />
+                                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="Percent" DisplayValueExpression="Format(&quot;{0:0.0} %&quot;,from AccProduct select current Percent)" />
+                                  </ColumnList>
+                                </VirtualFunctionMapping>
+                              </ControlReferenceContainer>
+                            </ControlList>
+                          </VirtualControlMapping>
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </GridBandListView>
+                    <SelectionAction ScriptItemUID="ServerActionCall5">
+                      <ActionSequence ScriptItemUID="Action3" Condition="select current orderablestatus from AccProduct">
+                        <Update DataColumn="RequestThis" DataTable="AccProduct" ScriptItemUID="Update1" WhereClause="PrimaryKey() = (from AccProduct select current PrimaryKey())" Value="not(from AccProduct select current RequestThis)" />
+                      </ActionSequence>
+                    </SelectionAction>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn Layout="'VI_Styles_GridColumn_Centered'" Width="'40px'" ScriptItemUID="GridColumn1">
+                      <GridColumnHeader ScriptItemUID="wctl4">
+                        <Image Source="DialogImage" DialogImage="Order" ScriptItemUID="Image5" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image5alt" Value="translate('#LDS#Request')" />
+                          </HtmlAttributes>
+                        </Image>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell1">
+                        <SwitchContainer ScriptItemUID="Switch1">
+                          <SwitchContainerCase ScriptItemUID="Case1" Condition="select current orderablestatus from AccProduct" ItemUID="ORDERABLE">
+                            <Container ScriptItemUID="Container49" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'title'" ScriptItemUID="Container49title" Value="translate('#LDS#Add to cart')" />
+                              </HtmlAttributes>
+                              <CheckBox DataTable="AccProduct" DataColumn="RequestThis" ScriptItemUID="CheckBox3" Text="" />
+                            </Container>
+                          </SwitchContainerCase>
+                          <SwitchContainerCase ScriptItemUID="Case2" ItemUID="NOTORDERABLE">
+                            <Container ScriptItemUID="Container50" Layout="'VI_Styles_Container_Inline'">
+                              <LinkContainer ScriptItemUID="LinkContainer3" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;imx-icon imx-icon-AssignedNone&quot;" />
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="LinkContainer3title" Value="translate('#LDS#This product cannot currently be requested.')" />
+                                </HtmlAttributes>
+                                <ControlList ScriptItemUID="ControlList5" />
+                                <ServerActionCall ScriptItemUID="ServerActionCall13">
+                                  <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction21">
+                                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#This product cannot be requested at the moment.&quot;)" ScriptItemUID="VirtualFunctionMapping35" />
+                                    <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping36" />
+                                    <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from AccProduct select current display()" ScriptItemUID="VirtualFunctionMapping37" />
+                                    <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping38" />
+                                  </CallAction>
+                                </ServerActionCall>
+                              </LinkContainer>
+                            </Container>
+                          </SwitchContainerCase>
+                        </SwitchContainer>
+                      </Cell>
+                    </GridColumn>
+                    <ControlReferenceGridColumnGroup ID="VI_ITShop_AccProduct_GridColumns" DataTable="AccProduct" ScriptItemUID="wctl1">
+                      <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
+                    </ControlReferenceGridColumnGroup>
+                    <GridColumn ScriptItemUID="Column4" SortColumn="Counter" AutoFilterColumn="Counter">
+                      <GridColumnHeader ScriptItemUID="wctl3">
+                        <Label ScriptItemUID="Label2" Text="DataCaption(AccProduct,Counter)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell2">
+                        <Label ScriptItemUID="Label3" Text="if(1 = from AccProduct select current Counter)then&#xD;&#xA;   Translate(&quot;#LDS#Assigned to {0} other employee&quot;, from AccProduct select current Counter)&#xD;&#xA;else&#xD;&#xA;   Translate(&quot;#LDS#Assigned to {0} other employees&quot;, from AccProduct select current Counter)" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn ScriptItemUID="Column7" Width="&quot;150px&quot;" AutoFilterColumn="Percent" SortColumn="Percent">
+                      <GridColumnHeader ScriptItemUID="wctl6">
+                        <Label ScriptItemUID="Label4" Text="DataCaption(AccProduct,Percent)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell4">
+                        <ControlReferenceContainer ID="VI_Common_ProgressBar" ScriptItemUID="ControlRef18">
+                          <VirtualFunctionMapping ID="Progress()" Value="from AccProduct select current Progress" ScriptItemUID="VirtualFunctionMapping49" />
+                          <VirtualFunctionMapping ID="LowerLimit()" Value="0" ScriptItemUID="VirtualFunctionMapping48" />
+                          <VirtualFunctionMapping ID="UpperLimit()" Value="0" ScriptItemUID="VirtualFunctionMapping47" />
+                          <VirtualFunctionMapping ID="Tooltip()" Value="Translate(&quot;#LDS# {0} % of the other employees&quot;,format(&quot;{0:0.0}&quot;,from AccProduct select current Percent))" ScriptItemUID="VirtualFunctionMapping46" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="OverWriteColor()" Value="variable('%VI_Common_Color_Blue_2%')" />
+                        </ControlReferenceContainer>
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+              </Container>
+              <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container6">
+                <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect2" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Add to cart&quot;)" EnabledCondition="(0 &lt; select count() from AccProduct where (requestthis))" ScriptItemUID="Button2">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Delete DataTable="ShoppingCartItem" ScriptItemUID="Delete2" />
+                    <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="CallAction1">
+                      <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping2" />
+                    </CallAction>
+                    <ActionSequence ScriptItemUID="Action6" ItemUID="Orders">
+                      <ForeachRow DataTable="AccProduct" WhereClause="requestthis" ScriptItemUID="ForeachRow2">
+                        <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ScriptItemUID="wctl2" ReferenceType="AccProduct" UIDAccProduct="from AccProduct select current uid_accproduct">
+                          <VirtualFunctionMapping ID="uidaccproduct()" Value="from AccProduct select current uid_accproduct" ScriptItemUID="VirtualFunctionMapping3" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from shoppingcartorder select top 1 uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping4" />
+                          <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="Person" ScriptItemUID="VirtualTableMapping3" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping61" ID="IsNoCopyParametersPerson()" Value="from AccProduct select current IsNoCopyParametersPerson" />
+                        </AccProductSwitchCallAction>
+                      </ForeachRow>
+                    </ActionSequence>
+                    <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction9" />
+                    <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCart" ScriptItemUID="Redirect3" AllowReturnToThisContext="false" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+            <Container Condition="0 = select count() from AccProduct" ItemUID="nothing to request" ScriptItemUID="Container7">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer3">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#There are currently no requests.&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+              </ControlReferenceContainer>
+              <Container ScriptItemUID="Container8" Layout="'VI_Styles_Container_ButtonBar'">
+                <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                    <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect4" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AccProduct" Table="AccProduct" ScriptItemUID="DataTableDbObject1" WhereClauseSQL="format(&#xD;&#xA;	&quot;({0}) and uid_accproduct in (&#xD;&#xA;	   select p.uid_accproduct from QER_VPWOProductNodes p &#xD;&#xA;	   join personhasobject pho on pho.ObjectKey = p.ObjectKeyOrdered&#xD;&#xA;	   where pho.UID_Person in ({1})&#xD;&#xA;	   union	   &#xD;&#xA;	   select p.uid_accproduct from QER_VPWOProductNodes p&#xD;&#xA;	   join QERAssign Q on Q.UID_AccProduct = p.UID_AccProduct&#xD;&#xA;	   join personhasobject pho on pho.ObjectKey = Q.ObjectKeyAssignTarget	   &#xD;&#xA;	   where pho.UID_Person in ({1})	   &#xD;&#xA;	)&quot;,&#xD;&#xA;	variable(&#xD;&#xA;		getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;)&#xD;&#xA;	),&#xD;&#xA;	QER_PeerGroupSelect(&#xD;&#xA;		OrderPerson(),&#xD;&#xA;		&quot;QER\ITShop\PeerGroupAnalysis&quot;&#xD;&#xA;	)&#xD;&#xA;)">
+          <ActionSequence ScriptItemUID="Action8" />
+          <Column Name="RequestThis" DataType="System.Boolean" ScriptItemUID="Column1" />
+          <Column Name="OrderableStatus" Expression="exists(&quot;AccProduct&quot;,format(&quot;uid_accproduct in (select uid_accproduct from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,sqlformatvalue(OrderPerson(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,sqlformatvalue(UID_AccProduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,&quot;null&quot;)))" DataSource="Expression" ScriptItemUID="Column14" DataType="System.Boolean" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column27" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName }}+&quot;&quot;" />
+          <Column DataType="System.Int32" Name="Counter" ScriptItemUID="Column2" DataSource="Expression" Expression="IsNullOrEmpty(&#xD;&#xA;	DbCount(&#xD;&#xA;		&quot;Person&quot;,&#xD;&#xA;		format(&#xD;&#xA;			&quot;UID_Person in(&#xD;&#xA;			   select pho.UID_Person from QER_VPWOProductNodes p&#xD;&#xA;			   join personhasobject pho on pho.ObjectKey = p.ObjectKeyOrdered&#xD;&#xA;			   join AccProduct A on A.UID_ACCProduct = p.UID_ACCProduct and {2}&#xD;&#xA;			   where p.uid_accproduct = '{1}' and pho.UID_Person in ({0})&#xD;&#xA;			   UNION&#xD;&#xA;			   select pho.UID_Person from QER_VPWOProductNodes p&#xD;&#xA;			   join QERAssign Q on Q.UID_AccProduct = p.UID_AccProduct&#xD;&#xA;			   join personhasobject pho on pho.ObjectKey = Q.ObjectKeyAssignTarget&#xD;&#xA;			   join AccProduct A on A.UID_ACCProduct = p.UID_ACCProduct and {2}&#xD;&#xA;			   where p.uid_accproduct = '{1}' and pho.UID_Person in ({0})&#xD;&#xA;			)&quot;,&#xD;&#xA;			QER_PeerGroupSelect(&#xD;&#xA;				OrderPerson(),&#xD;&#xA;				&quot;QER\ITShop\PeerGroupAnalysis&quot;&#xD;&#xA;			),&#xD;&#xA;			UID_ACCProduct,&#xD;&#xA;			variable(&#xD;&#xA;				getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;)&#xD;&#xA;			)&#xD;&#xA;		),&#xD;&#xA;		false&#xD;&#xA;	),&#xD;&#xA;	0&#xD;&#xA;)	" Caption="translate('#LDS#Number of employees')" />
+          <Column DataType="System.Double" Name="Percent" ScriptItemUID="Column5" DataSource="Expression" Expression="((from AccProduct select current Convert(Counter,&quot;System.Double&quot;)) * 100) / (from Vars select PeerGroupCount)" Caption="translate('#LDS#Distribution in the peer group')" />
+          <Column DataType="System.Double" Name="Progress" ScriptItemUID="Column6" DataSource="Expression" Expression="from AccProduct select current (Round(Percent)/100) " />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrder" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartItem" Table="ShoppingCartItem" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action11" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject6">
+          <ActionSequence ScriptItemUID="Action13" />
+        </DataTableDbObject>
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.Int32" Name="PeerGroupCount" ScriptItemUID="Column3" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function2" Name="Round(double d)" DataType="System.Double" Expression="{{Math.Round(d,MidpointRounding.AwayFromZero)}}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="OrderPerson()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

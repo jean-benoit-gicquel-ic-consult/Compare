@@ -1,0 +1,79 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Responsibilities_Memberships_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="'UNSGroup'" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList2" ObjectType="FunctionValueList" SortOrder="30">
+        <FunctionValue Expression="&quot;UNSGroup&quot;" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList6" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select (&quot;UNSGroup&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_UNSGroup&quot;) as pattern)" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList5" ObjectType="FunctionValueList">
+        <FunctionValue Expression="&quot;UNSGroup&quot;" />
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="85">
+        <Control ID="FormSubgroups">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="TSBFormGroup1">
+              <Form ID="FormSubgroups" ScriptItemUID="TSBForm1">
+                <ActionSequence ScriptItemUID="TSBAction1" />
+                <PagePartContainer ID="Title" ScriptItemUID="TSBPagePartContainer1">
+                  <Label Text="translate(&quot;#LDS#Child groups&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="TSBLabel1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="TSBPagePartContainer2">
+                  <ContainerTemplate DataTable="DbObjects" ScriptItemUID="TSBContainerTemplate1" WhereClause="UID_Object = (from Container select UID_ObjectSelected)">
+                    <ControlReferenceContainer ID="VI_Roles_UNSGroupInUNSGroup" ScriptItemUID="TSBControlRef1">
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="TSBVirtualFunctionMapping1" />
+                      <VirtualTableMapping VirtualTable="AllObjects" DataTable="DbObjects" ScriptItemUID="TSBVirtualTableMapping1" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container12" ObjectType="Container" SortOrder="45">
+        <Container EnableCustomAttributes="true" ItemUID="Subgroups" Condition="(from DbObjects select GetObjectKeyTable(XObjectKey)) in (TableNameSupportSubGroups())" ScriptItemUID="TSBContainer3">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="TSBHtmlAttribute1" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="TSBControlRef2">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="TSBAction2">
+                <Redirect Target="FormModule" AbortExecution="false" ScriptItemUID="TSBRedirect1">
+                  <RedirectFormModule ID="FormSubgroups" ScriptItemUID="TSBRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Child groups&quot;)" ScriptItemUID="TSBVirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="Description()" Value="translate(&quot;#LDS#Shows all child groups for this group.&quot;)" ScriptItemUID="TSBVirtualFunctionMapping3" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="75">
+        <Function Name="TableNameSupportSubGroups()" DataType="System.String" FunctionType="FunctionValueList" ScriptItemUID="TSBFunction1">
+          <FunctionValueList ScriptItemUID="TSBFunctionValueList1">
+            <FunctionValue Expression="&quot;ADSGroup&quot;" />
+            <FunctionValue Expression="&quot;LDAPGroup&quot;" />
+            <FunctionValue Expression="&quot;NDOGroup&quot;" />
+            <FunctionValue Expression="&quot;UNSGroupB&quot;" />
+          </FunctionValueList>
+        </Function>
+      </AddObject>
+      <AddObject ObjectID="Switch1" ObjectType="SwitchContainer" SortOrder="5">
+        <SwitchContainerCase Condition="DbTableName() = &quot;UNSGroup&quot;" ScriptItemUID="TSBCase1">
+          <ControlReferenceControlList ID="TSB_ObjectGridView_UNSGroup" ScriptItemUID="TSBControlRef3">
+            <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="DbObjects" ScriptItemUID="TSBVirtualTableMapping2" />
+            <VirtualTableMapping VirtualTable="TargetTable" DataTable="Container" ScriptItemUID="TSBVirtualTableMapping3">
+              <VirtualColumnMapping VirtualColumn="TargetSelectedKey" DataColumn="UID_ObjectSelected" />
+            </VirtualTableMapping>
+            <VirtualFunctionMapping ID="DbWhereClause()" Value="sqland(&#xD;&#xA;dbwhereclause(),&#xD;&#xA;if(not(isnullorempty(from vars select uid_personaudit)))&#xD;&#xA;then&#xD;&#xA;(&#xD;&#xA;&#xD;&#xA;-- replace the logged in user's UID with the selected person&#xD;&#xA;select top 1 format(replace(pattern, getuser(), '{0}'), from vars select uid_personaudit) from (PersonResponsibleWhereClauses())  where dbtablename() = tablename&#xD;&#xA;)&#xD;&#xA;else &quot;1=1&quot;&#xD;&#xA;)" ScriptItemUID="TSBVirtualFunctionMapping4" />
+          </ControlReferenceControlList>
+        </SwitchContainerCase>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

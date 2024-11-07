@@ -1,0 +1,24 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b1431d0d-bd9a-6303-48f4-a04b89e75876">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_Person_Entitlements" MigrationNotes="DMLREPLACE;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ElementEdit ScriptItemUID="ElementEdit1" DataTable="Object" EnableNavigation="EnableNavigation()" DialogTreeName="&quot;VI_Person_Person_Entitlements_Overview&quot;">
+          <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef27" />
+        </ElementEdit>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualControl ID="AdditionalShapes" ContainerType="ControlList" />
+      <VirtualTable Name="Object" Class="Person" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,40 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_BackNavigation">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <ContainerTemplate DataTable="UserNavigation" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true" WhereClause="primarykey() in ( select top 1 primarykey() from usernavigation&#xD;&#xA;where&#xD;&#xA;isconnectable(UidFormprevious, UidForm, UidForm=getruntimeformid())&#xD;&#xA;and&#xD;&#xA;CanReturnToThis&#xD;&#xA;and&#xD;&#xA;UidForm &lt;&gt; GetRuntimeFormID()&#xD;&#xA;order by number desc)" OrderBy="'UidModule'">
+          <Button ScriptItemUID="Button1" DisplayType="Controls" ItemUID="navigationback" EnableCustomAttributes="true">
+            <ControlList ScriptItemUID="ControlList2">
+              <Image ScriptItemUID="Image1" StockImage="Back" StockImageSize="Large" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                </HtmlAttributes>
+              </Image>
+            </ControlList>
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;border-style: hidden; background: transparent; padding: 0; vertical-align: top;&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;title&quot;" Value="translate(&quot;#LDS#Go back to {0}&quot;, from usernavigation select current title)" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall3" EnableRedirectByUrl="true">
+              <RedirectByUrl Condition="from usernavigation select current canreturntothis">
+                <Redirect ScriptItemUID="Redirect2" Target="Link" HREF="from usernavigation select current&#xD;&#xA;variable(format(&quot;%linkstartform%?ContextInstanceID={0}&amp;RuntimeFormID={1}&quot;, UidModule, UidForm))" NoLinkObjectID="true" />
+              </RedirectByUrl>
+              <ActionSequence Condition="from usernavigation select current canreturntothis" ScriptItemUID="Action3">
+                <Redirect Target="Link" NoLinkObjectID="true" HREF="from usernavigation select current&#xD;&#xA;variable(format(&quot;%linkstartform%?ContextInstanceID={0}&amp;RuntimeFormID={1}&quot;, UidModule, UidForm))" ScriptItemUID="Redirect1" />
+              </ActionSequence>
+            </ServerActionCall>
+          </Button>
+        </ContainerTemplate>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

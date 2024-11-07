@@ -1,0 +1,213 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <GlobalControl ID="VI_Attestation_AttestationRun_PendingApprovers" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <CallAction ActionID="ReloadData" ScriptItemUID="CallAction1" />
+          </Action>
+        </Activator>
+        <Container Condition=" 0 &lt; select count() from Pending" ItemUID="Show approvers" ScriptItemUID="Container2">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="HeadLine()" Value="translate(&quot;#LDS#Pending approvals&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#This page displays the approvers who have pending attestation cases for the selected attestation run along with the number of their pending and closed cases in that run. You can select some or all approvers and send them a reminder mail.&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+          </ControlReferenceContainer>
+          <Grid ScriptItemUID="Grid1">
+            <GridBand DataTable="Approvers" ScriptItemUID="GridBand1" OrderBy="'NegativePending'" EnableGridViewSetting="false" RowSelection="Action" RowSelectionActive="">
+              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                <ControlList ScriptItemUID="ControlList1">
+                  <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef2">
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                      <ControlList ScriptItemUID="ControlList2">
+                        <Label Text="from Approvers select current Display()" ScriptItemUID="Label7" />
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                      <ControlList ScriptItemUID="ControlList3">
+                        <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef4">
+                          <VirtualTableMapping ScriptItemUID="VirtualTableMapping7" VirtualTable="EditTable" DataTable="Approvers">
+                            <VirtualColumnMapping DataColumn="Selected" VirtualColumn="DoSelect" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="IsReadOnly()" Value="from Approvers select current IsNullOrEmpty(DefaultEmailAddress)" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="SelectText()" Value="if(from Approvers select current IsNullOrEmpty(DefaultEmailAddress))then&#xD;&#xA;   translate('#LDS#Missing e-mail address')&#xD;&#xA;else&#xD;&#xA;   translate('#LDS#Select')" />
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                      <ControlList ScriptItemUID="ControlList4">
+                        <LayoutPanel ScriptItemUID="LayoutPanel1">
+                          <Label Text="translate(&quot;#LDS#Pending&quot;)" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="translate(&quot;#LDS#Number of run's pending cases which can be approved by the employee&quot;)" />
+                            </HtmlAttributes>
+                          </Label>
+                          <Label Text="from Approvers select current PendingCases()" ScriptItemUID="Label9" />
+                          <Label Text="translate(&quot;#LDS#Closed&quot;)" ScriptItemUID="Label10" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute11" Value="translate(&quot;#LDS#Number of the run's cases which have been closed by the employee&quot;)" />
+                            </HtmlAttributes>
+                          </Label>
+                          <Label Text="from Approvers select current PendingCases()" ScriptItemUID="Label11" />
+                        </LayoutPanel>
+                      </ControlList>
+                    </VirtualControlMapping>
+                  </ControlReferenceControlList>
+                </ControlList>
+              </GridBandListView>
+              <SelectionAction ScriptItemUID="ServerActionCall2">
+                <Update DataTable="Approvers" DataColumn="Selected" Value="ToggleSelect(Selected)" ScriptItemUID="Update4" WhereClause="UID_Person = ( select current UID_Person from Approvers)" />
+              </SelectionAction>
+              <GridFilters ScriptItemUID="GridFilters1" />
+              <GridRows />
+              <GridColumn ScriptItemUID="GridColumn4" Width="&quot;20px&quot;">
+                <GridColumnHeader ScriptItemUID="wctl1">
+                  <Image StockImage="Mail" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Image1alt" Value="translate('#LDS#Selection for reminder')" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                    </HtmlAttributes>
+                  </Image>
+                </GridColumnHeader>
+                <Cell ScriptItemUID="Cell1">
+                  <CheckBox DataTable="Approvers" DataColumn="Selected" ScriptItemUID="CheckBox1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute3" Value="if(from Approvers select current IsNullOrEmpty(DefaultEmailAddress))then&#xD;&#xA;   translate('#LDS#Missing e-mail address')&#xD;&#xA;else&#xD;&#xA;   translate('#LDS#Select')" />
+                      <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute4" Value="if(from Approvers select current IsNullOrEmpty(DefaultEmailAddress))then&#xD;&#xA;   translate('#LDS#Missing e-mail address')&#xD;&#xA;else&#xD;&#xA;   translate('#LDS#Select')" />
+                      <HtmlAttribute Name="&quot;disabled&quot;" ScriptItemUID="HtmlAttribute5" Value="if(from Approvers select current IsNullOrEmpty(DefaultEmailAddress))then&#xD;&#xA;   &quot;disabled&quot;" />
+                    </HtmlAttributes>
+                  </CheckBox>
+                </Cell>
+              </GridColumn>
+              <GridColumn ScriptItemUID="GridColumn1" SortColumn="__Display" AutoFilterColumn="__Display">
+                <GridColumnHeader ScriptItemUID="wctl2">
+                  <Label Text="DataCaption(&quot;AttestationCase&quot;, &quot;UID_PersonHead&quot;)" ScriptItemUID="Label1" />
+                </GridColumnHeader>
+                <Cell ScriptItemUID="Cell2">
+                  <Label Text="from Approvers select current Display()" ScriptItemUID="Label2" />
+                </Cell>
+              </GridColumn>
+              <GridColumn ScriptItemUID="GridColumn2" SortColumn="Pending" AutoFilterColumn="Pending" Width="&quot;7em&quot;" Layout="'VI_Styles_GridColumn_Right'">
+                <GridColumnHeader ScriptItemUID="wctl3">
+                  <Label Text="translate(&quot;#LDS#Pending&quot;)" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Label3title" Value="translate(&quot;#LDS#Number of run's pending cases which can be approved by the employee&quot;)" />
+                    </HtmlAttributes>
+                  </Label>
+                </GridColumnHeader>
+                <Cell ScriptItemUID="Cell3">
+                  <Label Text="from Approvers select current PendingCases()" ScriptItemUID="Label4" />
+                </Cell>
+              </GridColumn>
+              <GridColumn ScriptItemUID="GridColumn3" SortColumn="Closed" AutoFilterColumn="Closed" Width="&quot;7em&quot;" Layout="'VI_Styles_GridColumn_Right'">
+                <GridColumnHeader ScriptItemUID="wctl4">
+                  <Label Text="translate(&quot;#LDS#Closed&quot;)" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Label5title" Value="translate(&quot;#LDS#Number of the run's cases which have been closed by the employee&quot;)" />
+                    </HtmlAttributes>
+                  </Label>
+                </GridColumnHeader>
+                <Cell ScriptItemUID="Cell4">
+                  <Label Text="from Approvers select current ClosedCases()" ScriptItemUID="Label6" />
+                </Cell>
+              </GridColumn>
+            </GridBand>
+          </Grid>
+          <Container ItemUID="Check All (MultiSelect)" ScriptItemUID="Container3" Condition="1 &lt; select count() from Approvers where not(IsNullOrEmpty(DefaultEmailAddress))" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;margin-left: 10px;&quot;" />
+            </HtmlAttributes>
+            <CheckBoxMulti DataTable="Approvers" DataColumn="Selected" ScriptItemUID="CheckBoxMulti1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute1" Value="translate('#LDS#Select all')" />
+                <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute2" Value="translate('#LDS#Select all')" />
+              </HtmlAttributes>
+            </CheckBoxMulti>
+          </Container>
+          <Container Layout="'VI_Styles_Container_ButtonBar'" ItemUID="Send Mail Button" ScriptItemUID="Container4">
+            <Button Text="translate(&quot;#LDS#Send reminder&quot;)" ScriptItemUID="Button1" EnabledCondition="0 &lt; CountSelected()" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Send reminder mail to the selected approver(s)&quot;)" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <CallAction ActionID="VI_Attestation_AttestationRuns_SendReminder" ScriptItemUID="CallAction2">
+                  <VirtualFunctionMapping ID="ListOfAttestationRuns()" Value="UID_AttestationRun()" ScriptItemUID="VirtualFunctionMapping7" />
+                  <VirtualFunctionMapping ID="OptionalDescription()" Value="SendMailDescription()" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="OptionalListOfUID_Persons()" Value="listselect(Approvers, UID_Person, Selected and not(isnullorempty(defaultemailaddress)))" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+        <Container Condition="0 = select count() from Pending" ItemUID="Show explanation (if no approvers available)" ScriptItemUID="Container5">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef3">
+            <VirtualFunctionMapping ID="HeadLine()" Value="translate(&quot;#LDS#No data available&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+            <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#There are currently no approvers available for the pending attestations.')" ScriptItemUID="VirtualFunctionMapping6" />
+          </ControlReferenceContainer>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSQL Table="Pending" PrimaryKeyColumn="UID_PersonHead" ScriptItemUID="DataTableLimitedSQL1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="UID_PersonHead" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="PendingCases" DataType="System.Int32" ScriptItemUID="Column2" />
+        </DataTableSQL>
+        <DataTableSQL Table="Closed" PrimaryKeyColumn="UID_PersonHead" ScriptItemUID="DataTableLimitedSQL2">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="UID_PersonHead" DataType="System.String" ScriptItemUID="Column3" />
+          <Column Name="ClosedCases" DataType="System.Int32" ScriptItemUID="Column4" />
+        </DataTableSQL>
+        <DataTableDbObject Class="Person" Table="Approvers" WhereClauseSQL="SqlInWithFormat(&quot;UID_Person&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;, from Pending select UID_PersonHead)" ScriptItemUID="DataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="Pending" DataType="System.Int32" DataSource="Expression" Expression="from Pending select top 1 PendingCases where UID_PersonHead = (select current UID_Person from Approvers)" ScriptItemUID="Column5" Caption="translate(&quot;#LDS#Pending&quot;)" />
+          <Column Name="Closed" DataType="System.Int32" DataSource="Expression" Expression="IsNull(from Closed select top 1 ClosedCases where UID_PersonHead = (select current UID_Person from Approvers), 0)" ScriptItemUID="Column6" Caption="translate(&quot;#LDS#Closed&quot;)" />
+          <Column Name="NegativePending" DataType="System.Int32" DataSource="Expression" Expression="- Pending" Comment="Helper column necessary to order by pending cases desc" ScriptItemUID="Column7" />
+          <Column Name="SourceKey" DataType="System.String" ScriptItemUID="Column8" />
+          <Column Name="Selected" DataType="System.Boolean" ScriptItemUID="Column9" TriggerUpdates="Updates" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ReloadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action6">
+              <LoadTable DataTable="Pending" Type="LimitedSQL" ScriptItemUID="LoadTable1" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationRun_PendingApprovers.Pending&quot;">
+                <ParameterFree Name="&quot;uidattestationrun&quot;" Value="UID_AttestationRun()" ScriptItemUID="ParameterFree1" />
+              </LoadTable>
+              <ActionSequence Condition="0 &lt; select count() from Pending" ItemUID="load additional data for pending approvers" ScriptItemUID="Action7">
+                <LoadTable DataTable="Closed" Type="LimitedSQL" ScriptItemUID="LoadTable2" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationRun_PendingApprovers.Closed&quot;">
+                  <ParameterFree Name="&quot;uidattestationrun&quot;" Value="UID_AttestationRun()" ScriptItemUID="ParameterFree2" />
+                </LoadTable>
+                <LoadTable DataTable="Approvers" ScriptItemUID="LoadTable3">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                </LoadTable>
+                <Update DataTable="Approvers" DataColumn="Selected" Value="false" ScriptItemUID="Update3" />
+              </ActionSequence>
+              <ActionSequence Condition="0 = select count() from Pending" ItemUID="delete additional data if there are no pending approvers" ScriptItemUID="Action8">
+                <Delete DataTable="Closed" ScriptItemUID="Delete1" />
+                <Delete DataTable="Approvers" ScriptItemUID="Delete2" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="PendingCases()" Expression="from Pending select top 1 PendingCases where UID_PersonHead = (select current UID_Person from Approvers)" FilterForTable="Approvers" DataType="System.Int32" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="Approvers" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="ClosedCases()" Expression="IsNull(from Closed select top 1 ClosedCases where UID_PersonHead = (select current UID_Person from Approvers), 0)" FilterForTable="Approvers" DataType="System.Int32" ScriptItemUID="Function2">
+          <DataTableCursor DataTable="Approvers" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="CountSelected()" Expression="select count() from Approvers where IsNull(Selected, false) = true" DataType="System.Int32" ScriptItemUID="Function3" />
+        <Function Name="SendMailDescription()" Expression="if (1 = CountSelected())&#xA;then translate(&quot;#LDS#Send reminder mail to {0}&quot;, from Approvers select top 1 Display() where Selected = true)&#xA;else translate(&quot;#LDS#Send reminder mail to {0} selected attestors&quot;, CountSelected())" DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="ToggleSelect(bool expanded)" Expression="if(expanded) then false&#xD;&#xA;else true" DataType="System.Boolean" ScriptItemUID="Function5" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="UID_AttestationRun()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

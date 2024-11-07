@@ -1,0 +1,50 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_BusinessOwner_Overview_Tile" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef2">
+          <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+            <ActionComponent ScriptItemUID="Action2">
+              <CallAction ScriptItemUID="Call2" ActionID="SquareAction" />
+            </ActionComponent>
+          </VirtualControlMapping>
+          <VirtualControlMapping ContainerType="Container" VirtualControl="Container">
+            <Container ScriptItemUID="Container8">
+              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef3">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="PropertyList()" IsPropertyList="true">
+                  <ColumnList ScriptItemUID="ColumnList2">
+                    <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" ColumnList="GetConfig(PropertyList())" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="EditTable" />
+              </ControlReferenceContainer>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Caption()" Value="SquareText()" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Identifier()" Value="&quot;Large overview &quot; + SquareTableName()" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Size()" Value="'Large-Overview'" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="ContentType()" Value="'Container'" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Image()" Value="SquareTableName()" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="ImageType()" Value="'TableName'" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="HideTabIndex()" Value="true" />
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="SquareText()" DataType="System.String" />
+      <VirtualFunction Signature="SquareTableName()" DataType="System.String" />
+      <VirtualControl ID="SquareAction" ContainerType="ActionComponent" />
+      <VirtualFunction DataType="System.String" Signature="IconFont()" />
+      <VirtualFunction DataType="System.String" Signature="PropertyList()" TriggerUpdates="Never" />
+      <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1" RequiresCursor="true" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

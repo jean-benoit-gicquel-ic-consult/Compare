@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Tab_AccordeonMultiselect" Type="Tab" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" HasRelatedObject="true" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_Tab_Accordeon" />
+    <Property Name="TabStyle" Value="AccordeonMultiselect" Comment="" />
+    <Property Name="ShowTabsIfOnePage" Value="true" />
+  </LayoutObject>
+</WebDesigner>

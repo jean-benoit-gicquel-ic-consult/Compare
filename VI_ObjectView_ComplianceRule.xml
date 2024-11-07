@@ -1,0 +1,96 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl ID="VI_ObjectView_ComplianceRule" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="ComplianceRuleHasMControl" RemoveDeleted="false" RevertExisting="false" WhereClause="format(&quot;UID_MitigatingControl in( select UID_MitigatingControl from ComplianceRuleHasMControl where UID_ComplianceRule = '{0}')&quot;,from SourceObject select current UID_ComplianceRule)" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <ControlReferenceContainer ID="VI_ObjectView_Default" ScriptItemUID="ControlRef1">
+            <VirtualTableMapping VirtualTable="SourceObject" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" />
+          </ControlReferenceContainer>
+          <Container ScriptItemUID="Container5" Condition="0 &lt; select count() from ComplianceRuleInArea where UID_ComplianceRule = (from SourceObject select current UID_ComplianceRule)">
+            <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel3" Layout="'VI_Styles_LayoutPanel_Default'">
+              <Label ScriptItemUID="Label4" Text="datacaption(ComplianceRuleInArea, UID_ComplianceArea)" />
+              <ContainerTemplate DataTable="ComplianceRuleInArea" WhereClause="UID_ComplianceRule = (from SourceObject select current UID_ComplianceRule)" ScriptItemUID="ContainerTemplate1">
+                <Label Text="if(0 &lt; from ComplianceRuleInArea select current iterationindex())then(&quot;, &quot;)else(&quot;&quot;)" ScriptItemUID="Label6" />
+                <Label Text="from ComplianceRuleInArea select current displayvalue(UID_ComplianceArea)" ScriptItemUID="Label5" Action="Redirect">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" AbortExecution="false" ScriptItemUID="Redirect3">
+                      <RedirectParameter Name="'ObjectKey'" Value="from ComplianceRuleInArea select current objectwalker(&quot;FK(UID_ComplianceArea).XObjectKey&quot;)" />
+                    </Redirect>
+                  </ServerActionCall>
+                </Label>
+              </ContainerTemplate>
+            </LayoutPanel>
+          </Container>
+          <Container Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" ScriptItemUID="Container3">
+            <Container Condition="0 = (select count() from ComplianceRuleHasMControl where UID_ComplianceRule = (from SourceObject select current UID_ComplianceRule))" ScriptItemUID="Container4">
+              <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                <Label Text="datacaption(SourceObject, RiskIndex)" ScriptItemUID="Label1" />
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef2">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping2">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </LayoutPanel>
+            </Container>
+            <Container Condition="0 &lt; (select count() from ComplianceRuleHasMControl where UID_ComplianceRule = (from SourceObject select current UID_ComplianceRule))" ScriptItemUID="Container7">
+              <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel2">
+                <Label Text="datacaption(SourceObject, RiskIndex)" ScriptItemUID="Label2" />
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef3">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping3">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <Label Text="datacaption(SourceObject, RiskIndexReduced)" ScriptItemUID="Label3" />
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef4">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping4">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </LayoutPanel>
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-icon imx-table-MitigatingControl&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="HeadLine()" Value="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              </ControlReferenceContainer>
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="MitigatingControl" WhereClause="UID_MitigatingControl in (&#xA;select UID_MitigatingControl from ComplianceRuleHasMControl where UID_ComplianceRule = (from SourceObject select current UID_ComplianceRule)&#xA;)" ScriptItemUID="GridBand1">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumnSimple ScriptItemUID="Column4" Column="Ident_MitigatingControl" Width="'200px'" />
+                  <GridColumnSimple ScriptItemUID="Column1" Column="Description" Width="'300px'" />
+                  <GridColumnSimple ScriptItemUID="Column2" Column="SignificancyReduction" Width="'140px'" />
+                </GridBand>
+              </Grid>
+            </Container>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="ComplianceRuleHasMControl" Class="ComplianceRuleHasMControl" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+        </DataTableDbObject>
+        <DataTableFKView Table="MitigatingControl" ViewFKDataTable="ComplianceRuleHasMControl" ViewFKDataColumn="UID_MitigatingControl" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableCRView Class="ComplianceRuleInArea" Table="ComplianceRuleInArea" CRDataColumn="UID_ComplianceRule" ViewFKDataTable="SourceObject" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+        </DataTableCRView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="ComplianceRule" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

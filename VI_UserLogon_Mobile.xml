@@ -1,0 +1,158 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UserLogon_Mobile">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="General settings" Description="translate(&quot;#LDS#General settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_CompanyLogo_Mobile" Description="translate(&quot;#LDS#Company logo mobile&quot;)" LongDescription="translate(&quot;#LDS#You can use your company logo here.&quot;)" Type="Image" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IBookmarkProvider&gt;();
+
+// check if UserConfiguration is enabled
+var bookmarkProvider = provider as BookmarkProvider;
+if (bookmarkProvider == null || !bookmarkProvider.IsEnabled()) return;
+
+var bookmarks = provider.Get();
+foreach (var bookmark in bookmarks)
+{
+   Bookmarks.ObjectList.Add(bookmark);
+}</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'class'" Value="'userinfo_mobile'" ScriptItemUID="HtmlAttribute1" />
+          <HtmlAttribute Name="'data-role'" Value="'header'" ScriptItemUID="HtmlAttribute2" />
+          <HtmlAttribute Name="'data-position'" Value="'fixed'" ScriptItemUID="HtmlAttribute3" />
+          <HtmlAttribute Name="'data-theme'" Value="'a'" ScriptItemUID="HtmlAttribute4" />
+          <HtmlAttribute Name="'data-tap-toggle'" Value="'false'" ScriptItemUID="HtmlAttribute5" />
+          <HtmlAttribute Name="'data-id'" Value="'imx-header'" ScriptItemUID="HtmlAttribute6" />
+        </HtmlAttributes>
+        <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_Heading_1'" ItemUID="H1 - PageHeading">
+          <Image Source="File" FileName="getconfig(&quot;VI_Common_CompanyLogo_Mobile&quot;)" ScriptItemUID="Image1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Company page&quot;)" />
+            </HtmlAttributes>
+          </Image>
+          <Image Source="File" FileName="getconfig(&quot;VI_Common_ProductLogo&quot;)" ScriptItemUID="Image2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Home page&quot;)" />
+            </HtmlAttributes>
+          </Image>
+          <Label Text="''" ScriptItemUID="Label2" />
+        </Container>
+        <Container ScriptItemUID="Container4" ItemUID="Button-ControlGroup Left" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'data-role'" Value="'controlgroup'" ScriptItemUID="HtmlAttribute7" />
+            <HtmlAttribute Name="'data-type'" Value="'horizontal'" ScriptItemUID="HtmlAttribute8" />
+            <HtmlAttribute Name="'data-mini'" Value="'true'" ScriptItemUID="HtmlAttribute9" />
+            <HtmlAttribute Name="'class'" Value="'ui-btn-left'" ScriptItemUID="HtmlAttribute10" />
+          </HtmlAttributes>
+          <Label ScriptItemUID="Label7" EnableCustomAttributes="true" ItemUID="Open left Panel" Text="&quot;Open Panel&quot;">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-icon-bullets ui-btn-icon-notext'" ScriptItemUID="HtmlAttribute11" />
+              <HtmlAttribute Name="'onclick'" Value="'imx.mobile.page.sideSwipeObj.toggleSideSwipePanel(&quot;left&quot;)'" ScriptItemUID="HtmlAttribute12" />
+            </HtmlAttributes>
+          </Label>
+          <Label ScriptItemUID="Label1" EnableCustomAttributes="true" ItemUID="Back-Button" Text="translate(&quot;#LDS#Back&quot;)">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-icon-back ui-btn-icon-notext'" ScriptItemUID="HtmlAttribute13" />
+              <HtmlAttribute Name="'onclick'" Value="'if (history.length&gt;0) {history.back();}'" ScriptItemUID="HtmlAttribute14" />
+            </HtmlAttributes>
+          </Label>
+          <Label ScriptItemUID="Label6" EnableCustomAttributes="true" ItemUID="Refresh-Button" Text="translate(&quot;#LDS#Refresh&quot;)">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-icon-refresh ui-btn-icon-notext'" ScriptItemUID="HtmlAttribute15" />
+              <HtmlAttribute Name="'onclick'" Value="'document.location.reload(true)'" ScriptItemUID="HtmlAttribute16" />
+            </HtmlAttributes>
+          </Label>
+        </Container>
+        <Container ScriptItemUID="Container3" ItemUID="Button-ControlGroup Right" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'data-role'" Value="'controlgroup'" ScriptItemUID="HtmlAttribute17" />
+            <HtmlAttribute Name="'data-type'" Value="'horizontal'" ScriptItemUID="HtmlAttribute18" />
+            <HtmlAttribute Name="'class'" Value="'ui-btn-right '" ScriptItemUID="HtmlAttribute19" />
+            <HtmlAttribute Name="'data-mini'" Value="'true'" ScriptItemUID="HtmlAttribute20" />
+          </HtmlAttributes>
+          <Label Text="from user select display()" ScriptItemUID="Label5" EnableCustomAttributes="true" Action="Redirect" ItemUID="UserName &amp; link to ProfileMenu">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-btn-icon-left ui-icon-imx-user'" ScriptItemUID="HtmlAttribute21" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall2">
+              <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_MyData_PersonHyperView" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect6" />
+            </ServerActionCall>
+          </Label>
+          <Label Text="translate(&quot;#LDS#Heading Log Off&quot;)" ScriptItemUID="Label4" Action="Redirect" EnableCustomAttributes="true" ItemUID="Logout-Button">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-icon-power ui-btn-icon-notext ui-btn-inline'" ScriptItemUID="HtmlAttribute22" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction4">
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action3">
+                    <CodeLiteral ScriptItemUID="CodeLiteral3">
+// when the user explicitly logs off from the web application, set a flag on the session
+// to tell the web application not to automatically log in again using SSO
+
+System.Web.HttpContext.Current.Session[VI.WebRuntime.Communication.RequestAuthenticationModule.DO_NOT_SINGLE_SIGN_ON_MARKER] = "true";
+</CodeLiteral>
+                    <CodeLiteral ScriptItemUID="CodeLiteral4">// end OAuth session
+
+var hasOAuth = _UserSession.SessionObjects.ContainsKey("OAuth");
+if (hasOAuth)
+{
+	var client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
+	var url = client.GetLogoutUrl(_Database);
+	_UserSession.Dispose();
+	if (!string.IsNullOrEmpty(url))
+	{
+	    System.Web.HttpContext.Current.Response.Redirect(url, false);
+	}
+}
+else
+{
+	_UserSession.Logout();
+}</CodeLiteral>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log off?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log off&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              </CallAction>
+            </ServerActionCall>
+          </Label>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="select count() from bookmarks &gt; 0" ItemUID="Link to Bookmarks Panel">
+              <Label Text="translate('#LDS#Bookmarks')" ScriptItemUID="Label9" ItemUID="Bookmarks" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-btn-icon-notext ui-btn-inline ui-icon-imx-bookmark'" ScriptItemUID="HtmlAttribute28" />
+                  <HtmlAttribute Name="'onclick'" Value="'imx.mobile.page.sideSwipeObj.toggleSideSwipePanel(&quot;right&quot;, &quot;bookmark&quot;)'" ScriptItemUID="HtmlAttribute27" />
+                </HtmlAttributes>
+              </Label>
+            </SwitchContainerCase>
+          </SwitchContainer>
+          <Label Text="translate('#LDS#Properties')" ScriptItemUID="Label3" EnableCustomAttributes="true" ItemUID="Link to PropertiesMenu">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-btn-icon-notext ui-btn-inline ui-icon-imx-properties'" ScriptItemUID="HtmlAttribute23" />
+              <HtmlAttribute Name="'onclick'" Value="'imx.mobile.page.sideSwipeObj.toggleSideSwipePanel(&quot;right&quot;)'" ScriptItemUID="HtmlAttribute24" />
+            </HtmlAttributes>
+          </Label>
+        </Container>
+        <Container EnableCustomAttributes="true" ScriptItemUID="Container10" ItemUID="UserNavigation">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'class'" Value="'ui-bar ui-bar-b'" ScriptItemUID="HtmlAttribute25" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="VI_Common_UserNavigation" ScriptItemUID="ControlRef4" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableObjectView Table="Bookmarks" ElementType="VI.WebRuntime.IBookmark, VI.WebRuntime" ScriptItemUID="DataTableObjectView1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

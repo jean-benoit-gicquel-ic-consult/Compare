@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Container_TwoColumnLayout" Type="Container">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="columnsContainer" Comment="" />
+    <CssDocument CssName="Css">.columnsContainer { position: relative; margin: 0; }
+
+.leftColumn { margin-bottom: .5em;}
+
+.rightColumn { }
+
+@media screen and (min-width: 72em)
+{
+	.leftColumn { margin-right: 25em; }
+	.rightColumn { position: absolute; top: 0; right: 0; width: 24em; } 
+}
+
+
+/* if not responsive
+.leftColumn { margin-right: 25em; }
+.rightColumn { position: absolute; top: 0; right: 0; width: 24em; } 
+*/</CssDocument>
+  </LayoutObject>
+</WebDesigner>

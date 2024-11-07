@@ -1,0 +1,99 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject ID="VI_Styles_Textbox_Search" Type="TextBox" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" HasRelatedObject="true" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_Textbox_Default" />
+    <Property Name="CssClass" Value="TextBoxSearch" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">input[type="text"].TextBoxSearch {
+  color: %VI_Common_Color_ColorBase1%;
+  border-width: 0 0 1px 0;
+  border-color: %VI_Common_Color_ColorBase1%;
+  width: 130px;
+  margin: 0;
+  background-color: transparent;  
+}
+
+.imx-search button {
+  background: transparent url('%permanentlink%img=Find.png&amp;effect=Whiten') no-repeat top 5px right 10px; 
+  background-position: center;
+  margin: 0 0 1px 0;
+    width: 30px;
+    vertical-align: middle;
+    height: 26px;
+    display: inline-block;
+}
+
+.imx-search input::placeholder
+{ 
+color: %VI_Common_Color_LighterGray%; 
+font-weight: lighter;
+}
+
+.imx-highcontrast .imx-search button:focus
+{
+  outline: medium dotted %VI_Common_Color_DarkerGray%;
+}
+
+.imx-search button:focus {
+	outline: %VI_Common_Color_ColorBase1% dotted 1px;
+}
+
+.imx-search input[type='text'].TextBoxSearch::-webkit-input-placeholder { /* Edge */
+  color: %VI_Common_Color_ColorBase1%;
+  font-weight: 400; 
+  opacity: 1;
+}
+
+.imx-search input[type='text'].TextBoxSearch:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: %VI_Common_Color_ColorBase1%;
+  font-weight: 400; 
+  opacity: 1;
+}
+
+.imx-search input[type='text'].TextBoxSearch::placeholder {
+  color: %VI_Common_Color_ColorBase1%;
+  font-weight: 400; 
+  opacity: 1;
+}</CssDocument>
+    <CssDocument ScriptItemUID="CssDocument2" CssName="CSS for SearchBox in MenuDropdown">.imx-menudropdown .imx-search {
+  flex: 1 1 auto;
+  min-width: 214px;
+}
+
+.imx-menudropdown .imx-startpagelink {
+  flex: 0 0 auto;
+  margin: auto;
+  width: 25px;
+}
+
+.imx-menudropdown .imx-search &gt; div {
+  display: flex;
+}
+
+.imx-menudropdown {
+	margin-left: -1px;
+}
+
+.imx-menudropdown input[type="text"].TextBoxSearch {
+    background-color: %QBM_Primary_White%;
+	color: %VI_Common_Color_Font%;
+	border-right: 1px solid %VI_Common_Color_LighterGray%;	
+    flex: 1 1 auto;
+	width: 160px;
+	min-width: 160px;
+	border-width: 1px 1px 1px 1px;
+}
+
+.imx-menudropdown .imx-search button {
+  background: %QBM_Primary_White% url('%permanentlink%img=Find.png') no-repeat top 5px right 10px;
+  height: 28px;
+  margin-bottom: 0px;
+}
+
+.imx-toggleContainer .imx-menudropdown .imx-search {
+    border: solid 1px %VI_Common_Color_LighterGray%;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

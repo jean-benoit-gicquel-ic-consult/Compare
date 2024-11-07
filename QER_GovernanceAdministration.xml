@@ -1,0 +1,47 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_GovernanceAdministration" HelpChapterUid="&quot;8E9219B5-9712-43B9-BDB4-C17F96571663&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="CAP_GovernanceAdministration" NavigationTitle="translate(&quot;#LDS#Governance Administration&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Governance Administration&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <SwitchContainer ScriptItemUID="TileRisk">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole in ('ATT-AEROLE-ATTESTATIONADMIN-ADMIN', 'POL-AEROLE-QERPOLICY-ADMIN', 'CPL-AEROLE-RULEADMIN-ADMIN') and uid_person = '%useruid%'&quot;))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="Risk">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Identifier()" Value="&quot;Risk&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action4">
+                      <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_RiskIndex" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Caption()" Value="translate('#LDS#Risk Assessment')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Image()" Value="&quot;QERRiskIndex&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Value()" Value=" translate(&quot;#LDS#Shows all risk index functions defined in the system. You can view and edit their details.&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

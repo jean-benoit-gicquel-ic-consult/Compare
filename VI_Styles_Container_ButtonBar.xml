@@ -1,0 +1,96 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_ButtonBar" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="ButtonBar" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.ButtonBar { 
+  clear: both; 
+  width: auto; 
+  margin-top: 18px; 
+  text-align: right; 
+  padding: 8px; 
+  border-top: solid 1px %VI_Common_Color_Font_Secondary%;
+}
+
+.ButtonBar &gt; * {
+  display: inline; 
+  margin-left: 16px;
+  vertical-align: middle;
+}
+
+.ButtonBar .dropdown-menu {
+text-align: left;
+left: auto;
+right: 0;
+}
+
+.ButtonBar input[type="checkbox"],
+.ButtonBar label[for] {
+  vertical-align: middle;
+}
+
+.ButtonBar .imx-dropdown-toggle
+{
+   padding: 0.55em 20px;
+}
+
+@media %IMX_Mediaquery_Smartphone%
+{
+
+.imx-mobile-fill
+{
+    width: 100%;
+}
+
+.ButtonBar
+{
+padding-left: 0;
+padding-right: 0;
+}
+
+.ButtonBar,
+.ButtonBar .Inline
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.ButtonBar &gt; * {
+  margin: .2em 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.ButtonBar &gt; .dropup {
+  text-align: center;
+}
+
+.ButtonBar .toolbarButtonDropup,
+.ButtonBar .imx-dropdown
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.ButtonBar .imx-flex-row
+{
+    flex-direction: row;
+    justify-content: center;
+}
+
+.ButtonBar &gt; div {
+    flex-direction: column;
+}
+
+/* adjust height for showing caption */
+.ButtonBar button
+{
+  height: 100%;
+  padding-top: 0.7em;  
+  padding-bottom: 0.7em;
+}
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,45 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4da96f52-cf84-6bf4-64a8-a37adc5c1c3d">
+  <GlobalControl ID="VI_Edit_LimitedValues" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'title'" ScriptItemUID="Container1title" Value="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Description }}" />
+        </HtmlAttributes>
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action2">
+            <Delete DataTable="LimitedValues" ScriptItemUID="Delete1" />
+            <FillTable DataTable="LimitedValues" DataColumn="" Expression="GetLimitedValues(edittable, editcolumn)" ScriptItemUID="FillTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+            </FillTable>
+            <Update DataTable="LimitedValues" DataColumn="DisplayValue" WhereClause="isnull(displayvalue,'')=''" Value="value" ScriptItemUID="Update1" />
+          </Action>
+        </Activator>
+        <ControlReferenceContainer ID="VI_Edit_ComboBox" ScriptItemUID="ControlReferenceContainer1">
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1">
+            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="EditColumn" />
+          </VirtualTableMapping>
+          <VirtualTableMapping VirtualTable="SourceTable" DataTable="LimitedValues" ScriptItemUID="VirtualTableMapping2">
+            <VirtualColumnMapping VirtualColumn="SourceColumn" DataColumn="Value" />
+            <VirtualColumnMapping VirtualColumn="SourceDisplay" DataColumn="DisplayValue" />
+          </VirtualTableMapping>
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="AllowClearSelection()" Value="(from edittable select current getminlen(editcolumn)=0)&#xD;&#xA;and&#xD;&#xA;(0 = select count() from limitedvalues where value=&quot;0&quot;)" />
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="LimitedValues" PrimaryKeyColumn="Value" ScriptItemUID="DataTableCustom1">
+          <Column Name="Value" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="Description" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="DisplayValue" ScriptItemUID="Column3" DataType="System.String" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,234 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="8391a72c-0c71-c4ec-6f6d-dd35d98eb22f">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_AttestationCaseMasterDetail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container242">
+              <ControlReferenceContainer ID="VI_Attestation_AttestationCase" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="noitemstext()" Value="noitemstext()" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="AttestationCaseDbWhereClause()" Value="AttestationCaseDbWhereClause()" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="AttestationPolicyDbWhereClause()" Value="AttestationPolicyDbWhereClause()" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="UseOneGridForAllPolicies()" Value="UseOneGridForAllPolicies()" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualControlMapping ContainerType="Container" VirtualControl="AdditionalControlsColumn1">
+                  <Container ScriptItemUID="Container14">
+                    <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef9" />
+                  </Container>
+                </VirtualControlMapping>
+              </ControlReferenceContainer>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container2">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="AttestationCase" WhereClause="uid_attestationcase = ( from vars select uid_attestationcaseselected)" Layout="" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate2style" Value="" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="VI_Attestation_AttestationCase_Information" ScriptItemUID="ControlReferenceContainer2">
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="Isreadonly()" ScriptItemUID="VirtualFunctionMapping6" />
+                  <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="VirtualFunctionMapping7" />
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="AdditionalActions">
+                    <ControlList ScriptItemUID="ControlList6">
+                      <ControlReferenceControlList ID="AdditionalActions" ScriptItemUID="ControlRef8" />
+                    </ControlList>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="HideHistory()" Value="HideHistory()" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="HideButtonBar()" Value="HideButtonBar()" />
+                </ControlReferenceContainer>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList1">
+                <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AttestationCase" WhereClause="uid_attestationcase = ( from vars select uid_attestationcaseselected)">
+                  <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef5">
+                    <VirtualFunctionMapping ID="Caption1()" Value="datacaption(attestationcase,displayname)" ScriptItemUID="VirtualFunctionMapping8" />
+                    <VirtualFunctionMapping ID="Caption2()" Value="translate(&quot;#LDS#Status&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                    <VirtualFunctionMapping ID="Value1()" Value="from attestationcase select current displayName" ScriptItemUID="VirtualFunctionMapping10" />
+                    <VirtualFunctionMapping ID="Value2()" Value="from attestationcase select current displayValue(attestationstatedisplay)" ScriptItemUID="VirtualFunctionMapping11" />
+                  </ControlReferenceControlList>
+                </ContainerTemplate>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+        <Container ScriptItemUID="Container7" EnableCustomAttributes="true" Condition="not(HideButtonBar())">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container4" ItemUID="Reminder Mail" Condition="from container select isauditor" Layout="'VI_Styles_Container_Inline'">
+            <Button Text="translate(&quot;#LDS#View approvers for pending cases&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ServerActionCall2">
+                <ActionSequence ScriptItemUID="Action1">
+                  <LoadTable DataTable="PersonApprover" WhereClause="format(&quot;uid_person in (select uid_personhead from ATT_VAttDecisionPerson_DO where uid_attestationcase in ( select uid_attestationcase from attestationcase where {0}) and rulerlevel &lt;&gt; 2)&quot;,&#xD;&#xA;&#xD;&#xA;sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;&#xD;&#xA;if(isnullorempty(attestationpolicydbwhereclause())) then &quot;&quot;&#xD;&#xA;else&#xD;&#xA;format(&quot;uid_attestationpolicy in (select uid_attestationpolicy from attestationpolicy where {0})&quot;,&#xD;&#xA;attestationpolicydbwhereclause())))" ScriptItemUID="LoadTable1">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  </LoadTable>
+                  <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+                    <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container8">
+                        <Container ScriptItemUID="Container9">
+                          <Label Text="translate(&quot;#LDS#You can send a reminder mail to an approver for the pending attestation cases by clicking a link below.&quot;)" ScriptItemUID="Label2" />
+                        </Container>
+                        <Grid ScriptItemUID="Grid1">
+                          <GridBand DataTable="PersonApprover" EntriesPerPage="10" ScriptItemUID="GridBand1" DisplayHeader="Always">
+                            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                              <ControlList ScriptItemUID="ControlList2">
+                                <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef6">
+                                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                                    <ControlList ScriptItemUID="ControlList3">
+                                      <Label Text="select current display() from personapprover" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                                        <HtmlAttributes>
+                                          <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                                        </HtmlAttributes>
+                                      </Label>
+                                    </ControlList>
+                                  </VirtualControlMapping>
+                                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                                    <ControlList ScriptItemUID="ControlList4">
+                                      <Container ScriptItemUID="Container3" Condition="from personapprover select current isnullorempty(defaultemailaddress)">
+                                        <Label ScriptItemUID="Label4" Text="translate('#LDS#Missing e-mail address')" EnableCustomAttributes="true">
+                                          <HtmlAttributes>
+                                            <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute2" Value="translate('#LDS#Missing e-mail address')" />
+                                          </HtmlAttributes>
+                                        </Label>
+                                      </Container>
+                                      <Container ScriptItemUID="Container5" Condition="from personapprover select current not(isnullorempty(defaultemailaddress))">
+                                        <Literal Expression="format('&lt;a href=&quot;mailto:{0}?Subject={1}&quot;&gt;{2}&lt;/a&gt;',&#xD;&#xA;&#xD;&#xA;from PersonApprover select current DefaultEmailAddress,&#xD;&#xA;UrlEncode(HtmlEncode(datacaption(&quot;AttestationCase&quot;)), true),&#xD;&#xA;translate(&quot;#LDS#Send a mail&quot;))" />
+                                      </Container>
+                                    </ControlList>
+                                  </VirtualControlMapping>
+                                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                                    <ControlList ScriptItemUID="ControlList5">
+                                      <LayoutPanel ScriptItemUID="LayoutPanel1">
+                                        <ContainerColumnTemplate DataTable="PersonApprover" ScriptItemUID="ContainerColumnTemplate2">
+                                          <ColumnList ScriptItemUID="ColumnList3">
+                                            <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                                            <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_Department" />
+                                          </ColumnList>
+                                          <Container ScriptItemUID="Container13" ItemUID="Title column for normal properties">
+                                            <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef7">
+                                              <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonApprover" ScriptItemUID="VirtualTableMapping4">
+                                                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                              </VirtualTableMapping>
+                                              <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping13" />
+                                            </ControlReferenceContainer>
+                                          </Container>
+                                          <Container ScriptItemUID="Container12" ItemUID="Value column for normal properties">
+                                            <ColumnEditor DataTable="PersonApprover" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1" />
+                                          </Container>
+                                        </ContainerColumnTemplate>
+                                      </LayoutPanel>
+                                    </ControlList>
+                                  </VirtualControlMapping>
+                                </ControlReferenceControlList>
+                              </ControlList>
+                            </GridBandListView>
+                            <GridFilters ScriptItemUID="GridFilters1" />
+                            <GridRows />
+                            <GridColumn ScriptItemUID="GridColumn1" SortColumn="__Display">
+                              <GridColumnHeader ScriptItemUID="wctl1">
+                                <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label3" />
+                              </GridColumnHeader>
+                              <Cell ScriptItemUID="Cell2">
+                                <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container10">
+                                  <Label Text="select current display() from personapprover" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                                    </HtmlAttributes>
+                                  </Label>
+                                </Container>
+                              </Cell>
+                            </GridColumn>
+                            <ControlReferenceGridColumnGroup ID="VI_ObjectCollection_Person_GridColumns" DataTable="PersonApprover" ScriptItemUID="ControlRef2">
+                              <VirtualTableMapping VirtualTable="Person" DataTable="PersonApprover" ScriptItemUID="VirtualTableMapping1" />
+                            </ControlReferenceGridColumnGroup>
+                            <GridColumn ScriptItemUID="GridColumn2" Width="&quot;150px&quot;">
+                              <GridColumnHeader ScriptItemUID="wctl2">
+                                <Label Text="translate(&quot;#LDS#Send mail&quot;)" ScriptItemUID="Label6" />
+                              </GridColumnHeader>
+                              <Cell ScriptItemUID="Cell3">
+                                <Container ScriptItemUID="Container26" Condition="from personapprover select current isnullorempty(defaultemailaddress)">
+                                  <Label ScriptItemUID="Label1" Text="translate('#LDS#Missing e-mail address')" EnableCustomAttributes="true">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="translate('#LDS#Missing e-mail address')" />
+                                    </HtmlAttributes>
+                                  </Label>
+                                </Container>
+                                <Container ScriptItemUID="Container42" Condition="from personapprover select current not(isnullorempty(defaultemailaddress))">
+                                  <Literal Expression="format('&lt;a href=&quot;mailto:{0}?Subject={1}&quot;&gt;{2}&lt;/a&gt;',&#xA;&#xA;from PersonApprover select current DefaultEmailAddress,&#xA;UrlEncode(HtmlEncode(datacaption(&quot;AttestationCase&quot;)), true),&#xA;translate(&quot;#LDS#Send a mail&quot;))" />
+                                </Container>
+                              </Cell>
+                            </GridColumn>
+                          </GridBand>
+                        </Grid>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                      <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container11">
+                        <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef4" />
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Send a reminder mail&quot;)" ScriptItemUID="VirtualFunctionMapping12" />
+                  </CallAction>
+                </ActionSequence>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <ControlReferenceControlList ID="AdditionalButtons" ScriptItemUID="ControlRef3" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_AttestationCaseSelected" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+        <DataTableSingleRow Table="Container" DisplayColumn="" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="IsAuditor" DataType="System.Boolean" DataSource="Expression" Expression="exists(&quot;personinaerole&quot;, variable(&quot;uid_person = '%useruid%' and uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR'&quot;))" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="Person" Table="PersonApprover" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="DialogParameter" Class="DialogParameter">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject3" Table="DialogParameterSet" Class="DialogParameterSet">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" ScriptItemUID="VirtualTable1" Class="AttestationCase">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <Column Name="AttestationStateDisplay" DataType="System.String" ScriptItemUID="Column3" ColumnDataSource="LimitedValues" DataSource="Expression" Expression="if(isgranted) then &quot;approved&quot; else (if(isclosed) then &quot;denied&quot; else &quot;pending&quot;)" Caption="translate(&quot;#LDS#Status&quot;)">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="pending" Display="lower(translate(&quot;#LDS#Pending&quot;))" Comment="" />
+            <ColumnLimitedValue Name="approved" Display="lower(translate(&quot;#LDS#Approved&quot;))" Comment="" />
+            <ColumnLimitedValue Name="denied" Display="lower(translate(&quot;#LDS#Denied&quot;))" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+      </VirtualTable>
+      <VirtualFunction Signature="noitemstext()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AttestationCaseDbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="AttestationPolicyDbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HideButtonBar()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UseOneGridForAllPolicies()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalButtons" ContainerType="ControlList" />
+      <VirtualControl ContainerType="ControlList" ID="AdditionalActions">
+        <VirtualTableCursor DataTable="AttestationCase" />
+      </VirtualControl>
+      <VirtualFunction DataType="System.String" Signature="HideHistory()" />
+      <VirtualControl ContainerType="Container" ID="AdditionalControlsColumn1">
+        <VirtualTableCursor DataTable="AttestationCase" />
+      </VirtualControl>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

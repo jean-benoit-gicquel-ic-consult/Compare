@@ -1,0 +1,197 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_DefenderAuthentication">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.StarlingClient.dll" />
+        <AssemblyReference Assembly="Starling.TwoFactor.Client.dll" />
+        <TypeMember>private QER.StarlingClient.StarlingClient StarlingClient;</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="PersonForMfa" ScriptItemUID="QERLoadTable1" WhereClause="sqland( sqlcompareuid(&quot;UID_Person&quot;, getuser()), PersonWhereClause())">
+          <DbObjectLoadType ScriptItemUID="QERDbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+          <Action ScriptItemUID="Action6" Condition="0 = select count() from personformfa&#xD;&#xA;&#xD;&#xA;-- if no match, then 2FA does not apply to this employee --&gt; pass">
+            <CallAction ScriptItemUID="Call6" ActionID="CodeVerified" />
+          </Action>
+        </Activator>
+        <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="QERControlRef2">
+          <VirtualFunctionMapping ScriptItemUID="QERVirtualFunctionMapping4" ID="Text()" Value="Text()" />
+        </ControlReferenceContainer>
+        <Container ScriptItemUID="QERContainer3" ItemUID="MFA possible for this user" Condition="not(from personformfa select top 1 isnullorempty(mfauserid))">
+          <CodeLiteral ScriptItemUID="CodeLiteral2">if (StarlingClient == null)
+{
+	var apiKey = _Connection.GetConfigParm(@"QER\Person\Defender\ApiKey");
+	
+	var credentialString = _Connection.GetConfigParm(@"QER\Person\Starling\ApiKey");
+	
+	if (string.IsNullOrEmpty(credentialString) || string.Equals(credentialString, "&lt;ClientId:ClientSecret&gt;" /* default placeholder */))
+	{
+		// build legacy client
+		var baseUri = _Connection.GetConfigParm(@"QER\Person\Defender\ApiEndpoint");
+		if (string.IsNullOrEmpty(baseUri))
+		{
+			StarlingClient = new QER.StarlingClient.StarlingClient(apiKey);
+		}
+	    else
+	    {
+		    StarlingClient = new QER.StarlingClient.StarlingClient(apiKey, baseUri);
+	    }
+		
+		StarlingClient.DisableForceParameter = "1".Equals(_Connection.GetConfigParm(@"QER\Person\Defender\DisableForceParameter"));
+    }
+	else
+	{
+		// build new client
+		var stsUri = _Connection.GetConfigParm(@"QER\Person\Starling\ApiEndpoint");
+		if (string.IsNullOrEmpty(stsUri))
+		{
+			StarlingClient = QER.StarlingClient.StarlingClient.BuildClient(credentialString);
+		}
+	    else
+	    {
+			stsUri = stsUri.Replace(@"auth/realms/StarlingClients/protocol/openid-connect/token", "");
+		    StarlingClient = QER.StarlingClient.StarlingClient.BuildClient(credentialString, null, stsUri);
+	    }
+		
+		StarlingClient.DisableForceParameter = "1".Equals(_Connection.GetConfigParm(@"QER\Person\Starling\DisableForceParameter"));		
+	}
+}
+
+var row = Vars.SingleRow;
+var settings = (SyncActions.Do(() =&gt; StarlingClient.GetSubscriptionOptionsAsync()));
+row.SetValue("sms_enabled", settings.IsSMSSupported);
+row.SetValue("phone_calls_enabled", settings.IsPhoneCallSupported);
+row.SetValue("onetouch_enabled", true);</CodeLiteral>
+          <Container ScriptItemUID="Container1">
+            <TextBox DataTable="MfaResponse" ScriptItemUID="QERTextBox1" DataColumn="Code" />
+            <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;line-height: 3em;&quot;" />
+              </HtmlAttributes>
+              <SwitchContainer ScriptItemUID="Switch2">
+                <SwitchContainerCase ScriptItemUID="Case2" Condition="from vars select sms_enabled">
+                  <Button ScriptItemUID="QERButton1" Text="translate(&quot;#LDS#Send SMS&quot;)" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;margin-right: 1em;&quot;" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="QERServerActionCall1">
+                      <CodeLiteral ScriptItemUID="CodeLiteral3">var userId = GetMfaUserId();
+await StarlingClient.RequestOtpAsync(userId, QER.StarlingClient.OtpType.Sms, ct).ConfigureAwait(false);
+</CodeLiteral>
+                      <CallAction ScriptItemUID="Call1" ActionID="VI_Common_UserMessageAdd">
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="MessageText()" Value="translate(&quot;#LDS#SMS has been sent successfully.&quot;)" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Button>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="from vars select phone_calls_enabled" ItemUID="phone">
+                  <Button ScriptItemUID="QERButton2" Text="translate(&quot;#LDS#Phone call&quot;)" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;margin-right: 1em;&quot;" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="QERServerActionCall2">
+                      <CodeLiteral ScriptItemUID="CodeLiteral4">var userId = GetMfaUserId();
+await StarlingClient.RequestOtpAsync(userId, QER.StarlingClient.OtpType.Call, ct).ConfigureAwait(false);
+</CodeLiteral>
+                      <CallAction ScriptItemUID="Call2" ActionID="VI_Common_UserMessageAdd">
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="MessageText()" Value="translate(&quot;#LDS#Phone call has been initiated.&quot;)" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Button>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="Switch3">
+                <SwitchContainerCase ScriptItemUID="Case3" Condition="from vars select onetouch_enabled">
+                  <Button ScriptItemUID="Button2" Text="translate(&quot;#LDS#Authenticate with Starling 2FA app&quot;)" Layout="'VI_Styles_Button_Pill'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall2">
+                      <CodeLiteral ScriptItemUID="CodeLiteral5">var userId = GetMfaUserId();
+var result = await StarlingClient.SendPushRequestAndPollAsync(userId, AppMessage(), ct: ct).ConfigureAwait(false);
+var success = result == Starling.TwoFactor.Client.PushNotificationRequestStatus.Approved;
+MfaResponse_CodeCorrect.SetValue(MfaResponse_Current.Row, success);</CodeLiteral>
+                      <ActionSequence ScriptItemUID="Action4" Condition="from mfaresponse select current codecorrect">
+                        <CallAction ScriptItemUID="Call4" ActionID="CodeVerified" />
+                      </ActionSequence>
+                    </ServerActionCall>
+                  </Button>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </Container>
+          <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="&quot;margin-top: 16px;&quot;" />
+            </HtmlAttributes>
+            <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#Next&quot;)">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <ActionSequence ScriptItemUID="Action3" Condition="from MfaResponse select IsNullOrEmpty(Code)">
+                  <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call7">
+                    <VirtualFunctionMapping ID="MessageText()" Value="Text()" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#You must enter a code.')" ScriptItemUID="VirtualFunctionMapping5" />
+                  </CallAction>
+                  <EndExecution />
+                </ActionSequence>
+                <CodeLiteral ScriptItemUID="CodeLiteral1">var row = MfaResponse_Current.Row;
+MfaResponse_CodeCorrect.SetValue(row, false);
+var userId = GetMfaUserId();
+var token = TableStore.GetLocalColumn(MfaResponse, "Code").GetValue(row);
+var success = await StarlingClient.VerifyOtpAsync(userId, token, ct).ConfigureAwait(false);
+MfaResponse_CodeCorrect.SetValue(row, success);
+</CodeLiteral>
+                <ActionSequence ScriptItemUID="Action2" Condition="from mfaresponse select current codecorrect">
+                  <CallAction ScriptItemUID="Call3" ActionID="CodeVerified" />
+                </ActionSequence>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+        <Container ScriptItemUID="QERContainer4" Condition="from personformfa select top 1 isnullorempty(mfauserid)" ItemUID="MFA not possible" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="QERHtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-message&quot;" />
+          </HtmlAttributes>
+          <Label ScriptItemUID="QERLabel1" Text="translate(&quot;#LDS#Starling 2FA authentication is not possible because your user account is not associated with a valid Starling 2FA user ID. Request a Starling 2FA user ID from the service catalog.&quot;)" />
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action5">
+              <CallAction ScriptItemUID="Call5" ActionID="NoMfaPossible" />
+            </Action>
+          </Activator>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject ScriptItemUID="QERDataTableDbObject1" Table="PersonForMfa" Class="Person">
+          <ActionSequence ScriptItemUID="QERAction1" />
+        </DataTableDbObject>
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.Boolean" Name="sms_enabled" ScriptItemUID="Column1" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="onetouch_enabled" ScriptItemUID="Column2" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="phone_calls_enabled" ScriptItemUID="Column3" TriggerUpdates="Never" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="GetMfaUserId()" DataType="System.String" Expression="from personformfa select top 1 (mfauserid)" TriggerUpdates="Never" />
+        <Function ScriptItemUID="Function2" Name="AppMessage()" DataType="System.String" Expression="variable(&quot;%PRODUCTNAME%&quot;)" TriggerUpdates="Never" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="MfaResponse" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="CodeCorrect" DataType="System.Boolean" />
+        <Column DataType="System.String" Name="Code" ScriptItemUID="QERColumn1">
+          <ParameterFree Name="&quot;PlaceHolderText&quot;" Value="translate(&quot;#LDS#Token response&quot;)" ScriptItemUID="ParameterFree1" />
+        </Column>
+      </VirtualTable>
+      <VirtualFunction DataType="System.String" Signature="Text()" TriggerUpdates="Never" />
+      <VirtualControl ContainerType="ActionComponent" ID="CodeVerified" />
+      <VirtualControl ContainerType="ActionComponent" ID="NoMfaPossible" />
+      <VirtualFunction DataType="System.String" Signature="PersonWhereClause()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

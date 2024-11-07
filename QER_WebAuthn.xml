@@ -1,0 +1,197 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_WebAuthn">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <AssemblyReference Assembly="VI.Web.ConfigBase.dll" />
+        <NamespaceImport Namespace="QER.CompositionApi.Auth" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Employee_QERWebAuthnKey_Filter" Type="SQL" Description="translate('#LDS#Webauthn: Employees who can manage their security keys')" DatabaseTable="Person" LongDescription="translate('#LDS#Specify which employees are allowed to manage their Webauthn security keys.')" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action4">
+            <LoadTable DataTable="QERWebAuthnKey" ScriptItemUID="LoadTable1" WhereClause="SqlCompareUid(&quot;UID_Person&quot;,from Person select UID_Person)">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+            </LoadTable>
+          </Action>
+        </Activator>
+        <Container ScriptItemUID="Container1" Condition="0 = from QERWebAuthnKey select count()" ItemUID="No security keys" Layout="'VI_Styles_Container_ParagraphLargeMarging'">
+          <Container ScriptItemUID="Container10" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+            </HtmlAttributes>
+            <Image StockImage="Information" StockImageSize="Large" ScriptItemUID="Image3" />
+          </Container>
+          <Label Text="translate(&quot;#LDS#You have not set up any security keys.&quot;)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Label1style" Value="&quot;display: inline-block; padding-top: .5em;&quot;" />
+            </HtmlAttributes>
+          </Label>
+        </Container>
+        <Container ScriptItemUID="Container7" ItemUID="Keylist" RefreshTriggerExpression="from QERWebAuthnKey select GetDataVersion()" Condition="0 &lt; from QERWebAuthnKey select count()">
+          <ContainerTemplate DataTable="QERWebAuthnKey" ScriptItemUID="ContainerTemplate3">
+            <Label Text="from QERWebAuthnKey select current IsNullOrEmpty(Display(),translate('#LDS#Unnamed security key'))" ScriptItemUID="Label1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;Style&quot;" Value="if(from QERWebAuthnKey select current IsNullOrEmpty(DisplayName))then&#xD;&#xA;   &quot;font-style: italic; font-size: large;&quot;&#xD;&#xA;else&#xD;&#xA;   &quot;font-size: large;&quot;&#xD;&#xA;&#xD;&#xA;" />
+              </HtmlAttributes>
+            </Label>
+            <Container ScriptItemUID="Container9" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;style&quot;" Value="&quot;width: 75%; margin-top: 6px;&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;style&quot;" Value="Variable(&quot;border-top: solid 1px %VI_Common_Color_Font_Secondary%;&quot;)" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="KeyViewer" ScriptItemUID="ControlRef3" />
+              </Container>
+            </Container>
+            <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;style&quot;" Value="if(select current ((iterationindex()+1) &lt; iterationcount()) from QERWebAuthnKey)then&#xD;&#xA;   &quot;padding-bottom: 32px;&quot;" />
+              </HtmlAttributes>
+              <Button ScriptItemUID="Button8" Text="translate('#LDS#Edit')" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute6" Value="translate(&quot;#LDS#Edit security key&quot;)" />
+                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="translate(&quot;#LDS#Edit security key&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;data-imx-identifier&quot;" Value="format(&quot;KEYEDIT_{0}&quot;,select current (iterationindex() + 1) from QERWebAuthnKey)" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall8">
+                  <CallAction ScriptItemUID="Call1" ActionID="EditKey" />
+                </ServerActionCall>
+              </Button>
+              <Button ScriptItemUID="Button9" Text="translate('#LDS#Delete')" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true" EnabledCondition="(1 &lt; (from QERWebAuthnKey select count()))&#xD;&#xA;or&#xD;&#xA;(from Person select top 1 not(IsNullOrEmpty(MfaUserId)))">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute4" Value="translate(&quot;#LDS#Delete security key&quot;)" />
+                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="translate(&quot;#LDS#Delete security key&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;data-imx-identifier&quot;" Value="format(&quot;KEYDELETE_{0}&quot;,select current (iterationindex() + 1) from QERWebAuthnKey)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="&quot;margin-left: 16px;&quot;" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall9">
+                  <CallAction ScriptItemUID="Call2" ActionID="DeleteKey" />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </ContainerTemplate>
+        </Container>
+        <Container ScriptItemUID="Container3" Layout="'VI_Styles_Container_ButtonBar'" RefreshTriggerExpression="from QERWebAuthnKey select Count()" ItemUID="Buttonpanel">
+          <ControlReferenceContainer ID="AdditionalControls" ScriptItemUID="ControlRef2" />
+          <Button ScriptItemUID="Button2" Text="translate('#LDS#New security key')" ItemUID="NEWSecurityKey" EnabledCondition="{{&#xD;&#xA;VI.Base.SyncActions.Do(()=&gt;Rsts2Fa.BuildAsync(_Database, VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.Web.ConfigBase.IWebAppDbConfig&gt;().BaseUrl)).CanAddNewKey(_Database)&#xD;&#xA;}}">
+            <ServerActionCall ScriptItemUID="ServerActionCall2">
+              <CodeLiteral ScriptItemUID="CodeLiteral1">var config = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.Web.ConfigBase.IWebAppDbConfig&gt;();
+var rsts2fa = await Rsts2Fa.BuildAsync(_Database, config.BaseUrl).ConfigureAwait(false);
+var secondaryProviderId = _UserSession.ApplicationInfo.ConfigSettings.GetValueOrDefault("VI_Common_AccessControl_Webauthn_2FAID");
+VI.WebRuntime.HttpContextFactory.Current.Response.Redirect(rsts2fa.BuildNewKeyUrl(_Database, config.BaseUrl, secondaryProviderId), false);</CodeLiteral>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="QERWebAuthnKey" Class="QERWebAuthnKey">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="UID_QERWebAuthnKeySelected" ScriptItemUID="Column4" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="DeleteKey">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action6">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call10">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure you want to delete this security key?&quot;)" ScriptItemUID="VirtualFunctionMapping24" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping23" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Delete security key&quot;)" ScriptItemUID="VirtualFunctionMapping22" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="MessageBoxType()" Value="'Default'" />
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action11">
+                    <Delete DataTable="QERWebAuthnKey" ScriptItemUID="Delete1" WhereClause="PrimaryKey() = from QERWebAuthnKey select current PrimaryKey()" SetDeletionFlag="DeleteAndSave" />
+                    <ActionOnControl />
+                    <CallAction ScriptItemUID="Call5" ActionID="AfterSaving" />
+                  </ActionComponent>
+                </VirtualControlMapping>
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QERWebAuthnKey" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="EditKey">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action2">
+              <CallAction ScriptItemUID="Call4" ActionID="VI_Popup">
+                <VirtualControlMapping ContainerType="Container" VirtualControl="PopupContent">
+                  <Container ScriptItemUID="Container6">
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef6">
+                      <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping13">
+                        <ColumnList ScriptItemUID="ColumnList3">
+                          <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="DisplayName" Caption="DataCaption(QERWebAuthnKey,DisplayName)" Description="DataCaption(QERWebAuthnKey,DisplayName)" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="QERWebAuthnKey" ScriptItemUID="VirtualTableMapping3" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping ContainerType="Container" VirtualControl="PopupBottom">
+                  <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_Popup_Buttons'">
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="Button5" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_Default'" ItemUID="AUTHCancel">
+                      <ServerActionCall ScriptItemUID="ServerActionCall5">
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate('#LDS#Save')" ScriptItemUID="Button6" ItemUID="AUTHSave">
+                      <ServerActionCall ScriptItemUID="ServerActionCall6">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <Save DataTable="QERWebAuthnKey" ScriptItemUID="Save2" WhereClause="PrimaryKey() = from QERWebAuthnKey select current PrimaryKey()" />
+                        <ActionOnControl />
+                        <CallAction ScriptItemUID="Call3" ActionID="AfterSaving" />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="PopupTitle()" Value="translate('#LDS#Edit security key')" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="CssClass()" Value="&quot;imx-popup-small&quot;" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QERWebAuthnKey" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="KeyViewer">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container8" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;style&quot;" Value="&quot;padding-top: 8px;&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef7">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping3">
+                  <ColumnList ScriptItemUID="ColumnList1">
+                    <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="DateRegistered">
+                      <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;Date&quot;" ScriptItemUID="ParameterFree1" />
+                    </SingleColumn>
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DateLastUsed" ColumnComponentView="VI_Edit_View_DateTimeago" Condition="not(from QERWebAuthnKey select current (IsNull(DateLastUsed,#1899-12-30#) &lt; #1900-01-01#))" />
+                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="DateLastUsed" DisplayValueExpression="&quot;never&quot;" Condition="from QERWebAuthnKey select current (IsNull(DateLastUsed,#1899-12-30#) &lt; #1900-01-01#)" />
+                    <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="SignatureCount" DisplayValueExpression="if(0 = from QERWebAuthnKey select current SignatureCount)then(&#xD;&#xA;   &quot;never&quot;&#xD;&#xA;)&#xD;&#xA;else if(1 = from QERWebAuthnKey select current SignatureCount)then(   &#xD;&#xA;   translate('#LDS#{0} time',from QERWebAuthnKey select current SignatureCount)&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   translate('#LDS#{0} times',from QERWebAuthnKey select current SignatureCount)&#xD;&#xA;)" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="QERWebAuthnKey" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="ShowHiddenProperties()" Value="true" />
+              </ControlReferenceContainer>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QERWebAuthnKey" ScriptItemUID="DataTableCursor2" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Person" ScriptItemUID="VirtualTable1" Class="Person" />
+      <VirtualControl ContainerType="Container" ID="AdditionalControls" />
+      <VirtualControl ContainerType="ActionComponent" ID="AfterSaving" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,33 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="TSB_UNSGroup_GridColumns">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridColumnGroup DataTable="UNSGroup" ScriptItemUID="GridColumnGroup1">
+        <GridColumnSimple ScriptItemUID="Column1" Column="UID_UNSRootProxy" Width="&quot;280px&quot;" />
+        <GridColumnSimple ScriptItemUID="Column3" Column="OwnerStateDisplay" Width="&quot;170px&quot;" />
+      </GridColumnGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView Table="AccProductForGroup" ViewFKDataTable="UNSGroup" ViewFKDataColumn="UID_AccProduct" Class="AccProduct" ScriptItemUID="TSBDataTableFKView1">
+          <DbObjectLoadType ConvertToInteractive="false" ScriptItemUID="TSBDbObjectLoadType1" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="UNSGroup" ScriptItemUID="VirtualTable1" Class="UNSGroup">
+        <Column DataType="System.String" Name="OwnerStateDisplay" ScriptItemUID="Column2" ColumnDataSource="LimitedValues" DisplayValueExpression="if isnullorempty(uid_accproduct) then &quot;No&quot; else &quot;Yes&quot;" Caption="translate(&quot;#LDS#Requestable&quot;)">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="No" Display="translate(&quot;#LDS#No&quot;)" WhereClause="SqlEmpty(&quot;UID_AccProduct&quot;,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Yes" Display="translate(&quot;#LDS#Yes&quot;)" WhereClause="sqlcompare(&quot;UID_AccProduct&quot;,&quot;&quot;,&quot;string&quot;,&quot;notequal&quot;,&quot;NonUnicodeLiterals&quot;)" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+        <ColumnProxy Name="UID_UNSRootProxy" ScriptItemUID="ColumnProxy1" DataColumn="UID_UNSRoot" Caption="translate(&quot;#LDS#Domain / Mandant&quot;)" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

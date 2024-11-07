@@ -1,0 +1,34 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_LoadShoppingCartOrder" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action5" />
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence Condition="not(createnew())" ScriptItemUID="Action2">
+          <LoadTable DataTable="ShoppingCartOrder" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;CheckStatus&quot;, 0, &quot;int&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()))" OrderBy="&quot;XDateInserted desc&quot;" LoadLimit="1" ScriptItemUID="LoadTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+          </LoadTable>
+        </ActionSequence>
+        <ActionSequence Condition="createnew()&#xA;or&#xA;(0 = select count() from ShoppingCartOrder)" ItemUID="Create new Ordernumber" ScriptItemUID="Action3">
+          <Insert DataTable="ShoppingCartOrder" ScriptItemUID="Insert1">
+            <ActionSequence ScriptItemUID="Action4">
+              <Method DataTable="ShoppingCartOrder" Method="FillDocumentNumber" WhereClause="uid_shoppingcartorder = select current uid_shoppingcartorder from shoppingcartorder" SaveAfterAction="false" />
+              <Save DataTable="ShoppingCartOrder" ScriptItemUID="Save1" />
+            </ActionSequence>
+            <InsertValue DataColumn="UID_Person" Value="from user select uid_person" />
+          </Insert>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ShoppingCartOrder" Class="ShoppingCartOrder" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="CreateNew()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,46 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_UnsDomain" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Grid ScriptItemUID="Grid1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;data-imx-grid-displaytype&quot;" Value="DisplayType()" />
+          </HtmlAttributes>
+          <GridBand DataTable="HierarchyTable" EntriesPerPage="10" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="" RowSelection="Action" RowSelectionActive="select current not(IsNonSelectable()) from HierarchyTable">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <SelectionAction ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="ElementSelected" ScriptItemUID="Call1" />
+            </SelectionAction>
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn SortColumn="DisplayName" AutoFilterColumn="DisplayName" ScriptItemUID="Column1">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label Text="DataCaption(HierarchyTable, DisplayName)" ScriptItemUID="Label5" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1">
+                <Label Text="select current display() from hierarchytable" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="select current cssclass() from hierarchytable" />
+                    <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute2" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+          </GridBand>
+        </Grid>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="HierarchyTable" Class="TSBVUNSDomain" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

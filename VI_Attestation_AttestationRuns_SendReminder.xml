@@ -1,0 +1,70 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <GlobalControl MetamodelVersion="2016-05-01" ID="VI_Attestation_AttestationRuns_SendReminder" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent Condition="not(isnullorempty(ListOfAttestationruns()))" ScriptItemUID="Action1">
+        <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction5">
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="HeadLine()" Value="OptionalDescription()" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#You can optionally include a custom message in the mail.&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceContainer>
+              <LayoutPanel Columns="2" Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel1">
+                <FormItemLabel DataTable="LocalVars" DataColumn="Message" ScriptItemUID="FormItemLabel1">
+                  <Label Text="translate('#LDS#Custom message')" ScriptItemUID="Label43" />
+                </FormItemLabel>
+                <TextBox DataTable="LocalVars" DataColumn="Message" ScriptItemUID="TextBox1" TextMode="MultiLine" Rows="8" />
+              </LayoutPanel>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container4">
+              <Button Text="translate('#LDS#OK')" ScriptItemUID="Button3" ItemUID="Default Button">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <ActionSequence ItemUID="ok, send mail" ScriptItemUID="Action2">
+                    <Method DataTable="User" ObjectMethodType="FireEvent" ObjectEventName="RemindApproverInit">
+                      <MethodParameter Name="&quot;PolicyRuns&quot;" Value="ListOfAttestationRuns()" />
+                      <MethodParameter Name="&quot;MessageText&quot;" Value="from LocalVars select Message" />
+                      <MethodParameter Name="&quot;PersonHeads&quot;" Value="IsNull(OptionalListOfUID_Persons(), &quot;&quot;)" />
+                    </Method>
+                    <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction7">
+                      <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping3" />
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The reminder mails have been sent.&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                    </CallAction>
+                    <ActionOnControl />
+                  </ActionSequence>
+                </ServerActionCall>
+              </Button>
+              <Button Text="translate('#LDS#Cancel')" ScriptItemUID="Button2" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                </ServerActionCall>
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Send reminder mail&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+        </CallAction>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action3" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Message" Comment="Stores the optional free text message to be passed to the sendmail process." DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ListOfAttestationRuns()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="OptionalDescription()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="OptionalListOfUID_Persons()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

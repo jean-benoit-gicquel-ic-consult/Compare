@@ -1,0 +1,49 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Chart_Default" Type="Chart" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="AxisLineColor" Value="#000000" Comment="" />
+    <Property Name="StrokeColor" Value="#00FFFFFF" Comment="" />
+    <Property Name="StrokeWidth" Value="2" Comment="" />
+    <Property Name="AxisLabelFontSize" Value="8" Comment="" />
+    <Property Name="AxisLabelColor" Value="#000000" Comment="" />
+    <Property Name="PieRadius" Value="0" Comment="" />
+    <Property Name="AxisLabelFont" Value="Trebuchet MS" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">
+/* Dojo Legend Styles */ 
+
+.dojoxLegendNode {
+	background-color:%VI_Common_Color_LighterGray%;
+	border:1px solid %VI_Common_Color_LightGray%;
+	margin:0;
+	padding:0;	
+}
+.dojoxLegendNode td{
+	padding: 6px 4px 6px 6px;
+}
+.dojoxLegendIcon {
+	padding: 0px;
+	margin: 0 2px 0 4px;
+}
+.dojoxLegendIcon div{
+	float: left;
+}
+.dj_ie .dojoxLegendNode td{
+	padding: 5px;	
+}
+.dj_ie .dojoxLegendIcon {
+	padding: 0px;
+	margin: 0 2px 0 5px;
+	vertical-align: middle;
+}
+
+.dojoxLegendText {
+    display: inline-block;
+    overflow-x: hidden;
+    vertical-align: top;
+    width: 90px;
+    text-overflow: ellipsis;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,34 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="ADS_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="30">
+        <ConfigParam Key="VI_ObjectView_ADSAccount_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ADSAccount&quot;))" DatabaseTable="ADSAccount" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_ADSGroup_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ADSGroup&quot;))" DatabaseTable="ADSGroup" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_ADSAccountInADSGroup_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ADSAccountInADSGroup&quot;))" DatabaseTable="ADSAccountInADSGroup" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="10">
+        <ConfigEntry Key="VI_ObjectView_ADSAccount_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="ADSConfigEntry1">
+          <SingleColumn DataColumn="CanonicalName" FKWhereClause="" ScriptItemUID="ADSSingleColumn1" />
+          <SingleColumn DataColumn="SAMAccountName" FKWhereClause="" ScriptItemUID="ADSSingleColumn2" />
+          <SingleColumn DataColumn="cn" FKWhereClause="" ScriptItemUID="ADSSingleColumn3" />
+          <SingleColumn DataColumn="DisplayName" FKWhereClause="" ScriptItemUID="ADSSingleColumn4" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_ADSGroup_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="ADSConfigEntry2">
+          <SingleColumn DataColumn="SAMAccountName" FKWhereClause="" ScriptItemUID="ADSSingleColumn5" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="ADSSingleColumn6" />
+          <SingleColumn DataColumn="IsGlobal" FKWhereClause="" ScriptItemUID="ADSSingleColumn7" />
+          <SingleColumn DataColumn="IsLocal" FKWhereClause="" ScriptItemUID="ADSSingleColumn8" />
+          <SingleColumn DataColumn="IsDistributionGroup" FKWhereClause="" ScriptItemUID="ADSSingleColumn9" />
+          <SingleColumn FKWhereClause="" ScriptItemUID="ADSSingleColumn10" DataColumn="DisplayName" />
+          <SingleColumn ScriptItemUID="ADSSingleColumn14" DataColumn="UID_ADSDomain" />
+          <SingleColumn ScriptItemUID="ADSSingleColumn15" DataColumn="UID_ADSContainer" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_ADSAccountInADSGroup_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="ADSConfigEntry3">
+          <SingleColumn ScriptItemUID="ADSSingleColumn12" DataColumn="UID_ADSAccount" />
+          <SingleColumn ScriptItemUID="ADSSingleColumn13" DataColumn="UID_ADSGroup" />
+          <SingleColumn ScriptItemUID="ADSSingleColumn11" DataColumn="RiskIndexCalculated" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,153 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Delegation_History_Filter" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action6">
+        <CallAction ActionID="SetInitial" ScriptItemUID="Call3" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+            <FormItemLabel DataTable="Vars" DataColumn="Date1" ScriptItemUID="FormItemLabel1">
+              <Label Text="DataCaption(&quot;PersonWantsOrg&quot;,&quot;validfrom&quot;)" ScriptItemUID="Label1" />
+            </FormItemLabel>
+            <Container ScriptItemUID="Container3" Layout="'VI_Styles_Container_SingleLine'">
+              <DateControl DataTable="Vars" DataColumn="Date1" DefaultTime="&quot;00:00:01&quot;" ScriptItemUID="DateControl1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="DateControl1style" Value="'float: left;'" />
+                </HtmlAttributes>
+              </DateControl>
+              <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="'padding-top: 10px;'" />
+                </HtmlAttributes>
+                <FormItemLabel DataTable="Vars" DataColumn="Date2" ScriptItemUID="FormItemLabel2">
+                  <Label Text="'-'" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Label2style" Value="'padding-left: 10px; vertical-align: sub; padding-right: 10px;'" />
+                    </HtmlAttributes>
+                  </Label>
+                </FormItemLabel>
+              </Container>
+              <DateControl DataTable="Vars" DataColumn="Date2" DefaultTime="&quot;23:59:59&quot;" ScriptItemUID="DateControl2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="DateControl2style" Value="'float: left;'" />
+                </HtmlAttributes>
+              </DateControl>
+            </Container>
+            <FormItemLabel DataTable="Vars" DataColumn="Date3" ScriptItemUID="FormItemLabel3">
+              <Label Text="DataCaption(&quot;PersonWantsOrg&quot;,&quot;validuntil&quot;)" ScriptItemUID="Label3" />
+            </FormItemLabel>
+            <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_SingleLine'">
+              <DateControl DataTable="Vars" DataColumn="Date3" DefaultTime="&quot;00:00:01&quot;" ScriptItemUID="DateControl3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="DateControl3style" Value="'float: left;'" />
+                </HtmlAttributes>
+              </DateControl>
+              <Container ScriptItemUID="Container8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container8style" Value="'padding-top: 10px;'" />
+                </HtmlAttributes>
+                <FormItemLabel DataTable="Vars" DataColumn="Date4" ScriptItemUID="FormItemLabel4">
+                  <Label Text="'-'" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Label4style" Value="'padding-left: 10px; vertical-align: sub; padding-right: 10px;'" />
+                    </HtmlAttributes>
+                  </Label>
+                </FormItemLabel>
+              </Container>
+              <DateControl DataTable="Vars" DataColumn="Date4" DefaultTime="&quot;23:59:59&quot;" ScriptItemUID="DateControl4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="DateControl4style" Value="'float: left;'" />
+                </HtmlAttributes>
+              </DateControl>
+            </Container>
+            <Container Condition="ea()" ScriptItemUID="LayoutPanelItem5">
+              <Label Text="DataCaption(&quot;Delegation&quot;,&quot;UID_PersonSender&quot;)" ScriptItemUID="Label5" />
+            </Container>
+            <Container Condition="ea()" ScriptItemUID="LayoutPanelItem6">
+              <ColumnEditor DataTable="Vars" DataColumn="UID_PersonSender" ScriptItemUID="ColumnEditor1" />
+            </Container>
+            <Container Condition="ea()" ScriptItemUID="LayoutPanelItem7">
+              <Label Text="DataCaption(&quot;Delegation&quot;,&quot;UID_PersonReceiver&quot;)" ScriptItemUID="Label6" />
+            </Container>
+            <Container Condition="ea()" ScriptItemUID="LayoutPanelItem8">
+              <ColumnEditor DataTable="Vars" DataColumn="UID_PersonReceiver" ScriptItemUID="ColumnEditor2" />
+            </Container>
+            <Container Condition="ea()" ScriptItemUID="LayoutPanelItem9">
+              <ControlList ScriptItemUID="ControlList9" />
+            </Container>
+            <Container Condition="ea()" ScriptItemUID="LayoutPanelItem10">
+              <CheckBox DataTable="Container" DataColumn="ShowNeverAssigned" Text="translate('#LDS#Show never assigned delegations')" ScriptItemUID="CheckBox1" />
+            </Container>
+          </LayoutPanel>
+        </Container>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" ItemUID="Buttonpanel" ScriptItemUID="Container15">
+          <Button Text="if(ea()) then&#xD;&#xA;translate(&quot;#LDS#Quick search&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#Advanced search&quot;)&#xD;&#xA;" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1">
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <ActionOnControl ActionType="PerformValidation" />
+              <Update DataTable="Vars" DataColumn="Expertmode" Value="not(from Vars select Expertmode)" ScriptItemUID="Update1" />
+              <ActionSequence Condition="not(ea())" ScriptItemUID="Action5">
+                <CallAction ActionID="SetInitial" ScriptItemUID="Call1" />
+              </ActionSequence>
+            </ServerActionCall>
+          </Button>
+          <Button Text="translate('#LDS#Search')" ItemUID="Search" ScriptItemUID="Button2">
+            <ServerActionCall ScriptItemUID="ServerActionCall2">
+              <ActionOnControl ActionType="PerformValidation" />
+              <CallAction ActionID="UpdateWhereClause" ScriptItemUID="Call2" />
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Date1" DataType="System.DateTime" ScriptItemUID="Column1" />
+          <Column Name="Date2" DataType="System.DateTime" ScriptItemUID="Column2" />
+          <Column Name="Date3" DataType="System.DateTime" ScriptItemUID="Column3" />
+          <Column Name="Date4" DataType="System.DateTime" ScriptItemUID="Column4" />
+          <Column Name="Expertmode" DataType="System.Boolean" ScriptItemUID="Column5" />
+          <Column Name="UID_PersonSender" DataType="System.String" ScriptItemUID="Column6" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column Name="UID_PersonReceiver" DataType="System.String" ScriptItemUID="Column7" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+        </DataTableSingleRow>
+        <DataTableSingleRow Table="Container" DisplayColumn="" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="ShowNeverAssigned" DataType="System.Boolean" ScriptItemUID="Column8" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SetInitial">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <Update DataTable="Vars" DataColumn="Date1" Value="AddSeconds(AddMonths(NullTime(GetDate()),-12),1)" ScriptItemUID="Update2" />
+              <Update DataTable="Vars" DataColumn="Date2" Value="AddSeconds(AddDays(NullTime(GetDate()),1),-1)" ScriptItemUID="Update3" />
+              <Update DataTable="Vars" DataColumn="Date3" Value="AddSeconds(AddMonths(NullTime(GetDate()),-12),1)" ScriptItemUID="Update4" />
+              <Update DataTable="Vars" DataColumn="Date4" Value="AddSeconds(AddDays(NullTime(GetDate()),1),-1)" ScriptItemUID="Update5" />
+              <Update DataTable="Container" DataColumn="ShowNeverAssigned" Value="false" ScriptItemUID="Update6" />
+              <Update DataTable="Vars" DataColumn="UID_PersonReceiver" Value="&quot;&quot;" ScriptItemUID="Update7" />
+              <Update DataTable="Vars" DataColumn="UID_PersonSender" Value="&quot;&quot;" ScriptItemUID="Update8" />
+              <CallAction ActionID="UpdateWhereClause" ScriptItemUID="Call4" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UpdateWhereClause">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <Update DataTable="TargetTable" DataColumn="TargetWhereClause" ScriptItemUID="Update9" Value="format(&quot;uid_personwantsorg in(&#xD;&#xA;select PWO.uid_personwantsorg from personwantsorg PWO&#xD;&#xA;join delegation D on D.uid_personwantsorg = PWO.uid_personwantsorg&#xD;&#xA;where (D.uid_personreceiver = '{0}' or D.uid_personsender = '{0}') {1} and ({2}) and ({3}) {4} {5}&#xD;&#xA;)&quot;,GetUser(),&#xD;&#xA;if((from Container select ShowNeverAssigned) = false)then&#xD;&#xA;&quot;and PWO.UID_PersonWantsOrg in (select UID_PersonWantsOrg from PWODecisionHistory where OrderState = N'Assigned')&quot;,&#xD;&#xA;validfromwhereclause(),validuntilwhereclause(),senderwhereclause(),receiverwhereclause()&#xD;&#xA;)" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="validfromwhereclause()" Expression="if(from Vars select (IsNull(date1,#1899-12-30#) &lt; #1900-01-01#) and from Vars select (IsNull(date2,#1899-12-30#) &lt; #1900-01-01#))then(&#xD;&#xA;  &quot;2=2&quot;&#xD;&#xA;)&#xD;&#xA;else if(from Vars select (IsNull(date2,#1899-12-30#) &lt; #1900-01-01#))then(&#xD;&#xA;   sqlor(&#xD;&#xA;      SqlCompare(&quot;validfrom&quot;, (from vars select Date1), &quot;date&quot;, &quot;greaterorequal&quot;),&#xD;&#xA;      SqlEmpty(&quot;validfrom&quot;, &quot;date&quot;)&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;else if(from Vars select (IsNull(date1,#1899-12-30#) &lt; #1900-01-01#))then(&#xD;&#xA;   sqlor(&#xD;&#xA;      SqlCompare(&quot;validfrom&quot;, (from vars select Date2), &quot;date&quot;, &quot;lowerorequal&quot;),&#xD;&#xA;      SqlEmpty(&quot;validfrom&quot;, &quot;date&quot;)&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   sqlor(&#xD;&#xA;      sqland(&#xD;&#xA;         SqlCompare(&quot;validfrom&quot;, (from vars select Date1), &quot;date&quot;, &quot;greaterorequal&quot;),&#xD;&#xA;         SqlCompare(&quot;validfrom&quot;, (from vars select Date2), &quot;date&quot;, &quot;lowerorequal&quot;)&#xD;&#xA;      ),&#xD;&#xA;      SqlEmpty(&quot;validfrom&quot;, &quot;date&quot;)&#xD;&#xA;   )&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="validuntilwhereclause()" Expression="if(from Vars select (IsNull(Date3,#1899-12-30#) &lt; #1900-01-01#) and from Vars select (IsNull(Date4,#1899-12-30#) &lt; #1900-01-01#))then(&#xD;&#xA;  &quot;3=3&quot;&#xD;&#xA;)&#xD;&#xA;else if(from Vars select (IsNull(Date4,#1899-12-30#) &lt; #1900-01-01#))then(&#xD;&#xA;   sqlor(&#xD;&#xA;      SqlCompare(&quot;validuntil&quot;, (from vars select Date3), &quot;date&quot;, &quot;greaterorequal&quot;),&#xD;&#xA;      SqlEmpty(&quot;validuntil&quot;, &quot;date&quot;)&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;else if(from Vars select (IsNull(Date3,#1899-12-30#) &lt; #1900-01-01#))then(&#xD;&#xA;   sqlor(&#xD;&#xA;      SqlCompare(&quot;validuntil&quot;, (from vars select Date4), &quot;date&quot;, &quot;lowerorequal&quot;),&#xD;&#xA;      SqlEmpty(&quot;validuntil&quot;, &quot;date&quot;)&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   sqlor(&#xD;&#xA;      sqland(&#xD;&#xA;         SqlCompare(&quot;validuntil&quot;, (from vars select Date3), &quot;date&quot;, &quot;greaterorequal&quot;),&#xD;&#xA;         SqlCompare(&quot;validuntil&quot;, (from vars select Date4), &quot;date&quot;, &quot;lowerorequal&quot;)&#xD;&#xA;      ),&#xD;&#xA;      SqlEmpty(&quot;validuntil&quot;, &quot;date&quot;)&#xD;&#xA;   )&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="senderwhereclause()" Expression="if(not(from vars select IsNullOrEmpty(UID_PersonSender)))then&#xD;&#xA;&quot; and &quot; + SqlCompareUid(&quot;Uid_PersonSender&quot;, (from vars select UID_PersonSender))" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="receiverwhereclause()" Expression="if(not(from vars select IsNullOrEmpty(UID_PersonReceiver)))then&#xD;&#xA;&quot; and &quot; + SqlCompareUid(&quot;UID_PersonReceiver&quot;, from vars select UID_PersonReceiver)" DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="ea()" Expression="from Vars select Expertmode" Comment="Ist es die erweiterte Ansicht?" DataType="System.Boolean" ScriptItemUID="Function5" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSelection" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

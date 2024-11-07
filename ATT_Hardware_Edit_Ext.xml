@@ -1,0 +1,52 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Hardware_Edit_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container13" ObjectType="Container" SortOrder="25">
+        <Container EnableCustomAttributes="true" ItemUID="Attestation" Condition="IsOwnerOfObject() and getconfigparm(&quot;QER\Attestation&quot;)=&quot;1&quot;" ScriptItemUID="ATTContainer1">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="ATTHtmlAttribute2" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ATTControlRef3">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="ATTAction4">
+                <Redirect Target="FormModule" AbortExecution="false" ScriptItemUID="ATTRedirect2">
+                  <RedirectFormModule ID="FormAttestation" ScriptItemUID="ATTRedirectForm2" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Attestation&quot;)" ScriptItemUID="ATTVirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="Description()" Value="translate('#LDS#Shows the attestation status of this object.')" ScriptItemUID="ATTVirtualFunctionMapping2" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="45">
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCase" ScriptItemUID="ATTDataTableDbObject2">
+          <ActionSequence ScriptItemUID="ATTAction3" />
+          <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="ATTColumn3" />
+          <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="ATTColumn4" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="35">
+        <Control ID="FormAttestation">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="ATTFormGroup2">
+              <Form ID="FormAttestation" ScriptItemUID="ATTForm2">
+                <ActionSequence ScriptItemUID="ATTAction1" />
+                <PagePartContainer ID="Title" ScriptItemUID="ATTPagePartContainer3">
+                  <Label Text="translate(&quot;#LDS#Attestation&quot;) + &quot; - &quot; + FormCaption()" ScriptItemUID="ATTLabel2" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="ATTPagePartContainer4">
+                  <ContainerTemplate DataTable="Hardware" ScriptItemUID="ATTContainerTemplate2">
+                    <ControlReferenceContainer ID="VI_Roles_AttestationCasesForObject" ScriptItemUID="ATTControlRef2">
+                      <VirtualTableMapping VirtualTable="BaseObject" DataTable="Hardware" ScriptItemUID="ATTVirtualTableMapping2" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,25 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Employee_PreEdit" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence Condition="0 = select count() from person" ScriptItemUID="Action2">
+          <Insert DataTable="Person" ScriptItemUID="Insert1">
+            <ActionSequence ScriptItemUID="Action3" />
+            <InsertValue DataColumn="UID_PersonHead" Value="getuser() -- make logged on user the manager of the new employee" />
+          </Insert>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Person" Class="Person" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

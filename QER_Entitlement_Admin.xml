@@ -1,0 +1,86 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="cbbb3e2e-82a5-eed9-3ab6-35d9321d52df">
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Entitlement_Admin" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="TableName" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+        <Column DataType="System.String" Name="Key" ScriptItemUID="Column1" />
+        <Column DataType="System.String" Name="TableName" ScriptItemUID="Column2" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Type&quot;)">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="QERAssign" Display="datacaption(&quot;QERAssign&quot;)" Comment="" />
+            <ColumnLimitedValue Name="QERResource" Display="datacaption(&quot;QERResource&quot;)" Comment="" />
+            <ColumnLimitedValue Name="QERReuse" Display="datacaption(&quot;QERReuse&quot;)" Comment="" />
+            <ColumnLimitedValue Name="QERReuseUS" Display="datacaption(&quot;QERReuseUS&quot;)" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+      </DataTableSingleRow>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="Resource" DbObjectTypeDynamic="true" DynamicClass="from vars select tablename">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Organizations" NavigationTitle="translate(&quot;#LDS#Heading Organization&quot;)">
+        <ActionSequence ScriptItemUID="Action2">
+          <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update2" Value="Request(&quot;TableName&quot;)" />
+        </ActionSequence>
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="DataCaption(Request(&quot;TableName&quot;))" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+          <Container ScriptItemUID="Container1" RefreshTriggerExpression="from vars select tablename">
+            <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+              <HtmlAttributes />
+              <MasterPane ScriptItemUID="MasterPane1">
+                <Container ScriptItemUID="Container2">
+                  <ControlReferenceControlList ID="QBM_ObjectGridView_Default" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="HierarchyTable" DataTable="Resource" />
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="TargetTable" DataTable="Vars">
+                      <VirtualColumnMapping DataColumn="Key" VirtualColumn="TargetSelectedKey" />
+                    </VirtualTableMapping>
+                  </ControlReferenceControlList>
+                </Container>
+              </MasterPane>
+              <DetailPane ScriptItemUID="DetailPane1">
+                <Container ScriptItemUID="Container3">
+                  <ContainerTemplate DataTable="Resource" ScriptItemUID="ContainerTemplate1" WhereClause="primarykey() = (select key from vars)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;data-imx-layout&quot;" Value="&quot;flex-fill&quot;" />
+                    </HtmlAttributes>
+                    <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, from Resource select current DBTable()))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="SourceObject" DataTable="Resource" />
+                    </ObjectSwitchContainer>
+                  </ContainerTemplate>
+                  <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_ButtonBar'">
+                    <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#Edit&quot;)">
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
+                          <RedirectParameter Value="getobjectkey(from vars select tablename, select key from vars, &quot;&quot;)" Name="'ObjectKey'" />
+                        </Redirect>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+                <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef4">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Value1()" Value="from Resource select top 1 display() where primarykey()= (from vars select key)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot;+(from vars select tablename)" />
+                    </ControlReferenceControlList>
+                  </ControlList>
+                </DetailPaneHeader>
+              </DetailPane>
+            </MasterDetailControl>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,100 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_FavoritesMarkObject">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="QBM.CompositionApi.UserConfig" />
+        <AssemblyReference Assembly="QBM.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <Update DataTable="Object" DataColumn="UidBookmark" WhereClause="primarykey()= ( select current primarykey() from object)" Value="{{&#xD;&#xA;var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IBookmarkProvider&gt;();&#xD;&#xA;&#xD;&#xA;// check if UserConfiguration is enabled&#xD;&#xA;var bookmarkProvider = provider as BookmarkProvider;&#xD;&#xA;if (bookmarkProvider == null || !bookmarkProvider.IsEnabled()) return;&#xD;&#xA;&#xD;&#xA;var existingBookmark = provider.Get().FirstOrDefault(b =&gt; string.Equals(b.Display, BookmarkDisplay));&#xD;&#xA;&#xD;&#xA;@return existingBookmark != null ? existingBookmark.Uid : null;&#xD;&#xA;}}" ScriptItemUID="Update1" />
+          </Action>
+        </Activator>
+        <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-icon imx-icon-bookmark imx-bookmarklink imx-mobile-nomobile&quot;" />
+          </HtmlAttributes>
+          <ControlList ScriptItemUID="ControlList2">
+            <Label Text="from object select current ( if (isnullorempty(uidbookmark)) then translate(&quot;#LDS#Bookmark this page&quot;) else translate(&quot;#LDS#Remove bookmark&quot;))" ScriptItemUID="Label3" />
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ScriptItemUID="Call1" ActionID="BookmarkAction" />
+          </ServerActionCall>
+        </LinkContainer>
+        <LinkContainer ScriptItemUID="LinkContainer2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute21" Name="&quot;class&quot;" Value="&quot;imx-mobile-mobileonly LabelNoDeco&quot;" />
+          </HtmlAttributes>
+          <ControlList ScriptItemUID="ControlList3">
+            <SwitchContainer ScriptItemUID="Switch1">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="isnullorempty(from object select current uidbookmark)">
+                <Label ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--bookmark&quot;" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </SwitchContainerCase>
+              <SwitchContainerCase ScriptItemUID="Case2">
+                <Label ScriptItemUID="Label2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--bookmark-o&quot;" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall2">
+            <CallAction ScriptItemUID="Call2" ActionID="BookmarkAction" />
+          </ServerActionCall>
+        </LinkContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="BookmarkAction">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action3">
+              <CodeLiteral ScriptItemUID="CodeLiteral1">var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IBookmarkProvider&gt;();
+
+// check if UserConfiguration is enabled
+var bookmarkProvider = provider as BookmarkProvider;
+if (bookmarkProvider == null || !bookmarkProvider.IsEnabled()) return;
+
+var colUidBookmark = TableStore.GetLocalColumn(Object, "uidBookmark");
+var uidBookmark = colUidBookmark.GetValue(Object_Current.Row);
+
+var xmlObjectKey = ((IDbObjectRow)Object_Current.Row).ObjectKey.ToXmlString();
+if (string.IsNullOrEmpty(uidBookmark))
+{
+	var newBookmark = provider.Put(BookmarkDisplay, BookmarkUrl, BookmarkCssClass);
+	colUidBookmark.SetValue(Object_Current.Row, newBookmark.Uid);
+}
+else
+{
+	provider.Delete(uidBookmark);
+	colUidBookmark.SetValue(Object_Current.Row, null);
+}
+</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+        <Column Name="UidBookmark" DataType="System.String" ScriptItemUID="Column1" TriggerUpdates="Updates" />
+      </VirtualTable>
+      <VirtualFunction Signature="BookmarkCssClass()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="BookmarkDisplay()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="BookmarkUrl()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

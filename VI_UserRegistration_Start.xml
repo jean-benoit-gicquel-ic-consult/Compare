@@ -1,0 +1,139 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <Context MetamodelVersion="2016-05-08" ID="VI_UserRegistration_Start" HelpChapterUid="&quot;6328A2BA-7B5E-4A32-AF1B-112936A84ABF&quot;" MigrationNotes="DIALOGCONFIGPARM;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="UserRegistration" Description="translate('#LDS#User registration')" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_PersonNew_Properties" Description="translate(&quot;#LDS#Properties&quot;)" Type="ColumnList" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="Person" Table="PersonNew" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+        <ColumnProxy DataColumn="BirthDate" Name="BirthDateHelper" FKWhereClause="" ScriptItemUID="ColumnProxy1" />
+        <Column Name="SecurityCode" DataType="System.String" ScriptItemUID="Column1" Caption="translate(&quot;#LDS#Security code&quot;)" MinLength="1" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2">
+      <Insert DataTable="PersonNew" ScriptItemUID="Insert1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <InsertValue DataColumn="ApprovalState" Value="1&#xA;-- &quot;new&quot;" />
+        <InsertValue DataColumn="IsInActive" Value="true" />
+        <InsertValue DataColumn="IsExternal" Value="true" />
+        <InsertValue Value="{{&#xD;&#xA;@return Connection.GetSingleProperty(&quot;QBMCulture&quot;, &quot;UID_DialogCulture&quot;, _Connection.SqlFormatter.Comparison(&quot;Ident_DialogCulture&quot;, VI.Base.LanguageManager.UICulture.Name, VI.Base.ValType.String, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase)).String;&#xD;&#xA;}}" DataColumn="UID_DialogCulture" />
+        <InsertValue Value="{{&#xD;&#xA;@return Connection.GetSingleProperty(&quot;QBMCulture&quot;, &quot;UID_DialogCulture&quot;, _Connection.SqlFormatter.Comparison(&quot;Ident_DialogCulture&quot;, VI.Base.LanguageManager.Culture.Name, VI.Base.ValType.String, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase)).String;&#xD;&#xA;}}" DataColumn="UID_DialogCultureFormat" />
+      </Insert>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_UserRegistration" NavigationTitle="translate(&quot;#LDS#Heading User Registration&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action4" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <Label Text="translate(&quot;#LDS#Heading Register a New User&quot;)" ScriptItemUID="Label1" />
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action6">
+              <Update DataColumn="UID_DialogCulture" DataTable="PersonNew" ScriptItemUID="Update1" Value="{{&#xD;&#xA;@return _Connection.GetSingleProperty(&quot;QBMCulture&quot;, &quot;UID_DialogCulture&quot;, _Connection.SqlFormatter.Comparison(&quot;Ident_DialogCulture&quot;, VI.Base.LanguageManager.UICulture.Name, VI.Base.ValType.String, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase)).String;&#xD;&#xA;}}" />
+              <Update DataColumn="UID_DialogCultureFormat" DataTable="PersonNew" ScriptItemUID="Update2" Value="{{&#xD;&#xA;@return _Connection.GetSingleProperty(&quot;QBMCulture&quot;, &quot;UID_DialogCulture&quot;, _Connection.SqlFormatter.Comparison(&quot;Ident_DialogCulture&quot;, VI.Base.LanguageManager.Culture.Name, VI.Base.ValType.String, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase)).String;&#xD;&#xA;}}" />
+            </Action>
+          </Activator>
+          <Container ItemUIDReference="Save" ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;flex-fill&quot;" />
+            </HtmlAttributes>
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Please enter the following information.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+            </Container>
+            <ContainerTemplate DataTable="PersonNew" ScriptItemUID="ContainerTemplate1">
+              <Container ScriptItemUID="Container4">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonNew" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <ExpressionColumnList ColumnList="getconfig(&quot;VI_PersonNew_Properties&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                </ControlReferenceContainer>
+              </Container>
+              <Container ScriptItemUID="Container5">
+                <LayoutPanel ScriptItemUID="LayoutPanel1">
+                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonNew" ScriptItemUID="VirtualTableMapping2">
+                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="SecurityCode" />
+                    </VirtualTableMapping>
+                  </ControlReferenceContainer>
+                  <Captcha ScriptItemUID="Captcha1" />
+                </LayoutPanel>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+          <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container8">
+            <Container ScriptItemUID="Container6" Layout="'VI_Styles_Container_Inline'">
+              <ControlReferenceContainer ID="VI_Common_LanguageInfo" ScriptItemUID="ControlRef7" />
+            </Container>
+            <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Save" ScriptItemUID="Button1">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <ActionOnControl ActionType="PerformValidation" />
+                <Save DataTable="PersonNew" ScriptItemUID="Save1" />
+                <Redirect FormID="Form2" ScriptItemUID="Redirect1" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ID="Form2" PageFileName="VI_FormTemplate_UserRegistration" NavigationTitle="translate(&quot;#LDS#Heading User Registration&quot;)" ScriptItemUID="Form2">
+        <ActionSequence ScriptItemUID="Action5" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+          <Label Text="translate(&quot;#LDS#Heading Register a New User&quot;)" ScriptItemUID="Label3" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+          <Container ScriptItemUID="Container9">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Your account has been created. Please note that your account will not be activated until it is approved.&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+            </ControlReferenceContainer>
+            <Container Layout="'VI_Styles_Container_SmallInfoBox'" ScriptItemUID="Container10" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container10style" Value="variable(&quot;max-width: 700px;&quot;)" />
+              </HtmlAttributes>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container11">
+                <Label Text="translate(&quot;#LDS#Please write down the following information.&quot;)" ScriptItemUID="Label4" />
+              </Container>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container12" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container12style" Value="&quot;margin-top: 12px;&quot;" />
+                </HtmlAttributes>
+                <ContainerTemplate DataTable="PersonNew" ScriptItemUID="ContainerTemplate2">
+                  <Container ScriptItemUID="Container13">
+                    <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef4">
+                      <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping4">
+                        <ColumnList ScriptItemUID="ColumnList2">
+                          <SingleColumn DataColumn="CentralAccount" ScriptItemUID="SingleColumn1" />
+                          <SingleColumn DataColumn="DefaultEMailAddress" ScriptItemUID="SingleColumn2" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonNew" ScriptItemUID="VirtualTableMapping3" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </Container>
+            <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container14">
+              <Button Text="translate(&quot;#LDS#Done&quot;)" ScriptItemUID="Button2">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl ActionType="EndSession" />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

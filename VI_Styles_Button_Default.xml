@@ -1,0 +1,32 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Button_Default" Type="Button" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="imx-button" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-button  {
+    color: %VI_Common_Color_Button_Font%;  
+    background-color: %VI_Common_Color_Button_Default%;  
+ }
+
+.imx-button:hover {
+    background-color: %VI_Common_Color_Button_Default_Hover%;  
+	text-decoration: none;
+}
+.imx-button:focus {
+    background-color: %VI_Common_Color_Button_Default_Hover%;  
+	text-decoration: none; 
+    outline: 1px %VI_Common_Color_Button_Outline% dotted;
+    outline-offset: 1px;
+}
+
+.imx-button:Disabled  {
+    color: %VI_Common_Color_Button_Font_Disabled%;
+	background-color: %VI_Common_Color_Button_Disabled%;
+	cursor: not-allowed;
+}
+.imx-button:Disabled:hover  {
+
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

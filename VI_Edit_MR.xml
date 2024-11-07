@@ -1,0 +1,178 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ee72d379-b5f3-2d7f-73df-adfaea6b6f2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_MR" Comment="" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="System.Threading.Tasks" />
+        <NamespaceImport Namespace="System.Threading" />
+        <TypeMember>private const string MemberRelationKey = "MemberRelation";
+
+private IDisposable _observer;
+
+public MemberRelation MemberRelation
+{
+	get
+	{
+		return ((MemberRelation)TableStore.UserData[MemberRelationKey]);
+	}
+}
+
+private async Task GetChangesAsync(DbObjectSaveActionCollector actionCollector, CancellationToken ct)
+{
+	var actions = MemberRelation.GetChangeActions();
+	foreach (var a in actions)
+		actionCollector.Actions.Add(a);
+}</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action9" />
+      <Container ScriptItemUID="Container1" IsBeginRenderPart="true">
+        <CodeLiteral ScriptItemUID="CodeLiteral3">MemberRelation memberRelation = null;
+
+var relNameLeft = RelationColumnNameLeft;
+var relName = RelationName;
+
+if (TableStore.UserData.ContainsKey(MemberRelationKey))
+{
+	memberRelation = MemberRelation;
+	
+	if (!string.Equals(memberRelation.ColumnNameLeft, relNameLeft) || !string.Equals(memberRelation.RelationTableName, relName))
+	{
+		// Dispose old observer
+		var d = System.Threading.Interlocked.CompareExchange&lt;IDisposable&gt;(ref _observer, null, null);
+		if (d != null)
+		{
+			d.Dispose();
+		}
+		memberRelation = null;
+	}
+}
+
+if (memberRelation == null)
+{
+	// clear all previously loaded candidate objects
+	Candidate.Delete();
+
+	memberRelation = new MemberRelation(_Database, (IDbObjectRow) this.EditTable_Current.Row, this.TableStore.GetLocalColumn(Candidate, "IsMember"), this.Candidate, relName, relNameLeft);
+	memberRelation.LoadMembers();
+	TableStore.UserData[MemberRelationKey] = memberRelation;
+	
+	if (!ShowSaveButton)
+	{
+		var observer = new GenericAsyncObserver&lt;DbObjectSaveActionCollector&gt;(GetChangesAsync);
+		_observer = ((IDbObjectRow)EditTable_Current.Row).SaveActionCollecting.Subscribe(observer);
+	}
+}
+</CodeLiteral>
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container8">
+              <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, CandidateTableName()))" ActionType="ObjectSelection">
+                <VirtualTableMapping VirtualTable="TargetTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping1">
+                  <VirtualColumnMapping VirtualColumn="TargetWhereClause" DataColumn="PreSelectWhereClause" />
+                </VirtualTableMapping>
+              </ObjectSwitchContainer>
+              <Container ItemUID="Liste" ScriptItemUID="Container9" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container9style" Value="&quot;margin-top:3px;&quot;" />
+                </HtmlAttributes>
+                <Container ItemUID="Available entries" ScriptItemUID="Container12" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Container12style" Value="&quot;min-height:150px;&quot;" />
+                  </HtmlAttributes>
+                  <ObjectSwitchContainer ScriptItemUID="TableRef2" ObjectKey="GetObjectKey(&quot;DialogTable&quot;, {{ _Connection.Tables[CandidateTableName()].Uid }}, &quot;&quot;)" ActionType="ObjectCollection">
+                    <VirtualControlMapping VirtualControl="ElementSelected" ContainerType="ActionComponent">
+                      <ActionComponent ScriptItemUID="Action8" Condition="not(IsReadonly())">
+                        <Update DataTable="Candidate" DataColumn="IsMember" Value="not( ismember)" WhereClause="primarykey() = select current primarykey() from candidate" ScriptItemUID="Update1" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="TableName()" Value="candidatetablename()" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualFunctionMapping ID="CssClass()" Value="CssClass()" ScriptItemUID="VirtualFunctionMapping2" />
+                    <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="Candidate" ScriptItemUID="VirtualTableMapping2" />
+                    <VirtualFunctionMapping ID="DbWhereClause()" Value="AdditionalWhereClause()" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="StatusDescriptor()" Value="StatusDescriptor()" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="DisplayType()" Value="'MultiSelect'" ScriptItemUID="VirtualFunctionMapping5" />
+                  </ObjectSwitchContainer>
+                </Container>
+              </Container>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container10" EnableCustomAttributes="true">
+              <HtmlAttributes />
+              <Container ScriptItemUID="Container21">
+                <ContainerTemplate DataTable="Candidate" WhereClause="IsMember" OrderBy="'__LongDisplay'" ScriptItemUID="ContainerTemplate3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate3style" Value="&quot;padding-left: 8px;&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container2">
+                    <LinkContainer ScriptItemUID="LinkContainer2" EnabledCondition="not(isreadonly())">
+                      <ControlList ScriptItemUID="ControlList4">
+                        <Label Text="from Candidate select current DisplayLong()" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon imx-icon-AssignedDirect&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall4">
+                        <Update DataTable="Candidate" DataColumn="IsMember" WhereClause="primarykey() = select current primarykey() from candidate" Value="not(ismember)" ScriptItemUID="Update2" />
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="translate(&quot;#LDS#Assigned&quot;)" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+        <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_ButtonBar'" Condition="ShowSaveButton()">
+          <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button1">
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">var changes = MemberRelation.GetChangeActions();
+var runner = new QBM.CompositionApi.UiAction.ActionRunner(_Database, changes);
+await runner.RunAsync(ct).ConfigureAwait(false);
+</CodeLiteral>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Candidate" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="CandidateTableName()">
+          <ActionSequence ScriptItemUID="Action1" />
+          <Column Name="IsMember" DataType="System.Boolean" Comment="" ScriptItemUID="Column1" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="PreSelectWhereClause" ScriptItemUID="Column8" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="CssClass()" Expression="from candidate select current ( if (ismember) then &quot;imx-icon imx-icon-AssignedDirect&quot; else &quot;imx-icon imx-icon-AssignedNone&quot;)" DataType="System.String" ScriptItemUID="Function7">
+          <DataTableCursor DataTable="Candidate" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="CandidateTableName()" Expression="getmrcandidatetable( relationname(), relationcolumnnameleft())" DataType="System.String" ScriptItemUID="Function8" />
+        <Function Name="StatusDescriptor()" Expression="from candidate select current ( if (ismember) then &quot;ASSIGNED&quot; else &quot;NOTASSIGNED&quot;)" DataType="System.String" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="Candidate" ScriptItemUID="DataTableCursor2" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="RelationName()" Comment="" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="RelationColumnNameLeft()" Comment="" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="EditTable" Comment="" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="AdditionalWhereClause()" Comment="" DataType="System.String" />
+      <VirtualFunction Signature="isReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowSaveButton()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

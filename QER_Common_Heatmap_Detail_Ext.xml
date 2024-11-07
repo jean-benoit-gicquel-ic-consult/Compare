@@ -1,0 +1,48 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_Common_Heatmap_Detail_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container4" ObjectType="Container" SortOrder="35">
+        <Container ScriptItemUID="Container51" Condition=" ((select count() from RiskyPersons where riskindexcalculated&gt;0)&gt;0) and&#xD;&#xA; (from dashboarddef select current ident_dialogdashboarddef like '%PersonRiskIndex%' )">
+          <Label Text="translate(&quot;#LDS#Top 5 employees with the highest risk index:&quot;)&#xD;&#xA;" ScriptItemUID="Label40" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Label40style" Value="'font-size: 1.0em; font-weight: bolder;'" />
+            </HtmlAttributes>
+          </Label>
+          <ContainerTemplate DataTable="RiskyPersons" OrderBy="'riskindexcalculated desc'" WhereClause="riskindexcalculated&gt;0" ScriptItemUID="LayoutPanelItemTemplate1" WithoutParentContainer="true">
+            <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="QERControlRef1">
+              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="QERVirtualFunctionMapping1">
+                <ColumnList ScriptItemUID="QERColumnList1">
+                  <SingleColumn ScriptItemUID="QERSingleColumn1" DataColumn="riskindexcalculated" DisplayValueExpression="numformat(from RiskyPersons select current riskindexcalculated, '0.00')" Caption="from RiskyPersons select current Internalname" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="RiskyPersons" ScriptItemUID="QERVirtualTableMapping1" />
+              <VirtualFunctionMapping ScriptItemUID="QERVirtualFunctionMapping2" ID="Class()" Value="&quot;LayoutpPropItem&quot;" />
+            </ControlReferenceContainer>
+          </ContainerTemplate>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Action13" ObjectType="ActionSequence" SortOrder="100" />
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="10">
+        <DataTableSQL Table="RiskyPersons" PrimaryKeyColumn="" SQLStatement="" DisplayColumn="" ScriptItemUID="DataTableLimitedSQL2">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="InternalName" DataType="System.String" ScriptItemUID="Column393" />
+          <Column Name="riskindexcalculated" DataType="System.Double" ScriptItemUID="Column50" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column24" />
+        </DataTableSQL>
+      </AddObject>
+      <AddObject ObjectID="Action13" ObjectType="ActionSequence" SortOrder="5">
+        <LoadTable DataTable="BaseTree" ScriptItemUID="QERLoadTable4" WhereClause="&quot;xobjectkey='&quot; + from dashboardcontent select current elementobjectkey + &quot;'&quot;">
+          <DbObjectLoadType ScriptItemUID="QERDbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <LoadTable DataTable="RiskyPersons" Type="LimitedSQL" ScriptItemUID="LoadTable8" IdentLimitedSQL="&quot;Webportal.QER_Detail_DashboardDef_Heatmap.RiskyPersons&quot;">
+          <ParameterFree Name="&quot;uidobject&quot;" Value="from basetree select top 1 uid_org" ScriptItemUID="QERParameterFree1" />
+        </LoadTable>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="25">
+        <DataTableDbObject Class="BaseTree" Table="BaseTree" ScriptItemUID="QERDataTableDbObject2">
+          <ActionSequence ScriptItemUID="QERAction4" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Responsibilities_MyResponsibilities_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="15">
+        <SwitchContainer ScriptItemUID="TileBusinessRoles">
+          <SwitchContainerCase ScriptItemUID="RMBCase1" Condition="-- check PreProcessorCondition first&#xD;&#xA;IsPreProp('ORG')&#xD;&#xA;and &#xD;&#xA;exists(&quot;person&quot;, format(&quot;uid_person in (select hho.uid_personhead from helperheadorg hho join org o on o.uid_org = hho.uid_org where hho.uid_personhead = {0})&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="RMBContainer1" ItemUID="BusinessRoles">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="RMBAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles" ScriptItemUID="RMBRedirect2">
+                    <RedirectParameter Name="&quot;Area&quot;" Value="&quot;BusinessRoles&quot;" />
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading Business Roles&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Heading Business Roles&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows your business roles, their members and the associated entitlements. You can also create a new business role.')" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping9" ID="Identifier()" Value="&quot;BusinessRoles&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping10" ID="Image()" Value="&quot;Org&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,187 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_Tile">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-generic-tile&quot; + &#xD;&#xA;(if (Size() &lt;&gt; &quot;Tile&quot;) then &quot; &quot; + Lower(Size()))&#xD;&#xA;+&#xD;&#xA;(if (Highlight()) then &quot; highlighted&quot;)&#xD;&#xA;+&#xD;&#xA;(if(Size() = &quot;Overview&quot;) then&quot; imx-generic-tile-underline&quot;)&#xD;&#xA;+&#xD;&#xA;(if(Size() &lt;&gt; &quot;Dashboard&quot;) then&quot; imx-generic-tile-dotted&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;   " />
+          <Property Name="TagName" Value="section" />
+          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;data-imx-identifier&quot;" Value="Identifier()" />
+        </HtmlAttributes>
+        <SwitchContainer ScriptItemUID="Switch1">
+          <SwitchContainerCase ScriptItemUID="Case7" Condition="Size() = &quot;Large-Overview&quot;" ItemUID="Large Overview layout">
+            <Container ScriptItemUID="Container12" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;imx-generic-tile-content large-overview&quot;" />
+              </HtmlAttributes>
+              <LinkContainer ScriptItemUID="LinkContainer2" EnabledCondition="not ActionDisabled()" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;data-imx-identifier&quot;" Value="&quot;tile-link&quot;" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute15" Name="&quot;tabindex&quot;" Value="If(HideTabIndex())Then&#xD;&#xA;   &quot;-1&quot;&#xD;&#xA;Else&#xD;&#xA;   &quot;0&quot;" />
+                </HtmlAttributes>
+                <ControlList ScriptItemUID="ControlList2">
+                  <ControlReferenceContainer ID="CaptionComponent" ScriptItemUID="ControlRef12" />
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <CallAction ScriptItemUID="Call4" ActionID="OnClick" />
+                </ServerActionCall>
+              </LinkContainer>
+              <Container ScriptItemUID="Container11" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-generic-tile-value&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="Container" ScriptItemUID="ControlRef10" />
+              </Container>
+            </Container>
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case5" Condition="Size() = 'Dashboard'" ItemUID="Dashboard Layout">
+            <Container ScriptItemUID="Container9" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;class&quot;" Value="&quot;imx-flex-header&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceContainer ID="CaptionComponent" ScriptItemUID="ControlRef6" />
+              <SwitchContainer ScriptItemUID="ExploreButton">
+                <SwitchContainerCase ScriptItemUID="Case6" ItemUID="Explore Button" Condition="not ActionDisabled()">
+                  <ControlReferenceControlList ID="QBM_Common_ExploreButton" ScriptItemUID="ControlRef5">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="RedirectAction">
+                      <ActionComponent ScriptItemUID="Action3">
+                        <CallAction ScriptItemUID="Call2" ActionID="OnClick" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Identifier()" Value="&quot;tile-link&quot;" />
+                  </ControlReferenceControlList>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+            <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute53" Name="&quot;class&quot;" Value="&quot;imx-generic-tile-value imx-flex-child imx-relative imx-overflowvisible&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceContainer ID="Container" ScriptItemUID="ControlRef7" />
+            </Container>
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case3" ItemUID="other layouts">
+            <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true" EnabledCondition="not ActionDisabled()">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-generic-tile-content&quot;" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;data-imx-identifier&quot;" Value="&quot;tile-link&quot;" />
+              </HtmlAttributes>
+              <ControlList ScriptItemUID="ControlList1">
+                <ControlReferenceContainer ID="CaptionComponent" ScriptItemUID="ControlRef1" />
+                <ControlReferenceContainer ID="ValueComponent" ScriptItemUID="ControlRef3" />
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <CallAction ScriptItemUID="Call1" ActionID="OnClick" />
+              </ServerActionCall>
+            </LinkContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="CaptionComponent">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true" ItemUID="Caption">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-generic-tile-caption&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="HeaderImage" Condition="ShowImageInHeader() AND NOT ShowImageAsIconFont()">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="span" />
+                </HtmlAttributes>
+                <Image Source="File" FileName="UrlImage()" ScriptItemUID="Image1" ItemUID="HeaderImage" />
+              </Container>
+              <Container ScriptItemUID="Container5" Condition="ShowImageInHeader() AND ShowImageAsIconFont()" ItemUID="Icon Font" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-generic-tile-iconfont&quot;" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="Image()" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+              <Container ScriptItemUID="Container8" EnableCustomAttributes="true" Condition="not IsNull(Caption())" ItemUID="Caption">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="H1" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;class&quot;" Value="if(Size() = &quot;Overview&quot;) then&#xD;&#xA;   &quot;heading&quot;&#xD;&#xA;else&#xD;&#xA;   &quot;other-heading&quot;&#xD;&#xA;   " />
+                </HtmlAttributes>
+                <Literal Expression="Caption()" Type="HtmlEscapedText" />
+              </Container>
+            </Container>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ValueComponent">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container4" Condition="(ShowImageAsValue()) OR not IsNullOrEmpty(Value())" ItemUID="Value" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;style&quot;" Value="if (ShowImageAsValue() AND ImageType() &lt;&gt; 'IconFont') then StyleImage()&#xD;&#xA;" />
+                <Property Name="TagName" Value="span" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;heading imx-generic-tile-value&quot; + (if (ShowImageAsValue() AND ImageType() = 'IconFont') then ' imx-generic-tile-iconfont')" />
+              </HtmlAttributes>
+              <SwitchContainer ScriptItemUID="Switch2">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="ShowImageAsValue() AND ImageType() = 'IconFont'">
+                  <Label ScriptItemUID="Label1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="Image()" />
+                    </HtmlAttributes>
+                  </Label>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case2" Condition="(ShowImageAsValue() AND ImageType() &lt;&gt; 'IconFont') OR not IsNullOrEmpty(Value())">
+                  <Literal Expression="if (ShowImageAsValue()) then &quot; &quot; else Value()" Type="HtmlEscapedText" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="ShowImageAsValue()" DataType="System.Boolean" Expression="(not IsNullOrEmpty(Image())) AND (ContentType() = &quot;Image&quot;)" />
+        <Function ScriptItemUID="Function3" Name="ShowImageInHeader()" DataType="System.Boolean" Expression="(not IsNullOrEmpty(Image())) AND (ContentType() &lt;&gt; &quot;Image&quot;)" />
+        <Function ScriptItemUID="Function6" Name="ShowImageAsIconFont()" DataType="System.Boolean" Expression="ImageType() = 'IconFont'" />
+        <Function ScriptItemUID="Function2" Name="ImageColor()" DataType="System.String" Expression="if (Highlight())&#xD;&#xA;then variable(&quot;%VI_Common_Color_Badge_Warning%&quot;)&#xD;&#xA;&#xD;&#xA;else if (ShowImageAsValue())&#xD;&#xA;then variable(&quot;%VI_Common_Color_Font%&quot;)&#xD;&#xA;&#xD;&#xA;else if (ShowImageInHeader())&#xD;&#xA;then variable(&quot;%VI_Common_Color_ColorBase3%&quot;)&#xD;&#xA;" />
+        <Function ScriptItemUID="Function4" Name="StyleImage()" DataType="System.String" Expression="(if (ShowImageAsValue()) then (&quot;background-position: center; &quot;))&#xD;&#xA;+&#xD;&#xA;&quot;background-repeat: no-repeat; background-image: url('&quot;&#xD;&#xA;+&#xD;&#xA;UrlImage()&#xD;&#xA;+ &#xD;&#xA;&quot;');&quot;" />
+        <Function ScriptItemUID="Function5" Name="UrlImage()" DataType="System.String" Expression="(if (ImageType() = &quot;StockImage&quot;) then variable(&quot;%link%stockImg=&quot;)&#xD;&#xA;else (&#xD;&#xA;  if (ImageType() = &quot;TableName&quot;) &#xD;&#xA;  then (variable(&quot;%permanentlink%dialogimgTbl=&quot;))&#xD;&#xA;  )&#xD;&#xA;)&#xD;&#xA;+ &#xD;&#xA;UrlEncode(Image())&#xD;&#xA;+&#xD;&#xA;(if (ShowImageAsValue()) then &quot;&amp;size=Large&quot; else if (ShowImageInHeader()) then &quot;&amp;size=big&quot;)&#xD;&#xA;+&#xD;&#xA;&quot;&amp;effect=tint&amp;color=&quot; + UrlEncode(ImageColor())&#xD;&#xA;" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="Caption()" />
+      <VirtualControl ContainerType="ActionComponent" ID="OnClick" Comment="The action to perform when clicking the caption" />
+      <VirtualFunction DataType="System.String" Signature="Value()" />
+      <VirtualFunction DataType="System.String" Signature="ImageType()" VirtualFunctionHasLimitedValues="true" DefaultValue="&quot;StockImage&quot;">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="StockImage" Comment="The name of a stock image" />
+          <VirtualFunctionLimitedValue Name="TableName" Comment="The name of a table" />
+          <VirtualFunctionLimitedValue Name="IconFont" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction DataType="System.String" Signature="Identifier()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="Image()" />
+      <VirtualFunction DataType="System.String" Signature="Size()" VirtualFunctionHasLimitedValues="true" DefaultValue="&quot;Tile&quot;">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Square" />
+          <VirtualFunctionLimitedValue Name="Tile" />
+          <VirtualFunctionLimitedValue Name="Addon-Tile" />
+          <VirtualFunctionLimitedValue Name="Overview" />
+          <VirtualFunctionLimitedValue Name="Dashboard" />
+          <VirtualFunctionLimitedValue Name="Large-Overview" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction DataType="System.Boolean" Signature="Highlight()" DefaultValue="false" />
+      <VirtualFunction DataType="System.String" Signature="ContentType()" VirtualFunctionHasLimitedValues="true">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Text" />
+          <VirtualFunctionLimitedValue Name="Image" />
+          <VirtualFunctionLimitedValue Name="Container" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualControl ContainerType="Container" ID="Container" />
+      <VirtualFunction DataType="System.Boolean" Signature="ActionDisabled()" DefaultValue="false" />
+      <VirtualFunction DataType="System.Boolean" Signature="HideTabIndex()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

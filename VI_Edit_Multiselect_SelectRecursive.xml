@@ -1,0 +1,45 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Edit_Multiselect_SelectRecursive" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence Condition="IsDeSelect()" ItemUID="Deselect" ScriptItemUID="Action2">
+          <Delete DataTable="SelectedItemsCollection" WhereClause="uid_selecteditem in&#xA;( select primarykey() from candidate where&#xA;isconnectable(primarykey(), parentkey,&#xA;-- start values: the current value&#xA;((primarykey() = (from candidate select current primarykey()))))&#xA;)" ScriptItemUID="Delete1" />
+        </ActionSequence>
+        <ActionSequence Condition="NOT IsDeSelect()" ItemUID="Select" ScriptItemUID="Action3">
+          <ForeachRow DataTable="Candidate" WhereClause="isconnectable(primarykey(), parentkey,&#xA;-- start values: the current value&#xA;((primarykey() = (from candidate select current primarykey())) ))" ScriptItemUID="ForeachRow1">
+            <ActionSequence Condition="0 = select count() from selecteditemscollection where (uid_selecteditem = from Candidate select current primarykey())" ScriptItemUID="Action4">
+              <Insert DataTable="SelectedItemsCollection" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action5" />
+                <InsertValue DataColumn="UID_SelectedItem" Value="from Candidate select current primarykey()" />
+                <InsertValue DataColumn="Display" Value="from Candidate select current displaylong()" />
+                <InsertValue DataColumn="TargetValue" Value="from Candidate select current isnull( candidatetargetvalue(), primarykey() )" />
+              </Insert>
+            </ActionSequence>
+          </ForeachRow>
+        </ActionSequence>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action6" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="Candidate" Comment="Collection of objects that are available for de/selection." RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <Column Name="Display" DataType="System.String" Expression="displaylong()" DataSource="Expression" ScriptItemUID="Column1" />
+        <Column Name="ParentKey" DataType="System.String" Expression="getparentkey()" DataSource="Expression" ScriptItemUID="Column2" />
+      </VirtualTable>
+      <VirtualTable Name="SelectedItemsCollection" Comment="Internal collection of selected items used as base collection for the selection and deselection trees.&#xD;&#xA;" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="UID_SelectedItem" Comment="The primary key of a single one selected item" DataType="System.String" />
+        <VirtualColumn Name="Display" Comment="The display value of a single on selected item." DataType="System.String" />
+        <VirtualColumn Name="TargetValue" Comment="The target value of the parameter. This may be the UID, but objects may be referenced by other columns as well." DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsDeSelect()" DataType="System.Boolean" Comment="Boolean value for differnting between selection and deselection of the tree." TriggerUpdates="Never" />
+      <VirtualFunction Signature="GetSelectedKey()" Comment="The primaryKey() of the first selected Candidate, passed to select or deselect all children." DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="CandidateTargetValue()" FilterForTable="Candidate" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

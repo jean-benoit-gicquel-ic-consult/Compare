@@ -1,0 +1,277 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_OrderHistory_Filter" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember ItemUID="SqlWhereClauseUnionBuilderForPWO">public string SqlWhereClauseUnionBuilderForPWO(params string[] whereClauses)
+{
+	if (! whereClauses.Any(clause =&gt; ! string.IsNullOrEmpty(clause))) {
+		return "";
+	}
+		
+	string s = "UID_PersonWantsOrg in( " 
+		+ whereClauses.Where(clause =&gt; ! string.IsNullOrEmpty(clause)).Select(clause =&gt; string.Format("select UID_PersonWantsOrg from PersonWantsOrg where {0}", clause)).Aggregate((s1, s2) =&gt; s1 + " UNION ALL " + s2) 
+		+ ")";
+	return s.Replace("select UID_PersonWantsOrg from PersonWantsOrg where UID_PersonWantsOrg in( select UID_PersonWantsOrg","( select UID_PersonWantsOrg");
+}</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action10">
+        <CallAction ActionID="SetInitial" ScriptItemUID="Call7" />
+        <CallAction ActionID="Search" ScriptItemUID="Call8" />
+        <SwitchAction ScriptItemUID="Switch1">
+          <SwitchActionCase ScriptItemUID="case2" Condition="showaudit() and isnull(getuseraudit(),'') = ''" ItemUID="ShowAudit, with personsearch">
+            <SwitchAction ScriptItemUID="Switch2">
+              <SwitchActionCase ScriptItemUID="Case2" ItemUID="Requester" Condition="showfor('Requester')">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update15" Value="translate(&quot;#LDS#The page displays all requests.&quot;)" />
+              </SwitchActionCase>
+              <SwitchActionCase ScriptItemUID="Case3" ItemUID="Approver" Condition="showfor('Approver')">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update16" Value="translate('#LDS#The page displays all requests.')" />
+              </SwitchActionCase>
+            </SwitchAction>
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search description if auditor is preselected in the Tab control">
+            <SwitchAction ScriptItemUID="Switch3">
+              <SwitchActionCase ScriptItemUID="Case4" ItemUID="Requester" Condition="showfor('Requester')">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update19" Value="translate('#LDS#The page displays all requests of the selected employee.')" />
+              </SwitchActionCase>
+              <SwitchActionCase ScriptItemUID="Case1" ItemUID="Approver" Condition="showfor('Approver')">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update18" Value="translate('#LDS#The page displays all approvals of the selected employee where the selected employee was involved in the approval process.')" />
+              </SwitchActionCase>
+            </SwitchAction>
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case1" Condition="not(showaudit()) and (isnull(setuseraudit(),'') = '')" ItemUID="NoAudit">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update11" Value="if( showfor('Approver') ) then&#xD;&#xA;translate(&quot;#LDS#This page shows the history of your approval decisions.&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#This page shows the history of your requested products.&quot;)" />
+          </SwitchActionCase>
+        </SwitchAction>
+        <CodeLiteral ScriptItemUID="Try">{{
+try{</CodeLiteral>
+        <Update DataColumn="HeadLine" DataTable="TargetTable" ScriptItemUID="Update17" Value="from Vars select HeadLine" />
+        <Update DataColumn="HeadLineIsExternal" DataTable="Vars" ScriptItemUID="Update20" Value="true" />
+        <CodeLiteral ScriptItemUID="Catch">}
+catch{}
+}}</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Button ScriptItemUID="Button3" Text="translate(&quot;#LDS#Advanced search&quot;)" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-grid-button&quot;" />
+          </HtmlAttributes>
+          <ServerActionCall ScriptItemUID="ServerActionCall3">
+            <CallAction ScriptItemUID="Call1" ActionID="VI_Popup">
+              <VirtualControlMapping ContainerType="Container" VirtualControl="PopupContent">
+                <Container ScriptItemUID="Container3">
+                  <Container Condition="showaudit()" ItemUID="Audit person search control" ScriptItemUID="Container9">
+                    <LayoutPanel Columns="2" Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel1">
+                      <Label Text="if(showfor('Requester')) then&#xD;&#xA;translate('#LDS#Select employee') + ':'&#xD;&#xA;else if(showfor('Approver')) then&#xD;&#xA;translate('#LDS#Select approver') + ':'" ScriptItemUID="Label1" />
+                      <ColumnEditor DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="ColumnEditor1" />
+                    </LayoutPanel>
+                  </Container>
+                  <Container ScriptItemUID="Container12">
+                    <LayoutPanel Columns="2" Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel2">
+                      <Container Condition="showfor('Requester') and (getuseraudit() &lt;&gt; '')" ScriptItemUID="LayoutPanelItem3">
+                        <Label Text="translate('#LDS#Display requests')" ScriptItemUID="Label2" />
+                      </Container>
+                      <Container Condition="showfor('Requester') and (getuseraudit() &lt;&gt; '')" ScriptItemUID="LayoutPanelItem4">
+                        <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="TagName" Value="fieldset" />
+                          </HtmlAttributes>
+                          <Container ScriptItemUID="Container11" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <Property Name="TagName" Value="legend" />
+                            </HtmlAttributes>
+                            <Label Text="translate('#LDS#Display requests')" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;style&quot; " ScriptItemUID="HtmlAttribute6" Value="&quot;display: none;&quot; " />
+                              </HtmlAttributes>
+                            </Label>
+                          </Container>
+                          <Container ScriptItemUID="Container15">
+                            <CheckBox DataTable="Vars" DataColumn="ShowSelfOrder" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by the selected employee for himself')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by you for yourself')" ScriptItemUID="CheckBox1" />
+                          </Container>
+                          <Container ScriptItemUID="Container16">
+                            <CheckBox DataTable="Vars" DataColumn="ShowOrderForOthers" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by the selected employee for others')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by you for others')&#xD;&#xA;" ScriptItemUID="CheckBox2" />
+                          </Container>
+                          <Container ScriptItemUID="Container17">
+                            <CheckBox DataTable="Vars" DataColumn="ShowOrderByOthers" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by others for the selected employee')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by others for you')" ScriptItemUID="CheckBox3" />
+                          </Container>
+                          <Container Condition="exists(&quot;person&quot;, variable( getconfig(&quot;VI_Employee_Person_Filter&quot;)))" ScriptItemUID="Container18">
+                            <CheckBox DataTable="Vars" DataColumn="ShowOrdersInScope" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate(&quot;#LDS#Submitted requests in the selected employee's organization&quot;)&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by other users')" ScriptItemUID="CheckBox4" />
+                          </Container>
+                        </Container>
+                      </Container>
+                      <Container Condition="showfor('Approver')&#xA;and&#xA;(not auditmode() and not showaudit())" ScriptItemUID="LayoutPanelItem5">
+                        <Label Text="translate('#LDS#Approved by')" ScriptItemUID="Label3" />
+                      </Container>
+                      <Container Condition="showfor('Approver')&#xA;and&#xA;(not auditmode() and not showaudit())" ScriptItemUID="LayoutPanelItem6">
+                        <ColumnEditor DataTable="Vars" DataColumn="UID_PersonApproved" ScriptItemUID="ColumnEditor2" />
+                      </Container>
+                      <Container ScriptItemUID="LayoutPanelItem9">
+                        <FormItemLabel DataTable="Vars" DataColumn="documentnumber" ScriptItemUID="FormItemLabel2">
+                          <Label Text="translate(&quot;#LDS#Filter by request number&quot;)" ScriptItemUID="Label5" />
+                        </FormItemLabel>
+                      </Container>
+                      <Container ScriptItemUID="LayoutPanelItem10">
+                        <TextBox DataTable="Vars" DataColumn="documentnumber" ScriptItemUID="TextBox2" />
+                      </Container>
+                      <Container ScriptItemUID="LayoutPanelItem12">
+                        <Label Text="translate('#LDS#Request state')" ScriptItemUID="Label7" />
+                      </Container>
+                      <Container ScriptItemUID="LayoutPanelItem13">
+                        <Container ScriptItemUID="Container13" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="TagName" Value="fieldset" />
+                          </HtmlAttributes>
+                          <Container ScriptItemUID="Container19" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <Property Name="TagName" Value="legend" />
+                            </HtmlAttributes>
+                            <Label Text="translate('#LDS#Request state')" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;style&quot; " ScriptItemUID="HtmlAttribute2" Value="&quot;display: none;&quot; " />
+                              </HtmlAttributes>
+                            </Label>
+                          </Container>
+                          <Container ScriptItemUID="Container29">
+                            <CheckBox DataTable="Vars" DataColumn="ShowOpen" Text="translate('#LDS#Pending')" ScriptItemUID="CheckBox5" />
+                          </Container>
+                          <Container ScriptItemUID="Container30">
+                            <CheckBox DataTable="Vars" DataColumn="ShowApproved" Text="translate('#LDS#Approved')" ScriptItemUID="CheckBox6" />
+                          </Container>
+                          <Container ScriptItemUID="Container31">
+                            <CheckBox DataTable="Vars" DataColumn="ShowDeactivated" Text="translate('#LDS#Canceled or denied or dismissed')" ScriptItemUID="CheckBox7" />
+                          </Container>
+                        </Container>
+                      </Container>
+                    </LayoutPanel>
+                  </Container>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="Container" VirtualControl="PopupBottom">
+                <Container ScriptItemUID="Container4">
+                  <Container Layout="'VI_Styles_Container_ButtonBar'" ItemUID="Buttonpanel" ScriptItemUID="Container35">
+                    <Button Text="translate(&quot;#LDS#Reset&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1">
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <CallAction ActionID="SetInitial" ScriptItemUID="Call3" />
+                        <CallAction ActionID="Search" ScriptItemUID="Call5" />
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate('#LDS#Search')" ItemUID="Search" ScriptItemUID="Button2">
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <CallAction ActionID="Search" ScriptItemUID="Call4" />
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="PopupTitle()" Value="translate(&quot;#LDS#Advanced search&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="CssClass()" Value="&quot;imx-popup-large&quot;" />
+            </CallAction>
+          </ServerActionCall>
+        </Button>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ShowSelfOrder" DataType="System.Boolean" ScriptItemUID="Column1" />
+          <Column Name="ShowOrderByOthers" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="ShowOrderForOthers" DataType="System.Boolean" ScriptItemUID="Column3" />
+          <Column Name="ShowOrdersInScope" DataType="System.Boolean" ScriptItemUID="Column4" />
+          <Column Name="ShowOpen" DataType="System.Boolean" ScriptItemUID="Column8" />
+          <Column Name="ShowApproved" DataType="System.Boolean" ScriptItemUID="Column9" />
+          <Column Name="ShowDeactivated" DataType="System.Boolean" ScriptItemUID="Column10" />
+          <Column Name="ShowDenied" DataType="System.Boolean" ScriptItemUID="Column11" />
+          <Column Name="documentnumber" ScriptItemUID="Column13" DataType="System.String" />
+          <Column Name="CancelOrderReason" ScriptItemUID="Column15" DataType="System.String" />
+          <Column Name="UID_PersonApproved" ScriptItemUID="Column17" DataType="System.String" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="sqlor(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuseraudit()),&#xD;&#xA;       sqland( format(&quot;uid_person in ( select uid_person from person where {0} )&quot;, variable( IsNullOrEmpty( getconfig(&quot;VI_Employee_Person_Filter&quot;), &quot;1=1&quot;))))&#xD;&#xA;)" />
+          <Column Name="UID_PersonAudit" ScriptItemUID="Column19" DataType="System.String" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column DataType="System.Boolean" Name="PersonHasSubIdentity" ScriptItemUID="Column28" DataSource="Expression" Expression="if(getconfigparm(&quot;QER\Person\MasterIdentity&quot;) = &quot;1&quot; and not(auditmode()) and (getuseraudit() = GetUser()) and (from user select IsNullOrEmpty(UID_PersonMasterIdentity))) then&#xD;&#xA;   Exists(&#xD;&#xA;      &quot;Person&quot;, &#xD;&#xA;	  SqlAnd(&#xD;&#xA;	     SqlCompareUid(&quot;UID_Person&quot;,GetUser(),&quot;notequal&quot;),&#xD;&#xA;         format(&quot;UID_Person in (select UID_Person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(GetUser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;	  )&#xD;&#xA;   )&#xD;&#xA;else&#xD;&#xA;   false" TriggerUpdates="Never" />
+          <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column5" />
+          <Column DataType="System.Boolean" Name="HeadLineIsExternal" ScriptItemUID="Column6" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SetInitial">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action15">
+              <SwitchAction ScriptItemUID="Switch4">
+                <SwitchActionCase ScriptItemUID="Case5" Condition="isnull(setuseraudit(),'') &lt;&gt; '' ">
+                  <Update DataTable="Vars" DataColumn="UID_PersonAudit" Value="setuseraudit()" ScriptItemUID="Update2" />
+                </SwitchActionCase>
+                <SwitchActionCase ScriptItemUID="Case6">
+                  <Update DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="Update1" />
+                </SwitchActionCase>
+              </SwitchAction>
+              <Update DataTable="Vars" DataColumn="ShowSelfOrder" Value="true" ScriptItemUID="Update3" />
+              <Update DataTable="Vars" DataColumn="ShowOpen" Value="true" ScriptItemUID="Update4" />
+              <Update DataTable="Vars" DataColumn="ShowApproved" Value="true" ScriptItemUID="Update5" />
+              <Update DataTable="Vars" DataColumn="ShowDeactivated" Value="true" ScriptItemUID="Update6" />
+              <Update DataTable="Vars" DataColumn="ShowOrdersInScope" Value="false" ScriptItemUID="Update7" />
+              <Update DataTable="Vars" DataColumn="ShowOrderByOthers" Value="true" ScriptItemUID="Update8" />
+              <Update DataTable="Vars" DataColumn="ShowOrderForOthers" Value="false" ScriptItemUID="Update9" />
+              <Update DataTable="Vars" DataColumn="ShowDenied" Value="false" ScriptItemUID="Update10" />
+              <Update DataTable="Vars" DataColumn="documentnumber" ScriptItemUID="Update12" />
+              <Update DataTable="Vars" DataColumn="UID_PersonApproved" ScriptItemUID="Update13" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="Search">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action17">
+              <Update DataTable="TargetTable" DataColumn="WhereClause" Value="if(request(&quot;aeweb_uid_personwantsorg&quot;)&lt;&gt;'' and not(showfor('Approver')))&#xD;&#xA;then&#xD;&#xA;-- load everything with uid_personwantsorg parameter&#xD;&#xA;(&#xD;&#xA;sqland(&#xD;&#xA;personwhereclause(),&#xD;&#xA;getconfig(&quot;VI_ITShop_OrderHistory_Filter&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_personwantsorg&quot;, request(&quot;aeweb_uid_personwantsorg&quot;))&#xD;&#xA;))&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;sqland(&#xD;&#xA;statuswhereclause(),&#xD;&#xA;(if( showfor('Approver')) then approverwhereclause() else personwhereclause()),&#xD;&#xA;documentnumberwhereclause(),&#xD;&#xA;(if( showfor('Approver')) then getnull() else getconfig(&quot;VI_ITShop_OrderHistory_Filter&quot;))&#xD;&#xA;)" ScriptItemUID="Update14" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="personwhereclause()" Expression="if (getuseraudit()&lt;&gt;'') then&#xD;&#xA;(&#xD;&#xA;&#xD;&#xA;if(from vars select showselforder and showorderbyothers and showorderforothers and showordersinscope) then getnull()&#xD;&#xA;else&#xD;&#xA;isnullorempty(&#xD;&#xA;CallWhereClauseUnionBuilder(&#xD;&#xA;(&#xD;&#xA;if(from vars select ShowSelfOrder) then(&#xD;&#xA;   if(PersonHasSubIdentity())then&#xD;&#xA;       PersonWhereClauseSelfOrderMasterIdentity()&#xD;&#xA;   else&#xD;&#xA;       PersonWhereClauseSelfOrder()&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   getnull()&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;,&#xD;&#xA;&#xD;&#xA;if( from vars select ShowOrderByOthers )then(&#xD;&#xA;   if(PersonHasSubIdentity())then&#xD;&#xA;      PersonWhereclauseByOthersMasterIdentity()&#xD;&#xA;   else&#xD;&#xA;      PersonWhereClauseByOthers()&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   getnull()&#xD;&#xA;),&#xD;&#xA;&#xD;&#xA;if( from vars select ShowOrderForOthers )then(&#xD;&#xA;   if(PersonHasSubIdentity())then&#xD;&#xA;      PersonWhereClauseForOthersMasterIdentity()&#xD;&#xA;   else&#xD;&#xA;      PersonWhereClauseForOthers()&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   getnull()&#xD;&#xA;),&#xD;&#xA;&#xD;&#xA;if( from vars select ShowOrdersInScope )&#xD;&#xA;then PersonWhereClauseInScope() else getnull(),&#xD;&#xA;), &quot;1=0&quot;&#xD;&#xA;))" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="statuswhereclause()" Expression="if( from vars select showapproved and showopen and showdeactivated)&#xD;&#xA;then getnull()&#xD;&#xA;else&#xD;&#xA;sqland(&#xD;&#xA;CallWhereClauseUnionBuilder(&#xD;&#xA;GetSelectedOrderStates()&#xD;&#xA;,&#xD;&#xA;-- Spezial für mehrfach bestellbare nicht abbestellbare wenn nur alle zugewiesenen zeigen&#xD;&#xA;if(from vars select (ShowApproved and not(ShowDeactivated)))then&#xD;&#xA;&quot;OrderState = 'Unsubscribed' and UID_Org in (&#xD;&#xA;select UID_ITShopOrg from ItShopOrg I where UID_AccProduct in(&#xD;&#xA;select u.UID_AccProduct from basetreeassign a&#xD;&#xA;join dialogtable dt on dt.uid_dialogtable = a.uid_dialogtableelement&#xD;&#xA;join QERAccProductUsage u on u.TableName = dt.tablename&#xD;&#xA;where a.IsReusePossible = 1 and a.IsReusePossibleUS = 0))&quot;&#xD;&#xA;)&#xD;&#xA;,&#xD;&#xA;-- Spezial für mehrfach bestellbare nicht abbestellbare wenn nur alle abbestellen zeigen&#xD;&#xA;if(from vars select (not(ShowApproved) and ShowDeactivated))then&#xD;&#xA;&quot;UID_PersonWantsOrg not in(&#xD;&#xA;select UID_PersonWantsOrg from PersonWantsOrg where&#xD;&#xA;OrderState = 'Unsubscribed' and UID_Org in (&#xD;&#xA;select UID_ITShopOrg from ItShopOrg I where UID_AccProduct in(&#xD;&#xA;select u.UID_AccProduct from basetreeassign a&#xD;&#xA;join dialogtable dt on dt.uid_dialogtable = a.uid_dialogtableelement&#xD;&#xA;join QERAccProductUsage u on u.TableName = dt.tablename&#xD;&#xA;where a.IsReusePossible = 1 and a.IsReusePossibleUS = 0)))&quot;&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="approverwhereclause()" Expression="format(&quot;uid_personwantsorg in (&#xD;&#xA;  select uid_personwantsorg from PWODecisionHistory where &#xD;&#xA;  DecisionType in ('Grant', 'Dismiss', 'Answer', 'Query', 'AddAdditional', 'AddInsteadOf', 'Direct', 'Escalate', 'Cancel', 'Deny') {0} )&quot;,&#xD;&#xA;  if(getuseraudit() &lt;&gt; '') then(&#xD;&#xA;  &quot;and uid_personhead = '&quot; + (if (isnull(select uid_PersonApproved from vars, '') in ('', &quot;''&quot;) ) then getuseraudit() else from Vars select uid_PersonApproved) +&quot;'&quot;&#xD;&#xA;  )&#xD;&#xA;  else(&#xD;&#xA;  &quot;&quot;&#xD;&#xA;  )&#xD;&#xA;  )&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="documentnumberwhereclause()" Expression="if (isnull(select documentnumber from vars, '')='') then&#xD;&#xA;getnull()&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;(&#xD;&#xA;&quot;uid_shoppingcartorder in ( select uid_shoppingcartorder from shoppingcartorder where &quot;+&#xD;&#xA;sqlcompare(&quot;documentnumber&quot;, from vars select documentnumber, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;)+&quot;)&quot;)" DataType="System.String" ScriptItemUID="Function6" />
+        <Function Name="auditmode()" Expression="if (from vars select isnull(uid_personaudit,'') = '') then false else true" DataType="System.Boolean" ScriptItemUID="Function7" />
+        <Function Name="getuseraudit()" Expression="if (from vars select isnull(uid_personaudit,'') = '' and not showaudit()) then(&#xD;&#xA;getuser()&#xD;&#xA;) &#xD;&#xA;else(&#xD;&#xA;from vars select isnull(uid_personaudit,'')&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function8" />
+        <Function Name="getsql_haveprolongateorcancelinhistorie(bool showothers)" Expression="&quot;uid_personwantsorg in (select uid_personwantsorg from pwodecisionhistory where &quot; +sqland(&#xD;&#xA;sqlcompare(&quot;uid_personhead&quot;, getuseraudit(), &quot;string&quot;, if(showothers)then &quot;notequal&quot; else &quot;equal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;SqlInWithFormat(&quot;decisiontype&quot;, &quot;string&quot;, &quot;none&quot;, union(&quot;Unsubscribe&quot;, &quot;Prolongate&quot;))&#xD;&#xA;)+&quot;)&quot;" DataType="System.String" ScriptItemUID="Function9" />
+        <Function Name="getsql_haveprolongateorcancelinhistorieMasterIdentity(bool showothers)" Expression="format(&quot;uid_personwantsorg in (select uid_personwantsorg from pwodecisionhistory where {0})&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;if(showothers)then&#xD;&#xA;   format(&quot;uid_personhead not in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;else&#xD;&#xA;   format(&quot;uid_personhead in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;,&#xD;&#xA;SqlInWithFormat(&quot;decisiontype&quot;, &quot;string&quot;, &quot;none&quot;, union(&quot;Unsubscribe&quot;, &quot;Prolongate&quot;))&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function18" />
+        <Function Name="showfor(string type)" Expression="if((IsNullOrEmpty(form(),'Requester') = type))then&#xD;&#xA;true&#xD;&#xA;else&#xD;&#xA;false" DataType="System.Boolean" ScriptItemUID="Function10" />
+        <Function Name="PersonWhereClauseSelfOrder()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_personordered&quot;, getuseraudit()),&#xD;&#xA;sqlcompareuid(&quot;uid_personinserted&quot;, getuseraudit())&#xD;&#xA;),&#xD;&#xA;-- Oder auch die Bestellungen, welche ich verlängert oder abbestellt habe --&#xD;&#xA;getsql_haveprolongateorcancelinhistorie(False)&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function11" />
+        <Function Name="PersonWhereClauseSelfOrderMasterIdentity()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqland(&#xD;&#xA;   format(&quot;uid_personordered in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))),&#xD;&#xA;   format(&quot;uid_personinserted in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;),&#xD;&#xA;-- Oder auch die Bestellungen, welche ich verlängert oder abbestellt habe --&#xD;&#xA;getsql_haveprolongateorcancelinhistorieMasterIdentity(False)&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function15" />
+        <Function Name="PersonWhereclauseByOthers()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_personordered&quot;, getuseraudit()),&#xD;&#xA;sqlcompareuid(&quot;uid_personinserted&quot;, getuseraudit(), &quot;notequal&quot;)&#xD;&#xA;),&#xD;&#xA;-- Oder auch die Bestellungen welche ich für mich bestellt habe, aber andere MA verlängert oder abbestellt haben --&#xD;&#xA;sqland(&#xD;&#xA;-- Nicht uid_personhead in der History&#xD;&#xA;getsql_haveprolongateorcancelinhistorie(true),&#xD;&#xA;sqlcompareuid(&quot;uid_personordered&quot;, getuseraudit())&#xD;&#xA;)&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function16" />
+        <Function Name="PersonWhereclauseByOthersMasterIdentity()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqland(&#xD;&#xA;format(&quot;uid_personordered in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))),&#xD;&#xA;format(&quot;uid_personinserted not in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;),&#xD;&#xA;-- Oder auch die Bestellungen welche ich für mich bestellt habe, aber andere MA verlängert oder abbestellt haben --&#xD;&#xA;sqland(&#xD;&#xA;-- Nicht uid_personhead in der History&#xD;&#xA;getsql_haveprolongateorcancelinhistorieMasterIdentity(true),&#xD;&#xA;format(&quot;uid_personordered in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;)&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function12" />
+        <Function Name="PersonWhereClauseForOthers()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_personordered&quot;, getuseraudit(), &quot;notequal&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_personinserted&quot;, getuseraudit())&#xD;&#xA;),&#xD;&#xA;-- Oder auch die Bestellungen die anzeigen, die ich für andere MA verlängert oder abbestellt habe --&#xD;&#xA;sqland(&#xD;&#xA;getsql_haveprolongateorcancelinhistorie(false),&#xD;&#xA;sqlcompareuid(&quot;uid_personordered&quot;, getuseraudit(), &quot;notequal&quot;)&#xD;&#xA;)&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function13" />
+        <Function Name="PersonWhereClauseForOthersMasterIdentity()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqland(&#xD;&#xA;format(&quot;uid_personordered not in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))),&#xD;&#xA;format(&quot;uid_personinserted in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))),),&#xD;&#xA;-- Oder auch die Bestellungen die anzeigen, die ich für andere MA verlängert oder abbestellt habe --&#xD;&#xA;sqland(&#xD;&#xA;getsql_haveprolongateorcancelinhistorieMasterIdentity(false),&#xD;&#xA;format(&quot;uid_personordered not in (select uid_person from {0})&quot;, SqlFunctionCallTable(&quot;QER&quot;, &quot;GGetInfo&quot;, &quot;FTPersonsAreMe&quot;, sqlformatvalue(getuseraudit(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;)&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function17" />
+        <Function Name="PersonWhereClauseInScope()" Expression="CallWhereClauseUnionBuilder(&#xD;&#xA;sqlor(&#xD;&#xA;format(&quot;uid_personordered in ( select uid_person from person where {0} )&quot;, &#xD;&#xA;        Replace(Variable(IsNullOrEmpty(GetConfig(&quot;VI_Employee_Person_Filter&quot;), &quot;1=1&quot;)), getuser(), getuseraudit())),&#xD;&#xA;format(&quot;uid_personinserted in ( select uid_person from person where {0} )&quot;, &#xD;&#xA;        Replace(Variable(IsNullOrEmpty(GetConfig(&quot;VI_Employee_Person_Filter&quot;), &quot;1=1&quot;)), getuser(), getuseraudit()))&#xD;&#xA;),&#xD;&#xA;-- Oder MA meines Bereiches hat verlängert oder abbestellt --&#xD;&#xA;&quot;uid_personwantsorg in (select uid_personwantsorg from pwodecisionhistory where &quot; +sqland(&#xD;&#xA;format(&quot;uid_personhead in ( select uid_person from person where {0} )&quot;, &#xD;&#xA;        Replace(Variable(IsNullOrEmpty(GetConfig(&quot;VI_Employee_Person_Filter&quot;), &quot;1=1&quot;)), getuser(), getuseraudit())),&#xD;&#xA;SqlInWithFormat(&quot;decisiontype&quot;, &quot;string&quot;, &quot;none&quot;, union(&quot;Unsubscribe&quot;, &quot;Prolongate&quot;))&#xD;&#xA;)+&quot;)&quot;&#xD;&#xA;-- Ende --&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function14" />
+        <Function Name="PersonHasSubIdentity()" Expression="Try(from Vars select PersonHasSubIdentity,false)" DataType="System.Boolean" ScriptItemUID="Function5" />
+        <Function ScriptItemUID="Function19" Name="CallWhereClauseUnionBuilder(string s)" DataType="System.String" Expression="{{@return SqlWhereClauseUnionBuilderForPWO(s);}}" />
+        <Function ScriptItemUID="Function20" Name="CallWhereClauseUnionBuilder(string s, string s2)" DataType="System.String" Expression="{{@return SqlWhereClauseUnionBuilderForPWO(s,s2);}}" />
+        <Function ScriptItemUID="Function21" Name="CallWhereClauseUnionBuilder(string s, string s2, string s3)" DataType="System.String" Expression="{{@return SqlWhereClauseUnionBuilderForPWO(s,s2,s3);}}" />
+        <Function ScriptItemUID="Function22" Name="CallWhereClauseUnionBuilder(string s, string s2, string s3, string s4)" DataType="System.String" Expression="{{@return SqlWhereClauseUnionBuilderForPWO(s,s2,s3,s4);}}" />
+        <Function ScriptItemUID="Function23" Name="GetSelectedOrderStates()" DataType="System.String" Expression="{{&#xD;&#xA;System.Collections.Generic.List&lt;string&gt; _states = new System.Collections.Generic.List&lt;string&gt;();&#xD;&#xA;if(this.Vars.SingleRow.GetValue(&quot;ShowApproved&quot;)){&#xD;&#xA;   _states.AddRange(new String[]{&quot;Assigned&quot;,&quot;Granted&quot;,&quot;Waiting&quot;});&#xD;&#xA;}&#xD;&#xA;if(this.Vars.SingleRow.GetValue(&quot;ShowOpen&quot;)){&#xD;&#xA;   _states.AddRange(new String[]{&quot;OrderProduct&quot;,&quot;OrderProlongate&quot;,&quot;OrderUnsubscribe&quot;});&#xD;&#xA;}&#xD;&#xA;if(this.Vars.SingleRow.GetValue(&quot;ShowDeactivated&quot;)){&#xD;&#xA;   _states.AddRange(new String[]{&quot;Dismissed&quot;,&quot;Unsubscribed&quot;,&quot;Aborted&quot;});&#xD;&#xA;}&#xD;&#xA;string query = &quot;&quot;;&#xD;&#xA;if(_states.Count &gt; 0){&#xD;&#xA;   query = &quot;OrderState in (&quot;+ _states.Where(clause =&gt; ! string.IsNullOrEmpty(clause)).Select(clause =&gt; string.Format(&quot;'{0}'&quot;, clause)).Aggregate((s1, s2) =&gt; s1 + &quot;,&quot; + s2) + &quot;)&quot;;&#xD;&#xA;}&#xD;&#xA;else{&#xD;&#xA;   query = &quot;1=0&quot;;&#xD;&#xA;}&#xD;&#xA;@return query;&#xD;&#xA;}}&#xD;&#xA;" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action13">
+            <CallAction ActionID="Search" ScriptItemUID="Call2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonAudit" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler2" Operation="Update">
+          <ActionSequence ScriptItemUID="Action1" />
+          <DataEventHandlerColumn DataColumn="UID_PersonApproved" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="setuseraudit()" Comment="Set the user for auditing and the auditing mode" DataType="System.String" />
+      <VirtualFunction Signature="showaudit()" Comment="Set the auditing mode person search control" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="form()" Comment="Approver, Requester and Full" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="TargetTable" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="WhereClause" DataType="System.String" />
+        <VirtualColumn Name="HeadLine" DataType="System.String" IsMandatory="false" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

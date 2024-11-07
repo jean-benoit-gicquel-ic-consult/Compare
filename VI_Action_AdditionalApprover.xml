@@ -1,0 +1,152 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Action_AdditionalApprover" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Update DataTable="PersonReference" DataColumn="IsSelected" Value="0" ScriptItemUID="Update1" />
+        <Delete DataTable="PersonReference" ScriptItemUID="Delete1" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Choose an additional approver&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <Container Condition="0 = from PersonReference select count() where IsSelected" ItemUID="Person search and question Popup" ScriptItemUID="Container5">
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="PersonReference" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="SqlAnd(PersonFilter(), format(&quot;uid_person != '{0}'&quot;, select uid_person from user))" RowSelection="Action" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <SelectionAction ScriptItemUID="ServerActionCall1">
+                      <ActionOnControl ActionType="PerformValidation" />
+                      <Update DataTable="PersonReference" DataColumn="IsSelected" Value="1" WhereClause="uid_person = select current uid_person from PersonReference" ScriptItemUID="Update2" />
+                      <ActionOnControl />
+                      <CallAction ActionID="ActionPopup" ScriptItemUID="Call2" />
+                      <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#{0} is additional approver.&quot;, from personreference select current display())" ScriptItemUID="VirtualFunctionMapping2" />
+                        <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping3" />
+                      </CallAction>
+                    </SelectionAction>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumnColumnTemplate DataTable="PersonReference" ScriptItemUID="GridColumnColumnTemplate1">
+                      <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                        <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_Person_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                      </ColumnList>
+                      <GridColumnGroup DataTable="PersonReference" ScriptItemUID="GridColumnGroup1">
+                        <GridColumnSimple ScriptItemUID="Column5" Column="currentcolumn" />
+                      </GridColumnGroup>
+                    </GridColumnColumnTemplate>
+                  </GridBand>
+                </Grid>
+              </Container>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUID="Buttonpanel" ItemUIDReference="Default Button" ScriptItemUID="Container11">
+              <Button Text="translate('#LDS#Cancel')" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button2" AssociatedWithEscapeKey="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                  <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update3" />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="PersonWantsOrg" Table="PersonWantsOrg" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="PersonReference" Class="Person" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="IsSelected" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Notice" ScriptItemUID="Column2" DataType="System.String" MinLength="1" Caption="translate(&quot;#LDS#Reason&quot;)" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ActionPopup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action6">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container12">
+                    <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                      <Label Text="translate('#LDS#Recipient')" ScriptItemUID="Label5" />
+                      <Label Text="select top 1 display() from PersonReference where IsSelected" ScriptItemUID="Label6" />
+                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef1">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="Notice" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                      <Container ScriptItemUID="Container2">
+                        <TextBox DataTable="Vars" DataColumn="Notice" TextMode="MultiLine" Rows="8" ScriptItemUID="TextBox1" />
+                        <Validator DataTable="Vars" DataColumn="Notice" ScriptItemUID="Validator1" />
+                      </Container>
+                    </LayoutPanel>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container17">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" ScriptItemUID="Button3">
+                      <ServerActionCall ScriptItemUID="ServerActionCall3">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <ActionSequence ItemUID="ok" ScriptItemUID="Action9">
+                          <ActionSequence ItemUID="PersonWantsOrg" Condition="DBTable(Action) = 'PersonWantsOrg'" ScriptItemUID="Action10">
+                            <LoadTable DataTable="PersonWantsOrg" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from Action select current XObjectKey)" ScriptItemUID="LoadTable1">
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+                            </LoadTable>
+                            <Method DataTable="PersonWantsOrg" Method="AddAdditional" WhereClause="PrimaryKey() in (select current PrimaryKey() from Action)">
+                              <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                              <MethodParameter Name="'strUID_PersonAdditional'" Value="from PersonReference select uid_person where IsSelected" />
+                              <MethodParameter Name="'strReasonText'" Value="from Vars select Notice" />
+                            </Method>
+                          </ActionSequence>
+                          <ActionOnControl />
+                          <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update4" />
+                          <CodeLiteral ScriptItemUID="CodeLiteral1">// invalidate tablestore --&gt; reload data 
+Action_Current.Row.Table.TableStore.Invalidate();</CodeLiteral>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button4" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute2" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall4">
+                        <ActionOnControl />
+                        <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update5" />
+                        <EndExecution />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="PopupTitle()" ScriptItemUID="VirtualFunctionMapping5" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="Action" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Action" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="ActionHelper" ScriptItemUID="VirtualTable2" />
+      <VirtualFunction Signature="PersonFilter()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="PopupTitle()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

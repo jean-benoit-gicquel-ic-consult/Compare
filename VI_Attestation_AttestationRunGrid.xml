@@ -1,0 +1,703 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="8391a72c-0c71-c4ec-6f6d-dd35d98eb22f">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_AttestationRunGrid" MigrationNotes="DIALOGCONFIGPARM;" Comment="An overview grid displaying pending attestation runs and allowing to take actions on them&#xD;&#xA;a) change due date ('prolongation', though setting an earlier date should be possible)&#xD;&#xA;b) remind attestors of a run&#xD;&#xA;c) display detail information (in a popup)&#xD;&#xA;&#xD;&#xA;The following behavior can be configured by configuration keys:&#xD;&#xA;- whether to show the number of delegated attestations in the detail information&#xD;&#xA;- the progress limits, i.e. the values under which progress will regarded good/mediocre/bad.&#xD;&#xA;&#xD;&#xA;An attestation run is no real database object but rather a logical concept.&#xD;&#xA;When the schedule is running that takes an attestation policy and creates according attestation cases, all resulting attestation cases are considered to be in a single run.&#xD;&#xA;This run is queried as as the group of attestation cases that have the same attestation policy and processing date (AttestationCase.PolicyProcessed).">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Attestation" Description="translate('#LDS#Attestation')" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Attestation_ShowNumberDelegatedCases" Description="translate(&quot;#LDS#Show number of delegated attestation cases in attestation run details&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_Attestation_AttestationRun_ProgressLimitBad" Description="translate(&quot;#LDS#Progress limit under which progress will be regarded 'bad'.&quot;)" LongDescription="translate(&quot;#LDS#Value must be a double between 0 and 1 representing a percentage between 0% and 100%. The decimal mark is full stop (.), e.g. 80% is expressed as 0.8&quot;)" Type="Text" />
+        <ConfigParam Key="VI_Attestation_AttestationRun_ProgressLimitGood" Description="translate(&quot;#LDS#Progress limit above which progress will be regarded 'good'.&quot;)" LongDescription="translate(&quot;#LDS#Value must be a double between 0 and 1 representing a percentage between 0% and 100%. The decimal mark is full stop (.), e.g. 80% is expressed as 0.8&quot;)" Type="Text" />
+        <ConfigParam Key="VI_Attestation_ShowNumberEscalatedCases" Description="translate(&quot;#LDS#Show number of escalated attestation cases in attestation run details&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action4">
+        <Update DataTable="LocalVars" DataColumn="ForecastProgressFilter" Value="&quot;OnlyShowBad&quot;" ScriptItemUID="Update4" />
+        <CallAction ActionID="InitCollections" ScriptItemUID="Call3" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container142">
+              <Container Condition="0 &lt; select count() from AttestationRun" ItemUID="Show grid if pending runs available" ScriptItemUID="Container2">
+                <LayoutPanel ScriptItemUID="LayoutPanel5">
+                  <Label Text="RowCaption(translate(&quot;#LDS#Min. Category&quot;))" ScriptItemUID="Label1" />
+                  <Container ItemUID="FulfillmentFilter" ScriptItemUID="Container3">
+                    <Container ItemUID="RadioButtonGood" ScriptItemUID="Container4" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'title'" ScriptItemUID="Container4title" Value="translate(&quot;#LDS#Show good, mediocre and bad (i.e. all) pending runs&quot;)" />
+                      </HtmlAttributes>
+                      <RadioButton DataTable="LocalVars" DataColumn="ForecastProgressFilter" Text="translate(&quot;#LDS#Good&quot;)" ScriptItemUID="RadioButton1" DataValue="&quot;ShowAll&quot;" CustomStyle="format(&quot;color: {0};&quot;, ColorGood())" />
+                    </Container>
+                    <Container ItemUID="RadioButtonMediocre" ScriptItemUID="Container5" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'title'" ScriptItemUID="Container5title" Value="translate(&quot;#LDS#Show only mediocre and bad pending runs, i.e. hide the good runs&quot;)" />
+                      </HtmlAttributes>
+                      <RadioButton DataTable="LocalVars" DataColumn="ForecastProgressFilter" Text="translate(&quot;#LDS#Mediocre&quot;)" ScriptItemUID="RadioButton2" DataValue="&quot;HideGood&quot;" CustomStyle="format(&quot;color: {0};&quot;, ColorMediocre())" />
+                    </Container>
+                    <Container ItemUID="RadioButtonBad" ScriptItemUID="Container6" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'title'" ScriptItemUID="Container6title" Value="translate(&quot;#LDS#Show only bad pending runs&quot;)" />
+                      </HtmlAttributes>
+                      <RadioButton DataTable="LocalVars" DataColumn="ForecastProgressFilter" Text="translate(&quot;#LDS#Bad&quot;)" ScriptItemUID="RadioButton3" DataValue="&quot;OnlyShowBad&quot;" CustomStyle="format(&quot;color: {0};&quot;, ColorBad())" />
+                    </Container>
+                  </Container>
+                </LayoutPanel>
+                <Grid AllowExport="true" ScriptItemUID="Grid1" ExportFileName="" ExportTitle="">
+                  <GridBand DataTable="AttestationRun" OrderBy="'DueDateSortable'" WhereClause="FitsSelectedMinCategory()" ItemUID="GridLayerAttestationRuns" ScriptItemUID="GridBand1" RowSelection="true" DataTableForSelection="LocalVars" DataColumnForSelection="AttestationRunSelected" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                      <ControlList ScriptItemUID="ControlList3">
+                        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef14">
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                            <ControlList ScriptItemUID="ControlList4">
+                              <Container Layout="'VI_Styles_Container_Inline'" Condition="variable(&quot;%gridexport%&quot;) &lt;&gt; 'export'" ItemUID="Either Category Bubble (in normal view)" ScriptItemUID="Container8" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute4" Value="from AttestationRun select current CategoryText" />
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="from attestationrun select current format(&quot;padding-left: 15px; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px; background-color: {0};&quot;, CategoryColor())&#xA;&#xA;" />
+                                </HtmlAttributes>
+                              </Container>
+                              <Container Condition="variable(&quot;%gridexport%&quot;) = 'export'" ItemUID="Or Catgory Text (in export)" ScriptItemUID="Container13">
+                                <Label Text="from AttestationRun select current CategoryText" ScriptItemUID="Label47" ItemUID="Category" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute5" Value="from attestationrun select current format(&quot;color: {0};&quot;, CategoryColor())" />
+                                  </HtmlAttributes>
+                                </Label>
+                              </Container>
+                              <Container ScriptItemUID="Container18" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute2" Value="'padding-left:10px'" />
+                                </HtmlAttributes>
+                                <Label ScriptItemUID="Label51" Text="from AttestationRun select current displayValue(UID_AttestationPolicy)" />
+                              </Container>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                            <ControlList ScriptItemUID="ControlList5" />
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                            <ControlList ScriptItemUID="ControlList6">
+                              <LayoutPanel ScriptItemUID="LayoutPanel6">
+                                <ContainerColumnTemplate DataTable="AttestationRun" ScriptItemUID="ContainerColumnTemplate1">
+                                  <ColumnList ScriptItemUID="ColumnList2">
+                                    <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" />
+                                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Run" Caption="translate(&quot;#LDS#Start&quot;)" />
+                                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DueDateSortable" />
+                                  </ColumnList>
+                                  <Container ScriptItemUID="Container16" ItemUID="Title column for normal properties">
+                                    <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef15">
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationRun" ScriptItemUID="VirtualTableMapping19">
+                                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                      </VirtualTableMapping>
+                                      <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping12" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                  <Container ScriptItemUID="Container14" ItemUID="Value column for normal properties">
+                                    <ColumnEditor DataTable="AttestationRun" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2" />
+                                  </Container>
+                                </ContainerColumnTemplate>
+                                <ContainerColumnTemplate DataTable="AttestationRun" ScriptItemUID="ContainerColumnTemplate2">
+                                  <ColumnList ScriptItemUID="ColumnList1">
+                                    <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                                    <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="Progress" />
+                                  </ColumnList>
+                                  <Container ScriptItemUID="Container22" ItemUID="Title column for normal properties">
+                                    <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef16">
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationRun" ScriptItemUID="VirtualTableMapping1">
+                                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                      </VirtualTableMapping>
+                                      <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping23" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                  <Container ScriptItemUID="Container20" ItemUID="Value column for normal properties">
+                                    <ControlReferenceContainer ID="CurrentProgress" ScriptItemUID="ControlRef17" />
+                                  </Container>
+                                </ContainerColumnTemplate>
+                              </LayoutPanel>
+                            </ControlList>
+                          </VirtualControlMapping>
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </GridBandListView>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn ScriptItemUID="Category" Width="&quot;50px&quot;" SortColumn="CategoryText" AutoFilterColumn="CategoryText" Layout="'VI_Styles_GridColumn_Right'">
+                      <GridColumnHeader ScriptItemUID="wctl1">
+                        <Container Condition="variable(&quot;%gridexport%&quot;) = 'export'" ItemUID="Caption (only in export)" ScriptItemUID="Container7">
+                          <Label Text="translate(&quot;#LDS#Category&quot;)" ScriptItemUID="Label43" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell2">
+                        <Container Layout="'VI_Styles_Container_Inline'" Condition="variable(&quot;%gridexport%&quot;) &lt;&gt; 'export'" ItemUID="Either Category Bubble (in normal view)" ScriptItemUID="Container9" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Container9title" Value="from AttestationRun select current CategoryText" />
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Container9style" Value="from attestationrun select current format(&quot;padding-left: 15px; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px; background-color: {0};&quot;, CategoryColor())&#xA;&#xA;" />
+                          </HtmlAttributes>
+                        </Container>
+                        <Container Condition="variable(&quot;%gridexport%&quot;) = 'export'" ItemUID="Or Catgory Text (in export)" ScriptItemUID="Container10">
+                          <Label Text="from AttestationRun select current CategoryText" ScriptItemUID="Label45" ItemUID="Category" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" ScriptItemUID="Label45style" Value="from attestationrun select current format(&quot;color: {0};&quot;, CategoryColor())" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumnSimple ScriptItemUID="Column4" Column="UID_AttestationPolicy" />
+                    <GridColumn Width="&quot;140px&quot;" SortColumn="Run" ScriptItemUID="GridColumn6" Layout="'VI_Styles_GridColumn_Centered'" AutoFilterColumn="Run">
+                      <GridColumnHeader ScriptItemUID="wctl3">
+                        <Label Text="translate(&quot;#LDS#Start&quot;)" ScriptItemUID="Label11" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell4">
+                        <Label Text="FormatDate(from AttestationRun select current Run, &quot;d&quot;)" ScriptItemUID="Label12" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Label12title" Value="from AttestationRun select current Run" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="&quot;140px&quot;" SortColumn="DueDateSortable" Layout="'VI_Styles_GridColumn_Centered'" AutoFilterColumn="DueDateSortable" ScriptItemUID="Column2">
+                      <GridColumnHeader ScriptItemUID="wctl4">
+                        <Label Text="translate(&quot;#LDS#Due date&quot;)" ScriptItemUID="Label48" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell5">
+                        <Label Text="from attestationrun select current DueDateString()" ScriptItemUID="Label49" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Label49title" Value="from AttestationRun select current DueDateStringLong()" />
+                            <HtmlAttribute Name="'class'" ScriptItemUID="Label49style" Value="if (select current OverDue from AttestationRun)&#xD;&#xA;then &quot;imx-grid-warninglabel&quot;&#xD;&#xA;else &quot;&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="&quot;140px&quot;" SortColumn="Progress" AutoFilterColumn="Progress" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="Column3">
+                      <GridColumnHeader ScriptItemUID="wctl5">
+                        <Label Text="translate(&quot;#LDS#Progress&quot;)" ScriptItemUID="Label50" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell6">
+                        <Container ItemUID="ProgressBar" ScriptItemUID="Container15">
+                          <ControlReferenceContainer ID="CurrentProgress" ScriptItemUID="ControlRef2" />
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="&quot;100px&quot;" SortColumn="ForecastProgress" ScriptItemUID="GridColumn5" AutoFilterColumn="ForecastProgress" Layout="'VI_Styles_GridColumn_Centered'" Condition="false">
+                      <GridColumnHeader ScriptItemUID="wctl6">
+                        <Label Text="translate(&quot;#LDS#Forecast&quot;)" ScriptItemUID="Label9" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Label9title" Value="translate(&quot;#LDS#Forecast progress on due date assuming same attestation speed for the future&quot;)" />
+                          </HtmlAttributes>
+                        </Label>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell7">
+                        <Container ItemUID="ProgressBar" ScriptItemUID="Container17">
+                          <ControlReferenceContainer ID="CurrentForecastProgress" ScriptItemUID="ControlRef3" />
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="&quot;10em&quot;" SortColumn="ForecastDate" ScriptItemUID="GridColumn9" Layout="'VI_Styles_GridColumn_Centered'" AutoFilterColumn="ForecastDate" Condition="false">
+                      <GridColumnHeader ScriptItemUID="wctl7">
+                        <Label Text="translate(&quot;#LDS#Forecast date&quot;)" ScriptItemUID="Label17" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell8">
+                        <Label Text="from attestationrun select current ForecastDateString()" ScriptItemUID="Label18" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Label18title" Value="from AttestationRun select current ForecastDateStringLong()" />
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label18style" Value="from AttestationRun select current ForecastDateStringStyle()" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="&quot;7em&quot;" SortColumn="Delay" ScriptItemUID="GridColumn7" Layout="'VI_Styles_GridColumn_Right'" AutoFilterColumn="Delay" Condition="false">
+                      <GridColumnHeader ScriptItemUID="wctl8">
+                        <Label Text="translate(&quot;#LDS#Delay&quot;)" ScriptItemUID="Label13" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell9">
+                        <Label Text="from attestationrun select current DelayString()" ScriptItemUID="Label14" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Label14title" Value="from AttestationRun select current DelayStringLong()" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+                <ControlReferenceContainer ID="LastLoaded" ScriptItemUID="ControlRef4" />
+                <Container Layout="'VI_Styles_Container_ButtonBar'" ItemUID="Button Panel" ScriptItemUID="Container30" Condition="allowedit()">
+                  <Button Text="translate(&quot;#LDS#Remind attestors of ALL visible runs&quot;)" ScriptItemUID="Button2" EnabledCondition="0 &lt; select count() from AttestationRun where FitsSelectedMinCategory()">
+                    <ServerActionCall ScriptItemUID="ServerActionCall8">
+                      <CallAction ActionID="SendMailForVisibleRuns" ScriptItemUID="CallAction7" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </Container>
+              <Container ItemUID="Show description if no pending runs" Condition="0 = select count() from AttestationRun" ScriptItemUID="Container31">
+                <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                  <VirtualFunctionMapping ID="HeadLine()" Value="translate(&quot;#LDS#No data available&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#There are currently no pending attestation runs.')" ScriptItemUID="VirtualFunctionMapping3" />
+                </ControlReferenceContainer>
+                <ControlReferenceContainer ID="LastLoaded" ScriptItemUID="ControlRef6" />
+              </Container>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container11">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AttestationRun" WhereClause="primarykey() = (from localvars select AttestationRunSelected)">
+                <Container ScriptItemUID="Container12">
+                  <ControlReferenceControlList ID="DetailsForCurrentRun" ScriptItemUID="ControlRef12" />
+                  <Container ScriptItemUID="Container21" Condition="allowedit()" Layout="'VI_Styles_Container_ButtonBar'">
+                    <Button Text="translate('#LDS#Extend attestation run')" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'" ItemUID="Prolongate Button">
+                      <ServerActionCall ScriptItemUID="ServerActionCall4">
+                        <Update DataTable="LocalVars" DataColumn="ProlongationDueDate" Value="from AttestationRun select current DueDate" ScriptItemUID="Update1" />
+                        <Update DataTable="LocalVars" DataColumn="ProlongationReason" Value="''" ScriptItemUID="Update2" />
+                        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                            <Container ScriptItemUID="Container23">
+                              <LayoutPanel Columns="2" Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel1">
+                                <Container ScriptItemUID="Container24">
+                                  <FormItemLabel DataTable="AttestationRun" DataColumn="DueDate" ScriptItemUID="FormItemLabel1">
+                                    <Label Text="RowCaption(translate(&quot;#LDS#New due date&quot;))" ScriptItemUID="Label52" />
+                                  </FormItemLabel>
+                                  <Label Text="' *'" ScriptItemUID="Label53" EnableCustomAttributes="true">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute Name="'style'" ScriptItemUID="Label53style" Value="Variable(&quot;color: %VI_Common_Color_Badge_Important%&quot;)" />
+                                    </HtmlAttributes>
+                                  </Label>
+                                </Container>
+                                <DateControl DataTable="LocalVars" DataColumn="ProlongationDueDate" ScriptItemUID="DateControl1" DefaultTime="" />
+                                <Container ScriptItemUID="Container26">
+                                  <FormItemLabel DataTable="LocalVars" DataColumn="ProlongationReason" ScriptItemUID="FormItemLabel2">
+                                    <Label Text="RowCaption(translate('#LDS#Reason'))" ScriptItemUID="Label54" />
+                                  </FormItemLabel>
+                                  <Label Text="' *'" ScriptItemUID="Label55" EnableCustomAttributes="true">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute Name="'style'" ScriptItemUID="Label55style" Value="Variable(&quot;color: %VI_Common_Color_Badge_Important%&quot;)" />
+                                    </HtmlAttributes>
+                                  </Label>
+                                </Container>
+                                <TextBox DataTable="LocalVars" DataColumn="ProlongationReason" TextMode="MultiLine" Rows="8" ScriptItemUID="TextBox1" />
+                              </LayoutPanel>
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                            <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container28">
+                              <Button Text="translate('#LDS#OK')" ItemUID="Default Button" ScriptItemUID="Button3">
+                                <ServerActionCall ScriptItemUID="ServerActionCall5">
+                                  <ActionSequence ItemUID="test if reason is entered" Condition="isnull(from LocalVars select ProlongationReason,'')=''" ScriptItemUID="Action1">
+                                    <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call2">
+                                      <VirtualControlMapping VirtualControl="OnOK" ContainerType="ActionComponent">
+                                        <ActionComponent ScriptItemUID="Action2">
+                                          <ActionOnControl />
+                                          <EndExecution />
+                                        </ActionComponent>
+                                      </VirtualControlMapping>
+                                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Please enter a reason for extending this attestation run.')" ScriptItemUID="VirtualFunctionMapping4" />
+                                      <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+                                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#No reason entered&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                                      <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping7" />
+                                    </CallAction>
+                                  </ActionSequence>
+                                  <ActionSequence ItemUID="ok, prolongate" ScriptItemUID="Action3">
+                                    <Update DataTable="AttestationRun" DataColumn="DueDate" Value="from LocalVars select ProlongationDueDate" WhereClause="UID_AttestationRun = from AttestationRun select current UID_AttestationRun" ScriptItemUID="Update3" />
+                                    <Method DataTable="AttestationPolicy" ObjectMethodType="FireEvent" ObjectEventName="PROLONGATE" WhereClause="UID_AttestationPolicy  = (from AttestationRun select current UID_AttestationPolicy)">
+                                      <MethodParameter Name="'OldDate'" Value="from AttestationRun select current Run" />
+                                      <MethodParameter Name="'NewDate'" Value="from LocalVars select ProlongationDueDate" />
+                                      <MethodParameter Name="'UID_PersonProlongate'" Value="getUser()" />
+                                      <MethodParameter Name="'Reason'" Value="from LocalVars select ProlongationReason" />
+                                    </Method>
+                                    <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction5">
+                                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The attestation run has been extended.&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                                      <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping9" />
+                                    </CallAction>
+                                    <ActionOnControl />
+                                  </ActionSequence>
+                                </ServerActionCall>
+                              </Button>
+                              <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" ScriptItemUID="Button4" AssociatedWithEscapeKey="true" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                                </HtmlAttributes>
+                                <ServerActionCall ScriptItemUID="ServerActionCall6">
+                                  <ActionOnControl />
+                                </ServerActionCall>
+                              </Button>
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Enter date and reason for extending {0}.', from AttestationRun select current displayvalue(UID_attestationPolicy))" ScriptItemUID="VirtualFunctionMapping10" />
+                        </CallAction>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate('#LDS#Send reminder')" ScriptItemUID="Button5" Layout="'VI_Styles_Button_Default'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall7">
+                        <CallAction ActionID="SendMailForCurrentRun" ScriptItemUID="CallAction6" />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef13">
+                  <VirtualFunctionMapping ID="Value1()" Value="from AttestationRun select top 1 displayvalue(UID_AttestationPolicy) where primarykey() = (from localvars select AttestationRunSelected)" ScriptItemUID="VirtualFunctionMapping11" />
+                </ControlReferenceControlList>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AttestationPolicy" Table="AttestationPolicy" Comment="The available attestation policies. Used solely for requesting the display of an attestation policy." ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableSQL Table="AttestationRun" Comment="Holds information about pending attestation runs (i.e. attestation runs with attestations pending).&#xD;&#xA;This is the MAIN collection that will be shown in the grid - all other collections are auxiliary collections." ScriptItemUID="DataTableLimitedSQL1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action6" />
+          <Column Name="UID_AttestationPolicy" DataType="System.String" ScriptItemUID="Column6" ColumnDataSource="ForeignKey" DBTableName="&quot;AttestationPolicy&quot;" DBColumnName="&quot;UID_AttestationPolicy&quot;" FKWhereClause="" />
+          <Column Name="UID_AttestationRun" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="Run" DataType="System.DateTime" ScriptItemUID="Column1" />
+          <Column Name="DueDate" DataType="System.DateTime" Comment="Due date for the run" ScriptItemUID="Column8" />
+          <Column Name="PendingCases" DataType="System.Int32" Comment="Number of pending cases within the run" ScriptItemUID="Column9" />
+          <Column Name="ClosedCases" DataType="System.Int32" Comment="Number of closed cases within the run" ScriptItemUID="Column10" />
+          <Column Name="NewCases" DataType="System.Int32" Comment="Number of new cases within the run" ScriptItemUID="Column7" />
+          <Column Name="DelegatedCases" DataType="System.Int32" Comment="Number of delegated cases within the run" ScriptItemUID="Column11" />
+          <Column Name="EscalatedCases" DataType="System.Int32" Comment="Number of delegated cases within the run" ScriptItemUID="Column12" />
+          <Column Name="Progress" DataType="System.Double" DataSource="Expression" Expression="Progress(ClosedCases, PendingCases + ClosedCases)" Comment="Progress of the run (so far)" ScriptItemUID="Column13" Caption="translate(&quot;#LDS#Progress&quot;)" />
+          <Column Name="OverDue" DataType="System.Boolean" DataSource="Expression" Expression="IgnoreTime(DueDate) &lt; IgnoreTime(LoadTime())" Comment="Wether the run is overdue" ScriptItemUID="Column14" />
+          <Column Name="SecondsGone" DataType="System.Double" Comment="Number of seconds gone between processing date of the run and load time" ScriptItemUID="Column15" />
+          <Column Name="DaysGone" DataType="System.Double" DataSource="Expression" Expression="SecondsToDays(SecondsGone)" Comment="Number of days between processing date of the run and load time" ScriptItemUID="Column16" />
+          <Column Name="SecondsLeft" DataType="System.Double" DataSource="Expression" Expression="if (HasDueDate=true)&#xA;then SecondsDiff(LoadTime(), DueDate)&#xA;else 0.0" Comment="Number of seconds left for the run, i.e. the number of seconds between load time until due date." ScriptItemUID="Column17" />
+          <Column Name="DaysLeft" DataType="System.Double" DataSource="Expression" Expression="if (HasDueDate=true) then SecondsToDays(SecondsLeft) else 0.00" Comment="Number of days left for the run, i.e. the number of days between load time until due date." ScriptItemUID="Column18" />
+          <Column Name="ForecastClosedCases" DataType="System.Int32" DataSource="Expression" Expression="if (DaysLeft &gt; 0) then Maximum(ClosedCases+ RoundDown(Speed * DaysLeft), PendingCases + ClosedCases) else -1" Comment="Forecast value for the number of closed cases upon reaching due date.&#xD;&#xA;-1 signals that there are no more days left until due date (so &quot;forecasting&quot; makes no sense)." ScriptItemUID="Column19" />
+          <Column Name="ForecastProgress" DataType="System.Double" DataSource="Expression" Expression="if (DaysLeft &gt; 0) then Progress(ForecastClosedCases, PendingCases + ClosedCases)" Comment="Forecast value for the progress when hitting due date." ScriptItemUID="Column20" Caption="translate(&quot;#LDS#Forecast&quot;)" />
+          <Column Name="Speed" DataType="System.Double" DataSource="Expression" Expression="Speed(DaysGone, ClosedCases)" Comment="The attestation speed so far (based on the number of closed cases within DaysGone since Run date)." ScriptItemUID="Column21" />
+          <Column Name="Delay" DataType="System.Double" DataSource="Expression" Expression="if ((Speed &gt; 0) AND (HasDueDate=true))&#xA;then SecondsToDays(SecondsDiff(DueDate, ForecastDate))&#xA;else if (Speed &gt; 0) then 0.0&#xA;else Convert(MaxInt(), &quot;Double&quot;)" Comment="The forecast number of additional days that are necessary to complete the attestation run.&#xD;&#xA;Negative values indicate a run that will be completed prior to due date.&#xD;&#xA;Based on Speed and DueDate.&#xD;&#xA;&#xD;&#xA;A run that made no progress in the past is considered to be ultimatively late in the forecast, which is signalled by MaxInt delay.&#xD;&#xA;A run that has no due date (viable choice) normally cannot get late.&#xD;&#xA;If both situations come together (the run has no due date, but also made no progress so far), we give precedence to the fact that there is no progress, this signaling ulitmative delay with MaxInt." ScriptItemUID="Column22" Caption="translate(&quot;#LDS#Delay&quot;)" />
+          <Column Name="DueDateSortable" DataType="System.DateTime" DataSource="Expression" Expression="if (HasDueDate=true) then DueDate else MaxDate()&#xA;" Comment="Sorting value based on due date.&#xD;&#xA;Necessary because no null dates can be loaded, so a logical null DueDate will have a value of MinDate.&#xD;&#xA;But when sorting the runs by due date ascending, we want the runs with no due date (logical null) to appear at the end." ScriptItemUID="Column23" Caption="translate(&quot;#LDS#Due date&quot;)" />
+          <Column Name="ForecastDate" DataType="System.DateTime" DataSource="Expression" Expression="if (Speed = 0)&#xA;then MaxDate()&#xA;else AddDays(LoadTime(), convert(ForecastRemainingDays, 'System.Int32'))" Comment="Forcast date for completion of the run." ScriptItemUID="Column24" Caption="translate(&quot;#LDS#Forecast date&quot;)" />
+          <Column Name="HasDueDate" DataType="System.Boolean" DataSource="Expression" Expression="(DueDate &gt; MinDate()) = true" Comment="Returns whether the run has a due date set.&#xD;&#xA;Necessary because actually a date column will always have a value, so that a logical null results in MinDate value." ScriptItemUID="Column25" />
+          <Column Name="ForecastRemainingDays" DataType="System.Double" DataSource="Expression" Expression="if (Speed = 0)&#xA;then -1&#xA;else RoundUp( Convert(PendingCases, &quot;Double&quot;) / Speed )" Comment="The number of remaining days necessary (from load time) to complete the run.&#xD;&#xA;-1 signals Infinity, given when has no progress been made so far (speed = 0)" ScriptItemUID="Column26" />
+          <Column Name="CategoryText" DataType="System.String" DataSource="Expression" Expression="if IsBad() then translate(&quot;#LDS#Bad&quot;) else if IsMediocre() then translate(&quot;#LDS#Mediocre&quot;) else translate(&quot;#LDS#Good&quot;)" Comment="A display for the category of the current attestation run." ScriptItemUID="Column27" Caption="translate(&quot;#LDS#Category&quot;)" />
+        </DataTableSQL>
+        <DataTableSQL Table="AttestationSummaryClosedCases" Comment="Information about closed attestation cases" ScriptItemUID="DataTableLimitedSQL2">
+          <ActionSequence ScriptItemUID="Action7" />
+          <Column Name="UID_AttestationRun" DataType="System.String" ScriptItemUID="Column28" />
+          <Column Name="ClosedCases" DataType="System.Int32" ScriptItemUID="Column30" />
+        </DataTableSQL>
+        <DataTableSQL Table="AttestationSummaryDelegatedCases" Comment="Holds information about delegated attestation cases." ScriptItemUID="DataTableLimitedSQL3">
+          <ActionSequence ScriptItemUID="Action8" />
+          <Column Name="UID_AttestationRun" DataType="System.String" ScriptItemUID="Column31" />
+          <Column Name="DelegatedCases" DataType="System.Int32" ScriptItemUID="Column33" />
+        </DataTableSQL>
+        <DataTableSQL Table="AttestationSummaryEscalatedCases" Comment="Holds information about delegated attestation cases." ScriptItemUID="DataTableLimitedSQL4">
+          <ActionSequence ScriptItemUID="Action9" />
+          <Column Name="UID_AttestationRun" DataType="System.String" ScriptItemUID="Column34" />
+          <Column Name="EscalatedCases" DataType="System.Int32" ScriptItemUID="Column36" />
+        </DataTableSQL>
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ProlongationDueDate" DataType="System.DateTime" Comment="The new due date when prolonging an attestation run." ScriptItemUID="Column37" />
+          <Column Name="ProlongationReason" Comment="The" DataType="System.String" ScriptItemUID="Column38" />
+          <Column Name="LoadTime" DataType="System.DateTime" Comment="The time when the collections have been loaded the last time." ScriptItemUID="Column39" />
+          <Column Name="ForecastProgressFilter" ColumnDataSource="LimitedValues" DataType="System.String" ScriptItemUID="Column40">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="ShowAll" Comment="All pending runs should be visible regardless of there forecast progress." Display="" />
+              <ColumnLimitedValue Name="HideGood" Comment="Pending runs with good forecast progress should be hidden." Display="" />
+              <ColumnLimitedValue Name="OnlyShowBad" Comment="Only pending runs with bad forecast progress should be visible." Display="" />
+            </ColumnLimitedValues>
+          </Column>
+          <Column Name="SendMailMessage" Comment="Stores the optional free text message to be passed to the sendmail process." DataType="System.String" ScriptItemUID="Column41" />
+          <Column Name="AttestationRunSelected" DataType="System.String" ScriptItemUID="Column45" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="InitCollections">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action10">
+              <ActionSequence ItemUID="Store current time stamp as LoadTime" ScriptItemUID="Action11">
+                <Update DataTable="LocalVars" DataColumn="LoadTime" Value="GetDate()" ScriptItemUID="Update5" />
+              </ActionSequence>
+              <ActionSequence ItemUID="Load collections" ScriptItemUID="Action12">
+                <LoadTable DataTable="AttestationRun" Type="LimitedSQL" ScriptItemUID="LoadTable6" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationRunGrid.AttestationRun&quot;">
+                  <InsertValue DataColumn="SecondsGone" Value="SecondsDiff(Run, LoadTime())" />
+                  <ParameterFree Name="&quot;PersonOwner&quot;" Value="if not(allowedit())then GetUser()" ScriptItemUID="ParameterFree1" />
+                </LoadTable>
+                <LoadTable DataTable="AttestationSummaryClosedCases" Type="LimitedSQL" ScriptItemUID="LoadTable1" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationRunGrid.AttestationSummaryCC&quot;" />
+                <LoadTable DataTable="AttestationPolicy" ScriptItemUID="LoadTable3">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                </LoadTable>
+                <ActionSequence Condition="ShowDelegatedCases()" ItemUID="Load delegated cases info, if turned on" ScriptItemUID="Action13">
+                  <LoadTable DataTable="AttestationSummaryDelegatedCases" Type="LimitedSQL" ScriptItemUID="LoadTable4" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationRunGrid.AttestationSummaryDC&quot;" />
+                </ActionSequence>
+                <ActionSequence Condition="ShowEscalatedCases()" ItemUID="Load escalated cases info, if turned on" ScriptItemUID="Action14">
+                  <LoadTable DataTable="AttestationSummaryEscalatedCases" Type="LimitedSQL" ScriptItemUID="LoadTable5" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationRunGrid.AttestationSummaryEC&quot;" />
+                </ActionSequence>
+              </ActionSequence>
+              <ActionSequence ItemUID="Copy information from auxiliary collections into the MAIN collection" ScriptItemUID="Action15">
+                <ForeachRow DataTable="AttestationSummaryClosedCases" ScriptItemUID="ForeachRow2">
+                  <Update DataTable="AttestationRun" DataColumn="ClosedCases" WhereClause="UID_AttestationRun = (select current UID_AttestationRun from AttestationSummaryClosedCases)" Value="select current ClosedCases from AttestationSummaryClosedCases" ScriptItemUID="Update7" />
+                  <Update DataTable="AttestationRun" DataColumn="NewCases" WhereClause="UID_AttestationRun = (select current UID_AttestationRun from AttestationSummaryClosedCases)" Value="dbcount(&quot;AttestationCase&quot;, sqland(&quot;IsNotApprovedBefore=1&quot;, sqlcompareuid(&quot;UID_AttestationRun&quot;, select current UID_AttestationRun from AttestationSummaryClosedCases)))" ScriptItemUID="Update6" />
+                </ForeachRow>
+                <ForeachRow DataTable="AttestationSummaryDelegatedCases" ScriptItemUID="ForeachRow3">
+                  <Update DataTable="AttestationRun" DataColumn="DelegatedCases" WhereClause="UID_AttestationRun = (select current UID_AttestationRun from AttestationSummaryDelegatedCases)" Value="select current DelegatedCases from AttestationSummaryDelegatedCases" ScriptItemUID="Update8" />
+                </ForeachRow>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="DetailsForCurrentRun">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList1">
+              <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_Secondary'">
+                <TabPage ScriptItemUID="TabPage1">
+                  <ControlsHeader ScriptItemUID="Container33">
+                    <Label Text="translate(&quot;#LDS#Details&quot;)" ScriptItemUID="Label44" />
+                  </ControlsHeader>
+                  <ControlsBody ScriptItemUID="Container34">
+                    <Label Text="translate(&quot;#LDS#Current data&quot;)" ScriptItemUID="Label15" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="h3" />
+                      </HtmlAttributes>
+                    </Label>
+                    <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel2">
+                      <Label Text="RowCaption(DataCaptionSingle(&quot;AttestationPolicy&quot;))" ScriptItemUID="Label19" />
+                      <Label Text="from AttestationRun select current displayvalue(UID_AttestationPolicy)" ScriptItemUID="Label20" />
+                      <Label Text="RowCaption(translate(&quot;#LDS#Run started&quot;))" ScriptItemUID="Label21" />
+                      <Container Layout="'VI_Styles_Container_SingleLine'" ScriptItemUID="Container40">
+                        <Container ItemUID="Display of the raw due date" ScriptItemUID="Container41">
+                          <Label Text="from AttestationRun select current FormatDate(Run, &quot;G&quot;)" ScriptItemUID="Label22" />
+                        </Container>
+                        <Container ItemUID="Display of the number of days ago" ScriptItemUID="Container42" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Container42style" Value="&quot;margin-left: 5px;&quot;" />
+                          </HtmlAttributes>
+                          <Label Text="format(&quot;({0})&quot;, &#xA;  from AttestationRun &#xA;  select current translate(&quot;#LDS#{0} day(s) ago&quot;, NumFormat(DaysGone, &quot;0.00&quot;))&#xA;)" ScriptItemUID="Label30" />
+                        </Container>
+                      </Container>
+                      <Label Text="RowCaption(translate(&quot;#LDS#Due date&quot;))" ScriptItemUID="Label10" />
+                      <ControlList ScriptItemUID="ControlList13">
+                        <Container ItemUID="Display of the raw due date" ScriptItemUID="Container45">
+                          <Label Text="from AttestationRun select current (if HasDueDate then FormatDate(DueDate, &quot;G&quot;) else translate(&quot;#LDS#none (no due date set)&quot;))" ScriptItemUID="Label37" />
+                        </Container>
+                        <Container ItemUID="Display of the days left" Condition="from AttestationRun select current HasDueDate" ScriptItemUID="Container46" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Container46style" Value="&quot;margin-left: 5px;&quot;" />
+                          </HtmlAttributes>
+                          <Label Text="format(&quot;({0})&quot;,&#xA;  from AttestationRun select current &#xA;  if (OverDue) then translate(&quot;#LDS#{0} day(s) overdue&quot;, NumFormat(-DaysLeft, &quot;0.00&quot;))&#xA;  else translate(&quot;#LDS#{0} day(s) left&quot;, NumFormat(DaysLeft, &quot;0.00&quot;))&#xA;)" ScriptItemUID="Label42" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" ScriptItemUID="Label42style" Value="if (from AttestationRun select current OverDue) then format(&quot;color: {0};&quot;, ColorBad())" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                      </ControlList>
+                      <Label Text="RowCaption(translate(&quot;#LDS#Progress so far&quot;))" ScriptItemUID="Label34" />
+                      <ControlReferenceContainer ID="CurrentProgress" ScriptItemUID="ControlRef7" />
+                    </LayoutPanel>
+                    <Label Text="translate(&quot;#LDS#Attestation details&quot;)" ScriptItemUID="Label16" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="h3" />
+                      </HtmlAttributes>
+                    </Label>
+                    <LayoutPanel ScriptItemUID="LayoutPanel4">
+                      <Label Text="RowCaption(translate(&quot;#LDS#Pending attestations&quot;))" ScriptItemUID="Label23" />
+                      <Label Text="from AttestationRun select current &#xA;translate(&quot;#LDS#{0} of {1} attestations&quot;, PendingCases, ClosedCases + PendingCases)" ScriptItemUID="Label24" />
+                      <Label ScriptItemUID="Label36" Text="translate(&quot;#LDS#New attestations&quot;)" />
+                      <Label Text="from AttestationRun select current &#xD;&#xA;translate(&quot;#LDS#{0} of {1} attestations&quot;, NewCases, ClosedCases + PendingCases)" ScriptItemUID="Label46" />
+                      <Label Text="RowCaption(translate(&quot;#LDS#Closed attestations&quot;))" ScriptItemUID="Label25" />
+                      <Label Text="from AttestationRun select current &#xA;translate(&quot;#LDS#{0} of {1} attestations&quot;, ClosedCases, ClosedCases + PendingCases)" ScriptItemUID="Label27" />
+                      <Container Condition="ShowDelegatedCases()" ItemUID="Delegated attestations (label)" ScriptItemUID="LayoutPanelItem21">
+                        <Label Text="RowCaption(translate(&quot;#LDS#Delegated attestations&quot;))" ScriptItemUID="Label26" />
+                      </Container>
+                      <Container ItemUID="Delegated attestations (value)" Condition="ShowDelegatedCases()" ScriptItemUID="LayoutPanelItem22">
+                        <Label Text="from AttestationRun select current translate(&quot;#LDS#{0} of {1} attestations&quot;, DelegatedCases, ClosedCases + PendingCases)" ScriptItemUID="Label28" />
+                      </Container>
+                      <Container Condition="ShowEscalatedCases()" ItemUID="Escalated attestations (label)" ScriptItemUID="LayoutPanelItem23">
+                        <Label Text="RowCaption(translate(&quot;#LDS#Escalated attestations&quot;))" ScriptItemUID="Label5" />
+                      </Container>
+                      <Container ItemUID="Escalated attestations (value)" Condition="ShowEscalatedCases()" ScriptItemUID="LayoutPanelItem24">
+                        <Label Text="from AttestationRun select current translate(&quot;#LDS#{0} of {1} attestations&quot;, EscalatedCases, ClosedCases + PendingCases)" ScriptItemUID="Label6" />
+                      </Container>
+                      <Label Text="RowCaption(translate(&quot;#LDS#Attestation speed&quot;))" ScriptItemUID="Label31" />
+                      <Label Text="from AttestationRun select current translate(&quot;#LDS#{0} attestations/day&quot;, NumFormat(Speed, &quot;0.00&quot;))" ScriptItemUID="Label32" />
+                    </LayoutPanel>
+                    <Label Text="translate(&quot;#LDS#Attestation forecast&quot;)" ScriptItemUID="Label29" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="h3" />
+                      </HtmlAttributes>
+                    </Label>
+                    <LayoutPanel ScriptItemUID="LayoutPanel3">
+                      <Label Text="RowCaption(translate(&quot;#LDS#Forecast progress on due date&quot;))" ScriptItemUID="Label35" />
+                      <ControlList ScriptItemUID="ControlList31">
+                        <Container Condition="from AttestationRun select current OverDue=false" ItemUID="Forecast progress Bar (if not overdue)" ScriptItemUID="Container65">
+                          <ControlReferenceContainer ID="CurrentForecastProgress" ScriptItemUID="ControlRef8" />
+                        </Container>
+                        <Container Condition="from AttestationRun select current OverDue = true" ScriptItemUID="Container66">
+                          <Label Text="translate(&quot;#LDS#No forecast applicable because run is already overdue&quot;)" ScriptItemUID="Label8" />
+                        </Container>
+                      </ControlList>
+                      <Label Text="RowCaption(translate(&quot;#LDS#Forecast date for run completion&quot;))" ScriptItemUID="Label38" />
+                      <Container ScriptItemUID="Container68" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Container68style" Value="&quot;vertical-align:bottom;&quot;" />
+                        </HtmlAttributes>
+                        <Label Text="from AttestationRun select current ForecastDateStringLong()" ScriptItemUID="Label39" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label39style" Value="from AttestationRun select current ForecastDateStringStyle()" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Container>
+                      <Label Text="RowCaption(translate(&quot;#LDS#Forecast Delay&quot;))" ScriptItemUID="Label40" />
+                      <Label Text="from attestationrun select current DelayStringLong()" ScriptItemUID="Label41" />
+                      <Label Text="RowCaption(translate(&quot;#LDS#Category&quot;))" ScriptItemUID="Label3" />
+                      <ControlList ScriptItemUID="ControlList37">
+                        <Label Text="from AttestationRun select current CategoryText" ScriptItemUID="Label4" ItemUID="Category" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label4style" Value="format(&quot;color: {0};&quot;, from AttestationRun select current CategoryColor())" />
+                          </HtmlAttributes>
+                        </Label>
+                        <Container ItemUID="Explanation" ScriptItemUID="Container73">
+                          <Label Text="from attestationrun select current IsCategoryExplanation()" ScriptItemUID="Label33" />
+                        </Container>
+                      </ControlList>
+                    </LayoutPanel>
+                  </ControlsBody>
+                </TabPage>
+                <TabPage ScriptItemUID="TabPage2" Condition="allowedit()">
+                  <ControlsHeader ScriptItemUID="Container74">
+                    <Label Text="translate(&quot;#LDS#Attestors&quot;)" ScriptItemUID="Label74" />
+                  </ControlsHeader>
+                  <ControlsBody ScriptItemUID="Container75">
+                    <ControlReferenceContainer ID="VI_Attestation_AttestationRun_PendingApprovers" ScriptItemUID="ControlRef9">
+                      <VirtualFunctionMapping ID="UID_AttestationRun()" Value="from AttestationRun select current UID_AttestationRun" ScriptItemUID="VirtualFunctionMapping13" />
+                    </ControlReferenceContainer>
+                  </ControlsBody>
+                </TabPage>
+              </Tab>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationRun" ScriptItemUID="DataTableCursor5" />
+        </Control>
+        <Control ID="CurrentProgress">
+          <LocalControlContext ContainerType="Container" Comment="The progressbar for the current attestation run row.">
+            <Container ItemUID="ProgressBar" ScriptItemUID="Container77">
+              <ControlReferenceContainer ID="VI_Common_ProgressBar" ScriptItemUID="ControlRef10">
+                <VirtualFunctionMapping ID="Progress()" Value="from AttestationRun select current Progress" ScriptItemUID="VirtualFunctionMapping14" />
+                <VirtualFunctionMapping ID="LowerLimit()" Value="BadProgress()" ScriptItemUID="VirtualFunctionMapping15" />
+                <VirtualFunctionMapping ID="UpperLimit()" Value="GoodProgress()" ScriptItemUID="VirtualFunctionMapping16" />
+                <VirtualFunctionMapping ID="Tooltip()" Value="from attestationrun select current ProgressTooltip()" ScriptItemUID="VirtualFunctionMapping17" />
+              </ControlReferenceContainer>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationRun" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="CurrentForecastProgress">
+          <LocalControlContext ContainerType="Container" Comment="The forecast progress bar for the current attestation run row.">
+            <Container ItemUID="ProgressBar" ScriptItemUID="Container78">
+              <Container Condition="from AttestationRun select current ForecastProgressApplicable() = true" ScriptItemUID="Container79">
+                <ControlReferenceContainer ID="VI_Common_ProgressBar" ScriptItemUID="ControlRef11">
+                  <VirtualFunctionMapping ID="Progress()" Value="from AttestationRun select current ForecastProgress" ScriptItemUID="VirtualFunctionMapping18" />
+                  <VirtualFunctionMapping ID="LowerLimit()" Value="BadProgress()" ScriptItemUID="VirtualFunctionMapping19" />
+                  <VirtualFunctionMapping ID="UpperLimit()" Value="GoodProgress()" ScriptItemUID="VirtualFunctionMapping20" />
+                  <VirtualFunctionMapping ID="Tooltip()" Value="from AttestationRun select current ForecastProgressTooltip()" ScriptItemUID="VirtualFunctionMapping21" />
+                </ControlReferenceContainer>
+              </Container>
+              <Container Condition="from AttestationRun select current ForecastProgressApplicable() = false" ScriptItemUID="Container80">
+                <Label Text="translate(&quot;#LDS#n/a&quot;)" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="Label7title" Value="from attestationrun select current ForecastProgressNotApplicableExplanation()" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationRun" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="SendMailForCurrentRun">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action18">
+              <CallAction ActionID="VI_Attestation_AttestationRuns_SendReminder" ScriptItemUID="CallAction9">
+                <VirtualFunctionMapping ID="ListOfAttestationRuns()" Value="from AttestationRun select current UID_AttestationRun" ScriptItemUID="VirtualFunctionMapping25" />
+                <VirtualFunctionMapping ID="OptionalDescription()" Value="translate(&quot;#LDS#Every attestor in charge will receive a single reminder mail.&quot;)" ScriptItemUID="VirtualFunctionMapping22" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationRun" ScriptItemUID="DataTableCursor4" />
+        </Control>
+        <Control ID="SendMailForVisibleRuns">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action19">
+              <CallAction ActionID="VI_Attestation_AttestationRuns_SendReminder" ScriptItemUID="CallAction10">
+                <VirtualFunctionMapping ID="ListOfAttestationRuns()" Value="concat(from attestationrun select UID_AttestationRun, &quot;|&quot;)" ScriptItemUID="VirtualFunctionMapping26" />
+                <VirtualFunctionMapping ID="OptionalDescription()" Value="translate(&quot;#LDS#Each attestor in charge will receive a single reminder mail.&quot;)" ScriptItemUID="VirtualFunctionMapping24" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="LastLoaded">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container81" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container81style" Value="&quot;text-align:right;&quot;" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#last loaded: {0}&quot;, getdateinzone(LoadTime(), &quot;local&quot;))" ScriptItemUID="Label2" Action="Redirect" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label2title" Value="translate(&quot;#LDS#Reload page data&quot;)" />
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Label2style" Value="&quot;margin-top:5px;&quot;" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall10">
+                  <CallAction ActionID="InitCollections" ScriptItemUID="CallAction4" />
+                </ServerActionCall>
+              </Label>
+            </Container>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="BadColor()" Expression="Variable(&quot;%VI_Common_Color_Badge_Important%&quot;)" Comment="Returns the configured color value for bad progress." DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="BadProgress()" Expression="try(Convert(GetConfig(&quot;VI_Attestation_AttestationRun_ProgressLimitBad&quot;), &quot;double&quot;), 0.7)" DataType="System.Double" Comment="Returns the configured limit for bad progress.&#xD;&#xA;Progress lower or equal than this is regarded &quot;bad&quot;.&#xD;&#xA;If nothing is set, the default is 0.7" ScriptItemUID="Function2" />
+        <Function Name="CategoryColor()" Expression="if IsBad() then ColorBad() else if IsMediocre() then ColorMediocre() else ColorGood()" FilterForTable="AttestationRun" Comment="A color value according to the category of the current attestation run." DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="ColorBad()" Expression="Variable(&quot;%VI_Common_Color_Badge_Important%&quot;)" Comment="Returns the color value for bad coloring." DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="ColorGood()" Expression="Variable(&quot;%VI_Common_Color_Badge_Success%&quot;)" Comment="Returns the color value for &quot;good&quot; coloring." DataType="System.String" ScriptItemUID="Function5" />
+        <Function Name="ColorMediocre()" Expression="Variable(&quot;%VI_Common_Color_Badge_Warning%&quot;)" Comment="Returns the color value for &quot;mediocre&quot; coloring." DataType="System.String" ScriptItemUID="Function6" />
+        <Function Name="DelayString()" Expression="if (Speed &gt; 0) then (RoundUp(Delay) + &quot;&quot;) else translate(&quot;#LDS#n/a&quot;)" FilterForTable="AttestationRun" Comment="Returns the short display value of delay." DataType="System.String" ScriptItemUID="Function7" />
+        <Function Name="DelayStringLong()" Expression="if (Speed &gt; 0) then translate(&quot;#LDS#{0} days&quot;, NumFormat(Delay, &quot;0.00&quot;)) else translate(&quot;#LDS#n/a&quot;)" FilterForTable="AttestationRun" Comment="Returns the long display of delay." DataType="System.String" ScriptItemUID="Function8" />
+        <Function Name="DueDateString()" Expression="if (HasDueDate=true) then FormatDate(DueDate, &quot;d&quot;) else &quot;&quot;" FilterForTable="AttestationRun" Comment="Returns the value to display for the due date." DataType="System.String" ScriptItemUID="Function9" />
+        <Function Name="DueDateStringLong()" Expression="if (HasDueDate=true) then FormatDate(DueDate, &quot;G&quot;) else &quot;&quot;" FilterForTable="AttestationRun" Comment="Returns the long display of the due date." DataType="System.String" ScriptItemUID="Function10" />
+        <Function Name="FitsSelectedMinCategory()" Expression="if (OnlyShowBad()) then IsBad() &#xA;else (if (HideGood()) then (IsBad() OR IsMediocre()) else true)" FilterForTable="AttestationRun" DataType="System.Boolean" ScriptItemUID="Function11" />
+        <Function Name="ForecastDateString()" Expression="if (Speed &gt; 0) then FormatDate(ForecastDate, &quot;d&quot;) else translate(&quot;#LDS#n/a&quot;)" FilterForTable="AttestationRun" Comment="Returns the short display of the forecast date." DataType="System.String" ScriptItemUID="Function12" />
+        <Function Name="ForecastDateStringLong()" Expression="if (Speed &gt; 0) then FormatDate(ForecastDate, &quot;G&quot;) else translate(&quot;#LDS#n/a&quot;)" FilterForTable="AttestationRun" Comment="Returns the long display of the forecast date." DataType="System.String" ScriptItemUID="Function13" />
+        <Function Name="ForecastDateStringStyle()" Expression="if (HasDueDate = false) OR (DueDateSortable&gt;= ForecastDate)&#xD;&#xA;then &quot;&quot;&#xD;&#xA;else format(&quot;color: {0};&quot;, ColorBad())" FilterForTable="AttestationRun" Comment="Returns the appropriate css style for the forecast date." DataType="System.String" ScriptItemUID="Function14" />
+        <Function Name="ForecastProgressApplicable()" Expression="HasDueDate = true AND OverDue = false" FilterForTable="AttestationRun" DataType="System.Boolean" Comment="Returns whether for the current run progress can be forecast." ScriptItemUID="Function15" />
+        <Function Name="ForecastProgressNotApplicableExplanation()" Expression="if (HasDueDate = false) then translate(&quot;#LDS#No forecast applicable because run has no due date&quot;)&#xD;&#xA;else if (OverDue = false) then translate(&quot;#LDS#No forecast applicable because run is already overdue&quot;)" FilterForTable="AttestationRun" Comment="Returns whether for the current run progress can be forecast." DataType="System.String" ScriptItemUID="Function16" />
+        <Function Name="ForecastProgressToolTip()" Expression="translate(&quot;#LDS#Progress Forecast: {0} of {1} attestations ({2})&quot;, ForecastClosedCases, ClosedCases + PendingCases, PercentageString(ForecastProgress))" FilterForTable="AttestationRun" DataType="System.String" ScriptItemUID="Function17" />
+        <Function Name="GoodColor()" Expression="Variable(&quot;%VI_Common_Color_Badge_Success%&quot;)" Comment="Returns the configured color value for &quot;good&quot; progress." DataType="System.String" ScriptItemUID="Function18" />
+        <Function Name="GoodProgress()" Expression="try(Convert(GetConfig(&quot;VI_Attestation_AttestationRun_ProgressLimitGood&quot;), &quot;double&quot;), 0.9)" DataType="System.Double" Comment="Returns the configured limit for &quot;good&quot; progress.&#xD;&#xA;Progress greater than this value will be regarded good.&#xD;&#xA;If nothing is set the default is 0.9" ScriptItemUID="Function19" />
+        <Function Name="GetConfigDouble(string key)" Expression="EvalInCulture('', Convert(GetConfig(key), &quot;double&quot;))" Comment="Returns a configuration key that is stored as serialized double as the according double.&#xD;&#xA;(Explanation: Evaluates the string with InvariantCulture by passing null as Argument to EvalInCulture)" DataType="System.Double" ScriptItemUID="Function20" />
+        <Function Name="HideGood()" Expression="from LocalVars select ForecastProgressFilter = &quot;HideGood&quot;" DataType="System.Boolean" Comment="Returns whether the current filter is set to hide good runs." ScriptItemUID="Function21" />
+        <Function Name="IgnoreTime(DateTime aDate)" Expression="formatDate(aDate, &quot;yyyyMMdd&quot;)" Comment="Returns a date comparable string that is deprived of time.&#xD;&#xA;This enables comparing two dates regardless of time.&#xD;&#xA;I.e. IgnoreTime(date1) [compare] IgnoreTime(d2) &lt;==&gt; date1 (without time) [compare] date2 (without time)&#xD;&#xA;compare:= (&lt;, &gt;, &lt;=, &gt;=, =, !=)" DataType="System.String" ScriptItemUID="Function22" />
+        <Function Name="IsBad()" Expression="HasDueDate and ((OverDue=true) OR (Speed &lt;= 0) OR (ForecastProgress &lt;= BadProgress()))" FilterForTable="AttestationRun" DataType="System.Boolean" Comment="Returns whether the current run is &quot;Bad&quot;." ScriptItemUID="Function23" />
+        <Function Name="IsMediocre()" Expression="(Speed &gt; 0) AND (ForecastProgress &gt; BadProgress()) AND (ForecastProgress &lt;= GoodProgress())" FilterForTable="AttestationRun" DataType="System.Boolean" Comment="Returns whether the current run is &quot;Mediocre&quot;." ScriptItemUID="Function24" />
+        <Function Name="IsCategoryExplanation()" Expression="if (HasDueDate = false) &#xD;&#xA;  then translate(&quot;#LDS#This run is categorized 'good' because it has no due date.&quot;)&#xD;&#xA;else if (OverDue=true) &#xD;&#xA;  then translate(&quot;#LDS#This run is categorized bad, because it is already overdue.&quot;) &#xD;&#xA;else if (ForecastProgress &lt;= BadProgress()) &#xD;&#xA;  then translate(&quot;#LDS#This run is categorized bad, because progress on due date is forecast to be no more than {0}.&quot;, PercentageString(BadProgress()))&#xD;&#xA;else if (ForecastProgress &lt;= GoodProgress()) &#xD;&#xA;  then translate(&quot;#LDS#This run is categorized mediocre, because progress on due date is forecast to be no more than {0}.&quot;, PercentageString(GoodProgress()))&#xD;&#xA;else translate(&quot;#LDS#This run is categorized good, because progress on due date is forecast to be more than {0}.&quot;, PercentageString(GoodProgress()))" FilterForTable="AttestationRun" Comment="Returns a string explaining the categorization of the run (i.e. why it has been categorized the way it is)." DataType="System.String" ScriptItemUID="Function25" />
+        <Function Name="IsWholeNumber(System.Double someDouble)" Expression="(someDouble - Convert(someDouble, &quot;int32&quot;)) = 0" Comment="Returns wether a double is a whole number" DataType="System.Boolean" ScriptItemUID="Function26" />
+        <Function Name="LoadTime()" Expression="from LocalVars select LoadTime" DataType="System.DateTime" Comment="Returns the last time collections were reloaded." ScriptItemUID="Function27" />
+        <Function Name="Maximum(int val, int max)" Expression="Convert(if (val &gt; max) then max else val, &quot;Int32&quot;)" DataType="System.Int32" Comment="Returns the maximum of two integers." ScriptItemUID="Function28" />
+        <Function Name="MaxDate()" Expression="#9999-12-31 23:59:59#" DataType="System.DateTime" Comment="Returns the maximum system date." ScriptItemUID="Function29" />
+        <Function Name="MaxInt()" Expression="2147483647" DataType="System.Int32" Comment="Returns the maximum system integer." ScriptItemUID="Function30" />
+        <Function Name="MinDate()" Expression="#1899-12-30 00:00:00#" DataType="System.DateTime" Comment="Returns the minimum system date." ScriptItemUID="Function31" />
+        <Function Name="OnlyShowBad()" Expression="from LocalVars select ForecastProgressFilter = &quot;OnlyShowBad&quot;" DataType="System.Boolean" Comment="Returns whether the filter is set to only show &quot;bad&quot; run." ScriptItemUID="Function32" />
+        <Function Name="PercentageString(System.Double progress)" Expression="format(&quot;{0} %&quot;, RoundDown(100.0*progress))" DataType="System.String" ScriptItemUID="Function33" />
+        <Function Name="Progress(int countClosed, int countTotal)" Expression="Convert(countClosed, &quot;double&quot;)/ Convert(countTotal, &quot;double&quot;)" DataType="System.Double" Comment="Calculates and returns some progress based upon closed and total counts." ScriptItemUID="Function34" />
+        <Function Name="ProgressToolTip()" Expression="translate(&quot;#LDS#Progress so far: {0} of {1} attestations ({2})&quot;, ClosedCases, ClosedCases + PendingCases, PercentageString(Progress))" FilterForTable="AttestationRun" DataType="System.String" ScriptItemUID="Function35" />
+        <Function Name="RoundDown(System.Double someDouble)" Expression="if (IsWholeNumber(someDouble)) then Convert(someDouble, &quot;int32&quot;) else Convert(someDouble - 0.5, &quot;int32&quot;)&#xA;-- checking for whole numbers is necessary, because convert does banker's rounding, &#xA;-- so using -0.5 delivers wrong numbers on every odd whole number" DataType="System.Int32" Comment="Rounds a double down to the next lower integer." ScriptItemUID="Function36" />
+        <Function Name="RoundUp(System.Double someDouble)" Expression="if (IsWholeNumber(someDouble)) then Convert(someDouble, &quot;int32&quot;) else Convert(someDouble + 0.5, &quot;int32&quot;)&#xA;-- checking for whole numbers is necessary, because convert does banker's rounding, &#xA;-- so using +0.5 delivers wrong numbers on every odd whole number" Comment="Rounds a double up to the next higher integer." DataType="System.Int32" ScriptItemUID="Function37" />
+        <Function Name="RowCaption(string aCaption)" Expression="aCaption" Comment="Encapsulates the way texts that are row captions should be displayed" DataType="System.String" ScriptItemUID="Function38" />
+        <Function Name="SecondsDiff(DateTime dateStart, DateTime dateEnd)" Expression="{{&#xD;&#xA;@return dateEnd.Subtract(dateStart).TotalSeconds;&#xD;&#xA;}}" DataType="System.Double" Comment="Returns the number of seconds that have passed between dateStart and dateEnd.&#xD;&#xA;Normally (for a positive number) dateStart will be prior to dateEnd, but this is no requirement.&#xD;&#xA;If dateStart is later then dateEnd a negative number will be returned.&#xD;&#xA;" ScriptItemUID="Function39" />
+        <Function Name="SecondsPerDay()" Expression="24*60*60" DataType="System.Int32" Comment="Returns the number of seconds a complete day has got." ScriptItemUID="Function40" />
+        <Function Name="SecondsToDays(double seconds)" Expression="Convert(seconds, &quot;Double&quot;)/SecondsPerDay()" DataType="System.Double" Comment="Converts some number of seconds (an int) into the appropriate number of days (a double)." ScriptItemUID="Function41" />
+        <Function Name="ShowDelegatedCases()" Expression="getconfig(&quot;VI_Attestation_ShowNumberDelegatedCases&quot;)=&quot;true&quot;" DataType="System.Boolean" Comment="Returns the configured value for whether to show the number of delegated cases in the details view." ScriptItemUID="Function42" />
+        <Function Name="ShowEscalatedCases()" Expression="getconfig(&quot;VI_Attestation_ShowNumberEscalatedCases&quot;)=&quot;true&quot;" DataType="System.Boolean" Comment="Returns the configured value for whether to show the number of escalated cases in the details view." ScriptItemUID="Function43" />
+        <Function Name="Speed(double daysGone, int closedCases)" Expression="if (daysGone &gt; 0) then closedCases/daysGone else 0.0" DataType="System.Double" Comment="Calculates the attestation speed as double value in attestations/day." ScriptItemUID="Function44" />
+        <Function Name="AllowEdit()" Expression="-- visible for Compliance &amp; Security Officer&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xA;or&#xA;-- visible for ATT-AEROLE-ATTESTATIONADMIN-ADMIN&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'ATT-AEROLE-ATTESTATIONADMIN-ADMIN' and uid_person = '%useruid%'&quot;))" DataType="System.Boolean" ScriptItemUID="Function45" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,59 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="f9551d76-bb9d-ae13-839f-3e74f84efdd5">
+  <LayoutObject ID="VI_Styles_LayoutPanel_Default" Type="LayoutPanel" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="LayoutpPropItems" Comment="" />
+    <Property Name="CssClassNameColumnPrefix" Value="imx-layoutpanel-cell imx-layoutpanel-mobileblock LayoutpPropCol LayoutpPropCol" Comment="" />
+    <Property Name="CssClassNameRow" Value="LayoutpPropRow" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-layoutpanel-cell, .imx-layoutpanel-cell { display: table-cell; }
+
+.LayoutpPropItems{ margin-bottom: 1em;}
+.LayoutpPropRow  { display: table-row; min-height: %propcellminheight%; }
+.LayoutpPropCol  { min-height: %propcellminheight%; padding: 2px 4px 3px 0; vertical-align: top; }
+.LayoutpPropCol:nth-child(1) { width: %propertylabelwidth%px; }
+.LayoutpPropCol:nth-child(2) { width: %propertyeditorwidth%px;}
+.propeditor      { min-width: %propertyeditorwidth%px; }
+
+@media %IMX_Mediaquery_Smartphone%
+{
+  .LayoutpPropItems 
+  {
+     width: 100%; 
+	 margin-bottom: 0;
+	 display: table; /* to make width effective in smartphone mode*/ 
+  }
+   .imx-layoutpanel-mobileblock { 
+       display: block; 
+   }
+   
+   .imx-layoutpanel-mobileblock:nth-child(1) { width: auto; font-style: italic;}
+   .imx-layoutpanel-mobileblock:nth-child(2) { width: auto; margin-bottom: .5em;}
+}
+
+.LayoutPropItem{display:table;}</CssDocument>
+    <CssDocument CssName="HyperView CSS" ScriptItemUID="CssDocument2">.hyperviewelement table.LayoutpPropItems { width: 100%; }
+
+.hyperviewelement .LayoutpPropCol0 { padding: 0; width: 50%; font-weight: lighter;}
+.hyperviewelement .LayoutpPropCol1 { padding: 0; } </CssDocument>
+    <CssDocument CssName="Detail Pane CSS" ScriptItemUID="CssDocument3">.imx-mdc-detail .LayoutpPropRow {
+    border-bottom: 1px solid %VI_Common_Color_LightGray%; 
+    line-height: 20px;
+	min-height: 26px;
+}
+
+.imx-mdc-detail .LayoutpPropCol0 {
+    width: 146px;
+	max-width: 146px;
+	color: %VI_Common_Color_Font%; 
+}
+
+.imx-mdc-detail .LayoutpPropCol1 {
+    width: 245px; /* leave some space for scrollbars*/
+	max-width: 245px; /* #27180 */
+	color: %VI_Common_Color_Font_Secondary%;  
+	font-weight: bold;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

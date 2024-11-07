@@ -1,0 +1,131 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="5c45cb31-ed63-60e0-c5b2-9ae49f2f2705">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PWO_MasterDetail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var col = (ExpressionColumn)TableStore.GetLocalColumn(this.PersonWantsOrg, "UID_AccProduct");
+var parentMetadataProvider = col.MetadataProvider;
+col.MetadataProvider = (m, c, r) =&gt; {
+
+	var vmParent = parentMetadataProvider != null ? parentMetadataProvider(m, c, r) : m;
+	var newMetadata = new ValueMetadata(c, vmParent);
+	// Customize filtering on the UID_AccProduct property
+    var filterProvider = new Data.ColumnFilterProvider(_Connection.Tables["AccProduct"].Columns["Ident_AccProduct"]);
+    filterProvider.WhereClauseFormatter = whereClause =&gt; string.Format("uid_org in (select uid_itshoporg from itshoporg where uid_accproduct in ( select uid_accproduct from accproduct where {0}))", whereClause);
+	filterProvider.WhereClauseFormatterInverted = whereClause =&gt; string.Format("uid_accproduct in ( select uid_accproduct from itshoporg where uid_itshoporg in ( select uid_org from personwantsorg where {0}))", whereClause);
+    newMetadata.FilterProvider = filterProvider;
+	return newMetadata;
+};</CodeLiteral>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container2">
+              <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+                <ControlReferenceGridBand ID="VI_ITShop_PwoOverviewGrid" ScriptItemUID="ControlRef1" DataTable="">
+                  <VirtualFunctionMapping ID="DbWhereClause()" Value="DbWhereClause()" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping2">
+                    <VirtualColumnMapping VirtualColumn="UID_PWOSelected" DataColumn="UID_PWOSelected" />
+                  </VirtualTableMapping>
+                  <VirtualControlMapping VirtualControl="AdditionalControlsColumn1" ContainerType="Container">
+                    <Container ScriptItemUID="Container1">
+                      <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef5" />
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="HeaderControls">
+                    <ControlList ScriptItemUID="ControlList4">
+                      <ControlReferenceControlList ID="HeaderControls" ScriptItemUID="ControlRef6" />
+                    </ControlList>
+                  </VirtualControlMapping>
+                </ControlReferenceGridBand>
+              </Grid>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container3">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PersonWantsOrg" WhereClause="uid_personwantsorg = ( from vars select uid_pwoselected)" Layout="" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate1style" Value="" />
+                </HtmlAttributes>
+                <ControlReferenceControlList ID="VI_ITShop_PWO_Detail" ScriptItemUID="ControlRef2">
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="ShowCancelOrder()" Value="ShowCancelOrder()" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualControlMapping VirtualControl="AdditionalActions" ContainerType="ControlList">
+                    <ControlList ScriptItemUID="ControlList2">
+                      <ControlReferenceContainer ID="AdditionalActions" ScriptItemUID="ControlRef3" />
+                    </ControlList>
+                  </VirtualControlMapping>
+                </ControlReferenceControlList>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList3">
+                <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="PersonWantsOrg" WhereClause="uid_personwantsorg = ( from vars select uid_pwoselected)" Layout="" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate2style" Value="" />
+                  </HtmlAttributes>
+                  <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef4">
+                    <VirtualFunctionMapping ID="Caption2()" Value="translate(&quot;#LDS#Status&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                    <VirtualFunctionMapping ID="Value1()" Value="from personwantsorg select current displayvalue(uid_accproduct)" ScriptItemUID="VirtualFunctionMapping6" />
+                    <VirtualFunctionMapping ID="Value2()" Value="from personwantsorg select current displayorderstate()" ScriptItemUID="VirtualFunctionMapping7" />
+                    <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot;+(from personwantsorg select current tablename)" ScriptItemUID="VirtualFunctionMapping8" />
+                    <VirtualFunctionMapping ID="Value2CssClass()" Value="&quot;imx-icon &quot;+&#xD;&#xA;from personwantsorg select current&#xD;&#xA;(&#xD;&#xA;if(IsLogicallyAssigned())&#xD;&#xA;then &quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else if (orderstate in ('New', 'OrderProduct', 'Waiting', 'OrderProlongate', 'OrderUnsubscribe'))&#xD;&#xA;then &quot;imx-icon-Workflow&quot;&#xD;&#xA;else if (orderstate in ('Dismissed', 'Aborted'))&#xD;&#xA;then &quot;imx-icon-Error&quot;&#xD;&#xA;else if (orderstate = 'Granted')&#xD;&#xA;then &quot;imx-icon-BlueCheckmark&quot;&#xD;&#xA;else if(orderstate='Unsubscribed' and uid_accproduct in (select uid_accproduct from accproduct where (helperisreusable and not(helperisreusablewithunsubscribe))))&#xD;&#xA;then &quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else if (orderstate in ('Unsubscribed'))&#xD;&#xA;then &quot;imx-icon-AssignedNone&quot;&#xD;&#xA;else &quot;&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                  </ControlReferenceControlList>
+                </ContainerTemplate>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_PWOSelected" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+        <DataTableCRView Table="PWODecisionHistory" Class="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+        </DataTableCRView>
+        <DataTableFKView Table="ITShopOrg" ViewFKDataTable="PersonWantsOrg" ViewFKDataColumn="UID_Org" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+        </DataTableFKView>
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="ITShopOrg" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+          <Column Name="HelperIsReusable" DataType="System.Boolean" ScriptItemUID="Column9" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossible : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+          <Column Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" ScriptItemUID="Column10" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossibleUnsubscribe : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetProlongationSuffix()" Expression="select current&#xA;(if(orderstate=&quot;OrderProlongate&quot;) then (&quot; &quot;+translate(&quot;#LDS#until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)))&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function ScriptItemUID="Function2" Name="IsLogicallyAssigned()" DataType="System.Boolean" Expression="-- the orderstate is &quot;Unsubscribed&quot; but the request should be displayed as being &quot;assigned&quot;&#xD;&#xA;&#xD;&#xA;orderstate=&quot;Assigned&quot; or (orderstate='Unsubscribed' and uid_accproduct in (select uid_accproduct from accproduct where (helperisreusable and not(helperisreusablewithunsubscribe))))" TriggerUpdates="Never" FilterForTable="PersonWantsOrg" />
+        <Function ScriptItemUID="Function3" Name="DisplayOrderState()" DataType="System.String" Expression="-- #14518 special handling for cases where orderstate is user-unfriendly&#xD;&#xA;select current &#xD;&#xA;(&#xD;&#xA;if(IsLogicallyAssigned()) then&#xD;&#xA;translatecolumn(&quot;Assigned&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)&#xD;&#xA;else&#xD;&#xA;displayvalue(orderstate)&#xD;&#xA;)&#xD;&#xA;from PersonWantsOrg&#xD;&#xA;&#xD;&#xA;+ GetProlongationSuffix()" TriggerUpdates="Never">
+          <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor2" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="VirtualTable1">
+        <Column Name="UID_AccProduct" DataType="System.String" ScriptItemUID="Column11" DataSource="Expression" Expression="from itshoporg select top 1 uid_accproduct where uid_itshoporg = ( from personwantsorg select current uid_org)" ColumnDataSource="ForeignKey" DBTableName="&quot;AccProduct&quot;" DBColumnName="&quot;UID_AccProduct&quot;" FKWhereClause="" />
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column2" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, this.TableStore.GetLocalColumn(this.PersonWantsOrg, &quot;UID_AccProduct&quot;).GetValue(queryRow)).Result.TableName }}+&quot;&quot;" />
+      </VirtualTable>
+      <VirtualFunction Signature="ShowCancelOrder()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalActions" ContainerType="Container">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalControlsColumn1" ContainerType="Container">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualControl ContainerType="ControlList" ID="HeaderControls" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

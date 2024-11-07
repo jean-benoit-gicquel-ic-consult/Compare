@@ -1,0 +1,99 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="QBM_Styles_Container_UserMenu_horizontal" Type="Container">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="userMenuHorizontal imx-mobile-nomobile" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.userMenuHorizontal  
+{
+  position: absolute; 
+  left: 0; 
+  top: %headerheight%px; 
+  right: 0;
+  line-height: %UserNavigationHeight%px;
+  height: %UserNavigationHeight%px;
+  color:  %VI_Common_Color_Font%;
+  font-size: 1.1em; 
+  display: flex;
+}
+
+.userMenuHorizontal .k-widget {
+     font-weight: inherit;
+     font-family: inherit;
+     font-size: inherit;
+}
+.userMenuHorizontal .k-header {
+    height: 100%;
+}
+
+.userMenuHorizontal .k-state-active
+{
+    background-color: %VI_Common_Color_ColorBase1%;
+	color: %VI_Common_Color_Blue_1%;
+}
+
+.userMenuHorizontal .k-state-hover,
+.userMenuHorizontal .k-state-hover&gt;.k-state-active, 
+.userMenuHorizontal .k-item.k-state-hover&gt;a{
+    color: %VI_Common_Color_ColorBase1%;
+	background-color: %VI_Common_Color_Blue_1%;
+}
+
+.userMenuHorizontal .k-link&gt;.k-icon {
+    display: none;
+}
+
+.userMenuHorizontal .k-item &gt; .NavListLabel.k-link {
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+.userMenuHorizontal .k-menu .k-item&gt;.k-link,
+.userMenuHorizontal .k-menu-scroll-wrapper .k-item&gt;.k-link
+{
+    line-height: 1em;
+	padding: 0.73em
+}
+
+.userMenuHorizontal &gt; * {
+    /*needed for the flex layout --&gt; https://drafts.csswg.org/css-flexbox/#min-size-auto*/
+    min-width: 1em;
+	min-height: 1em;
+}
+
+.userMenuHorizontal .imx-startpagelink {
+    padding: 0 1em;
+	flex: 0 0 auto;
+}
+
+.userMenuHorizontal .imx-startpagelink &gt; a.iconFont,
+.imx-menudropdown .imx-startpagelink &gt; a.iconFont {
+    color: %VI_Common_Color_ColorBase3%; 
+	font-size: 1.6em; 
+	text-decoration: none; 
+}
+
+.userMenuHorizontal .imx-navigationMenu
+{
+   flex: 1 1 auto; 
+   width: 100%;
+}
+
+.userMenuHorizontal .imx-settingsmenu {
+	padding-right: 1em;
+	flex: 0 0 auto;
+}
+
+.userMenuHorizontal ul[role="menubar"] .k-state-default
+{
+	border: rgba(255, 255, 255, 0) solid 1px;
+}
+
+.userMenuHorizontal ul[role="menubar"] li.k-state-focused, 
+.userMenuHorizontal ul[role="menubar"] li.k-state-active
+{
+	border: Highlight dotted 1px;
+	border: -webkit-focus-ring-color auto 1px;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

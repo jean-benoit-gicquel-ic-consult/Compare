@@ -1,0 +1,53 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="41">
+        <ConfigEntry Key="Filter_ColumnEditor_AttestationPolicy.UID_AttestationObject" Value="&quot;uid_attestationobject in ( select uid_attestationobject from attestationwizardparm)&quot;" ScriptItemUID="ATTConfigEntry1" />
+        <ConfigEntry Key="ColumnEditor_AttestationPolicy.WhereClauseMeta" Value="VI_Edit_Special_AttestationPolicy_WhereClauseMeta" ScriptItemUID="ATTConfigEntry2" />
+        <ConfigEntry Key="ColumnViewer_AttestationCase.RiskIndex" Value="VI_Compliance_RiskIndexDisplay" ScriptItemUID="ATTConfigEntry3" />
+        <ConfigEntry Key="ColumnViewer_AttestationCase.DateHead" Value="VI_Edit_View_DateTimeago" ScriptItemUID="ATTConfigEntry4" />
+        <ConfigEntry Key="ColumnViewer_AttestationRun.PolicyProcessed" Value="VI_Edit_View_DateTimeago" ScriptItemUID="ATTConfigEntry5" />
+        <ConfigEntry Key="ColumnViewer_AttestationCase.ToSolveTill" Value="VI_Edit_View_DateTimeago" ScriptItemUID="ATTConfigEntry7" />
+        <ConfigEntry Key="ColumnViewer_AttestationHistory.DateHead" Value="VI_Edit_View_DateTimeago" ScriptItemUID="ATTConfigEntry6" />
+        <ConfigEntry Key="Filter_ColumnEditor_AccProduct.UID_OrgAttestator" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;ATT-AEROLE-ITSHOPADMIN-ATTESTATOR&quot;))" ScriptItemUID="ATTConfigEntry8" />
+        <ConfigEntry Key="Filter_ColumnEditor_Department.UID_OrgAttestator" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;ATT-AEROLE-STRUCTADMIN-ATTESTATOR&quot;))" ScriptItemUID="ATTConfigEntry9" />
+        <ConfigEntry Key="Filter_ColumnEditor_ProfitCenter.UID_OrgAttestator" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;ATT-AEROLE-STRUCTADMIN-ATTESTATOR&quot;))" ScriptItemUID="ATTConfigEntry10" />
+        <ConfigEntry Key="Filter_ColumnEditor_Locality.UID_OrgAttestator" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;ATT-AEROLE-STRUCTADMIN-ATTESTATOR&quot;))" ScriptItemUID="QERConfigEntry138" />
+        <ConfigEntry ScriptItemUID="ATTConfigEntry11" Key="ColumnEditor_AttestationPolicy.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" />
+        <ConfigEntry ScriptItemUID="ATTConfigEntry12" Key="ColumnEditor_AttestationCase.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" />
+      </AddObject>
+      <AddObject ObjectID="SubProjects1" ObjectType="SubProjects" SortOrder="0">
+        <SubProject ID="VI_UserRegistration_Web" />
+      </AddObject>
+      <AddObject ObjectID="MenuItem7" ObjectType="MenuItem" SortOrder="45">
+        <MenuItem ID="VI_Attestation_EscalationApproval" Title="translate(&quot;#LDS#Escalation&quot;)" ContextID="VI_Attestation" Condition="IsPreProp(&quot;Attestation&quot;) and exists(&quot;PersonInAERole&quot;, format(&quot;uid_person = {0} and uid_aerole = 'ATT-AEROLE-ATTESTATION-INTERVENTION'&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" ScriptItemUID="ATTMenuItem10">
+          <Parameters>
+            <RedirectParameter Name="'IsEscalation'" Value="&quot;true&quot;" />
+          </Parameters>
+        </MenuItem>
+      </AddObject>
+      <AddObject ObjectID="MenuItem7" ObjectType="MenuItem" SortOrder="30">
+        <MenuItem ID="VI_Audit_AttestationHistory" Title="translate(&quot;#LDS#Auditing&quot;)" ContextID="VI_Attestation_History" Tooltip="translate('#LDS#Attestation overview')" Condition="GetConfigParm(&quot;QER\Attestation&quot;) = &quot;1&quot;&#xD;&#xA;AND &#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ('CAP-AEROLE-AUDITING-AUDITOR')&quot;&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="ATTMenuItem9">
+          <Parameters>
+            <RedirectParameter Name="'AuditMode'" Value="'YES'" />
+          </Parameters>
+        </MenuItem>
+      </AddObject>
+      <AddObject ObjectID="MenuItem7" ObjectType="MenuItem" SortOrder="15">
+        <MenuItem ID="ATT_Attestation_MyAttestations" ScriptItemUID="ATTMenuItem14" Title="translate(&quot;#LDS#My Attestation Status&quot;)" Condition="IsPreProp(&quot;Attestation&quot;)" ContextID="ATT_Attestation_MyAttestations">
+          <Parameters />
+        </MenuItem>
+      </AddObject>
+      <AddObject ObjectID="MenuItem7" ObjectType="MenuItem" SortOrder="20">
+        <MenuItem ID="ATT_Attestation_MyActions" Title="translate(&quot;#LDS#Heading My Actions&quot;)" Condition="IsPreProp(&quot;Attestation&quot;)" ScriptItemUID="ATTMenuItem15" ContextID="ATT_Attestation_MyActions">
+          <Parameters />
+        </MenuItem>
+      </AddObject>
+      <AddObject ObjectID="MenuItem7" ObjectType="MenuItem" SortOrder="35">
+        <MenuItem ID="ATT_Attestation_AttestationPolicies" ScriptItemUID="ATTMenuItem17" Title="translate('#LDS#Governance Administration')" ContextID="ATT_Attestation_AttestationPolicies" Condition="IsNull(GetConfigParm(&quot;QER\Attestation&quot;), &quot;0&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;(&#xD;&#xA;-- visible for Compliance &amp; Security Officer&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for ATT-AEROLE-ATTESTATIONADMIN-ADMIN&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'ATT-AEROLE-ATTESTATIONADMIN-ADMIN' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for policy owners&#xD;&#xA;exists(&quot;attestationpolicy&quot;, SqlCompareUid(&quot;UID_PersonOwner&quot;, GetUser()))&#xD;&#xA;)">
+          <Parameters />
+        </MenuItem>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

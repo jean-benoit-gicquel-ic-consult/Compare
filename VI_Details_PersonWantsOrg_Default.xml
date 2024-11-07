@@ -1,0 +1,31 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="+h8lVKkd9oxpFATtAnZncQ==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Details_PersonWantsOrg_Default" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+(from personwantsorg select current tablename)" />
+        </HtmlAttributes>
+        <Container ScriptItemUID="Container2">
+          <Label Text="from personwantsorg select current displayvalue(displayorg)" ScriptItemUID="Label1" />
+        </Container>
+        <ControlReferenceContainer ID="VI_ITShop_AssignmentInfo" ScriptItemUID="ControlReferenceContainer2" />
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_PersonWantsOrg" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column1" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, PersonWantsOrg_UID_AccProduct.GetValue(queryRow)).Result.TableName }}+&quot;&quot;" />
+      </VirtualTableExtension>
+      <VirtualTableExtension Name="AccProduct" Class="AccProduct" ScriptItemUID="VirtualTableExtension2" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,349 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_ProductSelection_ReferenceUser" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_Filter_AccProduct_Copy" Description="translate(&quot;#LDS#Filter for requests which can be copied from a reference employee&quot;)" Type="SQL" DatabaseTable="AccProduct" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action7" />
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="ReferenceUser" NavigationTitle="translate(&quot;#LDS#Requests for&quot;)+&quot; &quot;+(from personreference select current display())" PageFileName="VI_FormTemplate_Standard" ScriptItemUID="Form1">
+          <ActionSequence ScriptItemUID="Action1" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+            <Label Text="translate(&quot;#LDS#Requests for&quot;)+&quot; &quot;+(from personreference select current display())" ScriptItemUID="Label1" />
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+            <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+              <Action ScriptItemUID="Action2">
+                <LoadTable DataTable="AccProductReferenceUser" WhereClause="format(&quot;({0}) and uid_accproduct in ( select p.uid_accproduct from QER_VPWOProductNodes p join personhasobject pho on pho.ObjectKey = p.ObjectKeyOrdered where pho.UID_Person = {1})&quot;,&#xD;&#xA;variable(getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;)),&#xD;&#xA;from PersonReference select current sqlformatvalue(UID_Person, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable1">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                </LoadTable>
+                <LoadTable DataTable="PersonInBaseTree" WhereClause="SqlAnd(&#xD;&#xA;   sqlcompareuid(&quot;UID_Person&quot;, from PersonReference select current uid_person),&#xD;&#xA;   if(isSinglePersonRequest())then(&#xD;&#xA;      format(&quot;UID_Org not in (select UID_Org from PersonInBaseTree where {0})&quot;, sqlcompareuid(&quot;UID_Person&quot;, personfororder()))&#xD;&#xA;   )&#xD;&#xA;   ,&#xD;&#xA;   Format(&quot;UID_Org in (select UID_Org from Basetree where UID_OrgRoot in (select UID_OrgRoot from OrgRoot where {0}))&quot;,&#xD;&#xA;      SqlOr(&#xD;&#xA;	     &quot;UID_OrgRoot in ('QER-V-Locality', 'QER-V-Department', 'QER-V-ProfitCenter', 'QER-V-AERole')&quot;,&#xD;&#xA;         if(IsPreProp(&quot;ORG&quot;))then&#xD;&#xA;            &quot;UID_OrgRoot in ( select uid_orgroot from org)&quot;&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable2">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                </LoadTable>
+                <Delete DataTable="ObjectsAssignment" ScriptItemUID="Delete1" />
+                <FillTable DataTable="ObjectsAssignment" Source="XObjectKey" DataTableSource="BaseTree" DataColumnSource="XObjectKey" WhereClause="" DataColumnTableName="Tablename" DataColumnXObjectKey="ObjectKey" ScriptItemUID="FillTable1">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" />
+                  <FillTableDisplayColumn DataColumn="FullPath" />
+                  <FillTableDisplayColumn DataColumn="Description" />
+                </FillTable>
+              </Action>
+            </Activator>
+            <Container Condition="0 &lt; select count() from accproductreferenceuser or 0 &lt; select count() from objectsassignment" ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer1">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#The following requests have been granted to {0}. Please select the products which you would like to request.&quot;, from personreference select current display())" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ItemUID="PRODUCTS" ScriptItemUID="Container2">
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="AccProductReferenceUser" EntriesPerPage="10" ScriptItemUID="GridBand1" RowSelection="Action" RowSelectionActive="">
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                            <ControlList ScriptItemUID="ControlList7">
+                              <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from AccProductReferenceUser select current tablename" />
+                                </HtmlAttributes>
+                                <Label ScriptItemUID="Label8" Text="from AccProductReferenceUser select current Display()" />
+                              </Container>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                            <ControlList ScriptItemUID="ControlList8">
+                              <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef1">
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="IsReadOnly()" Value="not(select current orderablestatus from AccProductReferenceUser)" />
+                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping6" VirtualTable="EditTable" DataTable="AccProductReferenceUser">
+                                  <VirtualColumnMapping DataColumn="RequestThis" VirtualColumn="DoSelect" />
+                                </VirtualTableMapping>
+                              </ControlReferenceControlList>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                            <ControlList ScriptItemUID="ControlList9">
+                              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef5">
+                                <VirtualTableMapping VirtualTable="EditTable" DataTable="AccProductReferenceUser" ScriptItemUID="VirtualTableMapping8" />
+                                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping11">
+                                  <ColumnList ScriptItemUID="ColumnList3">
+                                    <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="UID_AccProductGroup" />
+                                    <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_OrgRuler" />
+                                    <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="Description" />
+                                  </ColumnList>
+                                </VirtualFunctionMapping>
+                              </ControlReferenceContainer>
+                            </ControlList>
+                          </VirtualControlMapping>
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </GridBandListView>
+                    <SelectionAction ScriptItemUID="ServerActionCall5">
+                      <ActionSequence ScriptItemUID="Action3" Condition="select current orderablestatus from AccProductReferenceUser">
+                        <Update DataColumn="RequestThis" DataTable="AccProductReferenceUser" ScriptItemUID="Update1" WhereClause="PrimaryKey() = (from AccProductReferenceUser select current PrimaryKey())" Value="not(from AccProductReferenceUser select current RequestThis)" />
+                      </ActionSequence>
+                    </SelectionAction>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn Layout="'VI_Styles_GridColumn_Centered'" Width="&quot;120px&quot;" ScriptItemUID="GridColumn1">
+                      <GridColumnHeader ScriptItemUID="wctl4">
+                        <Label Text="translate(&quot;#LDS#Request&quot;)" ScriptItemUID="Label2" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell1">
+                        <SwitchContainer ScriptItemUID="Switch1">
+                          <SwitchContainerCase ScriptItemUID="Case1" Condition="select current orderablestatus from AccProductReferenceUser" ItemUID="ORDERABLE">
+                            <Container ScriptItemUID="Container49" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'title'" ScriptItemUID="Container49title" Value="translate('#LDS#Add to cart')" />
+                              </HtmlAttributes>
+                              <CheckBox DataTable="AccProductReferenceUser" DataColumn="RequestThis" ScriptItemUID="CheckBox3" Text="" />
+                            </Container>
+                          </SwitchContainerCase>
+                          <SwitchContainerCase ScriptItemUID="Case2" ItemUID="NOTORDERABLE">
+                            <Container ScriptItemUID="Container50" Layout="'VI_Styles_Container_Inline'">
+                              <LinkContainer ScriptItemUID="LinkContainer3" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;imx-icon imx-icon-AssignedNone&quot;" />
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="LinkContainer3title" Value="translate('#LDS#This product cannot currently be requested.')" />
+                                </HtmlAttributes>
+                                <ControlList ScriptItemUID="ControlList5" />
+                                <ServerActionCall ScriptItemUID="ServerActionCall13">
+                                  <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction21">
+                                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#This product cannot be requested at the moment.&quot;)" ScriptItemUID="VirtualFunctionMapping35" />
+                                    <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping36" />
+                                    <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from AccProductReferenceUser select current display()" ScriptItemUID="VirtualFunctionMapping37" />
+                                    <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping38" />
+                                  </CallAction>
+                                </ServerActionCall>
+                              </LinkContainer>
+                            </Container>
+                          </SwitchContainerCase>
+                        </SwitchContainer>
+                      </Cell>
+                    </GridColumn>
+                    <ControlReferenceGridColumnGroup ID="VI_ITShop_AccProduct_GridColumns" DataTable="AccProductReferenceUser" ScriptItemUID="wctl1">
+                      <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProductReferenceUser" ScriptItemUID="VirtualTableMapping1" />
+                    </ControlReferenceGridColumnGroup>
+                  </GridBand>
+                </Grid>
+              </Container>
+              <Container ItemUID="ASSIGNMENT" ScriptItemUID="Container3" Condition="0 &lt; select count() from objectsassignment">
+                <Container ScriptItemUID="Container4">
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer2">
+                    <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#{0} is a member of the following organizational structures. Please select the memberships which you would like to request.&quot;, from personreference select current display())" ScriptItemUID="VirtualFunctionMapping2" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Container ScriptItemUID="Container5">
+                  <Grid ScriptItemUID="Grid2">
+                    <GridBand DataTable="ObjectsAssignment" OrderBy="'FullPath'" EntriesPerPage="10" ScriptItemUID="GridBand2" RowSelection="Action" RowSelectionActive="">
+                      <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="true">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef2">
+                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                              <ControlList ScriptItemUID="ControlList6">
+                                <Container ScriptItemUID="Container11" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from objectsassignment select current tablename" />
+                                  </HtmlAttributes>
+                                  <Label ScriptItemUID="Label9" Text="from objectsassignment select current fullpath" />
+                                </Container>
+                              </ControlList>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                              <ControlList ScriptItemUID="ControlList4">
+                                <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef4">
+                                  <VirtualTableMapping ScriptItemUID="VirtualTableMapping7" VirtualTable="EditTable" DataTable="ObjectsAssignment">
+                                    <VirtualColumnMapping DataColumn="RequestThis" VirtualColumn="DoSelect" />
+                                  </VirtualTableMapping>
+                                </ControlReferenceControlList>
+                              </ControlList>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                              <ControlList ScriptItemUID="ControlList3">
+                                <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef3">
+                                  <VirtualTableMapping VirtualTable="EditTable" DataTable="ObjectsAssignment" ScriptItemUID="VirtualTableMapping5" />
+                                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping24">
+                                    <ColumnList ScriptItemUID="ColumnList2">
+                                      <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="Tablename" Caption="translate('#LDS#Type')" DisplayValueExpression="DataCaption(from objectsassignment select current Tablename)" />
+                                      <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Description" />
+                                    </ColumnList>
+                                  </VirtualFunctionMapping>
+                                </ControlReferenceContainer>
+                              </ControlList>
+                            </VirtualControlMapping>
+                          </ControlReferenceControlList>
+                        </ControlList>
+                      </GridBandListView>
+                      <SelectionAction ScriptItemUID="ServerActionCall6">
+                        <Update DataColumn="RequestThis" DataTable="ObjectsAssignment" ScriptItemUID="Update4" WhereClause="PrimaryKey() = (from ObjectsAssignment select current PrimaryKey())" Value="not(from ObjectsAssignment select current RequestThis)" />
+                      </SelectionAction>
+                      <GridFilters ScriptItemUID="GridFilters2" />
+                      <GridRows />
+                      <GridColumn Width="&quot;120px&quot;" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="GridColumn2">
+                        <GridColumnHeader ScriptItemUID="wctl5">
+                          <Label Text="translate(&quot;#LDS#Request&quot;)" ScriptItemUID="Label3" />
+                        </GridColumnHeader>
+                        <Cell ScriptItemUID="Cell2">
+                          <CheckBox DataTable="ObjectsAssignment" DataColumn="RequestThis" ScriptItemUID="CheckBox2" Text="" />
+                        </Cell>
+                      </GridColumn>
+                      <GridColumn SortColumn="FullPath" ScriptItemUID="GridColumn3" AutoFilterColumn="FullPath">
+                        <GridColumnHeader ScriptItemUID="wctl6">
+                          <Label Text="datacaption(&quot;basetree&quot;, &quot;fullpath&quot;)" ScriptItemUID="Label7" />
+                        </GridColumnHeader>
+                        <Cell ScriptItemUID="Cell3">
+                          <Image Source="File" FileName="from objectsassignment select current variable(format(&quot;%permanentlink%dialogImgTbl={0}&quot;, tablename))" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image1" />
+                          <Label Text="from objectsassignment select current fullpath" Action="Redirect" ScriptItemUID="Label4">
+                            <ServerActionCall ScriptItemUID="ServerActionCall1">
+                              <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                                <RedirectParameter Name="'ObjectKey'" Value="from objectsassignment select current objectkey" />
+                              </Redirect>
+                            </ServerActionCall>
+                          </Label>
+                        </Cell>
+                      </GridColumn>
+                      <GridColumn Width="&quot;350px&quot;" SortColumn="Description" ScriptItemUID="GridColumn4">
+                        <GridColumnHeader ScriptItemUID="wctl7">
+                          <Label Text="datacaption(&quot;Locality&quot;,&quot;description&quot;)" ScriptItemUID="Label5" />
+                        </GridColumnHeader>
+                        <Cell ScriptItemUID="Cell4">
+                          <Label Text="select current description from objectsassignment" ScriptItemUID="Label6" />
+                        </Cell>
+                      </GridColumn>
+                    </GridBand>
+                  </Grid>
+                </Container>
+              </Container>
+              <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container6">
+                <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect2" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Add to cart&quot;)" EnabledCondition="(0 &lt; select count() from accproductreferenceuser where (requestthis)) or (0 &lt; select count() from objectsassignment where (requestthis))" ScriptItemUID="Button2">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Delete DataTable="ShoppingCartItem" ScriptItemUID="Delete2" />
+                    <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="CallAction1">
+                      <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping2" />
+                    </CallAction>
+                    <ActionSequence ScriptItemUID="Action6" ItemUID="Orders">
+                      <ForeachRow DataTable="AccProductReferenceUser" WhereClause="requestthis" ScriptItemUID="ForeachRow2">
+                        <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ScriptItemUID="wctl2" ReferenceType="AccProduct" UIDAccProduct="from accproductreferenceuser select current uid_accproduct">
+                          <VirtualFunctionMapping ID="uidaccproduct()" Value="from accproductreferenceuser select current uid_accproduct" ScriptItemUID="VirtualFunctionMapping3" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from shoppingcartorder select top 1 uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping4" />
+                          <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="PersonsForOrder" ScriptItemUID="VirtualTableMapping3" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="IsNoCopyParametersPerson()" Value="from AccProductReferenceUser select current IsNoCopyParametersPerson" />
+                        </AccProductSwitchCallAction>
+                      </ForeachRow>
+                    </ActionSequence>
+                    <ActionSequence ScriptItemUID="Action5" ItemUID="Assignmentorders">
+                      <ForeachRow DataTable="PersonsForOrder" ScriptItemUID="ForeachRowPersonsForOrder">
+                        <LoadTable DataTable="Person" ScriptItemUID="LoadTable5" WhereClause="SqlCompareUid(&quot;UID_Person&quot;,from PersonsForOrder select current UID_Person)">
+                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" />
+                        </LoadTable>
+                        <ForeachRow DataTable="ObjectsAssignment" WhereClause="requestthis" ScriptItemUID="ForeachRowObjectsAssignment">
+                          <Update DataTable="ObjectsAssignment" DataColumn="ObjectKeyAssignment" Value="from PersonInBaseTree select top 1&#xD;&#xA;replace(XObjectKey, from PersonReference select current UID_Person, from PersonsForOrder select current UID_Person)&#xD;&#xA;where UID_Org = ( select current PrimaryKey() from ObjectsAssignment)" WhereClause="primarykey() = ( select current primarykey() from objectsassignment)" ScriptItemUID="Update2" />
+                          <Update DataTable="ObjectsAssignment" DataColumn="AssignmentProduct" Value="VI_GetAccproductAssignmentMember(from PersonsForOrder select current UID_Person, objectkeyassignment)" WhereClause="primarykey() = ( select current primarykey() from objectsassignment)" ScriptItemUID="Update3" />
+                          <ActionSequence ScriptItemUID="Action14" Condition="0 = (select Count() from AssignmentProducts Where primarykey() = (select Current primarykey() from objectsassignment))">
+                            <LoadTable DataTable="AssignmentProducts" ScriptItemUID="LoadTable4" WhereClause="SqlCompareUid(&quot;UID_AccProduct&quot;, from ObjectsAssignment select AssignmentProduct Where primarykey() = ( select Current primarykey() from objectsassignment))" RemoveDeleted="false" RevertExisting="false">
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+                            </LoadTable>
+                          </ActionSequence>
+                          <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ScriptItemUID="wctl3" ReferenceType="AccProduct" UIDAccProduct="from objectsassignment select current assignmentproduct">
+                            <VirtualFunctionMapping ID="uidaccproduct()" Value="from objectsassignment select current assignmentproduct" ScriptItemUID="VirtualFunctionMapping5" />
+                            <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from shoppingcartorder select top 1 uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping6" />
+                            <VirtualFunctionMapping ID="ObjectKeyAssignment()" Value="from objectsassignment select current objectkeyassignment" ScriptItemUID="VirtualFunctionMapping7" />
+                            <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="Person" ScriptItemUID="VirtualTableMapping4" />
+                            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="IsNoCopyParametersPerson()" Value="from AssignmentProducts select IsNoCopyParametersPerson Where primarykey() = (select Current primarykey() from objectsassignment)" />
+                          </AccProductSwitchCallAction>
+                        </ForeachRow>
+                      </ForeachRow>
+                    </ActionSequence>
+                    <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction9" />
+                    <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCart" ScriptItemUID="Redirect3" AllowReturnToThisContext="false" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Create template&quot;)" ScriptItemUID="Button4">
+                  <ServerActionCall ScriptItemUID="ServerActionCall7">
+                    <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCartPatternAddOrMerge" AllowReturnToThisContext="true" ScriptItemUID="Redirect5">
+                      <RedirectParameter Name="'UID_Person_ReferenceUser'" Value="from PersonReference select top 1 UID_Person" />
+                    </Redirect>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+            <Container Condition="0 = select count() from accproductreferenceuser and 0= select count() from objectsassignment" ItemUID="nothing to request" ScriptItemUID="Container7">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer3">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#There are currently no requests.&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+              </ControlReferenceContainer>
+              <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container8">
+                <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                    <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect4" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AccProduct" Table="AccProductReferenceUser" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action8" />
+          <Column Name="RequestThis" DataType="System.Boolean" ScriptItemUID="Column1" />
+          <Column Name="OrderableStatus" Expression="if(isSinglePersonRequest())then(&#xD;&#xA;   exists(&quot;AccProduct&quot;,format(&quot;uid_accproduct in (select uid_accproduct from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,sqlformatvalue(personfororder(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,sqlformatvalue(UID_AccProduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,&quot;null&quot;)))&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   true&#xD;&#xA;)" DataSource="Expression" ScriptItemUID="Column14" DataType="System.Boolean" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column27" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName }}+&quot;&quot;" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="ObjectsAssignment" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric1" TriggerUpdates="Never">
+          <Column Name="Tablename" ScriptItemUID="Column4" DataType="System.String" />
+          <Column Name="ObjectKey" ScriptItemUID="Column5" DataType="System.String" />
+          <Column Name="FullPath" Expression="objectwalker(&quot;FullPath&quot;)+&quot;&quot;" DataSource="Expression" ScriptItemUID="Column6" DataType="System.String" />
+          <Column Name="Description" Expression="objectwalker(&quot;Description[d]&quot;)+&quot;&quot;" DataSource="Expression" ScriptItemUID="Column7" DataType="System.String" Caption="DataCaption(&quot;Locality&quot;,&quot;Description&quot;)" />
+          <Column Name="RequestThis" DataType="System.Boolean" ScriptItemUID="Column8" TriggerUpdates="Updates" />
+          <Column Name="ObjectKeyAssignment" MaxLength="" ScriptItemUID="Column9" DataType="System.String" />
+          <Column Name="AssignmentProduct" ScriptItemUID="Column10" DataType="System.String" MinLength="" MaxLength="" />
+        </DataTableGeneric>
+        <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrder" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartItem" Table="ShoppingCartItem" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action11" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonInBaseTree" Table="PersonInBaseTree" ScriptItemUID="DataTableDbObject4">
+          <ActionSequence ScriptItemUID="Action9">
+            <LoadTable DataTable="BaseTree" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+        </DataTableDbObject>
+        <DataTableDbObject Class="BaseTree" Table="BaseTree" WhereClauseSQL="Format(&quot;UID_Org in (select UID_Org from PersonInBaseTree where {0})&quot;,WhereClause(PersonInBaseTree))" ScriptItemUID="DataTableDbObject5">
+          <ActionSequence ScriptItemUID="Action12" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject6">
+          <ActionSequence ScriptItemUID="Action13" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject7" Table="AssignmentProducts" Class="AccProduct" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="personfororder()" Expression="from PersonsForOrder select top 1 UID_Person" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="isSinglePersonRequest()" Expression="1 = from PersonsForOrder select Count()" DataType="System.Boolean" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonReference" Class="Person" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="PersonsForOrder" Class="Person" ScriptItemUID="VirtualTable2" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

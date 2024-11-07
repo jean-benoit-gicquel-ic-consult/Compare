@@ -1,0 +1,70 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_PersonWantsOrg_NewManager">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container Condition="from personwantsorg select current (orderstate = 'OrderProduct')" ScriptItemUID="Container3">
+          <Container Condition="from personwantsorg select current (orderdetail1 = ( select top 1 xobjectkey from user))" ItemUID="-- Approval as new manager" ScriptItemUID="Container4" Layout="'VI_Styles_Container_Paragraph'">
+            <Label Text="translate(&quot;#LDS#Please confirm that you will be the new manager for {0}, effective {1}.&quot;, from personwantsorg select current displaypersonordered, from personwantsorg select current formatdate(validfrom, &quot;d&quot;))" ScriptItemUID="Label1" />
+          </Container>
+          <Container Condition="from personwantsorg select current (uid_personinserted = getuser() and not(isreadonly()))" ItemUID="-- Approval as old manager (new manager has denied)" ScriptItemUID="Container6">
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container7">
+              <Label Text="translate(&quot;#LDS#Please select the new manager for {0}, effective {1}.&quot;, from personwantsorg select current displaypersonordered, from personwantsorg select current formatdate(validfrom, &quot;d&quot;))" ScriptItemUID="Label2" />
+            </Container>
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="PropertyList()" IsPropertyList="true">
+                <ColumnList ScriptItemUID="ColumnList1">
+                  <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="UID_PersonHeadNew" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="EnableNavigation()" Value="false" />
+              <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="PersonWantsOrg" />
+            </ControlReferenceContainer>
+          </Container>
+          <Container ScriptItemUID="Container9" Layout="'VI_Styles_Container_Paragraph'">
+            <Button Text="translate(&quot;#LDS#View user's entitlements&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Pill'">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <CallAction ActionID="QER_PersonWantsOrg_EditActionGroupPopup" ScriptItemUID="Call1">
+                  <VirtualTableMapping VirtualTable="PWO" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping1">
+                    <VirtualColumnMapping VirtualColumn="Data" DataColumn="AdditionalData" />
+                  </VirtualTableMapping>
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOExisting" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="ValidUntilLimitThis" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column1" DataSource="Expression" Expression="true" />
+          <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column3" MinLength="" MaxLength="" Comment="dummy property, required for interface compatibility" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="HVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ValidFrom" DataType="System.DateTime" ScriptItemUID="Column11" DataSource="Expression" Expression="from PersonWantsOrg select current ValidFrom" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="PersonWantsOrg" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action7">
+            <Update DataTable="PersonWantsOrg" DataColumn="OrderDetail1" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" Value="if(isnullorempty(uid_personheadnew)) then &quot;&quot; else getobjectkey(&quot;person&quot;, uid_personheadnew, &quot;&quot;)" ScriptItemUID="Update2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonHeadNew" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="PersonWantsOrg">
+        <Column Name="UID_PersonHeadNew" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" ScriptItemUID="Column4" DataType="System.String" Caption="translate(&quot;#LDS#New Manager&quot;)" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;uid_person&quot;, getuser(), &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompare(&quot;uid_person&quot;, from personwantsorg select current uid_personordered, &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" />
+      </VirtualTable>
+      <VirtualFunction DataType="System.Boolean" Signature="IsReadOnly()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

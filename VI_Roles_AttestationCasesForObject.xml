@@ -1,0 +1,164 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="915deccf-028f-f40d-f1d7-da1b1064f373">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_AttestationCasesForObject" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Attestation" ScriptItemUID="ConfigSectionDefinition1" Description="" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="ActionInit">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">// reload category data and counts when the Invalidating event is raised
+AttestationCase.TableStore.Invalidating += (s,e) =&gt; 
+{
+	LoadCategories();
+	Vars.SingleRow.SetValue("Semaphor", Vars.SingleRow.GetValue("Semaphor").Int+1);
+};</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action8">
+            <CallAction ActionID="LoadCategories" ScriptItemUID="Call1" />
+          </Action>
+        </Activator>
+        <Container ScriptItemUID="Container3" RefreshTriggerExpression="from vars select semaphor">
+          <Container ScriptItemUID="Container5" Condition="0 = select count() from casecategory where CategoryFilter()">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#There are currently no pending attestations.')" ScriptItemUID="VirtualFunctionMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+          <Tab ScriptItemUID="Tab1" Layout="if (ShowAsPrimaryTab()) then 'VI_Styles_Tab_Default' else 'VI_Styles_Tab_Secondary'">
+            <TabPageTemplate ScriptItemUID="TabPageTemplate1" DataTable="CaseCategory" WhereClause="CategoryFilter()" OrderBy="'Position, DisplayName'">
+              <TabPage ScriptItemUID="TabPage1">
+                <ControlsHeader ScriptItemUID="Container4">
+                  <Label Text="from casecategory select current displayname+&quot; (&quot;+countcases+&quot;)&quot;" ScriptItemUID="Label2" />
+                </ControlsHeader>
+                <ControlsBody ScriptItemUID="Container42">
+                  <ControlReferenceContainer ID="VI_Attestation_AttestationCaseMasterDetail" ScriptItemUID="ControlRef3">
+                    <VirtualFunctionMapping ID="noitemstext()" Value="translate(&quot;#LDS#No attestation cases were found for this object.&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                    <VirtualFunctionMapping ID="AttestationCaseDbWhereClause()" Value="sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;from casecategory select current casewhereclause&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="AttestationPolicyDbWhereClause()" Value="from casecategory select current policywhereclause" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping5" />
+                    <VirtualFunctionMapping ID="HideButtonBar()" Value="HideButtonBar()" ScriptItemUID="VirtualFunctionMapping6" />
+                    <VirtualFunctionMapping ID="UseOneGridForAllPolicies()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+                    <VirtualControlMapping VirtualControl="AdditionalButtons" ContainerType="ControlList">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <SwitchContainer ScriptItemUID="Switch1">
+                          <SwitchContainerCase ScriptItemUID="Case1" Condition="not(GetContextID() like &quot;%_Audit_%&quot;)">
+                            <Button Text="translate(&quot;#LDS#Send reminder&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true" Layout="'VI_Styles_Button_Default'" EnabledCondition="0 &lt; DbCount(&quot;attestationcase&quot;,&#xD;&#xA;sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;from casecategory select current casewhereclause,&#xD;&#xA;sqlcompare(&quot;IsClosed&quot;, 0,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;),&#xD;&#xA;format(&quot;uid_attestationpolicy in (select uid_attestationpolicy from attestationpolicy where {0})&quot;,from casecategory select current policywhereclause)&#xD;&#xA;)&#xD;&#xA;)">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Send reminder mail&quot;)" />
+                              </HtmlAttributes>
+                              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                                <CallAction ActionID="VI_Attestation_AttestationObject_SendReminder" ScriptItemUID="CallAction2">
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="AttestationCaseWhereClause()" Value="sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;from casecategory select current casewhereclause,&#xD;&#xA;sqlcompare(&quot;IsClosed&quot;, 0,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;),&#xD;&#xA;format(&quot;uid_attestationpolicy in (select uid_attestationpolicy from attestationpolicy where {0})&quot;,from casecategory select current policywhereclause)&#xD;&#xA;)" />
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="OptionalDescription()" Value="Format(&quot;{1} ({0})&quot;,from BaseObject select current Display(),from casecategory select current displayname)" />
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="XObjectKeyOfAttestationObject()" Value="from baseobject select current objectwalker(&quot;XObjectKey&quot;)" />
+                                </CallAction>
+                              </ServerActionCall>
+                            </Button>
+                            <Container Layout="'VI_Styles_Container_Inline'" Condition="not(hideapprovallink()) and&#xD;&#xA;exists(&quot;attestationcase&quot;, format(&quot;uid_attestationcase in ( select uid_attestationcase from ATT_VAttDecisionPerson_DO where uid_personhead = {0} and rulerlevel&lt;&gt;2) and ({1})&quot;,&#xD;&#xA;sqlformatvalue(getuser(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;-- only attestation cases relevant to this view&#xD;&#xA;sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;from casecategory select current casewhereclause&#xD;&#xA;)&#xD;&#xA;))" ScriptItemUID="Container2" ItemUID="Approve">
+                              <Button Text="translate(&quot;#LDS#Heading Approve&quot;)" ScriptItemUID="Button2" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="Button2title" Value="translate(&quot;#LDS#Click here to approve pending attestation cases.&quot;)" />
+                                </HtmlAttributes>
+                                <ServerActionCall ScriptItemUID="ServerActionCall3">
+                                  <Redirect Target="Context" ContextID="VI_Attestation" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                                    <RedirectParameter Name="'objecttablename'" Value="from baseobject select current dbtable()" />
+                                    <RedirectParameter Name="'objectprimarykey'" Value="from baseobject select current primarykey()" />
+                                  </Redirect>
+                                </ServerActionCall>
+                              </Button>
+                            </Container>
+                          </SwitchContainerCase>
+                        </SwitchContainer>
+                        <ControlReferenceControlList ID="AdditionalButtons" ScriptItemUID="ControlRef2" />
+                      </ControlList>
+                    </VirtualControlMapping>
+                  </ControlReferenceContainer>
+                </ControlsBody>
+              </TabPage>
+            </TabPageTemplate>
+          </Tab>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="CaseCategory" ScriptItemUID="DataTableCustom1">
+          <Column Name="DisplayName" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="CaseWhereClause" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="PolicyWhereClause" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="CountCases" DataType="System.Int32" ScriptItemUID="Column6" DataSource="Expression" Expression="DbCount(&quot;attestationcase&quot;,&#xD;&#xA;&#xD;&#xA;sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;casewhereclause, format(&quot;uid_attestationpolicy in ( select uid_attestationpolicy from attestationpolicy where {0} )&quot;, policywhereclause)),&#xD;&#xA;-- with permissions&#xD;&#xA;true)" />
+          <Column Name="CountCasesPendingOverdue" DataType="System.Int32" ScriptItemUID="Column9" DataSource="Expression" Expression="DbCount(&quot;attestationcase&quot;,&#xD;&#xA;&#xD;&#xA;sqland( casewhereclause,&#xD;&#xA;sqlcompare(&quot;isclosed&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;tosolvetill&quot;, GetDate(), &quot;date&quot;, &quot;greaterthan&quot;),&#xD;&#xA;format(&quot;uid_attestationpolicy in ( select uid_attestationpolicy from attestationpolicy where {0} )&quot;, policywhereclause)),&#xD;&#xA;-- with permissions&#xD;&#xA;true)" />
+          <Column Name="CountPolicies" DataType="System.Int32" ScriptItemUID="Column2" DataSource="Expression" Expression="DbCount(&quot;attestationpolicy&quot;, sqland( policywhereclause, &quot;isinactive=0&quot;))" />
+          <Column Name="Position" DataType="System.Int32" ScriptItemUID="Column8" />
+          <Column DataType="System.Boolean" Name="IsAllCategory" ScriptItemUID="Column10" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_AttestationCaseSelected" DataType="System.String" ScriptItemUID="Column3" />
+          <Column Name="Semaphor" DataType="System.Int32" ScriptItemUID="Column7" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="LoadCategories">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action2">
+              <Delete DataTable="CaseCategory" ScriptItemUID="Delete1" />
+              <Insert DataTable="CaseCategory" ScriptItemUID="Insert4">
+                <ActionSequence ScriptItemUID="Action3" />
+                <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#All attestation cases&quot;)" />
+                <InsertValue DataColumn="CaseWhereClause" Value="GetWhereClauseObjectInAnyField()" />
+                <InsertValue DataColumn="PolicyWhereClause" Value="&quot;1=1&quot;" />
+                <InsertValue DataColumn="Position" Value="1000 -- display as last" />
+                <InsertValue Value="true" DataColumn="IsAllCategory" />
+              </Insert>
+              <Insert DataTable="CaseCategory" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action1" />
+                <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Object attestation&quot;)" />
+                <InsertValue DataColumn="CaseWhereClause" Value="GetWhereClauseObjectInAnyField()" />
+                <InsertValue DataColumn="PolicyWhereClause" Value="-- look up attestation policies for the object itself, while considering union tables (i.e. ADSGroup object --&gt; attestation on UNSGroup)&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao join dialogtable dt on dt.uid_dialogtable = ao.uid_dialogtable where dt.tablename = {0} or dt.uid_dialogtable in ( select uid_dialogtableunion from dialogtable where tablename = {0}))&quot;, sqlformatvalue(from baseobject select current DBTable(), &quot;string&quot;))" />
+                <InsertValue DataColumn="Position" Value="7" />
+              </Insert>
+              <ActionSequence ScriptItemUID="Action9" Condition="from baseobject select current not( dbtable() in ('QERReuse', 'QERAssign', 'QERReuseUS' ))">
+                <Insert DataTable="CaseCategory" ScriptItemUID="Insert2">
+                  <ActionSequence ScriptItemUID="Action6" />
+                  <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Memberships&quot;)" />
+                  <InsertValue DataColumn="CaseWhereClause" Value="GetWhereClauseObjectInAnyField()" />
+                  <InsertValue DataColumn="PolicyWhereClause" Value="-- look up person memberships&#xD;&#xA;&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao join dialogtable dt on dt.uid_dialogtable = ao.uid_dialogtable where {0})&quot;,&#xD;&#xA;&#xD;&#xA;from baseobject select current&#xD;&#xA;if(DBTable()=&quot;Person&quot;)&#xD;&#xA;then&#xD;&#xA;{{&#xD;&#xA;_Connection.SqlFormatter.InClause(&quot;dt.tablename&quot;, VI.Base.ValType.String, VI.DB.FormatterOptions.NonUnicodeLiterals,&#xD;&#xA;_Connection.Tables.Select(t=&gt;t.Tablename)&#xD;&#xA;.Where(t=&gt;t.StartsWith(&quot;PersonHas&quot;) || t.StartsWith(&quot;PersonIn&quot;))) }}&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;-- include primary person membership attestations when a basetree object is selected&#xD;&#xA;format(&quot;dt.tablename in ('Person', 'PersonHas{0}' , 'PersonIn{0}')&quot;, dbtable())&#xD;&#xA;)" />
+                  <InsertValue DataColumn="Position" Value="2" />
+                </Insert>
+              </ActionSequence>
+              <ActionSequence ScriptItemUID="Action5" Condition="from baseobject select current not( dbtable() = 'Person' )">
+                <Insert DataTable="CaseCategory" ScriptItemUID="Insert3">
+                  <ActionSequence ScriptItemUID="Action7" />
+                  <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Entitlements&quot;)" />
+                  <InsertValue DataColumn="CaseWhereClause" Value="GetWhereClauseObjectInAnyField()" />
+                  <InsertValue DataColumn="PolicyWhereClause" Value="-- look up entitlements&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao join dialogtable dt on dt.uid_dialogtable = ao.uid_dialogtable where {0})&quot;, MakeTableNameForHas(from baseobject select current DBTable()))" />
+                  <InsertValue DataColumn="Position" Value="6" />
+                </Insert>
+              </ActionSequence>
+              <Update DataTable="CaseCategory" DataColumn="Position" ScriptItemUID="Update1" Value="9" WhereClause="0 = IsNullOrEmpty(Position,0)" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="CategoryFilter()" Expression="(if (HideCategoriesWithoutCases()) then (countcases &gt; 0) else true) and countpolicies &gt; 0 -- display all categories that have a matching policy" DataType="System.Boolean" ScriptItemUID="Function1" FilterForTable="CaseCategory" />
+        <Function Name="GetWhereClauseObjectInAnyField()" Expression="format(&quot;uid_attestationcase in ( select uid_attestationcase from {0})&quot;, sqlfunctioncalltable(&quot;ATT&quot;,&quot;GAttestation&quot;, &quot;FTAttCasesForBaseObject&quot;, sqlformatvalue(from baseobject select current getobjectkey(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" DataType="System.String" ScriptItemUID="Function2" TriggerUpdates="Never" />
+        <Function ScriptItemUID="Function3" Name="MakeTableNameForHas(string tableName)" DataType="System.String" Expression="{{&#xD;&#xA;_Connection.SqlFormatter.InClause(&quot;dt.tablename&quot;, VI.Base.ValType.String, VI.DB.FormatterOptions.NonUnicodeLiterals,&#xD;&#xA;_Connection.Tables.Select(t=&gt;t.Tablename)&#xD;&#xA;.Where(t=&gt;t.StartsWith(tableName+&quot;Has&quot;))) }}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="BaseObject" ScriptItemUID="VirtualTable1" RequiresCursor="true" />
+      <VirtualFunction Signature="HideButtonBar()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="AttestationCase" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="HideCategoriesWithoutCases()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AttestationCaseDbWhereClause()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowAsPrimaryTab()" DataType="System.Boolean" DefaultValue="True" Comment="As a default this component has primary tabs.&#xD;&#xA;If this component is used in a Master-Detail-Control it looks nicer if you use a secondary tab." TriggerUpdates="Never" />
+      <VirtualControl ContainerType="ControlList" ID="AdditionalButtons" />
+      <VirtualFunction DataType="System.Boolean" Signature="HideApprovalLink()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

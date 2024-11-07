@@ -1,0 +1,21 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="ATT_Action_InsteadOfApprover_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="0">
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCase" ScriptItemUID="ATTDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ATTAction1" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Action9" ObjectType="ActionSequence" SortOrder="10">
+        <ActionSequence ItemUID="AttestationCase" Condition="DBTable(Action) = 'AttestationCase'" ScriptItemUID="ATTAction2">
+          <LoadTable DataTable="AttestationCase" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from Action select current XObjectKey)" ScriptItemUID="ATTLoadTable1" />
+          <Method DataTable="AttestationCase" Method="AddInsteadOf" WhereClause="PrimaryKey() in (select current PrimaryKey() from Action)">
+            <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+            <MethodParameter Name="'strUID_PersonInsteadOf'" Value="from PersonReference select uid_person where IsSelected" />
+            <MethodParameter Name="'strReasonText'" Value="from Vars select Notice" />
+          </Method>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

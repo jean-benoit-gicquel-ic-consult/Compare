@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_Default" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="Container1">
+        <LinkContainer EnabledCondition="IsFKNavigation()" ScriptItemUID="LinkContainer1">
+          <ControlList ScriptItemUID="ControlList1">
+            <Label Text="from edittable select current IsNullOrEmpty(displayvalue(editcolumn),NullText())" ScriptItemUID="Label1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="from edittable select current IsNullOrEmpty(displayvalue(editcolumn),NullText())" />
+              </HtmlAttributes>
+            </Label>
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall1" EnableRedirectByUrl="true">
+            <RedirectByUrl>
+              <Redirect ScriptItemUID="Redirect3" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
+                <RedirectParameter Name="'TableName'" Value="if(IsDynamicFK())&#xD;&#xA;then&#xD;&#xA;try(from edittable select current getobjectkeytable(editcolumn+&quot;&quot;),&quot;&quot;)&#xD;&#xA;else&#xD;&#xA;try(from edittable select current getobjectkeytable(getobjectkey(editcolumn)),&quot;&quot;)" />
+                <RedirectParameter Name="'UID'" Value="if(IsDynamicFK())&#xD;&#xA;then&#xD;&#xA;GetPkFromObjectKey(try(from edittable select current editcolumn+&quot;&quot;, &quot;&quot;))&#xD;&#xA;else&#xD;&#xA;try(from edittable select current (editcolumn+&quot;&quot;), &quot;&quot;)" />
+              </Redirect>
+            </RedirectByUrl>
+            <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+              <RedirectParameter Name="'ObjectKey'" Value="from edittable select current getobjectkey(editcolumn)" />
+            </Redirect>
+          </ServerActionCall>
+        </LinkContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsFKNavigation()" Expression="EnableNavigation()&#xD;&#xA;and (from edittable select current cansee(editcolumn))&#xD;&#xA;and (from edittable select current not(IsNullOrEmpty(editcolumn))) -- only if property is not null&#xD;&#xA;and&#xD;&#xA;{{&#xD;&#xA;&#xD;&#xA;var m = EditTable_EditColumn.GetMetadata(EditTable_Current.Row);&#xD;&#xA;@return m.ForeignKeyColumn != null || m.GetForeignKeyDynamicTablesAsync().Result != null;&#xD;&#xA;&#xD;&#xA;}}" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function ScriptItemUID="Function2" Name="IsDynamicFk()" DataType="System.Boolean" Expression="{{&#xD;&#xA;&#xD;&#xA;var m = EditTable_EditColumn.GetMetadata(EditTable_Current.Row);&#xD;&#xA;@return m.GetForeignKeyDynamicTablesAsync().Result != null;&#xD;&#xA;&#xD;&#xA;}}" />
+        <Function ScriptItemUID="Function3" Name="GetPkFromObjectKey(string input)" DataType="System.String" Expression="if(IsNullOrEmpty(input))then&#xD;&#xA;&quot;&quot;&#xD;&#xA;else&#xD;&#xA;{{&#xD;&#xA;var result = &quot;&quot;;&#xD;&#xA;try{result = new VI.DB.DbObjectKey(input).Keys[0];}catch{}&#xD;&#xA;@return result;&#xD;&#xA;}}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

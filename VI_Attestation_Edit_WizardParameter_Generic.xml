@@ -1,0 +1,38 @@
+﻿<WebDesigner TdnsHash="fc1cc689-c628-cdb4-bd82-bac9c207c56a">
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Attestation_Edit_WizardParameter_Generic" MigrationNotes="DIALOGCONFIGPARM;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef1">
+          <VirtualTableMapping VirtualTable="Candidate" DataTable="Objects" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualTableMapping VirtualTable="SelectedItems" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping2">
+            <VirtualColumnMapping VirtualColumn="uidList" DataColumn="ParameterValue" />
+          </VirtualTableMapping>
+          <VirtualFunctionMapping ID="CandidateDbWhereClause()" Value="DbWhereClause()" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="UidListDelimiter()" Value="&quot;,&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="CandidateTargetValueColumn()" Value="CandidateTargetValueColumn()" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="CandidateTargetValue()" Value="if(isnullorempty(CandidateTargetValueColumn()))&#xD;&#xA;then getnull()&#xD;&#xA;else&#xD;&#xA;(objectwalker(CandidateTargetValueColumn())+&quot;&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+        </ControlReferenceContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Objects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="DBTableName()">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ParameterInEdit" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="ParameterValue" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="DBTableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="CandidateTargetValueColumn()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

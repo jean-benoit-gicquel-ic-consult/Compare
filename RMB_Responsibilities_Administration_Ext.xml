@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Responsibilities_Administration_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="20">
+        <SwitchContainer ScriptItemUID="TileBusinessRoles">
+          <SwitchContainerCase ScriptItemUID="RMBCase1" Condition="ispreprop(&quot;ORG&quot;) and exists(&quot;Person&quot;, variable(&quot;uid_person = '%useruid%' and uid_person in ( select piae.uid_person from personinaerole piae join AERoleCollection aec on aec.UID_AERole = piae.uid_aerole where aec.UID_ParentAERole = 'RMB-AEROLE-ROLEADMIN-ADMIN')&quot;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="RMBContainer1" ItemUID="business roles">
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping9" ID="Identifier()" Value="&quot;business roles&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="RMBAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="RMB_BusinessRoles_Admin" ScriptItemUID="RMBRedirect2" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping4" ID="Caption()" Value="datacaption(&quot;Org&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping10" ID="Image()" Value="&quot;Org&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows the list of all business roles.')" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

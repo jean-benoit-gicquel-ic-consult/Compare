@@ -1,0 +1,58 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="332a3e2c-c5ff-424e-0c7c-8ae5bd70659a">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_Shape_Properties">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.WebControls.DynamicHyperView.IPropertyShape" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'imx-layout'" Value="isnullorempty( ColorKey(), &quot;MiddleCenter&quot;)" ScriptItemUID="HtmlAttribute1" />
+            <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="if(from object select current IsDeleted())&#xD;&#xA;then &quot;imx-hyperview-deleted&quot;" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlRef1">
+            <VirtualControlMapping ContainerType="Container" VirtualControl="ShapeContent">
+              <Container ScriptItemUID="Container1">
+                <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping7">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" ColumnList="PropertyList()" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="Object" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation() and isnullorempty(shapelinkurl()) -- avoid nested links" ScriptItemUID="VirtualFunctionMapping1" />
+                </ControlReferenceContainer>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Caption()" Value="Caption()" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="ImageURL()" Value="ImageURL()" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="ColorKey()" Value="ColorKey()" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="DbTableName()" Value="DbTableName()" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="HeaderText()" Value="HeaderText()" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ShapeLinkUrl()" Value="ShapeLinkUrl()" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ElementColor()" Value="ElementColor()" />
+          </ControlReferenceContainer>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="Caption()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ImageURL()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ColorKey()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbTableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HeaderText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="Object" ScriptItemUID="VirtualTable1" RequiresCursor="true" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="PropertyList()" PropertyListForTable="Object" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.Boolean" Signature="EnableNavigation()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ShapeLinkUrl()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ElementColor()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,149 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl ID="VI_QERPolicy_NonComplianceGrid" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action8" />
+      <GridBand DataTable="QERPolicyHasObject" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="QERPolicyWhereClause()" RowSelection="true" DataTableForSelection="TargetTable" DataColumnForSelection="UID_QERPolicyHasObject" EnableCustomAttributes="true" DisplayHeader="Always">
+        <HtmlAttributes>
+          <CodeLiteral ScriptItemUID="CodeLiteral1">if(!IsReadOnly()){
+	VI.WebRuntime.Data.WhereClauseFilter y = new VI.WebRuntime.Data.WhereClauseFilter("pending",VI.WebRuntime.WebSql.Translate("#LDS#Decision pending"),_Connection.SqlFormatter.Comparison("IsDecisionMade", 0, VI.Base.ValType.Bool, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase));
+	y.Column = this._QERPolicyHasObject_DisplayStatus;
+	_dataSource.Filters.Add(y);
+}
+
+
+</CodeLiteral>
+          <Property Name="ApplyFilledHeight" Value="true" />
+        </HtmlAttributes>
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef2">
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                <ControlList ScriptItemUID="ControlList2">
+                  <Container ScriptItemUID="Container1" Condition="showDisplayObject()">
+                    <Label Text="datacaption(QERPolicyHasObject, DisplayObjectKey)+&quot;: &quot;+from QERPolicyHasObject select current displayobjectkey" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="from QERPolicyHasObject select current (&quot;imx-icon imx-table-&quot; +getObjectKeytable(objectkey))" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                <ControlList ScriptItemUID="ControlList3">
+                  <ControlReferenceControlList ID="VI_Common_DecisionControlListView" ScriptItemUID="ControlRef3">
+                    <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping7" />
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicyHasObject" ScriptItemUID="VirtualTableMapping2">
+                      <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DoApprove" />
+                      <VirtualColumnMapping VirtualColumn="DoReject" DataColumn="DoReject" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="ApproveText()" Value="translate(&quot;#LDS#Grant exception&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                    <VirtualFunctionMapping ID="DenyText()" Value="translate(&quot;#LDS#Deny exception&quot;)" ScriptItemUID="VirtualFunctionMapping10" />
+                    <VirtualFunctionMapping ID="ApproveAllText()" Value="translate(&quot;#LDS#Grant all exceptions&quot;)" ScriptItemUID="VirtualFunctionMapping11" />
+                    <VirtualFunctionMapping ID="DenyAllText()" Value="translate(&quot;#LDS#Deny all exceptions&quot;)" ScriptItemUID="VirtualFunctionMapping12" />
+                  </ControlReferenceControlList>
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                <ControlList ScriptItemUID="ControlList4">
+                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                    <ContainerColumnTemplate DataTable="QERPolicyHasObject" ScriptItemUID="ContainerColumnTemplate2">
+                      <ColumnList ScriptItemUID="ColumnList3">
+                        <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="UID_QERPolicy" Caption="datacaption(&quot;qerpolicy&quot;, &quot;uid_qerpolicy&quot;)" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DisplayStatus" Caption="datacaption(qerpolicyhasobject, displaystatus)" />
+                      </ColumnList>
+                      <Container ScriptItemUID="Container8" ItemUID="Title column for normal properties">
+                        <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef5">
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicyHasObject" ScriptItemUID="VirtualTableMapping4">
+                            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping13" />
+                        </ControlReferenceContainer>
+                      </Container>
+                      <Container ScriptItemUID="Container3" ItemUID="Value column for normal properties">
+                        <ColumnEditor DataTable="QERPolicyHasObject" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2" />
+                      </Container>
+                    </ContainerColumnTemplate>
+                  </LayoutPanel>
+                </ControlList>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <GridColumn Width="'33%'" SortColumn="DisplayObjectKey" AutoFilterColumn="DisplayObjectKey" Condition="showDisplayObject()" ScriptItemUID="Column2">
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Label Text="datacaption(QERPolicyHasObject, DisplayObjectKey)" ScriptItemUID="Label4" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell3">
+            <Label Text="from QERPolicyHasObject select current displayobjectkey" ScriptItemUID="Label2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="from QERPolicyHasObject select current (&quot;imx-icon imx-table-&quot; +getObjectKeytable(objectkey))" />
+              </HtmlAttributes>
+            </Label>
+          </Cell>
+        </GridColumn>
+        <GridColumn Width="'33%'" SortColumn="UID_QERPolicy" AutoFilterColumn="UID_QERPolicy" ScriptItemUID="Column3">
+          <GridColumnHeader ScriptItemUID="wctl2">
+            <Label Text="datacaption(&quot;qerpolicy&quot;, &quot;uid_qerpolicy&quot;)" ScriptItemUID="Label6" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell4">
+            <Label Text="select current displayvalue(uid_qerpolicy) from QERPolicyHasObject" ScriptItemUID="Label3" />
+          </Cell>
+        </GridColumn>
+        <GridColumn Width="'200px'" SortColumn="DisplayStatus" AutoFilterColumn="DisplayStatus" ScriptItemUID="Column4">
+          <GridColumnHeader ScriptItemUID="wctl3">
+            <Label Text="datacaption(qerpolicyhasobject, displaystatus)" ScriptItemUID="Label8" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell5">
+            <Label Text="from QERPolicyHasObject select current displayvalue(displaystatus)" ScriptItemUID="Label11" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from QERPolicyHasObject select current&#xD;&#xA;&#xD;&#xA;&quot;imx-icon &quot; +&#xD;&#xA;(if(isdecisionmade) then (&#xD;&#xA;if(IsExceptionGranted) then&#xD;&#xA;&quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else&#xD;&#xA;&quot;imx-icon-Error&quot;)&#xD;&#xA;else&#xD;&#xA;&quot;imx-icon-Workflow&quot;&#xD;&#xA;)" />
+              </HtmlAttributes>
+            </Label>
+          </Cell>
+        </GridColumn>
+        <ControlReferenceGridColumnGroup ID="VI_Common_DecisionControl" DataTable="QERPolicyHasObject" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="DenySelectAll()" Value="not(&quot;true&quot;=getconfig(&quot;POL_QERPolicyHasObject_AllowSelectAll&quot;))" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicyHasObject" ScriptItemUID="VirtualTableMapping1">
+            <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DoApprove" />
+            <VirtualColumnMapping VirtualColumn="DoReject" DataColumn="DoReject" />
+          </VirtualTableMapping>
+          <VirtualFunctionMapping ID="ApproveText()" Value="translate(&quot;#LDS#Grant exception&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="DenyText()" Value="translate(&quot;#LDS#Deny exception&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+          <VirtualFunctionMapping ID="ApproveAllText()" Value="translate(&quot;#LDS#Grant all exceptions&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+          <VirtualFunctionMapping ID="DenyAllText()" Value="translate(&quot;#LDS#Deny all exceptions&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+        </ControlReferenceGridColumnGroup>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="showDisplayObject()" DataType="System.Boolean" TriggerUpdates="Never" DefaultValue="true" />
+      <VirtualFunction Signature="QERPolicyWhereClause()" DataType="System.String" />
+      <VirtualTable Name="TargetTable" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="UID_QERPolicyHasObject" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="QERPolicyHasObject" ScriptItemUID="VirtualTable2" Class="QERPolicyHasObject">
+        <VirtualColumn Name="DisplayObjectKey" DataType="System.String" />
+        <VirtualColumn Name="DisplayStatus" DataType="System.String" />
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <VirtualColumn Name="ReasonForDecision" DataType="System.String" />
+        <VirtualColumn Name="UID_QERJustificationSelected" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="QERPolicyObjects" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="ObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

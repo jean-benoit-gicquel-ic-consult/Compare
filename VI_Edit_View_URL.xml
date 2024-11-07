@@ -1,0 +1,39 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_URL" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <LinkContainer ScriptItemUID="LinkContainer1" EnabledCondition="not(isnullorempty(GetTargetUrl())) AND EnableNavigation()">
+          <ControlList ScriptItemUID="ControlList2">
+            <Label ScriptItemUID="Label2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="i" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--external-link&quot;" />
+              </HtmlAttributes>
+            </Label>
+            <Label Text="translate(&quot;#LDS#External link&quot;)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;padding-left: .5em;&quot;" />
+              </HtmlAttributes>
+            </Label>
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall1" EnableRedirectByUrl="true">
+            <RedirectByUrl>
+              <Redirect ScriptItemUID="Redirect2" Target="Link" HREF="GetTargetUrl()" />
+            </RedirectByUrl>
+          </ServerActionCall>
+        </LinkContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetTargetUrl()" Expression="{{ EditTable_EditColumn.GetValue(EditTable_Current.Row).String }}" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

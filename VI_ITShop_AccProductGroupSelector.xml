@@ -1,0 +1,191 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AccProductGroupSelector" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_Filter_AccProductGroup" Description="translate('#LDS#Displayed service categories')" Type="SQL" DatabaseTable="AccProductGroup" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Filter_AccProductGroupMultiUser" Description="translate('#LDS#Displayed service categories for a group of users')" Type="SQL" DatabaseTable="AccProductGroup" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action4">
+        <CallAction ActionID="LoadData" ScriptItemUID="Call2" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ItemUID="Productgroups" ScriptItemUID="Container13" Condition="not(from container select isshowproductlist)">
+          <Container ScriptItemUID="Container11" ItemUID="extra layout container required for Chrome 767691">
+            <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;class&quot;" Value="&quot;LayoutpPropItems&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container9" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;class&quot;" Value="&quot;LayoutpPropRow&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-layoutpanel-cell imx-layoutpanel-mobileblock LayoutpPropCol LayoutpPropCol0 imx-flex-row&quot;" />
+                  </HtmlAttributes>
+                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef4">
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="Container" ScriptItemUID="VirtualTableMapping3">
+                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="ProductSearchString" />
+                    </VirtualTableMapping>
+                  </ControlReferenceContainer>
+                </Container>
+                <Container ScriptItemUID="Container8" ItemUIDReference="BtnSearchInAllCategories" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-layoutpanel-cell imx-layoutpanel-mobileblock LayoutpPropCol LayoutpPropCol1&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container10" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-flex-row&quot;" />
+                    </HtmlAttributes>
+                    <TextBox DataTable="Container" DataColumn="ProductSearchString" CustomStyle="&quot;width: 165px;&quot;" EmptyText="if(getconfig(&quot;VI_ITShop_AccProduct_Tags&quot;)=&quot;true&quot;)&#xD;&#xA;then translate(&quot;#LDS#Product or tag name&quot;)&#xD;&#xA;else &quot;&quot;" ScriptItemUID="TextBox1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="CssClass" Value="imx-textbox imx-textbox-search imx-flex-child" />
+                      </HtmlAttributes>
+                    </TextBox>
+                    <Button Text="&quot;&quot;" ScriptItemUID="Button1" ItemUID="BtnSearchInAllCategories" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;title&quot;" ScriptItemUID="HtmlAttribute6" Value="translate('#LDS#Search in all categories')" />
+                        <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute7" Value="&quot;imx-textbox-searchbtn&quot;" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <Update DataTable="Container" DataColumn="WhereClauseGroup" Value="&quot;1=1&quot;" ScriptItemUID="Update23" />
+                        <Update DataTable="AccProductGroup" DataColumn="IsActive" Value="false" ScriptItemUID="Update20" />
+                        <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="false" ScriptItemUID="Update19" />
+                        <Update DataTable="Container" DataColumn="IsShowProductList" ScriptItemUID="Update21" Value="true" />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </Container>
+            </Container>
+          </Container>
+          <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;flex-fill&quot;" />
+            </HtmlAttributes>
+            <ContainerTemplate DataTable="AccProductGroup" WhereClause="isnull(uid_accproductgroupparent,'')=''&#xA;" OrderBy="'SortOrder, Ident_AccProductGroup'" ScriptItemUID="ContainerTemplate1" Layout="" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="ul" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="li" />
+                  <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;display: inline-block; list-style: none; position: relative; margin-right: 15px;&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceControlList ID="VI_ITShop_AccProductGroupSingle" ScriptItemUID="ControlRef3">
+                  <VirtualTableMapping VirtualTable="AccProductGroup" DataTable="AccProductGroup" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualControlMapping VirtualControl="AccProductGroupSelected" ContainerType="ActionComponent">
+                    <ActionComponent ScriptItemUID="Action2">
+                      <Update DataTable="Container" DataColumn="WhereClauseGroup" Value="sqlcompareuid(&quot;uid_accproductgroup&quot;, (from AccProductGroup select current uid_accproductgroup))" ScriptItemUID="Update3" />
+                      <Update DataTable="Container" DataColumn="ProductSearchString" Value="''" ScriptItemUID="Update10" />
+                      <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="false" WhereClause="isnull(uid_accproductgroupparent,'')=''" ScriptItemUID="Update4" />
+                      <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="true" WhereClause="not(isselected) and uid_accproductgroup = ( select current uid_accproductgroup from accproductgroup)" ScriptItemUID="Update5" />
+                      <Update DataTable="AccProductGroup" DataColumn="IsActive" Value="false" WhereClause="uid_accproductgroup &lt;&gt; from AccProductGroup select current uid_accproductgroup" ScriptItemUID="Update6" />
+                      <Update DataTable="AccProductGroup" DataColumn="IsActive" Value="true" WhereClause="uid_accproductgroup = from AccProductGroup select current uid_accproductgroup" ScriptItemUID="Update7" />
+                      <Update DataTable="Container" DataColumn="IsShowProductList" ScriptItemUID="Update13" Value="true" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                </ControlReferenceControlList>
+              </Container>
+            </ContainerTemplate>
+            <Container ScriptItemUID="Container12" Condition="0 = from AccProductGroup select count()" ItemUID="No products available">
+              <Label ScriptItemUID="Label4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;style&quot;" Value="variable(&quot;font-size: 1.4em; color: %VI_Common_Color_Badge_Warning%; margin-right: 6px;&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--shopping-cart&quot;" />
+                </HtmlAttributes>
+              </Label>
+              <Label ScriptItemUID="Label3" Text="translate('#LDS#There are currently no products available for you. Contact your manager to make products available for you.')" />
+            </Container>
+          </Container>
+        </Container>
+        <Container ScriptItemUID="Container2" Condition="from container select isshowproductlist" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute5" Value="&quot;margin-bottom: 1.5em;&quot;" />
+          </HtmlAttributes>
+          <Label ScriptItemUID="Label1" Text="if(IsFilteredByCategory())&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#Showing service items in category&quot;)+&quot;:&quot;&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#Showing service items in all categories&quot;)" />
+          <ControlReferenceContainer ID="VI_ITShop_AccProductGroupList" ScriptItemUID="ControlRef2">
+            <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="PersonsForOrder" ScriptItemUID="VirtualTableMapping2" />
+          </ControlReferenceContainer>
+          <ContainerTemplate DataTable="AccProductGroup" ScriptItemUID="ContainerTemplate2" WhereClause="isactive" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;imx-mobile-nomobile&quot;" />
+              <Property Name="TagName" Value="span" />
+            </HtmlAttributes>
+            <ControlReferenceControlList ID="QBM_Common_FavoritesMarkObject" ScriptItemUID="ControlRef1">
+              <VirtualTableMapping VirtualTable="Object" DataTable="AccProductGroup" ScriptItemUID="VirtualTableMapping4" />
+              <VirtualFunctionMapping ID="BookmarkDisplay()" Value="from AccProductGroup select display() where isactive" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualFunctionMapping ID="BookmarkUrl()" Value="{{&#xD;&#xA;var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();&#xD;&#xA;dict[&quot;uid_accproductgroupsecond&quot;] = ContainerTemplate2_Current.Row.GetValue(&quot;UID_AccProductGroup&quot;);&#xD;&#xA;dict[&quot;uid_accproductgroup&quot;] = ContainerTemplate2_Current.Row.GetValue(&quot;UID_AccProductGroup&quot;);&#xD;&#xA;&#xD;&#xA;string moduleName;&#xD;&#xA;string moduleNameIn = &quot;VI_ITShop_ProductSelection&quot;;&#xD;&#xA;if (!_UserSession.ApplicationInfo.ObjectOverrides.TryGetValue(moduleNameIn, out moduleName))&#xD;&#xA;   moduleName = moduleNameIn;&#xD;&#xA;@return VI.WebRuntime.Communication.WebPage.GenericPageHandler + &quot;?&quot; + _UserSession.ApplicationInfo.Modules[moduleName].GetUrlParameterString(dict);&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;}}" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="BookmarkCssClass()" Value="&quot;imx-table-&quot;+from AccProductGroup select getobjectkeytable(xobjectkey) where isactive" ScriptItemUID="VirtualFunctionMapping3" />
+            </ControlReferenceControlList>
+          </ContainerTemplate>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="LoadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <Delete DataTable="AccProductGroup" ScriptItemUID="Delete1" />
+              <ActionSequence ScriptItemUID="Action7" Condition="not(IsNullOrEmpty(request(&quot;uid_accproductgroup&quot;)))">
+                <LoadTable DataTable="AccProductGroup" WhereClause="-- Loads all parents and himself&#xD;&#xA;SqlAnd(&#xD;&#xA;   format(&quot;UID_AccProductGroup in(select UID_AccProductGroupParent from QER_VACCProductGroupCollection where {0})&quot;,&#xD;&#xA;   SqlCompareUid(&quot;UID_AccProductGroup&quot;, request(&quot;uid_accproductgroup&quot;))&#xD;&#xA;   )&#xD;&#xA;   ,WhereClausePerson()&#xD;&#xA;)" ScriptItemUID="LoadTable2" RemoveDeleted="false" RevertExisting="false">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+                </LoadTable>
+                <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="1" ScriptItemUID="Update1" WhereClause="UID_AccProductGroupParent &lt;&gt; request(&quot;uid_accproductgroup&quot;)" />
+                <Update DataTable="AccProductGroup" DataColumn="IsActive" Value="uid_accproductgroup = isnull(request(&quot;uid_accproductgroup&quot;), &quot;&quot;)" ScriptItemUID="Update16" />
+                <Update DataTable="AccProductGroup" DataColumn="IsClicked" Value="True" WhereClause="uid_accproductgroup = request(&quot;uid_accproductgroup&quot;)" ScriptItemUID="Update17" />
+                <ForeachRow DataTable="AccProductGroup" ScriptItemUID="ForeachRow1">
+                  <LoadTable DataTable="AccProductGroup" WhereClause="SqlAnd(SqlCompareUid(&quot;UID_AccProductGroupParent&quot;, &#xD;&#xA;from AccProductGroup select current UID_AccProductGroup&#xD;&#xA;), WhereClausePerson())" ScriptItemUID="LoadTable3" RemoveDeleted="false" RevertExisting="false">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+                  </LoadTable>
+                </ForeachRow>
+              </ActionSequence>
+              <LoadTable DataTable="AccProductGroup" WhereClause="-- Loads all root groups&#xD;&#xA;SqlAnd(SqlEmpty(&quot;UID_AccProductGroupParent&quot;,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),WhereClausePerson())" ScriptItemUID="LoadTable4" RemoveDeleted="false" RevertExisting="false">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                <FillTableDisplayColumn DataColumn="JPegPhoto" />
+              </LoadTable>
+              <ActionSequence ScriptItemUID="Action3" Condition="(isnull(request(&quot;uid_accproductgroupsecond&quot;),&quot;&quot;)&lt;&gt;&quot;&quot;)&#xD;&#xA;and&#xD;&#xA;0 = (select Count() from AccProductGroup where UID_AccProductGroup = request(&quot;uid_accproductgroupsecond&quot;))">
+                <LoadTable DataTable="AccProductGroup" WhereClause="format(&quot;UID_AccProductGroup ='{0}'&quot;,Request(&quot;uid_accproductgroupsecond&quot;))" ScriptItemUID="LoadTable1" RemoveDeleted="false" RevertExisting="false" LoadLimit="1">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                </LoadTable>
+              </ActionSequence>
+              <ActionSequence ItemUID="preloading of ACCProducts" Condition="0 &lt;&gt; (from AccProductGroup select count() where isactive = true)" ScriptItemUID="Action6">
+                <Update DataTable="Container" DataColumn="WhereClauseGroup" Value="sqlcompareuid(&quot;uid_accproductgroup&quot;, (from AccProductGroup select uid_accproductgroup where IsActive = true))" ScriptItemUID="Update18" />
+                <Update DataTable="Container" DataColumn="IsShowProductList" ScriptItemUID="Update11" Value="true" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="IsFilteredByCategory()" DataType="System.Boolean" Expression="0 &lt; select count() from accproductgroup where isnullorempty(uid_accproductgroupparent) and isselected" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="PersonsForOrder" ScriptItemUID="DataEventHandler1" Operation="Bulk">
+          <ActionSequence ScriptItemUID="Action1">
+            <CallAction ActionID="LoadData" ScriptItemUID="Call1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_Person" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AccProductGroup" Class="AccProductGroup" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="IsSelected" DataType="System.Boolean" />
+        <VirtualColumn Name="IsClicked" DataType="System.Boolean" />
+        <VirtualColumn Name="IsActive" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable3" RequiresCursor="true">
+        <VirtualColumn Name="WhereClauseGroup" DataType="System.String" />
+        <VirtualColumn Name="ProductSearchString" DataType="System.String" />
+        <VirtualColumn Name="IsShowProductList" DataType="System.Boolean" />
+        <VirtualColumn Name="IncludeChildCategories" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualTable Name="PersonsForOrder" ScriptItemUID="VirtualTable1" Class="Person" />
+      <VirtualFunction Signature="WhereClausePerson()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

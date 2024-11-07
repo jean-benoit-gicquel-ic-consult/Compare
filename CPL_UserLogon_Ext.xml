@@ -1,0 +1,15 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_UserLogon_Ext">
+    <Extensions>
+      <AddObject ObjectID="Menu4" ObjectType="Menu" SortOrder="27">
+        <MenuElement Text="if  ( (from CountOpenDatabaseItems select OpenNonCompliance) &gt; 0 ) then &#xD;&#xA;  ( translate(&quot;#LDS#Heading Pending Rule Violations&quot;) + ' (' + from CountOpenDatabaseItems select OpenNonCompliance + ')' )&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Heading Pending Rule Violations&quot;)" Condition="IsNull(GetConfigParm(&quot;QER\ComplianceCheck&quot;), &quot;0&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_orgruler from compliancerule ))&quot;&#xD;&#xA;))" ScriptItemUID="CPLMenuElement1">
+          <ServerActionCall ScriptItemUID="CPLServerActionCall1">
+            <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_Compliance_ExceptionApproval" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="CPLRedirect1">
+              <RedirectParameter Value=" translate(&quot;#LDS#Heading Pending Rule Violations&quot;)" Name="'Title'" />
+            </Redirect>
+          </ServerActionCall>
+        </MenuElement>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,52 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_MyActions_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="15">
+        <SwitchContainer ScriptItemUID="TilePolicyViolations">
+          <SwitchContainerCase ScriptItemUID="POLCase1" Condition="GetConfigParm(&quot;QER\Policy&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_aeroleruler from qerpolicy ))&quot;&#xD;&#xA;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="POLContainer1" ItemUID="Pending Policy Violations">
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping13" ID="Identifier()" Value="&quot;Pending Policy Violations&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="POLAction3">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_QERPolicy_ExceptionApproval" ScriptItemUID="POLRedirect3">
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading Pending policy violations&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping4" ID="Caption()" Value="if  ( (from CountOpenDatabaseItems select OpenQERPolicyHasObject)  &gt; 0 ) then &#xD;&#xA;  (translate(&quot;#LDS#Heading Pending Policy Violations&quot;) +' (' + from CountOpenDatabaseItems select OpenQERPolicyHasObject + ')' )&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Heading Pending Policy Violations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping14" ID="Image()" Value="&quot;QERPolicy&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping11" ID="Value()" Value="translate('#LDS#Shows the pending policy violations that you can approve or deny.')" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping12" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping15" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping16" ID="Size()" Value="'Overview'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping2" ID="Highlight()" Value="(from CountOpenDatabaseItems select OpenQERPolicyHasObject)  &gt; 0" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="20">
+        <SwitchContainer ScriptItemUID="TilePolicyViolationHistory">
+          <SwitchContainerCase ScriptItemUID="POLCase2" Condition="GetConfigParm(&quot;QER\Policy&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_aeroleruler from qerpolicy ))&quot;&#xD;&#xA;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="POLContainer2" ItemUID="Policy Violation History">
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping17" ID="Identifier()" Value="&quot;Policy Violation History&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="POLAction1">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_QERPolicy_ExceptionApproval" ScriptItemUID="POLRedirect1">
+                    <RedirectParameter Name="'HistoryMode'" Value="'YES'" />
+                    <RedirectParameter Value="translate('#LDS#Heading Policy Violation History')" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Heading Policy Violation History')" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping18" ID="Image()" Value="&quot;cux-icon cux-icon--history&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping7" ID="Value()" Value="translate(&quot;#LDS#Review your company policy exception approvals.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping9" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping19" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping20" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

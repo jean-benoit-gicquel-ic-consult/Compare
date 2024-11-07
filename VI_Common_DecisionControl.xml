@@ -1,0 +1,105 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_DecisionControl" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridColumnGroup DataTable="EditTable" ScriptItemUID="GridColumnGroup1">
+        <GridColumn Condition="not(IsReadOnly())" Width="&quot;80px&quot;" HasFooterCell="true" ScriptItemUID="GridColumn1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;data-imx-exporthide&quot;" ScriptItemUID="HtmlAttribute15" Value="&quot;true&quot;" />
+          </HtmlAttributes>
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Label Text="translate(&quot;#LDS#Decision&quot;)" ScriptItemUID="Label1" />
+          </GridColumnHeader>
+          <GridColumnFooter ScriptItemUID="wctl2" Condition="(from EditTable select Count() )&gt; 2">
+            <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_Inline'">
+              <Container Condition="not(DenySelectAll())" ScriptItemUID="Container2" EnableCustomAttributes="true" ItemUID="Approve all">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute3" Value="'checkboxAll_yes'" />
+                </HtmlAttributes>
+                <CheckBoxMulti DataTable="EditTable" DataColumn="DoApprove" ScriptItemUID="CheckBoxMulti1" Layout="'VI_Styles_CheckBoxMulti_DecisionControl'" Text="&quot;&quot;" ItemUID="Approve all" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="IsNullOrEmpty(ApproveAllText(),translate(&quot;#LDS#Approve all&quot;))" />
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute12" Value="IsNullOrEmpty(ApproveAllText(),translate(&quot;#LDS#Approve all&quot;))" />
+                    <HtmlAttribute Name="'data-imx-multicheckbox-hiddenCount'" ScriptItemUID="HtmlAttribute14" Value="'2'" />
+                  </HtmlAttributes>
+                </CheckBoxMulti>
+              </Container>
+              <Container Condition="not(DenySelectAll())" ScriptItemUID="Container3" EnableCustomAttributes="true" ItemUID="Deny all">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;checkboxAll_no&quot;" />
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="'padding-left: 10px;'" />
+                </HtmlAttributes>
+                <CheckBoxMulti DataTable="EditTable" DataColumn="DoReject" ScriptItemUID="CheckBoxMulti2" Layout="'VI_Styles_CheckBoxMulti_DecisionControl'" Text="&quot;&quot;" ItemUID="Deny all" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute9" Value="IsNullOrEmpty(DenyAllText(),translate(&quot;#LDS#Deny all&quot;))" />
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute11" Value="IsNullOrEmpty(DenyAllText(),translate(&quot;#LDS#Deny all&quot;))" />
+                    <HtmlAttribute Name="'data-imx-multicheckbox-hiddenCount'" ScriptItemUID="HtmlAttribute13" Value="'2'" />
+                  </HtmlAttributes>
+                </CheckBoxMulti>
+              </Container>
+            </Container>
+          </GridColumnFooter>
+          <Cell ScriptItemUID="Cell1">
+            <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_Inline'">
+              <Container ScriptItemUID="Container1" EnableCustomAttributes="true" ItemUID="Approve">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="'checkbox_yes'" />
+                </HtmlAttributes>
+                <CheckBox DataTable="EditTable" DataColumn="DoApprove" Text="&quot;&quot;" ScriptItemUID="CheckBox1" Layout="'VI_Styles_CheckBox_DecisionControl'" EnableCustomAttributes="true" ItemUID="Approve">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="IsNullOrEmpty(ApproveText(),translate(&quot;#LDS#Approve&quot;))" />
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute8" Value="IsNullOrEmpty(ApproveText(),translate(&quot;#LDS#Approve&quot;))" />
+                  </HtmlAttributes>
+                </CheckBox>
+              </Container>
+              <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="Deny">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;checkbox_no&quot;" />
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container7style" Value="'padding-left: 10px;'" />
+                </HtmlAttributes>
+                <CheckBox DataTable="EditTable" DataColumn="DoReject" Text="&quot;&quot;" ScriptItemUID="CheckBox2" Layout="'VI_Styles_CheckBox_DecisionControl'" EnableCustomAttributes="true" ItemUID="Deny">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute6" Value="IsNullOrEmpty(DenyText(),translate(&quot;#LDS#Deny&quot;))" />
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute7" Value="IsNullOrEmpty(DenyText(),translate(&quot;#LDS#Deny&quot;))" />
+                  </HtmlAttributes>
+                </CheckBox>
+              </Container>
+            </Container>
+          </Cell>
+        </GridColumn>
+      </GridColumnGroup>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="EditTable" ScriptItemUID="DataEventHandler1">
+          <ActionSequence Condition="from EditTable select current doapprove" ScriptItemUID="Action2">
+            <Update DataTable="EditTable" DataColumn="DoReject" Value="false" WhereClause="primarykey() = ( select current primarykey() from edittable)" ScriptItemUID="Update1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="DoApprove" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Update" DataTable="EditTable" ScriptItemUID="DataEventHandler2">
+          <ActionSequence Condition="from EditTable select current doreject" ScriptItemUID="Action3">
+            <Update DataTable="EditTable" DataColumn="DoApprove" Value="false" WhereClause="primarykey() = ( select current primarykey() from edittable) and doapprove" ScriptItemUID="Update2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="DoReject" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DenySelectAll()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DenyText()" DataType="System.String" />
+      <VirtualFunction Signature="ApproveText()" DataType="System.String" />
+      <VirtualFunction Signature="ApproveAllText()" DataType="System.String" />
+      <VirtualFunction DataType="System.String" Signature="DenyAllText()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

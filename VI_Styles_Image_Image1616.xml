@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Image_Image1616" Type="Image" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="img1616 IconImage" Comment="16x16 pixel picture" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.img1616 { width: 16px; height: 16px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

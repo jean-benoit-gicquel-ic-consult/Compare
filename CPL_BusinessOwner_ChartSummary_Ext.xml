@@ -1,0 +1,18 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="CPL_BusinessOwner_ChartSummary_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigEntry5" ObjectType="ConfigEntryObjects" SortOrder="20">
+        <ConfigEntryObject ScriptItemUID="CPLConfigEntryObject1">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ComplianceRuleViolationsByProfitCenter&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Compliance rule violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;2&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;ComplianceRuleViolationsByProfitCenterMonthly&lt;/DashboardDefHistoric&gt;&lt;RpsReport&gt;Compliance rule violations by structure members&lt;/RpsReport&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigEntry6" ObjectType="ConfigEntryObjects" SortOrder="20">
+        <ConfigEntryObject ScriptItemUID="CPLConfigEntryObject2">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ComplianceRuleViolationsByLocality&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Compliance rule violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;0.7&lt;/RedLimit&gt;&lt;GreenLimit&gt;0.3&lt;/GreenLimit&gt;&lt;SortOrder&gt;3&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;ComplianceRuleViolationsByLocalityMonthly&lt;/DashboardDefHistoric&gt;&lt;RpsReport&gt;Compliance rule violations by structure members&lt;/RpsReport&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigEntry3" ObjectType="ConfigEntryObjects" SortOrder="20">
+        <ConfigEntryObject ScriptItemUID="CPLConfigEntryObject3">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ComplianceRuleViolationsByDepartment&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Compliance rule violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;2&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;&lt;/DashboardDefHistoric&gt;&lt;RpsReport&gt;Compliance rule violations by structure members&lt;/RpsReport&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigEntry3" ObjectType="ConfigEntryObjects" SortOrder="40">
+        <ConfigEntryObject ScriptItemUID="CPLConfigEntryObject4">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ComplianceNewRuleViolations_By_Department&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#New rule violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;4&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;noclick&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;&lt;/DashboardDefHistoric&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

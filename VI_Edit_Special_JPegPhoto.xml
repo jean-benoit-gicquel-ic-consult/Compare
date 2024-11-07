@@ -1,0 +1,107 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="CBPh90Eg+BKY5zTh0JpA1w==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_Special_JPegPhoto" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Container Condition="select current canedit(editcolumn) from edittable" ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="'float: right; padding-left: 20px;'" />
+          </HtmlAttributes>
+          <LinkContainer ScriptItemUID="Image2Link">
+            <ControlList ScriptItemUID="Image2Ctl">
+              <Image StockImage="Edit" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Change&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                </HtmlAttributes>
+              </Image>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <ActionSequence ScriptItemUID="Action1">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;min-width: 600px; max-width:700px;&quot; -- leave enough space for large images" />
+                      </HtmlAttributes>
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container4">
+                        <Label Text="translate(&quot;#LDS#To upload an image to the database, please choose an image file.&quot;)" ScriptItemUID="Label1" />
+                      </Container>
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container5">
+                        <ImageEditor DataTable="tempImage" DataColumn="EditColumn" MaxHeight="200" MaxWidth="150" TempImage="RawImage" ScriptItemUID="ImageEditor1" />
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container6">
+                      <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" EnabledCondition="from tempImage select current not(isnull(EditColumn))" ScriptItemUID="Button1">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <Update DataTable="EditTable" DataColumn="EditColumn" WhereClause="primarykey() = select current primarykey() from edittable" Value="from tempImage select  EditColumn" ScriptItemUID="Update1" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ScriptItemUID="Button2" AssociatedWithEscapeKey="true" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="{{ DataContext.EditTable_EditColumn.GetMetadata(DataContext.EditTable_Current.Row).Display }}" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                </CallAction>
+                <Update DataTable="tempImage" DataColumn="RawImage" ScriptItemUID="Update2" />
+              </ActionSequence>
+            </ServerActionCall>
+          </LinkContainer>
+          <LinkContainer ScriptItemUID="Image1Link">
+            <ControlList ScriptItemUID="Image1Ctl">
+              <Image StockImage="Delete" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Remove&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                </HtmlAttributes>
+              </Image>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall4">
+              <Update DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="Update3" />
+            </ServerActionCall>
+          </LinkContainer>
+        </Container>
+        <Container Condition="select current not(isnull(editcolumn)) from edittable" ScriptItemUID="Container7" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container7style" Value="'max-width: 260px; max-height: 260px; overflow: hidden;'" />
+          </HtmlAttributes>
+          <Image Source="DataSet" DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="Image3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Display }}" />
+            </HtmlAttributes>
+          </Image>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="tempImage" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="EditColumn" DataType="System.Byte[]" ScriptItemUID="Column1" />
+          <Column Name="RawImage" DataType="System.Byte[]" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension1">
+        <VirtualColumnExtension Name="EditColumn" DataType="System.Byte[]" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

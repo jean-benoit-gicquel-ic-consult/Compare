@@ -1,0 +1,24 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="CBPh90Eg+BKY5zTh0JpA1w==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_Special_Person_Gender" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Edit_LimitedValues" ScriptItemUID="ControlRef1">
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1">
+            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="EditColumn" />
+          </VirtualTableMapping>
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" Class="Person" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

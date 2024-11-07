@@ -1,0 +1,32 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RPS_MyData_PersonalData_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="30" Condition="IsPreProp(&quot;REPORT_SUBSCRIPTION&quot;)">
+        <TabPage ScriptItemUID="RPSTabPage1" ItemUID="Reporting">
+          <ControlsHeader ScriptItemUID="RPSContainer2">
+            <Label Text="translate('#LDS#Subscriptions')" ScriptItemUID="RPSLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RPSContainer1">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="RPSControlRef1">
+              <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#This page shows your current report subscriptions. You can add a new subscription here.&quot;)" ScriptItemUID="RPSVirtualFunctionMapping1" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="VI_Reporting_Subscriptions" ScriptItemUID="RPSControlRef2" />
+          </ControlsBody>
+        </TabPage>
+        <TabPage ScriptItemUID="RPSTabPage2" Condition="exists(&quot;Person&quot;, variable(sqland(&quot;uid_person = '%useruid%'&quot;, getconfig(&quot;RPS_Resp_ListReports_Condition&quot;))))">
+          <ControlsHeader ScriptItemUID="RPSContainer3">
+            <Label ScriptItemUID="RPSLabel2" Text="translate(&quot;#LDS#Reports&quot;)" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RPSContainer4">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="RPSControlRef3">
+              <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#This page shows all available list reports. You can create new list reports and make them available to employees and organizational units.&quot;)" ScriptItemUID="RPSVirtualFunctionMapping2" />
+            </ControlReferenceContainer>
+            <ControlReferenceControlList ID="RPS_ListReports" ScriptItemUID="RPSControlRef4">
+              <VirtualFunctionMapping ScriptItemUID="RPSVirtualFunctionMapping3" ID="DbWhereClause()" Value="SqlOr(&#xD;&#xA;getconfig(&quot;VI_Roles_Responsibility_RPSReport&quot;),&#xD;&#xA;SqlAnd( &quot;isInactive = 0&quot;, &#xD;&#xA;        &quot;islistreport = 1&quot;, &#xD;&#xA;		&quot;IsDeactivatedByPreProcessor = 0&quot;,&#xD;&#xA;		format(&quot;UID_RPSReport in (select UID_RPSReport from PersonHasRPSReport where UID_Person = '{0}')&quot;,getuser())&#xD;&#xA;		)&#xD;&#xA;)&#xD;&#xA;" />
+            </ControlReferenceControlList>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

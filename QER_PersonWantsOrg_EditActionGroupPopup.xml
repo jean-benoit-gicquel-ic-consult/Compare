@@ -1,0 +1,67 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_PersonWantsOrg_EditActionGroupPopup">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="QBM.CompositionApi.UiAction" />
+        <NamespaceImport Namespace="System.Collections.Generic" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <ControlReferenceControlList ID="QER_PersonWantsOrg_EditActionGroup" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceControlList>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container ScriptItemUID="Container2" Layout="'VI_Styles_Container_ButtonPanel'">
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="IsReadOnly()" ItemUID="ReadOnly">
+                  <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="QERControlRef2" />
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case2" ItemUID="Writeable">
+                  <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="Button1" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_Default'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <ActionOnControl />
+                    </ServerActionCall>
+                  </Button>
+                  <Button ScriptItemUID="Button2" Text="translate(&quot;#LDS#Save&quot;)">
+                    <ServerActionCall ScriptItemUID="ServerActionCall2">
+                      <CodeLiteral ScriptItemUID="CodeLiteral2">// call AdditionalDataWrite delegate
+var dict = (IDictionary&lt;IDataRow, Action&gt;) PWO.ExtendedProperties["AdditionalDataWrite"];
+dict[PWO_Current.Row]();
+
+var dbObjRow = (IDbObjectRow) PWO_Current.Row;
+if (dbObjRow.Entity.IsLoaded)
+{
+	dbObjRow.Save(_Database);
+}
+</CodeLiteral>
+                      <ActionOnControl />
+                    </ServerActionCall>
+                  </Button>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="PopupTitle()" Value="from pwo select current display()" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PWO" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="Data" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

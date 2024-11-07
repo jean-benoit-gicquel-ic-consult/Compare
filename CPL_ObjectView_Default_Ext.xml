@@ -1,0 +1,31 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2013-01-23" ID="CPL_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="100">
+        <ConfigParam Key="VI_ObjectView_ComplianceRule_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ComplianceRule&quot;))" DatabaseTable="ComplianceRule" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="90">
+        <ConfigEntry Key="VI_ObjectView_ComplianceRule_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="CPLConfigEntry1">
+          <SingleColumn DataColumn="Ident_ComplianceRule" FKWhereClause="" ScriptItemUID="CPLSingleColumn1" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="CPLSingleColumn2" />
+          <SingleColumn DataColumn="RuleNumber" FKWhereClause="" ScriptItemUID="CPLSingleColumn3" />
+          <SingleColumn DataColumn="UID_OrgAttestator" FKWhereClause="" ScriptItemUID="CPLSingleColumn4" />
+          <SingleColumn DataColumn="UID_OrgRuler" FKWhereClause="" ScriptItemUID="CPLSingleColumn5" />
+          <SingleColumn DataColumn="UID_OrgResponsible" FKWhereClause="" ScriptItemUID="CPLSingleColumn6" />
+          <SingleColumn DataColumn="UID_ComplianceGroup" FKWhereClause="" ScriptItemUID="CPLSingleColumn7" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="110">
+        <ConfigEntry Key="VI_ObjectView_NonCompliance_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="CPLConfigEntry2">
+          <SingleColumn DataColumn="Ident_NonCompliance" FKWhereClause="" ScriptItemUID="CPLSingleColumn8" />
+          <SingleColumn DataColumn="InternalName" FKWhereClause="" ScriptItemUID="CPLSingleColumn9" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="CPLSingleColumn10" />
+          <SingleColumn DataColumn="UID_ParentNonCompliance" FKWhereClause="" ScriptItemUID="CPLSingleColumn11" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="110">
+        <ConfigParam Key="VI_ObjectView_NonCompliance_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;NonCompliance&quot;))" DatabaseTable="NonCompliance" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

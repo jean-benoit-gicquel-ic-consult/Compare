@@ -1,0 +1,562 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Compliance_RiskAssessment" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.Interfaces.dll" />
+        <TypeMember>internal void LoadRiskIndex(string uidQerRiskIndex, string dbObjectKey, string parent)
+{
+	var svc = _Connection.Session.Resolve&lt;QER.Interfaces.IRiskIndexService&gt;();
+	var resultTask = svc.GetAsync(uidQerRiskIndex, new DbObjectKey(dbObjectKey));
+	resultTask.ConfigureAwait(false);
+	var result = resultTask.Result;
+	foreach(var elem in result)
+	{
+		var insertValues = new ColumnInsertValues(RiskObject);
+		insertValues["UID_QERRiskIndex"] = uidQerRiskIndex;
+		insertValues["parent"] = parent;
+		insertValues["SourceValue"] = elem.SourceValue;
+		insertValues["ObjectKeySource"] = elem.ObjectKeySource;
+		insertValues["ObjectKeyTarget"] = elem.ObjectKeyTarget;
+		RiskObject.Insert(insertValues);
+	}
+}</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable ScriptItemUID="FillTable1" DataTable="Objects" DBTableName="getobjectkeytable(objectkey())" WhereClause="format(&quot;xobjectkey = {0}&quot;, sqlformatvalue(objectkey(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" RemoveDeleted="false" LoadLimit="">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+          <InsertValue DataColumn="TableNameNoBase" Value="GetObjectKeyTable(objectkey())" />
+          <InsertValue DataColumn="UID" Value="primarykey()" />
+          <InsertValue DataColumn="RiskIndexCalculated" Value="try(convert(objectwalker(&quot;riskindexcalculated&quot;),&quot;System.Double&quot;),0.0)" />
+          <InsertValue DataColumn="XObjectKey" Value="objectwalker(&quot;XObjectKey&quot;)" />
+        </LoadTable>
+        <ActionSequence Condition="0 = select count() from tableandriskindex" ScriptItemUID="Action2">
+          <LoadTable DataTable="TableAndRiskIndex" Type="LimitedSQL" ScriptItemUID="LoadTable1" IdentLimitedSQL="&quot;Webportal.VI_Compliance_RiskAssessment.TableAndRiskIndex&quot;" />
+          <LoadTable DataTable="QERRiskIndex" WhereClause="sqlcompare(&quot;isinactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;)" ScriptItemUID="LoadTable2">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <ForeachRow DataTable="Objects" WhereClause="xobjectkey = objectkey()" ScriptItemUID="ForeachRow1">
+          <CallAction ActionID="LoadRiskObjects" ScriptItemUID="Call2" />
+        </ForeachRow>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <ContainerTemplate DataTable="Objects" WhereClause="xobjectkey = objectkey() and (0 &lt; select count() from qerriskindex)" ScriptItemUID="ContainerTemplate1">
+          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+            <Table ScriptItemUID="Table1">
+              <Row ScriptItemUID="Row1">
+                <Cell ScriptItemUID="Cell16" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Cell16style" Value="&quot;width: 140px;&quot;" />
+                  </HtmlAttributes>
+                  <Label Text="translate(&quot;#LDS#Calculated risk index&quot;)" ScriptItemUID="Label23" />
+                </Cell>
+                <Cell ScriptItemUID="Cell17" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Cell17style" Value="&quot;width: 120px;&quot;" />
+                  </HtmlAttributes>
+                  <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef1">
+                    <VirtualFunctionMapping ID="UseCaption()" Value="translate(&quot;#LDS#Calculated risk index&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualTableMapping VirtualTable="Object" DataTable="Objects" ScriptItemUID="VirtualTableMapping1">
+                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="ResultRisk" />
+                    </VirtualTableMapping>
+                  </ControlReferenceContainer>
+                </Cell>
+              </Row>
+            </Table>
+          </Container>
+          <Container Condition="0 &lt; select count() from qerriskindex where uid_qerriskindex in ( select uid_qerriskindex from riskobject where isnullorempty(parent))" ScriptItemUID="Container3">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ID="Text()" Value="if(0 &lt; select count() from qerriskindex where (uid_qerriskindex in ( select uid_qerriskindex from riskobject where isnullorempty(parent)) and typeofcalculation in ('mx1','av1')))&#xD;&#xA;then&#xD;&#xA;-- new calculation rules MX1/AV1&#xD;&#xA;translate(&quot;#LDS#The following properties and assignments contribute to the calculated risk index.&quot;)+&quot; &quot;+translate(&quot;#LDS#The calculated risk index is the sum of all attribute-based values and the maximum of all assignment-base values.&quot;)&#xD;&#xA;else&#xD;&#xA;-- legacy&#xD;&#xA;translate(&quot;#LDS#The following properties and assignments contribute to the calculated risk index.&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+            </ControlReferenceContainer>
+            <Grid AllowExport="true" ScriptItemUID="Grid3" ExportFileName="" ExportTitle="">
+              <GridBand DataTable="QERRiskIndex" WhereClause="uid_qerriskindex in ( select uid_qerriskindex from riskobject where isnullorempty(parent)) and resultvalue&lt;&gt;0" OrderBy="'IsFromAttribute desc'" ScriptItemUID="GridBand3" ConsolidateTables="true" EnableCustomAttributes="true" DisplayHeader="Always">
+                <HtmlAttributes>
+                  <Property Name="ApplyFilledHeight" Value="true" />
+                </HtmlAttributes>
+                <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                        <ControlList ScriptItemUID="ControlList7">
+                          <Label Text="from qerriskindex select current&#xD;&#xA;((if(isfromattribute) then translate(&quot;#LDS#Attribute&quot;) else translate(&quot;#LDS#Assignments&quot;))+&quot;: &quot;+display())" ScriptItemUID="Label44" />
+                        </ControlList>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                        <ControlList ScriptItemUID="ControlList9">
+                          <LayoutPanel ScriptItemUID="LayoutPanel1">
+                            <ContainerColumnTemplate DataTable="QERRiskIndex" ScriptItemUID="ContainerColumnTemplate2">
+                              <ColumnList ScriptItemUID="ColumnList3">
+                                <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                                <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="ResultValue" Caption="translate(&quot;#LDS#Risk&quot;)" />
+                                <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Weight" />
+                              </ColumnList>
+                              <Container ScriptItemUID="Container25">
+                                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
+                                  <VirtualTableMapping VirtualTable="EditTable" DataTable="QERRiskIndex" ScriptItemUID="VirtualTableMapping10">
+                                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                  </VirtualTableMapping>
+                                  <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+                                </ControlReferenceContainer>
+                              </Container>
+                              <Container ScriptItemUID="Container24">
+                                <SwitchContainer ScriptItemUID="Switch2">
+                                  <SwitchContainerCase ScriptItemUID="Case1" Condition="DataColumnName(QERRiskIndex,currentcolumn) = (&quot;ResultValue&quot;)">
+                                    <ControlReferenceControlList ID="COL_ResultValue" ScriptItemUID="ControlRef4" />
+                                  </SwitchContainerCase>
+                                  <SwitchContainerCase ScriptItemUID="Case2" Condition="DataColumnName(QERRiskIndex,currentcolumn) = (&quot;Weight&quot;)">
+                                    <Label Text="DisplayWeight()" ScriptItemUID="Label45" />
+                                  </SwitchContainerCase>
+                                  <SwitchContainerCase ScriptItemUID="Case3">
+                                    <ColumnEditor DataTable="QERRiskIndex" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2">
+                                      <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping5" />
+                                    </ColumnEditor>
+                                  </SwitchContainerCase>
+                                </SwitchContainer>
+                              </Container>
+                            </ContainerColumnTemplate>
+                          </LayoutPanel>
+                        </ControlList>
+                      </VirtualControlMapping>
+                    </ControlReferenceControlList>
+                  </ControlList>
+                </GridBandListView>
+                <GridFilters ScriptItemUID="GridFilters1" />
+                <GridRows />
+                <GridColumn Width="&quot;450px&quot;" ScriptItemUID="Column47">
+                  <GridColumnHeader ScriptItemUID="wctl1">
+                    <Label Text="translate(&quot;#LDS#Risk index&quot;)" ScriptItemUID="Label24" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell1">
+                    <Label Text="from qerriskindex select current&#xD;&#xA;((if(isfromattribute) then translate(&quot;#LDS#Attribute&quot;) else translate(&quot;#LDS#Assignments&quot;))+&quot;: &quot;+display())" ScriptItemUID="Label25" />
+                  </Cell>
+                </GridColumn>
+                <GridColumn SortColumn="ResultValue" ScriptItemUID="Column48">
+                  <GridColumnHeader ScriptItemUID="wctl2">
+                    <Label Text="translate(&quot;#LDS#Risk&quot;)" ScriptItemUID="Label26" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell2">
+                    <ControlReferenceControlList ID="COL_ResultValue" ScriptItemUID="ControlRef3" />
+                  </Cell>
+                </GridColumn>
+                <GridColumn Width="&quot;140px&quot;" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="Column49">
+                  <GridColumnHeader ScriptItemUID="wctl3">
+                    <Label Text="datacaption(&quot;qerriskindex&quot;, &quot;weight&quot;)" ScriptItemUID="Label28" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell3">
+                    <Label Text="DisplayWeight()" ScriptItemUID="Label29" />
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+              <GridBand DataTable="RiskObject" IsRecursive="true" RecursiveWhereClause="parent = (select current pk from riskobject)" WhereClause="(select current not(typeofcalculation in ('inc','dec'))from qerriskindex)&#xD;&#xA;and&#xD;&#xA;&#xD;&#xA;isnullorempty(parent) and uid_qerriskindex = ( select current uid_qerriskindex from qerriskindex)" EntriesPerPage="999999" OrderBy="'DisplayValue1 desc'" ScriptItemUID="GridBand4" ConsolidateTables="true">
+                <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="true">
+                  <ControlList ScriptItemUID="ControlList3">
+                    <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef5">
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                        <ControlList ScriptItemUID="ControlList5">
+                          <Label Text="from riskobject select current displaytype" ScriptItemUID="Label46" />
+                        </ControlList>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                        <ControlList ScriptItemUID="ControlList4">
+                          <LayoutPanel ScriptItemUID="LayoutPanel2">
+                            <ContainerColumnTemplate DataTable="RiskObject" ScriptItemUID="ContainerColumnTemplate1">
+                              <ColumnList ScriptItemUID="ColumnList1">
+                                <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" />
+                                <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="DisplayValue1" Caption="translate(&quot;#LDS#Risk&quot;)" />
+                                <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DisplayValue2" Caption="translate(&quot;#LDS#Contributing object&quot;)" />
+                              </ColumnList>
+                              <Container ScriptItemUID="Container27">
+                                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef9">
+                                  <VirtualTableMapping VirtualTable="EditTable" DataTable="RiskObject" ScriptItemUID="VirtualTableMapping2">
+                                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                  </VirtualTableMapping>
+                                  <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                                </ControlReferenceContainer>
+                              </Container>
+                              <Container ScriptItemUID="Container26">
+                                <SwitchContainer ScriptItemUID="Switch1">
+                                  <SwitchContainerCase ScriptItemUID="Case5" Condition="DataColumnName(RiskObject,currentcolumn) = (&quot;DisplayValue2&quot;)">
+                                    <ControlReferenceControlList ID="COL_Contributingobject" ScriptItemUID="ControlRef10" />
+                                  </SwitchContainerCase>
+                                  <SwitchContainerCase ScriptItemUID="Case4">
+                                    <ColumnEditor DataTable="RiskObject" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1">
+                                      <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping7" />
+                                    </ColumnEditor>
+                                  </SwitchContainerCase>
+                                </SwitchContainer>
+                              </Container>
+                            </ContainerColumnTemplate>
+                          </LayoutPanel>
+                        </ControlList>
+                      </VirtualControlMapping>
+                    </ControlReferenceControlList>
+                  </ControlList>
+                </GridBandListView>
+                <GridFilters ScriptItemUID="GridFilters2" />
+                <GridRows />
+                <GridColumn SortColumn="DisplayType" ScriptItemUID="Column50">
+                  <GridColumnHeader ScriptItemUID="wctl4">
+                    <Label Text="translate(&quot;#LDS#Type&quot;)" ScriptItemUID="Label30" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell4">
+                    <Label Text="from riskobject select current displaytype" ScriptItemUID="Label31" />
+                  </Cell>
+                </GridColumn>
+                <GridColumn HasFooterCell="true" ScriptItemUID="Column51">
+                  <GridColumnHeader ScriptItemUID="wctl5">
+                    <Label Text="translate(&quot;#LDS#Contributing object&quot;)" ScriptItemUID="Label32" />
+                  </GridColumnHeader>
+                  <GridColumnFooter Condition="select current not(typeofcalculation in ('inc','dec'))from qerriskindex" ScriptItemUID="wctl6">
+                    <Label Text="DisplayTypeOfCalculation()" ScriptItemUID="Label2" />
+                  </GridColumnFooter>
+                  <Cell ScriptItemUID="Cell5">
+                    <ControlReferenceControlList ID="COL_Contributingobject" ScriptItemUID="ControlRef8" />
+                  </Cell>
+                </GridColumn>
+                <GridColumn SortColumn="DisplayValue1" Layout="'VI_Styles_GridColumn_Centered'" Width="&quot;140px&quot;" HasFooterCell="true" ScriptItemUID="Column52">
+                  <GridColumnHeader ScriptItemUID="wctl7">
+                    <Label Text="translate(&quot;#LDS#Risk index&quot;)" ScriptItemUID="Label37" />
+                  </GridColumnHeader>
+                  <GridColumnFooter Condition="select current not(typeofcalculation in ('inc','dec'))from qerriskindex" ScriptItemUID="wctl8">
+                    <Label Text="from qerriskindex select current&#xA;(numformat(tempvaluenotweighted, &quot;0.0000&quot;))" ScriptItemUID="Label38" />
+                  </GridColumnFooter>
+                  <Cell ScriptItemUID="Cell6">
+                    <Container ScriptItemUID="Container11">
+                      <Label Text="from riskobject select current displayvalue1" ScriptItemUID="Label39" />
+                    </Container>
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+            </Grid>
+          </Container>
+          <Container Layout="'VI_Styles_Container_Paragraph'" Condition="from objects select current IsRiskOutofDateInDatabase" ScriptItemUID="Container12">
+            <Label Text="translate(&quot;#LDS#The calculated risk index will be updated on the next calculation run.&quot;)" ScriptItemUID="Label42" />
+          </Container>
+          <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container13">
+            <Button Text="translate(&quot;#LDS#View risk functions&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate('#LDS#Click here for help about this view.')" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall3">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container14">
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15">
+                        <Label Text="translate(&quot;#LDS#The following attributes and assignments contribute to the calculated risk index.&quot;)" ScriptItemUID="Label43" />
+                      </Container>
+                      <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_AccordeonMultiselect'">
+                        <TabPage ScriptItemUID="TabPage1">
+                          <ControlsHeader ScriptItemUID="Container16">
+                            <Label Text="translate(&quot;#LDS#Attribute-based calculation&quot;)" ScriptItemUID="Label19" />
+                          </ControlsHeader>
+                          <ControlsBody ScriptItemUID="Container17">
+                            <Grid ScriptItemUID="Grid2" AllowExport="true" ExportFileName="" ExportTitle="">
+                              <GridBand DataTable="QERRiskIndex" ScriptItemUID="GridBand2" WhereClause="uid_qerriskindex in ( select uid_qerriskindex from tableandriskindex where tablename = ( select current tablename from objects)) and IsFromAttribute = 'true'">
+                                <GridBandListView ScriptItemUID="GridBandListView3" EnableListView="Auto" />
+                                <GridFilters ScriptItemUID="GridFilters3" />
+                                <GridRows />
+                                <GridColumn ScriptItemUID="GridColumn8" HasFooterCell="true" SortColumn="__Display">
+                                  <GridColumnHeader ScriptItemUID="wctl10">
+                                    <Label Text="datacaption(&quot;QERRiskIndex&quot;, &quot;DisplayValue&quot;)" ScriptItemUID="Label17" />
+                                  </GridColumnHeader>
+                                  <GridColumnFooter ScriptItemUID="wctl11" />
+                                  <Cell ScriptItemUID="Cell8">
+                                    <Label Text="from qerriskindex select current display()" ScriptItemUID="Label18" />
+                                  </Cell>
+                                </GridColumn>
+                                <GridColumn ScriptItemUID="GridColumn7" Width="&quot;110px&quot;" Layout="'VI_Styles_GridColumn_Centered'" SortColumn="Weight">
+                                  <GridColumnHeader ScriptItemUID="wctl12">
+                                    <Label Text="datacaption(&quot;qerriskindex&quot;, &quot;weight&quot;)" ScriptItemUID="Label15" />
+                                  </GridColumnHeader>
+                                  <Cell ScriptItemUID="Cell9">
+                                    <Label Text="from qerriskindex select current weight" ScriptItemUID="Label16" />
+                                  </Cell>
+                                </GridColumn>
+                                <GridColumn ScriptItemUID="GridColumn6" Width="&quot;150px&quot;" Layout="'VI_Styles_GridColumn_Centered'" SortColumn="TypeOfCalculation">
+                                  <GridColumnHeader ScriptItemUID="wctl13">
+                                    <Label Text="datacaption(&quot;qerriskindex&quot;, &quot;typeofcalculation&quot;)" ScriptItemUID="Label13" />
+                                  </GridColumnHeader>
+                                  <Cell ScriptItemUID="Cell10">
+                                    <Label Text="from qerriskindex select current displayvalue(typeofcalculation)" ScriptItemUID="Label14" />
+                                  </Cell>
+                                </GridColumn>
+                                <GridColumn ScriptItemUID="GridColumn5" Width="&quot;200px&quot;" SortColumn="ResultValue">
+                                  <GridColumnHeader ScriptItemUID="wctl14">
+                                    <Label Text="translate(&quot;#LDS#Result value&quot;)" ScriptItemUID="Label11" />
+                                  </GridColumnHeader>
+                                  <Cell ScriptItemUID="Cell11">
+                                    <Label Text="from qerriskindex select current&#xD;&#xA;&#xD;&#xA;-- inc/dec wird nicht gewichtet&#xD;&#xA;(if(IsIncOrDec()) then numformat(if(isnull(resultvalue)) then 0.0 else resultvalue,&quot;0.0000&quot;)&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;-- Wichtungsrechnung aufzeigen&#xD;&#xA;(numformat(if(isnull(tempvaluenotweighted)) then 0.0 else tempvaluenotweighted, &quot;0.0000&quot;)&#xD;&#xA;+ &quot; * &quot; + numformat(weight, &quot;0.0000&quot;) + &quot; / &quot; + numformat(calculationbase, &quot;0.0000&quot;) + &quot; = &quot; + numformat(if(isnull(resultvalue)) then 0.0 else resultvalue, &quot;0.0000&quot;)))" ScriptItemUID="Label12" />
+                                  </Cell>
+                                </GridColumn>
+                              </GridBand>
+                            </Grid>
+                          </ControlsBody>
+                        </TabPage>
+                        <TabPage ScriptItemUID="TabPage2">
+                          <ControlsHeader ScriptItemUID="Container18">
+                            <Label Text="translate(&quot;#LDS#Assignment-based calculation&quot;)" ScriptItemUID="Label20" />
+                          </ControlsHeader>
+                          <ControlsBody ScriptItemUID="Container19">
+                            <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+                              <GridBand DataTable="QERRiskIndex" ScriptItemUID="GridBand1" WhereClause="uid_qerriskindex in ( select uid_qerriskindex from tableandriskindex where tablename = ( select current tablename from objects)) and IsFromAttribute = 'false'">
+                                <GridBandListView ScriptItemUID="GridBandListView4" EnableListView="Auto" />
+                                <GridFilters ScriptItemUID="GridFilters4" />
+                                <GridRows />
+                                <GridColumn ScriptItemUID="GridColumn4" HasFooterCell="true" SortColumn="__Display">
+                                  <GridColumnHeader ScriptItemUID="wctl15">
+                                    <Label Text="datacaption(&quot;QERRiskIndex&quot;, &quot;DisplayValue&quot;)" ScriptItemUID="Label9" />
+                                  </GridColumnHeader>
+                                  <GridColumnFooter ScriptItemUID="wctl16" />
+                                  <Cell ScriptItemUID="Cell12">
+                                    <Label Text="from qerriskindex select current display()" ScriptItemUID="Label10" />
+                                  </Cell>
+                                </GridColumn>
+                                <GridColumn ScriptItemUID="GridColumn3" Width="&quot;110px&quot;" Layout="'VI_Styles_GridColumn_Centered'" SortColumn="Weight">
+                                  <GridColumnHeader ScriptItemUID="wctl17">
+                                    <Label Text="datacaption(&quot;qerriskindex&quot;, &quot;weight&quot;)" ScriptItemUID="Label7" />
+                                  </GridColumnHeader>
+                                  <Cell ScriptItemUID="Cell13">
+                                    <Label Text="from qerriskindex select current weight" ScriptItemUID="Label8" />
+                                  </Cell>
+                                </GridColumn>
+                                <GridColumn ScriptItemUID="GridColumn2" Width="&quot;150px&quot;" Layout="'VI_Styles_GridColumn_Centered'" SortColumn="TypeOfCalculation">
+                                  <GridColumnHeader ScriptItemUID="wctl18">
+                                    <Label Text="datacaption(&quot;qerriskindex&quot;, &quot;typeofcalculation&quot;)" ScriptItemUID="Label5" />
+                                  </GridColumnHeader>
+                                  <Cell ScriptItemUID="Cell14">
+                                    <Label Text="from qerriskindex select current displayvalue(typeofcalculation)" ScriptItemUID="Label6" />
+                                  </Cell>
+                                </GridColumn>
+                                <GridColumn ScriptItemUID="GridColumn1" Width="&quot;200px&quot;" SortColumn="ResultValue">
+                                  <GridColumnHeader ScriptItemUID="wctl19">
+                                    <Label Text="translate(&quot;#LDS#Result value&quot;)" ScriptItemUID="Label3" />
+                                  </GridColumnHeader>
+                                  <Cell ScriptItemUID="Cell15">
+                                    <Label Text="from qerriskindex select current&#xD;&#xA;&#xD;&#xA;-- inc/dec wird nicht gewichtet&#xD;&#xA;(if(IsIncOrDec()) then numformat(if(isnull(resultvalue)) then 0.0 else resultvalue,&quot;0.0000&quot;)&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;-- Wichtungsrechnung aufzeigen&#xD;&#xA;(numformat(if(isnull(tempvaluenotweighted)) then 0.0 else tempvaluenotweighted, &quot;0.0000&quot;)&#xD;&#xA;+ &quot; * &quot; + numformat(weight, &quot;0.0000&quot;) + &quot; / &quot; + numformat(calculationbase, &quot;0.0000&quot;) + &quot; = &quot; + numformat(if(isnull(resultvalue)) then 0.0 else resultvalue, &quot;0.0000&quot;)))" ScriptItemUID="Label4" />
+                                  </Cell>
+                                </GridColumn>
+                              </GridBand>
+                            </Grid>
+                          </ControlsBody>
+                        </TabPage>
+                      </Tab>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container20">
+                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef7" />
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Risk Assessment&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </ContainerTemplate>
+        <Container Condition="0 = select count() from qerriskindex" ScriptItemUID="Container23" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="CPLHtmlAttribute1" Value="&quot;imx-message imx-message-exception&quot;" />
+          </HtmlAttributes>
+          <Label Text="translate(&quot;#LDS#You do not have permission to view the risk index functions.&quot;)" ScriptItemUID="Label22" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableGeneric Table="Objects" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric1" TriggerUpdates="Never">
+          <Column Name="UID" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="RiskIndexCalculated" DataType="System.Double" ScriptItemUID="Column3" />
+          <Column Name="XObjectKey" ScriptItemUID="Column4" DataType="System.String" />
+          <Column Name="TableNameNoBase" ScriptItemUID="Column5" DataType="System.String" />
+          <Column Name="ResultRiskUnbound" Expression="isnull(convert(&#xD;&#xA;from qerriskindex select sum(resultvalue) where&#xD;&#xA;(uid_qerriskindex in ( select uid_qerriskindex from riskobject where isnullorempty(parent) and not(typeofcalculation in ('mx1','av1')))), &quot;System.Double&quot;), convert(0.0, &quot;System.Double&quot;))&#xD;&#xA;&#xD;&#xA;-- look for maxiumum of all MX1/AV1 values&#xD;&#xA;+&#xD;&#xA;isnull(convert(&#xD;&#xA;from qerriskindex select max(resultvalue) where&#xD;&#xA;(uid_qerriskindex in ( select uid_qerriskindex from riskobject where isnullorempty(parent) and typeofcalculation in ('mx1','av1'))), &quot;System.Double&quot;), convert(0.0, &quot;System.Double&quot;))&#xD;&#xA;" DataSource="Expression" ScriptItemUID="Column6" DataType="System.Double" />
+          <Column Name="ResultRisk" Expression="if(resultriskunbound&lt;0.0) then 0.0 else if ( resultriskunbound&gt;1.0) then 1.0 else resultriskunbound" DataSource="Expression" ScriptItemUID="Column7" DataType="System.Double" />
+          <Column Name="IsRiskOutofDateInDatabase" Expression="numformat(resultrisk, &quot;0.0000&quot;) &lt;&gt; numformat(riskindexcalculated, &quot;0.0000&quot;)" DataSource="Expression" ScriptItemUID="Column8" DataType="System.Boolean" />
+          <Column Name="UID_QERRiskIndexTop" Expression="-- which value is the maximum of all MX1/AV1 values?&#xD;&#xA;from qerriskindex select top 1 uid_qerriskindex where&#xD;&#xA;(uid_qerriskindex in ( select uid_qerriskindex from riskobject where isnullorempty(parent) and typeofcalculation in ('mx1','av1'))) order by resultvalue desc&#xD;&#xA;" DataSource="Expression" ScriptItemUID="Column9" DataType="System.String" />
+          <Column Name="Tablename" DataType="System.String" DataSource="Expression" Expression="select top 1 tablenamebase from tables where tablename = (select current tablenamenobase from objects)" ScriptItemUID="Column2" />
+        </DataTableGeneric>
+        <DataTableSQL Table="RiskObject" PrimaryKeyColumn="pk" DisplayColumn="" SQLStatement="" ScriptItemUID="DataTableLimitedSQL1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="UID_QERRiskIndex" ColumnDataSource="ForeignKey" DBTableName="&quot;QERRiskIndex&quot;" DBColumnName="&quot;UID_QERRiskIndex&quot;" ScriptItemUID="Column11" DataType="System.String" FKWhereClause="" />
+          <Column Name="ObjectKeyTarget" ScriptItemUID="Column12" DataType="System.String" />
+          <Column Name="SourceValue" DataType="System.Decimal" ScriptItemUID="Column13" />
+          <Column Name="pk" ScriptItemUID="Column14" DataType="System.String" />
+          <Column Name="parent" ScriptItemUID="Column15" DataType="System.String" />
+          <Column Name="IsChildCalculated" DataType="System.Boolean" ScriptItemUID="Column16" />
+          <Column Name="ObjectKeySource" ScriptItemUID="Column17" DataType="System.String" />
+          <Column Name="TableNameSource" Expression="if(isnullorempty(objectkeysource)) then &quot;&quot; else getobjectkeytable(objectkeysource)" DataSource="Expression" ScriptItemUID="Column18" DataType="System.String" />
+          <Column Name="IsAccount" Expression="-- if it maps to UNSAccount, it is an account&#xD;&#xA;&#xD;&#xA;if(isnullorempty(tablenamesource)) then false&#xD;&#xA;else&#xD;&#xA;SingleProperty(&quot;Dialogtable&quot;, &quot;UID_DialogTableUnion&quot;, format(&quot;TableName = {0}&quot;, sqlformatvalue(tablenamesource, &quot;string&quot;))) = &quot;TSB-T-UNSAccount&quot;" DataSource="Expression" ScriptItemUID="Column19" DataType="System.Boolean" />
+          <Column Name="DisplayType" Expression="if(isaccount)&#xD;&#xA;then translate(&quot;#LDS#Account&quot;)&#xD;&#xA;else if(not(isnullorempty(parent))) then&#xD;&#xA;(&#xD;&#xA;if(isnullorempty(objectkeysource))&#xD;&#xA;then&#xD;&#xA;datacaption(getobjectkeytable(objectkeytarget))&#xD;&#xA;else datacaption(getobjectkeytable(objectkeysource))&#xD;&#xA;)&#xD;&#xA;else&#xD;&#xA;if(isnullorempty(objectkeysource))&#xD;&#xA;then translate(&quot;#LDS#Property&quot;) else translate(&quot;#LDS#Assignment&quot;)" DataSource="Expression" ScriptItemUID="Column21" DataType="System.String" Caption="translate(&quot;#LDS#Type&quot;)" />
+          <Column Name="TableNameDisplay" Expression="if(isnullorempty(objectkeysource)) then &quot;&quot; else datacaption(getobjectkeytable(objectkeysource))" DataSource="Expression" ScriptItemUID="Column22" DataType="System.String" />
+          <Column Name="TypeOfCalculation" Expression="from qerriskindex select top 1 typeofcalculation where uid_qerriskindex =( select current uid_qerriskindex from riskobject)" DataSource="Expression" ScriptItemUID="Column23" DataType="System.String" />
+          <Column Name="Weight" Expression="from qerriskindex select top 1 weight where uid_qerriskindex =( select current uid_qerriskindex from riskobject)" DataSource="Expression" ScriptItemUID="Column24" DataType="System.Double" />
+          <Column Name="CalculationBase" Expression="from qerriskindex select top 1 calculationbase where uid_qerriskindex =( select current uid_qerriskindex from riskobject)" DataSource="Expression" ScriptItemUID="Column25" DataType="System.Double" />
+          <Column Name="DisplayValue1" Expression="from qerriskindex select top 1 &#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;if(typeofcalculation in ('inc', 'max', 'avg'))&#xD;&#xA;then&#xD;&#xA;numformat(&#xD;&#xA;(1 --weight&#xD;&#xA;*(from riskobject select current (sourcevalue))), &quot;0.0000&quot;)&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;if(typeofcalculation in ('dec'))&#xD;&#xA;then&#xD;&#xA;numformat(&#xD;&#xA;( convert(weight, &quot;decimal&quot;) *(0-(from riskobject select current (sourcevalue)))), &quot;0.0000&quot;)&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;numformat(from riskobject select current sourcevalue, &quot;0.0000&quot;))&#xD;&#xA;where uid_qerriskindex = ( select current uid_qerriskindex from riskobject)" DataSource="Expression" ScriptItemUID="Column26" DataType="System.String" Caption="translate(&quot;#LDS#Risk index&quot;)" />
+          <Column Name="DisplayValue2" Expression="from qerriskindex select top 1 &#xA;&#xA;(&#xA;if(typeofcalculation in ('inc','max', 'avg'))&#xA;then&#xA;&#xA;(weight + &quot; * &quot;+numformat(from riskobject select current sourcevalue, &quot;0.0000&quot;))&#xA;else&#xA;&#xA;if(typeofcalculation in ('dec'))&#xA;then&#xA;&#xA;(weight + &quot; * &quot;+numformat(0-(from riskobject select current sourcevalue), &quot;0.0000&quot;))&#xA;else&#xA;&#xA;numformat(from riskobject select current sourcevalue, &quot;0.0000&quot;))&#xA;&#xA;where uid_qerriskindex = ( select current uid_qerriskindex from riskobject)" DataSource="Expression" ScriptItemUID="Column27" DataType="System.String" />
+        </DataTableSQL>
+        <DataTableDbObject Class="QERRiskIndex" Table="QERRiskIndex" ScriptItemUID="DataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="TempValueNotWeighted" Expression="from qerriskindex select current ((&#xD;&#xA;&#xD;&#xA;(if(typeofcalculation in ('mx1', 'max'))&#xD;&#xA;then ( from riskobject select max(sourcevalue) where uid_qerriskindex = ( select current uid_qerriskindex from qerriskindex) and isnullorempty(parent))&#xD;&#xA;else if (typeofcalculation in ('av1', &quot;avg&quot;))&#xD;&#xA;then ( from riskobject select avg(sourcevalue) where uid_qerriskindex = ( select current uid_qerriskindex from qerriskindex) and isnullorempty(parent))&#xD;&#xA;else ( from riskobject select top 1 sourcevalue where uid_qerriskindex = ( select current uid_qerriskindex from qerriskindex) and isnullorempty(parent))&#xD;&#xA;)&#xD;&#xA;))" DataSource="Expression" ScriptItemUID="Column28" DataType="System.Decimal" />
+          <Column Name="TempValue" Expression="convert(weight, &quot;decimal&quot;) * tempvaluenotweighted" DataSource="Expression" ScriptItemUID="Column29" DataType="System.Decimal" />
+          <Column Name="CalculationBase" Expression="if(typeofcalculation in ( 'max','avg'))&#xD;&#xA;then&#xD;&#xA;(select sum(weight) from qerriskindex where (uid_dialogcolumn = ( select current uid_dialogcolumn from qerriskindex)&#xD;&#xA;and typeofcalculation in ( 'max','avg'))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;else if (typeofcalculation in ('mx1','av1'))&#xD;&#xA;then&#xD;&#xA;(1.0&#xD;&#xA;)&#xD;&#xA;else if(typeofcalculation in ( 'dec'))&#xD;&#xA;then -1.0&#xD;&#xA;else 1.0" DataSource="Expression" ScriptItemUID="Column30" DataType="System.Decimal" />
+          <Column Name="ResultValue" Expression="tempvalue / calculationbase" DataSource="Expression" ScriptItemUID="Column31" DataType="System.Decimal" />
+          <Column Name="IsFromAttribute" Expression="typeofcalculation in ('inc','dec')" DataSource="Expression" ScriptItemUID="Column32" DataType="System.Boolean" />
+          <Column Name="IsMaximumValue" DataType="System.Boolean" ScriptItemUID="Column33" />
+        </DataTableDbObject>
+        <DataTableView Table="Tables" PrimaryKeyColumn="Tablename" ViewExpression="select distinct (tablenamenobase as tablename) from objects" DisplayColumn="" ScriptItemUID="DataTableView1" TriggerUpdates="Never">
+          <Column Name="Tablename" ScriptItemUID="Column34" DataType="System.String" />
+          <Column Name="TablenameBase" Expression="GetTableNameWithBase(tablename)" DataSource="Expression" DataType="System.String" ScriptItemUID="Column43" />
+        </DataTableView>
+        <DataTableSQL Table="TableAndRiskIndex" PrimaryKeyColumn="" SQLStatement="" DisplayColumn="" ScriptItemUID="DataTableLimitedSQL2" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="Tablename" ScriptItemUID="Column35" DataType="System.String" />
+          <Column Name="UID_QERRiskIndex" ScriptItemUID="Column36" DataType="System.String" />
+        </DataTableSQL>
+        <DataTableSingleRow Table="Vars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="PK" ScriptItemUID="Column38" DataType="System.String" />
+        </DataTableSingleRow>
+        <DataTableGeneric Table="ResponsibleObjects" PrimaryKeyColumn="pk" ScriptItemUID="DataTableGeneric2" TriggerUpdates="Never">
+          <Column Name="TableName" ScriptItemUID="Column40" DataType="System.String" />
+          <Column Name="SourceKey" ScriptItemUID="Column41" DataType="System.String" />
+          <Column Name="ObjectKey" ScriptItemUID="Column42" DataType="System.String" />
+          <Column Name="ObjectDisplay" Expression="displaylong()" DataSource="Expression" ScriptItemUID="Column44" DataType="System.String" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column10" />
+        </DataTableGeneric>
+        <DataTableView Table="RiskObjectTables" PrimaryKeyColumn="Tablename" ViewExpression="select distinct (GetObjectKeyTable( objectkeysource ) as TableName) from riskobject" DisplayColumn="" ScriptItemUID="DataTableView2" TriggerUpdates="Never">
+          <Column Name="Tablename" DataType="System.String" ScriptItemUID="Column45" />
+          <Column Name="TablenameBase" Expression="GetTableNameWithBase(tablename)" DataSource="Expression" DataType="System.String" ScriptItemUID="Column46" />
+        </DataTableView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="LoadRiskObjects">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action6">
+              <Delete DataTable="RiskObject" ScriptItemUID="Delete1" />
+              <ForeachRow DataTable="QERRiskIndex" WhereClause="uid_qerriskindex in ( select uid_qerriskindex from tableandriskindex where tablename = ( select current tablename from objects))" ScriptItemUID="ForeachRow2">
+                <CodeLiteral ScriptItemUID="CodeLiteral1">var uidQerRiskIndex =  this.QERRiskIndex.GetColumn("UID_QERRiskIndex", "QERRiskIndex").GetValue(ForeachRow2_Current.Row).String;
+var dbObjectKey = TableStore.GetLocalColumn(this.Objects, "XObjectKey").GetValue(_Objects_Current.Row).String;
+LoadRiskIndex(uidQerRiskIndex, dbObjectKey, null);
+
+</CodeLiteral>
+              </ForeachRow>
+              <While Condition="0 &lt; select count() from riskobject where (not(ischildcalculated) and not(isnullorempty(objectkeysource)))">
+                <ActionSequence ItemUID="Recursively analyze the contributing objects' risk index es" ScriptItemUID="Action7">
+                  <ForeachRow DataTable="RiskObject" WhereClause="not(ischildcalculated) and not(isnullorempty(objectkeysource))" ScriptItemUID="ForeachRow3">
+                    <Update DataTable="Vars" DataColumn="PK" Value="from riskobject select current pk" ScriptItemUID="Update1" />
+                    <Update DataTable="RiskObject" DataColumn="IsChildCalculated" WhereClause="pk = select current pk from riskobject" Value="true" ScriptItemUID="Update2" />
+                    <ForeachRow DataTable="QERRiskIndex" WhereClause="uid_qerriskindex in ( select uid_qerriskindex from tableandriskindex where tablename = ( select top 1 tablenamebase from riskobjecttables where tablename = ( select current GetObjectKeyTable( objectkeysource ) from riskobject)))" ScriptItemUID="ForeachRow4">
+                      <CodeLiteral ScriptItemUID="CodeLiteral2">LoadRiskIndex(QERRiskIndex.GetColumn("UID_QERRiskIndex", "QERRiskIndex").GetValue(ForeachRow4_Current.Row).String,
+	RiskObject.GetColumn("ObjectKeySource").GetValue(ForeachRow3_Current.Row).String,
+	this.Vars.GetColumn("PK").GetValue(this.Vars.SingleRow).String);
+
+
+	</CodeLiteral>
+                    </ForeachRow>
+                  </ForeachRow>
+                </ActionSequence>
+              </While>
+              <Delete DataTable="ResponsibleObjects" ScriptItemUID="Delete2" />
+              <FillTable DataTable="ResponsibleObjects" Source="XObjectKey" DataTableSource="RiskObject" DataColumnSource="ObjectKeyTarget" WhereClause="" DataColumnSourceKey="SourceKey" DataColumnXObjectKey="ObjectKey" ResolveMNObjects="ResolveAlways" DataColumnTableName="TableName" ScriptItemUID="FillTable2">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+              </FillTable>
+              <FillTable DataTable="ResponsibleObjects" Source="XObjectKey" DataTableSource="RiskObject" DataColumnSource="ObjectKeySource" WhereClause="" DataColumnSourceKey="SourceKey" DataColumnXObjectKey="ObjectKey" ResolveMNObjects="ResolveAlways" DataColumnTableName="TableName" ScriptItemUID="FillTable3">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+              </FillTable>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="Objects" ScriptItemUID="DataTableCursor4" />
+        </Control>
+        <Control ID="COL_ResultValue">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList2">
+              <Label Text="from qerriskindex select current (numformat(resultvalue, &quot;0.0000&quot;)&#xA;&#xA;--+&quot; (&quot; + numformat(100.0*(ResultValue / (from objects select current ResultRisk)), &quot;0.00&quot;) + &quot; % )&quot;&#xA;)" ScriptItemUID="Label27" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label27title" Value="from qerriskindex select current (numformat(tempvaluenotweighted, &quot;0.0000&quot;) + &quot; * &quot; + numformat(weight, &quot;0.0000&quot;) + &quot; / &quot; + numformat(calculationbase, &quot;0.0000&quot;))" />
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Label27style" Value="if(from qerriskindex select current (isfromattribute or uid_qerriskindex=(from objects select top 1 uid_qerriskindextop))) then &quot;font-weight: bold;&quot; else &quot;&quot;" />
+                </HtmlAttributes>
+              </Label>
+              <Container Layout="'VI_Styles_Container_SmallText'" Condition="from qerriskindex select current (isfromattribute or uid_qerriskindex=(select top 1 uid_qerriskindextop from objects))" ScriptItemUID="Container4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container4style" Value="&quot;display: inline; padding-left: 6px;&quot;" />
+                </HtmlAttributes>
+                <Label Text="from qerriskindex select current (&#xD;&#xA;if(isfromattribute) then&#xD;&#xA;(&quot;(&quot;+translate(&quot;#LDS#Attribute-based calculation&quot;)+&quot;)&quot;)&#xD;&#xA;else if(uid_qerriskindex=(from objects select top 1 uid_qerriskindextop)) then&#xD;&#xA;&quot;(&quot;+translate(&quot;#LDS#Maximum of all assignments&quot;)+&quot;)&quot;&#xD;&#xA;)" ScriptItemUID="Label1" />
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QERRiskIndex" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="COL_Contributingobject">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList6">
+              <Container ScriptItemUID="Container5">
+                <Container Condition="from riskobject select current ( isnullorempty(objectkeysource) and objectkeytarget &lt;&gt; objectkey())" ItemUID="PROPERTIES" ScriptItemUID="Container6">
+                  <ContainerTemplate DataTable="ResponsibleObjects" WhereClause="sourcekey = ( from riskobject  select current pk) and objectkey &lt;&gt; (from riskobject select top 1 objectkeytarget where pk = ( select current parent from riskobject))" ScriptItemUID="ContainerTemplate2">
+                    <Image Source="File" FileName="variable(format(&quot;%permanentlink%dialogimgtbl={0}&quot;, (from responsibleobjects select current TableName)))" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="datacaptionsingle(from responsibleobjects select current TableName)" />
+                      </HtmlAttributes>
+                    </Image>
+                    <Container Layout="'VI_Styles_Container_Inline'" Condition="not((from qerriskindex select top 1 (TypeOfCalculation in ('mx1', 'max', 'av1', 'avg'))&#xD;&#xA;where uid_qerriskindex = ( from riskobject select current UID_QERRiskIndex))&#xD;&#xA;&#xD;&#xA;and&#xD;&#xA;(from riskobject select current isnullorempty(ObjectKeySource)))" ScriptItemUID="Container7">
+                      <Label Text="from qerriskindex select top 1 displayvalue(displayvalue)  where uid_qerriskindex = ( select current uid_qerriskindex from riskobject )" ScriptItemUID="Label33" />
+                    </Container>
+                    <Container Layout="'VI_Styles_Container_Inline'" Condition="(from qerriskindex select top 1 (TypeOfCalculation in ('mx1', 'av1', 'max','avg'))&#xD;&#xA;where uid_qerriskindex = ( from riskobject select current UID_QERRiskIndex))&#xD;&#xA;&#xD;&#xA;and&#xD;&#xA;(from riskobject select current isnullorempty(ObjectKeySource))" ScriptItemUID="Container8">
+                      <Label Text="from responsibleobjects select current objectdisplay" Action="Redirect" ScriptItemUID="Label34">
+                        <ServerActionCall ScriptItemUID="ServerActionCall1">
+                          <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                            <RedirectParameter Name="'ObjectKey'" Value="from ResponsibleObjects select current ObjectKey" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </Label>
+                    </Container>
+                  </ContainerTemplate>
+                </Container>
+                <Container Condition="from riskobject select current not(isnullorempty(objectkeysource))" ItemUID="ASSIGNMENTS" ScriptItemUID="Container9">
+                  <Container ItemUID="object visible" Condition="0 &lt; select count() from responsibleobjects where (sourcekey=(from riskobject select current pk) and&#xA;objectkey&lt;&gt;(from riskobject select current objectkeytarget))" ScriptItemUID="Container10">
+                    <Image ScriptItemUID="Image1" Source="File" FileName="variable(format(&quot;%permanentlink%dialogimgtbl={0}&quot;, (from responsibleobjects select  top 1 TableName where sourcekey=(from riskobject select current pk) and objectkey&lt;&gt;(from riskobject select current objectkeytarget))))" Layout="'VI_Styles_Image_Image1616'" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="datacaptionsingle(from responsibleobjects select  top 1 TableName where sourcekey=(from riskobject select current pk) and objectkey&lt;&gt;(from riskobject select current objectkeytarget))" />
+                      </HtmlAttributes>
+                    </Image>
+                    <Label Text="(from responsibleobjects select top 1 objectdisplay where sourcekey=(from riskobject select current pk) and objectkey&lt;&gt;(from riskobject select current objectkeytarget))" Action="Redirect" ScriptItemUID="Label35">
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                          <RedirectParameter Name="'ObjectKey'" Value="from riskobject select current objectkeysource" />
+                        </Redirect>
+                      </ServerActionCall>
+                    </Label>
+                  </Container>
+                  <Container ItemUID="object not visible" Condition="0 = select count() from responsibleobjects where (sourcekey=(from riskobject select current pk) and&#xD;&#xA;objectkey&lt;&gt;(from riskobject select current objectkeytarget))" ScriptItemUID="Container21">
+                    <Label Text="&quot;(&quot;+translate(&quot;#LDS#No permission to display object: {0}&quot;, from RiskObject select current TableNameDisplay)+&quot;)&quot;" ScriptItemUID="Label21" />
+                  </Container>
+                </Container>
+                <Container Condition="from riskobject select current ( isnullorempty(objectkeysource) and objectkeytarget = objectkey())" ItemUID="CONTRIBUTING OBJECT" ScriptItemUID="Container22">
+                  <Image Source="File" FileName="variable(&quot;%permanentlink%dialogimgtbl=QERRiskIndex&quot;)" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image3" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="from qerriskindex select top 1 displayvalue(displayvalue)  where uid_qerriskindex = ( select current uid_qerriskindex from riskobject )" />
+                    </HtmlAttributes>
+                  </Image>
+                  <Label Text="from riskobject select current displayvalue(uid_qerriskindex)" ScriptItemUID="Label36" />
+                </Container>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RiskObject" ScriptItemUID="DataTableCursor5" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetTableNameWithBase(string t)" Expression="isnullorempty(&#xD;&#xA;(singleproperty(&quot;dialogtable&quot;, &quot;tablename&quot;, format(&quot;uid_dialogtable in ( select UID_DialogTableBase from dialogtable where tablename = '{0}')&quot;, t))+&quot;&quot;),&#xD;&#xA;t+&quot;&quot;&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="DisplayTypeOfCalculation()" Expression="from qerriskindex select current&#xA;(&#xA;if(typeofcalculation in ('AV1','AVG')) then translate(&quot;#LDS#Average&quot;)&#xA;else if (typeofcalculation in ('MX1','MAX')) then translate(&quot;#LDS#Maximum&quot;)&#xA;else &quot;&quot;)" DataType="System.String" ScriptItemUID="Function2">
+          <DataTableCursor DataTable="QERRiskIndex" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="DisplayWeight()" Expression="from qerriskindex select current (&#xA;if(typeofcalculation in ( 'inc','dec')) then &quot;&quot;&#xA;else&#xA;numformat(weight, &quot;0.0000&quot;))" DataType="System.String" ScriptItemUID="Function3">
+          <DataTableCursor DataTable="QERRiskIndex" ScriptItemUID="DataTableCursor3" />
+        </Function>
+        <Function Name="IsIncOrDec()" Expression="typeofcalculation in ('inc','dec')" DataType="System.Boolean" FilterForTable="QERRiskIndex" ScriptItemUID="Function4" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ObjectKey()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

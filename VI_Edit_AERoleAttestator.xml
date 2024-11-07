@@ -1,0 +1,156 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_AERoleAttestator" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2">
+        <LoadTable DataTable="AERole" RemoveDeleted="false" WhereClause="format( &quot;uid_aerole = {0}&quot;, sqlformatvalue( from object select current uid_orgattestator, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </LoadTable>
+        <LoadTable DataTable="PersonInAERole" RemoveDeleted="false" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <LayoutPanel ScriptItemUID="LayoutPanel1">
+            <Label Text="datacaption( object, uid_orgattestator)" ScriptItemUID="Label1" />
+            <ColumnEditor DataTable="Object" DataColumn="UID_OrgAttestator" ScriptItemUID="ColumnEditor1" />
+          </LayoutPanel>
+        </Container>
+        <ContainerTemplate DataTable="AERole" WhereClause="uid_aerole = (select current uid_orgattestator from object)" ScriptItemUID="ContainerTemplate1">
+          <Container Condition="select current not(uid_aerole in (GetLogicallyemptyRoles())) from aerole" ItemUID="NOT NOBODY ROLE" ScriptItemUID="Container5">
+            <Container ItemUID="EditPersonInAERole" ScriptItemUID="Container6">
+              <ControlReferenceContainer ID="VI_Edit_MR" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="RelationName()" Value="&quot;PersonInAERole&quot;" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="RelationColumnNameLeft()" Value="&quot;UID_AERole&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="AERole" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualFunctionMapping ID="AdditionalWhereClause()" Value="getconfig(&quot;VI_ITShop_Filter_PersonMembershipInAERole&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              </ControlReferenceContainer>
+            </Container>
+          </Container>
+          <Container Condition="select current (uid_aerole in (GetLogicallyEmptyRoles())) from aerole" ItemUID="NOBODY ROLE" ScriptItemUID="Container7">
+            <Label Text="translate(&quot;#LDS#In order to assign employees as owners, please select an owner role first.&quot;)" ScriptItemUID="Label2" />
+          </Container>
+        </ContainerTemplate>
+        <Container Condition="IsNoPermission()" ScriptItemUID="Container8">
+          <Label Text="translate(&quot;#LDS#You do not have permission to view assigned attestors.&quot;)" ScriptItemUID="Label3" />
+        </Container>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container9" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container9style" Value="&quot;margin-top: 16px;&quot;" />
+          </HtmlAttributes>
+          <Container Condition="caninsert(&quot;personinaerole&quot;) and caninsert(&quot;AERole&quot;)" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container10">
+            <Button Text="translate(&quot;#LDS#Add new&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Delete DataTable="AERoleNew" ScriptItemUID="Delete1" />
+                <Insert DataTable="AERoleNew" ScriptItemUID="Insert1">
+                  <ActionSequence ScriptItemUID="Action1" />
+                  <InsertValue DataColumn="UID_ParentAERole" Value="&quot;ATT-AEROLE-ITSHOPADMIN-ATTESTATOR&quot;" />
+                </Insert>
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container11">
+                      <ContainerTemplate DataTable="AERoleNew" ScriptItemUID="ContainerTemplate2">
+                        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping4">
+                            <ColumnList ScriptItemUID="ColumnList1">
+                              <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Ident_AERole" />
+                              <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="Description" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="AERoleNew" ScriptItemUID="VirtualTableMapping2" />
+                        </ControlReferenceContainer>
+                      </ContainerTemplate>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container14">
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button2">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button3">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute2" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <Save DataTable="AERoleNew" ScriptItemUID="Save1" />
+                          <Update DataTable="Object" DataColumn="UID_OrgAttestator" WhereClause="primarykey() = ( from object select current primarykey())" Value="from aerolenew select top 1 uid_aerole" ScriptItemUID="Update1" />
+                          <Save DataTable="Object" WhereClause="primarykey() = ( from object select current primarykey())" ScriptItemUID="Save2" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The new attestor role &quot;{0}&quot; has been created.', from aerolenew select top 1 display())" ScriptItemUID="VirtualFunctionMapping5" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping6" />
+                          </CallAction>
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Create new attestor role&quot;)" ScriptItemUID="VirtualFunctionMapping7" />
+                  <VirtualFunctionMapping ID="TableName()" Value="&quot;AERole&quot;" ScriptItemUID="VirtualFunctionMapping8" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container Layout="'VI_Styles_Container_Inline'" Condition="caninsert(&quot;personinaerole&quot;)" ScriptItemUID="Container15">
+            <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button4">
+              <HtmlAttributes>
+                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute3" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall4">
+                <Save DataTable="AERole" WhereClause="uid_aerole = (select current uid_orgattestator from object)" ScriptItemUID="Save3" />
+                <Save DataTable="Object" WhereClause="primarykey() = select current primarykey() from object" ScriptItemUID="Save4" />
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping10" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AERole" Class="AERole" WhereClauseSQL="" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AERole" Table="AERoleNew" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonInAERole" Table="PersonInAERole" WhereClauseSQL="format(&quot;uid_person = '{0}'&quot;,getuser())" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsNoPermission()" Expression="(0 = select count() from aerole where (uid_aerole = (select current uid_orgattestator from object)))&#xD;&#xA;and&#xD;&#xA;not(isnullorempty(select current uid_orgattestator from object))" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="GetLogicallyEmptyRoles()" DataType="System.String" ScriptItemUID="Function2" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList1">
+            <FunctionValue Expression="&quot;ADS-AEROLE-ADSGROUP-OWNER-EMPTY&quot;" />
+            <FunctionValue Expression="&quot;SP0-AEROLE-SPSGROUP-OWNER-EMPTY&quot;" />
+          </FunctionValueList>
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Object" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action6">
+            <LoadTable DataTable="AERole" RemoveDeleted="false" WhereClause="format( &quot;uid_aerole = {0}&quot;, sqlformatvalue( from object select current uid_orgattestator, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+            </LoadTable>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_OrgAttestator" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="UID_OrgAttestator" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

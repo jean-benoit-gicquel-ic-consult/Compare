@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-03" ID="CPL_ITShop_PwoOverviewGrid_Ext">
+    <Extensions>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable" SortOrder="30">
+        <VirtualColumn Name="CheckStatus" DataType="System.Boolean" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

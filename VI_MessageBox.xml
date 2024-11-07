@@ -1,0 +1,120 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="TYWoh0uXJtKvz73ODSbjJg==">
+  <GlobalControl ID="VI_MessageBox" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualFunctionMapping ID="PopupTitle()" Value="MessageBoxTitle()" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+                <Container Condition="showyesno()" ScriptItemUID="Container3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+                  </HtmlAttributes>
+                  <Image StockImage="Help" StockImageSize="Large" ScriptItemUID="Image1" />
+                </Container>
+                <Container Condition="messageboxtype()=&quot;Error&quot;" ScriptItemUID="Container4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Container4style" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+                  </HtmlAttributes>
+                  <Image StockImage="Error" StockImageSize="Large" ScriptItemUID="Image2" />
+                </Container>
+                <Container Condition="messageboxtype()=&quot;Warning&quot;" ScriptItemUID="Container5" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+                  </HtmlAttributes>
+                  <Image StockImage="Warning" StockImageSize="Large" ScriptItemUID="Image3" />
+                </Container>
+                <Label Text="MessageText()" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Label1style" Value="&quot;display: inline-block; padding-top: .5em; max-width: 450px;&quot;" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container6">
+              <Container Condition="ShowYesNo()" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container7">
+                <Button Text="translate('#LDS#Yes')" ItemUID="Default Button" Layout="if(IsDestructiveAction()) then 'VI_Styles_Button_Default' else 'VI_Styles_Button_Primary'" EnableCustomAttributes="true" ScriptItemUID="Button1">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Yes&quot;)" ScriptItemUID="HtmlAttribute1" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <CallAction ActionID="OnYes" ScriptItemUID="Call2" />
+                    <ActionOnControl />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+              <Container Condition="ShowYesNo()" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container8">
+                <Button Text="translate('#LDS#No')" Layout="if(IsDestructiveAction()) then 'VI_Styles_Button_Primary' else 'VI_Styles_Button_Default'" EnableCustomAttributes="true" ScriptItemUID="Button2" AssociatedWithEscapeKey="not(ShowCancel())" ItemUID="PopupButton_No">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_No&quot;)" ScriptItemUID="HtmlAttribute2" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <CallAction ActionID="OnNo" ScriptItemUID="Call3" />
+                    <ActionOnControl />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+              <Container Condition="ShowOK()" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container9">
+                <Button Text="translate('#LDS#OK')" ItemUID="Default Button" Layout="if(IsDestructiveAction()) then 'VI_Styles_Button_Default' else 'VI_Styles_Button_Primary'" AssociatedWithEscapeKey="not(ShowCancel()) or ShowYesNo() -- only associate escape key with OK if it is the only button" EnableCustomAttributes="true" ScriptItemUID="Button3">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_OK&quot;)" ScriptItemUID="HtmlAttribute3" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <CallAction ActionID="OnOK" ScriptItemUID="Call4" />
+                    <ActionOnControl />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+              <Container Condition="ShowCancel()" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container10">
+                <Button Text="translate('#LDS#Cancel')" AssociatedWithEscapeKey="true" Layout="if(IsDestructiveAction()) then 'VI_Styles_Button_Primary' else 'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button4" ItemUID="PopupButton_Cancel">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute4" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <CallAction ActionID="OnCancel" ScriptItemUID="Call5" />
+                    <ActionOnControl />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="CssClass()" Value="if(ShowYesNo()) then &quot;imx-popup-yesno&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="MessageText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowYesNo()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowOK()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowCancel()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsDestructiveAction()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="MessageBoxTitle()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualControl ID="OnYes" ContainerType="ActionComponent" />
+      <VirtualControl ID="OnNo" ContainerType="ActionComponent" />
+      <VirtualControl ID="OnCancel" ContainerType="ActionComponent" />
+      <VirtualControl ID="OnOK" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="MessageBoxType()" VirtualFunctionHasLimitedValues="true" DataType="System.String" TriggerUpdates="Never">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Default" Comment="" />
+          <VirtualFunctionLimitedValue Name="Error" Comment="" />
+          <VirtualFunctionLimitedValue Name="Warning" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

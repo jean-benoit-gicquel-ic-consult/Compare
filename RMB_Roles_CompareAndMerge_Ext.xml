@@ -1,0 +1,18 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Roles_CompareAndMerge_Ext">
+    <Extensions>
+      <AddObject ObjectID="DataTableSingleRow1" ObjectType="DataTableSingleRow" SortOrder="25">
+        <Column DataType="System.Boolean" Name="IsOrgAdmin" DataSource="Expression" Expression="IsMember(&quot;RMB-AEROLE-ROLEADMIN-ADMIN&quot;)" ScriptItemUID="RMBColumn1" TriggerUpdates="Never" />
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="35">
+        <ActionSequence Condition="getobjectkeytable(objectkeyrole()) = &quot;Org&quot;&#xD;&#xA;OR&#xD;&#xA;(getconfig(&quot;Allow_Roles_Merge_Different_Organisation_Type&quot;) = &quot;True&quot;)" ItemUID="ORG" ScriptItemUID="RMBAction1">
+          <Insert DataTable="Tables" ScriptItemUID="RMBInsert1">
+            <ActionSequence ScriptItemUID="RMBAction2" />
+            <InsertValue Value="&quot;Org&quot;" DataColumn="Name" />
+            <InsertValue Value="SqlAnd(&#xD;&#xA;   if(not(getconfig(&quot;Allow_Roles_Merge_Different_Role_Class&quot;) = &quot;True&quot;))then   &#xD;&#xA;      SqlCompareUid(&quot;UID_OrgRoot&quot;, SingleProperty(&quot;Org&quot;,&quot;UID_OrgRoot&quot;,sqlcompareuid(&quot;XobjectKey&quot;, objectkeyrole())))&#xD;&#xA;,&#xD;&#xA;   if(from vars select isorgadmin) then&#xD;&#xA;      &quot;1=1&quot;&#xD;&#xA;   else&#xD;&#xA;      format(&quot;XObjectKey in (select bt.XObjectkey from basetree bt join basetreecollection btc on btc.uid_org = bt.uid_org join helperheadorg hho on hho.UID_Org = btc.UID_ParentOrg where {0})&quot;, sqlcompareuid(&quot;hho.UID_PersonHead&quot;, getuser()))&#xD;&#xA;)" DataColumn="DbWhereClause" />
+          </Insert>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

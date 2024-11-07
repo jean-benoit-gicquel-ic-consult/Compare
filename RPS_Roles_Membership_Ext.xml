@@ -1,0 +1,13 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="eb955f29-902d-d101-686c-88a462159ce9">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RPS_Roles_Membership_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action9" ObjectType="ActionSequence" SortOrder="10">
+        <ActionSequence ItemUID="RPSReport" ScriptItemUID="RPSAction10">
+          <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="RPSLoadTable8" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToRPSReport&quot;">
+            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="RPSParameterFree1" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

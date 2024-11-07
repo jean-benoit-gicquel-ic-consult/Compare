@@ -1,0 +1,76 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <LayoutObject ID="VI_Styles_Tab_Accordeon" Type="Tab" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassNamePageActive" Value="AccordT AccordTactive" Comment="" />
+    <Property Name="CssClassNamePageInactive" Value="AccordT" Comment="" />
+    <Property Name="CssClassNameHeaderRow" Value="AccordTR" Comment="" />
+    <Property Name="CssClassNameHeaderContainer" />
+    <Property Name="TabStyle" Value="Accordeon" Comment="" />
+    <Property Name="CssClassNameBodyContainer" Value="AccordC" Comment="" />
+    <Property Name="CssClassNamePageContainer" Value="AccordPC" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">/*Accordeon control*/
+
+a.AccordT
+{
+  background-color: %VI_Common_Color_LighterGray%;
+  color: %VI_Common_Color_Font_Secondary%;
+  padding: 0 0 0 40px;
+  width: auto;
+  display: block; 
+  margin: auto;
+  line-height: 40px;
+  background-image: url("%link%dojoFile=qui/frameworkcontentui/ic_expndrChevSide1Thin_normal_16.png");
+  background-position: 15px center;
+  background-repeat: no-repeat;
+}
+
+a.AccordT:hover, a.AccordT:focus
+{
+  text-decoration: none;
+}
+
+/* space between accordeon headers */
+.AccordPC  { margin-top: 7px; }
+
+/* the first accordeon header does not need any space above it */
+.AccordPC : first-child  { margin-top: 0; }
+
+.imx-accordeonCollapsed &gt;.AccordC {
+    display: none;
+}
+
+/* accordeon page content */
+.AccordC
+{
+  padding: 8px 8px 0 8px;
+  min-height: 20px; /* for smooth fade-ins */
+}
+
+/* expanded state */
+.imx-accordeonExpanded &gt; a.AccordT
+{
+   background-color: %VI_Common_Color_ColorBase3%;
+   color: %VI_Common_Color_ColorBase1%;
+   font-weight: bold;
+   background-image: url("%link%dojoFile=qui/frameworkcontentui/ic_expndrChevDwnThin_active_select_16.png");
+}
+
+/* hover state */
+.imx-accordeonCollapsed &gt; a.AccordT:hover { background-color: %VI_Common_Color_Blue_1%; }
+
+/* focus state, used for keyboard navigation */
+
+.imx-accordeonCollapsed &gt; a.AccordT:focus 
+{
+ border:1px solid %VI_Common_Color_ColorBase3%;
+}
+
+.imx-accordeonExpanded &gt; a.AccordT:focus 
+{
+ border:1px solid %VI_Common_Color_ColorBase1%;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

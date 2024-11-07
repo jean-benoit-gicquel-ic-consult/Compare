@@ -1,0 +1,7 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_ReportViewer_Default" Type="ReportViewer" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+  </LayoutObject>
+</WebDesigner>

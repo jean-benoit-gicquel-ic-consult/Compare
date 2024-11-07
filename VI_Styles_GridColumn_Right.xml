@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_GridColumn_Right" Type="GridColumn" MigrationNotes="DIALOGCONFIGPARM;" HasRelatedObject="true" MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_GridColumn_Default" />
+    <Property Name="CssClassName" Value="right" Comment="" />
+    <Property Name="CssClassNameHeaderCell" Value="right" Comment="" />
+    <Property Name="CssClassNameFooterCell" Value="right" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.right { text-align: right; padding-right:5px;}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

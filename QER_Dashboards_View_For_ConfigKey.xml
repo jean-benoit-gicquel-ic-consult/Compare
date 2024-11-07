@@ -1,0 +1,48 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_Dashboards_View_For_ConfigKey">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceContainer ID="VI_DashboardFilterPopup" ScriptItemUID="ControlRef2">
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="ConfigKey()" Value="ConfigKey()" />
+          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+            <ControlList ScriptItemUID="ControlList8" />
+          </VirtualControlMapping>
+        </ControlReferenceContainer>
+        <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;style&quot;" Value="&quot;display: inline-block; width: 100%;vertical-align: top;&quot;" />
+            <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;contentSliderContainer&quot;" />
+          </HtmlAttributes>
+          <ContentSlider ScriptItemUID="ContentSlider2" MaxSlides="1" SlideWidth="0" MinSlides="1">
+            <ControlList ScriptItemUID="ControlList2">
+              <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;overflow-y: auto; padding-bottom: 12px;&quot;" />
+                </HtmlAttributes>
+              </Container>
+            </ControlList>
+          </ContentSlider>
+        </Container>
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var heatmaps2 = (System.Collections.Generic.List&lt;object&gt;) _UserSession.ApplicationInfo.ConfigObjects[ConfigKey()];
+
+CustomizableView.CreateDashboardControl(heatmaps2.Where(a=&gt; a is VI.WebRuntime.WebControls.ChartControlInfo),Container1);
+
+CustomizableView.CreateDashboardControl(heatmaps2.Where(a=&gt; a is VI.WebRuntime.WebControls.HeatmapControlInfo),ContentSlider2, true);
+
+</CodeLiteral>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="ConfigKey()" />
+      <VirtualFunction DataType="System.String" Signature="Title()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

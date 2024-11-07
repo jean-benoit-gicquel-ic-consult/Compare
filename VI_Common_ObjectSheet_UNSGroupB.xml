@@ -1,0 +1,26 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_ObjectSheet_UNSGroupB" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceControlList ID="TSB_Common_ObjectSheet_CommonGroup" ScriptItemUID="ControlRef2">
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+        </ControlReferenceControlList>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="Object" ViewFKDataColumn="UID_AccProduct" ViewFKWhereClause="" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSheet" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="Object" Class="UNSGroupB" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

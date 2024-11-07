@@ -1,0 +1,135 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl ID="VI_ObjectView_QERPolicy" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="QERPolicyHasMControl" RemoveDeleted="false" RevertExisting="false" WhereClause="format(&quot;UID_MitigatingControl in( select UID_MitigatingControl from QERPolicyHasMControl where UID_QERPolicy = '{0}')&quot;,from SourceObject select current UID_QERPolicy)" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <ControlReferenceContainer ID="VI_ObjectView_Default" ScriptItemUID="ControlRef1">
+            <VirtualTableMapping VirtualTable="SourceObject" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" />
+          </ControlReferenceContainer>
+          <Container ScriptItemUID="Container5" Condition="0 &lt; select count() from QERPolicyInArea where UID_QERPolicy = (from SourceObject select current UID_QERPolicy)">
+            <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel3" Layout="'VI_Styles_LayoutPanel_Default'">
+              <Label ScriptItemUID="Label3" Text="datacaption(QERPolicyInArea, UID_ComplianceArea)" />
+              <ContainerTemplate DataTable="QERPolicyInArea" WhereClause="UID_QERPolicy = (from SourceObject select current UID_QERPolicy)" ScriptItemUID="ContainerTemplate1">
+                <Label Text="if(0 &lt; from QERPolicyInArea select current iterationindex())then(&quot;, &quot;)else(&quot;&quot;)" ScriptItemUID="Label2" />
+                <Label Text="from QERPolicyInArea select current displayvalue(UID_ComplianceArea)" ScriptItemUID="Label1" Action="Redirect">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" AbortExecution="false" ScriptItemUID="Redirect3">
+                      <RedirectParameter Name="'ObjectKey'" Value="from QERPolicyInArea select current objectwalker(&quot;FK(UID_ComplianceArea).XObjectKey&quot;)" />
+                    </Redirect>
+                  </ServerActionCall>
+                </Label>
+              </ContainerTemplate>
+            </LayoutPanel>
+          </Container>
+          <Container Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" ScriptItemUID="Container3">
+            <Container Condition="0 = (select count() from QERPolicyHasMControl where UID_QERPolicy = (from SourceObject select current UID_QERPolicy))" ScriptItemUID="Container4">
+              <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef8">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping2">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef2">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping3">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </LayoutPanel>
+            </Container>
+            <Container Condition="0 &lt; (select count() from QERPolicyHasMControl where UID_QERPolicy = (from SourceObject select current UID_QERPolicy))" ScriptItemUID="Container7">
+              <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel2">
+                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping4">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef3">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping5">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef7">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping6">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef4">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping7">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </LayoutPanel>
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-icon imx-table-MitigatingControl&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="HeadLine()" Value="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              </ControlReferenceContainer>
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="MitigatingControl" WhereClause="UID_MitigatingControl in (&#xA;select UID_MitigatingControl from QERPolicyHasMControl where UID_QERPolicy = (from SourceObject select current UID_QERPolicy)&#xA;)" ScriptItemUID="GridBand1">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn SortColumn="Ident_MitigatingControl" Width="'200px'" ScriptItemUID="Column1">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Container ScriptItemUID="Container12">
+                        <Label Text="DataCaption(&quot;MitigatingControl&quot;,&quot;Ident_MitigatingControl&quot;)" ScriptItemUID="Label4" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label Text="from MitigatingControl select current displayvalue(Ident_MitigatingControl)" ScriptItemUID="Label5" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn SortColumn="Description" Width="'300px'" ScriptItemUID="Column2">
+                    <GridColumnHeader ScriptItemUID="wctl2">
+                      <Container ScriptItemUID="Container13">
+                        <Label Text="DataCaption(&quot;MitigatingControl&quot;,&quot;Description&quot;)" ScriptItemUID="Label6" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell2">
+                      <Label Text="from MitigatingControl select current displayvalue(Description)" ScriptItemUID="Label7" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn SortColumn="SignificancyReduction" Width="'140px'" ScriptItemUID="Column3">
+                    <GridColumnHeader ScriptItemUID="wctl3">
+                      <Container ScriptItemUID="Container14">
+                        <Label Text="DataCaption(&quot;MitigatingControl&quot;,&quot;SignificancyReduction&quot;)" ScriptItemUID="Label8" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell3">
+                      <Label Text="from MitigatingControl select current displayvalue(SignificancyReduction)" ScriptItemUID="Label9" />
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </Container>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="QERPolicyHasMControl" Class="QERPolicyHasMControl" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+        </DataTableDbObject>
+        <DataTableFKView Table="MitigatingControl" ViewFKDataTable="QERPolicyHasMControl" ViewFKDataColumn="UID_MitigatingControl" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableCRView Class="QERPolicyInArea" Table="QERPolicyInArea" CRDataColumn="UID_QERPolicy" ViewFKDataTable="SourceObject" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+        </DataTableCRView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="QERPolicy" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

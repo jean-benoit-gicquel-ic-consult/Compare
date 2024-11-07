@@ -1,0 +1,51 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Infosystem_DashboardObjectData_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="30">
+        <Container Condition="from option select selected = &quot;Compliance&quot;" ScriptItemUID="CPLContainer1">
+          <Activator ExecuteAlways="true" ScriptItemUID="CPLActivator1">
+            <Action ScriptItemUID="CPLAction1">
+              <LoadTable DataTable="PersonInNonCompliance" WhereClause="SqlOr(&#xD;&#xA;if(IsBaseTree() and GetObjectKeyTable(from Object select current XObjectKey) &lt;&gt; 'AERole')then&#xD;&#xA;   format(&quot;UID_Person in (select UID_Person from Person where UID_{0}= (select UID_{0} from {0} where XObjectKey = '{1}'))&quot;,&#xD;&#xA;      GetObjectKeyTable(from Object select current XObjectKey),&#xD;&#xA;      from Object select current XObjectKey&#xD;&#xA;   ),&#xD;&#xA;   format(&quot;UID_Person in (select UID_Person from Person{2}{3} where UID_{0}=(select UID_{0} from {0} where XObjectKey = '{1}'))&quot;,&#xD;&#xA;      GetObjectKeyTable(from Object select current XObjectKey),&#xD;&#xA;      from Object select current XObjectKey,&#xD;&#xA;	  if(IsBaseTree())then &quot;In&quot; else &quot;Has&quot;,&#xD;&#xA;	  if((select current GetObjectKeyTable(XObjectKey)+&quot;&quot; from Object) = &quot;Application&quot;)then &quot;App&quot; else (select current GetObjectKeyTable(XObjectKey) from object)&#xD;&#xA;   )&#xD;&#xA;)" ScriptItemUID="CPLLoadTable2">
+                <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType1" ConvertToInteractive="false" />
+              </LoadTable>
+              <LoadTable DataTable="ComplianceRule" WhereClause="sqlcompare(&quot;isinactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;)" ScriptItemUID="CPLLoadTable1">
+                <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType2" ConvertToInteractive="false" />
+              </LoadTable>
+            </Action>
+          </Activator>
+          <Container ScriptItemUID="CPLContainer2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="CPLContainer2style" Value="'padding-bottom: 7px; padding-top: 7px;'" />
+            </HtmlAttributes>
+            <Label Text="translate('#LDS#This view shows all compliance rule violations of members of {0}.', select current displaylong() from object) + &quot; &quot; +translate('#LDS#Note: This view displays live data.')" ScriptItemUID="CPLLabel1" />
+          </Container>
+          <Container ScriptItemUID="CPLContainer4">
+            <ControlReferenceControlList ID="CPL_PersonInNonCompliance_MasterDetail" ScriptItemUID="CPLControlRef2">
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="CPLVirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="DbWhereClause()" Value="SqlOr(&#xD;&#xA;if(IsBaseTree() and GetObjectKeyTable(from Object select current XObjectKey) &lt;&gt; 'AERole')then&#xD;&#xA;   format(&quot;UID_Person in (select UID_Person from Person where UID_{0}= (select UID_{0} from {0} where XObjectKey = '{1}'))&quot;,&#xD;&#xA;      GetObjectKeyTable(from Object select current XObjectKey),&#xD;&#xA;      from Object select current XObjectKey&#xD;&#xA;   ),&#xD;&#xA;   format(&quot;UID_Person in (select UID_Person from Person{2}{3} where UID_{0}=(select UID_{0} from {0} where XObjectKey = '{1}'))&quot;,&#xD;&#xA;      GetObjectKeyTable(from Object select current XObjectKey),&#xD;&#xA;      from Object select current XObjectKey,&#xD;&#xA;	  if(IsBaseTree())then &quot;In&quot; else &quot;Has&quot;,&#xD;&#xA;	  if((select current GetObjectKeyTable(XObjectKey)+&quot;&quot; from Object) = &quot;Application&quot;)then &quot;App&quot; else (select current GetObjectKeyTable(XObjectKey) from object)&#xD;&#xA;   )&#xD;&#xA;)" ScriptItemUID="CPLVirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="showpersonnoncompliance()" Value="true" ScriptItemUID="CPLVirtualFunctionMapping3" />
+            </ControlReferenceControlList>
+          </Container>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="10">
+        <DataTableDbObject Table="ComplianceRule" Class="ComplianceRule" ScriptItemUID="CPLDataTableDbObject1">
+          <ActionSequence ScriptItemUID="CPLAction2" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Action8" ObjectType="ActionSequence" SortOrder="10">
+        <Insert DataTable="AvailableQueries" ScriptItemUID="CPLInsert1">
+          <ActionSequence ScriptItemUID="CPLAction3" />
+          <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#Compliance rule violations&quot;)" />
+          <InsertValue DataColumn="Key" Value="&quot;Compliance&quot;" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="0">
+        <DataTableDbObject Table="PersonInNonCompliance" Class="PersonInNonCompliance" ScriptItemUID="CPLDataTableDbObject2">
+          <ActionSequence ScriptItemUID="CPLAction4" />
+          <Column Name="displaystatus" DataType="System.String" DataSource="Expression" Expression="(if (not(IsDecisionMade)) then&#xD;&#xA;translate(&quot;#LDS#Decision pending&quot;)&#xD;&#xA;else if ( not(IsExceptionGranted)) then&#xD;&#xA;translate(&quot;#LDS#Exception denied&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#Exception granted&quot;))" ScriptItemUID="CPLColumn1" Caption="translate(&quot;#LDS#Approval state&quot;)" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

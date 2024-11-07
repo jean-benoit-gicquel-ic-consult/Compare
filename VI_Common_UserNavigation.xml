@@ -1,0 +1,104 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_UserNavigation" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container13" Layout="'VI_Styles_Container_Breadcrumb'" ItemUIDReference="SearchbtnHeader">
+        <Container ScriptItemUID="Container2" ItemUID="breadcrumb navigation" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="TagName" Value="ul" />
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-list imx-breadcrumbnav&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="li" />
+            </HtmlAttributes>
+            <LinkContainer ScriptItemUID="LinkContainer1">
+              <ControlList ScriptItemUID="ControlList1">
+                <Label Text="translate(&quot;#LDS#Start&quot;)" ScriptItemUID="Label1" />
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall1" EnableRedirectByUrl="true">
+                <RedirectByUrl>
+                  <Redirect ScriptItemUID="Redirect1a" Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" />
+                </RedirectByUrl>
+                <Redirect Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect1" />
+              </ServerActionCall>
+            </LinkContainer>
+          </Container>
+          <ContainerTemplate DataTable="UserNavigation" WhereClause="isconnectable(UidFormprevious, UidForm, UidForm=getruntimeformid())" OrderBy="'Number'" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">
+            <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="li" />
+              </HtmlAttributes>
+              <ControlReferenceContainer ID="NavigationItem" ScriptItemUID="ControlReferenceContainer1" />
+            </Container>
+          </ContainerTemplate>
+        </Container>
+        <Container ScriptItemUID="Container1" ItemUID="Search" IsBeginNewValidationGroup="true" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute5" Value="'imx-search'" />
+            <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;search&quot;" />
+          </HtmlAttributes>
+          <TextBox DataTable="SearchTerm" DataColumn="Term" Columns="7" EnableCustomAttributes="true" ScriptItemUID="TextBox1" Layout="'VI_Styles_Textbox_Search'" EmptyText="translate(&quot;#LDS#Search&quot;)">
+            <HtmlAttributes>
+              <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Search_Header&quot;)" ScriptItemUID="HtmlAttribute1" />
+              <HtmlAttribute Name="'activate-input'" ScriptItemUID="HtmlAttribute3" Value="'true'" />
+              <HtmlAttribute Name="&quot;aria-label&quot;" ScriptItemUID="HtmlAttribute7" Value="translate(&quot;#LDS#WD_GridSearchLabel&quot;)" />
+            </HtmlAttributes>
+          </TextBox>
+          <Button ScriptItemUID="Button1" EnableCustomAttributes="true" ItemUID="SearchbtnHeader" DisplayType="Controls">
+            <ControlList ScriptItemUID="ControlList3" />
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;title&quot;" ScriptItemUID="HtmlAttribute6" Value="translate(&quot;#LDS#Search&quot;)" />
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;&quot;" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall4">
+              <Redirect Target="FormModule" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect2">
+                <RedirectFormModule ID="VI_Common_Search" ScriptItemUID="RedirectFormModule1">
+                  <VirtualFunctionMapping ID="SearchTerm()" Value="from searchterm select term" ScriptItemUID="VirtualFunctionMapping1" />
+                </RedirectFormModule>
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="SearchTerm" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Term" ScriptItemUID="Column1" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="NavigationItem">
+          <LocalControlContext ContainerType="Container">
+            <Container Condition="from usernavigation select current not(SkipInNavigation)" ScriptItemUID="Container10">
+              <Container Layout="'VI_Styles_Container_Inline'" Condition="from UserNavigation select current (CanReturnToThis and UidForm &lt;&gt; GetRuntimeFormID())" ScriptItemUID="Container11">
+                <LinkContainer ScriptItemUID="LinkContainer2">
+                  <ControlList ScriptItemUID="ControlList2">
+                    <Label Text="from UserNavigation select current Title" ScriptItemUID="Label5" />
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall2" EnableRedirectByUrl="true">
+                    <RedirectByUrl Condition="from usernavigation select current canreturntothis">
+                      <Redirect ScriptItemUID="Redirect3a" Target="Link" HREF="from usernavigation select current&#xD;&#xA;variable(format(&quot;%linkstartform%?ContextInstanceID={0}&amp;RuntimeFormID={1}&quot;, UidModule, UidForm))" NoLinkObjectID="true" />
+                    </RedirectByUrl>
+                    <ActionSequence Condition="from usernavigation select current canreturntothis" ScriptItemUID="Action2">
+                      <Redirect Target="Link" NoLinkObjectID="true" HREF="from usernavigation select current&#xD;&#xA;variable(format(&quot;%linkstartform%?ContextInstanceID={0}&amp;RuntimeFormID={1}&quot;, UidModule, UidForm))" ScriptItemUID="Redirect3" />
+                    </ActionSequence>
+                  </ServerActionCall>
+                </LinkContainer>
+              </Container>
+              <Container Layout="'VI_Styles_Container_Inline'" Condition="from UserNavigation select current (not(CanReturnToThis) or UidForm=GetRuntimeFormID())" ScriptItemUID="Container12">
+                <Label Text="from UserNavigation select current&#xD;&#xA;(if(len(Title)&gt;50) then (substring(title,0,50)+&quot;...&quot;) else title)" ScriptItemUID="Label6" />
+              </Container>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="UserNavigation" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

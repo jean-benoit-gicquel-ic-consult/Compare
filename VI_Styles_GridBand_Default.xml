@@ -1,0 +1,299 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <LayoutObject ID="VI_Styles_GridBand_Default" Type="GridBand" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassNameRow" Value="GridRow" Comment="" />
+    <Property Name="CssClassNameHeaderRowAboveColumns" Value="GridRowStaticAbove" Comment="" />
+    <Property Name="CssClassNameHeaderRowBelowColumns" Value="GridRowStaticBelow" Comment="" />
+    <Property Name="CssClassNameCell" Value="GridCell" Comment="" />
+    <Property Name="CssClassNameTable" Value="GridTable" Comment="" />
+    <CssDocument CssName="Grid layout classes" ScriptItemUID="CssDocument1">th.GridCell
+{
+  font-weight: 600; 
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: %VI_Common_Color_Gray%;
+  overflow: hidden; 
+  text-overflow:ellipsis; 
+  white-space:nowrap; 
+  vertical-align: baseline; 
+}
+
+th.GridCell:hover
+{ 
+  background-color: %VI_Common_Color_LighterGray%; 
+}
+
+th.GridCell span   
+{ 
+  text-overflow:ellipsis; 
+  overflow: hidden; 
+  white-space:nowrap; 
+  vertical-align: middle; 
+  width: auto; 
+}
+
+th.GridCell&gt;div 
+{ 
+  display: inline-block; 
+}
+
+.imx-grid-rowselection tr.gridRowActionable, .imx-grid-rowselection li.gridRowActionable
+{
+  cursor: pointer;
+  transition: background-color .25s ease-in-out;
+}
+
+.hyperviewelement .imx-grid-rowselection tr.gridRowActionable:hover,
+.hyperviewelement .imx-grid-rowselection li.gridRowActionable:hover {
+    background-color: rgba(255,255,255,.2);
+}
+
+.hyperviewelement .imx-grid-paging-totalcount,
+.hyperviewelement .imx-grid-pagingcontainer select
+{
+   display: none;
+   /* count is displayed in hyperview title */
+}
+
+.hyperviewelement .imx-grid-paging-index
+{
+   background-color: transparent;
+   color: inherit;
+}</CssDocument>
+    <CssDocument CssName="Grid titles above column headers" ScriptItemUID="CssDocument2">.GridRowStaticAbove	
+{ 
+  background-color: %VI_Common_Color_LightGray%;
+  border: 0;
+  color: %VI_Common_Color_Font_Secondary%;  
+  vertical-align: baseline; 
+  height: 30px;
+}
+
+.GridRowStaticAbove td,
+.GridRowStaticBelow td,
+.GridRowStaticAbove th  
+{ 
+  padding: 1px 0px 2px 3px; 
+  text-align: left; 
+  font-size: 1.1em; 
+  font-weight: normal; 
+}
+
+.GridRowStaticBelow th
+{ 
+  padding: 4px 0 4px 3px; 
+  text-align: center; 
+  font-weight: normal;
+}
+
+.GridRowStaticBelow  
+{ 
+  background-color: %VI_Common_Color_LightGray%; 
+}</CssDocument>
+    <CssDocument CssName="Grid rows" ScriptItemUID="CssDocument3">.GridRow  
+{ 
+   background-color: transparent; 
+}
+
+.GridRow:hover
+{ 
+  background-color: %VI_Common_Color_LighterGray%;
+}
+
+.GridRow:hover a
+{ 
+  color: %VI_Common_Color_ColorBase2%;
+}
+
+.GridNaviCell
+{ 
+  padding-top: 4px; 
+  min-width: 20px;
+  width: 20px;
+  border: 0;
+  float: left;
+}
+
+.GridNaviCell a:focus 
+{ 
+  outline: none;
+}
+
+/* also float the sibling nodes to the plus icon, so the text does not continue to flow under the plus sign */
+.GridNaviCell+div
+{ 
+  float:left;
+}
+
+.GridCell
+{ 
+  overflow: hidden;
+  vertical-align:top;
+  padding: 0.8em;
+}
+
+tfoot .GridFooterCell
+{ 
+  overflow: hidden;
+}
+
+.GridCellSlim
+{ 
+  padding: 0.4em 0;
+  border: 0;
+  vertical-align:top; 
+}
+
+.GridBlock
+{ 
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 0;
+}
+
+.GridTable
+{ 
+  table-layout: fixed;
+}
+
+.GridTable:focus { outline: none; }
+
+.imx-nodataindication
+{
+  background-color: %VI_Common_Color_LighterGray%;
+  font-style: italic;
+}</CssDocument>
+    <CssDocument CssName="Paging control" ScriptItemUID="CssDocument4">.imx-grid-pagingcontainer  
+{ 
+  display: flex;
+  padding-top: 10px;
+  padding-right: 1em;
+}
+
+.imx-grid-pagingcontainer &gt; span
+{
+  line-height: 40px;
+}
+
+.imx-grid-paging-totalcount
+{
+  flex: 1 1 auto;
+}
+
+.imx-grid-paginglink
+{ 
+  text-decoration: none; 
+  outline: none;
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+  color: %VI_Common_Color_DarkerGray%;
+}
+
+a.imx-grid-paginglink:hover 
+{ 
+  background-color: %VI_Common_Color_Blue_1%;
+  color: %VI_Common_Color_Font%;
+}
+
+.imx-grid-paginglink.currentPage
+{ 
+  background-color: %VI_Common_Color_Blue_2%;
+  color: %VI_Common_Color_ColorBase1%;
+}
+a.imx-grid-paginglink:focus,
+a.imx-grid-paginglink:active
+{ 
+  background-color: %VI_Common_Color_Blue_2%;
+  color: %VI_Common_Color_ColorBase1%;
+}
+
+.imx-grid-paginglink-prev, .imx-grid-paginglink-next
+{
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 1em;
+  font-family: fa-identity;
+}
+
+.imx-grid-paginglink-prev:before
+{
+  content: "\f053";
+  margin-left: -.25em;
+}
+
+.imx-grid-paginglink-next::before
+{
+   content: "\f054";
+}
+
+.imx-grid-paging-index,
+input.imx-grid-paging-index[type="text"]
+{
+   width: auto;
+}
+
+.imx-grid-paging-index,
+input.imx-grid-paging-index[type="text"],
+.paginglinks select
+{
+   height: 2.7em;
+   box-sizing: border-box;
+}
+
+@media %IMX_Mediaquery_Smartphone%
+{
+  .paginglinks .imx-grid-paging-index,
+  .paginglinks .imx-button, 
+  .paginglinks select {
+    padding: 0 7px;
+    margin: 0 0.5em;
+	height: 2em;
+  }
+
+  .paginglinks select  {
+     padding: 0;
+  }
+}</CssDocument>
+    <CssDocument CssName="Gridsorting and AutoFilterCol" ScriptItemUID="CssDocument5">.gridsortimg  { float: right; }
+
+th .autofiltercol {  margin-left: 5px; display: inline-block; }
+th:hover .autofiltercol { visibility: visible; }
+</CssDocument>
+    <CssDocument CssName="Filter Buttons" ScriptItemUID="CssDocument6">.AutoFilterButton{
+   background-color: transparent; 
+   background-image: url('%link%img=filter-small.png');
+   padding: 0px;
+   width: 16px;
+   height: 16px;
+   vertical-align: middle;
+}
+
+.AutoFilterButton.DeleteFilter{
+   background-image: url('%permanentlink%stockImg=BlueDelete');
+}</CssDocument>
+    <CssDocument CssName="CSSHeaderCell" ScriptItemUID="CssDocument7">th.GridCell.SortedAsc { 
+  background-image: url('%permanentlink%img=sort-up.gif'); 
+  background-position: 100% 50%; 
+  background-repeat: no-repeat; 
+  background-color: %VI_Common_Color_LightGray%;
+}
+
+th.GridCell.SortedDesc
+{ 
+  background-image: url('%permanentlink%tpl=sort-down.gif');
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+  background-color: %VI_Common_Color_LighterGray%;
+}
+
+</CssDocument>
+    <CssDocument CssName="CSS for recursive blocks" ScriptItemUID="CssDocument8">.GridBlock.RecursiveBlock
+{ 
+  margin-top: 0;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

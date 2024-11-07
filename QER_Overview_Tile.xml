@@ -1,0 +1,69 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_Overview_Tile">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1" Layout="'QBM_Styles_Container_TileOverview'">
+          <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="&quot;overflow: auto; height: 100%; width: 100%;&quot;" />
+            </HtmlAttributes>
+            <ControlList ScriptItemUID="ControlList2">
+              <Container ScriptItemUID="Container2" EnableCustomAttributes="true" ItemUID="heading">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;heading&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container3">
+                  <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_Inline'" Condition="not(isnullorempty(SquareTableName()))" ItemUID="Table Icon">
+                    <Image Source="File" FileName="if(Highlight()) then&#xD;&#xA;  variable(&quot;%permanentlink%dialogimgTbl=&quot;)+SquareTableName()+ &quot;&amp;size=big&amp;effect=Tint&amp;color=&quot; + UrlEncode(variable(&quot;%VI_Common_Color_Badge_Warning%&quot;))&#xD;&#xA;else &#xD;&#xA;  variable(&quot;%permanentlink%dialogimgTbl=&quot;)+SquareTableName()+ &quot;&amp;size=big&amp;effect=Tint&amp;color=&quot; + UrlEncode(variable(&quot;%VI_Common_Color_ColorBase3%&quot;))" ScriptItemUID="Image2" />
+                  </Container>
+                  <Container ScriptItemUID="Container5" Condition="not(isnullorempty(IconFont()))" ItemUID="Icon Font" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot; display: inline; vertical-align: sub; padding-right: 6px;&quot;" />
+                    </HtmlAttributes>
+                    <Label ScriptItemUID="Label2" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;style&quot;" Value="if(Highlight()) then&#xD;&#xA;  variable(&quot;font-size: 1.4em; color: %VI_Common_Color_Badge_Warning%&quot;)&#xD;&#xA;else &#xD;&#xA;  &quot;font-size: 1.4em;&quot;" />
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="IconFont()" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                  <Container ScriptItemUID="Container6" ItemUID="Text" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="Container3style" Value="&quot;display: inline; vertical-align: sub;&quot;" />
+                    </HtmlAttributes>
+                    <Label Text="SquareText()" ScriptItemUID="Label3" />
+                  </Container>
+                </Container>
+              </Container>
+              <Container ScriptItemUID="Container7" ItemUID="description" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;description&quot;" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label1" Text="Description()" />
+              </Container>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ScriptItemUID="Call1" ActionID="SquareAction" />
+            </ServerActionCall>
+          </LinkContainer>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="SquareText()" DataType="System.String" />
+      <VirtualFunction Signature="SquareTableName()" DataType="System.String" />
+      <VirtualControl ID="SquareAction" ContainerType="ActionComponent" />
+      <VirtualFunction DataType="System.String" Signature="IconFont()" />
+      <VirtualFunction DataType="System.String" Signature="Description()" />
+      <VirtualFunction DataType="System.Boolean" Signature="Highlight()" TriggerUpdates="Never" DefaultValue="false" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

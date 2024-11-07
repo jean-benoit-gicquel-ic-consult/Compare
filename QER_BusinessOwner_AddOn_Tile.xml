@@ -1,0 +1,33 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_BusinessOwner_AddOn_Tile" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container15" Layout="'VI_Styles_Container_Inline'">
+        <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef1">
+          <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+            <ActionComponent ScriptItemUID="Action2">
+              <CallAction ScriptItemUID="Call1" ActionID="SquareAction" />
+            </ActionComponent>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="SquareText()" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Value()" Value="Description()" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Identifier()" Value="SquareText()" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Size()" Value="'Addon-Tile'" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ContentType()" Value="'Text'" />
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="SquareText()" DataType="System.String" />
+      <VirtualControl ID="SquareAction" ContainerType="ActionComponent" />
+      <VirtualFunction DataType="System.String" Signature="Description()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

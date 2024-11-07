@@ -1,0 +1,13 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Tab_TaskPane" Type="Tab" HasRelatedObject="true" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_Tab_AccordeonMultiselect" />
+    <Property Name="TabStyle" Value="AccordeonMultiselect" Comment="" />
+    <Property Name="CssClassNameBodyContainer" Value="AccordC TaskPane" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">/* for links in body */
+.TaskPane a  &gt; :not(.imx-grid-pagingcontainer) { display: block; margin-bottom: 8px; text-decoration: none;}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

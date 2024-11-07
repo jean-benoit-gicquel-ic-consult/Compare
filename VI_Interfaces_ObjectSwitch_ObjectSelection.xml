@@ -1,0 +1,22 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Interfaces_ObjectSwitch_ObjectSelection" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ComponentInterfaceObject ContainerType="Container" />
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="TargetTable" RequiresCursor="true" ScriptItemUID="VirtualTable1" Comment="The collection where the resulting WHERE clause will be stored.">
+        <VirtualColumn Name="TargetWhereClause" DataType="System.String" Comment="The property where the resulting WHERE clause will be stored. Whenever the contents of this field change, data should be reloaded." />
+      </VirtualTable>
+      <VirtualFunction Signature="TableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AdditionalWhereClause()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

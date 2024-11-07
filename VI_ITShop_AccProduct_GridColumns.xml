@@ -1,0 +1,36 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AccProduct_GridColumns" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridColumnGroup DataTable="AccProduct" ScriptItemUID="GridColumnGroup1">
+        <GridColumn SortColumn="__Display" ScriptItemUID="GridColumn1" AutoFilterColumn="__Display">
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Container ScriptItemUID="Container1" />
+            <Label Text="translate('#LDS#Product')" ScriptItemUID="Label1" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell1">
+            <Container ScriptItemUID="Container2">
+              <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from accproduct" ScriptItemUID="AccProductSwitchContainer1">
+                <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
+              </AccProductSwitchContainer>
+              <ControlReferenceContainer ID="AdditionalContent" ScriptItemUID="ControlReferenceContainer1" />
+            </Container>
+          </Cell>
+        </GridColumn>
+      </GridColumnGroup>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AccProduct" Class="AccProduct" ScriptItemUID="VirtualTable1" />
+      <VirtualControl ID="AdditionalContent" ContainerType="Container">
+        <VirtualTableCursor DataTable="AccProduct" />
+      </VirtualControl>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

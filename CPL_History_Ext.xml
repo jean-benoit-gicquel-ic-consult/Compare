@@ -1,0 +1,19 @@
+﻿<WebDesigner TdnsHash="1c34f547-8aee-31f3-791e-ba5bfca1c37f">
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="CPL_History_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="CPLCodeLiteral1">dataProvider.AddMemberRelationTable("PersonInNonCompliance", "UID_Person", "AddNonCompliance", "RemoveNonCompliance", "ComplianceViolation");</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="ColumnLimitedValues1" ObjectType="ColumnLimitedValues">
+        <ColumnLimitedValue Name="AddNonCompliance" Display="translate(&quot;#LDS#Compliance violation detected&quot;)" Comment="" />
+        <ColumnLimitedValue Name="RemoveNonCompliance" Display="translate(&quot;#LDS#Compliance violation resolved&quot;)" Comment="" />
+      </AddObject>
+      <AddObject ObjectID="ColumnLimitedValues2" ObjectType="ColumnLimitedValues">
+        <ColumnLimitedValue Name="ComplianceViolation" Display="translate(&quot;#LDS#Compliance violation&quot;)" Comment="" />
+      </AddObject>
+      <AddObject ObjectID="ColumnLimitedValues3" ObjectType="ColumnLimitedValues">
+        <ColumnLimitedValue Name="ComplianceViolation" Display="translate(&quot;#LDS#Compliance violation&quot;)" Comment="" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

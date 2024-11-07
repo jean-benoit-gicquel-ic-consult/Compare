@@ -1,0 +1,23 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_ITShop_DirectDecision_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action4" ObjectType="ActionSequence" SortOrder="10">
+        <ActionSequence Condition="DBTable(PersonWantsOrg) = 'AttestationCase'" ScriptItemUID="ATTAction1" ItemUID="AttestationCase">
+          <LoadTable DataTable="ATC" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from PersonWantsOrg select current XObjectKey)" ScriptItemUID="ATTLoadTable1">
+            <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType1" />
+          </LoadTable>
+          <Method DataTable="ATC" Method="DirectDecision" WhereClause="UID_AttestationCase = from PersonWantsOrg select current UID_PersonWantsOrg">
+            <MethodParameter Name="&quot;strUID_PersonHead&quot;" Value="GetUser()" />
+            <MethodParameter Name="&quot;strReasonText&quot;" Value="from Container select isnull(ReasonText,&quot;&quot;)" />
+            <MethodParameter Name="&quot;iOffset&quot;" Value="Convert((from WorkingStepView select current Convert(isnull(LevelNumber,0),&quot;System.Int32&quot;)) - (from PersonWantsOrg select current Convert(isnull(DecisionLevel,0),&quot;System.Int32&quot;)),&quot;System.Int32&quot;)" />
+          </Method>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableDbObject Table="ATC" Class="AttestationCase" ScriptItemUID="ATTDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ATTAction2" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

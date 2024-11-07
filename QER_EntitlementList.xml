@@ -1,0 +1,57 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_EntitlementList">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="QERActivator1" ExecuteAlways="true">
+          <Action ScriptItemUID="QERAction1">
+            <LoadTable DataTable="BaseTreeHasObject" ScriptItemUID="QERLoadTable1" WhereClause="SqlCompareUid(&quot;UID_Org&quot;,uidorg())">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+            <FillTable DataTable="Entitlements" ScriptItemUID="QERFillTable1" Source="XObjectKey" DataTableSource="BaseTreeHasObject" DataColumnSource="ObjectKey" WhereClause="" DataColumnTableName="" DataColumnSourceKey="" DataColumnXObjectKey="">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </FillTable>
+          </Action>
+        </Activator>
+        <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="QERControlRef1">
+          <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#The following entitlements are assigned to the role.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+        </ControlReferenceContainer>
+        <Grid ScriptItemUID="QERGrid1" AllowExport="true" ExportFileName="" ExportTitle="" HideMenu="true">
+          <GridBand DataTable="Entitlements" ScriptItemUID="QERGridBand1" EntriesPerPage="10" EnableGridViewSetting="false" DisplayHeader="Always">
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn ScriptItemUID="QERColumn2">
+              <GridColumnHeader ScriptItemUID="QERwctl1">
+                <Label Text="translate(&quot;#LDS#Entitlement&quot;)" ScriptItemUID="QERLabel3" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="QERCell1">
+                <Label Text="from entitlements select current display()" ScriptItemUID="QERLabel2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="QERHtmlAttribute1" Value="&quot;imx-icon imx-table-&quot;+(from entitlements select current dbtable())" />
+                    <HtmlAttribute Name="'title'" ScriptItemUID="QERLabel2title" Value="from entitlements select current format(&quot;{0}: {1}&quot;, datacaptionsingle(dbtable()), displaylong())" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+          </GridBand>
+        </Grid>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="BaseTreeHasObject" Table="BaseTreeHasObject" ScriptItemUID="QERDataTableDbObject1">
+          <ActionSequence ScriptItemUID="RMBAction2" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="Entitlements" ScriptItemUID="QERDataTableGeneric1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="UidOrg()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,33 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="20c47cec-b8c0-02f3-76bd-ec3a8dd1d28c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Common_HyperView_ComplianceArea_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container10" ObjectType="Container" SortOrder="0">
+        <Container Layout="'VI_Styles_Container_Inline'" Condition="0 &lt; (from ComplianceRule select count())" ScriptItemUID="CPLContainer1">
+          <Button Text="translate(&quot;#LDS#Rule overview report&quot;)" ScriptItemUID="CPLButton1">
+            <ServerActionCall ScriptItemUID="CPLServerActionCall1">
+              <Update DataTable="ReportParameters" DataColumn="Area" Value="from Object select PrimaryKey()" ScriptItemUID="CPLUpdate1" />
+              <Update DataTable="ReportParameters" DataColumn="ReportName" Value="'VI_ComplianceFramework_Overview_UID'" ScriptItemUID="CPLUpdate2" />
+              <Update DataTable="ReportParameters" DataColumn="LastCompiledReportUID" Value="newid()" ScriptItemUID="CPLUpdate3" />
+              <PrepareReport ReportName="select current reportname from reportparameters" CompiledReportUID="select lastcompiledreportuid from reportparameters">
+                <ParameterFree Name="'Area'" Value="select Area from reportparameters" ScriptItemUID="CPLParameterFree1" />
+              </PrepareReport>
+              <Redirect Target="Context" InNewFrame="true" AbortExecution="false" PopupID="Report" Width="'800'" Height="'400'" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" ScriptItemUID="CPLRedirect1">
+                <RedirectParameter Name="'uid_compiledreport'" Value="from ReportParameters select LastCompiledReportUID" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="0">
+        <LoadTable DataTable="ComplianceRule" RemoveDeleted="false" ScriptItemUID="CPLLoadTable1" WhereClause="format(&quot;uid_compliancerule in ( select uid_compliancerule from complianceruleinarea where uid_compliancearea = {0})&quot;, sqlformatvalue(from object select current uid_compliancearea, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+          <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="20">
+        <DataTableDbObject Class="ComplianceRule" Table="ComplianceRule" ScriptItemUID="CPLDataTableDbObject1">
+          <ActionSequence ScriptItemUID="CPLAction1" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,8 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <LayoutObject ID="VI_Styles_Container_SmallErrorBox" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="imx-message" Comment="" />
+  </LayoutObject>
+</WebDesigner>

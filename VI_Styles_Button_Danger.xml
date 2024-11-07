@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Button_Danger" Type="Button" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="imx-button--danger" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-button--danger  {
+    color: %VI_Common_Color_Button_Font%;  
+    background-color: %VI_Common_Color_Button_Danger%;  
+ }
+
+.imx-button--danger:hover {
+    background-color: %VI_Common_Color_Button_Danger_Hover%;  
+	text-decoration: none;
+}
+.imx-button--danger:focus {
+    background-color: %VI_Common_Color_Button_Danger_Hover%;  
+	text-decoration: none; 
+    outline: 1px %VI_Common_Color_Button_Outline% dotted;
+    outline-offset: 1px;
+}
+
+.imx-button--danger:Disabled  {
+    color: %VI_Common_Color_Button_Font_Disabled%;
+	background-color: %VI_Common_Color_Button_Disabled%;
+	cursor: not-allowed;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

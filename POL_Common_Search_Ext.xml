@@ -1,0 +1,14 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Common_Search_Ext">
+    <Extensions>
+      <AddObject ObjectID="ServerActionCall3" ObjectType="ServerActionCall" SortOrder="11">
+        <ActionSequence Condition="getconfigparm(&quot;QER\Policy&quot;)=&quot;1&quot; and&#xA;(select current dbtablename from results)= 'QERPOLICY'" ItemUID="QERPOLICY" ScriptItemUID="POLAction1">
+          <Redirect Target="Context" ContextID="VI_QERPolicy_Report" AllowReturnToThisContext="true" ScriptItemUID="POLRedirect1">
+            <RedirectParameter Name="'UID_QERPolicy'" Value="from results select current primarykey()" />
+            <RedirectParameter Name="'Form'" Value="&quot;Rule&quot;" />
+          </Redirect>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

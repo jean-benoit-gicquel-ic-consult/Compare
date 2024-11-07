@@ -1,0 +1,94 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Hardware_Overview" ScriptItemUID="Context1" AllowUrlNavigation="true" HelpChapterUid="&quot;55CD7D2C-93C2-4C87-9B2E-1F042656E059&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="Hardware" Description="datacaption(&quot;Hardware&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Hardware_Person_Filter" Type="SQL" Description="translate('#LDS#Devices which can be edited by the current user')" DatabaseTable="Hardware" LongDescription="" />
+        <ConfigParam Key="VI_Hardware_Person_ManagerCondition" Type="SQL" Description="translate('#LDS#Employees authorized to add and edit devices')" DatabaseTable="Hardware" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_Hardware_Person_ResultAttributes" Type="ColumnList" Description="translate('#LDS#Fields displayed in the result list')" DatabaseTable="Hardware" LongDescription="" />
+        <ConfigParam Key="VI_Allowed_Ident_HardwareBasicType" Type="Text" Description="translate('#LDS#Comma separated list of device types')" />
+        <ConfigParam Key="Vi_Allow_Hardware_Registration" Description="translate('#LDS#Allow creation of new devices')" LongDescription="translate('#LDS#Allows users to create new devices.')" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="Hardware" Class="Hardware" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action2" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="UID_Hardware" DataType="System.String" ScriptItemUID="Column4" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="DataCaption(&quot;Hardware&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3">
+          <ActionSequence ScriptItemUID="Action4" Condition="from Vars select not IsNullOrEmpty(UID_Hardware)">
+            <LoadTable DataTable="Hardware" ScriptItemUID="LoadTable1" WhereClause="SqlCompareUid(&quot;UID_Hardware&quot;,from Vars select UID_Hardware)">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+            </LoadTable>
+            <Update DataTable="Vars" DataColumn="UID_Hardware" ScriptItemUID="Update2" />
+          </ActionSequence>
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="DataCaption(&quot;Hardware&quot;)" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;flex-fill&quot;" />
+              </HtmlAttributes>
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="Hardware" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="variable(getconfig(&quot;VI_Hardware_Person_Filter&quot;))" EnableCustomAttributes="true" RowSelection="Action">
+                  <HtmlAttributes>
+                    <Property Name="ApplyFilledHeight" Value="true" />
+                  </HtmlAttributes>
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <SelectionAction ScriptItemUID="ServerActionCall1">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <Update DataTable="Vars" DataColumn="UID_Hardware" ScriptItemUID="Update1" Value="select current uid_hardware from hardware" />
+                    <Redirect Target="Context" ContextID="VI_Hardware_Edit" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                      <RedirectParameter Name="'UID_Hardware'" Value="select current uid_hardware from hardware" />
+                    </Redirect>
+                  </SelectionAction>
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumnColumnTemplate DataTable="Hardware" ScriptItemUID="GridColumnColumnTemplate1">
+                    <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                      <ExpressionColumnList ColumnList="getconfig(&quot;VI_Hardware_Person_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                    </ColumnList>
+                    <GridColumnGroup DataTable="Hardware" ScriptItemUID="GridColumnGroup1">
+                      <GridColumnSimple ScriptItemUID="Column3" Column="currentcolumn" />
+                    </GridColumnGroup>
+                  </GridColumnColumnTemplate>
+                </GridBand>
+              </Grid>
+            </Container>
+            <Container ScriptItemUID="Container4" EnableCustomAttributes="true" ItemUID="Buttonbar" Condition="convert(isnull(getconfig(&quot;Vi_Allow_Hardware_Registration&quot;),'false'), 'Boolean')">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+              </HtmlAttributes>
+              <Button Text="translate('#LDS#Add a new device')" ScriptItemUID="Button3" EnabledCondition="caninsert(&quot;hardware&quot;)">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <Redirect ScriptItemUID="Redirect2" Target="Context" ContextID="VI_Hardware_Edit" AllowReturnToThisContext="true" />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate('#LDS#On this page you can view and edit devices you are responsible for. Select a device to view its data.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

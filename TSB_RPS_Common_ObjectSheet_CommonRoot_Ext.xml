@@ -1,0 +1,37 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_RPS_Common_ObjectSheet_CommonRoot_Ext" RequiredDbModules="TSB,RPS">
+    <Extensions>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="15">
+        <TabPage ExpandedCondition="not(isnullorempty(request(&quot;Dashboard&quot;)))" ScriptItemUID="TSBTabPage1">
+          <ControlsHeader ScriptItemUID="TSBContainer1">
+            <Label Text="translate(&quot;#LDS#Details&quot;)" ScriptItemUID="TSBLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="TSBContainer2">
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="TSBControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping1" ID="PropertyList()" IsPropertyList="true">
+                <ColumnList ScriptItemUID="TSBColumnList1">
+                  <SingleColumn ScriptItemUID="TSBSingleColumn1" DataColumn="UID_RPSReport" ColumnComponentEdit="VI_Edit_FKByComboBox" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping ScriptItemUID="TSBVirtualTableMapping2" VirtualTable="EditTable" DataTable="Vars" />
+            </ControlReferenceContainer>
+            <Container ScriptItemUID="TSBContainer3" RefreshTriggerExpression="from vars select uid_rpsreport" Condition="not(isnullorempty(from vars select uid_rpsreport))">
+              <ControlReferenceControlList ID="RPS_ListReport" ScriptItemUID="TSBControlRef3">
+                <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping2" ID="ElementObjectKey()" Value="from object select current getobjectkey()" />
+                <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping3" ID="IdentListReport()" Value="SingleProperty(&quot;RPSReport&quot;, &quot;Ident_RPSReport&quot;,sqlcompareuid(&quot;UID_RPSReport&quot;, from vars select uid_rpsreport))" />
+              </ControlReferenceControlList>
+            </Container>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="5">
+        <DataTableSingleRow ScriptItemUID="TSBDataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="UID_RPSReport" ScriptItemUID="TSBColumn1" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_RPSReport&quot;" DBTableName="&quot;RPSReport&quot;" FKWhereClause="variable(&quot;UID_RPSReport in ('TSB-14c11a6322cd453ca7f162a782bc638b', 'TSB-F4AE49E79B9E6845A7366720B3C6ED90', 'TSB-7D0D9343ACF50D469AAB915FE8FA1919')  and uid_rpsreport in (select uid_rpsreport from personhasrpsreport where uid_person = '%useruid%')&quot;)" Caption="datacaptionsingle(&quot;RPSReport&quot;)" />
+        </DataTableSingleRow>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="1">
+        <Update DataColumn="UID_RPSReport" DataTable="Vars" ScriptItemUID="TSBUpdate1" Value="if (request('dashboard') = 'UNSRootWithWithoutAccProduct') &#xD;&#xA;   then 'TSB-14c11a6322cd453ca7f162a782bc638b' else&#xD;&#xA;if (request('dashboard') = 'UserAccountsHavingRiskGreaterXByDomain') &#xD;&#xA;   then 'TSB-F4AE49E79B9E6845A7366720B3C6ED90' else&#xD;&#xA;if (request('dashboard') = 'EntitlementsHavingRiskGreaterXByDomain') &#xD;&#xA;   then 'TSB-7D0D9343ACF50D469AAB915FE8FA1919'&#xD;&#xA;else&#xD;&#xA;   ''" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

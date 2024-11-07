@@ -1,0 +1,114 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_CheckBox_DecisionControl" Type="CheckBox" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.checkbox_yes, .checkbox_no {
+    /* Enable absolute positioning of the hidden form controls*/
+    position: relative;
+    /* Just a bit of space. */
+    margin-bottom: 0.5em;
+    /*
+    Match line-height to the height of the replacement image to ensure it
+    doesn't get clipped
+    */
+    line-height: 24px;
+}
+fieldset : last-child {
+    margin-bottom: 0;
+}
+/*
+Position and hide the real checkboxes and radio buttons.
+The inputs are made transparent instead of completely hidden to preserve
+clickability in browsers that don't have clickable labels, like Safari for
+iOS 5 and older.
+*/
+.checkbox_yes input[type="checkbox"], 
+.checkbox_no  input[type="checkbox"]  {
+    position: absolute;
+    /* Match the image dimensions */
+    width: 24px;
+    height: 24px;
+    /* Reset anything that could peek out or interfere with dimensions */
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    opacity: 0;
+}
+/*
+Insert a pseudo element inside each label and give it a background
+image that will become the custom checkbox or radio button.
+Using inline-block lets you use vertical-align to adjust it vertically
+as needed.
+*/
+.checkbox_yes input[type="checkbox"] + label:before {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    content: " ";
+    vertical-align: top;
+}
+
+.checkbox_no  input[type="checkbox"] + label:before {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 0px;
+    content: " ";
+    vertical-align: top;
+}
+/*
+Position the background image differently depending on the state of each
+checkbox and radio button.
+*/
+
+.checkbox_yes input[type="checkbox"] + label:before {
+    background:  url('%permanentlink%img=24_approve_normal.png');
+}
+
+.checkbox_yes input[type="checkbox"]:checked + label:before {
+   background:  url('%permanentlink%img=24_approve_selected.png');
+}
+
+.checkbox_yes input[type="checkbox"][disabled] + label:before {
+   background:  url('%permanentlink%img=24_approve_disabled.png');
+}
+
+.checkbox_no input[type="checkbox"] + label:before {
+    background:  url('%permanentlink%img=24_deny_normal.png');
+}
+
+.checkbox_no input[type="checkbox"]:checked + label:before {
+   background:  url('%permanentlink%img=24_deny_selected.png');
+}
+
+/*
+Overriding styles from jquery mobile 
+*/
+.ui-mobile .checkbox_yes label,
+.ui-mobile .checkbox_no label,
+.ui-mobile .checkboxAll_no label, 
+.ui-mobile .checkboxAll_yes label
+{
+  display: inline;
+  font-size: inherit;
+  margin-bottom: 5px; 
+}
+
+/*
+Set outline style for highlighting focussed control
+*/
+.checkbox_yes input[type="checkbox"]:focus + label:before, 
+.checkbox_no input[type="checkbox"]:focus + label:before,
+.checkboxAll_yes input[type="checkbox"]:focus + label:before, 
+.checkboxAll_no input[type="checkbox"]:focus + label:before
+{
+  outline-style: solid;  
+  outline-width: 2px;
+  outline-color: %VI_Common_Color_Font%;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

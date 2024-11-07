@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_RadioButton_Default" Type="RadioButton" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="radiobutton" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.radiobutton { padding-right: 7px; vertical-align: text-bottom; }
+.radiobutton input { margin-left: 0;margin-right: 7px; width: 15px; margin-top: 3px; vertical-align: top; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,14 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="320">
+        <ConfigEntry Key="ColumnEditor_UNSGroup.UID_AccProduct" Value="VI_Edit_FKWithNewAccProduct" ScriptItemUID="TSBConfigEntry1" />
+        <ConfigEntry Key="ColumnEditor_UNSGroup.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" ScriptItemUID="TSBConfigEntry2" />
+        <ConfigEntry Key="FilterByObject.UNSRoot" Value="true" ScriptItemUID="TSBConfigEntry3" />
+        <ConfigEntry Key="FilterByObject.UNSContainer" Value="true" ScriptItemUID="TSBConfigEntry4" />
+        <ConfigEntry ScriptItemUID="TSBConfigEntry5" Key="ColumnEditor_TSBAccountDef.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" />
+        <ConfigEntry ScriptItemUID="TSBConfigEntry6" Key="ColumnEditor_UNSGroupB.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,22 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_Org" MigrationNotes="DMLREPLACE;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ElementEdit ScriptItemUID="ElementEdit1" DataTable="Object" EnableNavigation="EnableNavigation()">
+          <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef33" />
+        </ElementEdit>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_HyperView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="Object" Class="Org" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

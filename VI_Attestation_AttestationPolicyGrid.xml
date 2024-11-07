@@ -1,0 +1,343 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_AttestationPolicyGrid" Comment="Shows an overview about the existing attestation policies.&#xD;&#xA;&#xD;&#xA;The component includes controls enabling the user to delete the shown attestation policies.&#xD;&#xA;&#xD;&#xA;Furthermore the component Includes controls for editing an existing and creating a new attestation policy.&#xD;&#xA;Unlike deletion, editing and creating will not be accomplished in place but instead only be signaled by an event.&#xD;&#xA;When an existing or newly created policy shall be edited the virtual action OnEdit will be called and the virtual collection AttestationPolicyEdit will hold the attestation policy to edit as single one object." MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action6" />
+      <Container ScriptItemUID="Container1">
+        <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <CallAction ActionID="InitCollections" ScriptItemUID="Call1" />
+          </Action>
+        </Activator>
+        <Container ItemUID="Grid showing all attestation policies" Condition="0 &lt; select count() from AttestationPolicy " ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;flex-fill&quot;" />
+          </HtmlAttributes>
+          <Grid AllowExport="true" ScriptItemUID="Grid1" ExportFileName="" ExportTitle="">
+            <GridBand DataTable="AttestationPolicy" WhereClause="if(from LocalVars select IncludeDeactivated) then true&#xD;&#xA;else (&#xD;&#xA;  (Not IsInactive) &#xD;&#xA;)" ScriptItemUID="GridBand1">
+              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                <ControlList ScriptItemUID="ControlList1">
+                  <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef1">
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                      <ControlList ScriptItemUID="ControlList2">
+                        <Label ScriptItemUID="Label16" Text="from AttestationPolicy select current Ident_AttestationPolicy" />
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                      <ControlList ScriptItemUID="ControlList3">
+                        <Container Condition="not (from AttestationPolicy select current IsNullOrEmpty(WhereClauseMeta))" ScriptItemUID="Container4">
+                          <Container ItemUID="Edit Button" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container8">
+                            <LinkContainer ScriptItemUID="LinkContainer3">
+                              <ControlList ScriptItemUID="ControlList7">
+                                <Image StockImage="Edit" ScriptItemUID="Image6" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute7" Value="translate(&quot;#LDS#Edit attestation policy&quot;)" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </ControlList>
+                              <ServerActionCall ScriptItemUID="ServerActionCall7">
+                                <SwitchAction ScriptItemUID="Switch2">
+                                  <SwitchActionCase ScriptItemUID="Case4" Condition="{{ var userSession = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IUserSession&gt;(); @return userSession.IsPhoneDevice;}}">
+                                    <CallAction ScriptItemUID="Call19" ActionID="UserMessage_NotAvailableOnPhoneDevices" />
+                                  </SwitchActionCase>
+                                  <SwitchActionCase ScriptItemUID="Case3">
+                                    <LoadTable DataTable="AttestationPolicyEdit" WhereClause="format(&quot;uid_attestationpolicy = '{0}'&quot;, from AttestationPolicy select current uid_attestationpolicy)" ScriptItemUID="LoadTable4">
+                                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" />
+                                    </LoadTable>
+                                    <CallAction ActionID="OnEdit" ScriptItemUID="Call13" />
+                                  </SwitchActionCase>
+                                </SwitchAction>
+                              </ServerActionCall>
+                            </LinkContainer>
+                          </Container>
+                          <Container ItemUID="Copy Button" Layout="'VI_Styles_Container_Inline'" Condition="CanInsert('AttestationPolicy') AND CanInsert('AttestationPolicyInArea')" ScriptItemUID="Container7">
+                            <LinkContainer ScriptItemUID="LinkContainer2">
+                              <ControlList ScriptItemUID="ControlList6">
+                                <Image StockImage="Copy" ScriptItemUID="Image5" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute6" Value="translate(&quot;#LDS#Copy attestation policy&quot;)" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </ControlList>
+                              <ServerActionCall ScriptItemUID="ServerActionCall6">
+                                <SwitchAction ScriptItemUID="Switch3">
+                                  <SwitchActionCase ScriptItemUID="Case6" Condition="{{ var userSession = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IUserSession&gt;(); @return userSession.IsPhoneDevice;}}">
+                                    <CallAction ScriptItemUID="Call15" ActionID="UserMessage_NotAvailableOnPhoneDevices" />
+                                  </SwitchActionCase>
+                                  <SwitchActionCase ScriptItemUID="Case5">
+                                    <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call10">
+                                      <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                                        <ActionComponent ScriptItemUID="Action3">
+                                          <ActionOnControl />
+                                          <CallAction ActionID="CopyCurrentPolicy" ScriptItemUID="Call12" />
+                                          <CallAction ActionID="OnEdit" ScriptItemUID="Call11" />
+                                        </ActionComponent>
+                                      </VirtualControlMapping>
+                                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Do you want to create a copy of '{0}'?&quot;, from AttestationPolicy select current Display())" ScriptItemUID="VirtualFunctionMapping8" />
+                                      <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+                                    </CallAction>
+                                  </SwitchActionCase>
+                                </SwitchAction>
+                              </ServerActionCall>
+                            </LinkContainer>
+                          </Container>
+                          <Container Condition="CanDelete('AttestationPolicy') AND NOT IsDefaultPolicy()" Layout="'VI_Styles_Container_Inline'" ItemUID="Delete Button" ScriptItemUID="Container6">
+                            <LinkContainer ScriptItemUID="LinkContainer1">
+                              <ControlList ScriptItemUID="ControlList5">
+                                <Image StockImage="DeleteDocument" ScriptItemUID="Image4" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="translate(&quot;#LDS#Delete attestation policy&quot;)" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </ControlList>
+                              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                                <CallAction ActionID="VI_Attestation_Delete_AttestationPolicy" ScriptItemUID="Call3">
+                                  <VirtualFunctionMapping ID="UidOfItemToDelete()" Value="(from AttestationPolicy select current PrimaryKey())" ScriptItemUID="VirtualFunctionMapping6" />
+                                  <VirtualTableMapping VirtualTable="Items" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping2" />
+                                </CallAction>
+                              </ServerActionCall>
+                            </LinkContainer>
+                          </Container>
+                        </Container>
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                      <ControlList ScriptItemUID="ControlList4">
+                        <LayoutPanel ScriptItemUID="LayoutPanel2">
+                          <ContainerColumnTemplate DataTable="AttestationPolicy" ScriptItemUID="ContainerColumnTemplate1">
+                            <ColumnList ScriptItemUID="ColumnList2">
+                              <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" />
+                              <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_AttestationObject" />
+                              <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="PolicyInArea" />
+                              <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="UID_DialogSchedule" />
+                              <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_PersonOwner" />
+                            </ColumnList>
+                            <Container ScriptItemUID="Container46" ItemUID="Title column for normal properties">
+                              <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef9">
+                                <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping19">
+                                  <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                </VirtualTableMapping>
+                                <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping11" />
+                              </ControlReferenceContainer>
+                            </Container>
+                            <Container ScriptItemUID="Container45" ItemUID="Value column for normal properties">
+                              <ColumnEditor DataTable="AttestationPolicy" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2" />
+                            </Container>
+                          </ContainerColumnTemplate>
+                        </LayoutPanel>
+                      </ControlList>
+                    </VirtualControlMapping>
+                  </ControlReferenceControlList>
+                </ControlList>
+              </GridBandListView>
+              <GridFilters ScriptItemUID="GridFilters1" />
+              <GridRows />
+              <GridColumnSimple ScriptItemUID="Column6" Column="Ident_AttestationPolicy" />
+              <GridColumnSimple ScriptItemUID="Column2" Column="UID_AttestationObject" Width="&quot;14em&quot;" />
+              <GridColumnSimple ScriptItemUID="Column5" Column="PolicyInArea" Width="&quot;14em&quot;" />
+              <GridColumnSimple ScriptItemUID="Column1" Column="UID_DialogSchedule" Width="&quot;13em&quot;" />
+              <GridColumnSimple ScriptItemUID="Column3" Column="UID_PersonOwner" Width="&quot;10em&quot;" />
+              <GridColumn Width="&quot;75px&quot;" ScriptItemUID="Column8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;data-imx-exporthide&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;true&quot;" />
+                </HtmlAttributes>
+                <GridColumnHeader ScriptItemUID="wctl6">
+                  <Label Text="translate(&quot;#LDS#Actions&quot;)" ScriptItemUID="Label13" />
+                </GridColumnHeader>
+                <Cell ScriptItemUID="Cell9">
+                  <Container Condition="not (from AttestationPolicy select current IsNullOrEmpty(WhereClauseMeta))" ScriptItemUID="Container17">
+                    <Container ItemUID="Edit Button" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container18">
+                      <LinkContainer ScriptItemUID="Image1Link">
+                        <ControlList ScriptItemUID="Image1Ctl">
+                          <Image StockImage="Edit" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Edit attestation policy&quot;)" />
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <SwitchAction ScriptItemUID="Switch4">
+                            <SwitchActionCase ScriptItemUID="Case8" Condition="{{ var userSession = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IUserSession&gt;(); @return userSession.IsPhoneDevice;}}">
+                              <CallAction ScriptItemUID="Call14" ActionID="UserMessage_NotAvailableOnPhoneDevices" />
+                            </SwitchActionCase>
+                            <SwitchActionCase ScriptItemUID="Case7">
+                              <LoadTable DataTable="AttestationPolicyEdit" WhereClause="format(&quot;uid_attestationpolicy = '{0}'&quot;, from AttestationPolicy select current uid_attestationpolicy)" ScriptItemUID="LoadTable1">
+                                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                              </LoadTable>
+                              <CallAction ActionID="OnEdit" ScriptItemUID="Call2" />
+                            </SwitchActionCase>
+                          </SwitchAction>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                    <Container ItemUID="Copy Button" Layout="'VI_Styles_Container_Inline'" Condition="CanInsert('AttestationPolicy') AND CanInsert('AttestationPolicyInArea')" ScriptItemUID="Container19">
+                      <LinkContainer ScriptItemUID="Image2Link">
+                        <ControlList ScriptItemUID="Image2Ctl">
+                          <Image StockImage="Copy" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Copy attestation policy&quot;)" />
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <SwitchAction ScriptItemUID="Switch5">
+                            <SwitchActionCase ScriptItemUID="Case10" Condition="{{ var userSession = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IUserSession&gt;(); @return userSession.IsPhoneDevice;}}">
+                              <CallAction ScriptItemUID="Call16" ActionID="UserMessage_NotAvailableOnPhoneDevices" />
+                            </SwitchActionCase>
+                            <SwitchActionCase ScriptItemUID="Case9">
+                              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call3k">
+                                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                                  <ActionComponent ScriptItemUID="Action2">
+                                    <ActionOnControl />
+                                    <CallAction ActionID="CopyCurrentPolicy" ScriptItemUID="Call4" />
+                                    <CallAction ActionID="OnEdit" ScriptItemUID="Call5" />
+                                  </ActionComponent>
+                                </VirtualControlMapping>
+                                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Do you want to create a copy of '{0}'?&quot;, from AttestationPolicy select current Display())" ScriptItemUID="VirtualFunctionMapping1" />
+                                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                              </CallAction>
+                            </SwitchActionCase>
+                          </SwitchAction>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                    <Container Condition="CanDelete('AttestationPolicy') AND NOT IsDefaultPolicy()" Layout="'VI_Styles_Container_Inline'" ItemUID="Delete Button" ScriptItemUID="Container20">
+                      <LinkContainer ScriptItemUID="Image3Link">
+                        <ControlList ScriptItemUID="Image3Ctl">
+                          <Image StockImage="DeleteDocument" ScriptItemUID="Image3" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="Image3alt" Value="translate(&quot;#LDS#Delete attestation policy&quot;)" />
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                          <CallAction ActionID="VI_Attestation_Delete_AttestationPolicy" ScriptItemUID="Call6">
+                            <VirtualFunctionMapping ID="UidOfItemToDelete()" Value="(from AttestationPolicy select current PrimaryKey())" ScriptItemUID="VirtualFunctionMapping3" />
+                            <VirtualTableMapping VirtualTable="Items" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping1" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </Container>
+                </Cell>
+              </GridColumn>
+            </GridBand>
+          </Grid>
+        </Container>
+        <Container ItemUID="Button for adding the VERY FIRST attestation policy" ScriptItemUID="Container33">
+          <ControlReferenceContainer ID="ButtonCreateNewAttestationPolicy" ScriptItemUID="ControlRef2" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AttestationPolicy" Table="AttestationPolicy" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+          <ColumnMemberRelation Name="PolicyInArea" RelationTableName="&quot;AttestationPolicyInArea&quot;" ColumnNameLeft="&quot;UID_AttestationPolicy&quot;" Caption="datacaption(&quot;ComplianceArea&quot;)" ScriptItemUID="ColumnMemberRelation1" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ReviewDate" DataType="System.DateTime" ScriptItemUID="Column17" />
+          <Column Name="IncludeDeactivated" DataType="System.Boolean" ScriptItemUID="Column11" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ButtonCreateNewAttestationPolicy">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container34" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;ButtonBar&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="&quot;text-align: right;&quot;" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-flex-row&quot;" />
+                </HtmlAttributes>
+                <CheckBox DataTable="LocalVars" DataColumn="IncludeDeactivated" Text="translate(&quot;#LDS#Include deactivated policies&quot;)" ScriptItemUID="CheckBox1" />
+              </Container>
+              <Container ScriptItemUID="Container3" Condition="CanInsert('AttestationPolicy') AND CanInsert('AttestationPolicyInArea')">
+                <Button Text="translate(&quot;#LDS#New attestation policy&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Create a new attestation policy&quot;)" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall5">
+                    <SwitchAction ScriptItemUID="Switch1">
+                      <SwitchActionCase ScriptItemUID="Case1" Condition="{{ var userSession = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IUserSession&gt;(); @return userSession.IsPhoneDevice;}}">
+                        <CallAction ScriptItemUID="Call17" ActionID="UserMessage_NotAvailableOnPhoneDevices" />
+                      </SwitchActionCase>
+                      <SwitchActionCase ScriptItemUID="Case2">
+                        <Delete DataTable="AttestationPolicyEdit" ScriptItemUID="Delete1" />
+                        <Insert DataTable="AttestationPolicyEdit" ScriptItemUID="Insert1">
+                          <ActionSequence ScriptItemUID="Action11" />
+                          <InsertValue DataColumn="SolutionDays" Value="DefaultSolutionDays()" />
+                          <InsertValue DataColumn="IsAutoCloseOldCases" Value="DefaultIsAutoCloseOldCases()" />
+                        </Insert>
+                        <CallAction ActionID="OnEdit" ScriptItemUID="Call7" />
+                      </SwitchActionCase>
+                    </SwitchAction>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </LocalControlContext>
+        </Control>
+        <Control ID="CopyCurrentPolicy">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Copies the current attestation policy">
+            <ActionComponent ScriptItemUID="Action12">
+              <LoadTable DataTable="AttestationPolicyEdit" WhereClause=" format(&quot;uid_attestationpolicy = '{0}'&quot;, &#xA;VI_Copy_AttestationPolicy_Web(from AttestationPolicy select current uid_attestationpolicy, true, true)&#xA;)" ScriptItemUID="LoadTable2">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+              </LoadTable>
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call8">
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The attestation policy '{0}' has been copied.&quot;, from AttestationPolicy select current display())" ScriptItemUID="VirtualFunctionMapping5" />
+              </CallAction>
+              <CallAction ActionID="InitCollections" ScriptItemUID="Call9" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="InitCollections">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action13">
+              <LoadTable DataTable="AttestationPolicy" WhereClause="sqland(&#xD;&#xA;Format(&quot;not({0})&quot;,SqlEmpty(&quot;WhereClauseMeta&quot;,&quot;string&quot;)),&#xD;&#xA;Format(&quot;UID_AttestationObject in (select UID_AttestationObject from AttestationObject where IsDeactivatedByPreProcessor = 0)&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable3">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+              </LoadTable>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UserMessage_NotAvailableOnPhoneDevices">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call18">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#WD_NotAvailbleOnPhoneDevices')" ScriptItemUID="VirtualFunctionMapping21" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping20" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="DateAsString(DateTime aDate)" Expression="if (aDate = #1899.12.30 00:00:00#) &#xA;then  &quot;-&quot;&#xA;else FormatDate(aDate, &quot;d&quot;)" Comment="Formats a DateTime object into a String.&#xD;&#xA;Includes special formatting for a minimum date (1899/12/30 00:00:00), which will be regarded as null date and represented as special null string &quot;-&quot;." DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="DescriptionValue(string tableName, string uid)" Expression="IsNull(try(SingleProperty(&quot;DialogSchedule&quot;, &quot;Description&quot;, SqlCompare(format(&quot;UID_{0}&quot;, tableName), uid, &quot;string&quot;, &quot;Equal&quot;, &quot;NonUnicodeLiterals&quot;)), &quot;&quot;), &quot;&quot;)" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="CurrentUidPolicy()" Expression="from AttestationPolicy select current primarykey()" DataType="System.String" ScriptItemUID="Function3">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="DefaultSolutionDays()" Expression="try(Convert(GetConfig(&quot;VI_Attestation_NEW_POLICY_DEFAULT_SOLUTION_DAYS&quot;), &quot;System.Int32&quot;), 0)" DataType="System.Int32" ScriptItemUID="Function4" />
+        <Function Name="DefaultIsAutoCloseOldCases()" Expression="try(Convert(GetConfig(&quot;VI_Attestation_NEW_POLICY_DEFAULT_IS_AUTO_CLOSE_OLD_CASES&quot;), &quot;System.Boolean&quot;), false)" DataType="System.Boolean" ScriptItemUID="Function5" />
+        <Function Name="IsDefaultPolicy()" Expression="3 = (from AttestationPolicy select current IndexOf(Lower(Uid_AttestationPolicy), &quot;-&quot;, 0))" DataType="System.Boolean" ScriptItemUID="Function6">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor3" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualControl ID="OnEdit" ContainerType="ActionComponent" Comment="Will be called when an attestation policy shall be edited. This object might also be a newly created policy, which is the case when the &quot;create&quot; button was pressed." />
+      <VirtualTable Name="AttestationPolicyEdit" Comment="When OnEdit is invoked, this Collection holds a single entry: the attestation policy to edit or create." Class="AttestationPolicy" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

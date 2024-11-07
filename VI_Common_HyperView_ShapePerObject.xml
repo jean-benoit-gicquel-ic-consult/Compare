@@ -1,0 +1,68 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_ShapePerObject" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <ActionSequence ScriptItemUID="Action3" Condition="condition()">
+          <LoadTable DataTable="Objects" ScriptItemUID="LoadTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+          </LoadTable>
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList2">
+        <ContainerTemplate DataTable="Objects" ScriptItemUID="ElementTemplate1" WithoutParentContainer="true">
+          <Container ScriptItemUID="Element3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'imx-layout'" Value="LayoutType()" ScriptItemUID="HtmlAttribute1" />
+            </HtmlAttributes>
+            <LinkContainer EnabledCondition="EnableNavigation()" ScriptItemUID="LinkContainer1">
+              <ControlList ScriptItemUID="ControlList1">
+                <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlRef4">
+                  <VirtualFunctionMapping ID="ColorKey()" Value="LayoutType()" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="ImageURL()" Value="variable(&quot;%permanentlink%dialogimgTbl=&quot;+DbTableName()+&quot;&amp;size=Big&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="Caption()" Value="select current display() from objects" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="HeaderText()" Value="isnullorempty( HeaderText(), datacaption(dbtablename()))" ScriptItemUID="VirtualFunctionMapping4" />
+                  <VirtualControlMapping VirtualControl="ShapeContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container8">
+                      <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef5">
+                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping5">
+                          <ColumnList ScriptItemUID="ColumnList2" />
+                        </VirtualFunctionMapping>
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Objects" ScriptItemUID="VirtualTableMapping1" />
+                        <VirtualFunctionMapping ID="EnableNavigation()" Value="false -- avoid nested links" ScriptItemUID="VirtualFunctionMapping6" />
+                      </ControlReferenceContainer>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="DbTableName()" Value="DbTableName()" ScriptItemUID="VirtualFunctionMapping7" />
+                </ControlReferenceContainer>
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                  <RedirectParameter Name="'ObjectKey'" Value="from Objects select current objectwalker(&quot;xobjectkey&quot;)" />
+                </Redirect>
+              </ServerActionCall>
+            </LinkContainer>
+          </Container>
+        </ContainerTemplate>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Objects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="dbtablename()" WhereClauseSQL="DbWhereClause()">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="HeaderText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbTableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="LayoutType()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Condition()" DataType="System.Boolean" DefaultValue="true" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

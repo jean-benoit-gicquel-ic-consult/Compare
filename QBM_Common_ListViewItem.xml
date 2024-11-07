@@ -1,0 +1,51 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_ListViewItem">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Styles_ListView_Default" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1" EnableCustomAttributes="true" ItemUID="Head">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="'class'" Value="&quot;ListViewHead&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container10" EnableCustomAttributes="true" ItemUID="Title">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute9" Value="&quot;ListViewTitle&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceControlList ID="Title" ScriptItemUID="ControlRef1" />
+          </Container>
+          <Container ScriptItemUID="Container3" EnableCustomAttributes="true" ItemUID="Actions">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="&quot;ListViewActions&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceControlList ID="Actions" ScriptItemUID="ControlRef5" />
+          </Container>
+        </Container>
+        <Container ScriptItemUID="Container8" EnableCustomAttributes="true" ItemUID="Content">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="'class'" Value="&quot;ListViewContentRow&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true" ItemUID="Actions">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute2" Value="&quot;ListViewContentCell&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceControlList ID="Content" ScriptItemUID="ControlRef6" />
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualControl ContainerType="ControlList" ID="Title" />
+      <VirtualControl ContainerType="ControlList" ID="Actions" />
+      <VirtualControl ContainerType="ControlList" ID="Content" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

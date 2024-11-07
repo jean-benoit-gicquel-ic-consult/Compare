@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="110">
+        <ConfigEntry Key="VI_ObjectView_Org_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="RMBConfigEntry1">
+          <SingleColumn DataColumn="UID_OrgRoot" FKWhereClause="" ScriptItemUID="RMBSingleColumn1" />
+          <SingleColumn DataColumn="FullPath" FKWhereClause="" ScriptItemUID="RMBSingleColumn2" />
+          <SingleColumn FKWhereClause="" ScriptItemUID="RMBSingleColumn3" DataColumn="Description" />
+          <SingleColumn DataColumn="UID_OrgType" FKWhereClause="" ScriptItemUID="RMBSingleColumn4" />
+          <SingleColumn DataColumn="Remarks" FKWhereClause="" ScriptItemUID="RMBSingleColumn5" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="RMBSingleColumn6" />
+          <SingleColumn ScriptItemUID="RMBSingleColumn9" DataColumn="UID_PersonHead" />
+          <SingleColumn ScriptItemUID="RMBSingleColumn10" DataColumn="UID_PersonHeadSecond" />
+          <SingleColumn ScriptItemUID="RMBSingleColumn11" DataColumn="UID_RulerContainer" />
+          <SingleColumn ScriptItemUID="RMBSingleColumn12" DataColumn="UID_RulerContainerIT" />
+          <SingleColumn DataColumn="UID_FunctionalArea" FKWhereClause="" ScriptItemUID="RMBSingleColumn7" />
+          <SingleColumn DataColumn="Commentary" FKWhereClause="" ScriptItemUID="RMBSingleColumn8" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="110">
+        <ConfigParam Key="VI_ObjectView_Org_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Org&quot;))" DatabaseTable="Org" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

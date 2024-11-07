@@ -1,0 +1,15 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_LinkContainer_MastHead" Type="LinkContainer" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="LinkContainerMastHead" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.LinkContainerMastHead ,
+.LinkContainerMastHead:focus ,
+.LinkContainerMastHead:active ,
+.LinkContainerMastHead:visited { color: %VI_Common_Color_ColorBase1% !important; text-decoration: none; }
+.LinkContainerMastHead:focus , .LinkContainerMastHead:hover {color: %VI_Common_Color_ColorBase1% !important; text-decoration: none; }
+
+.LinkContainerMastHead .IconImage { padding-right: 2px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

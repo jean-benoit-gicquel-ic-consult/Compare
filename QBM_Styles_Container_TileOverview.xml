@@ -1,0 +1,56 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="QBM_Styles_Container_TileOverview" Type="Container">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="tile-overview" />
+    <CssDocument ScriptItemUID="CssDocument1" CssName="CSS">.tile-overview{
+    display: inline-flex;
+	width: 300px;
+	height: 175px;
+	margin-right: 20px;
+    vertical-align: top;
+    margin-bottom: 2em;
+    border: solid 1px %VI_Common_Color_LighterGray%; 
+  }
+.tile-overview:hover,
+.tile-overview:focus {
+    border: solid 1px %VI_Common_Color_Gray%;
+    outline: none;
+    text-decoration: none;
+}
+.tile-overview a:hover,
+.tile-overview a:focus {
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+.tile-overview .heading {
+   padding: 30px 10px 0px 10px;
+   color: %VI_Common_Color_ColorBase3%;
+   font-size: 1.4em;
+   text-align: center;
+   line-height: 1.4em;
+   width: 280px;
+}
+.tile-overview .description {
+    padding: 10px 10px 0px 10px;
+	font-size: 1.2em;
+	color: %VI_Common_Color_Font%;
+    width: 280px;
+}
+
+/* responsive layout*/
+@media %IMX_Mediaquery_Smartphone%
+{
+  .tile-overview 
+  {
+    max-width: 300px;
+    min-height: 175px;
+    width: initial;
+  }
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

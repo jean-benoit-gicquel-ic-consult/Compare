@@ -1,0 +1,69 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_DecisionControlListView" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container4" Condition="not(IsReadOnly())" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="&quot;width: 56px; display: inline-block;&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true" ItemUID="Approve">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="'checkbox_yes'" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+            </HtmlAttributes>
+            <CheckBox DataTable="EditTable" DataColumn="DoApprove" Text="&quot;&quot;" ScriptItemUID="CheckBox1" Layout="'VI_Styles_CheckBox_DecisionControl'" EnableCustomAttributes="true" ItemUID="Approve">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="IsNullOrEmpty(ApproveText(),translate(&quot;#LDS#Approve&quot;))" />
+                <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute8" Value="IsNullOrEmpty(ApproveText(),translate(&quot;#LDS#Approve&quot;))" />
+              </HtmlAttributes>
+            </CheckBox>
+          </Container>
+          <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="Deny">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;checkbox_no&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+            </HtmlAttributes>
+            <CheckBox DataTable="EditTable" DataColumn="DoReject" Text="&quot;&quot;" ScriptItemUID="CheckBox2" Layout="'VI_Styles_CheckBox_DecisionControl'" EnableCustomAttributes="true" ItemUID="Deny">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute6" Value="IsNullOrEmpty(DenyText(),translate(&quot;#LDS#Deny&quot;))" />
+                <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute7" Value="IsNullOrEmpty(DenyText(),translate(&quot;#LDS#Deny&quot;))" />
+              </HtmlAttributes>
+            </CheckBox>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="EditTable" ScriptItemUID="DataEventHandler1">
+          <ActionSequence Condition="from EditTable select current doapprove" ScriptItemUID="Action2">
+            <Update DataTable="EditTable" DataColumn="DoReject" Value="false" WhereClause="primarykey() = ( select current primarykey() from edittable)" ScriptItemUID="Update1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="DoApprove" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Update" DataTable="EditTable" ScriptItemUID="DataEventHandler2">
+          <ActionSequence Condition="from EditTable select current doreject" ScriptItemUID="Action3">
+            <Update DataTable="EditTable" DataColumn="DoApprove" Value="false" WhereClause="primarykey() = ( select current primarykey() from edittable) and doapprove" ScriptItemUID="Update2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="DoReject" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DenyText()" DataType="System.String" />
+      <VirtualFunction Signature="ApproveText()" DataType="System.String" />
+      <VirtualFunction Signature="ApproveAllText()" DataType="System.String" />
+      <VirtualFunction DataType="System.String" Signature="DenyAllText()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

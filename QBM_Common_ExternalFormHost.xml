@@ -1,0 +1,34 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_ExternalFormHost">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action1" />
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="Form" NavigationTitle="isnullorempty(request(&quot;HeadingName&quot;),request(&quot;DisplayName&quot;))" ScriptItemUID="Form1">
+          <ActionSequence ScriptItemUID="Action2" />
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+            <Container EnableCustomAttributes="true" ScriptItemUID="Container1">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="style" Value="'position: absolute; left: 0; right: 0; top: 0; bottom: 0;'" />
+              </HtmlAttributes>
+              <IFrame URL="CheckUrl(Url())" IsAutoSize="true" ScriptItemUID="IFrame1" />
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="CheckUrl(string url)" DataType="System.String" Expression="{{&#xD;&#xA;VI.WebRuntime.RuntimeUtil.CheckIsValidUrlForRedirect(url);&#xD;&#xA;@return url;&#xD;&#xA;}}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="Url()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="DisplayName()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="HeadingName()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

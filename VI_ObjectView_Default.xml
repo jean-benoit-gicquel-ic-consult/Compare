@@ -1,0 +1,37 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="381c8d42-9022-7775-5b2d-1bd1ccce99d5">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectView_Default" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectView" Description="translate('#LDS#Object details')" ScriptItemUID="ConfigSectionDefinition1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container Condition="not( isnullorempty( dbtable(sourceobject)))" ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+            <ColumnList ScriptItemUID="ColumnList2">
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectView_&quot;+ (select current dbtable() from sourceobject)+&quot;_Fields&quot;)" ScriptItemUID="ExpressionColumnList1" />
+              <CodeLiteral ScriptItemUID="CodeLiteral1">// special handling for M:N tables: display the two objects of the relation
+var row = SourceObject_Current.Row as IDbObjectRow;
+var table = row != null ? _Connection.Tables[row.Entity.Tablename] : null;
+if (!ColumnList2_columns.Any() &amp;&amp; table != null &amp;&amp; table.IsMNTable)
+{
+	foreach(var pkCol in table.PrimaryKeyColumns)
+	{
+		ColumnList2_columns.Add(SourceObject_Current.Row.Table.GetColumn(pkCol.Columnname, table.Tablename));
+	}
+}</CodeLiteral>
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping2" />
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,178 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_ITShop_PersonWantsOrg_Information_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="0">
+        <Container ScriptItemUID="ADSContainer1" Condition="from personwantsorg select current (uid_accproduct in ('ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB'))" RefreshTriggerExpression="from personwantsorg select current orderdetail1">
+          <Activator ScriptItemUID="ADSActivator1" ExecuteAlways="true">
+            <Action ScriptItemUID="ADSAction3">
+              <CallAction ScriptItemUID="ADSCall3" ActionID="ReinitADS" />
+            </Action>
+          </Activator>
+          <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ADSControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ADSVirtualFunctionMapping1">
+              <ColumnList ScriptItemUID="ADSColumnList1">
+                <SingleColumn ScriptItemUID="ADSSingleColumn1" Value="from ADSValueList select result where index=0" FkTableName="&quot;ADSContainer&quot;" FkColumnName="&quot;UID_ADSContainer&quot;" Caption="datacaptionsingle(&quot;ADSContainer&quot;)" />
+                <SingleColumn ScriptItemUID="ADSSingleColumn2" Caption="datacaption(&quot;ADSGroup&quot;, &quot;cn&quot;)" Value="select result from ADSValueList where index=1" />
+                <SingleColumn ScriptItemUID="ADSSingleColumn3" Caption="translate(&quot;#LDS#Scope&quot;)" Value="select result from ADSValueList where index=2" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSLocalVars" ScriptItemUID="ADSVirtualTableMapping1" />
+          </ControlReferenceContainer>
+          <Container ScriptItemUID="ADSContainer2" Condition="not(isreadonly()) and from personwantsorg &#xA; select current orderstate in ('OrderProduct', 'OrderProlongate', 'OrderUnsubscribe') and exists(&quot;PersonWantsOrg&quot;, format(&quot;uid_personwantsorg in (select uid_personwantsorg from qer_vitshopdecisionperson where uid_personwantsorg = '{0}' and uid_person = '{1}' and rulerlevel&lt;&gt;2)&quot;, uid_personwantsorg, getuser()))&#xA;&#xA;-- new distibution or security group requested" Layout="'VI_Styles_Container_ButtonBar'">
+            <Button Text="translate(&quot;#LDS#Configure the new group&quot;)" ScriptItemUID="ADSButton1">
+              <ServerActionCall ScriptItemUID="ADSServerActionCall2">
+                <CallAction ActionID="EditNewGroup" ScriptItemUID="ADSCall2" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls">
+        <Control ID="EditNewGroup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action10">
+              <LoadTable DataTable="AccProduct" RemoveDeleted="false" WhereClause="SqlCompareUid(&quot;uid_accproduct&quot;,from personwantsorg select current uid_accproduct)" ScriptItemUID="LoadTable5">
+                <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType1" ConvertToInteractive="false" />
+              </LoadTable>
+              <Update DataTable="ADSLocalVars" DataColumn="Scope" Value="select result from ADSValueList where index=2" ScriptItemUID="Update2" />
+              <Delete DataTable="ADSGroupTemp" ScriptItemUID="Delete1" />
+              <Insert DataTable="ADSGroupTemp" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action11" />
+                <InsertValue DataColumn="cn" Value="select result from ADSValueList where index=1" />
+                <InsertValue DataColumn="UIDX_ADSContainer" Value="select result from ADSValueList where index=0" />
+                <InsertValue DataColumn="IsGlobal" Value="'Global' = from ADSLocalVars select scope" />
+                <InsertValue DataColumn="IsLocal" Value="'Local' = from ADSLocalVars select scope" />
+                <InsertValue DataColumn="IsUniversal" Value="'Universal' = from ADSLocalVars select scope" />
+                <InsertValue DataColumn="IsSecurity" Value="from personwantsorg select current UID_AccProduct = 'ADS-FADE2DA6501F4A26AC7791D257A128DB'" />
+                <InsertValue DataColumn="IsDistributionGroup" Value="from personwantsorg select current UID_AccProduct = 'ADS-EFFB4A3D760248949257BC4781592E7C'" />
+              </Insert>
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container17">
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef4">
+                      <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Please supply the following information for the new group.&quot;)" ScriptItemUID="ADSVirtualFunctionMapping2" />
+                    </ControlReferenceContainer>
+                    <Validator DisplayType="Generic" ScriptItemUID="ADSValidator1">
+                      <ValidationModifier Condition="exists(&quot;unsgroup&quot;, format( &quot;uid_unscontainer = ( select uid_unscontainer from unscontainer where uid_unscontainer = {0}) and cn = {1}&quot;, sqlformatvalue(from adsgrouptemp select top 1 uidx_adscontainer, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;), sqlformatvalue(from adsgrouptemp select top 1 cn, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;&#xD;&#xA;or&#xD;&#xA;&#xD;&#xA;exists(&quot;personwantsorg&quot;, format(&quot;UID_Org in ( select uid_itshoporg from itshoporg where uid_accproduct in ('ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB'))&#xD;&#xA;and OrderDetail1 like '{0}|{1}|%' and orderstate = 'OrderProduct' and {2}&quot;, from adsgrouptemp select top 1 uidx_adscontainer, from adsgrouptemp select top 1 cn,SqlCompare(&quot;UID_PersonWantsOrg&quot;,select current primarykey() from personwantsorg,&quot;string&quot;,&quot;NotEqual&quot;,&quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;&#xD;&#xA;or&#xD;&#xA;&#xD;&#xA;exists(&quot;shoppingcartitem&quot;, format(&quot;uid_accproduct in ('ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB') and OrderDetail1 like '{0}|{1}|%'&quot;, from adsgrouptemp select top 1 uidx_adscontainer, from adsgrouptemp select top 1 cn))" ID="NameValidator" Text="translate(&quot;#LDS#The selected group name is already assigned.&quot;)" />
+                    </Validator>
+                    <Validator DisplayType="Generic" ScriptItemUID="ADSValidator2">
+                      <ValidationModifier Condition="from adsgrouptemp select top 1 cn like '%|%'" ID="NameValidator2" Text="translate(&quot;#LDS#The name contains invalid characters.&quot;)" />
+                    </Validator>
+                    <Container ScriptItemUID="Container21">
+                      <ContainerTemplate DataTable="ADSGroupTemp" ScriptItemUID="ADSContainerTemplate1">
+                        <Container ScriptItemUID="Container22">
+                          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef5">
+                            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ADSVirtualFunctionMapping3">
+                              <ColumnList ScriptItemUID="ColumnList2">
+                                <SingleColumn DataColumn="cn" ScriptItemUID="SingleColumn1" MinLength="1" />
+                                <SingleColumn DataColumn="UIDX_ADSContainer" ScriptItemUID="SingleColumn2" MinLength="1" />
+                              </ColumnList>
+                            </VirtualFunctionMapping>
+                            <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSGroupTemp" ScriptItemUID="ADSVirtualTableMapping2" />
+                            <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="ADSVirtualFunctionMapping4" />
+                          </ControlReferenceContainer>
+                        </Container>
+                      </ContainerTemplate>
+                      <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef6">
+                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ADSVirtualFunctionMapping5">
+                          <ColumnList ScriptItemUID="ColumnList1">
+                            <SingleColumn DataColumn="Scope" ScriptItemUID="SingleColumn3" />
+                          </ColumnList>
+                        </VirtualFunctionMapping>
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSLocalVars" ScriptItemUID="ADSVirtualTableMapping3" />
+                        <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="ADSVirtualFunctionMapping6" />
+                      </ControlReferenceContainer>
+                    </Container>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container ScriptItemUID="Container23">
+                    <Container Condition="not(IsReadOnly())" Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container24">
+                      <Button Text="translate(&quot;#LDS#OK&quot;)" ScriptItemUID="Button3">
+                        <ServerActionCall ScriptItemUID="ServerActionCall7">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <Update DataColumn="UID_ADSContainer" DataTable="ADSGroupTemp" Value="from ADSGroupTemp select current UIDX_ADSContainer" ScriptItemUID="ADSUpdate1" />
+                          <ActionOnControl />
+                          <Method DataTable="ADSGroupTemp" ObjectMethodType="ExecuteTemplates" />
+                          <ConvertInteractiveEntity DataTable="PersonWantsOrg" />
+                          <Update DataTable="PersonWantsOrg" DataColumn="OrderDetail1" WhereClause="primarykey() = select current primarykey() from personwantsorg" Value="(from adsgrouptemp select top 1 uid_adscontainer + '|' + from ADSGroupTemp select cn + '|' + from ADSLocalVars select Scope)" ScriptItemUID="Update3" />
+                          <Save DataTable="PersonWantsOrg" WhereClause="primarykey() = select current primarykey() from personwantsorg" ScriptItemUID="ADSSave1" />
+                          <CallAction ScriptItemUID="ADSCall1" ActionID="ReinitADS" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" ScriptItemUID="Button4" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="ADSHtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall8">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                    <Container Condition="IsReadOnly()" Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container25">
+                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef7" />
+                    </Container>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="from accproduct select top 1 display() where uid_accproduct = from personwantsorg select current uid_accproduct" ScriptItemUID="ADSVirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="TableName()" Value="&quot;AccProduct&quot;" ScriptItemUID="ADSVirtualFunctionMapping8" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ReinitADS">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="ADSAction2">
+              <Delete DataTable="ADSValueList" ScriptItemUID="ADSDelete1" />
+              <FillTable DataTable="ADSValueList" DataColumn="result" Expression="split(from personwantsorg select current orderdetail1, '|', true)" ScriptItemUID="FillTable1">
+                <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType3" />
+              </FillTable>
+              <LoadTable DataTable="ADSContainer" WhereClause="SqlCompareUid(&quot;uid_adscontainer&quot;,from ADSValueList select result where index=0)" RemoveDeleted="false" ScriptItemUID="ADSLoadTable2">
+                <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType2" ConvertToInteractive="false" />
+              </LoadTable>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableSingleRow Table="ADSLocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Scope" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Group scope&quot;)" ScriptItemUID="ADSColumn1" DataType="System.String" MinLength="1">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="Global" Display="translate(&quot;#LDS#Global group&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Local" Display="translate(&quot;#LDS#Local group&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Universal" Display="translate(&quot;#LDS#Universal group&quot;)" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+        </DataTableSingleRow>
+        <DataTableDbObject Class="AccProduct" Table="AccProduct" ScriptItemUID="ADSDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ADSAction1" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ADSGroup" Table="ADSGroupTemp" ScriptItemUID="DataTableDbObject4">
+          <ActionSequence ScriptItemUID="Action9" />
+          <Column DataType="System.String" Name="UIDX_ADSContainer" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_ADSContainer&quot;" DBTableName="&quot;ADSContainer&quot;" FKWhereClause="" ScriptItemUID="ADSColumn2" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ADSContainer" Table="ADSContainer" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+        <DataTableCustom Table="ADSValueList" PrimaryKeyColumn="pk" DisplayColumn="" ScriptItemUID="DataTableCustom1">
+          <Column Name="pk" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="result" ScriptItemUID="Column4" DataType="System.String" />
+          <Column Name="index" DataType="System.Int32" ScriptItemUID="ADSColumn5" />
+        </DataTableCustom>
+      </AddObject>
+      <AddObject ObjectID="DataEventHandlers1" ObjectType="DataEventHandlers">
+        <DataEventHandler DataTable="ADSLocalVars" Operation="Update" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ScriptItemUID="Action14">
+            <Update DataTable="ADSGroupTemp" DataColumn="IsGlobal" Value="false" ScriptItemUID="Update5" />
+            <Update DataTable="ADSGroupTemp" DataColumn="IsLocal" Value="false" ScriptItemUID="Update6" />
+            <Update DataTable="ADSGroupTemp" DataColumn="IsUniversal" Value="false" ScriptItemUID="Update7" />
+            <Update DataTable="ADSGroupTemp" DataColumn="IsGlobal" Value="'Global' = from ADSLocalVars select scope" ScriptItemUID="Update8" />
+            <Update DataTable="ADSGroupTemp" DataColumn="IsLocal" Value="'Local' = from ADSLocalVars select scope" ScriptItemUID="Update9" />
+            <Update DataTable="ADSGroupTemp" DataColumn="IsUniversal" Value="'Universal' = from ADSLocalVars select scope" ScriptItemUID="Update10" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="Scope" />
+        </DataEventHandler>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

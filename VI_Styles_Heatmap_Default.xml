@@ -1,0 +1,97 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Heatmap_Default" Type="Heatmap" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.dojoxTreeMap {
+	background-color: %VI_Common_Color_ColorBase1%;
+	
+}
+
+.dojoxTreeMapLeaf {
+	padding: 0;
+}
+
+.dojoxTreeMapGroup {
+}
+
+.dojoxTreeMapGroupContent {
+}
+
+.dojoxTreeMapHeader {
+	background-color: %VI_Common_Color_ColorBase1%;
+	border: 1px solid %VI_Common_Color_ColorBase2%;
+}
+
+/* on desktop recent browsers you may prefer to use :hover pseudo-class instead
+   of dojoxTreeMapHovered */
+
+.dojoxTreeMapLeaf.dojoxTreeMapHovered {
+	border-color: %VI_Common_Color_ColorBase1%;
+}
+
+.dojoxTreeMapGroup.dojoxTreeMapHovered {
+}
+
+.dojoxTreeMapSelected {
+	border-color: %QBM_Primary_Red%;
+}
+
+.dojoxTreeMapSelected:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	border: 3px dashed %QBM_Primary_Blue%;
+	pointer-events: none;
+	z-index: 20;
+}
+
+.dojoxTreeMapGroup.dojoxTreeMapSelected:before {
+	content: '';
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	right: 1px;
+	bottom: 1px;
+	border: 1px solid %QBM_Primary_Red%;
+	pointer-events: none;
+	z-index: 20;
+}
+
+
+.dojoxTreeMapGroup.dojoxTreeMapSelected{
+	border:2px dashed %QBM_Primary_Red%;
+}
+
+.dj_iequircks .dojoxTreeMapIEHack.dojoxTreeMapSelected,
+.dj_ie7 .dojoxTreeMapIEHack.dojoxTreeMapSelected + div,
+.dj_ie8 .dojoxTreeMapIEHack.dojoxTreeMapSelected + div {
+	border:  1px solid %QBM_Primary_Red%;
+	z-index: 20;
+}
+
+.dojoxTreeMap {
+    text-align: center;
+    background: none;
+	color: %VI_Common_Color_ColorBase2%;
+  }
+
+  .dojoxTreeMapLeaf {
+    text-overflow: ellipsis;
+   border-radius: 1px;
+    margin: 1.5px;
+  }
+
+  .dojoxTreeMapHeader {
+    text-align: center;
+    -webkit-border-radius: 15px 15px;
+    -moz-border-radius: 15px 15px;
+    rder-top-right-radius: 15px 15px; 
+    border-radius: 15px 15px;
+    background:  %VI_Common_Color_ColorBase1%;
+  }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

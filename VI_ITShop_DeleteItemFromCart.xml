@@ -1,0 +1,25 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="Dr/gLPBSWzS4wuO2FREumA==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_DeleteItemFromCart" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ActionComponent ScriptItemUID="Action2">
+        <Delete DataTable="ShoppingCartItem" SetDeletionFlag="DeleteDeferred" WhereClause="uid_shoppingcartitemparent = (select uid_shoppingcartitem from shoppingcartitem where CartItemFilter())" ScriptItemUID="Delete1" />
+        <Save DataTable="ShoppingCartItem" WhereClause="1=0" ScriptItemUID="Save1" />
+        <Delete DataTable="ShoppingCartItem" SetDeletionFlag="DeleteDeferred" WhereClause="CartItemFilter()" ScriptItemUID="Delete2" />
+        <Save DataTable="ShoppingCartItem" WhereClause="1=0" ScriptItemUID="Save2" />
+        <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call1" />
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="CartItemFilter()" DataType="System.Boolean" FilterForTable="ShoppingCartItem" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

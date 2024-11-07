@@ -1,0 +1,61 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl ID="VI_ITShop_WebPart_Top5Orders" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="WebParts" Description="" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_WebPart_Top5Orders_Visibility" Description="translate(&quot;#LDS#Display web component '{0}'&quot;, translate('#LDS#Top 5 requested products'))" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence Condition="getconfig(&quot;VI_ITShop_WebPart_Top5Orders_Visibility&quot;)=&quot;true&quot;" ScriptItemUID="Action1">
+        <LoadTable DataTable="AccProduct" WhereClause="format(&#xD;&#xA;if (getsystem()=&quot;ORACLE&quot;) then&#xD;&#xA;&#xD;&#xA;&quot;uid_accproduct in (&#xD;&#xA;  select uid_accproduct from (&#xD;&#xA;    select its.uid_accproduct from itshoporg its&#xD;&#xA;      join personwantsorg pwo on pwo.uid_org = its.uid_itshoporg&#xD;&#xA;	  join itshoporg bo on bo.uid_itshoporg = its.uid_parentitshoporg&#xD;&#xA;	  join itshoporg cu on bo.uid_parentitshoporg = cu.uid_parentitshoporg and {2}&#xD;&#xA;	  join personinitshoporg pits on pits.uid_person = '{0}' and pits.uid_itshoporg = cu.uid_itshoporg&#xD;&#xA;	  where {1}&#xD;&#xA;	  group by its.uid_accproduct &#xD;&#xA;	  order by count(*) desc&#xD;&#xA;  ) where rownum &lt; 6&#xD;&#xA;)&quot;&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;&quot;uid_accproduct in (&#xD;&#xA;  select top 5 its.uid_accproduct from itshoporg its&#xD;&#xA;    join personwantsorg pwo on pwo.uid_org = its.uid_itshoporg&#xD;&#xA;	join itshoporg bo on bo.uid_itshoporg = its.uid_parentitshoporg&#xD;&#xA;	join itshoporg cu on bo.uid_parentitshoporg = cu.uid_parentitshoporg and {2}&#xD;&#xA;	join personinitshoporg pits on pits.uid_person = '{0}' and pits.uid_itshoporg = cu.uid_itshoporg&#xD;&#xA;	where {1}&#xD;&#xA;	group by its.uid_accproduct order by count(*) desc&#xD;&#xA;) &quot;,&#xD;&#xA;getuser(),variable(isnull(getconfig(&quot;VI_ITShop_OrderHistory_Filter&quot;),&quot;1=1&quot;,&#xD;&#xA;sqlcompare(&quot;cu.itshopinfo&quot;, &quot;CU&quot;, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;))))&#xD;&#xA;" OrderBy="if (getsystem() = &quot;MSSQL&quot;) then&#xD;&#xA;'substring(ModeOfCalculation,0,0)'" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ForeachRow DataTable="AccProduct" ScriptItemUID="ForeachRow1">
+          <Update DataTable="AccProduct" DataColumn="SortHelper" Value="select count() from Accproduct where not(isnull(SortHelper))" WhereClause="uid_accproduct = (select current uid_accproduct from AccProduct)" ScriptItemUID="Update1" />
+        </ForeachRow>
+      </ActionSequence>
+      <Container Condition="getconfig(&quot;VI_ITShop_WebPart_Top5Orders_Visibility&quot;)=&quot;true&quot;" ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2" ItemUID="top 5 orders">
+          <Container ScriptItemUID="Container3" Layout="'VI_Styles_Container_Heading_2'">
+            <Label Text="translate('#LDS#Top 5 requested products')" ScriptItemUID="Label15" />
+          </Container>
+          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AccProduct" WithoutParentContainer="true">
+            <Container ScriptItemUID="Container4">
+              <ControlReferenceControlList ID="VI_Common_WebPart_TaskTile" ScriptItemUID="ControlRef2">
+                <VirtualControlMapping VirtualControl="Clicked" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action3">
+                    <Redirect Target="Context" ContextID="VI_ITShop_ProductSelection" AllowReturnToThisContext="true" ScriptItemUID="Redirect3">
+                      <RedirectParameter Name="'uid_accproduct'" Value="from AccProduct select current uid_accproduct" />
+                    </Redirect>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="HeadText()" Value="from AccProduct select current display()" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceControlList>
+            </Container>
+          </ContainerTemplate>
+          <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="&quot;font-style: italic; text-align: right;&quot;" />
+            </HtmlAttributes>
+            <Label Text="&quot;&gt; &quot;+ translate(&quot;#LDS#Go to service catalog&quot;)" ScriptItemUID="Label3" Action="Redirect">
+              <ServerActionCall ScriptItemUID="ServerActionCall2">
+                <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ProductSelection" />
+              </ServerActionCall>
+            </Label>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AccProduct" Class="AccProduct" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+          <Column Name="SortHelper" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ColumnEditor_Edit" MigrationNotes="DIALOGCONFIGPARM;" DataTableDebugDisplay="EditTable" DataColumnDebugDisplay="EditColumn">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.IColumnEditorComponent" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="EditColumn" IsMultiType="true" />
+      </VirtualTable>
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AdditionalWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="NullText()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,187 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <GlobalControl ID="VI_Attestation_SelectedObjectsInfo" MigrationNotes="DIALOGCONFIGPARM;" Comment="A component for showing the objects matching a given SELECT statement.&#xD;&#xA;&#xD;&#xA;=== DISPLAY ===&#xD;&#xA;At a first glance the component displays a label showing the number of matching objects.&#xD;&#xA;At a second glance, when clicking the label, a popup appears that displays the single objects &#xD;&#xA;utilizing the appropriate table dependent reference (ObjectCollection) for the given base table.&#xD;&#xA;&#xD;&#xA;=== INPUT ===&#xD;&#xA;Necessary input is given with the QueryData virtual collection as well as the SourceKey() virtual function, i.e.&#xD;&#xA;a) base table and where condition for the SELECT statement to check and&#xD;&#xA;b) the SourceKey defining the context for which this component is used.&#xD;&#xA;&#xD;&#xA;=== (Re)load Behavior ===&#xD;&#xA;You can force the component to reload the count numbers displayed in the label by changing the value of ReloadSemaphor().&#xD;&#xA;The single objects displayed in the popup are always fetched again when the popup opens.&#xD;&#xA;&#xD;&#xA;NOTE: Reload will always be performed for the whole collection that meets FilterQueryData() (i.e. the whole collection, in case FilterQueryData() is not specified.)&#xD;&#xA;&#xD;&#xA;=== Auto-Detection of changes ===&#xD;&#xA;If the number of objects loaded for the popup doesn't match the number of objects displayed for the label the component&#xD;&#xA;auto-detects that and calls the AfterCloseWhenCountChanged-Action directly after closing the popup.&#xD;&#xA;Other change conditions in which the number of objects remains unchanged are not auto-detected (e.g. ABC -&gt; ACD = same number but different sets)." MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action4">
+        <Insert DataTable="DummyPolicy" ScriptItemUID="Insert1">
+          <ActionSequence ScriptItemUID="Action5" />
+        </Insert>
+        <ActionSequence Condition="not IsNull(select top 1 ReloadedAllOnInit from LocalVars, false)" ItemUID="Reload all a single time during first initializer" ScriptItemUID="Action6">
+          <Update DataTable="LocalVars" DataColumn="ReloadedAllOnInit" Value="true" ScriptItemUID="Update1" />
+          <CallAction ActionID="ReloadAllCount" ScriptItemUID="CallAction13" />
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Label Text="Formatted(CurrentCount())" ScriptItemUID="Label1" Action="Redirect" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="IsNull(NumberToolTip(), IsNull(PopupTitle(), translate(&quot;#LDS#Number of matching objects&quot;)))" />
+          </HtmlAttributes>
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ActionID="PrefetchCurrentCount" ScriptItemUID="CallAction6" />
+            <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction3">
+              <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                <Container ScriptItemUID="Container2">
+                  <Container ItemUID="Count changed message" Condition="MessageVisibleCountChanged()" ScriptItemUID="Container4">
+                    <Label Text="Format(NumberChangedMessage(), Formatted(CurrentCount()), Formatted(PrefetchedCount()) )" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-information&quot;" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                  <Label Text="if (CurrentCount() = 0) &#xA;then translate(&quot;#LDS#There are currently no matching objects.&quot;) &#xA;else translate(&quot;#LDS#There are currently {0} matching objects.&quot;, PrefetchedCount())" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="p" />
+                    </HtmlAttributes>
+                  </Label>
+                  <ControlReferenceControlList ID="QBM_ObjectGridView_Default" ScriptItemUID="ControlRef1">
+                    <VirtualFunctionMapping ID="DbWhereClause()" Value="sqland(from queryData select WhereClause where (sourcekey()=sourcekey and effectivefilter()))" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="SelectedObjects" ScriptItemUID="VirtualTableMapping1" />
+                    <VirtualTableMapping VirtualTable="TargetTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping2">
+                      <VirtualColumnMapping VirtualColumn="TargetSelectedKey" DataColumn="dummy" />
+                    </VirtualTableMapping>
+                  </ControlReferenceControlList>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container6">
+                  <Button Text="translate(&quot;#LDS#Close&quot;)" ScriptItemUID="Button2" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ItemUID="Default Button">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute1" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="ServerActionCall2">
+                      <ActionOnControl />
+                      <CallAction ActionID="SaveCurrentPrefetchedCount" ScriptItemUID="CallAction12" />
+                      <ActionSequence ItemUID="if count changed" Condition="CurrentCountChanged()" ScriptItemUID="Action2">
+                        <CallAction ActionID="AfterCloseWhenCountChanged" ScriptItemUID="CallAction9" />
+                      </ActionSequence>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="PopupTitle()" Value="IsNull(PopupTitle(), translate(&quot;#LDS#Selected object(s)&quot;))" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="TableName()" Value="CurrentBaseTable()" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+            </CallAction>
+          </ServerActionCall>
+        </Label>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="SelectedObjects" ScriptItemUID="DataTableDbObject2" DbObjectTypeDynamic="true" DynamicClass="CurrentBaseTable()">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AttestationPolicy" Table="DummyPolicy" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+          <Column Name="TmpWhereClause" DataType="System.String" ScriptItemUID="Column2" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ReloadedAllOnInit" DataType="System.Boolean" Comment="Reloading all during initialization is necessary. Because the component gets initialized once per cursor state this flag is used to avoid &quot;reload all&quot; is attempted more than once." ScriptItemUID="Column4" />
+          <Column Name="dummy" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+        <DataTableSingleRow Table="TmpCount" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="MatchCount" DataType="System.Int32" ScriptItemUID="Column8" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ReloadAllCount">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Reloads the matching objects for the current UsageKey()">
+            <ActionComponent ScriptItemUID="Action11">
+              <ForeachRow DataTable="QueryData" WhereClause="EffectiveFilter()" ScriptItemUID="ForeachRow2">
+                <CallAction ActionID="UpdateWhereClause" ScriptItemUID="CallAction2" />
+                <CallAction ActionID="PrefetchCount" ScriptItemUID="CallAction4" />
+                <CallAction ActionID="SavePrefetchedCount" ScriptItemUID="CallAction11" />
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UpdateWhereClause">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ItemUID="UpdateWhereClause" ScriptItemUID="Action12">
+              <ActionSequence Condition="IsNullOrEmpty(from QueryData select current WhereClauseSnippet)" ItemUID="CASE 1: if NO WhereClauseSnippet" ScriptItemUID="Action13">
+                <Update DataTable="DummyPolicy" DataColumn="TmpWhereClause" Value="&quot;&quot;" ScriptItemUID="Update2" />
+              </ActionSequence>
+              <ActionSequence Condition="not IsNullOrEmpty(from QueryData select current WhereClauseSnippet)" ItemUID="CASE 2 (otherwise): IF WhereClauseSnippet" ScriptItemUID="Action14">
+                <Update DataTable="DummyPolicy" DataColumn="WhereClause" Value="from QueryData select current WhereClauseSnippet" ScriptItemUID="Update3" />
+                <Method DataTable="DummyPolicy" Method="GetWhereClause" ResultColumn="TmpWhereClause" SaveAfterAction="false" />
+              </ActionSequence>
+              <Update DataTable="QueryData" DataColumn="WhereClause" Value="from DummyPolicy select top 1 IsNull(TmpWhereClause, &quot;&quot;)" WhereClause="PrimaryKey() = from QueryData select current PrimaryKey()" ScriptItemUID="Update4" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QueryData" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="PrefetchCount">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent Condition="from QueryData select current (NOT IsNullOrEmpty(BaseTable) AND NOT IsNullOrEmpty(WhereClause))" ItemUID="Reload Count" ScriptItemUID="Action15">
+              <Update DataTable="TmpCount" DataColumn="MatchCount" Value="DbCount(from QueryData select current BaseTable,from QueryData select current WhereClause)" ScriptItemUID="Update5" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QueryData" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="PrefetchCurrentCount">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action16">
+              <ForeachRow DataTable="QueryData" WhereClause="EffectiveFilter() AND SourceKey = SourceKey()" ScriptItemUID="ForeachRow3">
+                <CallAction ActionID="UpdateWhereClause" ScriptItemUID="CallAction10" />
+                <CallAction ActionID="PrefetchCount" ScriptItemUID="CallAction7" />
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="SavePrefetchedCount">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent Condition="from QueryData select current (NOT IsNullOrEmpty(BaseTable) AND NOT IsNullOrEmpty(WhereClause))" ItemUID="Reload Count" ScriptItemUID="Action17">
+              <Update DataTable="QueryData" DataColumn="EverCounted" WhereClause="primarykey() = from QueryData select current primarykey()" Value="true" ScriptItemUID="Update6" />
+              <Update DataTable="QueryData" DataColumn="Count" WhereClause="primarykey() = from QueryData select current primarykey()" Value="from TmpCount select top 1 MatchCount" ScriptItemUID="Update7" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="QueryData" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="SaveCurrentPrefetchedCount">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action18">
+              <ForeachRow DataTable="QueryData" WhereClause="EffectiveFilter() AND SourceKey = SourceKey()" ScriptItemUID="ForeachRow4">
+                <CallAction ActionID="SavePrefetchedCount" ScriptItemUID="CallAction5" />
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="CurrentBaseTable()" Expression="from QueryData select top 1 BaseTable" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="CurrentCount()" Expression="from QueryData select top 1 Count where SourceKey = SourceKey() and EffectiveFilter()" DataType="System.Int32" ScriptItemUID="Function2" />
+        <Function Name="CurrentCountChanged()" Expression="CurrentEverCounted() AND CurrentCount() &lt;&gt; PrefetchedCount()" DataType="System.Boolean" ScriptItemUID="Function3" />
+        <Function Name="CurrentEverCounted()" Expression="from QueryData select top 1 EverCounted where SourceKey = SourceKey() and EffectiveFilter()" DataType="System.Boolean" ScriptItemUID="Function4" />
+        <Function Name="EffectiveFilter()" Expression="FilterQueryData()" FilterForTable="QueryData" DataType="System.Boolean" ScriptItemUID="Function5" />
+        <Function Name="Formatted(int count)" Expression="NumFormat(count, &quot;#,##0&quot;)" DataType="System.String" ScriptItemUID="Function6" />
+        <Function Name="PrefetchedCount()" Expression="from TmpCount select top 1 MatchCount" DataType="System.Int32" ScriptItemUID="Function8" />
+        <Function Name="MessageVisibleCountChanged()" Expression="CurrentCountChanged() AND NOT IsNullOrEmpty(NumberChangedMessage())" DataType="System.Boolean" ScriptItemUID="Function9" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <ExpressionEventHandler Value="ReloadSemaphor()" ScriptItemUID="ExpressionEventHandler1">
+          <ActionSequence ScriptItemUID="Action19">
+            <Comment Comment="Reload all counts when the value of ReloadSemaphor has changed." />
+            <CallAction ActionID="ReloadAllCount" ScriptItemUID="CallAction1" />
+          </ActionSequence>
+        </ExpressionEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="PopupTitle()" Comment="Optional function defining the title of all popups that appear after clicking the number of selected objects.&#xD;&#xA;If not specified a generic title will be used." DataType="System.String" />
+      <VirtualFunction Signature="NumberTooltip()" Comment="Optional function defining the tooltip to show for each label that displays the number of selected objects.&#xD;&#xA;If not specified a generic tooltip will be used." DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="QueryData" Comment="Collection holding the queries to perform." ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="SourceKey" DataType="System.String" />
+        <VirtualColumn Name="BaseTable" DataType="System.String" />
+        <VirtualColumn Name="WhereClauseSnippet" DataType="System.String" />
+        <Column Name="WhereClause" DataType="System.String" ScriptItemUID="Column5" />
+        <Column Name="EverCounted" DataType="System.Boolean" ScriptItemUID="Column6" />
+        <Column Name="Count" DataType="System.Int32" ScriptItemUID="Column7" />
+      </VirtualTable>
+      <VirtualFunction Signature="SourceKey()" Comment="The source key for distinction of different uses of this component on the same definition node.&#xD;&#xA;A typical usage is e.g. to set &quot;SourceKey() = from X select current primarykey()&quot; when iterating over collection X." DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="FilterQueryData()" DataType="System.Boolean" FilterForTable="QueryData" Comment="A filter defining the relevant subset of rows in QueryData that should be regarded and for which numbers should be reloaded." TriggerUpdates="Never" />
+      <VirtualFunction Signature="ReloadSemaphor()" DataType="System.Int32" Comment="A changed value in this function forces a reload of the numbers of matching objects." />
+      <VirtualFunction Signature="NumberChangedMessage()" Comment="Optional function defining a message to be displayed when a change between the number of selected objects has been detected.&#xD;&#xA;If the message is empty or undefined, no message will be displayed.&#xD;&#xA;Otherwise the message will be formatted with the old number (as first parameter) and the new number (as second parameter), i.e. the message could contain placeholders {0} and {1}." DataType="System.String" TriggerUpdates="Never" />
+      <VirtualControl ID="AfterCloseWhenCountChanged" ContainerType="ActionComponent" Comment="If a change between the displayed count (in the label) and the actual count of listed objects has been detected,&#xD;&#xA;this action will be called after the popup listing the objects has been closed.&#xD;&#xA;E.g. one common usage of this action could be to force a &quot;reload all&quot;..." />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

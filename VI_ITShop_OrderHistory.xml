@@ -1,0 +1,142 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <Context ID="VI_ITShop_OrderHistory" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="if (IsNull(request(&quot;AuditMode&quot;), &quot;NO&quot;) = &quot;YES&quot;) then&#xA;(&#xA;  if( request('Form')='Approver') then &#xA;   -- auditing &gt; approvals&#xA;    &quot;F9F75D3D-429F-46A3-A2C2-E5C34019A316&quot;&#xA;  else&#xA;   -- auditing &gt; requests&#xA;    &quot;A76B1409-B828-4810-B3B2-591C0E64784C&quot;&#xA;)&#xA;else&#xA;(&#xA;  if( request('Form')='Approver') then&#xA;    -- my action history &gt; approval history&#xA;    &quot;3D2A7094-3519-4E23-A438-160FD1D31CEE&quot;&#xA;  else&#xA;    -- my action history &gt; request history&#xA;    &quot;62A223D9-CBF3-485B-B9CD-04BB43AEC19E&quot;&#xA;)" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="Form" IsMandatory="false" />
+        <Parameter Name="aeweb_UID_PersonWantsOrg" IsMandatory="false" />
+        <Parameter Name="AuditMode" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="IT Shop" Description="translate(&quot;#LDS#IT Shop&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_OrderHistory_CancelOrder" Description="translate('#LDS#Open requests can be canceled')" LongDescription="translate('#LDS#Pending requests can be canceled by the requester')" />
+        <ConfigParam Key="VI_ITShop_OrderHistory_CanRecallDecision" Description="translate('#LDS#Decisions for requests can be recalled')" LongDescription="translate('#LDS#Decisions for requests can be recalled by the approver')" />
+        <ConfigParam Key="VI_ITShop_OrderHistory_ResendOrder" Description="translate('#LDS#Denied and cancelled requests can be re-submitted')" LongDescription="translate('#LDS#If this feature is activated, denied and cancelled requests can be directly re-submitted by the recipient or the requestor.')" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="My profile" Description="translate(&quot;#LDS#My profile&quot;)" ScriptItemUID="ConfigSectionDefinition2">
+        <ConfigParam Key="VI_ITShop_OrderHistory_Filter" Type="SQL" Description="translate('#LDS#Request history filter')" DatabaseTable="PersonWantsOrg" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1">
+          <ActionSequence Condition="convert(isnull(getconfig(&quot;VI_ITShop_OrderHistory_CanRecallDecision&quot;), 'false'), 'System.Boolean')&#xA;and&#xA;IsNull(Request('Form'),'') = 'Approver' and IsNull(Request(&quot;AuditMode&quot;),'') &lt;&gt; 'YES'" ScriptItemUID="Action2">
+            <Method DataTable="PersonWantsOrg" Method="CanRecallDecision" ResultColumn="CanRecallDecision" WhereClause="(IsNull(UID_PersonHead,'') = GetUser()) and ((IsNull(OrderState,'') in ('OrderProduct','OrderProlongate','OrderUnsubscribe')))" SaveAfterAction="false">
+              <MethodParameter Name="&quot;strUID_Person&quot;" Value="getuser()" />
+            </Method>
+          </ActionSequence>
+        </ActionSequence>
+        <Column Name="CanRecallDecision" DataType="System.Boolean" ScriptItemUID="Column2" />
+      </DataTableDbObject>
+      <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrder" ScriptItemUID="DataTableDbObject3">
+        <ActionSequence ScriptItemUID="Action5" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="PWOWhereClause" DataType="System.String" ScriptItemUID="Column1" />
+        <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column3" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="getTitleAndHeadline()" Expression="if(isnull(Request(&quot;AuditMode&quot;),'') = 'YES') then(&#xA;if( request('Form')='Approver') then&#xA;translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Approvals')&#xA;else&#xA;translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Requests')&#xA;)&#xA;else(&#xA;if( request('Form')='Approver') then&#xA;translate('#LDS#Heading Approval History')&#xA;else&#xA;translate('#LDS#Heading Request History')&#xA;)&#xA;" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="getPageDescription()" Expression="if( request('Form')='Approver') then&#xA;translate(&quot;#LDS#This page shows the history of your approval decisions.&quot;)&#xA;else&#xA;translate(&quot;#LDS#This page shows the history of your requested products.&quot;)" DataType="System.String" ScriptItemUID="Function2" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action6" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="getTitleAndHeadline()" SkipNavigation="false" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action7" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="getTitleAndHeadline()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <ControlReferenceControlList ID="VI_ITShop_PWO_MasterDetail" ScriptItemUID="ControlRef4">
+              <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping2" />
+              <VirtualFunctionMapping ID="ShowCancelOrder()" Value="if(Request(&quot;AuditMode&quot;) = 'YES') then&#xA;false&#xA;else&#xA;true" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualControlMapping VirtualControl="AdditionalActions" ContainerType="Container">
+                <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4">
+                  <Container Condition="isnull(Request(&quot;AuditMode&quot;),'') = 'YES' &#xD;&#xA;and &#xD;&#xA;((from PersonWantsOrg select current IsNullOrEmpty(UID_ShoppingCartOrder,'')) &lt;&gt; '')" Layout="'VI_Styles_Container_Inline'" ItemUID="AUDITMODE" ScriptItemUID="Container5">
+                    <LinkContainer ScriptItemUID="Image1Link">
+                      <ControlList ScriptItemUID="Image1Ctl">
+                        <Image Source="DialogImage" DialogImage="Order" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="DataCaption(&quot;ShoppingCartOrder&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <ActionSequence ScriptItemUID="Action8">
+                          <LoadTable DataTable="ShoppingCartOrder" RemoveDeleted="false" WhereClause="format(&quot;Uid_ShoppingCartOrder = '{0}'&quot;,from PersonWantsOrg select current UID_ShoppingCartOrder)" ScriptItemUID="LoadTable2">
+                            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                          </LoadTable>
+                          <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                            <VirtualFunctionMapping ID="PopupTitle()" Value="DataCaption(&quot;ShoppingCartOrder&quot;) + &quot; &quot; + from ShoppingCartOrder select DocumentNumber where UID_ShoppingCartOrder = (from PersonWantsOrg select current UID_ShoppingCartOrder)" ScriptItemUID="VirtualFunctionMapping4" />
+                            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                              <Container ScriptItemUID="Container6">
+                                <ContainerTemplate DataTable="ShoppingCartOrder" WhereClause="UID_ShoppingCartOrder = (from PersonWantsOrg select current UID_ShoppingCartOrder)" ScriptItemUID="ContainerTemplate1">
+                                  <Container ScriptItemUID="Container7">
+                                    <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;ShoppingCartOrder&quot;))" ActionType="ObjectView">
+                                      <VirtualTableMapping VirtualTable="SourceObject" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping3" />
+                                    </ObjectSwitchContainer>
+                                  </Container>
+                                </ContainerTemplate>
+                              </Container>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                              <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container8">
+                                <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef3" />
+                              </Container>
+                            </VirtualControlMapping>
+                          </CallAction>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                  <Container Condition="isnull(Request(&quot;AuditMode&quot;),'') &lt;&gt; 'YES' and (from PersonWantsOrg select current isnull(CanRecallDecision,false))" Layout="'VI_Styles_Container_Inline'" ItemUID="HISTORYMODE" ScriptItemUID="Container9">
+                    <LinkContainer ScriptItemUID="Image2Link">
+                      <ControlList ScriptItemUID="Image2Ctl">
+                        <Image StockImage="Undo" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Revoke last decision&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall3">
+                        <ActionSequence ScriptItemUID="Action9">
+                          <CallAction ActionID="VI_ITShop_RecallDecision" ScriptItemUID="Call2">
+                            <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping4" />
+                          </CallAction>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="DbWhereClause()" Value="from vars select PWOWhereClause" ScriptItemUID="VirtualFunctionMapping5" />
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="HeaderControls">
+                <ControlList ScriptItemUID="ControlList1">
+                  <ControlReferenceContainer ID="VI_ITShop_OrderHistory_Filter" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                      <VirtualColumnMapping VirtualColumn="WhereClause" DataColumn="PWOWhereClause" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="form()" Value="isnull(request('Form'),'')" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualFunctionMapping ID="showaudit()" Value="Request(&quot;AuditMode&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping2" />
+                  </ControlReferenceContainer>
+                </ControlList>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <Container ScriptItemUID="Container1" RefreshTriggerExpression="from vars select GetDataVersion(HeadLine)">
+            <ControlList ScriptItemUID="ControlList2">
+              <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef2">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Text()" Value="from Vars select HeadLine" />
+              </ControlReferenceControlList>
+            </ControlList>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

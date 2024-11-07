@@ -1,0 +1,16 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Roles_Membership_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action9" ObjectType="ActionSequence" SortOrder="15">
+        <ActionSequence ItemUID="ESet" ScriptItemUID="Action11" Condition="ispreprop( 'ESET' )">
+          <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable9" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToESet&quot;">
+            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select current (&quot;ESet&quot;=tablename) from AllObjects" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

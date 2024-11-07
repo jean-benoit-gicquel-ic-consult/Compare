@@ -1,0 +1,204 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UserRegistration_Header" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Allgemein" Description="translate(&quot;#LDS#General settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_ProductLogo" Description="translate(&quot;#LDS#Product logo&quot;)" LongDescription="translate(&quot;#LDS#You can use your product logo here.&quot;)" Type="Image" />
+        <ConfigParam Key="VI_Common_CompanyLogo" Description="translate(&quot;#LDS#Company logo&quot;)" LongDescription="translate(&quot;#LDS#You can use your company logo here.&quot;)" Type="Image" />
+        <ConfigParam Key="VI_Common_CompanyLink" Description="translate(&quot;#LDS#Company link&quot;)" LongDescription="translate(&quot;#LDS#The browser will follow this link by clicking on your company logo.&quot;)" Type="Text" />
+        <ConfigParam Key="VI_Common_ShowLinksToProductSite" Description="translate(&quot;#LDS#Show links to support and community&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action5" />
+      <Container ScriptItemUID="Container9" Layout="'VI_Styles_Container_Masthead'" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="-- do not show on smartphones&#xD;&#xA;&quot;masthead imx-mobile-nomobile&quot;" />
+        </HtmlAttributes>
+        <Container ScriptItemUID="Container1" ItemUID="product and company logo" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-company-product-logo&quot;" />
+          </HtmlAttributes>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="not(isnullorempty(getconfig(&quot;VI_Common_CompanyLogo&quot;)))" ItemUID="CompanyLogo">
+              <LinkContainer ScriptItemUID="Image2Link">
+                <ControlList ScriptItemUID="Image2Ctl">
+                  <Image Source="File" FileName="getconfig(&quot;VI_Common_CompanyLogo&quot;)" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Company page&quot;)" />
+                    </HtmlAttributes>
+                  </Image>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <Redirect Target="Link" NoLinkObjectID="true" HREF="getconfig(&quot;VI_Common_CompanyLink&quot;)" ScriptItemUID="Redirect2" AbortExecution="false" />
+                </ServerActionCall>
+              </LinkContainer>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2">
+              <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="variable(&quot;display: inline-block; line-height: %headerheight%px; max-height: %headerheight%px; overflow: hidden;&quot;)" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-logoWithProduct&quot;" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </SwitchContainerCase>
+          </SwitchContainer>
+          <SwitchContainer ScriptItemUID="Switch2">
+            <SwitchContainerCase ScriptItemUID="Case3" Condition="not(isnullorempty(getconfig(&quot;VI_Common_ProductLogo&quot;)))">
+              <LinkContainer ScriptItemUID="Image1Link" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;display: inline-block;&quot;" />
+                </HtmlAttributes>
+                <ControlList ScriptItemUID="Image1Ctl">
+                  <Image Source="File" FileName="getconfig(&quot;VI_Common_ProductLogo&quot;)" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Home page&quot;)" />
+                    </HtmlAttributes>
+                  </Image>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Update DataTable="UserMenu" DataColumn="IsExpanded" Value="false" ScriptItemUID="Update1" />
+                  <Redirect Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect1" AbortExecution="false" />
+                </ServerActionCall>
+              </LinkContainer>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case4">
+              <Container ScriptItemUID="Container3">
+                <Label ScriptItemUID="Label1" Text="variable(&quot;%PRODUCTNAMESHORT%&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="variable(&quot;font-size: large; line-height: %headerheight%px;&quot;)" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </Container>
+        <Container ScriptItemUID="Container13" Layout="'VI_Styles_Container_Inline'" ItemUID="user navigation" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container13style" Value="'position: absolute; right: 0; top: 0;'" />
+          </HtmlAttributes>
+          <Container ItemUID="User" ScriptItemUID="Container10" Layout="'VI_Styles_Container_Inline'">
+            <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton3" DisplayType="Controls">
+              <Menu ScriptItemUID="Menu3">
+                <MenuElement Text="translate(&quot;#LDS#Heading Log Off&quot;)" ScriptItemUID="MenuElement8">
+                  <ServerActionCall ScriptItemUID="ServerActionCall13">
+                    <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction3">
+                      <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                        <ActionComponent ScriptItemUID="Action1">
+                          <CodeLiteral ScriptItemUID="CodeLiteral3">
+// when the user explicitly logs off from the web application, set a flag on the session
+// to tell the web application not to automatically log in again using SSO
+
+System.Web.HttpContext.Current.Session[VI.WebRuntime.Communication.RequestAuthenticationModule.DO_NOT_SINGLE_SIGN_ON_MARKER] = "true";
+</CodeLiteral>
+                          <CodeLiteral ScriptItemUID="CodeLiteral4">// end OAuth session
+
+var hasOAuth = _UserSession.SessionObjects.ContainsKey("OAuth");
+if (hasOAuth)
+{
+	var client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
+	var url = client.GetLogoutUrl(_Database);
+	_UserSession.Dispose();
+	if (!string.IsNullOrEmpty(url))
+	{
+	    System.Web.HttpContext.Current.Response.Redirect(url, false);
+	}
+}
+else
+{
+	_UserSession.Logout();
+}</CodeLiteral>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log off?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log off&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                    </CallAction>
+                  </ServerActionCall>
+                </MenuElement>
+              </Menu>
+              <ControlList ScriptItemUID="ControlList3">
+                <Label ScriptItemUID="Label5" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute17" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--user&quot;" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.3em;&quot;)" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall14" />
+            </ToolbarButton>
+          </Container>
+          <Container ItemUID="About" ScriptItemUID="Container5" Layout="'VI_Styles_Container_Inline'">
+            <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton1" DisplayType="Controls">
+              <Menu ScriptItemUID="Menu1">
+                <MenuElement Text="translate('#LDS#Help')" ScriptItemUID="MenuElement1">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Code ClassName="VI.WebRuntime.ShowHelpAction, VI.WebRuntime" ScriptItemUID="Code1">
+                      <ControlList ScriptItemUID="ControlList1" />
+                    </Code>
+                  </ServerActionCall>
+                </MenuElement>
+                <MenuElement Text="translate('#LDS#Switch to desktop view')" ScriptItemUID="MenuElement10" Condition="{{ VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice }}">
+                  <ServerActionCall ScriptItemUID="ServerActionCall16">
+                    <Redirect ScriptItemUID="Redirect11" Target="Link" HREF="{{ _Form.GetUrl() + &quot;&amp;imx_layout=Desktop&quot; }}" AbortExecution="false" />
+                  </ServerActionCall>
+                </MenuElement>
+                <MenuElement Text="translate('#LDS#Switch to mobile view')" ScriptItemUID="MenuElement5" Condition="{{ !VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice }}">
+                  <ServerActionCall ScriptItemUID="ServerActionCall11">
+                    <Redirect ScriptItemUID="Redirect9" Target="Link" HREF="{{ _Form.GetUrl() + &quot;&amp;imx_layout=Tablet&quot; }}" AbortExecution="false" />
+                  </ServerActionCall>
+                </MenuElement>
+                <MenuElement Text="translate('#LDS#About')" ScriptItemUID="MenuElement4">
+                  <ServerActionCall ScriptItemUID="ServerActionCall6">
+                    <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+                      <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                        <Container ScriptItemUID="Container6">
+                          <ControlReferenceContainer ID="VI_AboutDialog" ScriptItemUID="ControlReferenceContainer1" />
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                        <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_ButtonPanel'">
+                          <Container ScriptItemUID="Container8" Layout="'VI_Styles_Container_Inline'">
+                            <ControlReferenceContainer ID="VI_Common_LanguageInfo" ScriptItemUID="ControlRef1" />
+                          </Container>
+                          <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef2" />
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+                    </CallAction>
+                  </ServerActionCall>
+                </MenuElement>
+              </Menu>
+              <ControlList ScriptItemUID="ControlList2">
+                <Label ScriptItemUID="Label6" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-help&quot;" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.6em;&quot;)" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;title&quot;" Value="translate('#LDS#About')" />
+                    <Property Name="TagName" Value="i" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall8" />
+            </ToolbarButton>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="DialogDatabase" Table="DialogDatabase" ScriptItemUID="DataTableDbObject1" WhereClauseSQL="sqlcompare(&quot;ismaindatabase&quot;,true, &quot;bool&quot;, &quot;equal&quot;)">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

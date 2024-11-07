@@ -1,0 +1,140 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_UNSGroupInUNSGroup" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+          <Label Text="translate(&quot;#LDS#This group currently has the following member groups.&quot;)" ScriptItemUID="Label1" />
+        </Container>
+        <Container ItemUID="UNSB" Condition="from allobjects select current TableName='UNSGroupB'" ScriptItemUID="Container15">
+          <Grid ScriptItemUID="Grid4">
+            <GridBand DataTable="UNSGroupBInUNSGroupB" WhereClause="uid_unsgroupbparent = ( select current primarykey() from allobjects )" ScriptItemUID="GridBand4">
+              <GridBandListView ScriptItemUID="GridBandListView1" />
+              <GridFilters ScriptItemUID="GridFilters1" />
+              <GridRows />
+              <GridColumn ScriptItemUID="Column9">
+                <GridColumnHeader ScriptItemUID="wctl1">
+                  <Container ScriptItemUID="Container16">
+                    <Label Text="datacaption( &quot;unsgroupbinunsgroupb&quot;, &quot;uid_unsgroupbchild&quot; )" ScriptItemUID="Label11" />
+                  </Container>
+                </GridColumnHeader>
+                <Cell ScriptItemUID="Cell4">
+                  <Container ScriptItemUID="Container17">
+                    <Container Condition="CanInsertOrDelete() and select current not(isdeleted()) from unsgroupbinunsgroupb" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container18">
+                      <CheckBox DataTable="UNSGroupBInUNSGroupB" DataColumn="RemoveThis" ScriptItemUID="CheckBox4" Text="" />
+                      <FormItemLabel DataTable="UNSGroupBInUNSGroupB" DataColumn="RemoveThis" IsInvisible="true" ScriptItemUID="FormItemLabel4">
+                        <Label Text="translate(&quot;#LDS#Heading Select&quot;)" ScriptItemUID="Label12" />
+                      </FormItemLabel>
+                    </Container>
+                    <Image Source="File" FileName="from unsgroupbinunsgroupb select current &#xD;&#xA;(if(IsDeleted()) then &#xD;&#xA;variable(&quot;%permanentlink%stockImg=DeleteDocument&quot;)&#xD;&#xA;else&#xD;&#xA;variable(&quot;%permanentlink%dialogimgTbl=UNSGroupB&quot;))" ScriptItemUID="Image4" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="datacaption(&quot;UNSGroupB&quot;)" />
+                      </HtmlAttributes>
+                    </Image>
+                    <Label Text="select current displayvalue(uid_unsgroupbchild) from unsgroupbinunsgroupb" ScriptItemUID="Label13" />
+                  </Container>
+                </Cell>
+              </GridColumn>
+            </GridBand>
+          </Grid>
+        </Container>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" Condition="CanInsertOrDelete()" ScriptItemUID="Container23">
+          <Container Layout="'VI_Styles_Container_Inline'" ItemUID="UNSB" Condition="0 &lt; select count() from unsgroupbinunsgroupb&#xD;&#xA;and from allobjects select current TableName='UNSGroupB'" ScriptItemUID="Container34">
+            <Button Text="translate(&quot;#LDS#Remove selected&quot;)" Layout="'VI_Styles_Button_Default'" EnabledCondition="0 &lt; (from unsgroupbinunsgroupb select Count() where IsNull(RemoveThis, false) = true)" ScriptItemUID="Button7">
+              <ServerActionCall ScriptItemUID="ServerActionCall7">
+                <Delete DataTable="UNSGroupBInUNSGroupB" SetDeletionFlag="DeleteAndSave" WhereClause="removethis" ScriptItemUID="Delete2" />
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call6">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping2" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ScriptItemUID="Container3" ItemUID="UNSB ADD" Condition="from allobjects select current TableName='UNSGroupB' and CanInsert(&quot;UNSGroupB&quot;)">
+            <Button Text="translate(&quot;#LDS#New child group&quot;)" ScriptItemUID="Button1">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Delete DataTable="UNSGroupBInUNSGroupBNew" ScriptItemUID="Delete1" />
+                <Insert DataTable="UNSGroupBInUNSGroupBNew" ScriptItemUID="Insert1">
+                  <ActionSequence ScriptItemUID="Action1" />
+                  <InsertValue DataColumn="UID_UNSGroupBParent" Value="from allobjects select current primarykey()" />
+                </Insert>
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container24">
+                      <ContainerTemplate DataTable="UNSGroupBInUNSGroupBNew" ScriptItemUID="ContainerTemplate1">
+                        <LayoutPanel ScriptItemUID="LayoutPanel1">
+                          <Label Text="datacaption(&quot;unsgroupbinunsgroupb&quot;, &quot;uid_unsgroupbparent&quot;)" ScriptItemUID="Label17" />
+                          <Label Text="select current displayvalue(uid_unsgroupbparent) from UNSGroupBInUNSGroupBNew" ScriptItemUID="Label18" />
+                          <Label Text="datacaption(&quot;unsgroupbinunsgroupb&quot;, &quot;uid_unsgroupbchild&quot;)" ScriptItemUID="Label19" />
+                          <ColumnEditor DataTable="UNSGroupBInUNSGroupBNew" DataColumn="UID_UNSGroupBChild" ScriptItemUID="ColumnEditor1">
+                            <VirtualTableMapping VirtualTable="EditTable" DataTable="UNSGroupBInUNSGroupBNew" ScriptItemUID="VirtualTableMapping1">
+                              <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="UID_UNSGroupBChild" />
+                            </VirtualTableMapping>
+                            <VirtualFunctionMapping ID="AdditionalWhereClause()" Value="from UNSGroupBInUNSGroupBNew select current sqlcompareuid(&quot;uid_unsrootb&quot;, &quot;&quot;+objectwalker(&quot;FK(uid_unsgroupbparent).uid_unsrootb&quot;))" ScriptItemUID="VirtualFunctionMapping3" />
+                          </ColumnEditor>
+                        </LayoutPanel>
+                        <Validator DataTable="UNSGroupBInUNSGroupBNew" DataColumn="UID_UNSGroupBChild" ScriptItemUID="Validator1" />
+                      </ContainerTemplate>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container30">
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button2">
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <Save DataTable="UNSGroupBInUNSGroupBNew" ScriptItemUID="Save1" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping5" />
+                          </CallAction>
+                          <ActionOnControl />
+                          <LoadTable DataTable="UNSGroupBInUNSGroupB" ScriptItemUID="LoadTable1">
+                            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeBulk="true" />
+                          </LoadTable>
+                        </ServerActionCall>
+                      </Button>
+                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef1">
+                        <VirtualFunctionMapping ID="TriggerValidation()" Value="false" ScriptItemUID="VirtualFunctionMapping6" />
+                        <VirtualFunctionMapping ID="MoreThanOneButton()" Value="True" ScriptItemUID="VirtualFunctionMapping7" />
+                      </ControlReferenceControlList>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Add member group&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                  <VirtualFunctionMapping ID="TableName()" Value="&quot;UNSGroupB&quot;" ScriptItemUID="VirtualFunctionMapping9" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCRView Class="UNSGroupBInUNSGroupB" Table="UNSGroupBInUNSGroupB" CRDataColumn="UID_UNSGroupBParent" ViewFKDataTable="AllObjects" ViewFKWhereClause="TableName = &quot;UNSGroupB&quot;" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeBulk="true" />
+          <Column Name="RemoveThis" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableCRView>
+        <DataTableDbObject Class="UNSGroupBInUNSGroupB" Table="UNSGroupBInUNSGroupBNew" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action4" />
+          <RedefineColumn DataColumn="UID_UNSGroupBChild" ScriptItemUID="RedefineColumn1">
+            <ValidationModifier ID="ExistCheck" Text="translate(&quot;#LDS#This child group is already assigned.&quot;)" Condition="exists(&quot;UNSGroupBInUNSGroupB&quot;,&#xD;&#xA;sqland(sqlcompareuid(&quot;UID_UNSGroupBParent&quot;, from UNSGroupBInUNSGroupBNew select top 1 uid_unsgroupbparent),&#xD;&#xA;sqlcompareuid(&quot;UID_UNSGroupBChild&quot;, from UNSGroupBInUNSGroupBNew select top 1 uid_unsgroupbchild)))" />
+          </RedefineColumn>
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="CanInsertOrDelete()" Expression="not(IsReadOnly())&#xD;&#xA;and&#xD;&#xA;not(IsNullOrEmpty(GetTableNameIn(GetObjectKeyTable(select current XObjectKey from AllObjects))))&#xD;&#xA;and&#xD;&#xA;CanInsert(format(&quot;{0}&quot;,GetTableNameIn(GetObjectKeyTable(select current XObjectKey from AllObjects))))" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="GetTableNameIn(string tableName)" Expression="{{&#xD;&#xA;var tbl = &quot;&quot;;&#xD;&#xA;switch (tableName)&#xD;&#xA;{&#xD;&#xA;    case &quot;ADSGroup&quot;:&#xD;&#xA;        tbl = &quot;ADSGroupInADSGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;LDAPGroup&quot;:&#xD;&#xA;        tbl = &quot;LDAPGroupInLDAPGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;NDOGroup&quot;:&#xD;&#xA;        tbl = &quot;NDOGroupInGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;SAPGroup&quot;:&#xD;&#xA;        tbl = &quot;SAPGroupInSAPGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;UNSGroupB&quot;:&#xD;&#xA;        tbl = &quot;UNSGroupBInUNSGroupB&quot;;&#xD;&#xA;		break;		&#xD;&#xA;}&#xD;&#xA;@return tbl;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="TSBFunction1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AllObjects" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column2" DataSource="Expression" Expression="GetObjectKeyTable(XObjectKey)" />
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

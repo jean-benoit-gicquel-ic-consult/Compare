@@ -1,0 +1,28 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RPS_Select_DialogDashboardDef_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action1" ObjectType="ActionSequence" SortOrder="0">
+        <ActionSequence ScriptItemUID="Action16" Condition="-- is there a click action associated with this dashboard?&#xA;{{ ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)DataContext.DashboardInfo_Current.Row).TargetObject.ClickAction != null }}" ItemUID="List report link">
+          <CodeLiteral ScriptItemUID="RPSCodeLiteral1">ChartDataPoint point = null;
+
+if(DataContext.DialogDashboardContent_Current != null)
+{
+	var data = DataContext.DialogDashboardContent_Current.Row;
+	point = new ChartDataPoint
+	{
+		Value = DataContext.DialogDashboardContent_ElementValue.GetValue(data),
+		ElementName = DataContext.DialogDashboardContent_ElementName.GetValue(data),
+		ElementObjectKey = DataContext.DialogDashboardContent_ElementObjectKey.GetValue(data)
+	};
+}
+
+((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)DataContext.DashboardInfo_Current.Row).TargetObject.ClickAction(point);</CodeLiteral>
+          <EndExecution />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="CompilationSettings1" ObjectType="CompilationSettings" SortOrder="0">
+        <ObjectInclude ObjectIncludeID="RPS_ListReport_Form" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

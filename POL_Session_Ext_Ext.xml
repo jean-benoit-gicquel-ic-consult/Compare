@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Session_Ext_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERAction11" ObjectType="ActionSequence" SortOrder="45">
+        <Update DataTable="UserMenu" DataColumn="AdditionalData" Value="from PendingItems select top 1 (if(Count= 0) then &quot;&quot;  else numformat(Count, &quot;#,#&quot;)) where Id=&quot;OpenQERPolicyHasObject&quot;" WhereClause="id=&quot;VI_Compliance_ExceptionApproval_Policies&quot;" ScriptItemUID="POLUpdate1" />
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <Insert ScriptItemUID="POLInsert1" DataTable="PendingItems">
+          <ActionSequence ScriptItemUID="POLAction1" />
+          <InsertValue Value="&quot;OpenQERPolicyHasObject&quot;" DataColumn="Id" />
+          <InsertValue Value="translate(&quot;#LDS#There are new company policy violations.&quot;)" DataColumn="NewItemsText" />
+          <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_QERPolicy_ExceptionApproval&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="QERAction6" ObjectType="ActionSequence" SortOrder="35">
+        <ActionSequence Condition="IsPreProp(&quot;QERPOLICY&quot;)" ItemUID="IsPreProp(&quot;QERPOLICY&quot;)" ScriptItemUID="POLAction2">
+          <Update DataTable="PendingItems" DataColumn="Count" Value="DbCount(&quot;QERPolicyHasObject&quot;,&#xA;   SqlAnd(&#xA;      SqlCompare(&quot;IsDecisionMade&quot;,0,&quot;bool&quot;,&quot;Equal&quot;,&quot;none&quot;),&#xA;      Format(&quot;UID_QERPolicy in (select cr.UID_QERPolicy from QERPolicy cr join personinaerole pae on pae.uid_aerole =  cr.uid_aeroleruler and {0})&quot;,&#xA;         SqlAnd(&#xA;	        SqlCompare(&quot;pae.uid_person&quot;,GetUser(),&quot;string&quot;,&quot;Equal&quot;,&quot;NonUnicodeLiterals&quot;),&#xA;		    SqlCompare(&quot;cr.isexceptionallowed&quot;,1,&quot;bool&quot;,&quot;Equal&quot;,&quot;none&quot;)&#xA;		 )&#xA;      )&#xA;   )&#xA;)																				   																		" WhereClause="Id = &quot;OpenQERPolicyHasObject&quot;" ScriptItemUID="POLUpdate2" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="QERDataTableSingleRow1" ObjectType="DataTableSingleRow" SortOrder="55">
+        <Column DataType="System.Int32" Name="OpenQERPolicyHasObject" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;OpenQERPolicyHasObject&quot;" ScriptItemUID="POLColumn1" TriggerUpdates="Updates" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

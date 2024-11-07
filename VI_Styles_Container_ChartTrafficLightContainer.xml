@@ -1,0 +1,8 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_ChartTrafficLightContainer" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="ChartTrafficLight" Comment="" />
+  </LayoutObject>
+</WebDesigner>

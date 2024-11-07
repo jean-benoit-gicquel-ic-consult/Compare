@@ -1,0 +1,27 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="cbbb3e2e-82a5-eed9-3ab6-35d9321d52df">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_ObjectSheet_Locality">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Tab ScriptItemUID="Tab1">
+          <ControlReferenceTabPageGroup ID="QER_ObjectSheet_BaseTreeCommon" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="IsReadOnly()" Value="IsReadOnly()" />
+            <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="Object" DataTable="Object">
+              <VirtualColumnMapping DataColumn="RiskIndexCalculated" VirtualColumn="RiskIndexCalculated" />
+            </VirtualTableMapping>
+          </ControlReferenceTabPageGroup>
+        </Tab>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSheet">
+      <VirtualTableExtension ScriptItemUID="VirtualTableExtension1" Name="Object" Class="Locality" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,53 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AssignmentInfo" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <SwitchContainer ScriptItemUID="Switch1">
+          <SwitchContainerCase ScriptItemUID="Case1" Condition="showverboseinfo()">
+            <Container ScriptItemUID="Container2">
+              <Activator ScriptItemUID="Activator1">
+                <Action ScriptItemUID="Action4">
+                  <FillTable Source="XObjectKey" DataTable="AssignmentObjects" DataTableSource="PersonWantsOrg" DataColumnSource="ObjectKeyAssignment" WhereClause="primarykey() = (from PersonWantsOrg select current primarykey())" DataColumnTableName="TableName" ResolveMNObjects="ResolveAlways" ScriptItemUID="FillTable1">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  </FillTable>
+                </Action>
+              </Activator>
+              <LayoutPanel ScriptItemUID="LayoutPanel1">
+                <ContainerTemplate ScriptItemUID="LayoutPanelItemTemplate1" DataTable="AssignmentObjects" WithoutParentContainer="true">
+                  <Label Text="from assignmentobjects select current datacaptionsingle(tablename+&quot;&quot;)" ScriptItemUID="Label1" />
+                  <Label ScriptItemUID="Label5" Text="from assignmentobjects select current displaylong()" />
+                </ContainerTemplate>
+              </LayoutPanel>
+            </Container>
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case2">
+            <Label Text="from PersonWantsOrg select current DisplayValue(DisplayObjectKeyAssignment) " ScriptItemUID="Label4" />
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableGeneric Table="AssignmentObjects" PrimaryKeyColumn="Pk" ScriptItemUID="DataTableGeneric1" TriggerUpdates="Never">
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="Pk" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="MNTablename" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="FieldName" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="PersonReceiver" DataType="System.Boolean" ScriptItemUID="Column2" />
+        </DataTableGeneric>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="ObjectKeyAssignment" DataType="System.String" />
+        <VirtualColumn Name="DisplayObjectKeyAssignment" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="ShowVerboseInfo()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

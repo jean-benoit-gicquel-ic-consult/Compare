@@ -1,0 +1,16 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_ObjectView_Person_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="30">
+        <Container ScriptItemUID="ADSContainer1" ItemUID="Lync" Condition="getconfig(&quot;ADS_Lync_Enabled&quot;)=&quot;true&quot;">
+          <LayoutPanel ScriptItemUID="ADSLayoutPanel1">
+            <Label Text="translate(&quot;#LDS#Online status&quot;)" ScriptItemUID="ADSLabel1" />
+            <ControlReferenceControlList ID="ADS_Person_LyncPresence" ScriptItemUID="ADSControlRef1">
+              <VirtualTableMapping VirtualTable="Person" DataTable="SourceObject" ScriptItemUID="ADSVirtualTableMapping1" />
+            </ControlReferenceControlList>
+          </LayoutPanel>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

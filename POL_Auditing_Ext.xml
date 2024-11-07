@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Auditing_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="15">
+        <SwitchContainer ScriptItemUID="TilePolicyViolations">
+          <SwitchContainerCase ScriptItemUID="POLCase1" Condition="GetConfigParm(&quot;QER\Policy&quot;) = &quot;1&quot;">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="POLContainer1" ItemUID="Policy Violations">
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping9" ID="Identifier()" Value="&quot;Policy Violations&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="POLAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_QERPolicy_ExceptionApproval" ScriptItemUID="POLRedirect2">
+                    <RedirectParameter Name="'AuditMode'" Value="'YES'" />
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading Policy Violations&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Heading Policy Violations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping10" ID="Image()" Value="&quot;QERPolicy&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows all policy violations, organized by exception approver.')" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

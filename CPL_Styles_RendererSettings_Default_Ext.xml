@@ -1,0 +1,13 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Styles_RendererSettings_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="LayoutObject1" ObjectType="LayoutObject">
+        <CssDocument CssName="Compliance CSS rules" ScriptItemUID="CPLCssDocument1">.imx-message-compliance
+{
+  background-color: %QBM_Primary_Yellow%;
+  background-image: url("%link%dialogImg=Compliance Rule Violation&amp;size=Small&amp;effect=Whiten")
+}</CssDocument>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

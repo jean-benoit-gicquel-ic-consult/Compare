@@ -1,0 +1,242 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_CartCalculateCheckStatus" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.Customizer.dll" />
+        <NamespaceImport Namespace="QER.Customizer" />
+        <NamespaceImport Namespace="VI.Base" />
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <NamespaceImport Namespace="QER.CompositionApi.ITShop" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="IT Shop - Cart" Description="translate(&quot;#LDS#Shopping Cart&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_ForeignOrgCheck" Description="translate('#LDS#Check whether the recipient belongs to the same organizational unit as the requested product')" LongDescription="translate('#LDS#Checks whether the recipient and the requested product belong to the same organizational unit.')" />
+        <ConfigParam Key="VI_ITShop_ForeignFuncCheck" Description="translate('#LDS#Check whether the recipient belongs to the same functional area as the requested product')" LongDescription="translate('#LDS#Checks whether the purchaser and the requested product belong to the same functional area.')" />
+        <ConfigParam Key="VI_ITShop_AllowRequestWithMissingDependencies" Description="translate('#LDS#Allow request with missing dependencies')" LongDescription="translate('#LDS#Allow a request if a mandatory product is already assigned and cannot be requested again for this reason.')" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action13" />
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence ScriptItemUID="Action2">
+          <ActionSequence ScriptItemUID="Action20" Condition="false" ItemUID="placeholder for legacy extensions" />
+          <ActionSequence ScriptItemUID="Action18" Condition="false" ItemUID="placeholder for legacy extensions" />
+          <Update DataTable="ShoppingCartItem" DataColumn="CheckStatus" Value="&quot;&quot;" WhereClause="isactivated" ScriptItemUID="Update3" />
+          <Update DataTable="ShoppingCartItem" DataColumn="CanOrder" Value="false" WhereClause="isactivated" ScriptItemUID="Update4" />
+          <ActionSequence ScriptItemUID="Action17" Condition="false" ItemUID="placeholder for legacy extensions" />
+          <ActionSequence ScriptItemUID="Action15" Condition="false" ItemUID="placeholder for legacy extensions" />
+          <ActionSequence ScriptItemUID="Action16" Condition="false" ItemUID="placeholder for legacy extensions" />
+          <ActionSequence ScriptItemUID="Action14" Condition="false" ItemUID="placeholder for legacy extensions" />
+          <ActionSequence ScriptItemUID="Action12" ItemUID="placeholder for legacy extensions" Condition="false" />
+          <ForeachRow DataTable="ShoppingCartItem" WhereClause="isactivated and IsNullOrEmpty(MethodName)" ScriptItemUID="ForeachRow1">
+            <AccProductSwitchCallAction ActionType="Verify_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="select current UID_AccProduct from shoppingcartitem" ScriptItemUID="ControlRef1" ItemUID="Product-dependent verification steps">
+              <VirtualFunctionMapping ID="hideMessages()" Value="hidePopUps()" ScriptItemUID="VirtualFunctionMapping1" />
+            </AccProductSwitchCallAction>
+          </ForeachRow>
+          <ActionSequence ScriptItemUID="Action19">
+            <Save DataTable="ShoppingCartItem" ScriptItemUID="Save1" />
+            <CodeLiteral ScriptItemUID="CodeLiteral2">var check = new QER.CompositionApi.ITShop.ShoppingCartSubmit(uidshoppingcartorder);
+
+var qerCheck = check.Check;
+
+qerCheck.EnableForeignOrgCheck = VI.WebRuntime.WebSql.StringEquals("True", VI.WebRuntime.WebSql.GetConfigValueReplaced(_UserSession, "VI_ITShop_ForeignOrgCheck"));
+qerCheck.EnableForeignFunctionalAreaCheck = VI.WebRuntime.WebSql.StringEquals("True", VI.WebRuntime.WebSql.GetConfigValueReplaced(_UserSession, "VI_ITShop_ForeignFuncCheck"));
+qerCheck.AllowMissingMandatory = VI.WebRuntime.WebSql.StringEquals("True", VI.WebRuntime.WebSql.GetConfigValueReplaced(_UserSession, "VI_ITShop_AllowRequestWithMissingDependencies"));
+</CodeLiteral>
+          </ActionSequence>
+          <CodeLiteral ScriptItemUID="CodeLiteral1">var disposable = this.ShoppingCartItem.SuspendBulkEvents();
+CartCheckResult checkResult;
+
+try
+{
+	
+if (ShoppingCartItem.Any(ci =&gt; 
+                    {
+                        return (!string.IsNullOrEmpty(ShoppingCartItem_CheckStatus.GetValue(ci).String)
+                                    &amp;&amp; ShoppingCartItem.GetColumn("IsActivated", "ShoppingCartItem").GetValue(ci).Bool);
+                    }
+                ))
+{
+	// do not submit if any prior verify step found an error
+	SubmitSilentlyIfPossible = false;
+}
+
+
+if (SubmitSilentlyIfPossible)
+{
+    checkResult = await check.SubmitAsync(_Database, false, ct).ConfigureAwait(false);
+}
+else
+{
+	checkResult = await check.CheckAsync(_Database, ct).ConfigureAwait(false);
+}
+
+ExcludedPermissions.Delete();
+
+Container_Submitted.SetValue(Container_Current.Row, checkResult.Submitted);
+
+// non-critical status values first
+foreach (var item in checkResult.Items)
+{
+	var sci = ShoppingCartItem.GetRowForPrimaryKey(item.UidShoppingCartItem);
+	var qerResult = item.Results.OfType&lt;QerCartItemCheckResult&gt;().FirstOrDefault();
+	
+	if (qerResult == null)
+		continue;
+
+	if (qerResult.IsForeignOrg)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "OrgForeign");
+	}
+
+	if (qerResult.IsForeignFunctionalArea)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "FuncForeign");
+	}
+	
+	if (qerResult.MissingMandatory.Any())
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "Inclusion");
+	}
+}
+
+// ... then critical status values
+
+foreach (var item in checkResult.Items)
+{
+	var sci = ShoppingCartItem.GetRowForPrimaryKey(item.UidShoppingCartItem);
+	
+	var submitExc = item.Results.OfType&lt;SubmitException&gt;().FirstOrDefault();
+	
+	if (submitExc != null)
+	{
+		if (submitExc.Exception.ErrorNumber == 2133266)
+		{
+			ShoppingCartItem_CheckStatus.SetValue(sci, "Right");
+			continue;
+		}
+		else
+		{
+			ShoppingCartItem_CheckStatus.SetValue(sci, submitExc.HasErrors ? "Error" : "Warning");
+			var e = QER.Customizer.ExceptionInfo.ToException(submitExc.Exception);
+			using (var eBrowser = new ExceptionBrowser())
+			{
+				eBrowser.UseException(e);
+				var formattedErrorText = string.Join(" ", eBrowser.GetExceptions().Select(m =&gt; m.Message));
+			    ShoppingCartItem_ErrorText.SetValue(sci, formattedErrorText);
+			}
+
+			continue;
+		}
+	}
+	
+	var qerResult = item.Results.OfType&lt;QerCartItemCheckResult&gt;().FirstOrDefault();
+	
+	if (qerResult == null)
+		continue;
+	if (qerResult.IsExistingAssignment)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "ExistingAssignment");
+	}
+	
+	if (qerResult.IsDuplicate)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "Forbidden_Doublettes");
+	}
+	
+    if (qerResult.IsTimeConflict)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "Time");
+	}
+	
+	if (qerResult.HasExistingPwo)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "Right");
+	}
+
+	foreach (var exclusion in qerResult.Exclusions)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "PermissionExclusion");
+		var values = new ColumnInsertValues(ExcludedPermissions);
+		values["ObjectDisplayExcluded"] = exclusion.ObjectDisplayExcluded;
+		values["ObjectKeyExcluded"] = exclusion.ObjectKeyExcluded;
+		values["UID_ShoppingCartItem"] = exclusion.UidShoppingCartItem;
+		ExcludedPermissions.Insert(values);
+	}
+}
+
+foreach (var item in checkResult.Items)
+{
+	var sci = ShoppingCartItem.GetRowForPrimaryKey(item.UidShoppingCartItem);
+	if (string.IsNullOrEmpty(ShoppingCartItem_CheckStatus.GetValue(sci)))
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "OK");
+	}
+}
+
+} finally 
+{
+	SyncActions.Do(()=&gt;disposable.EndAsync());
+}</CodeLiteral>
+          <ActionSequence ScriptItemUID="Action9" />
+          <Update DataTable="ShoppingCartItem" DataColumn="CanOrder" Value="true" WhereClause="checkstatus in (OrderableStatus())" ScriptItemUID="Update11a" />
+          <ActionSequence ItemUID="Foreign functional Order -- obsolete, this is now handled by Composition API" Condition="false" ScriptItemUID="Action4" />
+          <ActionSequence ItemUID="Foreign org Order -- obsolete, this is now handled by Composition API" Condition="false" ScriptItemUID="Action5" />
+          <ActionSequence ItemUID="AccProductDependencies Exclusions -- obsolete, this is now handled by Composition API" ScriptItemUID="Action6" Condition="false" />
+          <ActionSequence ItemUID="AccProductDependencies Inclusions  -- obsolete, this is now handled by Composition API" ScriptItemUID="Action8" Condition="false" />
+          <ActionSequence Condition="not(hidePopUps())&#xD;&#xA;and&#xD;&#xA;0 &lt; (select count() from ShoppingCartItem where (not(canorder) and isactivated))" ScriptItemUID="Action7">
+            <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction2">
+              <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#At least one request cannot be submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Request can not be submitted&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping5" />
+            </CallAction>
+          </ActionSequence>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="ITShopOrgforShoppingCartItem()" Expression="format(&quot;uid_itshoporg in (select uid_itshoporgpr from {0})&quot;,&#xD;&#xA;sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,&#xD;&#xA;sqlformatvalue(UID_PersonOrdered, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;sqlformatvalue(UID_AccProduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;&quot;null&quot;&#xD;&#xA;))&#xD;&#xA;" FilterForTable="ShoppingCartItem" DataType="System.String" ScriptItemUID="Function2" />
+        <Function ScriptItemUID="Function1" Name="OrderableStatus()" DataType="System.String" FunctionType="FunctionValueList" TriggerUpdates="Never">
+          <FunctionValueList ScriptItemUID="FunctionValueList1">
+            <FunctionValue Expression="&quot;OK&quot;" />
+            <FunctionValue Expression="&quot;OrgForeign&quot;" />
+            <FunctionValue Expression="&quot;FuncForeign&quot;" />
+          </FunctionValueList>
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ComplianceCheckSimple" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="DBObjectKey" DataType="System.String" />
+        <VirtualColumn Name="UID_ComplianceRule" DataType="System.String" />
+        <VirtualColumn Name="UID_ComplianceSubRule" DataType="System.String" />
+        <VirtualColumn Name="UID_ShoppingCartItem" DataType="System.String" />
+        <VirtualColumn Name="UID_Person" DataType="System.String" />
+        <VirtualColumn Name="ViolationType" DataType="System.String" />
+        <VirtualColumn Name="IsNoEffectivePerson" DataType="System.Boolean" TriggerUpdates="Never" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceCheckSimpleObjects" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="sourcekey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="uidshoppingcartorder()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="CheckStatus" DataType="System.String" />
+        <VirtualColumn Name="CanOrder" DataType="System.Boolean" />
+        <VirtualColumn Name="OrderType" DataType="System.String" />
+        <VirtualColumn Name="ErrorText" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="hidePopUps()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.Boolean" Signature="SubmitSilentlyIfPossible()" TriggerUpdates="Never" />
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable4" RequiresCursor="true">
+        <VirtualColumn Name="Submitted" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualTable Name="ExcludedPermissions" ScriptItemUID="VirtualTable5" TriggerUpdates="Never">
+        <VirtualColumn Name="UID_ShoppingCartItem" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="ObjectDisplayExcluded" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="ObjectKeyExcluded" DataType="System.String" TriggerUpdates="Never" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

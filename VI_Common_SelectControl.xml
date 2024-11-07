@@ -1,0 +1,66 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_SelectControl" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridColumnGroup DataTable="EditTable" ScriptItemUID="GridColumnGroup1">
+        <GridColumn Condition="not(IsReadOnly())" Width="&quot;60px&quot;" HasFooterCell="true" ScriptItemUID="GridColumn1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="IsDisplayAfterAdditionalColumns" Value="true" />
+            <HtmlAttribute Name="&quot;data-imx-exporthide&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;true&quot;" />
+          </HtmlAttributes>
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Label Text="IsNullOrEmpty(ColumnName(),translate('#LDS#Heading Select'))" ScriptItemUID="Label1" />
+          </GridColumnHeader>
+          <GridColumnFooter ScriptItemUID="wctl2" Condition="(from EditTable select Count() )&gt; 2">
+            <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_Inline'">
+              <Container Condition="not(DenySelectAll())" ScriptItemUID="Container2" EnableCustomAttributes="true" ItemUID="Approve all">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute3" Value="'checkboxAll_yes'" />
+                </HtmlAttributes>
+                <CheckBoxMulti DataTable="EditTable" DataColumn="DoSelect" ScriptItemUID="CheckBoxMulti1" Layout="'VI_Styles_CheckBoxMulti_DecisionControl'" Text="&quot;&quot;" ItemUID="Select all" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="IsNullOrEmpty(SelectAllText(),translate(&quot;#LDS#Select all&quot;))" />
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute12" Value="IsNullOrEmpty(SelectAllText(),translate(&quot;#LDS#Select all&quot;))" />
+                    <HtmlAttribute Name="'data-imx-multicheckbox-hiddenCount'" ScriptItemUID="HtmlAttribute14" Value="'2'" />
+                  </HtmlAttributes>
+                </CheckBoxMulti>
+              </Container>
+            </Container>
+          </GridColumnFooter>
+          <Cell ScriptItemUID="Cell1">
+            <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_Inline'">
+              <Container ScriptItemUID="Container1" EnableCustomAttributes="true" ItemUID="Select">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="'checkbox_yes'" />
+                </HtmlAttributes>
+                <CheckBox DataTable="EditTable" DataColumn="DoSelect" Text="&quot;&quot;" ScriptItemUID="CheckBox1" Layout="'VI_Styles_CheckBox_DecisionControl'" EnableCustomAttributes="true" ItemUID="Select">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="IsNullOrEmpty(SelectText(),translate(&quot;#LDS#Heading Select&quot;))" />
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute8" Value="IsNullOrEmpty(SelectText(),translate(&quot;#LDS#Heading Select&quot;))" />
+                  </HtmlAttributes>
+                </CheckBox>
+              </Container>
+            </Container>
+          </Cell>
+        </GridColumn>
+      </GridColumnGroup>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="DoSelect" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DenySelectAll()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="SelectText()" DataType="System.String" />
+      <VirtualFunction Signature="SelectAllText()" DataType="System.String" />
+      <VirtualFunction Signature="ColumnName()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

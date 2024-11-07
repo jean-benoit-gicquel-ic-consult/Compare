@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Interfaces_ObjectSwitch_Edit_PersonWantsOrg">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ComponentInterfaceObject ContainerType="ControlList" />
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="PersonWantsOrg" ScriptItemUID="VirtualTable1" Class="PersonWantsOrg" RequiresCursor="true">
+        <Column Name="CancelReason" DataType="System.String" ScriptItemUID="Column3" />
+      </VirtualTable>
+      <VirtualFunction Signature="ShowCancelOrder()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalActions" ContainerType="ControlList">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

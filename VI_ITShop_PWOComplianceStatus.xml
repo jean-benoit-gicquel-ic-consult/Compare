@@ -1,0 +1,123 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6644f01e-17bd-61d8-97a5-cf4d01153fad">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PWOComplianceStatus" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action4">
+            <CallAction ActionID="VI_ITShop_CalculatePWOComplianceCheck" ScriptItemUID="Call1" />
+            <LoadTable DataTable="ComplianceRule" WhereClause="format(&quot;uid_compliancerule in ( {0})&quot;, listselect(compliancechecksimple, uid_compliancerule))" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+            <LoadTable DataTable="PersonInNonCompliance" ScriptItemUID="LoadTable2" WhereClause="format(&quot;uid_noncompliance in ( select uid_noncompliance from compliancerule where uid_compliancerule  in ( {0} ) ) and uid_person = {1}&quot;,&#xD;&#xA;listselect(compliancechecksimple, uid_compliancerule),&#xD;&#xA;sqlformatvalue(from personwantsorg select current uid_personordered, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </LoadTable>
+            <ForeachRow DataTable="ComplianceRule" ScriptItemUID="ForeachRow1" WhereClause="-- all PersonInNonCompliance that do not exist yet but will exist when the request is granted&#xD;&#xA;not (uid_noncompliance in (select uid_noncompliance from personinnoncompliance ))">
+              <Insert DataTable="PersonInNonCompliance" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action5" />
+                <InsertValue DataColumn="UID_NonCompliance" Value="from compliancerule select current uid_noncompliance" />
+                <InsertValue DataColumn="UID_Person" Value="from personwantsorg select current uid_personordered" />
+              </Insert>
+            </ForeachRow>
+          </Action>
+        </Activator>
+        <Container Condition="from personwantsorg select current not(checkstatus)" ScriptItemUID="Container3">
+          <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The following rule violations are caused by this request.&quot;)" ScriptItemUID="Label1" />
+          </Container>
+          <Container ScriptItemUID="Container5">
+            <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PersonInNonCompliance">
+              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="PropertyList()" IsPropertyList="true">
+                  <ColumnList ScriptItemUID="ColumnList2">
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="Ident_ComplianceRule" CannotEdit="true" />
+                    <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="RiskIndexCalculated" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="PersonInNonCompliance" />
+              </ControlReferenceContainer>
+              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                  <ColumnList ScriptItemUID="ColumnList1">
+                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="MitigatingControls" Condition="IsExceptionApprovalWithMControls()" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonInNonCompliance" ScriptItemUID="VirtualTableMapping1" />
+              </ControlReferenceContainer>
+              <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_ButtonBar'" Condition="IsExceptionApprovalWithMControls()">
+                <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button1">
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <CodeLiteral ScriptItemUID="CodeLiteral1">// save changes made in PersonInNCHasMControl for the current PersonInNonCompliance object
+var mcColumn = (MemberRelationColumn)TableStore.GetLocalColumn(this.PersonInNonCompliance, "MitigatingControls");
+var pincKey = ((IDbObjectRow)ContainerTemplate1_Current.Row).ObjectKey.ToXmlString();
+var pwoKey = ((IDbObjectRow)PersonWantsOrg_Current.Row).ObjectKey.ToXmlString();
+var description = "Assign mitigating control: " + pincKey + " " + pwoKey;
+
+// mitigating controls will be activated by the job chain CPL_PersonInNonCompliance_Assign_MitigatingControls
+using (new VI.DB.DeferredOperations.DeferredBlock(_Database, new DateTime(2200, 12, 31), description))
+{
+   mcColumn.GetMemberRelation(ContainerTemplate1_Current.Row).SaveChanges(_Database);
+}
+</CodeLiteral>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </Container>
+        <Container ScriptItemUID="Container4" Condition="from personwantsorg select current checkstatus" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+          </HtmlAttributes>
+          <Label Text="translate(&quot;#LDS#No rule violations have been detected for this request.&quot;)" ScriptItemUID="Label2" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="ComplianceRule" Class="ComplianceRule" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableCustom Table="ComplianceCheckSimple" ScriptItemUID="DataTableCustom1">
+          <Column Name="DBObjectKey" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="UID_ComplianceRule" ScriptItemUID="Column13" DataType="System.String" Caption="datacaptionsingle(&quot;ComplianceRule&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;ComplianceRule&quot;" DBColumnName="&quot;UID_ComplianceRule&quot;" FKWhereClause="" />
+          <Column Name="UID_ComplianceSubRule" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="UID_PersonWantsOrg" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="UID_AccProduct" DataType="System.String" DataSource="Expression" Comment="Holt das AccProduct zur ITShopOrg hier dazu" Expression="if( isnull( uid_itshoporg, '' ) = '' )&#xD;&#xA;then ''&#xD;&#xA;else singleproperty(&quot;itshoporg&quot;, &quot;uid_accproduct&quot;, &quot;uid_itshoporg = '&quot;+uid_itshoporg+&quot;'&quot;)" ScriptItemUID="Column6" />
+          <Column Name="UID_ITShopOrg" DataType="System.String" ScriptItemUID="Column7" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column11" Caption="datacaptionsingle(&quot;Person&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column Name="ViolationType" DataType="System.String" ScriptItemUID="Column3" ColumnDataSource="LimitedValues">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="Person" Display="" Comment="" />
+              <ColumnLimitedValue Name="Org" Display="" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+        </DataTableCustom>
+        <DataTableGeneric Table="ComplianceCheckSimpleObjects" ScriptItemUID="DataTableGeneric1">
+          <Column Name="sourcekey" DataType="System.String" ScriptItemUID="Column10" />
+          <Column Name="ObjectKey" DataType="System.String" ScriptItemUID="Column12" />
+        </DataTableGeneric>
+        <DataTableDbObject Class="PersonInNonCompliance" Table="PersonInNonCompliance" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action1" />
+          <ColumnMemberRelation Name="MitigatingControls" RelationTableName="&quot;PersonInNCHasMControl&quot;" ColumnNameLeft="&quot;ObjectKeyPersonInNonCompliance&quot;" Caption="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="ColumnMemberRelation1" />
+          <Column DataType="System.String" Name="Ident_ComplianceRule" ScriptItemUID="Column2" TriggerUpdates="Never" DataSource="Expression" Expression="from compliancerule select top 1 displayvalue(ident_compliancerule) where uid_noncompliance = (select current uid_noncompliance from personinnoncompliance)" Caption="datacaption(compliancerule, Ident_compliancerule)" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsExceptionApprovalWithMControls()" Expression="GetConfigParm(&quot;QER\CalculateRiskIndex\MitigatingControlsPerViolation&quot;)=&quot;1&quot;&#xA;and&#xA;from personwantsorg select current isexceptionapproval" DataType="System.Boolean" ScriptItemUID="Function1" TriggerUpdates="Never" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="CheckStatus" DataType="System.Boolean" />
+        <Column Name="IsExceptionApproval" DataType="System.Boolean" ScriptItemUID="Column8" DataSource="Expression" Expression="exists(&quot;person&quot;, format(&quot;uid_person in ( select h.uid_personhead from pwohelperpwo h where h.UID_PersonWantsOrg = {0} and h.levelnumber = {1} and h.uid_personhead = {2} and h.uid_pwodecisionrule in ('CPL-PWODecisionRule-OC', 'CPL-PWODecisionRule-OH'))&quot;,&#xA;sqlformatvalue(UID_PersonWantsOrg, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xA;decisionlevel,&#xA;sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xA;))" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,137 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_ITShop_AnswerQuestions_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableDbObject Table="AttestationCase" Class="AttestationCase" WhereClauseSQL="format(&quot;UID_AttestationCase in (&#xD;&#xA;select P.UID_AttestationCase from AttestationHelper P&#xD;&#xA;join AttestationCase PWO on PWO.UID_AttestationCase = P.UID_AttestationCase&#xD;&#xA;where P.UID_PersonHead = '{0}' and P.Decision = 'Q' and {1})&#xD;&#xA;&quot;,select uid_person from user,&#xD;&#xA;if(isnullorempty(request(&quot;aeweb_uid_attestationhelper&quot;))) then &quot;1=1&quot; else sqlcompare(&quot;p.uid_attestationhelper&quot;, request(&quot;aeweb_uid_attestationhelper&quot;),&quot;string&quot;,&quot;equal&quot;,&quot;NonUnicodeLiterals&quot;))" ScriptItemUID="ATTDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ATTAction1">
+            <LoadTable DataTable="AttestationPolicy" ScriptItemUID="ATTLoadTable1">
+              <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <Column Name="doapprove" DataType="System.Boolean" ScriptItemUID="ATTColumn1" />
+          <Column Name="doreject" DataType="System.Boolean" ScriptItemUID="ATTColumn2" />
+          <Column Name="IsPDFBased" DataType="System.String" ScriptItemUID="ATTColumn3" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="AttestationPolicy" Class="AttestationPolicy" WhereClauseSQL="format(&quot;UID_AttestationPolicy in ({0})&quot;,listselect(AttestationCase,UID_AttestationPolicy))&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="ATTDataTableDbObject2">
+          <ActionSequence ScriptItemUID="ATTAction2" />
+        </DataTableDbObject>
+        <DataTableCRView Table="AttestationHistory" Class="AttestationHistory" CRDataColumn="UID_AttestationCase" ViewFKDataTable="AttestationCase" ScriptItemUID="ATTDataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableCRView>
+      </AddObject>
+      <AddObject ObjectID="ContextParameters1" ObjectType="ContextParameters" SortOrder="10">
+        <Parameter Name="aeweb_uid_attestationhelper" IsMandatory="false" />
+      </AddObject>
+      <AddObject ObjectID="Action6" ObjectType="ActionSequence" SortOrder="10">
+        <ActionSequence ScriptItemUID="ATTAction4" Condition="not((Request('isRequest') = true )) or (not IsNullOrEmpty(Request('aeweb_uid_attestationhelper')) )">
+          <LoadTable DataTable="AttestationCase" ScriptItemUID="ATTLoadTable3">
+            <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType4" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Container5" ObjectType="Container" SortOrder="5">
+        <Container ItemUID="open attestation questions" ScriptItemUID="ATTContainer5" Condition="0 &lt; select count() from AttestationCase">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ATTControlRef3">
+            <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#You have been asked to answer an inquiry about the following attestation.&quot;)" ScriptItemUID="ATTVirtualFunctionMapping7" />
+          </ControlReferenceContainer>
+          <ControlReferenceContainer ID="VI_Attestation_AttestationCaseMasterDetail" ScriptItemUID="ATTControlRef9">
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping13" ID="IsReadOnly()" Value="true" />
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping15" ID="UseOneGridForAllPolicies()" Value="true" />
+            <VirtualTableMapping ScriptItemUID="ATTVirtualTableMapping2" VirtualTable="AttestationCase" DataTable="AttestationCase">
+              <VirtualColumnMapping DataColumn="doapprove" VirtualColumn="DoApprove" />
+              <VirtualColumnMapping DataColumn="doreject" VirtualColumn="DoReject" />
+            </VirtualTableMapping>
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping4" ID="HideButtonBar()" Value="true" />
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping5" ID="AttestationCaseDbWhereClause()" Value="whereclause(AttestationCase)" />
+            <VirtualControlMapping ContainerType="ControlList" VirtualControl="AdditionalActions">
+              <ControlList ScriptItemUID="ATTControlList1">
+                <Button Text="translate('#LDS#Respond')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="ATTButton1">
+                  <ServerActionCall ScriptItemUID="ATTServerActionCall1">
+                    <ActionSequence ScriptItemUID="ATTAction3">
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="ATTCall1">
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Respond to an inquiry&quot;)" ScriptItemUID="ATTVirtualFunctionMapping17" />
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="ATTContainer3">
+                            <Container ScriptItemUID="ATTContainer4">
+                              <LayoutPanel ScriptItemUID="ATTLayoutPanel1">
+                                <Label ScriptItemUID="ATTLabel5" Text="translate('#LDS#Date')" />
+                                <Label ScriptItemUID="ATTLabel3" Text="select top 1 DateHead &#xD;&#xA;from AttestationHistory where DecisionType = 'Query' and UID_AttestationCase = (select current UID_AttestationCase from AttestationCase) order by datehead desc&#xD;&#xA;" />
+                                <Label ScriptItemUID="ATTLabel6" Text="translate('#LDS#Inquiry by')" />
+                                <Label ScriptItemUID="ATTLabel7" Text="select top 1 displayvalue(DisplayPersonHead)&#xD;&#xA;from AttestationHistory where DecisionType = 'Query' and UID_AttestationCase = (select current UID_AttestationCase from AttestationCase) order by datehead desc&#xD;&#xA;" />
+                                <Label ScriptItemUID="ATTLabel8" Text="DataCaption(AttestationCase, DisplayName)" />
+                                <Label ScriptItemUID="ATTLabel9" Text="from AttestationCase select current DisplayValue(DisplayName)" />
+                                <Label ScriptItemUID="ATTLabel10" Text="DataCaption(AttestationCase, UID_AttestationPolicy)" />
+                                <Label ScriptItemUID="ATTLabel11" Text="from AttestationCase select current DisplayValue(UID_AttestationPolicy)" />
+                                <Label Text="translate(&quot;#LDS#Question&quot;)" ScriptItemUID="ATTLabel2" />
+                                <Label Text="select top 1  displayvalue(Reasonhead)&#xD;&#xA;from AttestationHistory where DecisionType = 'Query' and UID_AttestationCase = (select current UID_AttestationCase from AttestationCase) order by datehead desc&#xD;&#xA;" ScriptItemUID="ATTLabel1" />
+                              </LayoutPanel>
+                              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ATTControlRef6">
+                                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ATTVirtualFunctionMapping16">
+                                  <ColumnList ScriptItemUID="ATTColumnList3">
+                                    <SingleColumn DataColumn="Notice" ColumnComponentEdit="VI_Edit_TextLong" ScriptItemUID="ATTSingleColumn3" />
+                                  </ColumnList>
+                                </VirtualFunctionMapping>
+                                <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="ATTVirtualTableMapping4" />
+                              </ControlReferenceContainer>
+                            </Container>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="ATTContainer2">
+                            <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="ATTButton3">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="ATTHtmlAttribute2" />
+                              </HtmlAttributes>
+                              <ServerActionCall ScriptItemUID="ATTServerActionCall3">
+                                <ActionOnControl ActionType="PerformValidation" />
+                                <ActionSequence ItemUID="Input OK" ScriptItemUID="ATTAction5">
+                                  <Method DataTable="AttestationCase" Method="AnswerFromPerson" WhereClause="UID_AttestationCase = (select current UID_AttestationCase from AttestationCase)">
+                                    <MethodParameter Name="'strUID_Person'" Value="select uid_person from user" />
+                                    <MethodParameter Name="'strAnswer'" Value="select Notice from Vars" />
+                                  </Method>
+                                  <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="ATTUpdate1" />
+                                  <LoadTable DataTable="AttestationCase" ScriptItemUID="ATTLoadTable2">
+                                    <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType3" />
+                                  </LoadTable>
+                                  <ActionOnControl />
+                                  <CallAction ActionID="UpdateOpenItems" ScriptItemUID="ATTCall3" />
+                                  <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="ATTCall2">
+                                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your answer has been submitted.&quot;)" ScriptItemUID="ATTVirtualFunctionMapping6" />
+                                    <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="ATTVirtualFunctionMapping3" />
+                                  </CallAction>
+                                </ActionSequence>
+                              </ServerActionCall>
+                            </Button>
+                            <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" AssociatedWithEscapeKey="true" ScriptItemUID="ATTButton2">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="ATTHtmlAttribute1" />
+                              </HtmlAttributes>
+                              <ServerActionCall ScriptItemUID="ATTServerActionCall2">
+                                <ActionOnControl />
+                              </ServerActionCall>
+                            </Button>
+                          </Container>
+                        </VirtualControlMapping>
+                      </CallAction>
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+              </ControlList>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping2" ID="HideHistory()" Value="true" />
+            <VirtualControlMapping ContainerType="Container" VirtualControl="AdditionalControlsColumn1">
+              <Container ScriptItemUID="ATTContainer6">
+                <Label Text="select top 1 DateHead + ' - ' + displayvalue(DisplayPersonHead) + ' - ' + displayvalue(Reasonhead)&#xD;&#xA;from AttestationHistory where DecisionType = 'Query' and UID_AttestationCase = (select current UID_AttestationCase from AttestationCase) order by datehead desc&#xD;&#xA;" ScriptItemUID="ATTLabel4" />
+              </Container>
+            </VirtualControlMapping>
+          </ControlReferenceContainer>
+        </Container>
+        <Container ItemUID="no open attestation questions" ScriptItemUID="ATTContainer1" Condition="0 = select count() from AttestationCase">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ATTControlRef1">
+            <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#There are no pending approval inquiries.')" ScriptItemUID="ATTVirtualFunctionMapping1" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

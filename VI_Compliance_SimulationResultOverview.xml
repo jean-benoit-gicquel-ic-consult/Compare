@@ -1,0 +1,152 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="RAibPEJqu9V6ZuB3VszcpA==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Compliance_SimulationResultOverview" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action3" />
+      <Container ScriptItemUID="Container1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container3">
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="ComplianceCheckSimple" ScriptItemUID="GridBand1" DisplayHeader="Always" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="pkselected" WhereClause="ComplianceCheckSimpleFilter()">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn ScriptItemUID="GridColumn2">
+                    <GridColumnHeader ScriptItemUID="wctl3">
+                      <Label Text="translate(&quot;#LDS#Permission&quot;)" ScriptItemUID="Label4" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell3">
+                      <Label Text="select current Display from ComplianceCheckSimple" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from ComplianceCheckSimple select current getobjectkeytable(dbobjectkey)" />
+                        </HtmlAttributes>
+                      </Label>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumnSimple ScriptItemUID="Column8" Column="UID_ComplianceRule" />
+                  <GridColumnSimple ScriptItemUID="Column3" Column="UID_Person" Condition="ShowPerson()" />
+                  <ControlReferenceGridColumnGroup ID="VI_Compliance_GridColumn_RuleSeverity" DataTable="ComplianceRule" ScriptItemUID="wctl1">
+                    <VirtualTableMapping VirtualTable="Object" DataTable="ComplianceCheckSimple" ScriptItemUID="VirtualTableMapping1" />
+                  </ControlReferenceGridColumnGroup>
+                </GridBand>
+              </Grid>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container2">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="ComplianceCheckSimple" WhereClause="primarykey()= ( select pkselected from vars)">
+                <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_Secondary'">
+                  <TabPage ScriptItemUID="TabPage2" ItemUID="Rule violation">
+                    <ControlsHeader ScriptItemUID="Container6">
+                      <Label Text="translate(&quot;#LDS#Entitlement&quot;)" ScriptItemUID="Label3" />
+                    </ControlsHeader>
+                    <ControlsBody ScriptItemUID="Container5">
+                      <Container ScriptItemUID="Container4" ItemUID="ORG VIOLATION" Condition="from compliancechecksimple select current violationtype=&quot;Org&quot;" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-message imx-message-warning&quot;" />
+                        </HtmlAttributes>
+                        <Label Text="translate(&quot;#LDS#Assigning this permission will cause the role to become non-compliant.&quot;)" ScriptItemUID="Label6" />
+                      </Container>
+                      <Container ScriptItemUID="Container7" ItemUID="IsNoEffectivePerson setting" Condition="from compliancechecksimple select current isnoeffectiveperson" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute5" Value="&quot;imx-message imx-message-info&quot;" />
+                        </HtmlAttributes>
+                        <Label Text="translate(&quot;#LDS#The role inheritance for employees is currently disabled for this role.&quot;)" ScriptItemUID="Label8" />
+                      </Container>
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="ComplianceCheckSimpleObjects" WhereClause="xobjectkey = ( select current dbobjectkey from compliancechecksimple)">
+                        <LinkContainer ScriptItemUID="LinkContainer1">
+                          <ControlList ScriptItemUID="ControlList2">
+                            <Label Text="select current DataCaptionSingle(getobjectkeytable(dbobjectkey)) from ComplianceCheckSimple&#xD;&#xA;+ &quot;: &quot; +&#xD;&#xA;select top 1 Display from ComplianceCheckSimple where primarykey()= ( select pkselected from vars)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from ComplianceCheckSimple select current getobjectkeytable(dbobjectkey)" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                          <ServerActionCall ScriptItemUID="ServerActionCall1">
+                            <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                              <RedirectParameter Name="'ObjectKey'" Value="from ComplianceCheckSimple select current dbobjectkey" />
+                            </Redirect>
+                          </ServerActionCall>
+                        </LinkContainer>
+                        <ObjectSwitchContainer ScriptItemUID="TableSwitchContainer2" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, select current dbtable() from compliancechecksimpleobjects))" ActionType="ObjectView">
+                          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+                          <VirtualTableMapping DataTable="ComplianceCheckSimpleObjects" VirtualTable="SourceObject" ScriptItemUID="VirtualTableMapping2" />
+                        </ObjectSwitchContainer>
+                      </ContainerTemplate>
+                    </ControlsBody>
+                  </TabPage>
+                  <TabPage ScriptItemUID="TabPage1" ItemUID="Rule">
+                    <ControlsHeader ScriptItemUID="Container9">
+                      <Label Text="datacaptionsingle(&quot;ComplianceRule&quot;)" ScriptItemUID="Label2" />
+                    </ControlsHeader>
+                    <ControlsBody ScriptItemUID="Container8">
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="ComplianceRule" WhereClause="UID_ComplianceRule = ( select current UID_ComplianceRule from ComplianceCheckSimple)">
+                        <LinkContainer ScriptItemUID="LinkContainer2">
+                          <ControlList ScriptItemUID="ControlList3">
+                            <Label Text="select DataCaptionSingle(&quot;ComplianceRule&quot;)&#xD;&#xA;+ &quot;: &quot; +&#xD;&#xA;select current Display() from ComplianceRule" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from ComplianceRule select current getobjectkeytable(xobjectkey)" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                          <ServerActionCall ScriptItemUID="ServerActionCall2">
+                            <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                              <RedirectParameter Name="'ObjectKey'" Value="from ComplianceRule select current XObjectKey" />
+                            </Redirect>
+                          </ServerActionCall>
+                        </LinkContainer>
+                        <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;ComplianceRule&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                          <VirtualTableMapping VirtualTable="SourceObject" DataTable="ComplianceRule" ScriptItemUID="VirtualTableMapping3" />
+                        </ObjectSwitchContainer>
+                      </ContainerTemplate>
+                    </ControlsBody>
+                  </TabPage>
+                </Tab>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList1">
+                <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef1">
+                  <VirtualFunctionMapping ID="Value1()" Value="select top 1 Display from ComplianceCheckSimple where primarykey()= ( select pkselected from vars)" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="Caption1()" Value="translate(&quot;#LDS#Permission&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                </ControlReferenceControlList>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="pkselected" DataType="System.String" ScriptItemUID="Column5" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ComplianceCheckSimpleObjects" ScriptItemUID="VirtualTable1" TriggerUpdates="Never">
+        <VirtualColumn Name="SourceKey" DataType="System.String" />
+        <Column Name="XObjectKey" DataType="System.String" Expression="from ComplianceCheckSimpleObjects select current GetObjectKey()" DataSource="Expression" ScriptItemUID="Column4" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceCheckSimple" ScriptItemUID="VirtualTable2" TriggerUpdates="Never">
+        <VirtualColumn Name="UID_ComplianceRule" DataType="System.String" />
+        <VirtualColumn Name="DBObjectKey" DataType="System.String" />
+        <VirtualColumn Name="UID_Person" DataType="System.String" />
+        <Column Name="Display" DataType="System.String" ScriptItemUID="Column1" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;-- get the permission display&#xD;&#xA;from compliancechecksimpleobjects select top 1 displaylong() where xobjectkey=(select current dbobjectkey from compliancechecksimple),&#xD;&#xA;&#xD;&#xA;-- get the rule display&#xD;&#xA;from compliancerule select top 1 display() where uid_compliancerule = ( select current uid_compliancerule from compliancechecksimple))" />
+        <Column Name="RiskIndex" DataType="System.Double" ScriptItemUID="Column6" DataSource="Expression" Expression="from compliancerule select top 1 riskindex where uid_compliancerule = ( select current uid_compliancerule from compliancechecksimple)" Caption="datacaption(&quot;ComplianceRule&quot;, &quot;RiskIndex&quot;)" />
+        <Column Name="RiskIndexReduced" DataType="System.Double" ScriptItemUID="Column7" DataSource="Expression" Expression="from compliancerule select top 1 RiskIndexReduced where uid_compliancerule = ( select current uid_compliancerule from compliancechecksimple)" Caption="datacaption(&quot;ComplianceRule&quot;, &quot;RiskIndexReduced&quot;)" />
+        <VirtualColumn Name="ViolationType" DataType="System.String" />
+        <VirtualColumn Name="IsNoEffectivePerson" DataType="System.Boolean" TriggerUpdates="Never" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceRule" Class="ComplianceRule" ScriptItemUID="VirtualTable3" />
+      <VirtualFunction Signature="ShowBandHeader()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ComplianceCheckSimpleFilter()" DataType="System.Boolean" FilterForTable="ComplianceCheckSimple" DefaultValue="true" />
+      <VirtualFunction Signature="ShowPerson()" DataType="System.Boolean" TriggerUpdates="Never" DefaultValue="true" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

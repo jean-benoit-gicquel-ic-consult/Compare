@@ -1,0 +1,28 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="Dr/gLPBSWzS4wuO2FREumA==">
+  <GlobalControl ID="VI_Compliance_RuleSeverityIndicator" MetamodelVersion="2014-01-04" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_ProgressBar" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="Progress()" Value="from Object select current EditColumn" />
+          <VirtualFunctionMapping ID="Label()" Value="from Object select current NumFormat(EditColumn,'0.00')" />
+          <VirtualFunctionMapping ID="WarningOnHighValues()" Value="true" />
+          <VirtualFunctionMapping ID="Tooltip()" Value="IsNullOrEmpty(UseCaption(),datacaption(Object, EditColumn))+&quot;: &quot;+(select current NumFormat(EditColumn,'0.00') from Object)" />
+        </ControlReferenceContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="Object" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="EditColumn" DataType="System.Double" />
+      </VirtualTable>
+      <VirtualFunction Signature="UseCaption()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,38 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectEdit_Hardware" MigrationNotes="DMLREPLACE;" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Container ItemUID="Hardware - Fields" ScriptItemUID="Container5">
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef3">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_PC&quot;))" ScriptItemUID="ExpressionColumnListPC" Condition="&quot;PC&quot; = UID_HardwareType()" />
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_SRV&quot;))" ScriptItemUID="ExpressionColumnListSRV" Condition="&quot;SRV&quot; = UID_HardwareType()" />
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_MP&quot;))" ScriptItemUID="ExpressionColumnListMP" Condition="&quot;MP&quot; = UID_HardwareType()" />
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_TAB&quot;))" ScriptItemUID="ExpressionColumnListTAB" Condition="&quot;TAB&quot; = UID_HardwareType()" />
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_PR&quot;))" ScriptItemUID="ExpressionColumnListPR" Condition="&quot;PR&quot; = UID_HardwareType()" />
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_MO&quot;))" ScriptItemUID="ExpressionColumnListMO" Condition="&quot;MO&quot; = UID_HardwareType()" />
+                <ExpressionColumnList ColumnList="getconfig(format(&quot;VI_Hardware_Fields_Default&quot;))" ScriptItemUID="ExpressionColumnListDefault" Condition="not(UID_HardwareType() in (&quot;PC&quot;,&quot;SRV&quot;,&quot;MP&quot;,&quot;PR&quot;,&quot;MO&quot;,&quot;TAB&quot;))" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping3" />
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping2" />
+          </ControlReferenceContainer>
+        </Container>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="UID_HardwareType()" Expression="SingleProperty(&quot;HardwareType&quot;,&quot;Ident_HardwareBasicType&quot;,SqlCompareUid(&quot;UID_HardwareType&quot;,from edittable select current UID_HardwareType))" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" Class="Hardware" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

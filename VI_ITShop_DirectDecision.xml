@@ -1,0 +1,253 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_DirectDecision" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action7" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Update DataTable="Container" DataColumn="ReasonText" ScriptItemUID="Update1" />
+        <Delete DataTable="DirectSteps" ScriptItemUID="Delete1" />
+        <FillTable DataTable="DirectSteps" DataColumn="DirectStep" Expression="from QERWorkingStep select split(DirectSteps, char(7), false) where trim(DirectSteps) &lt;&gt; '0' and &#xD;&#xA;   UID_QERWorkingStep in (&#xD;&#xA;      from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (&#xD;&#xA;	     from PersonWantsOrg select current UID_PersonWantsOrg&#xD;&#xA;      )&#xD;&#xA;)" ScriptItemUID="FillTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </FillTable>
+        <Delete DataTable="DirectSteps" WhereClause="DirectStep = 0" ScriptItemUID="Delete2" />
+        <Update DataTable="DirectSteps" DataColumn="DirectStep" Value="Convert(DirectStep,&quot;System.Int32&quot;)&#xD;&#xA;+&#xD;&#xA;from PersonWantsOrg select current Convert(isnull(DecisionLevel,0),&quot;System.Int32&quot;)" ScriptItemUID="Update2" />
+        <ActionSequence Condition="0 &lt; (from DirectSteps select count())" ScriptItemUID="Action2">
+          <LoadTable DataTable="WorkingStep" WhereClause="if(DBTable(PersonWantsOrg) = 'AttestationCase') then(&#xD;&#xA;format(&quot;UID_QERWorkingStep in (select BACK.UID_QERWorkingStep from AttestationHelper PHP &#xD;&#xA;join AttestationHelper BACK on BACK.UID_AttestationCase = PHP.UID_AttestationCase&#xD;&#xA;where &#xD;&#xA;PHP.UID_AttestationCase = '{1}' and PHP.UID_AttestationHelper = '{2}' and BACK.UID_AttestationHelper &lt;&gt; '{2}' and BACK.LevelNumber in ({0}))&quot;,&#xD;&#xA;concat( select distinct directstep from directsteps, ', ' ),&#xD;&#xA;from PersonWantsOrg select current UID_PersonWantsOrg,&#xD;&#xA;from PWOHelperPWO select UID_PWOHelperPWO where UID_PersonWantsOrg = (&#xD;&#xA;   from PersonWantsOrg select current UID_PersonWantsOrg&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;format(&quot;UID_QERWorkingStep in (select BACK.UID_QERWorkingStep from pwohelperpwo PHP &#xD;&#xA;join pwohelperpwo BACK on BACK.uid_personwantsorg = PHP.uid_personwantsorg&#xD;&#xA;where &#xD;&#xA;PHP.uid_personwantsorg = '{1}' and PHP.uid_pwohelperpwo in ({2}) and BACK.uid_pwohelperpwo not in({2}) and BACK.LevelNumber in ({0}))&quot;,&#xD;&#xA;concat( select distinct directstep from directsteps, ', ' ),&#xD;&#xA;from PersonWantsOrg select current UID_PersonWantsOrg,&#xD;&#xA;listselect(PWOHelperPWO,UID_PWOHelperPWO,UID_PersonWantsOrg in (from PersonWantsOrg select current UID_PersonWantsOrg))&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Reroute approval&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="Text()" Value="Title()" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceContainer>
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="WorkingStepView" ScriptItemUID="GridBand1">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                    <ControlList ScriptItemUID="ControlList1">
+                      <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                          <ControlList ScriptItemUID="ControlList7">
+                            <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-QERWorkingStep&quot;" />
+                              </HtmlAttributes>
+                              <Label Text="from WorkingStep select Top 1 IsNullOrEmpty(displayvalue(LevelDisplay),DataCaption(&quot;QERWorkingStep&quot;,&quot;LevelDisplay&quot;)) where LevelNumber = (from WorkingStepView select current LevelNumber)" ScriptItemUID="Label9" />
+                            </Container>
+                          </ControlList>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                          <ControlList ScriptItemUID="ControlList8">
+                            <ControlReferenceControlList ID="Col_Button" ScriptItemUID="ControlRef6" />
+                          </ControlList>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                          <ControlList ScriptItemUID="ControlList9">
+                            <LayoutPanel ScriptItemUID="LayoutPanel2">
+                              <Container ScriptItemUID="Container7">
+                                <Label Text="DataCaption(&quot;PWODecisionStep&quot;,&quot;Ident_PWODecisionStep&quot;)" ScriptItemUID="Label8" />
+                              </Container>
+                              <ControlReferenceControlList ID="Col_Ident_PWODecisionStep" ScriptItemUID="ControlRef2X" />
+                            </LayoutPanel>
+                          </ControlList>
+                        </VirtualControlMapping>
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </GridBandListView>
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn ScriptItemUID="Column5">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Label Text="DataCaption(&quot;PWODecisionStep&quot;,&quot;LevelDisplay&quot;)" ScriptItemUID="Label1" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label Text="from WorkingStep select Top 1 IsNullOrEmpty(displayvalue(LevelDisplay),DataCaption(&quot;QERWorkingStep&quot;,&quot;LevelDisplay&quot;)) where LevelNumber = (from WorkingStepView select current LevelNumber)" ScriptItemUID="Label2" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn ScriptItemUID="Column6">
+                    <GridColumnHeader ScriptItemUID="wctl2">
+                      <Container ScriptItemUID="Container3">
+                        <Label Text="DataCaption(&quot;PWODecisionStep&quot;,&quot;Ident_PWODecisionStep&quot;)" ScriptItemUID="Label3" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell2">
+                      <ControlReferenceControlList ID="Col_Ident_PWODecisionStep" ScriptItemUID="ControlRef5" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn Width="'220px'" ScriptItemUID="Column7">
+                    <GridColumnHeader ScriptItemUID="wctl3">
+                      <Label Text="translate(&quot;#LDS#Reroute approval&quot;)" ScriptItemUID="Label5" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell3">
+                      <ControlReferenceControlList ID="Col_Button" ScriptItemUID="ControlRef3" />
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUID="Buttonpanel" ScriptItemUID="Container14">
+              <Button Text="translate('#LDS#Cancel')" ItemUID="Default Button" ScriptItemUID="Button5" AssociatedWithEscapeKey="true" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall6">
+                  <ActionOnControl />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="TableName()" Value="DBTable(PersonWantsOrg)" ScriptItemUID="VirtualFunctionMapping9" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="DirectSteps" ScriptItemUID="DataTableCustom1">
+          <Column Name="DirectStep" DataType="System.Int32" ScriptItemUID="Column1" />
+        </DataTableCustom>
+        <DataTableDbObject Class="QERWorkingStep" Table="WorkingStep" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ReasonText" ScriptItemUID="Column2" DataType="System.String" />
+        </DataTableSingleRow>
+        <DataTableDbObject Table="PWO" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action9" />
+        </DataTableDbObject>
+        <DataTableView Table="WorkingStepView" PrimaryKeyColumn="PK" ViewExpression="from WorkingStep select distinct LevelNumber" ScriptItemUID="DataTableView1">
+          <Column Name="LevelNumber" DataType="System.Int32" ScriptItemUID="Column3" />
+          <Column Name="PK" ScriptItemUID="Column4" DataType="System.String" />
+        </DataTableView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Col_Ident_PWODecisionStep">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList2">
+              <ContainerTemplate DataTable="WorkingStep" WhereClause="LevelNumber = (from WorkingStepView select current LevelNumber)" ScriptItemUID="ContainerTemplate1">
+                <Container ScriptItemUID="Container4">
+                  <Label Text="from WorkingStep select current displayvalue(Ident_PWODecisionStep)" Action="Redirect" ScriptItemUID="Label4">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="From WorkingStep select current Display()" ScriptItemUID="VirtualFunctionMapping3" />
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="Container5">
+                            <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;QERWorkingStep&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                              <VirtualTableMapping VirtualTable="SourceObject" DataTable="WorkingStep" ScriptItemUID="VirtualTableMapping1" />
+                            </ObjectSwitchContainer>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container6">
+                            <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef2" />
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="TableName()" Value="&quot;QERWorkingStep&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Label>
+                </Container>
+              </ContainerTemplate>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="WorkingStepView" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="Col_Button">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList3">
+              <Button Text="translate(&quot;#LDS#Reroute approval&quot;)" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button2">
+                <ServerActionCall ScriptItemUID="ServerActionCall3">
+                  <ActionSequence ScriptItemUID="Action3">
+                    <CallAction ActionID="VI_Popup" ScriptItemUID="Call3">
+                      <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                        <Container ScriptItemUID="Container8">
+                          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container9">
+                            <Label Text="translate(&quot;#LDS#Are you sure that you want to reroute the approval?&quot;)" ScriptItemUID="Label6" />
+                          </Container>
+                          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container10">
+                            <LayoutPanel ScriptItemUID="LayoutPanel1">
+                              <FormItemLabel DataTable="Container" DataColumn="ReasonText" ScriptItemUID="FormItemLabel1">
+                                <Label Text="translate(&quot;#LDS#Reason for rerouting&quot;)" ScriptItemUID="Label7" />
+                              </FormItemLabel>
+                              <TextBox DataTable="Container" DataColumn="ReasonText" Rows="3" ScriptItemUID="TextBox1" />
+                            </LayoutPanel>
+                          </Container>
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                        <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container13">
+                          <Button Text="translate(&quot;#LDS#Reroute approval&quot;)" ScriptItemUID="Button3" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="Button3title" Value="translate(&quot;#LDS#Reject last decision&quot;)" />
+                            </HtmlAttributes>
+                            <ServerActionCall ScriptItemUID="ServerActionCall4">
+                              <ActionSequence ScriptItemUID="Action4">
+                                <ActionSequence Condition="DBTable(PersonWantsOrg) = 'PersonWantsOrg'" ScriptItemUID="Action5">
+                                  <LoadTable DataTable="PWO" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from PersonWantsOrg select current XObjectKey)" ScriptItemUID="LoadTable2">
+                                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+                                  </LoadTable>
+                                  <Method DataTable="PWO" Method="DirectDecision" WhereClause="UID_PersonWantsOrg = from PersonWantsOrg select current UID_PersonWantsOrg">
+                                    <MethodParameter Name="&quot;strUID_PersonHead&quot;" Value="GetUser()" />
+                                    <MethodParameter Name="&quot;strReasonText&quot;" Value="from Container select isnull(ReasonText,&quot;&quot;)" />
+                                    <MethodParameter Name="&quot;iOffset&quot;" Value="Convert((from WorkingStepView select current Convert(LevelNumber,&quot;System.Int32&quot;)) - (from PersonWantsOrg select current Convert(isnull(DecisionLevel,0),&quot;System.Int32&quot;)),&quot;System.Int32&quot;)" />
+                                  </Method>
+                                </ActionSequence>
+                                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
+                                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The decision has been successfully saved.&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                                  <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping6" />
+                                </CallAction>
+                                <CodeLiteral ScriptItemUID="CodeLiteral1">// invalidate tablestore --&gt; reload data 
+DataContext.PersonWantsOrg_Current.Row.Table.TableStore.Invalidate();
+
+// close popups
+int y = _Form.PopupHost.OpenedPopups.Count();
+for (int i = 0; i &lt; y; i++)
+{
+    _Form.PopupHost.ClosePopup();
+}</CodeLiteral>
+                              </ActionSequence>
+                            </ServerActionCall>
+                          </Button>
+                          <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" ScriptItemUID="Button4" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                            </HtmlAttributes>
+                            <ServerActionCall ScriptItemUID="ServerActionCall5">
+                              <ActionOnControl />
+                            </ServerActionCall>
+                          </Button>
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ID="PopupTitle()" Value="from WorkingStep select Top 1 IsNullOrEmpty(displayvalue(LevelDisplay),DataCaption(&quot;QERWorkingStep&quot;,&quot;LevelDisplay&quot;)) Where LevelNumber = (from WorkingStepView select Current LevelNumber)" ScriptItemUID="VirtualFunctionMapping7" />
+                      <VirtualFunctionMapping ID="TableName()" Value="&quot;QERWorkingStep&quot;" ScriptItemUID="VirtualFunctionMapping8" />
+                    </CallAction>
+                  </ActionSequence>
+                </ServerActionCall>
+              </Button>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="WorkingStepView" ScriptItemUID="DataTableCursor2" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="QERWorkingStep" Class="QERWorkingStep" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="PWOHelperPWO" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="UID_PersonWantsOrg" DataType="System.String" />
+        <VirtualColumn Name="UID_QERWorkingStep" DataType="System.String" />
+        <VirtualColumn Name="UID_PWOHelperPWO" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="UID_PersonWantsOrg" DataType="System.String" />
+        <VirtualColumn Name="DecisionLevel" DataType="System.Int32" />
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="Title()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,50 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="160">
+        <ConfigParam Key="VI_ObjectView_UNSAccount_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;UNSAccount&quot;))" DatabaseTable="UNSAccount" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_UNSGroup_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;UNSGroup&quot;))" DatabaseTable="UNSGroup" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_UNSGroupB_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;UNSGroupB&quot;))" DatabaseTable="UNSGroupB" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_TSBAccountDef_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;TSBAccountDef&quot;))" DatabaseTable="TSBAccountDef" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="160">
+        <ConfigEntry Key="VI_ObjectView_UNSAccount_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="TSBConfigEntry1">
+          <SingleColumn DataColumn="AccountName" FKWhereClause="" ScriptItemUID="TSBSingleColumn1" />
+          <SingleColumn DataColumn="cn" FKWhereClause="" ScriptItemUID="TSBSingleColumn2" />
+          <SingleColumn DataColumn="UID_Person" FKWhereClause="" ScriptItemUID="TSBSingleColumn3" />
+          <SingleColumn DataColumn="UID_TSBAccountDef" FKWhereClause="" ScriptItemUID="TSBSingleColumn4" />
+          <SingleColumn DataColumn="LastName" FKWhereClause="" ScriptItemUID="TSBSingleColumn5" />
+          <SingleColumn DataColumn="FirstName" FKWhereClause="" ScriptItemUID="TSBSingleColumn6" />
+          <SingleColumn DataColumn="AccountDisabled" FKWhereClause="" ScriptItemUID="TSBSingleColumn7" />
+          <SingleColumn DataColumn="DistinguishedName" FKWhereClause="" ScriptItemUID="TSBSingleColumn8" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_UNSGroup_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="TSBConfigEntry2">
+          <SingleColumn DataColumn="cn" FKWhereClause="" ScriptItemUID="TSBSingleColumn9" />
+          <SingleColumn DataColumn="DistinguishedName" FKWhereClause="" ScriptItemUID="TSBSingleColumn10" />
+          <SingleColumn DataColumn="DisplayName" FKWhereClause="" ScriptItemUID="TSBSingleColumn11" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="TSBSingleColumn12" />
+          <SingleColumn DataColumn="UID_UNSContainer" FKWhereClause="" ScriptItemUID="TSBSingleColumn13" />
+          <SingleColumn DataColumn="GroupType" FKWhereClause="" ScriptItemUID="TSBSingleColumn14" />
+          <SingleColumn DataColumn="UID_UNSRoot" FKWhereClause="" ScriptItemUID="TSBSingleColumn15" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_UNSGroupB_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="TSBConfigEntry3">
+          <SingleColumn DataColumn="cn" FKWhereClause="" ScriptItemUID="TSBSingleColumn16" />
+          <SingleColumn DataColumn="DistinguishedName" FKWhereClause="" ScriptItemUID="TSBSingleColumn17" />
+          <SingleColumn DataColumn="DisplayName" FKWhereClause="" ScriptItemUID="TSBSingleColumn18" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="TSBSingleColumn19" />
+          <SingleColumn DataColumn="UID_UNSContainerB" FKWhereClause="" ScriptItemUID="TSBSingleColumn20" />
+          <SingleColumn DataColumn="GroupType" FKWhereClause="" ScriptItemUID="TSBSingleColumn21" />
+          <SingleColumn DataColumn="UID_UNSRootB" FKWhereClause="" ScriptItemUID="TSBSingleColumn22" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_TSBAccountDef_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="TSBConfigEntry4">
+          <SingleColumn ScriptItemUID="TSBSingleColumn24" DataColumn="Ident_TSBAccountDef" />
+          <SingleColumn ScriptItemUID="TSBSingleColumn23" DataColumn="Description" />
+          <SingleColumn ScriptItemUID="TSBSingleColumn25" DataColumn="IsForITShop" />
+          <SingleColumn ScriptItemUID="TSBSingleColumn26" DataColumn="RiskIndex" />
+          <SingleColumn ScriptItemUID="TSBSingleColumn27" DataColumn="UID_AccProduct" />
+          <SingleColumn ScriptItemUID="TSBSingleColumn28" DataColumn="ObjectKeyTargetSystem" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

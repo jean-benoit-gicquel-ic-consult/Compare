@@ -1,0 +1,228 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6d26800e-837b-cb12-91c7-15495dae15b8">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_ChartLoadData" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
+      <ActionComponent ScriptItemUID="Action1">
+        <LoadTable DataTable="DashboardDef" RemoveDeleted="false" RevertExisting="false" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInActive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsDeactivatedByPreProcessor&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;ident_dialogdashboarddef&quot;, (from dashboardinfo select current DisplayName), &quot;string&quot;, &quot;equal&quot;, &quot;ignorecase&quot;))" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ActionSequence ScriptItemUID="Action12" Condition="select count() from dashboarddef&gt;0">
+          <ActionSequence Condition="select top 1 isadhoc from dashboarddef where ident_dialogdashboarddef = (from dashboardinfo select current DisplayName)&#xA;&#xA;and not(from dashboardinfo select current controltype = &quot;ChartValueAndTrend&quot;)&#xA;" ItemUID="Ad-hoc Dashboard -&gt; we need to load data on-demand" ScriptItemUID="Action2">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+
+var currentStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(DashboardInfo_Current.Row)).TargetObject.Ident;
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.AdHoc, currentStat).ConfigureAwait(false);
+
+if (stat==null) {
+	Logger.Warn(string.Format("Can't get statistic '{0}'", currentStat));
+} else {
+	var sFilter = new VI.DB.Statistic.StatisticsFilter();
+	sFilter.FilterClause= ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(DashboardInfo_Current.Row)).TargetObject.AdditionalWhereClause;
+
+	var values = await stat.GetValuesAsync(sFilter).ConfigureAwait(false);
+	int count = 1;
+	foreach (var value in values) {
+		var iv = new ColumnInsertValues(DashboardContent);
+		iv.Add("ElementValue",value.Value);	
+		iv.Add("ElementObjectKey", value.ElementObjectKey);
+		iv.Add("ElementOrder", count++);
+		iv.Add("UID_DialogDashboardDef", stat.Uid);
+		iv.Add("ElementName", value.Display);
+		DashboardContent.Insert(iv);
+	}
+}</CodeLiteral>
+          </ActionSequence>
+          <ActionSequence Condition="select top 1 not( isadhoc ) from dashboarddef where ident_dialogdashboarddef = (from dashboardinfo select current DisplayName)&#xD;&#xA;&#xD;&#xA;and not(from dashboardinfo select current controltype = &quot;ChartValueAndTrend&quot;)" ItemUID="Load dashboard data from pre-calculated content" ScriptItemUID="Action3">
+            <CodeLiteral ScriptItemUID="CodeLiteral3">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+var cci = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(DashboardInfo_Current.Row)).TargetObject;
+var currentStat = cci.Ident;
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.Regular, currentStat).ConfigureAwait(false);
+
+if (stat==null) {
+	Logger.Warn("Can't get statistic '{0}'", currentStat);
+} else {
+
+	var ignoreZeroValues = cci.ControlType == "ChartBar";
+	
+	var values = await stat.GetValuesAsync(null).ConfigureAwait(false);
+	int count = 0;
+	Logger.Debug("Statistics: {0}, {1} values, requested history length: {2}", currentStat, values.Length, cci.HistoryLength);
+	foreach (var value in values) {
+		
+		if (ignoreZeroValues &amp;&amp; value.Value == 0)
+			continue;
+		
+		var historyOrder = 0;
+		var iv = new ColumnInsertValues(DashboardContent);
+		iv.Add("ElementValue", value.Value);	
+		iv.Add("ElementObjectKey", value.ElementObjectKey);
+		iv.Add("ElementOrder", ++count);
+		iv.Add("UID_DialogDashboardDef", stat.Uid);
+		iv.Add("ElementName", value.Display);
+		iv.Add("ElementDate", value.MeasureDate);
+		iv.Add("HistoryNumber", historyOrder++);
+		DashboardContent.Insert(iv);
+		
+		// only load historical data (historynumber&gt;0) if we are loading a line chart
+		if (value.History != null &amp;&amp; cci.ControlType.ToLowerInvariant().StartsWith("chartline"))
+		{
+			var history = cci.HistoryLength &gt; 0 ? value.History.Take(cci.HistoryLength) : value.History;
+			Logger.Debug("Statistics: {0}, {1} values used for history", currentStat, history.Count());
+			
+			foreach (var historicValue in history)
+			{
+				if (historicValue == null)
+					continue;
+				
+				var hv = new ColumnInsertValues(DashboardContent);
+				hv.Add("ElementValue", historicValue.Value);	
+				hv.Add("ElementObjectKey", historicValue.ElementObjectKey);
+				hv.Add("ElementOrder", count);
+				hv.Add("UID_DialogDashboardDef", stat.Uid);
+				hv.Add("ElementName", historicValue.Display.Original);
+				hv.Add("ElementDate", historicValue.MeasureDate);
+				hv.Add("HistoryNumber", historyOrder++);
+				DashboardContent.Insert(hv);
+			}
+		}
+	}
+}
+ 
+</CodeLiteral>
+          </ActionSequence>
+          <ActionSequence ScriptItemUID="Action5" ItemUID="Value + Trend Dashboard" Condition="from dashboardinfo select current controltype = &quot;ChartValueAndTrend&quot;">
+            <ActionSequence ScriptItemUID="Action11" Condition="not(isnullorempty(from dashboardinfo select current dashboarddefHistoric))" ItemUID="Additional historic definition">
+              <LoadTable DataTable="historicDef" RemoveDeleted="false" RevertExisting="false" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInActive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsDeactivatedByPreProcessor&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;ident_dialogdashboarddef&quot;, (from dashboardinfo select current DashboardDefHistoric), &quot;string&quot;, &quot;equal&quot;, &quot;ignorecase&quot;))" ScriptItemUID="LoadTable2">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" LoadTypeSlim="true" />
+              </LoadTable>
+            </ActionSequence>
+            <ActionSequence ScriptItemUID="Action7" Condition="from dashboarddef select top 1 isAdhoc" ItemUID="AdHoc Daten Laden">
+              <CodeLiteral ScriptItemUID="CodeLiteral21">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+
+var historicStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(this.DashboardInfo_Current.Row)).TargetObject.DashboardDefHistoric;
+
+var oldValues = new StringDictionary&lt;VI.DB.Statistic.IStatisticValue&gt;();
+
+if (historicStat != null)
+{
+   var historicValues = await (await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.Regular, historicStat).ConfigureAwait(false))
+.GetValuesAsync(null).ConfigureAwait(false);
+
+   foreach (var historicValue in historicValues)
+   {
+	   oldValues[historicValue.ElementObjectKey] = historicValue;
+   }
+}
+
+var currentStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(this.DashboardInfo_Current.Row)).TargetObject.DisplayName;
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.AdHoc, currentStat).ConfigureAwait(false);
+
+if (stat==null) {
+	Logger.Warn(string.Format("Can't get statistic '{0}'", currentStat));
+} else {
+
+	var sFilter = new VI.DB.Statistic.StatisticsFilter();
+	sFilter.FilterClause = (((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(this.DashboardInfo_Current.Row))).TargetObject.AdditionalWhereClause;
+
+	var values = await stat.GetValuesAsync(sFilter).ConfigureAwait(false);
+	int count = 1;
+	foreach (var value in values) {
+		var iv = new ColumnInsertValues(DashboardContent);
+		iv.Add("ElementValue",value.Value);
+		iv.Add("ElementObjectKey", value.ElementObjectKey);
+		iv.Add("ElementOrder", count++);
+		iv.Add("UID_DialogDashboardDef", stat.Uid);
+		iv.Add("ElementName", value.Display.Original);
+		if (oldValues.Keys.Contains(value.ElementObjectKey))
+		{
+			var oldRow = oldValues[value.ElementObjectKey];
+			iv.Add("ElementValueHistoric", oldRow.Value);
+			iv.Add("HistoricValueDate", oldRow.MeasureDate);
+			iv.Add("HasHistoricValue", true);
+		} else 
+		{
+			iv.Add("HasHistoricValue", false);
+		}
+		DashboardContent.Insert(iv);
+	}
+}
+</CodeLiteral>
+            </ActionSequence>
+            <ActionSequence ScriptItemUID="Action8" ItemUID="Nur History Daten" Condition="not (from dashboarddef select top 1 isAdhoc)">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+
+var currentStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)(this.DashboardInfo_Current.Row)).TargetObject.DisplayName;
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.Regular, currentStat).ConfigureAwait(false);
+
+var statValues = await stat.GetValuesAsync(null).ConfigureAwait(false);
+	
+int count = 1;
+foreach (var statValue in statValues) {
+	var iv = new ColumnInsertValues(DashboardContent);
+	iv.Add("ElementValue", statValue.Value);
+	iv.Add("ElementObjectKey", statValue.ElementObjectKey);
+	iv.Add("ElementOrder", count++);
+	iv.Add("UID_DialogDashboardDef", stat.Uid);
+	iv.Add("ElementName", stat.Display.Original);
+	iv.Add("HistoryNumber", 0);
+	if (statValue.History != null &amp;&amp; statValue.History.Length &gt; 0)
+	{
+		iv.Add("ElementValueHistoric", statValue.History[0].Value);
+		iv.Add("HistoricValueDate", statValue.History[0].MeasureDate);
+		iv.Add("HasHistoricValue", true);
+	} else 
+	{
+		iv.Add("HasHistoricValue", false);
+	}
+	DashboardContent.Insert(iv);
+}
+ </CodeLiteral>
+            </ActionSequence>
+          </ActionSequence>
+          <FillTable DataTable="ReferencedObjects" Source="XObjectKey" DataTableSource="ObjectKeys" DataColumnSource="ElementObjectKey" WhereClause="" DataColumnTableName="TableName" DataColumnXObjectKey="key" ResolveMNObjects="NoResolve" ScriptItemUID="FillTable2">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+          </FillTable>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableView Table="ObjectKeys" PrimaryKeyColumn="pk" ViewExpression="from DashboardContent select distinct ElementObjectKey" ScriptItemUID="DataTableView1">
+          <Column Name="ElementObjectKey" ScriptItemUID="Column28" DataType="System.String" />
+          <Column Name="pk" ScriptItemUID="Column29" DataType="System.String" />
+        </DataTableView>
+        <DataTableDbObject Class="DialogDashBoardDef" Table="historicDef" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action9" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DashboardInfo" ElementType="VI.WebRuntime.WebControls.ChartControlInfo, VI.WebRuntime" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="DashboardContent" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="UID_DialogDashboardDef" DataType="System.String" />
+        <VirtualColumn Name="ElementOrder" DataType="System.Int32" />
+        <VirtualColumn Name="ElementObjectKey" DataType="System.String" />
+        <VirtualColumn Name="ElementValue" DataType="System.Double" />
+        <VirtualColumn Name="ElementValue100" DataType="System.Double" />
+        <VirtualColumn Name="HistoryNumber" DataType="System.Int32" />
+        <VirtualColumn Name="ElementValueHistoric" DataType="System.Double" />
+        <VirtualColumn Name="HasHistoricValue" DataType="System.Boolean" />
+        <VirtualColumn Name="HistoricValueDate" DataType="System.DateTime" />
+        <Column Name="ObjectDisplay" DataType="System.String" ScriptItemUID="Column51" DataSource="Expression" Expression="from ReferencedObjects select display() where key= (from dashboardcontent select current elementobjectkey)" />
+      </VirtualTable>
+      <VirtualTable Name="DashboardDef" Class="DialogDashBoardDef" ScriptItemUID="VirtualTable3" />
+      <VirtualTable Name="ReferencedObjects" ScriptItemUID="VirtualTable4">
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn DataType="System.String" Name="key" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

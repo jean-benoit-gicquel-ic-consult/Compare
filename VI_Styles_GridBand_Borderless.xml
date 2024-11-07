@@ -1,0 +1,13 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_GridBand_Borderless" Type="GridBand" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassNameHeaderRowAboveColumns" Value="GridRowStaticAbove" Comment="" />
+    <Property Name="CssClassNameHeaderRowBelowColumns" Value="GridRowStaticBelow" Comment="" />
+    <Property Name="CssClassNameCell" Value="GridCellSlim" Comment="" />
+    <Property Name="CssClassNameTable" Value="GridTable GridTableSlim" Comment="" />
+    <Property Name="CssClassNameRow" Value="" Comment="" />
+    <CssDocument CssName="Smaller paging margin" ScriptItemUID="CssDocument1">.GridCellSlim { border-style: none; overflow: hidden; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

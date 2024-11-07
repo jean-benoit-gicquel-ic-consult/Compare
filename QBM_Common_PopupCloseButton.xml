@@ -1,0 +1,31 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_PopupCloseButton">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Button Text="translate(&quot;#LDS#Close&quot;)" ItemUID="Default Button" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ScriptItemUID="Button9" Layout="if ( NOT MoreThanOneButton() ) then 'VI_Styles_Button_Primary' else 'VI_Styles_Button_LabelOnly'">
+          <HtmlAttributes>
+            <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute3" />
+          </HtmlAttributes>
+          <ServerActionCall ScriptItemUID="ServerActionCall18">
+            <ActionSequence ScriptItemUID="Action1" Condition="TriggerValidation()">
+              <ActionOnControl ActionType="PerformValidation" />
+            </ActionSequence>
+            <ActionOnControl />
+          </ServerActionCall>
+        </Button>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="MoreThanOneButton()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualFunction Signature="TriggerValidation()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

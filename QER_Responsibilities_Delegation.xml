@@ -1,0 +1,57 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Responsibilities_Delegation" HelpChapterUid="&quot;F5671CB6-46DC-4385-804C-4E790F513306&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="QER_Responsibilities_Delegation" NavigationTitle="translate('#LDS#Delegation')">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate('#LDS#Delegation')" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="Delegation">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Identifier()" Value="&quot;Delegation&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action5">
+                  <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Delegation" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Caption()" Value="translate('#LDS#Heading Delegation')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Image()" Value="&quot;Delegation&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate('#LDS#Shows all responsibilities that you can delegate to other employees.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container3" ItemUID="DelegationHistory">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="Identifier()" Value="&quot;DelegationHistory&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action3">
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Delegation_History" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Delegation History')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Image()" Value="&quot;cux-icon cux-icon--history&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows the history of responsibilities that you have delegated to others, and that have been delegated to you.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,9 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="525">
+        <ConfigEntry Key="Filter_ColumnEditor_Hardware.UID_HardwareVMHost" Value="sqlcompare(&quot;ISVMHost&quot;, 1,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;)" ScriptItemUID="QERConfigEntry58" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

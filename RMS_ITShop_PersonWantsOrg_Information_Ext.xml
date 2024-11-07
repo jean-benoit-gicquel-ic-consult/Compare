@@ -1,0 +1,21 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_ITShop_PersonWantsOrg_Information_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="20">
+        <TabPage ScriptItemUID="RMSTabPage1" Condition="-- does this service item correspond to a system role?&#xD;&#xA;convert({{&#xD;&#xA;var uidaccproduct = this.TableStore.GetLocalColumn(this.PersonWantsOrg, &quot;UID_AccProduct&quot;).GetValue(this.PersonWantsOrg_Current.Row);&#xD;&#xA;@return QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, uidaccproduct).Result.TableName == &quot;ESet&quot;;&#xD;&#xA;}}, &quot;System.Boolean&quot;)">
+          <ControlsHeader ScriptItemUID="RMSContainer1">
+            <Label Text="translate(&quot;#LDS#Entitlements&quot;)" ScriptItemUID="RMSLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RMSContainer2">
+            <ControlReferenceControlList ID="RMS_EntitlementList" ScriptItemUID="RMSControlRef1">
+              <VirtualFunctionMapping ID="UidAccProduct()" Value="from personwantsorg select current uid_accproduct" ScriptItemUID="RMSVirtualFunctionMapping1" />
+            </ControlReferenceControlList>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="CompilationSettings1" ObjectType="CompilationSettings" SortOrder="5">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

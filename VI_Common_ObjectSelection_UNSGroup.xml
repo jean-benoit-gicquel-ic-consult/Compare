@@ -1,0 +1,48 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Common_ObjectSelection_UNSGroup" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ContainerTemplate DataTable="LocalVars" ScriptItemUID="ContainerTemplate1">
+          <Container ScriptItemUID="Container2">
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                <ColumnList ScriptItemUID="ColumnList1">
+                  <SingleColumn DataColumn="UID_UNSContainer" ScriptItemUID="SingleColumn1" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+        </ContainerTemplate>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_UNSContainer" MaxLength="" ColumnDataSource="ForeignKey" DBTableName="&quot;unscontainer&quot;" DBColumnName="&quot;uid_unscontainer&quot;" FKWhereClause="from TargetTable select current&#xD;&#xA;if(isnullorempty(additionalwhereclause())) then &quot;&quot; else format(&quot;uid_unscontainer in ( select uid_unscontainer from unsgroup where {0})&quot;, additionalwhereclause())&#xD;&#xA;-- only select containers which will have groups relevant to the selection" Caption="datacaption(&quot;unscontainer&quot;, &quot;uid_unscontainer&quot;)" ScriptItemUID="Column1" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="NewSearch">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <Update DataTable="TargetTable" DataColumn="TargetWhereClause" WhereClause="primarykey() = select current primarykey() from targettable" Value="if('' &lt;&gt; from localvars select uid_unscontainer)then&#xD;&#xA;   sqlcompareuid(&quot;uid_unscontainer&quot;, from localvars select uid_unscontainer)" ScriptItemUID="Update1" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="LocalVars" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action3">
+            <CallAction ActionID="NewSearch" ScriptItemUID="CallAction2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_UNSContainer" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSelection" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

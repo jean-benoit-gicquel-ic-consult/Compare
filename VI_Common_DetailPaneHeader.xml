@@ -1,0 +1,58 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_DetailPaneHeader" Comment="It's the common component for the header of the detail pane that shows one or two values with their corresponding captions as labels. It is also possible to specify each cssclass for the values label.  So the detail pane header has the following layout: &quot;Caption1: Value1   Caption2: Value2&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="TagName" Value="h2" />
+            <HtmlAttribute Name="'title'" ScriptItemUID="Container1title" Value="addCaption(Caption1(),Value1()) + &quot; &quot; + Value1() + &quot;; &quot; + addCaption(Caption2(),Value2()) + &quot; &quot; + Value2() " />
+          </HtmlAttributes>
+          <Label Text="addCaption(Caption1(),Value1())" ScriptItemUID="Label1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Label1style" Value="captionStyle(Caption1(),Value1())" />
+            </HtmlAttributes>
+          </Label>
+          <Label Text="Value1()" ScriptItemUID="Label2" EnableCustomAttributes="true" UseForeignWordsTagger="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="addValueCssClass(Value1CssClass())" />
+            </HtmlAttributes>
+          </Label>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="not (isnullorempty(Caption2()) and isnullorempty(Value2()))" ItemUID="Hide Caption2 and Value2, if both are null or empty">
+              <Label Text="addCaption(Caption2(),Value2())" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Label3style" Value="captionStyle(Caption2(),Value2())" />
+                </HtmlAttributes>
+              </Label>
+              <Label Text="Value2()" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="addValueCssClass(Value2CssClass())" />
+                </HtmlAttributes>
+              </Label>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="addCaption(string caption, string value)" Expression="if (isnullorempty(caption) or isnullorempty(value))&#xD;&#xA;then ''&#xD;&#xA;else caption + ':'" DataType="System.String" ScriptItemUID="Function1" Comment="Returns the given caption if the caption and the given value are not null or empty, otherwise '' would be returned " />
+        <Function Name="addValueCssClass(string cssClass)" Expression="&quot;imx-mdc-detail-header-value &quot; + cssClass" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="captionStyle(string caption, string value)" Expression="if (isnullorempty(caption) or isnullorempty(value))&#xA;then 'display: none;'" DataType="System.String" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="Caption1()" DataType="System.String" Comment="The text showing as caption for the first value" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Caption2()" DataType="System.String" Comment="The text showing as caption for the second value" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Value1()" DataType="System.String" />
+      <VirtualFunction Signature="Value2()" DataType="System.String" />
+      <VirtualFunction Signature="Value1CssClass()" DataType="System.String" />
+      <VirtualFunction Signature="Value2CssClass()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

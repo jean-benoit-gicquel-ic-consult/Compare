@@ -1,0 +1,89 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_MultiLimitedValues" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action4" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'title'" ScriptItemUID="Container1title" Value="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Description }}" />
+        </HtmlAttributes>
+        <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <ActionSequence Condition="0 = select count() from limitedvalues" ScriptItemUID="Action2">
+              <FillTable DataTable="LimitedValues" DataColumn="" Expression="GetLimitedValues(edittable, editcolumn)" ScriptItemUID="FillTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                <InsertValue DataColumn="Index" Value="select count() from limitedvalues" />
+              </FillTable>
+              <Update DataTable="LimitedValues" DataColumn="DisplayValue" WhereClause="isnull(displayvalue,'')=''" Value="value" ScriptItemUID="Update1" />
+            </ActionSequence>
+            <Delete DataTable="ObjectAllowsValue" WhereClause="sourcekey = ( from edittable select current primarykey())" ScriptItemUID="Delete1" />
+            <FillTable DataTable="ObjectAllowsValue" DataColumn="" Expression="GetLimitedValues(edittable, editcolumn)" ScriptItemUID="FillTable2">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+              <InsertValue DataColumn="sourcekey" Value="from edittable select current PrimaryKey()" />
+              <InsertValue DataColumn="Index" Value="select count() from objectallowsvalue" />
+            </FillTable>
+            <ActionSequence Condition="from edittable select current not(isnullorempty(editcolumn))" ScriptItemUID="Action3">
+              <Delete DataTable="ObjectHasValue" ScriptItemUID="Delete2" />
+              <FillTable DataTable="ObjectHasValue" DataColumn="value" Expression="select current split(editcolumn, char(7), true) from edittable	" ScriptItemUID="FillTable3">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+              </FillTable>
+              <Update DataTable="ObjectAllowsValue" DataColumn="IsChecked" Value="true" WhereClause="-- find all values that have already been selected&#xD;&#xA;value in ( select value from objecthasvalue) and sourcekey = (from edittable select current PrimaryKey())" ScriptItemUID="Update2" />
+            </ActionSequence>
+          </Action>
+        </Activator>
+        <ContainerTemplate DataTable="ObjectAllowsValue" WhereClause="sourcekey = ( from edittable select current primarykey())" OrderBy="'Index'" ScriptItemUID="ContainerTemplate1">
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="&quot;display:inline-block; padding-right: 6px; white-space: nowrap;&quot;" />
+            </HtmlAttributes>
+            <CheckBox DataTable="ObjectAllowsValue" DataColumn="IsChecked" Text="select current displayvalue from objectallowsvalue" ScriptItemUID="CheckBox1" />
+          </Container>
+        </ContainerTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="LimitedValues" PrimaryKeyColumn="Value" ScriptItemUID="DataTableCustom1">
+          <Column Name="Value" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="Description" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="DisplayValue" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column4" />
+        </DataTableCustom>
+        <DataTableCustom Table="ObjectAllowsValue" ScriptItemUID="DataTableCustom2">
+          <Column Name="Value" ScriptItemUID="Column5" DataType="System.String" />
+          <Column Name="Description" ScriptItemUID="Column6" DataType="System.String" />
+          <Column Name="DisplayValue" ScriptItemUID="Column7" DataType="System.String" />
+          <Column Name="IsChecked" DataType="System.Boolean" ScriptItemUID="Column8" />
+          <Column Name="sourcekey" ScriptItemUID="Column9" DataType="System.String" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column10" />
+        </DataTableCustom>
+        <DataTableCustom Table="ObjectHasValue" PrimaryKeyColumn="" DisplayColumn="" ScriptItemUID="DataTableCustom3">
+          <Column Name="value" ScriptItemUID="Column11" DataType="System.String" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="WriteToObject">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <Update DataTable="EditTable" DataColumn="EditColumn" Value="concat( (select value from objectallowsvalue where (ischecked and sourcekey = ( select current primarykey() from edittable)) ), char(7))" WhereClause="primarykey() = ( select current primarykey() from edittable)" ScriptItemUID="Update3" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="ObjectAllowsValue" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action6">
+            <CallAction ActionID="WriteToObject" ScriptItemUID="Call1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsChecked" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension1">
+        <VirtualColumnExtension Name="EditColumn" DataType="System.String" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

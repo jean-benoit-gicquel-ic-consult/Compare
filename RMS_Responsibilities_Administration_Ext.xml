@@ -1,0 +1,28 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Responsibilities_Administration_Ext">
+    <Extensions>
+      <AddObject ObjectID="Case3" ObjectType="SwitchContainerCase" SortOrder="45">
+        <SwitchContainer ScriptItemUID="RMSSwitch1">
+          <SwitchContainerCase Condition="-- check PreProcessorCondition first&#xD;&#xA;IsPreProp('ESET')" ScriptItemUID="RMSCase2">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ItemUID="SystemRoles" ScriptItemUID="RMSControlRef1">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="RMSAction1">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="QER_Entitlement_Admin" ScriptItemUID="RMSRedirect1">
+                    <RedirectParameter Value="'ESet'" Name="'TableName'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="Caption()" Value="translate(&quot;#LDS#Heading System Roles&quot;)" ScriptItemUID="RMSVirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="Image()" Value="&quot;ESet&quot;" ScriptItemUID="RMSVirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="ImageType()" Value="'TableName'" ScriptItemUID="RMSVirtualFunctionMapping4" />
+              <VirtualFunctionMapping ID="ContentType()" Value="'Text'" ScriptItemUID="RMSVirtualFunctionMapping5" />
+              <VirtualFunctionMapping ID="Value()" Value="translate('#LDS#Shows all system roles.')" ScriptItemUID="RMSVirtualFunctionMapping6" />
+              <VirtualFunctionMapping ID="Identifier()" Value="&quot;SystemRolesAdmin&quot;" ScriptItemUID="RMSVirtualFunctionMapping13" />
+              <VirtualFunctionMapping ID="Size()" Value="'Overview'" ScriptItemUID="RMSVirtualFunctionMapping14" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

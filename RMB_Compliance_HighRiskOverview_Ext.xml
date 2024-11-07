@@ -1,0 +1,70 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Compliance_HighRiskOverview_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList" SortOrder="10">
+        <FunctionValue Expression="from Org select (PrimaryKey() as PK, DisplayLong() as Display,'Org' as Type, RiskIndexCalculated as RiskIndex, xobjectkey)" />
+      </AddObject>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="30">
+        <TabPage ItemUID="Org" Condition="0 &lt; select count() from org" ScriptItemUID="RMBTabPage1">
+          <ControlsHeader ScriptItemUID="RMBContainer1">
+            <Label Text="mkdesc(datacaption(&quot;Org&quot;))" ScriptItemUID="RMBLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RMBContainer3">
+            <Grid AllowExport="true" ExportTitle="mkdesc(datacaption(&quot;Org&quot;))" ScriptItemUID="RMBGrid1" ExportFileName="">
+              <GridBand DataTable="Org" OrderBy="'RiskIndexCalculated desc, Ident_Org'" ScriptItemUID="RMBGridBand1" RowSelection="Action" RowSelectionActive="">
+                <GridBandListView ScriptItemUID="RMBGridBandListView1" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="RMBServerActionCall2">
+                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="RMBRedirect2">
+                    <RedirectParameter Name="'ObjectKey'" Value="from Org  select current xobjectkey" />
+                  </Redirect>
+                </SelectionAction>
+                <GridFilters ScriptItemUID="RMBGridFilters1" />
+                <GridRows />
+                <GridColumnColumnTemplate DataTable="Org" ScriptItemUID="RMBGridColumnColumnTemplate1">
+                  <ColumnList ScriptItemUID="RMBColumnList1">
+                    <SingleColumn ScriptItemUID="RMBSingleColumn3" DataColumn="Ident_Org" />
+                    <SingleColumn DataColumn="UID_OrgRoot" ScriptItemUID="RMBSingleColumn1" />
+                    <SingleColumn DataColumn="RiskIndexCalculated" ScriptItemUID="RMBSingleColumn2" />
+                  </ColumnList>
+                  <GridColumnGroup DataTable="Org" ScriptItemUID="RMBGridColumnGroup1">
+                    <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" Width="if(DataColumnName(Org,currentcolumn) = 'RiskIndexCalculated') then &quot;150px;&quot;" ScriptItemUID="RMBColumn2">
+                      <GridColumnHeader ScriptItemUID="RMBwctl2">
+                        <Container ScriptItemUID="RMBContainer5">
+                          <Label Text="datacaption(Org, currentcolumn)" ScriptItemUID="RMBLabel4" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="RMBCell2">
+                        <Container ScriptItemUID="RMBContainer6">
+                          <Container Condition="not(from Org select current DataColumnName(Org,currentcolumn) = 'RiskIndexCalculated')" ScriptItemUID="RMBContainer7">
+                            <Label Text="select current displayvalue(currentcolumn) from Org" ScriptItemUID="RMBLabel5" />
+                          </Container>
+                          <Container Condition="from Org select current DataColumnName(Org,currentcolumn) = 'RiskIndexCalculated'" ScriptItemUID="RMBContainer8">
+                            <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="RMBControlRef1">
+                              <VirtualTableMapping VirtualTable="Object" DataTable="Org" ScriptItemUID="RMBVirtualTableMapping1">
+                                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexCalculated" />
+                              </VirtualTableMapping>
+                            </ControlReferenceContainer>
+                          </Container>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                  </GridColumnGroup>
+                </GridColumnColumnTemplate>
+              </GridBand>
+            </Grid>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="30">
+        <DataTableDbObject Class="Org" Table="Org" WhereClauseSQL="if (getsystem()=&quot;ORACLE&quot;) then&#xA;Format(&quot;UID_Org in (select UID_Org from(select UID_Org from Org where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated desc) where rownum &lt; {0})&quot;,havecount()+1, threshold())&#xA;else&#xA;Format(&quot;UID_Org in (select top {0} UID_Org from Org where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated desc)&quot;,havecount(), threshold())" ScriptItemUID="RMBDataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="RMBAction1" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Action10" ObjectType="ActionSequence" SortOrder="0">
+        <LoadTable DataTable="Org" ScriptItemUID="RMBLoadTable1">
+          <DbObjectLoadType ScriptItemUID="RMBDbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

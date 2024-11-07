@@ -1,0 +1,384 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_RolesAndEntitlements" MigrationNotes="DMLREPLACE;" RequiredDbModules="">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="VI_Roles_RolesAndEntitlements" Description="translate(&quot;#LDS#Role management&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Roles_Responsibility_QERResource" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;QERResource&quot;)" Type="SQL" DatabaseTable="QERResource" LongDescription="" />
+        <ConfigParam Key="VI_Roles_Responsibility_Department" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;Department&quot;)" Type="SQL" DatabaseTable="Department" LongDescription="" />
+        <ConfigParam Key="VI_Roles_Responsibility_ProfitCenter" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;ProfitCenter&quot;)" Type="SQL" DatabaseTable="ProfitCenter" LongDescription="" />
+        <ConfigParam Key="VI_Roles_Responsibility_Locality" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;Locality&quot;)" Type="SQL" DatabaseTable="Locality" LongDescription="" />
+        <ConfigParam Key="VI_Roles_Responsibility_AERole" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;AERole&quot;)" Type="SQL" DatabaseTable="AERole" LongDescription="" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="RoleLifecycle" ScriptItemUID="ConfigSectionDefinition2" Description="translate(&quot;#LDS#Role Lifecycle&quot;)">
+        <ConfigParam Key="Allow_Roles_Split_By_Business_Owner" Description="translate(&quot;#LDS#Allow role split by business owner&quot;)" LongDescription="" />
+        <ConfigParam Key="Allow_Roles_Split_By_Admin" Description="translate(&quot;#LDS#Allow role split by an administrator&quot;)" />
+        <ConfigParam Key="Allow_Roles_Split_Different_Organisation_Type" Description="translate(&quot;#LDS#Allow role split of different organisation types&quot;)" />
+        <ConfigParam Key="Allow_Roles_Merge_By_Business_Owner" Description="translate(&quot;#LDS#Allow role merge by business owner&quot;)" LongDescription="" />
+        <ConfigParam Key="Allow_Roles_Merge_By_Admin" Description="translate(&quot;#LDS#Allow role merge by an administrator&quot;)" />
+        <ConfigParam Key="Allow_Roles_Merge_Different_Organisation_Type" Description="translate(&quot;#LDS#Allow role merge of different organisation types&quot;)" />
+        <ConfigParam Key="Allow_Roles_Merge_Different_Role_Class" Description="translate(&quot;#LDS#Allow role merge of different role classes&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action7">
+        <ActionSequence ScriptItemUID="Action8">
+          <CallAction ActionID="Reinitialize" ScriptItemUID="Call2" />
+        </ActionSequence>
+        <ActionSequence Condition="not(isnullorempty(objectkey()))" ScriptItemUID="Action9">
+          <ForeachRow DataTable="DbObjects" ScriptItemUID="ForeachRow1">
+            <CallAction ActionID="GoToViewForm" ScriptItemUID="Call3" />
+          </ForeachRow>
+        </ActionSequence>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container6" Condition="not(HideObjectTypSelect() and NOT IsNullOrEmpty(TableNamePreSelect()))&#xD;&#xA;and&#xD;&#xA;((1 &lt; from LimitedValues select Count()) AND NOT IsNullOrEmpty(TableNamePreSelect()))">
+          <LayoutPanel ScriptItemUID="LayoutPanel1">
+            <FormItemLabel DataTable="Vars" DataColumn="TableName" ScriptItemUID="FormItemLabel5">
+              <Label Text="DataCaption(vars,TableName)" ScriptItemUID="Label12" />
+            </FormItemLabel>
+            <ControlReferenceContainer ID="VI_Edit_ComboBox" ScriptItemUID="ControlRef1">
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping7">
+                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="TableName" />
+              </VirtualTableMapping>
+              <VirtualTableMapping VirtualTable="SourceTable" DataTable="LimitedValues" ScriptItemUID="VirtualTableMapping6">
+                <VirtualColumnMapping VirtualColumn="SourceColumn" DataColumn="Value" />
+                <VirtualColumnMapping VirtualColumn="SourceDisplay" DataColumn="DisplayValue" />
+              </VirtualTableMapping>
+            </ControlReferenceContainer>
+          </LayoutPanel>
+        </Container>
+        <Container ScriptItemUID="Container5" RefreshTriggerExpression="from Vars select TableName" Condition="not(IsNullOrEmpty(TableName()))">
+          <Container ScriptItemUID="Container4" Condition="area()=&quot;SystemEntitlements&quot;" ItemUID="SystemEntitlements">
+            <Grid ScriptItemUID="Grid2" AllowExport="true" ExportFileName="" ExportTitle="">
+              <GridBand DataTable="DbObjects" ScriptItemUID="GridBand2" DataSourceType="Database" DbOrderBy="" DBWhereClause="" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Action">
+                <HtmlAttributes>
+                  <Property Name="ApplyFilledHeight" Value="true" />
+                </HtmlAttributes>
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="ServerActionCall3">
+                  <CallAction ActionID="GoToViewForm" ScriptItemUID="Call1" />
+                </SelectionAction>
+                <GridFilters ScriptItemUID="GridFilters2" />
+                <GridRows />
+                <GridColumn SortColumn="__LongDisplay" AutoFilterColumn="__LongDisplay" ScriptItemUID="Column3">
+                  <GridColumnHeader ScriptItemUID="wctl1">
+                    <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label3" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell1">
+                    <Label Text="from DbObjects select current IsNullOrEmpty(DisplayLong(),Display())" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+(TableName())" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+            </Grid>
+          </Container>
+          <Container ScriptItemUID="Container2" Condition="not(area()=&quot;SystemEntitlements&quot;)" ItemUID="AllOther">
+            <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+              <GridBand DataTable="DbObjects" ScriptItemUID="GridBand1" DataSourceType="Database" DbOrderBy="" DBWhereClause="" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Action">
+                <HtmlAttributes>
+                  <Property Name="ApplyFilledHeight" Value="true" />
+                </HtmlAttributes>
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="ServerActionCall1">
+                  <CallAction ActionID="GoToViewForm" ScriptItemUID="Call7" />
+                </SelectionAction>
+                <GridFilters ScriptItemUID="GridFilters1" />
+                <GridRows />
+                <GridColumn SortColumn="__Display" AutoFilterColumn="__Display" ScriptItemUID="Column5" Condition="ShortDisplay()">
+                  <GridColumnHeader ScriptItemUID="wctl4">
+                    <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label8" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell4">
+                    <Label Text="from DbObjects select current Display()" ScriptItemUID="Label9" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+(TableName())" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Cell>
+                </GridColumn>
+                <GridColumn SortColumn="__LongDisplay" AutoFilterColumn="__LongDisplay" ScriptItemUID="Column4" Condition="not(ShortDisplay())">
+                  <GridColumnHeader ScriptItemUID="wctl3">
+                    <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label5" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell3">
+                    <Label Text="from DbObjects select current DisplayLong()" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+(TableName())" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+            </Grid>
+          </Container>
+        </Container>
+        <Container ItemUID="Buttons for adding new ownership" ScriptItemUID="Container7" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+          </HtmlAttributes>
+          <Container Condition="if(HideObjectTypSelect()) then&#xD;&#xA;  CanInsert ( &quot;QERResource&quot; ) and area()=&quot;OtherServices&quot; AND TableNamePreSelect()='QERResource'&#xD;&#xA;else &#xD;&#xA;  CanInsert ( &quot;QERResource&quot; ) and area()=&quot;OtherServices&quot;" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container11" ItemUID="add new qerresorce">
+            <Button Text="translate(&quot;#LDS#New resource&quot;)" ScriptItemUID="Button4" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ServerActionCall6">
+                <Delete DataTable="QERResourceNew" ScriptItemUID="Delete1" />
+                <Insert DataTable="QERResourceNew" ScriptItemUID="Insert4">
+                  <ActionSequence ScriptItemUID="Action5" />
+                </Insert>
+                <Redirect Target="FormModule" ScriptItemUID="Redirect4">
+                  <RedirectFormModule ID="NewQERResource" ScriptItemUID="RedirectForm4" />
+                </Redirect>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container Condition="area()=&quot;Organization&quot;" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container3" ItemUID="restore org">
+            <Button Text="translate(&quot;#LDS#Restore a deleted role&quot;)" ScriptItemUID="Button3" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ServerActionCall4">
+                <CallAction ScriptItemUID="Call6" ActionID="QER_Roles_Restore">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="TableNames()" Value="&quot;Department,Locality,ProfitCenter&quot;" />
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="HeaderControls">
+                    <ControlList ScriptItemUID="ControlList4">
+                      <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#You can use this wizard to restore a deleted role, if you were the owner of the deleted role.&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="p" />
+                        </HtmlAttributes>
+                      </Label>
+                    </ControlList>
+                  </VirtualControlMapping>
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container Layout="'VI_Styles_Container_Inline'" Condition="CanInsert ( &quot;AERole&quot; ) and area()=&quot;AERole&quot;" ScriptItemUID="Container12" ItemUID="add aerole">
+            <Button Text="translate(&quot;#LDS#New application role&quot;)" ScriptItemUID="Button5" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ServerActionCall7">
+                <Delete DataTable="AERoleNew" ScriptItemUID="Delete4" />
+                <Insert DataTable="AERoleNew" ScriptItemUID="Insert6">
+                  <ActionSequence ScriptItemUID="Action15" />
+                  <InsertValue DataColumn="UID_PersonHead" Value="getuser()" />
+                </Insert>
+                <Redirect Target="FormModule" ScriptItemUID="Redirect5">
+                  <RedirectFormModule ID="NewAERole" ScriptItemUID="RedirectForm1" />
+                </Redirect>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="WhereClause" ScriptItemUID="Column1" />
+          <Column Name="UID_ObjectSelected" ScriptItemUID="Column34" DataType="System.String" />
+          <Column DataType="System.String" Name="TableName" ScriptItemUID="Column2" Caption="translate(&quot;#LDS#Type&quot;)" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="QERResource" Table="QERResourceNew" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action11" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="DbObjects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="TableName()" TriggerUpdates="Updates" WhereClauseSQL="WhereClauseTable()">
+          <ActionSequence ScriptItemUID="Action2" />
+        </DataTableDbObject>
+        <DataTableCustom Table="LimitedValues" PrimaryKeyColumn="Value" ScriptItemUID="DataTableCustom2" Comment="Limited Values" DisplayColumn="DisplayValue">
+          <Column Name="Value" ScriptItemUID="Column22" DataType="System.String" />
+          <Column Name="DisplayValue" ScriptItemUID="Column32" DataType="System.String" DisplayValueExpression="DataCaption(from LimitedValues select current Value)" />
+        </DataTableCustom>
+        <DataTableDbObject Class="AERole" Table="AERoleNew" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action14" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Reinitialize">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action22">
+              <Delete DataTable="LimitedValues" ScriptItemUID="Delete3" />
+              <Delete DataTable="DbObjects" ScriptItemUID="Delete2" />
+              <ActionSequence Condition="area() = &quot;Organization&quot;" ItemUID="ORGANIZATION" ScriptItemUID="Action23">
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update1" Value="&quot;ProfitCenter&quot;" />
+                <ActionSequence ScriptItemUID="Action16" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert3" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action6" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update3" Value="&quot;Department&quot;" />
+                <ActionSequence ScriptItemUID="Action18" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert9" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action19" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update4" Value="&quot;Locality&quot;" />
+                <ActionSequence ScriptItemUID="Action20" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert10" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action21" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+              </ActionSequence>
+              <ActionSequence Condition="area() = &quot;AERole&quot;" ItemUID="AEROLE" ScriptItemUID="Action10">
+                <Insert ScriptItemUID="Insert5" DataTable="LimitedValues">
+                  <ActionSequence ScriptItemUID="Action12" />
+                  <InsertValue Value="&quot;AERole&quot;" DataColumn="Value" />
+                </Insert>
+              </ActionSequence>
+              <ActionSequence Condition="area() = &quot;OtherServices&quot;" ItemUID="OTHERSERVICES" ScriptItemUID="Action24">
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update5" Value="&quot;QERResource&quot;" />
+                <ActionSequence ScriptItemUID="Action3" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert1" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action4" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update6" Value="&quot;QERReuse&quot;" />
+                <ActionSequence ScriptItemUID="Action25" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert2" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action26" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update7" Value="&quot;QERReuseUS&quot;" />
+                <ActionSequence ScriptItemUID="Action27" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert11" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action28" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update8" Value="&quot;QERAssign&quot;" />
+                <ActionSequence ScriptItemUID="Action29" Condition="Exists(TableName(),WhereClauseTable())">
+                  <Insert ScriptItemUID="Insert12" DataTable="LimitedValues">
+                    <ActionSequence ScriptItemUID="Action30" />
+                    <InsertValue Value="TableName()" DataColumn="Value" />
+                  </Insert>
+                </ActionSequence>
+              </ActionSequence>
+              <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update2" Value="from LimitedValues select top 1 Value" />
+              <ActionSequence ScriptItemUID="Action1" Condition="((area() = &quot;OtherServices&quot; and TableNamePreSelect() in (&quot;QERResource&quot;,&quot;QERAssign&quot;,&quot;QERReuse&quot;,&quot;QERReuseUS&quot;,&quot;Application&quot;))&#xD;&#xA;or&#xD;&#xA;(area() = &quot;Organization&quot; and TableNamePreSelect() in (&quot;Locality&quot;,&quot;Department&quot;,&quot;ProfitCenter&quot;)))&#xD;&#xA;and&#xD;&#xA;Exists(TableNamePreSelect(),WhereClauseTable(TableNamePreSelect()))" ItemUID="TableNamePreSelect">
+                <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update9" Value="TableNamePreSelect()" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="NewAERole">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="AERoleFormGroup1">
+              <Form ID="AERoleDetail" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Create a new application role&quot;)" ScriptItemUID="Form1">
+                <ActionSequence ScriptItemUID="Action13" />
+                <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer2">
+                  <Label Text="translate(&quot;#LDS#Create a new application role&quot;)" ScriptItemUID="Label1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+                  <Container ScriptItemUID="Container8">
+                    <ContainerTemplate DataTable="AERoleNew" ScriptItemUID="ContainerTemplate1">
+                      <Container ScriptItemUID="Container10">
+                        <ObjectSwitchContainer ScriptItemUID="ObjectSwitchContainer1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;AERole&quot;))" ActionType="ObjectEdit">
+                          <VirtualTableMapping DataTable="AERoleNew" VirtualTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
+                        </ObjectSwitchContainer>
+                      </Container>
+                    </ContainerTemplate>
+                    <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container9">
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button2">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute8" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall5">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <Save DataTable="AERoleNew" ScriptItemUID="Save1" />
+                          <CallAction ActionID="Reinitialize" ScriptItemUID="Call5" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping1" />
+                          </CallAction>
+                          <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect3" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button1" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect2" />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="NewQERResource">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup2">
+              <Form ID="Detail3" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Create a new resource&quot;)" ScriptItemUID="Form3">
+                <ActionSequence ScriptItemUID="Action36" />
+                <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer5">
+                  <Label Text="translate(&quot;#LDS#Create a new resource&quot;)" ScriptItemUID="Label27" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer6">
+                  <ContainerTemplate DataTable="QERResourceNew" ScriptItemUID="ContainerTemplate7" WithoutParentContainer="true">
+                    <ObjectSwitchContainer ScriptItemUID="TableRef6" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;QERResource&quot;))" ActionType="ObjectEdit">
+                      <VirtualTableMapping DataTable="QERResourceNew" VirtualTable="EditTable" ScriptItemUID="VirtualTableMapping5" />
+                    </ObjectSwitchContainer>
+                  </ContainerTemplate>
+                  <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container61">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button11">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute3" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall14">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <Save DataTable="QERResourceNew" ScriptItemUID="Save2" />
+                        <CallAction ActionID="Reinitialize" ScriptItemUID="Call16" />
+                        <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call17">
+                          <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping16" />
+                          <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping17" />
+                        </CallAction>
+                        <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect10" />
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button12" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute4" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall15">
+                        <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect11" />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="GoToViewForm">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action40">
+              <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" AbortExecution="false">
+                <RedirectParameter Value="from DbObjects select current ObjectWalker(&quot;XObjectKey&quot;)" Name="'ObjectKey'" />
+                <RedirectParameter Value="--Responsibilities &gt; My Responsibilities &gt; Application Roles &gt; Selected AERole&#xD;&#xA;if(from Vars select TableName = &quot;AERole&quot;)then&#xD;&#xA;   &quot;AFC4B3C4-2AAD-40F0-9A47-719D5777642D&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Departments &gt; Selected Department&#xD;&#xA;else if(from Vars select TableName = &quot;Department&quot;)then&#xD;&#xA;   &quot;878F1D58-F1B0-42CB-A666-A2D397BD7ACB&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Employees &gt; Selected Employee&#xD;&#xA;else if(from Vars select TableName = &quot;Person&quot;)then&#xD;&#xA;   &quot;Employee&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Resources &gt; Selected Resource&#xD;&#xA;else if(from Vars select TableName = &quot;QERResource&quot;)then&#xD;&#xA;   &quot;6B020098-4254-4740-991B-6E6E1C8A7FCD&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Assignment Resources &gt; Selected Resource&#xD;&#xA;else if(from Vars select TableName = &quot;QERAssign&quot;)then&#xD;&#xA;   &quot;F82BE0F5-4FD5-4DC2-8B77-42284F28AF46&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Multi Request Resources &gt; Selected Resource&#xD;&#xA;else if(from Vars select TableName = &quot;QERReuse&quot;)then&#xD;&#xA;   &quot;C0811A15-0A74-46E2-A32F-F6925716E745&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Multi Requestable unsubscribable Resources &gt; Selected Resource&#xD;&#xA;else if(from Vars select TableName = &quot;QERReuseUS&quot;)then&#xD;&#xA;   &quot;F78C53F9-9BB0-4D65-B462-666F19D70D3C&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; My Responsibilities &gt; Devices &gt; Selected Device&#xD;&#xA;else if(from Vars select TableName = &quot;Device&quot;)then&#xD;&#xA;   &quot;Device&quot;" Name="'HelpChapterID'" />
+              </Redirect>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DbObjects" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="ObjectKeyWhereClause()" Expression="if(not(isnullorempty(objectkey())))&#xD;&#xA;then sqlcompareuid(&quot;XObjectKey&quot;, objectkey())" DataType="System.String" ScriptItemUID="Function3" TriggerUpdates="Never" />
+        <Function ScriptItemUID="Function1" Name="TableName()" DataType="System.String" Expression="from Vars select tablename" TriggerUpdates="Updates" />
+        <Function ScriptItemUID="Function2" Name="WhereClauseTable()" DataType="System.String" Expression="if((from Vars select TableName) in (&quot;QERResource&quot;,&quot;QERAssign&quot;,&quot;QERReuse&quot;,&quot;QERReuseUS&quot;))then&#xD;&#xA;sqland(variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)),objectkeywhereclause())&#xD;&#xA;else&#xD;&#xA;sqland(variable(getconfig(Format(&quot;VI_Roles_Responsibility_{0}&quot;,from Vars select TableName))),objectkeywhereclause())" />
+        <Function ScriptItemUID="Function4" Name="ShortDisplay()" DataType="System.Boolean" Expression="TableName() in (&quot;Org&quot;,&quot;Locality&quot;,&quot;Department&quot;,&quot;ProfitCenter&quot;)" />
+        <Function ScriptItemUID="Function5" Name="WhereClauseTable(String tableName)" DataType="System.String" Expression="if((TableName) in (&quot;QERResource&quot;,&quot;QERAssign&quot;,&quot;QERReuse&quot;,&quot;QERReuseUS&quot;))then&#xD;&#xA;sqland(variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)),objectkeywhereclause())&#xD;&#xA;else&#xD;&#xA;sqland(variable(getconfig(Format(&quot;VI_Roles_Responsibility_{0}&quot;,TableName))),objectkeywhereclause())" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="Area()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Caption()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ObjectKey()" DataType="System.String" />
+      <VirtualFunction Signature="TableNamePreSelect()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HideObjectTypSelect()" DataType="System.Boolean" TriggerUpdates="Never" DefaultValue="false" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

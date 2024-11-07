@@ -1,0 +1,63 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_ToolbarButton_Breadcrumb" Type="ToolbarButton" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="toolbarButtonBreadcrumb" Comment="" />
+    <CssDocument CssName="CSS" DisableCaching="true" ScriptItemUID="CssDocument1">.toolbarButtonBreadcrumb .imx-dropdown
+{
+height: %UserNavigationHeight%px;
+line-height: %UserNavigationHeight%px;
+outline: none;
+}
+
+.toolbarButtonBreadcrumb .imx-dropdown i
+{
+display: inline-block;
+line-height: %UserNavigationHeight%px;
+}
+
+.toolbarButtonBreadcrumb a.imx-dropdown-toggle
+{ 
+color: %VI_Common_Color_Blue_2%; 
+padding: 5px;
+}
+
+.toolbarButtonBreadcrumb a:hover.imx-dropdown-toggle,
+.toolbarButtonBreadcrumb a:focus.imx-dropdown-toggle 
+{
+    outline: none;
+}
+
+.toolbarButtonBreadcrumb .imx-dropdown-toggle:after
+{ 
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid %VI_Common_Color_ColoredLink%;   
+}
+
+.toolbarButtonBreadcrumb .imx-dropdown-menu 
+{ 
+left: auto; 
+right: 0; 
+background-color: %VI_Common_Color_Blue_2%; 
+max-height: 400px;
+overflow-x: auto;
+}
+
+.toolbarButtonBreadcrumb .imx-dropdown-menu li 
+{ 
+color: %VI_Common_Color_ColorBase1%; 
+}
+
+.toolbarButtonBreadcrumb .imx-dropdown-menu li:hover
+{ 
+background-color: %VI_Common_Color_Blue_1%;
+}
+.toolbarButtonBreadcrumb .imx-dropdown-menu li:focus
+{ 
+background-color: %VI_Common_Color_Blue_3%;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

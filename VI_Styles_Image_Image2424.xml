@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Image_Image2424" Type="Image" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="img2424 IconImage" Comment="24x24 pixel picture" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.img2424 { width: 24px; height: 24px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMS_ITShop_MyRoles_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select ( &quot;SystemRoles&quot; as area, translate(&quot;#LDS#Heading System Roles&quot;) as Caption)" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList2" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select ( &quot;SystemRoles&quot; as area, translate('#LDS#You are responsible for the following system roles.') as Caption)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,30 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_ValueAndLink">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <LinkContainer ScriptItemUID="LinkContainer1" EnabledCondition="not(isnullorempty(GetTargetUrl()))&#xD;&#xA;AND EnableNavigation()&#xD;&#xA;AND not(IsNoLink())">
+          <ControlList ScriptItemUID="ControlList2">
+            <Label Text="from edittable select current displayvalue(editcolumn)" ScriptItemUID="Label1" />
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall1" EnableRedirectByUrl="true">
+            <RedirectByUrl>
+              <Redirect ScriptItemUID="Redirect2" Target="Link" HREF="GetTargetUrl()" />
+            </RedirectByUrl>
+          </ServerActionCall>
+        </LinkContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetTargetUrl()" Expression="{{&#xD;&#xA;EditTable_EditColumn.ExtendedProperties.GetValueOrDefault(&quot;TargetUrl&quot;) as string &#xD;&#xA;?? EditTable_EditColumn.GetValue(EditTable_Current.Row).String }}" DataType="System.String" ScriptItemUID="Function1" />
+        <Function ScriptItemUID="Function2" Name="IsNoLink()" DataType="System.Boolean" Expression="{{ (EditTable_EditColumn.ExtendedProperties.GetValueOrDefault(&quot;TargetUrl&quot;) == null) ? true : false }}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ColumnEditor_View" />
+  </GlobalControl>
+</WebDesigner>

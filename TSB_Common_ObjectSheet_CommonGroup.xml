@@ -1,0 +1,344 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="TSB_Common_ObjectSheet_CommonGroup">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <ActionSequence ScriptItemUID="Action1" Condition="from vars select isediteffective">
+          <ConvertInteractiveEntity DataTable="Object" />
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Tab ScriptItemUID="Tab1">
+          <TabPage ItemUID="Status" ScriptItemUID="TabPage1">
+            <ControlsHeader ScriptItemUID="Container2">
+              <Label Text="translate(&quot;#LDS#Status&quot;)" ScriptItemUID="Label4" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container3">
+              <LayoutPanel ScriptItemUID="LayoutPanel1" Columns="2" Layout="'VI_Styles_LayoutPanel_WideSplitted'">
+                <ControlReferenceContainer ID="QER_BusinessOwner_Overview_Tile" ScriptItemUID="ControlRef6">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                    <ActionComponent ScriptItemUID="Action11" />
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="SquareText()" Value="from Object select current Display()" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="SquareTableName()" Value="(select current dbtable() from object)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="PropertyList()" Value="&quot;VI_ObjectView_&quot;+ (select current dbtable() from object)+&quot;_Fields&quot;" />
+                  <VirtualTableMapping ScriptItemUID="VirtualTableMapping5" VirtualTable="EditTable" DataTable="Object" />
+                </ControlReferenceContainer>
+                <Container ScriptItemUID="Container9" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                  </HtmlAttributes>
+                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef7" ItemUID="Overview">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                      <ActionComponent ScriptItemUID="Action12">
+                        <Redirect ScriptItemUID="Redirect9" Target="FormModule" AbortExecution="false">
+                          <RedirectFormModule ScriptItemUID="RedirectForm9" ID="FormOverview" />
+                        </Redirect>
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="SquareText()" Value="translate(&quot;#LDS#Overview&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="Description()" Value="translate('#LDS#Shows the overview for the selected organizational unit with assignments, entitlements and memberships.')" />
+                  </ControlReferenceContainer>
+                  <Container ScriptItemUID="Container30" EnableCustomAttributes="true" ItemUID="Master Data" Condition="from vars select IsEditEffective">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef8">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action13">
+                          <Redirect ScriptItemUID="Redirect7" Target="FormModule" AbortExecution="false">
+                            <RedirectFormModule ScriptItemUID="RedirectForm7" ID="FormMasterData" />
+                          </Redirect>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping24" ID="SquareText()" Value="translate(&quot;#LDS#Main data&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping23" ID="Description()" Value="Translate('#LDS#Shows the main data for this object.')" />
+                    </ControlReferenceContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container14" EnableCustomAttributes="true" ItemUID="Memberships" Condition="from vars select IsEditEffective">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef9">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action14">
+                          <Redirect ScriptItemUID="Redirect2" Target="FormModule" AbortExecution="false">
+                            <RedirectFormModule ScriptItemUID="RedirectForm2" ID="FormMemberships" />
+                          </Redirect>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="SquareText()" Value="translate(&quot;#LDS#Memberships&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the employees who are members of this entitlement.')" />
+                    </ControlReferenceContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container19" EnableCustomAttributes="true" ItemUID="Subgroups" Condition="(from Object select current DBTable()) in (TableNameSupportSubGroups())">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef4">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action19">
+                          <Redirect ScriptItemUID="Redirect1" Target="FormModule" AbortExecution="false">
+                            <RedirectFormModule ScriptItemUID="RedirectForm1" ID="FormSubgroups" />
+                          </Redirect>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="SquareText()" Value="translate(&quot;#LDS#Child groups&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Description()" Value="translate('#LDS#The selected group has {0} child groups.', CountSubGroups())" />
+                    </ControlReferenceContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container16" EnableCustomAttributes="true" ItemUID="Owners" Condition="from vars select isediteffective&#xD;&#xA;and&#xD;&#xA;(0 &lt; select count() from accproduct where (uid_accproduct = ( from object select current uid_accproduct)))&#xD;&#xA;and&#xD;&#xA;caninsert(&quot;personinaerole&quot;)">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef13">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action16">
+                          <Redirect ScriptItemUID="Redirect4" Target="FormModule" AbortExecution="false">
+                            <RedirectFormModule ScriptItemUID="RedirectForm4" ID="FormOwners" />
+                          </Redirect>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="SquareText()" Value="translate(&quot;#LDS#Owners&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Description()" Value="translate('#LDS#Assign owners of this entitlement.')" />
+                    </ControlReferenceContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container17" EnableCustomAttributes="true" ItemUID="History" Condition="from vars select isediteffective&#xD;&#xA;and&#xD;&#xA;(GetConfigParm(&quot;Common\ProcessState\PropertyLog&quot;) = &quot;1&quot;)">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef14">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action17">
+                          <Redirect ScriptItemUID="Redirect5" Target="FormModule" AbortExecution="false">
+                            <RedirectFormModule ScriptItemUID="RedirectForm5" ID="FormHistory" />
+                          </Redirect>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="SquareText()" Value="translate(&quot;#LDS#History&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Description()" Value="translate('#LDS#Shows historical data for the selected organizational unit.')" />
+                    </ControlReferenceContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container18" EnableCustomAttributes="true" ItemUID="Usage" Condition="from vars select isediteffective">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef15">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action18">
+                          <Redirect ScriptItemUID="Redirect6" Target="FormModule" AbortExecution="false">
+                            <RedirectFormModule ScriptItemUID="RedirectForm6" ID="FormUsage" />
+                          </Redirect>
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this entitlement belong to.')" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </Container>
+              </LayoutPanel>
+            </ControlsBody>
+          </TabPage>
+          <ControlReferenceTabPageGroup ID="AdditionalTabs" ScriptItemUID="ControlRef5" />
+        </Tab>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="IsEditEffective" DataType="System.Boolean" ScriptItemUID="Column1" DataSource="Expression" Expression="IsOwnerOfObject() and not(IsReadOnly())" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="FormOverview">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup1">
+              <Form ScriptItemUID="Form1" ID="FormOverview">
+                <ActionSequence ScriptItemUID="Action3" />
+                <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Overview&quot;))" ScriptItemUID="Label1" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+                  <Container ScriptItemUID="Container1">
+                    <ControlReferenceContainer ID="VI_Object_Overview_Default" ScriptItemUID="ControlRef1" />
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormMasterData">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup2">
+              <Form ScriptItemUID="Form2" ID="FormMasterData">
+                <ActionSequence ScriptItemUID="Action4" />
+                <PagePartContainer ScriptItemUID="PagePartContainer4" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Main data&quot;))" ScriptItemUID="Label15" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+                  <Container ScriptItemUID="Container4">
+                    <ObjectSwitchContainer ScriptItemUID="TableRef3" ObjectKey="singleproperty(&quot;dialogtable&quot;, &quot;XObjectKey&quot;, sqlcompare(&quot;TableName&quot;, from object select current dbtable(), &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;))" ActionType="ObjectEdit">
+                      <VirtualTableMapping DataTable="Object" VirtualTable="EditTable" ScriptItemUID="VirtualTableMapping3" />
+                    </ObjectSwitchContainer>
+                    <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = ( from Object select current uid_accproduct )" ScriptItemUID="ContainerTemplate3">
+                      <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef17">
+                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping17">
+                          <ColumnList ScriptItemUID="ColumnList1">
+                            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="IsInActive" Caption="translate(&quot;#LDS#IT shop product is inactive&quot;)" />
+                          </ColumnList>
+                        </VirtualFunctionMapping>
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping4" />
+                      </ControlReferenceContainer>
+                    </ContainerTemplate>
+                    <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container32">
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button8">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute2" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall11">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <Save DataTable="Object" WhereClause="PrimaryKey() = select current primarykey() from object" ScriptItemUID="Save2" />
+                          <Save DataTable="AccProduct" WhereClause="uid_accproduct = ( from object select current uid_accproduct )" HandleDeleteDeferred="false" ScriptItemUID="Save3" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call13">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping18" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping19" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormMemberships">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup3">
+              <Form ScriptItemUID="Form3" ID="FormMemberships">
+                <ActionSequence ScriptItemUID="Action5" />
+                <PagePartContainer ScriptItemUID="PagePartContainer6" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Memberships&quot;))" ScriptItemUID="Label14" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer5" ID="Main">
+                  <Container ScriptItemUID="Container5">
+                    <ControlReferenceContainer ID="VI_Roles_Membership" ScriptItemUID="ControlRef2">
+                      <VirtualTableMapping VirtualTable="AllObjects" DataTable="Object" ScriptItemUID="VirtualTableMapping2" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormOwners">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup5">
+              <Form ScriptItemUID="Form5" ID="FormOwners">
+                <ActionSequence ScriptItemUID="Action7" />
+                <PagePartContainer ScriptItemUID="PagePartContainer10" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Owners&quot;))" ScriptItemUID="Label3" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer9" ID="Main">
+                  <Container ScriptItemUID="Container10">
+                    <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = ( from object select current uid_accproduct)" ScriptItemUID="ContainerTemplate1">
+                      <Container ScriptItemUID="Container8">
+                        <ControlReferenceContainer ID="VI_ITShop_AccProduct_AERoleOwner" ScriptItemUID="ControlRef3">
+                          <VirtualTableMapping VirtualTable="Object" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
+                        </ControlReferenceContainer>
+                      </Container>
+                    </ContainerTemplate>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormUsage">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup7">
+              <Form ScriptItemUID="Form7" ID="FormUsage">
+                <ActionSequence ScriptItemUID="Action9" />
+                <PagePartContainer ScriptItemUID="PagePartContainer14" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Usage&quot;))" ScriptItemUID="Label24" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer13" ID="Main">
+                  <Container ScriptItemUID="Container12">
+                    <ControlReferenceContainer ID="VI_Roles_EntitlementUsageDetective" ScriptItemUID="ControlRef11">
+                      <VirtualFunctionMapping ID="TableName()" Value="from object select current dbtable()" ScriptItemUID="VirtualFunctionMapping12" />
+                      <VirtualFunctionMapping ID="PK()" Value="from object select current primarykey()" ScriptItemUID="VirtualFunctionMapping13" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormHistory">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup8">
+              <Form ScriptItemUID="Form8" ID="FormHistory">
+                <ActionSequence ScriptItemUID="Action10" />
+                <PagePartContainer ScriptItemUID="PagePartContainer16" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#History&quot;))" ScriptItemUID="Label25" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer15" ID="Main">
+                  <Container ScriptItemUID="Container13">
+                    <ControlReferenceContainer ID="VI_History" ScriptItemUID="ControlRef12">
+                      <VirtualFunctionMapping ID="BaseUid()" Value="from object select current primarykey()" ScriptItemUID="VirtualFunctionMapping14" />
+                      <VirtualFunctionMapping ID="Type()" Value="from object select current DBTable()" ScriptItemUID="VirtualFunctionMapping15" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormSubgroups">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup4">
+              <Form ScriptItemUID="Form4" ID="FormSubgroups">
+                <ActionSequence ScriptItemUID="Action6" />
+                <PagePartContainer ScriptItemUID="PagePartContainer8" ID="Title">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Child groups&quot;))" ScriptItemUID="Label2" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer7" ID="Main">
+                  <Container ScriptItemUID="Container6">
+                    <ControlReferenceContainer ID="VI_Roles_UNSGroupInUNSGroup" ScriptItemUID="ControlRef10">
+                      <VirtualTableMapping VirtualTable="AllObjects" DataTable="Object" ScriptItemUID="VirtualTableMapping6" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsOwnerOfObject()" Expression="if(from object select current dbtable() = 'EX0DL')then(&#xD;&#xA;   exists(&quot;ADSGroup&quot;,sqland(sqlcompareuid(&quot;UID_ADSGroup&quot;, from Object select current ObjectWalker(&quot;UID_ADSGroup&quot;)), variable(getconfig(&quot;VI_Roles_Responsibility_UNSGroup&quot;))))&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   -- owner by role?&#xD;&#xA;   exists(from object select current dbtable(), sqland(sqlcompareuid(&quot;XObjectKey&quot;, from object select current GetObjectKey()), variable(getconfig(&quot;VI_Roles_Responsibility_UNSGroup&quot;))))&#xD;&#xA;   -- or admin?&#xD;&#xA;   or&#xD;&#xA;   exists(from object select current dbtable(), sqland(sqlcompareuid(&quot;XObjectKey&quot;, from object select current GetObjectKey()), variable(getconfig(&quot;TSB_TargetSystem_Admin_UNSGroupFilter&quot;))))&#xD;&#xA;)" DataType="System.Boolean" ScriptItemUID="Function1" TriggerUpdates="Never" />
+        <Function ScriptItemUID="Function2" Name="CountSubGroups()" DataType="System.Int32" Expression="if(&#xD;&#xA;IsNullOrEmpty(GetTableNameIn(GetObjectKeyTable(select current XObjectKey from Object))) or IsNullOrEmpty(GetTableNameParent(GetObjectKeyTable(select current XObjectKey from Object))))then&#xD;&#xA;   0&#xD;&#xA;else&#xD;&#xA;   DbCount(&#xD;&#xA;      Format(&quot;{0}&quot;,GetTableNameIn(GetObjectKeyTable(select current XObjectKey from Object))),&#xD;&#xA;      SqlCompareUid(GetTableNameParent(GetObjectKeyTable(select current XObjectKey from Object)),from Object select current PrimaryKey())&#xD;&#xA;   )&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+        <Function ScriptItemUID="Function3" Name="TableNameSupportSubGroups()" DataType="System.String" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList1">
+            <FunctionValue Expression="&quot;ADSGroup&quot;" />
+            <FunctionValue Expression="&quot;LDAPGroup&quot;" />
+            <FunctionValue Expression="&quot;NDOGroup&quot;" />
+            <FunctionValue Expression="&quot;UNSGroupB&quot;" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="GetTableNameIn(string tableName)" Expression="{{&#xD;&#xA;var tbl = &quot;&quot;;&#xD;&#xA;switch (tableName)&#xD;&#xA;{&#xD;&#xA;    case &quot;ADSGroup&quot;:&#xD;&#xA;        tbl = &quot;ADSGroupInADSGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;LDAPGroup&quot;:&#xD;&#xA;        tbl = &quot;LDAPGroupInLDAPGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;NDOGroup&quot;:&#xD;&#xA;        tbl = &quot;NDOGroupInGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;UNSGroupB&quot;:&#xD;&#xA;        tbl = &quot;UNSGroupBInUNSGroupB&quot;;&#xD;&#xA;		break;		&#xD;&#xA;}&#xD;&#xA;@return tbl;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="TSBFunction1" />
+        <Function Name="GetTableNameParent(string tableName)" Expression="{{&#xD;&#xA;var spl = &quot;&quot;;&#xD;&#xA;switch (tableName)&#xD;&#xA;{&#xD;&#xA;    case &quot;ADSGroup&quot;:&#xD;&#xA;        spl = &quot;ADSGroupParent&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;LDAPGroup&quot;:&#xD;&#xA;        spl = &quot;UID_LDAPGroupParent&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;NDOGroup&quot;:&#xD;&#xA;        spl = &quot;UID_NDOGroup&quot;;&#xD;&#xA;		break;&#xD;&#xA;    case &quot;UNSGroupB&quot;:&#xD;&#xA;        spl = &quot;UID_UNSGroupBParent&quot;;&#xD;&#xA;		break;		&#xD;&#xA;}&#xD;&#xA;@return spl;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function4" />
+        <Function ScriptItemUID="Function5" Name="GetObjectDisplay(string text)" DataType="System.String" Expression="Format(&quot;{0} - {1}&quot;,&#xD;&#xA;text,&#xD;&#xA;(from Object select current&#xD;&#xA;(&#xD;&#xA;if(len(displaylong())&gt;128)&#xD;&#xA;then (substring(displaylong(),0,128)+&quot;...&quot;)&#xD;&#xA;else displaylong()&#xD;&#xA;)+&quot; (&quot;+ datacaptionsingle(getobjectkeytable(xobjectkey))+&quot;)&quot;)&#xD;&#xA;)" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="AccProduct" ScriptItemUID="VirtualTable2" Class="AccProduct" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" />
+      <VirtualControl ContainerType="TabPageGroup" ID="AdditionalTabs" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

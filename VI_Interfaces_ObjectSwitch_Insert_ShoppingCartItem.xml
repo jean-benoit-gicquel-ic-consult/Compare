@@ -1,0 +1,27 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Insert_ShoppingCartItem" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="ActionComponent" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="uidaccproduct()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UID_ShoppingCartOrder()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" TriggerUpdates="Never" ScriptItemUID="VirtualTable1" />
+      <VirtualControl ID="OnAfterInsert" ContainerType="ActionComponent" Comment="Signalisiert das erfolgreiche hinzufügen eines Items in den Einkaufswagen" />
+      <VirtualControl ID="OnAfterInsertCancel" ContainerType="ActionComponent" Comment="Fehler oder Abbruch beim Hinzufügen eines Items in den Einkaufswagen" />
+      <VirtualFunction Signature="ObjectKeyAssignment()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UID_ShoppingCartItemParentForOptional()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="PersonsForOrder" ScriptItemUID="VirtualTable2" Class="Person" />
+      <VirtualFunction Signature="UID_ShoppingCartItemParent()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsNoCopyParametersPerson()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

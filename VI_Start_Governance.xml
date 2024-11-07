@@ -1,0 +1,69 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Start_Governance" ScriptItemUID="Context1" Cardinality="Single" SingleInstanceTimeout="">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Common_Heatmap" />
+        <ObjectInclude ObjectIncludeID="VI_Common_Chart" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="Part" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition ScriptItemUID="ConfigSectionDefinition1" Name="Start page" Description="translate(&quot;#LDS#Home&quot;)">
+        <ConfigParam Key="VI_Start_Governance_Risk_Charts_Heatmaps" Description="translate(&quot;#LDS#List of risk charts and heatmaps on the start page&quot;)" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" LongDescription="" />
+        <ConfigParam Key="VI_Start_Governance_Organisation_Charts_Heatmaps" Description="translate(&quot;#LDS#List of organisation charts and heatmaps on the governance start page&quot;)" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" LongDescription="" />
+        <ConfigParam Key="VI_Start_Governance_ITShop_Charts_Heatmaps" Description="translate(&quot;#LDS#List of IT shop charts and heatmaps on the governance start page&quot;)" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" LongDescription="" />
+        <ConfigParam Key="VI_Start_Governance_Risk_Condition" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Visibility of Access Governance - Risk overview&quot;)" />
+        <ConfigParam Key="VI_Start_Governance_Organisation_Condition" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Visibility of Access Governance - Organization overview&quot;)" />
+        <ConfigParam Key="VI_Start_Governance_ITShop_Condition" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Visibility of Access Governance - IT Shop overview&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="ChartsForPart">
+        <LocalControlContext ContainerType="Container">
+          <Container ScriptItemUID="Container12" />
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="ContentMargin()" Expression="12" DataType="System.Int32" ScriptItemUID="Function2" />
+      <Function Name="ContentWidth()" Expression="180" DataType="System.Int32" ScriptItemUID="Function1" />
+      <Function ScriptItemUID="Function3" Name="Part()" DataType="System.String" Expression="request(&quot;Part&quot;)" />
+      <Function ScriptItemUID="Function4" Name="Title()" DataType="System.String" Expression="if (Part()=&quot;Compliance&quot;) then translate(&quot;#LDS#Compliance&quot;) else&#xD;&#xA;if (Part()=&quot;Risk&quot;) then translate(&quot;#LDS#Risk&quot;) else&#xD;&#xA;if (Part()=&quot;Policies&quot;) then translate(&quot;#LDS#Policies&quot;) else&#xD;&#xA;if (Part()=&quot;Organization&quot;) then translate(&quot;#LDS#Organization&quot;) else&#xD;&#xA;if (Part()=&quot;ITShop&quot;) then translate(&quot;#LDS#IT Shop&quot;) else&#xD;&#xA;if (Part()=&quot;Attestation&quot;) then translate(&quot;#LDS#Attestation&quot;) else&#xD;&#xA;if (Part()=&quot;TargetSystems&quot;) then translate(&quot;#LDS#Heading Target Systems&quot;) else&#xD;&#xA;if (Part()=&quot;PrivilegedAccountMgmt&quot;) then translate(&quot;#LDS#Heading Privileged Account Management&quot;) else&#xD;&#xA;&quot;&quot;" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" ScriptItemUID="Form1" NavigationTitle="translate(&quot;#LDS#Access Governance&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#Access Governance&quot;) + &quot; - &quot; + Title()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ScriptItemUID="Container3">
+              <Container ScriptItemUID="Container1" ItemUID="Risk" IsBeginRenderPart="true" RefreshTriggerExpression="" Condition="ispreprop(&quot;RISKINDEX&quot;) and ((IsNullOrEmpty(Part()) or Part()=&quot;Risk&quot;) and exists(&quot;Person&quot;, getconfig(&quot;VI_Start_Governance_Risk_Condition&quot;)))">
+                <ControlReferenceControlList ID="QER_Dashboards_View_For_ConfigKey" ScriptItemUID="ControlRef5">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="ConfigKey()" Value="&quot;VI_Start_Governance_Risk_Charts_Heatmaps&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Title()" Value="translate(&quot;#LDS#Risk&quot;)" />
+                </ControlReferenceControlList>
+              </Container>
+              <Container ScriptItemUID="Container7" ItemUID="Organisation" IsBeginRenderPart="true" RefreshTriggerExpression="" Condition="(IsNullOrEmpty(Part()) or Part()=&quot;Organization&quot;) and exists(&quot;Person&quot;, getconfig(&quot;VI_Start_Governance_Organisation_Condition&quot;))">
+                <ControlReferenceControlList ID="QER_Dashboards_View_For_ConfigKey" ScriptItemUID="ControlRef2">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="ConfigKey()" Value="&quot;VI_Start_Governance_Organisation_Charts_Heatmaps&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Title()" Value="translate(&quot;#LDS#Organization&quot;)" />
+                </ControlReferenceControlList>
+              </Container>
+              <Container ScriptItemUID="Container11" ItemUID="IT Shop" IsBeginRenderPart="true" RefreshTriggerExpression="" Condition="(IsNullOrEmpty(Part()) or Part()=&quot;ITShop&quot;) and exists(&quot;Person&quot;, getconfig(&quot;VI_Start_Governance_ITShop_Condition&quot;))">
+                <ControlReferenceControlList ID="QER_Dashboards_View_For_ConfigKey" ScriptItemUID="ControlRef3">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ConfigKey()" Value="&quot;VI_Start_Governance_ITShop_Charts_Heatmaps&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Title()" Value="translate(&quot;#LDS#IT Shop&quot;)" />
+                </ControlReferenceControlList>
+              </Container>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

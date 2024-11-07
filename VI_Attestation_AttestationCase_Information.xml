@@ -1,0 +1,670 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_AttestationCase_Information" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action3">
+        <ActionSequence Condition="from AttestationCase select current not(IsClosed) and IsNullOrEmpty(Request(&quot;AuditMode&quot;))" ScriptItemUID="Action16">
+          <LoadTable DataTable="AttestationHelper" ScriptItemUID="LoadTable9">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <ActionSequence Condition="convert(isnull(getconfig(&quot;VI_Attestation_AttestationHistory_CanRecallDecision&quot;), 'false'), 'System.Boolean')&#xA;and&#xA;GetContextID() = 'VI_Attestation_History' and IsNullOrEmpty(Request(&quot;AuditMode&quot;))" ScriptItemUID="Action17">
+          <Method DataTable="AttestationCase" Method="CanRecallDecision" ResultColumn="CanRecallDecision" WhereClause="UID_PersonHead = GetUser() and not(isclosed)" SaveAfterAction="false">
+            <MethodParameter Name="&quot;strUID_Person&quot;" Value="getuser()" />
+          </Method>
+        </ActionSequence>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Tab ScriptItemUID="Tab1" Layout="if (ShowAsPrimaryTab()) then 'VI_Styles_Tab_Default' else 'VI_Styles_Tab_Secondary'">
+          <TabPage ItemUID="INFO" ScriptItemUID="TabPage1">
+            <ControlsHeader ScriptItemUID="Container2">
+              <Label Text="translate(&quot;#LDS#Information&quot;)" ScriptItemUID="Label1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container3">
+              <ObjectSwitchContainer ObjectKey="getObjectKey(&quot;AttestationPolicy&quot;, from attestationcase select current uid_attestationpolicy, &quot;&quot;)" ActionType="AttestationCase_Detail" ScriptItemUID="ObjectSwitchContainer3">
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping18" />
+                <VirtualTableMapping VirtualTable="AttestationCase" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping17" />
+              </ObjectSwitchContainer>
+              <ContainerTemplate DataTable="DialogParameterSet" ScriptItemUID="ContainerTemplate2" WithoutParentContainer="true" WhereClause="objectkeyusedby = ( select current xobjectkey from attestationcase)">
+                <ControlReferenceContainer ID="VI_Reporting_ParameterEdit" ScriptItemUID="ControlRef3">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="IsReadOnly()" Value="IsreadOnly()" />
+                </ControlReferenceContainer>
+              </ContainerTemplate>
+              <ObjectSwitchContainer ObjectKey="&quot;&lt;Key&gt;&lt;T&gt;DialogTable&lt;/T&gt;&lt;P&gt;ATT-T-AttestationCase&lt;/P&gt;&lt;/Key&gt;&quot;" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                <VirtualTableMapping VirtualTable="SourceObject" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualFunctionMapping ID="EnableNavigation()" Value="false&#xA;-- do not allow navigation because navigation will display the current object state. the attested state may be different." ScriptItemUID="VirtualFunctionMapping1" />
+              </ObjectSwitchContainer>
+              <Container ScriptItemUID="Container6" Condition="from attestationcase select current canhavemcontrols">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef5">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="MControls" CannotEdit="IsReadOnly()" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping2" />
+                </ControlReferenceContainer>
+              </Container>
+              <Container ScriptItemUID="Container12" Layout="'VI_Styles_Container_ButtonBar'" ItemUID="ButtonBar">
+                <Activator ScriptItemUID="Activator3" ExecuteAlways="true">
+                  <Action ScriptItemUID="Action10" Condition="NOT HideButtonBar()">
+                    <LoadTable DataTable="AttestationHistory" WhereClause="format(&quot;UID_AttestationCase = '{0}'&quot;,from AttestationCase select current UID_AttestationCase)" ScriptItemUID="LoadTable6">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+                    </LoadTable>
+                  </Action>
+                </Activator>
+                <Container ItemUID="withdraw delegation (after choosing another approver)" ScriptItemUID="Container29" Condition="NOT HideButtonBar() AND WithdrawDelegationAllowed(from AttestationCase select current UID_AttestationCase)">
+                  <Button Text="translate('#LDS#Withdraw delegation')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button9" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Button9title" Value="translate('#LDS#Withdraw delegation of approval')" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="ServerActionCall7">
+                      <CallAction ActionID="RevokeDelegation" ScriptItemUID="Call3" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <Container ItemUID="withdraw additional approver" ScriptItemUID="Container43" Condition="NOT HideButtonBar() AND WithdrawAdditionalApproverAllowed(from AttestationCase select current UID_AttestationCase)">
+                  <Button Text="translate('#LDS#withdraw additional approval')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button10" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Button10title" Value="translate('#LDS#Withdraw additional approver')" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="ServerActionCall8">
+                      <CallAction ActionID="RevokeDelegation" ScriptItemUID="CallAction7" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <Container ItemUID="RecallQuery" Condition="NOT HideButtonBar() AND (0 &lt; (from AttestationHelperForRecallQuery select count() where UID_AttestationCase = (from AttestationCase select current UID_AttestationCase)))&#xD;&#xA;and&#xD;&#xA;(IsNullOrEmpty(IsReadOnly(),false)=false)" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container34">
+                  <Button Text="translate('#LDS#Recall last question')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button6">
+                    <ServerActionCall ScriptItemUID="ServerActionCall15">
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction9">
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="Container36">
+                            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container38">
+                              <FormItemLabel DataTable="AttestationCase" DataColumn="CancelReason" ScriptItemUID="FormItemLabel1">
+                                <Label Text="translate('#LDS#Please enter a reason for recall.')" ScriptItemUID="Label3a" />
+                              </FormItemLabel>
+                            </Container>
+                            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container37">
+                              <TextBox DataTable="AttestationCase" DataColumn="CancelReason" TextMode="MultiLine" Rows="3" CustomStyle="&quot;width:520px;&quot;" ScriptItemUID="TextBox1" />
+                            </Container>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container35">
+                            <Button Text="translate('#LDS#OK')" ScriptItemUID="Button7">
+                              <ServerActionCall ScriptItemUID="ServerActionCall17">
+                                <ForeachRow DataTable="AttestationCase" WhereClause="UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase)" ScriptItemUID="ForeachRow1">
+                                  <Method DataTable="AttestationCase" Method="RecallQuery" WhereClause="UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase)">
+                                    <MethodParameter Name="'strReasonText'" Value="from AttestationCase select current isnull(CancelReason,'')" />
+                                  </Method>
+                                </ForeachRow>
+                                <ActionOnControl />
+                                <ActionOnControl />
+                                <CodeLiteral ScriptItemUID="CodeLiteral1">AttestationCase.TableStore.Invalidate();</CodeLiteral>
+                              </ServerActionCall>
+                            </Button>
+                            <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button8" AssociatedWithEscapeKey="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute5" />
+                              </HtmlAttributes>
+                              <ServerActionCall ScriptItemUID="ServerActionCall16">
+                                <ActionOnControl />
+                              </ServerActionCall>
+                            </Button>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="Translate('#LDS#Recall last question')" ScriptItemUID="VirtualFunctionMapping14" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <Container ItemUID="ResetReservation" Condition="NOT HideButtonBar() AND (0 = (from AttestationHelperForRecallQuery select count() ))&#xD;&#xA;and&#xD;&#xA;(from AttestationCase select current IsReserved and UID_PersonHead = GetUser())&#xD;&#xA;and&#xD;&#xA;Not(isreadonly())&#xD;&#xA;And Exists(&#xD;&#xA;   &quot;AttestationCase&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_AttestationCase&quot;,from AttestationCase select Current UID_AttestationCase),&#xD;&#xA;	  SqlCompareUid(&quot;UID_PersonHead&quot;,GetUser()),&#xD;&#xA;      sqlcompare(&quot;IsReserved&quot;, 1, &quot;int&quot;, &quot;Equal&quot;)&#xD;&#xA;   )&#xD;&#xA;)" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container39">
+                  <Button Text="translate('#LDS#Revoke hold status')" ScriptItemUID="Button4" Layout="'VI_Styles_Button_Default'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall18">
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction2">
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="Container41">
+                            <Label Text="translate('#LDS#DescriptionResetReservation')" ScriptItemUID="Label11" />
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container40">
+                            <Button Text="translate('#LDS#OK')" ScriptItemUID="Button5">
+                              <ServerActionCall ScriptItemUID="ServerActionCall20">
+                                <ForeachRow DataTable="AttestationCase" WhereClause="UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase)" ScriptItemUID="ForeachRow2">
+                                  <Method DataTable="AttestationCase" Method="ResetReservation" WhereClause="UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase)" />
+                                </ForeachRow>
+                                <ActionOnControl />
+                                <ActionOnControl />
+                                <CodeLiteral ScriptItemUID="CodeLiteral2">AttestationCase.TableStore.Invalidate();</CodeLiteral>
+                              </ServerActionCall>
+                            </Button>
+                            <Button Text="translate('#LDS#Cancel')" ScriptItemUID="Button3" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" AssociatedWithEscapeKey="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute6" />
+                              </HtmlAttributes>
+                              <ServerActionCall ScriptItemUID="ServerActionCall19">
+                                <ActionOnControl />
+                              </ServerActionCall>
+                            </Button>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Revoke hold status')" ScriptItemUID="VirtualFunctionMapping15" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <Container ScriptItemUID="Container14" Layout="'VI_Styles_Container_Inline'" Condition="NOT HideButtonBar() AND (from AttestationCase select current ReportType )= 'PDF'" ItemUID="REPORT">
+                  <Button ScriptItemUID="Button2" Text="translate(&quot;#LDS#Report&quot;)">
+                    <ServerActionCall ScriptItemUID="ServerActionCall3">
+                      <PrepareReport CompiledReportUID="select current uid_attestationcase from attestationcase" Mode="UseCompiledPDF" ReportExpression="{{ (byte[])(this.AttestationCase.GetColumn(&quot;ReportContent&quot;, &quot;AttestationCase&quot;).GetValue(this.AttestationCase_Current.Row))&#xD;&#xA;}}" />
+                      <Redirect Target="Context" InNewFrame="true" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" Width="'800'" Height="'600'" ScriptItemUID="Redirect1">
+                        <RedirectParameter Name="'uid_compiledreport'" Value="from AttestationCase select current UID_AttestationCase" />
+                        <RedirectParameter Name="'PageTitle'" Value="from AttestationCase select current display()" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <Container ScriptItemUID="Container15" ItemUID="Attested Object" Condition="NOT HideButtonBar() AND from AttestationCase select current isnullorempty(ReportType) -- this case contains serialized XML data">
+                  <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#Show details&quot;)">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <CallAction ActionID="ATT_AttestationCase_ViewObjects" ScriptItemUID="Call2" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <ControlReferenceControlList ID="AdditionalActions" ScriptItemUID="ControlRef10" />
+                <Container ScriptItemUID="Container13" ItemUID="more actions" Condition="NOT HideButtonBar()">
+                  <ToolbarButton Text="translate(&quot;#LDS#Actions&quot;)" Layout="'VI_Styles_ToolbarButton_Dropup'" Tooltip="translate(&quot;#LDS#More information about this attestation case&quot;)" ScriptItemUID="ToolbarButton1">
+                    <Menu ScriptItemUID="Menu1">
+                      <MenuElement Text="translate(&quot;#LDS#Go to attested object&quot;)" Tooltip="translate(&quot;#LDS#Click to see more information about the attested object&quot;)" ScriptItemUID="MenuElement1" Condition="(from AttestationCase select current ReportType )= 'PDF'">
+                        <ServerActionCall ScriptItemUID="ServerActionCall14">
+                          <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                            <RedirectParameter Name="'ObjectKey'" Value="from attestationcase select current objectkeybase" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Send inquiry&quot;)" Tooltip="translate(&quot;#LDS#Send inquiry for this attestation case to another employee&quot;)" Condition="not(IsReadOnly())&#xA;and&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')&#xA;and&#xA;0 = (from AttestationHelperForRecallQuery select count() )" ScriptItemUID="MenuElement2">
+                        <ServerActionCall ScriptItemUID="ServerActionCall13">
+                          <ActionSequence ScriptItemUID="Action12">
+                            <CallAction ActionID="VI_Attestation_QueryToPerson" ScriptItemUID="Call1">
+                              <VirtualTableMapping VirtualTable="AttestationCase" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping3" />
+                            </CallAction>
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Reroute approval&quot;)" Tooltip="translate(&quot;#LDS#Reroute approval for this attestation case&quot;)" Condition="not(IsReadOnly())&#xD;&#xA;and&#xD;&#xA;0 &lt; (&#xD;&#xA;from QERWorkingStep select count() where &#xD;&#xA;   trim(IsNullOrEmpty(DirectSteps,'')) &lt;&gt; '' &#xD;&#xA;   and &#xD;&#xA;   trim(IsNullOrEmpty(DirectSteps,'')) &lt;&gt; '0'&#xD;&#xA;   and&#xD;&#xA;   UID_QERWorkingStep in ( from AttestationHelper select UID_QERWorkingStep)&#xD;&#xA;)" ScriptItemUID="MenuElement3">
+                        <ServerActionCall ScriptItemUID="ServerActionCall12">
+                          <CallAction ActionID="VI_ITShop_DirectDecision" ScriptItemUID="CallAction3">
+                            <VirtualTableMapping VirtualTable="QERWorkingStep" DataTable="QERWorkingStep" ScriptItemUID="VirtualTableMapping4" />
+                            <VirtualTableMapping VirtualTable="PWOHelperPWO" DataTable="AttestationHelper" ScriptItemUID="VirtualTableMapping5">
+                              <VirtualColumnMapping VirtualColumn="UID_PersonWantsOrg" DataColumn="UID_AttestationCase" />
+                              <VirtualColumnMapping VirtualColumn="UID_PWOHelperPWO" DataColumn="UID_AttestationHelper" />
+                            </VirtualTableMapping>
+                            <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping6">
+                              <VirtualColumnMapping VirtualColumn="UID_PersonWantsOrg" DataColumn="UID_AttestationCase" />
+                            </VirtualTableMapping>
+                            <VirtualFunctionMapping ID="Title()" Value="Translate('#LDS#If you do not wish to approve this attestation case, you may reroute the approval to one of the following steps.')" ScriptItemUID="VirtualFunctionMapping4" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Add approver&quot;)" Tooltip="translate(&quot;#LDS#Add additional approver for this attestation case&quot;)" Condition="not(IsReadOnly())&#xA;and&#xA;select current IsAdditionalAllowed from AttestationCase&#xA;and NOT&#xA;(select current IsReserved from AttestationCase)&#xA;and (&#xA;      (not(from AttestationHelper select top 1 IsFromDelegation ))&#xA;     and&#xA;      ('' = (from AttestationHelper select top 1 isnull(UID_PersonAdditional,'') ))&#xA;     and&#xA;       ('' = (from AttestationHelper select top 1 isnull(UID_PersonInsteadOf,'') ))&#xA;    )&#xA;&#xA;-- schaue erst mal nach, ob man ueberhaupt delegieren darf&#xA;-- schaue nach, ob man es schon von einer Delegation bekommen hat, dann darf man es nicht weiter delegieren&#xA;-- schaue nach, ob man selbst es schon auf eine art delegiert hat, dann darf man es nicht weiter delegieren" ScriptItemUID="MenuElement4">
+                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                          <CallAction ActionID="VI_Action_AdditionalApprover" ScriptItemUID="CallAction4">
+                            <VirtualTableMapping VirtualTable="Action" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping7" />
+                            <VirtualTableMapping VirtualTable="ActionHelper" DataTable="AttestationHelper" ScriptItemUID="VirtualTableMapping8" />
+                            <VirtualFunctionMapping ID="PersonFilter()" Value="SqlAnd(&#xD;&#xA;GetConfig(&quot;VI_Attestation_Edit_AdditionalToApprover&quot;),&#xD;&#xA;format(&quot;UID_Person not in (select UID_PersonHead from {0} where OrderNumber = 1)&quot;, sqlfunctioncalltable(&quot;ATT&quot;,&quot;GAttestation&quot;, &quot;FTAttNextDecisionMaker&quot;,sqlformatvalue(from AttestationCase select current UID_AttestationCase,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping5" />
+                            <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Enter a reason for adding an approver on this attestation case&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Delegate approval&quot;)" Tooltip="translate(&quot;#LDS#Delegate approval for this attestation case to another approver&quot;)" Condition="not(IsReadOnly())&#xA;and&#xA;select current IsInsteadOfAllowed from AttestationCase&#xA;and NOT&#xA;(select current IsReserved from AttestationCase)&#xA;and (&#xA;      (not(from AttestationHelper select top 1 IsFromDelegation ))&#xA;     and&#xA;      ('' = (from AttestationHelper select top 1 isnull(UID_PersonAdditional,'') ))&#xA;     and&#xA;       ('' = (from AttestationHelper select top 1 isnull(UID_PersonInsteadOf,'') ))&#xA;    )&#xA;&#xA;-- schaue erst mal nach, ob man ueberhaupt delegieren darf&#xA;-- schaue nach, ob man es schon von einer Delegation bekommen hat, dann darf man es nicht weiter delegieren&#xA;-- schaue nach, ob man selbst es schon auf eine art delegiert hat, dann darf man es nicht weiter delegieren&#xA;" ScriptItemUID="MenuElement5">
+                        <ServerActionCall ScriptItemUID="ServerActionCall5">
+                          <CallAction ActionID="VI_Action_InsteadOfApprover" ScriptItemUID="CallAction5">
+                            <VirtualTableMapping VirtualTable="Action" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping9" />
+                            <VirtualTableMapping VirtualTable="ActionHelper" DataTable="AttestationHelper" ScriptItemUID="VirtualTableMapping10" />
+                            <VirtualFunctionMapping ID="PersonFilter()" Value="SqlAnd(&#xD;&#xA;GetConfig(&quot;VI_Attestation_Edit_InsteadOfApprover&quot;),&#xD;&#xA;format(&quot;UID_Person not in (select UID_PersonHead from {0} where OrderNumber = 1)&quot;, sqlfunctioncalltable(&quot;ATT&quot;,&quot;GAttestation&quot;, &quot;FTAttNextDecisionMaker&quot;,sqlformatvalue(from AttestationCase select current UID_AttestationCase,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping7" />
+                            <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Enter a reason for delegating this attestation case&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Reject approval&quot;)" Tooltip="translate(&quot;#LDS#Reject approval for this attestation case and send it back to orignal approver&quot;)" Condition="not(IsReadOnly())&#xD;&#xA;and&#xD;&#xA;1 = (from AttestationHelper select count()&#xD;&#xA;where &#xD;&#xA;IsFromDelegation And RulerLevel &lt;&gt; 2&#xD;&#xA;And UID_AttestationCase = (select Current UID_AttestationCase from AttestationCase)&#xD;&#xA;And Not&#xD;&#xA;(select current IsReserved from AttestationCase)&#xD;&#xA;)" ScriptItemUID="MenuElement6">
+                        <ServerActionCall ScriptItemUID="ServerActionCall6">
+                          <CallAction ActionID="VI_Action_DenyApproval" ScriptItemUID="CallAction6">
+                            <VirtualTableMapping VirtualTable="Action" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping11" />
+                            <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Please enter your reason for denying approval.&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Send a reminder mail&quot;)" ScriptItemUID="MenuElement8" Condition="from container select isauditor&#xD;&#xA;and&#xD;&#xA;(from AttestationCase select current (not(isclosed)))">
+                        <ServerActionCall ScriptItemUID="ServerActionCall10">
+                          <ActionSequence ScriptItemUID="Action11">
+                            <LoadTable DataTable="PersonApprover" WhereClause="sqland(&#xD;&#xA;format(&quot;uid_person in (select uid_personhead from ATT_VAttDecisionPerson_DO where uid_attestationcase = {0} and rulerlevel &lt;&gt; 2)&quot;,&#xD;&#xA;sqlformatvalue(from attestationcase select current uid_attestationcase, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;sqlcompare(&quot;uid_person&quot;, GetUser(), &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable5">
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                            </LoadTable>
+                            <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction13">
+                              <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                <Container ScriptItemUID="Container27">
+                                  <Container ScriptItemUID="Container28">
+                                    <Container ScriptItemUID="Container25" Condition="0 &lt; from PersonApprover select count()">
+                                      <Label Text="translate(&quot;#LDS#You can send a reminder mail to an approver for this attestation case by clicking a link below.&quot;)" ScriptItemUID="Label2a" />
+                                    </Container>
+                                    <Container ScriptItemUID="Container24" Condition="0 = from PersonApprover select count()">
+                                      <Label ScriptItemUID="Label12" Text="translate(&quot;#LDS#There is no other approver than yourself.&quot;)" />
+                                    </Container>
+                                  </Container>
+                                  <Grid ScriptItemUID="Grid1">
+                                    <GridBand DataTable="PersonApprover" EntriesPerPage="10" ScriptItemUID="GridBand1" DisplayHeader="Always">
+                                      <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                                        <ControlList ScriptItemUID="ControlList2">
+                                          <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef4">
+                                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                                              <ControlList ScriptItemUID="ControlList3">
+                                                <Label Text="select current display() from personapprover" ScriptItemUID="Label13" EnableCustomAttributes="true">
+                                                  <HtmlAttributes>
+                                                    <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                                                  </HtmlAttributes>
+                                                </Label>
+                                              </ControlList>
+                                            </VirtualControlMapping>
+                                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                                              <ControlList ScriptItemUID="ControlList4">
+                                                <Container ScriptItemUID="Container33" Condition="from personapprover select current isnullorempty(defaultemailaddress)">
+                                                  <Label ScriptItemUID="Label10" Text="translate('#LDS#Missing e-mail address')" EnableCustomAttributes="true">
+                                                    <HtmlAttributes>
+                                                      <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="translate('#LDS#Missing e-mail address')" />
+                                                    </HtmlAttributes>
+                                                  </Label>
+                                                </Container>
+                                                <Container ScriptItemUID="Container32" Condition="from personapprover select current not(isnullorempty(defaultemailaddress))">
+                                                  <Literal Expression="format('&lt;a href=&quot;mailto:{0}?Subject={1}&quot;&gt;{2}&lt;/a&gt;',&#xD;&#xA;&#xD;&#xA;from PersonApprover select current DefaultEmailAddress,&#xD;&#xA;UrlEncode(HtmlEncode(datacaption(&quot;AttestationCase&quot;)), true),&#xD;&#xA;translate(&quot;#LDS#Send a mail&quot;))" />
+                                                </Container>
+                                              </ControlList>
+                                            </VirtualControlMapping>
+                                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                                              <ControlList ScriptItemUID="ControlList5">
+                                                <LayoutPanel ScriptItemUID="LayoutPanel1">
+                                                  <ContainerColumnTemplate DataTable="PersonApprover" ScriptItemUID="ContainerColumnTemplate2">
+                                                    <ColumnList ScriptItemUID="ColumnList3">
+                                                      <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                                                      <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_Department" />
+                                                    </ColumnList>
+                                                    <Container ScriptItemUID="Container31" ItemUID="Title column for normal properties">
+                                                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef7">
+                                                        <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonApprover" ScriptItemUID="VirtualTableMapping18">
+                                                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                                        </VirtualTableMapping>
+                                                        <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping10" />
+                                                      </ControlReferenceContainer>
+                                                    </Container>
+                                                    <Container ScriptItemUID="Container30" ItemUID="Value column for normal properties">
+                                                      <ColumnEditor DataTable="PersonApprover" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1" />
+                                                    </Container>
+                                                  </ContainerColumnTemplate>
+                                                </LayoutPanel>
+                                              </ControlList>
+                                            </VirtualControlMapping>
+                                          </ControlReferenceControlList>
+                                        </ControlList>
+                                      </GridBandListView>
+                                      <GridFilters ScriptItemUID="GridFilters1" />
+                                      <GridRows />
+                                      <GridColumnSimple ScriptItemUID="Column2" Column="__Display" />
+                                      <ControlReferenceGridColumnGroup ID="VI_ObjectCollection_Person_GridColumns" ScriptItemUID="wctl7" DataTable="PersonApprover">
+                                        <VirtualTableMapping VirtualTable="Person" DataTable="PersonApprover" ScriptItemUID="VirtualTableMapping13" />
+                                      </ControlReferenceGridColumnGroup>
+                                      <GridColumn ScriptItemUID="GridColumn2" Width="&quot;150px&quot;">
+                                        <GridColumnHeader ScriptItemUID="wctl1">
+                                          <Label Text="translate(&quot;#LDS#Send mail&quot;)" ScriptItemUID="Label8" />
+                                        </GridColumnHeader>
+                                        <Cell ScriptItemUID="Cell3">
+                                          <Container ScriptItemUID="Container26" Condition="from personapprover select current isnullorempty(defaultemailaddress)">
+                                            <Label ScriptItemUID="Label7" Text="translate('#LDS#Missing e-mail address')" EnableCustomAttributes="true">
+                                              <HtmlAttributes>
+                                                <HtmlAttribute Name="'title'" ScriptItemUID="Label7title" Value="translate('#LDS#Missing e-mail address')" />
+                                              </HtmlAttributes>
+                                            </Label>
+                                          </Container>
+                                          <Container ScriptItemUID="Container42" Condition="from personapprover select current not(isnullorempty(defaultemailaddress))">
+                                            <Literal Expression="format('&lt;a href=&quot;mailto:{0}?Subject={1}&quot;&gt;{2}&lt;/a&gt;',&#xD;&#xA;&#xD;&#xA;from PersonApprover select current DefaultEmailAddress,&#xD;&#xA;UrlEncode(HtmlEncode(datacaptionsingle(&quot;AttestationCase&quot;)+&quot;: &quot;+(from AttestationCase select current DisplayName)), true),&#xD;&#xA;translate(&quot;#LDS#Send a mail&quot;))" />
+                                          </Container>
+                                        </Cell>
+                                      </GridColumn>
+                                    </GridBand>
+                                  </Grid>
+                                </Container>
+                              </VirtualControlMapping>
+                              <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container16">
+                                  <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef6" />
+                                </Container>
+                              </VirtualControlMapping>
+                              <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Send a reminder mail&quot;)" ScriptItemUID="VirtualFunctionMapping13" />
+                            </CallAction>
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </MenuElement>
+                      <MenuElement Text="translate(&quot;#LDS#Revoke last decision&quot;)" ScriptItemUID="MenuElement9" Condition="from AttestationCase select current CanRecallDecision" Tooltip="translate(&quot;#LDS#Undo the last decision made for this attestation case&quot;)">
+                        <ServerActionCall ScriptItemUID="ServerActionCall11">
+                          <ActionSequence ScriptItemUID="Action9">
+                            <CallAction ActionID="VI_ITShop_RecallDecision" ScriptItemUID="CallAction10">
+                              <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping14" />
+                            </CallAction>
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </MenuElement>
+                    </Menu>
+                    <ServerActionCall ScriptItemUID="ServerActionCall9" />
+                  </ToolbarButton>
+                </Container>
+              </Container>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ItemUID="WORKFLOW" ScriptItemUID="TabPage2">
+            <ControlsHeader ScriptItemUID="Container4">
+              <Label Text="translate(&quot;#LDS#Workflow&quot;)" ScriptItemUID="Label2" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container5">
+              <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+                <Action ScriptItemUID="Action8">
+                  <LoadTable DataTable="AttestationHistory" WhereClause="format(&quot;UID_AttestationCase = '{0}'&quot;,from AttestationCase select current UID_AttestationCase)" ScriptItemUID="LoadTable2">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+                  </LoadTable>
+                  <LoadTable DataTable="PersonNextDecision" WhereClause="format( &quot;uid_person in(&#xD;&#xA;   {1}&#xD;&#xA;   union&#xD;&#xA;   select UID_PersonHead from ATT_VAttestationDecisionPerson where rulerlevel &lt;&gt; 2 and UID_AttestationCase = '{0}' and decisionorcomment = 'D'&#xD;&#xA;)&#xD;&#xA;&quot;,from AttestationCase select current UID_AttestationCase,&#xD;&#xA;format(&quot;select UID_PersonHead from {0} where rulerlevel &lt;&gt; 2 and OrderNumber &gt; 1&quot;, sqlfunctioncalltable(&quot;ATT&quot;,&quot;GAttestation&quot;, &quot;FTAttNextDecisionMaker&quot;,sqlformatvalue(from AttestationCase select current UID_AttestationCase,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;)" ScriptItemUID="LoadTable3">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" />
+                  </LoadTable>
+                  <LoadTable DataTable="Person2Attestation2OrderNumber" Type="LimitedSQL" ScriptItemUID="LoadTable4" IdentLimitedSQL="&quot;Webportal.VI_Attestation_AttestationCase_Information.P2A2O&quot;">
+                    <ParameterFree Name="&quot;uidattestationcase&quot;" Value="from AttestationCase select current UID_AttestationCase" ScriptItemUID="ParameterFree1" />
+                  </LoadTable>
+                </Action>
+              </Activator>
+              <ControlReferenceContainer ID="VI_Common_DecisionHistory" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="DecisionHistory" DataTable="AttestationHistory" ScriptItemUID="VirtualTableMapping15" />
+                <VirtualFunctionMapping ID="DecisionHistoryFilter()" Value="UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase)" ScriptItemUID="VirtualFunctionMapping16" />
+                <VirtualControlMapping VirtualControl="AdditionalEvents" ContainerType="ControlList">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <Container Condition="(from attestationcase select current not(isclosed))&#xD;&#xA;and&#xD;&#xA;0 = select count() from personnextdecision where uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( from AttestationCase select current UID_AttestationCase) and OrderNumber = 1)" ScriptItemUID="Container8" EnableCustomAttributes="true" ItemUID="CaseIsBeingCalculated">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-event imx-pending&quot;" />
+                        <Property Name="TagName" Value="li" Comment="" />
+                      </HtmlAttributes>
+                      <Label Text="translate(&quot;#LDS#The next decision step is currently being calculated. The attestation might also be waiting on a pending decision of another attestation.&quot;)" ScriptItemUID="Label4" />
+                    </Container>
+                    <Container Condition="0 &lt; select count() from personnextdecision where uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( from AttestationCase select current UID_AttestationCase) and OrderNumber = 1)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="CurrentDecisionMakers">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-event imx-pending&quot;" />
+                        <Property Name="TagName" Value="li" Comment="" />
+                      </HtmlAttributes>
+                      <Container ScriptItemUID="Container10" Layout="'VI_Styles_Container_Paragraph'">
+                        <Label Text="translate(&quot;#LDS#The following employees are currently entitled to approve this attestation case.&quot;)" ScriptItemUID="Label3" />
+                      </Container>
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( from AttestationCase select current UID_AttestationCase) and OrderNumber = 1)">
+                        <Container ScriptItemUID="Container22">
+                          <Label Text="from personnextdecision select current display()" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                    <Container ScriptItemUID="Container9" Condition="0 &lt; select count() from personnextdecision where uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( from AttestationCase select current UID_AttestationCase) and OrderNumber &gt; 1)" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-event imx-pending&quot;" />
+                        <Property Name="TagName" Value="li" Comment="" />
+                      </HtmlAttributes>
+                      <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_Paragraph'">
+                        <Label Text="translate(&quot;#LDS#The following employees are entitled to approve this attestation case after the current workflow step.&quot;)" ScriptItemUID="Label9" />
+                      </Container>
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate4" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase) and OrderNumber &gt; 1)">
+                        <Container ScriptItemUID="Container23">
+                          <Label Text="from personnextdecision select current display()" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                  </ControlList>
+                </VirtualControlMapping>
+              </ControlReferenceContainer>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ItemUID="ATTESTATION POLICY" ScriptItemUID="TabPage3">
+            <ControlsHeader ScriptItemUID="Container17">
+              <Label Text="datacaption(&quot;AttestationCase&quot;,&quot;UID_AttestationPolicy&quot;)" ScriptItemUID="Label14" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container18">
+              <ContainerTemplate DataTable="AttestationPolicy" WhereClause="uid_attestationpolicy = ( select current uid_attestationpolicy from attestationcase)" ScriptItemUID="ContainerTemplate1">
+                <Container ScriptItemUID="Container19">
+                  <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;AttestationPolicy&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer2">
+                    <VirtualTableMapping VirtualTable="SourceObject" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping16" />
+                  </ObjectSwitchContainer>
+                </Container>
+              </ContainerTemplate>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ItemUID="HISTORY" Condition="not(hidehistory())" ScriptItemUID="TabPage4">
+            <ControlsHeader ScriptItemUID="Container20">
+              <Label Text="translate(&quot;#LDS#History&quot;)" ScriptItemUID="Label15" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container21">
+              <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+                <Action ScriptItemUID="Action1">
+                  <LoadTable DataTable="AttestationCaseSameObject" WhereClause="from attestationcase select current&#xD;&#xA;format(&quot;objectkeybase = {0} and {1} and {2} and {3}&quot;,&#xD;&#xA;sqlformatvalue(ObjectKeyBase, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompare(&quot;uid_attestationcase&quot;, uid_attestationcase, &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompare(&quot;uid_attestationpolicy&quot;, uid_attestationpolicy, &quot;string&quot;,&quot;equal&quot;,&quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompare(&quot;UID_PersonHead&quot;, &quot;&quot;, &quot;string&quot;,&quot;notequal&quot;,&quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable1">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" ConvertToInteractive="false" />
+                  </LoadTable>
+                </Action>
+              </Activator>
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef2">
+                <VirtualFunctionMapping ID="Text()" Value="if(0 &lt; (select count() from attestationcasesameobject where objectkeybase = ( select current objectkeybase from attestationcase)))&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#This object has been attested previously. The following view shows the historical attestation cases for this object.&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#This object has not been previously attested.&quot;)" ScriptItemUID="VirtualFunctionMapping17" />
+              </ControlReferenceContainer>
+              <Grid ScriptItemUID="Grid2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;data-imx-layout&quot;" Value="&quot;flex-fill&quot;" />
+                </HtmlAttributes>
+                <GridBand DataTable="AttestationCaseSameObject" ScriptItemUID="GridBand2" OrderBy="'XDateInserted desc'" EnableGridViewSetting="false">
+                  <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="true">
+                    <ControlList ScriptItemUID="ControlList6">
+                      <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef8">
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                          <ControlList ScriptItemUID="ControlList7">
+                            <Label ScriptItemUID="Label16" Text="datacaption(&quot;AttestationCase&quot;, &quot;UID_PersonHead&quot;)+': '+&#xD;&#xA;from AttestationCaseSameObject select current displayvalue(UID_PersonHead)" />
+                          </ControlList>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                          <ControlList ScriptItemUID="ControlList8" />
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                          <ControlList ScriptItemUID="ControlList9">
+                            <LayoutPanel ScriptItemUID="LayoutPanel2">
+                              <ContainerColumnTemplate DataTable="AttestationCaseSameObject" ScriptItemUID="ContainerColumnTemplate1">
+                                <ColumnList ScriptItemUID="ColumnList2">
+                                  <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" />
+                                  <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsGranted" />
+                                  <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="DateHead" />
+                                </ColumnList>
+                                <Container ScriptItemUID="Container46" ItemUID="Title column for normal properties">
+                                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef9">
+                                    <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationCaseSameObject" ScriptItemUID="VirtualTableMapping19">
+                                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                    </VirtualTableMapping>
+                                    <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping11" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container45" ItemUID="Value column for normal properties">
+                                  <ColumnEditor DataTable="AttestationCaseSameObject" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2" />
+                                </Container>
+                              </ContainerColumnTemplate>
+                            </LayoutPanel>
+                          </ControlList>
+                        </VirtualControlMapping>
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </GridBandListView>
+                  <GridFilters ScriptItemUID="GridFilters2" />
+                  <GridRows />
+                  <GridColumnSimple ScriptItemUID="Column18" Column="IsGranted" />
+                  <GridColumnSimple ScriptItemUID="Column17" Column="UID_PersonHead" />
+                  <GridColumnSimple ScriptItemUID="Column19" Column="DateHead" />
+                </GridBand>
+              </Grid>
+            </ControlsBody>
+          </TabPage>
+        </Tab>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ReasonText" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="IsAuditor" DataType="System.Boolean" DataSource="Expression" Expression="exists(&quot;personinaerole&quot;, variable(&quot;uid_person = '%useruid%' and uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR'&quot;))" ScriptItemUID="Column3" />
+          <Column Name="Notice" DataType="System.String" ScriptItemUID="Column20" Caption="translate(&quot;#LDS#Reason&quot;)" MinLength="1" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="AttestationHistory" Table="AttestationHistory" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="PersonNextDecision" ScriptItemUID="DataTableDbObject2" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableSQL Table="Person2Attestation2OrderNumber" ScriptItemUID="DataTableLimitedSQL1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action6" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="UID_AttestationCase" DataType="System.String" ScriptItemUID="Column7" />
+          <Column Name="OrderNumber" DataType="System.Int32" ScriptItemUID="Column8" />
+        </DataTableSQL>
+        <DataTableFKView Table="AttestationPolicy" ViewFKDataTable="AttestationCase" ViewFKDataColumn="UID_AttestationPolicy" ViewFKWhereClause="" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType9" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableFKView Table="AttestationObject" ViewFKDataTable="AttestationPolicy" ViewFKDataColumn="UID_AttestationObject" ViewFKWhereClause="" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType10" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCaseSameObject" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action7" />
+          <Column Name="StatusDisplay" DataType="System.String" ScriptItemUID="Column9" />
+          <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="Column10" />
+          <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="Column11" />
+          <Column Name="IsAdditionalAllowed" DataType="System.Boolean" ScriptItemUID="Column12" />
+          <Column Name="IsInsteadOfAllowed" DataType="System.Boolean" ScriptItemUID="Column13" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AttestationHelper" Table="AttestationHelper" ScriptItemUID="DataTableDbObject4" WhereClauseSQL="format(&quot;UID_AttestationHelper in (&#xD;&#xA;select ah.UID_AttestationHelper from AttestationHelper ah&#xD;&#xA;join AttestationCase ac on ac.UID_AttestationCase = ah.UID_AttestationCase&#xD;&#xA;and ac.DecisionLevel = ah.LevelNumber&#xD;&#xA;where ah.uid_personhead = '{1}' and ac.UID_AttestationCase = '{0}' and {2}&#xD;&#xA;)&quot;,&#xD;&#xA;select Current uid_AttestationCase from attestationcase,&#xD;&#xA;GetUser(),&#xD;&#xA;If(IsEscalationApproval())Then&#xD;&#xA;      sqlcompare(&quot;ah.RulerLevel&quot;, 2, &quot;int&quot;, &quot;Equal&quot;)&#xD;&#xA;   Else&#xD;&#xA;      sqlcompare(&quot;ah.RulerLevel&quot;, 2, &quot;int&quot;, &quot;NotEqual&quot;)&#xD;&#xA;&#xD;&#xA;)">
+          <ActionSequence ScriptItemUID="Action13" />
+        </DataTableDbObject>
+        <DataTableFKView Table="QERWorkingStep" ViewFKDataTable="AttestationHelper" ViewFKDataColumn="UID_QERWorkingStep" ScriptItemUID="DataTableFKView3" TriggerUpdates="Never">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType11" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableCRView Class="AttestationHelper" Table="AttestationHelperForRecallQuery" CRDataColumn="UID_AttestationCase" ViewFKDataTable="AttestationCase" RelationDBWhereClause="&quot;Decision = 'Q'&quot;" ViewFKWhereClause="IsReserved and UID_PersonHead = GetUser()" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType12" ConvertToInteractive="false" />
+        </DataTableCRView>
+        <DataTableDbObject Class="Person" Table="PersonApprover" ScriptItemUID="DataTableDbObject5">
+          <ActionSequence ScriptItemUID="Action14" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="RevokeDelegation">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action15">
+              <ActionOnControl />
+              <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction12">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container47">
+                    <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel3">
+                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef11">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Container" ScriptItemUID="VirtualTableMapping12">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="Notice" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                      <TextBox DataTable="Container" DataColumn="Notice" TextMode="MultiLine" Rows="8" ScriptItemUID="TextBox3" />
+                    </LayoutPanel>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container44">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button14">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute11" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <ActionSequence ItemUID="ok" ScriptItemUID="Action19">
+                          <Method DataTable="AttestationCase" Method="RevokeDelegation" WhereClause="UID_AttestationCase = (select Current UID_AttestationCase  from AttestationCase)">
+                            <MethodParameter Name="'strUID_PersonDecision'" Value="getUser()" />
+                            <MethodParameter Name="'strReasonText'" Value="from Container select Notice" />
+                          </Method>
+                          <ActionOnControl />
+                          <CallAction ActionID="InvalidateTableStore" ScriptItemUID="Call4" />
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="ctl52" EnableCustomAttributes="true" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute9" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ctl53">
+                        <ActionOnControl />
+                        <Update DataTable="Container" DataColumn="Notice" ScriptItemUID="Update1" />
+                        <EndExecution />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Please enter a reason.')" ScriptItemUID="VirtualFunctionMapping12" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationCase" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="InvalidateTableStore">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action20">
+              <LoadTable DataTable="AttestationHistory" WhereClause="format(&quot;UID_AttestationCase = '{0}'&quot;,from AttestationCase select current UID_AttestationCase)" ScriptItemUID="LoadTable7">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+              </LoadTable>
+              <CodeLiteral ScriptItemUID="CodeLiteral3">AttestationCase.TableStore.Invalidate();</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function DataType="System.Boolean" Name="WithdrawDelegationAllowed(string UID)" Expression="0 &lt; from AttestationHelper select count() where not(IsNullOrEmpty(UID_PersonInsteadOf))" ScriptItemUID="Function4" />
+        <Function DataType="System.Boolean" Name="WithdrawAdditionalApproverAllowed(string UID)" Expression="0 &lt; from AttestationHelper select count() where IsNullOrEmpty(UID_PersonInsteadOf) and not(IsNullOrEmpty(UID_PersonAdditional))" ScriptItemUID="Function5" />
+        <Function Name="IsEscalationApproval()" Expression="request(&quot;IsEscalation&quot;)=&quot;true&quot;&#xD;&#xA;or&#xD;&#xA;request(&quot;IsEscalationApproval&quot;)=&quot;true&quot;" DataType="System.Boolean" ScriptItemUID="Function13" TriggerUpdates="Never" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="AttestationCase" Operation="Update" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ScriptItemUID="Action2">
+            <LoadTable DataTable="AttestationHelperForRecallQuery" ScriptItemUID="LoadTable10">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType13" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="XDateUpdated" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="AttestationCase" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action18">
+            <Save DataTable="AttestationCase" WhereClause="primarykey()=(select current primarykey() from attestationcase)" ScriptItemUID="Save1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="MControls" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" Class="AttestationCase" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <ColumnMemberRelation Name="MControls" RelationTableName="&quot;AttestationCaseHasMControl&quot;" ColumnNameLeft="&quot;UID_AttestationCase&quot;" Caption="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="ColumnMemberRelation1" />
+        <Column Name="CanHaveMControls" DataType="System.Boolean" ScriptItemUID="Column1" DataSource="Expression" Expression="GetConfigParm(&quot;QER\CalculateRiskIndex\MitigatingControlsPerViolation&quot;)=&quot;1&quot;" TriggerUpdates="Never" />
+        <Column Name="IsAdditionalAllowed" Expression="1 = &#xD;&#xA;(from QERWorkingStep select count()&#xD;&#xA;where IsAdditionalAllowed&#xD;&#xA;and UID_QERWorkingStep in (from AttestationHelper select UID_QERWorkingStep))" DataSource="Expression" ScriptItemUID="Column4" DataType="System.Boolean" />
+        <Column Name="IsInsteadOfAllowed" Expression="1 = &#xD;&#xA;(from QERWorkingStep select count()&#xD;&#xA;where isnull(IsInsteadOfAllowed,false) = true&#xD;&#xA;and UID_QERWorkingStep in (from AttestationHelper select UID_QERWorkingStep where UID_AttestationCase = (select current UID_AttestationCase from AttestationCase)))" DataSource="Expression" ScriptItemUID="Column14" DataType="System.Boolean" />
+        <Column Name="CanRecallDecision" DataType="System.Boolean" ScriptItemUID="Column15" />
+        <Column Name="CancelReason" ScriptItemUID="Column16" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="HideHistory()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowAsPrimaryTab()" DataType="System.Boolean" DefaultValue="True" Comment="As a default this component has primary tabs.&#xD;&#xA;If this component is used in a Master-Detail-Control it looks nicer if you use a secondary tab." TriggerUpdates="Never" />
+      <VirtualTable Name="DialogParameter" ScriptItemUID="VirtualTable2" Class="DialogParameter" />
+      <VirtualTable Name="DialogParameterSet" ScriptItemUID="VirtualTable3" Class="DialogParameterSet" />
+      <VirtualControl ContainerType="ControlList" ID="AdditionalActions">
+        <VirtualTableCursor DataTable="AttestationCase" />
+      </VirtualControl>
+      <VirtualFunction DataType="System.Boolean" Signature="HideButtonBar()" DefaultValue="false" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

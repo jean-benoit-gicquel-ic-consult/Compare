@@ -1,0 +1,52 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_ADSContainer">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Tree ScriptItemUID="Tree1">
+          <TreeBand DataTable="ADSDomain" ScriptItemUID="TreeBand1" DataSourceType="Database" DBWhereClause="">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            <ControlList ScriptItemUID="ControlList1">
+              <Label Text="select current display() from adsdomain" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-ADSContainer&quot;" />
+                </HtmlAttributes>
+              </Label>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1" />
+          </TreeBand>
+          <TreeBand DataTable="HierarchyTable" Layout="'VI_Styles_TreeBand_SelectionTreeBand'" ScriptItemUID="TreeBand2" DataSourceType="Database" DBWhereClause="sqland( DbWhereClause(), SqlCompareUid(&quot;uid_adsdomain&quot;,select current uid_adsdomain from adsdomain))">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            <ControlList ScriptItemUID="ControlList2">
+              <Label Text="select current display() from hierarchytable" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="select current cssclass() from hierarchytable" />
+                  <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute3" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                </HtmlAttributes>
+              </Label>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall3">
+              <ActionSequence ScriptItemUID="Action2" Condition="select current not(isnonselectable()) from hierarchytable">
+                <CallAction ActionID="ElementSelected" ScriptItemUID="CallAction1" />
+              </ActionSequence>
+            </ServerActionCall>
+          </TreeBand>
+        </Tree>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="ADSDomain" Table="ADSDomain" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="HierarchyTable" Class="ADSContainer" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

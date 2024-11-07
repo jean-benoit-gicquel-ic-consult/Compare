@@ -1,0 +1,162 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2k3YY9gUiyKUrXjdJ5Nrng==">
+  <GlobalControl ID="VI_Edit_MultiValueProperty" MigrationNotes="DMLREPLACE;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings2" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <CallAction ActionID="ReadBulk" ScriptItemUID="Call8" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container9">
+        <Container Condition="from edittable select current not(canedit(editcolumn))" ScriptItemUID="Container10">
+          <ContainerTemplate DataTable="ValueList" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)" OrderBy="'Index'" ScriptItemUID="ContainerTemplate3">
+            <Container ScriptItemUID="Container11">
+              <Label Text="select current result from valuelist" ScriptItemUID="Label4" />
+            </Container>
+          </ContainerTemplate>
+        </Container>
+        <Container Condition="from edittable select current canedit(editcolumn)" ScriptItemUID="Container12">
+          <Container EnableCustomAttributes="true" ScriptItemUID="Container13">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" Value="'float: right; padding-left: 4px;'" ScriptItemUID="HtmlAttribute6" />
+            </HtmlAttributes>
+            <Button Text="translate('#LDS#Add')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button4">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Update DataTable="Container" DataColumn="TempField" ScriptItemUID="Update9" />
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call9">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container14">
+                      <Label Text="translate('#LDS#Use &quot;;&quot; to seperate multiple values.')" ScriptItemUID="Label5" />
+                      <TextBox DataTable="Container" DataColumn="TempField" CustomStyle="'width: 98%;'" ScriptItemUID="TextBox2" />
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container15">
+                      <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button5">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Apply&quot;)" ScriptItemUID="HtmlAttribute7" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall6">
+                          <Update DataColumn="TempField" DataTable="Container" Value="from Container select replace(TempField, &quot; ;&quot;, &quot;;&quot;) " ScriptItemUID="Update10" />
+                          <Update DataColumn="TempField" DataTable="Container" Value="from Container select replace(TempField, &quot;; &quot;, &quot;;&quot;)" ScriptItemUID="Update11" />
+                          <Update DataColumn="TempField" DataTable="Container" ScriptItemUID="Update3" Value="RemoveSemicolonWithEmptyValue(from Container select TempField)" />
+                          <Update DataColumn="TempField" DataTable="Container" Value="from Container select replace(TempField, &quot;;&quot;, char(7))" ScriptItemUID="Update12" />
+                          <FillTable DataTable="ValueList" Expression="Split(from Container select TempField, char(7), true)" DataColumn="result" ScriptItemUID="FillTable3">
+                            <DbObjectLoadType ConvertToInteractive="false" ScriptItemUID="DbObjectLoadType3" />
+                          </FillTable>
+                          <Update DataColumn="UID_SourceObject" DataTable="ValueList" Value="select current primarykey() from edittable" WhereClause="isnullorempty(uid_sourceObject)" ScriptItemUID="Update13" />
+                          <Update DataTable="ValueList" DataColumn="Index" Value="0" WhereClause="isnull(index)" ScriptItemUID="Update14" />
+                          <CallAction ActionID="WriteToObject" ScriptItemUID="Call10" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" AssociatedWithEscapeKey="true" ScriptItemUID="Button6">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute8" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall7">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Add new&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="EnterKeyIdentifier()" Value="&quot;Default Button&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <ContainerTemplate DataTable="ValueList" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)" OrderBy="'Index'" ScriptItemUID="ContainerTemplate4">
+            <Container ScriptItemUID="Container16">
+              <LinkContainer ScriptItemUID="LinkContainer1">
+                <ControlList ScriptItemUID="ControlList1">
+                  <Image StockImage="DeleteDocument" ScriptItemUID="Image1" />
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall8">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <Delete DataTable="ValueList" WhereClause="primarykey() = ( select current primarykey() from valuelist)" ScriptItemUID="Delete4" />
+                  <CallAction ActionID="WriteToObject" ScriptItemUID="Call11" />
+                </ServerActionCall>
+              </LinkContainer>
+              <Label Text="select current result from valuelist" ScriptItemUID="Label6" />
+            </Container>
+          </ContainerTemplate>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables2">
+        <DataTableCustom Table="ValueList" ScriptItemUID="DataTableCustom2">
+          <Column Name="result" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column6" />
+          <Column Name="UID_SourceObject" DataType="System.String" ScriptItemUID="Column7" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="TempField" DataType="System.String" ScriptItemUID="Column8" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls2">
+        <Control ID="WriteToObject">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action12">
+              <ActionSequence ScriptItemUID="Action13">
+                <ForeachRow DataTable="ValueList" ScriptItemUID="ForeachRow3" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)">
+                  <ForeachRow DataTable="ValueList" ScriptItemUID="ForeachRow1" WhereClause="1 &lt; (select count() from ValueList where result = ( select current result from ValueList ) )&#xD;&#xA;AND PrimaryKey() = (select current PrimaryKey() from ValueList)" OrderBy="'Index desc'">
+                    <Delete DataTable="ValueList" ScriptItemUID="Delete1" WhereClause="PrimaryKey() = (select current PrimaryKey() from ValueList)" />
+                  </ForeachRow>
+                </ForeachRow>
+                <Update DataTable="EditTable" DataColumn="EditColumn" Value="concat( (select result from valuelist where uid_sourceobject = ( select current primarykey() from edittable) order by Index), char(7))&#xD;&#xA;" WhereClause="primarykey() = ( select current primarykey() from edittable)" ScriptItemUID="Update15" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ReadFromObject">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action14">
+              <ActionSequence ScriptItemUID="Action15">
+                <ActionSequence Condition="select current isnull(editcolumn,'')&lt;&gt;'' from edittable" ScriptItemUID="Action16">
+                  <FillTable DataTable="ValueList" DataColumn="result" Expression="select current split(editcolumn, char(7), true) from edittable" ScriptItemUID="FillTable4">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" />
+                  </FillTable>
+                </ActionSequence>
+                <Update DataTable="ValueList" DataColumn="UID_SourceObject" Value="select current primarykey() from edittable" WhereClause="isnull(uid_sourceobject,'')=''" ScriptItemUID="Update16" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ReadBulk">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action17">
+              <ActionSequence ScriptItemUID="Action18">
+                <Delete DataTable="ValueList" WhereClause="UID_SourceObject = (from edittable select current primarykey())" ScriptItemUID="Delete5" />
+                <ForeachRow DataTable="EditTable" WhereClause="primarykey() = select current primarykey() from edittable" ScriptItemUID="ForeachRow2">
+                  <CallAction ActionID="ReadFromObject" ScriptItemUID="Call12" />
+                </ForeachRow>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions2">
+        <Function ScriptItemUID="Function2" Name="RemoveSemicolonWithEmptyValue(string s)" DataType="System.String" Expression="-- last Char is ; &#xD;&#xA;if( 0 &lt; IndexOf( (s), &quot;;&quot;, Len(s) - 1))&#xD;&#xA;  then Substring( (s), 0, Len(s) - 1 )&#xD;&#xA;else  &#xD;&#xA;  s&#xD;&#xA;  &#xD;&#xA;&#xD;&#xA;" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers2">
+        <DataEventHandler Operation="Update" DataTable="EditTable" ScriptItemUID="DataEventHandler3">
+          <ActionSequence ScriptItemUID="Action19">
+            <Delete DataTable="ValueList" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)" ScriptItemUID="Delete6" />
+            <CallAction ActionID="ReadFromObject" ScriptItemUID="Call13" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="EditColumn" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Bulk" DataTable="EditTable" ScriptItemUID="DataEventHandler4">
+          <ActionSequence ScriptItemUID="Action20">
+            <CallAction ActionID="ReadBulk" ScriptItemUID="Call14" />
+          </ActionSequence>
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface2">
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension2">
+        <VirtualColumnExtension Name="EditColumn" DataType="System.String" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,13 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RPS_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="380">
+        <ConfigEntry Key="ColumnEditor_RPSSubscription.UID_DialogSchedule" Value="VI_Edit_FKByComboBox" ScriptItemUID="QERConfigEntry139" />
+        <ConfigEntry Key="Filter_ColumnEditor_RPSSubscription.UID_DialogSchedule" Value="&quot;UID_DialogTableBelongsTo = 'RPS-T-RPSSubscription'&quot;" ScriptItemUID="QERConfigEntry140" />
+        <ConfigEntry Key="ColumnEditor_RPSReport.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" ScriptItemUID="RPSConfigEntry1" />
+        <ConfigEntry Key="ColumnEditor_RPSReport.ReportDefinition" Value="RPS_ListReport_DefinitionEditor" ScriptItemUID="RPSConfigEntry2" />
+        <ConfigEntry Key="ColumnEditor_RPSReport.UID_AccProduct" Value="VI_Edit_FKWithNewAccProduct" ScriptItemUID="RPSConfigEntry4" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

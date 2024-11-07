@@ -1,0 +1,16 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="ADS_UNS_ShoppingCartItem_Details_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="10">
+        <Container ScriptItemUID="ADSContainer1" IsSetFocus="false">
+          <ControlReferenceContainer ID="VI_UNS_CommonRequestDetails" ScriptItemUID="ADSControlRef1">
+            <VirtualFunctionMapping ID="UIDAccProduct()" Value="from shoppingcartitem select current uid_accproduct" />
+            <VirtualTableMapping VirtualTable="BASETABLE" DataTable="ShoppingCartItem">
+              <VirtualColumnMapping VirtualColumn="DoNotAllowApprove" DataColumn="DoNotAllowApprove" />
+            </VirtualTableMapping>
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

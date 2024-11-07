@@ -1,0 +1,51 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_SquareLink">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container2" Layout="'QBM_Styles_Container_SquareLink'">
+          <LinkContainer ScriptItemUID="LinkContainer2">
+            <ControlList ScriptItemUID="ControlList3">
+              <Container ScriptItemUID="Container5">
+                <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_Inline'" Condition="not(isnullorempty(SquareTableName()))">
+                  <Image Source="File" FileName="if(Highlight()) then&#xD;&#xA;  variable(&quot;%permanentlink%dialogimgTbl=&quot;)+SquareTableName()+ &quot;&amp;size=big&amp;effect=Tint&amp;color=&quot; + UrlEncode(variable(&quot;%VI_Common_Color_Badge_Warning%&quot;))&#xD;&#xA;else &#xD;&#xA;  variable(&quot;%permanentlink%dialogimgTbl=&quot;)+SquareTableName()+ &quot;&amp;size=big&amp;effect=Tint&amp;color=&quot; + UrlEncode(variable(&quot;%VI_Common_Color_ColorBase3%&quot;))" ScriptItemUID="Image2" />
+                </Container>
+                <Container ScriptItemUID="Container1" Condition="not(isnullorempty(IconFont()))">
+                  <Label ScriptItemUID="Label1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;style&quot;" Value="if(Highlight()) then&#xD;&#xA;  variable(&quot;font-size: 1.6em; color: %VI_Common_Color_Badge_Warning%;&quot;)&#xD;&#xA;else &#xD;&#xA;  variable(&quot;font-size: 1.6em;  color: %VI_Common_Color_ColorBase3%;&quot;)" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="IconFont()" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+                <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="Container3style" Value="&quot;display: inline; vertical-align: sub;&quot;" />
+                  </HtmlAttributes>
+                  <Label Text="SquareText()" ScriptItemUID="Label2" />
+                </Container>
+              </Container>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="SquareAction" ScriptItemUID="Call1" />
+            </ServerActionCall>
+          </LinkContainer>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="SquareText()" DataType="System.String" />
+      <VirtualFunction Signature="SquareTableName()" DataType="System.String" />
+      <VirtualControl ID="SquareAction" ContainerType="ActionComponent" />
+      <VirtualFunction DataType="System.String" Signature="IconFont()" />
+      <VirtualFunction DataType="System.Boolean" Signature="Highlight()" TriggerUpdates="Never" DefaultValue="false" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,16 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <LayoutObject ID="VI_Styles_Label_LinkSecondary" Type="Label" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="secondaryLink" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.secondaryLink,
+.secondaryLink:hover,
+.secondaryLink:focus,
+.secondaryLink:active,
+.secondaryLink:visited 
+{
+color: %VI_Common_Color_ColoredLink_Secondary% !important;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,48 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Edit_ShoppingCartItem">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ComponentInterfaceObject ContainerType="ControlList" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ShoppingCartItem" ScriptItemUID="VirtualTable1" Class="ShoppingCartItem" RequiresCursor="true">
+        <VirtualColumn Name="CanHaveOptionalProducts" DataType="System.Boolean" />
+        <VirtualColumn Name="OrderType" DataType="System.String" />
+        <VirtualColumn Name="ProlongationDate" DataType="System.DateTime" />
+        <VirtualColumn Name="CheckStatus" DataType="System.String" />
+        <VirtualColumn Name="ErrorText" DataType="System.String" />
+        <VirtualColumn Name="ValidUntilUnsubscribe" DataType="System.DateTime" />
+      </VirtualTable>
+      <VirtualControl ID="MoveToForLater" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="ShoppingCartItem" />
+      </VirtualControl>
+      <VirtualControl ID="MoveToOrder" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="ShoppingCartItem" />
+      </VirtualControl>
+      <VirtualFunction Signature="ShowToForLater()" DataType="System.Boolean" DefaultValue="true" />
+      <VirtualTable Name="ComplianceCheckSimpleObjects" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="SourceKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceCheckSimple" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="UID_ShoppingCartItem" DataType="System.String" />
+        <VirtualColumn Name="UID_ComplianceRule" DataType="System.String" />
+        <VirtualColumn Name="UID_Person" DataType="System.String" />
+        <VirtualColumn Name="DBObjectKey" DataType="System.String" />
+        <VirtualColumn Name="ViolationType" DataType="System.String" />
+        <VirtualColumn Name="IsNoEffectivePerson" DataType="System.Boolean" TriggerUpdates="Never" />
+      </VirtualTable>
+      <VirtualTable Name="ExcludedPermissions" ScriptItemUID="VirtualTable5" TriggerUpdates="Never">
+        <VirtualColumn Name="UID_ShoppingCartItem" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="ObjectDisplayExcluded" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="ObjectKeyExcluded" DataType="System.String" TriggerUpdates="Never" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

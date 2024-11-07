@@ -1,0 +1,32 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_ToolbarButton_Dropup" Type="ToolbarButton" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" DisableCaching="true" ScriptItemUID="CssDocument1">.toolbarButtonDropup .imx-dropdown-toggle:after {
+  border-top: 4px solid transparent !important;
+  border-bottom: 4px solid %VI_Common_Color_ColoredLink%;
+  margin-bottom: 4px !important;
+}
+
+.toolbarButtonDropup .imx-dropdown-menu { 
+top: auto;
+bottom: 100%;
+right: 0;
+left: auto;
+text-align: left;
+}
+
+.toolbarButtonDropup .imx-dropdown-menu li:hover
+{
+  background: %VI_Common_Color_ColorBase3% none repeat scroll 0 0; 
+}
+
+.toolbarButtonDropup .imx-dropdown a
+{
+ color: %VI_Common_Color_ColoredLink%;
+}
+</CssDocument>
+    <Property Name="CssClassName" Value="toolbarButtonDropup" Comment="" />
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,16 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ce30ea4d-145c-e293-3a63-084253f5bbdf">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Employee_Overview_Ext" RequiredDbModules="CPL,RPS">
+    <Extensions>
+      <AddObject ObjectID="Container4" ObjectType="Container" SortOrder="0">
+        <Button Text="translate(&quot;#LDS#Rule violations&quot;)" ScriptItemUID="CPLButton1" Layout="'VI_Styles_Button_Default'">
+          <ServerActionCall ScriptItemUID="CPLServerActionCall1">
+            <Redirect ScriptItemUID="CPLRedirect1" Target="Context" ContextID="RPS_ListReport_Form" AllowReturnToThisContext="true">
+              <RedirectParameter Name="'ElementObjectKey'" Value="getobjectkey(&quot;Person&quot;, getuser(), &quot;&quot;)" />
+              <RedirectParameter Name="'IdentRpsReport'" Value="&quot;Compliance rule violations by direct reports&quot;" />
+            </Redirect>
+          </ServerActionCall>
+        </Button>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

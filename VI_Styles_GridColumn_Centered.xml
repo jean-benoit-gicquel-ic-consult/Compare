@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_GridColumn_Centered" Type="GridColumn" MigrationNotes="DIALOGCONFIGPARM;" HasRelatedObject="true" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_GridColumn_Default" />
+    <Property Name="CssClassName" Value="centered" Comment="" />
+    <Property Name="CssClassNameHeaderCell" Value="centered" Comment="" />
+    <Property Name="CssClassNameFooterCell" Value="centered" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.centered { text-align: center; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,203 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <Context ID="VI_QERPolicy_Report" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" HelpChapterUid="&quot;41B7FF60-F8CE-460D-A864-A54151E99C76&quot;" MetamodelVersion="2016-05-08" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="UID_QERPolicy" IsMandatory="false" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="ReportParameters" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="Area" ScriptItemUID="Column1" DataType="System.String" />
+        <Column Name="Group" ScriptItemUID="Column2" DataType="System.String" />
+        <Column Name="Rule" ScriptItemUID="Column3" DataType="System.String" />
+        <Column Name="Ruler" ScriptItemUID="Column4" DataType="System.String" />
+        <Column Name="RulerDisplay" ScriptItemUID="Column5" DataType="System.String" />
+        <Column Name="RuleResponsible" ScriptItemUID="Column6" DataType="System.String" />
+        <Column Name="RuleResponsibleDisplay" ScriptItemUID="Column7" DataType="System.String" />
+        <Column Name="ReportName" ScriptItemUID="Column8" DataType="System.String" />
+        <Column Name="LastCompiledReportUID" ScriptItemUID="Column9" DataType="System.String" />
+      </DataTableSingleRow>
+      <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow2">
+        <Column Name="QERPolicyFilter" ScriptItemUID="Column10" DataType="System.String" />
+        <Column Name="GroupFilter" ScriptItemUID="Column11" DataType="System.String" />
+        <Column Name="AreaFilter" ScriptItemUID="Column12" DataType="System.String" />
+        <Column Name="Page" ScriptItemUID="Column13" DataType="System.String" />
+        <Column Name="FrameworkOwner" Expression="exists(&quot;compliancearea&quot;, format(&quot;uid_orgresponsible in ( select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = {0} )) &quot;, sqlformatvalue(GetUser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" DataSource="Expression" ScriptItemUID="Column14" DataType="System.Boolean" />
+        <Column Name="PolicyOwner" Expression="exists(&quot;qerpolicy&quot;, format(&quot;uid_qerpolicy in (&#xD;&#xA;select cr.uid_qerpolicy from qerpolicy cr &#xD;&#xA;join aerolecollection col on col.uid_aerole = cr.uid_aeroleresponsible&#xD;&#xA;join personinaerole pio on pio.uid_aerole = col.uid_parentaerole where {0})&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;pio.uid_person&quot;, getuser()),&#xD;&#xA;sqlcompare(&quot;cr.IsInactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;cr.IsWorkingCopy&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)))" DataSource="Expression" ScriptItemUID="Column15" DataType="System.Boolean" />
+        <Column Name="ExceptionApprover" Expression="exists(&quot;qerpolicy&quot;, &#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsExceptionAllowed&quot;,true,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;uid_aeroleruler in&#xD;&#xA;(select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where {0}))&quot;, sqlcompareuid(&quot;uid_person&quot;, getuser()))))" DataSource="Expression" ScriptItemUID="Column16" DataType="System.Boolean" />
+        <Column Name="C_SOfficer" Expression="exists(&quot;personinaerole&quot;, sqland(&quot;uid_aerole in ('CAP-AEROLE-AUDITING-AUDITOR', 'CAP-AEROLE-IAG-CISO')&quot;, sqlcompareuid(&quot;uid_person&quot;, getuser())))" DataSource="Expression" ScriptItemUID="Column17" DataType="System.Boolean" />
+        <Column Name="UID_SELECTED" DataType="System.String" ScriptItemUID="Column20" />
+      </DataTableSingleRow>
+      <DataTableDbObject Table="QERPolicy" Class="QERPolicy" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="ShowReport">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action7">
+            <ActionSequence ScriptItemUID="Action8">
+              <Update DataTable="ReportParameters" DataColumn="LastCompiledReportUID" Value="newid()" ScriptItemUID="Update5" />
+              <PrepareReport ReportName="select current reportname from reportparameters" CompiledReportUID="select lastcompiledreportuid from reportparameters">
+                <ParameterFree Name="'Area'" Value="select area from reportparameters" ScriptItemUID="ParameterFree1" />
+                <ParameterFree Name="'PGroup'" Value="select group from reportparameters" ScriptItemUID="ParameterFree2" />
+                <ParameterFree Name="'Policy'" Value="select rule from reportparameters" ScriptItemUID="ParameterFree3" />
+                <ParameterFree Name="'Ruler'" Value="select ruler from reportparameters" ScriptItemUID="ParameterFree4" />
+                <ParameterFree Name="'RulerDisplay'" Value="select rulerdisplay from reportparameters" ScriptItemUID="ParameterFree5" />
+                <ParameterFree Name="'RuleResponsible'" Value="select ruleresponsible from reportparameters" ScriptItemUID="ParameterFree6" />
+                <ParameterFree Name="'RuleResponsibleDisplay'" Value="select ruleresponsibledisplay from reportparameters" ScriptItemUID="ParameterFree7" />
+              </PrepareReport>
+              <Redirect Target="Context" InNewFrame="true" AbortExecution="false" PopupID="Report" Width="'800'" Height="'400'" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" ScriptItemUID="Redirect1">
+                <RedirectParameter Name="'uid_compiledreport'" Value="from ReportParameters select LastCompiledReportUID" />
+              </Redirect>
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="Container" Operation="Update" ScriptItemUID="DataEventHandler1">
+        <ActionSequence ScriptItemUID="Action9">
+          <ActionSequence Condition="&quot;FrameworkOwner&quot; = from Container select Page" ItemUID="Framework" ScriptItemUID="Action10">
+            <LoadTable DataTable="QERPolicy" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;&#xD;&#xA;UID_QERPolicy in(&#xD;&#xA;   select UID_QERPolicy from QERPolicyInArea where UID_ComplianceArea in(&#xD;&#xA;      select UID_ComplianceArea from ComplianceArea where uid_orgresponsible in(&#xD;&#xA;         select uid_aerole from aerolecollection where uid_parentaerole in(&#xD;&#xA;	        select pio.uid_aerole from personinaerole pio where pio.uid_person = '{0}'&#xD;&#xA;	     )&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;&quot;,GetUser())&#xD;&#xA;)" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;PolicyOwner&quot; = from Container select Page" ItemUID="Policy" ScriptItemUID="Action11">
+            <LoadTable DataTable="QERPolicy" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;sqland((if(isnullorempty(request(&quot;UID_QERPolicy&quot;))) then &quot;&quot; &#xD;&#xA;else sqlcompareuid(&quot;uid_qerpolicy&quot;, request(&quot;UID_QERPolicy&quot;))&#xD;&#xA;),&#xD;&#xA;format(&quot;uid_aeroleresponsible in (select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = {0}))&quot;, sqlformatvalue(GetUser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="LoadTable2">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;ExceptionApprover&quot; = from Container select Page" ItemUID="Approver" ScriptItemUID="Action12">
+            <LoadTable DataTable="QERPolicy" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;uid_aeroleruler in (select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = {0}))&quot;, sqlformatvalue(GetUser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;)" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;C_SOfficer&quot; = from Container select Page" ItemUID="C_SOfficer" ScriptItemUID="Action13">
+            <LoadTable DataTable="QERPolicy" WhereClause="sqland(sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;))" ScriptItemUID="LoadTable4">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="Page" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action2">
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where FrameworkOwner" ScriptItemUID="Action3">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;FrameworkOwner&quot;" ScriptItemUID="Update1" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where PolicyOwner" ScriptItemUID="Action4">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;PolicyOwner&quot;" ScriptItemUID="Update2" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where ExceptionApprover" ScriptItemUID="Action5">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;ExceptionApprover&quot;" ScriptItemUID="Update3" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where C_SOfficer" ScriptItemUID="Action6">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;C_SOfficer&quot;" ScriptItemUID="Update4" />
+      </ActionSequence>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Policy violations&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action14" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Heading Policy Violations')" ScriptItemUID="Label3" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1">
+            <Container ScriptItemUID="Container2">
+              <Container Layout="'VI_Styles_Container_Paragraph'" Condition="1 &lt; &#xD;&#xA;(&#xD;&#xA;(isnull(from Container select 1 where ExceptionApprover,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where FrameworkOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where PolicyOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where C_SOfficer,0))&#xD;&#xA;)" ScriptItemUID="Container3">
+                <Container Condition="from Container select FrameworkOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4">
+                  <RadioButton DataTable="Container" DataColumn="Page" Text="translate(&quot;#LDS#For framework owners&quot;)" ScriptItemUID="RadioButton1" DataValue="&quot;FrameworkOwner&quot;" />
+                </Container>
+                <Container Condition="from Container select PolicyOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container5">
+                  <RadioButton DataTable="Container" DataColumn="Page" Text="translate(&quot;#LDS#For policy owners&quot;)" ScriptItemUID="RadioButton2" DataValue="&quot;PolicyOwner&quot;" />
+                </Container>
+                <Container Condition="from Container select ExceptionApprover" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container6">
+                  <RadioButton DataTable="Container" DataColumn="Page" Text="translate('#LDS#For exception approvers')" ScriptItemUID="RadioButton4" DataValue="&quot;ExceptionApprover&quot;" />
+                </Container>
+                <Container Condition="from Container select C_SOfficer" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container7">
+                  <RadioButton DataTable="Container" DataColumn="Page" Text="translate('#LDS#All policies')" ScriptItemUID="RadioButton3" DataValue="&quot;C_SOfficer&quot;" />
+                </Container>
+              </Container>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container8">
+                <Container Condition="&quot;FrameworkOwner&quot; = from Container select Page" ScriptItemUID="Container9">
+                  <Label Text="translate('#LDS#The following policies are assigned to frameworks which you are responsible for.')" ScriptItemUID="Label2" />
+                </Container>
+                <Container Condition="&quot;PolicyOwner&quot; = from Container select Page" ScriptItemUID="Container10">
+                  <Label Text="translate('#LDS#You are responsible for the following policies.')" ScriptItemUID="Label5" />
+                </Container>
+                <Container Condition="&quot;ExceptionApprover&quot; = from Container select Page" ScriptItemUID="Container11">
+                  <Label Text="translate('#LDS#You are authorized to grant exceptions to the following policies.')" ScriptItemUID="Label4" />
+                </Container>
+                <Container Condition="&quot;C_SOfficer&quot; = from Container select Page" ScriptItemUID="Container12">
+                  <Label Text="translate('#LDS#The following company policies are available in the system.')" ScriptItemUID="Label1" />
+                </Container>
+              </Container>
+              <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                <HtmlAttributes />
+                <MasterPane ScriptItemUID="MasterPane1">
+                  <Container ScriptItemUID="Container13" Layout="'VI_Styles_Container_Paragraph'">
+                    <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="DataCaption(&quot;QERPolicy&quot;)" ExportTitle="">
+                      <ControlReferenceGridBand ID="VI_QERPolicy_GridPolicy" DataTable="" ScriptItemUID="ControlRef1">
+                        <VirtualControlMapping VirtualControl="ReportRequested" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action15">
+                            <CallAction ActionID="ShowReport" ScriptItemUID="CallAction2" />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="QERPolicyFilter()" Value="1=1" ScriptItemUID="VirtualFunctionMapping1" />
+                        <VirtualTableMapping VirtualTable="QERPolicy" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping1" />
+                        <VirtualTableMapping VirtualTable="TargetTable" DataTable="Container" ScriptItemUID="VirtualTableMapping2">
+                          <VirtualColumnMapping VirtualColumn="UID_SELECTED" DataColumn="UID_SELECTED" />
+                        </VirtualTableMapping>
+                      </ControlReferenceGridBand>
+                    </Grid>
+                  </Container>
+                </MasterPane>
+                <DetailPane ScriptItemUID="DetailPane1">
+                  <Container ScriptItemUID="Container15">
+                    <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="QERPolicy" WhereClause="primarykey() = ( from container select UID_SELECTED)">
+                      <Container ScriptItemUID="Container18">
+                        <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, select current dbtable() from QERPolicy))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer">
+                          <VirtualFunctionMapping ID="ShowHeading()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                          <VirtualTableMapping VirtualTable="SourceObject" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping4" />
+                          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                        </ObjectSwitchContainer>
+                      </Container>
+                      <Container ScriptItemUID="Container14" Layout="'VI_Styles_Container_ButtonBar'">
+                        <Button Text="translate(&quot;#LDS#Show details&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'">
+                          <ServerActionCall ScriptItemUID="ServerActionCall1">
+                            <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" AbortExecution="false" ScriptItemUID="Redirect3">
+                              <RedirectParameter Name="'ObjectKey'" Value="from QERPolicy select current XObjectKey" />
+                            </Redirect>
+                          </ServerActionCall>
+                        </Button>
+                        <Button Text="translate(&quot;#LDS#Report&quot;)" ScriptItemUID="Button2">
+                          <ServerActionCall ScriptItemUID="ServerActionCall4">
+                            <Update DataTable="ReportParameters" DataColumn="Rule" Value="from QERPolicy select current UID_QERPolicy" ScriptItemUID="Update8" />
+                            <Update DataTable="ReportParameters" DataColumn="ReportName" Value="'VI_QERPolicy_Overview_UID'" ScriptItemUID="Update6" />
+                            <CallAction ActionID="ShowReport" ScriptItemUID="CallAction1" />
+                          </ServerActionCall>
+                        </Button>
+                      </Container>
+                    </ContainerTemplate>
+                  </Container>
+                  <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                    <ControlList ScriptItemUID="ControlList1">
+                      <Label Text="from QERPolicy select top 1 display() where primarykey() = ( from container select UID_SELECTED)" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-QERPolicy&quot;&#xD;&#xA;&#xD;&#xA;" />
+                        </HtmlAttributes>
+                      </Label>
+                    </ControlList>
+                  </DetailPaneHeader>
+                </DetailPane>
+              </MasterDetailControl>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

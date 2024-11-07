@@ -1,0 +1,22 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_UserLogon_Ext">
+    <Extensions>
+      <AddObject ObjectID="Menu4" ObjectType="Menu" SortOrder="25">
+        <MenuElement Text="if  ( (from CountOpenDatabaseItems select OpenAttestation) &gt; 0 ) then &#xD;&#xA;  ( translate(&quot;#LDS#Heading Pending Attestations&quot;) + ' (' + from CountOpenDatabaseItems select OpenAttestation + ')' )&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Heading Pending Attestations&quot;)" Condition="IsPreProp(&quot;Attestation&quot;)" ScriptItemUID="ATTMenuElement1">
+          <ServerActionCall ScriptItemUID="ATTServerActionCall1">
+            <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_Attestation" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="ATTRedirect1">
+              <RedirectParameter Value="false" Name="'isRequest'" />
+            </Redirect>
+          </ServerActionCall>
+        </MenuElement>
+      </AddObject>
+      <AddObject ObjectID="Menu4" ObjectType="Menu" SortOrder="26">
+        <MenuElement Text="if  ( (from CountOpenDatabaseItems select OpenInquiriesAttestation) &gt; 0 ) then &#xD;&#xA;  (translate('#LDS#Heading Attestation Inquiries') + ' (' +from CountOpenDatabaseItems select OpenInquiriesAttestation + ')' )&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Attestation Inquiries')" Condition="IsPreProp(&quot;Attestation&quot;)&#xD;&#xA;and&#xD;&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')" ScriptItemUID="ATTMenuElement2">
+          <ServerActionCall ScriptItemUID="ATTServerActionCall2">
+            <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_ITShop_AnswerQuestions" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="ATTRedirect2" />
+          </ServerActionCall>
+        </MenuElement>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,122 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ID="VI_Audit_Responsibilities" HelpChapterUid="from Vars select HelpChapterID" MigrationNotes="DIALOGCONFIGPARM;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="AuditMode" IsMandatory="false" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="Filter" ScriptItemUID="Column1" DataType="System.String" />
+        <Column Name="OrgRoot" ScriptItemUID="Column2" DataType="System.String" />
+        <Column Name="DbWhereClause" DataType="System.String" ScriptItemUID="Column11" />
+        <Column DataType="System.String" Name="Title" ScriptItemUID="Column3" />
+        <Column DataType="System.String" Name="HelpChapterID" ScriptItemUID="Column5" />
+      </DataTableSingleRow>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="DialogTable" Class="DialogTable">
+        <ActionSequence ScriptItemUID="Action3" />
+        <Column DataType="System.String" Name="LocalDisplay" ScriptItemUID="Column4" DataSource="Expression" Expression="if(&quot;Person&quot; = from DialogTable select current TableName)then&#xD;&#xA;   translate(&quot;#LDS#Employees&quot;)&#xD;&#xA;else&#xD;&#xA;   DataCaption(from DialogTable select current TableName)&#xD;&#xA;&#xD;&#xA;" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="LoadTables">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action5">
+            <Delete DataTable="DialogTable" ScriptItemUID="Delete1" />
+            <LoadTable DataTable="DialogTable" ScriptItemUID="LoadTable5" WhereClause="SqlIn(&quot;Tablename&quot;,&quot;String&quot;,split(&quot;Person,ProfitCenter,AERole,Department,Locality,QERResource,QERReuse,QERReuseUS,QERAssign,Hardware&quot;, &quot;,&quot;, false))">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function ScriptItemUID="Function1" Name="getTitleAndHeadline()" DataType="System.String" Expression="if (from vars select NOT IsNullOrEmpty(Title)) then&#xD;&#xA;(translate('#LDS#Auditing') + &quot; - &quot; + from Vars select Title)&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Heading Overview') &#xD;&#xA;" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action6" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="F1" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Roles And Entitlements')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action12">
+          <Update DataColumn="HelpChapterID" DataTable="Vars" ScriptItemUID="Update2" Value="&quot;F3BC8776-BDCF-4A4B-A35D-DFA77425050F&quot;" />
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Heading Auditing')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action21">
+              <Update DataTable="Vars" DataColumn="DbWhereClause" ScriptItemUID="Update1" />
+              <Update DataTable="Vars" DataColumn="Title" ScriptItemUID="Update12" />
+              <CallAction ScriptItemUID="Call1" ActionID="LoadTables" />
+            </Action>
+          </Activator>
+          <Container ScriptItemUID="Container1">
+            <Label ScriptItemUID="Label3" Text="translate('#LDS#Organization')" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="h3" />
+              </HtmlAttributes>
+            </Label>
+            <ContainerTemplate DataTable="DialogTable" ScriptItemUID="ContainerTemplate2" Layout="" EnableCustomAttributes="true" OrderBy="'LocalDisplay'">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container2">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef2">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action4">
+                      <Update DataTable="Vars" DataColumn="Filter" Value="from DialogTable select current TableName" ScriptItemUID="Update18" />
+                      <Update DataTable="Vars" DataColumn="Title" Value="DataCaption(from DialogTable select current TableName)" ScriptItemUID="Update9" />
+                      <SwitchAction ScriptItemUID="Switch1">
+                        <SwitchActionCase ScriptItemUID="Case1" Condition="&quot;Person&quot; = (from DialogTable select current TableName)">
+                          <Redirect ScriptItemUID="Redirect11" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Audit_SearchEmployee">
+                            <RedirectParameter Name="'AuditMode'" Value="'YES'" />
+                          </Redirect>
+                        </SwitchActionCase>
+                        <SwitchActionCase ScriptItemUID="Case2">
+                          <Redirect FormID="F2" ScriptItemUID="Redirect10" />
+                        </SwitchActionCase>
+                      </SwitchAction>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="Caption()" Value="from DialogTable select current LocalDisplay" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Identifier()" Value="from DialogTable select current TableName" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Image()" Value="from DialogTable select current TableName" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Size()" Value="'Square'" />
+                </ControlReferenceContainer>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ID="F2" PageFileName="VI_FormTemplate_Standard" NavigationTitle="getTitleAndHeadline()" ScriptItemUID="Form2">
+        <ActionSequence ScriptItemUID="Action15">
+          <Update DataColumn="HelpChapterID" DataTable="Vars" ScriptItemUID="Update3" Value="--Responsibilities &gt; Auditing &gt; Applications &#xD;&#xA;if(from Vars select Filter = &quot;Application&quot;) then&#xD;&#xA;   &quot;EB5AFE94-BA62-46C9-99D0-532E6DFF933F&quot;&#xD;&#xA;   &#xD;&#xA;--Responsibilities &gt; Auditing &gt; Resources    &#xD;&#xA;else if(from Vars select Filter = &quot;QERResource&quot;) then&#xD;&#xA;   &quot;ECC64C30-5119-4E55-9275-AC0ECF475530&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Departments &#xD;&#xA;else if(from Vars select Filter = &quot;Department&quot;) then&#xD;&#xA;   &quot;EFE9613A-C921-4C53-B5DF-1FC88E5405F4&quot;&#xD;&#xA;   &#xD;&#xA;--Responsibilities &gt; Auditing &gt; Multi-request resources&#xD;&#xA;else if(from Vars select Filter = &quot;QERReuse&quot;) then&#xD;&#xA;   &quot;EC3EBA68-12C2-434E-9C1F-AB061F86632E&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Multi requestable/unsubscribable resources&#xD;&#xA;else if(from Vars select Filter = &quot;QERReuseUS&quot;) then&#xD;&#xA;   &quot;EBA57326-FBA8-4F4F-AEE8-452A67D3C838&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Assignment resources&#xD;&#xA;else if(from Vars select Filter = &quot;QERAssign&quot;) then&#xD;&#xA;   &quot;EC5EC7D3-736E-41D2-B2C9-658D790D242C&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Locations tbd&#xD;&#xA;else if(from Vars select Filter = &quot;Locality&quot;) then&#xD;&#xA;   &quot;EFE9613A-C921-4C53-B5DF-1FC88E5405F4&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Cost Centers tbd&#xD;&#xA;else if(from Vars select Filter = &quot;ProfitCenter&quot;) then&#xD;&#xA;   &quot;EFE9613A-C921-4C53-B5DF-1FC88E5405F4&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Business Roles&#xD;&#xA;else if(from Vars select Filter = &quot;Org&quot;) then&#xD;&#xA;   &quot;F338B372-7089-4073-9225-5528E8494599&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Application Roles&#xD;&#xA;else if(from Vars select Filter = &quot;AERole&quot;) then&#xD;&#xA;   &quot;F11D3E11-9B5A-4A01-BA75-8B2022E77A59&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; System Roles&#xD;&#xA;else if(from Vars select Filter = &quot;ESet&quot;) then&#xD;&#xA;   &quot;F2C23190-3A91-444B-8E13-E5C99E089591&quot;" />
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+          <Label Text="getTitleAndHeadline()" ScriptItemUID="Label8" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+          <Container ScriptItemUID="Container12">
+            <ControlReferenceContainer ID="VI_Responsibilities_Memberships" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ID="DbTableName()" Value="from Vars select Filter" ScriptItemUID="VirtualFunctionMapping21" />
+              <VirtualFunctionMapping ID="DbWhereClause()" Value="from Vars select DbWhereClause" ScriptItemUID="VirtualFunctionMapping22" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer5" ID="TitleBar">
+          <Container ScriptItemUID="Container14" Condition="(from Vars select Filter) &lt;&gt; 'AERole'">
+            <ControlList ScriptItemUID="ControlList10">
+              <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Text()" Value="Translate('#LDS#This page displays the selected roles and entitlements. If you select a person only roles and entitlements for which the person is responsible are displayed.')" />
+              </ControlReferenceControlList>
+            </ControlList>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

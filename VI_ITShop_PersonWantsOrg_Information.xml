@@ -1,0 +1,143 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PersonWantsOrg_Information" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Tab ScriptItemUID="Tab1" Layout="if (ShowAsPrimaryTab()) then 'VI_Styles_Tab_Default' else 'VI_Styles_Tab_Secondary'">
+          <TabPage ItemUID="Info" ScriptItemUID="TabPage1">
+            <ControlsHeader ScriptItemUID="Container2">
+              <Label Text="translate(&quot;#LDS#Information&quot;)" ScriptItemUID="Label1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container3">
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="from personwantsorg select current uid_accproduct = &quot;QER-9F7E5C3156D54C979C427FDB081C7056&quot;" ItemUID="New Manager Assignment">
+                  <ControlReferenceControlList ID="VI_Edit_PersonWantsOrg_NewManager" ScriptItemUID="ControlRef3">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="IsReadOnly()" Value="IsReadOnly()" />
+                  </ControlReferenceControlList>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;PersonWantsOrg&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                <VirtualTableMapping VirtualTable="SourceObject" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+              </ObjectSwitchContainer>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ItemUID="Workflows" ScriptItemUID="TabPage2">
+            <ControlsHeader ScriptItemUID="Container4">
+              <Label Text="translate(&quot;#LDS#Workflow&quot;)" ScriptItemUID="Label2" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container5">
+              <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+                <Action ScriptItemUID="Action4">
+                  <LoadTable DataTable="PWODecisionHistory" ScriptItemUID="LoadTable3">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  </LoadTable>
+                  <LoadTable DataTable="PersonNextDecision" WhereClause="format( &quot;uid_person in(&#xD;&#xA;   {1}&#xD;&#xA;   union&#xD;&#xA;   select UID_Person from QER_VITShopDecisionPerson where rulerlevel &lt;&gt; 2 and uid_personwantsorg = '{0}' and decisionorcomment = 'D'&#xD;&#xA;)&#xD;&#xA;&quot;,from personwantsorg select current UID_PersonWantsOrg,&#xD;&#xA;format(&quot;select UID_PersonHead from {0} where OrderNumber &gt; 1 and rulerlevel &lt;&gt; 2&quot;, sqlfunctioncalltable(&quot;QER&quot;,&quot;GITShop&quot;, &quot;FTPwoNextDecisionMaker&quot;,sqlformatvalue(from personwantsorg select current UID_PersonWantsOrg,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;)" ScriptItemUID="LoadTable1">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                  </LoadTable>
+                  <LoadTable DataTable="Person2PWO2OrderNumber" Type="LimitedSQL" ScriptItemUID="LoadTable2" IdentLimitedSQL="&quot;Webportal.VI_ITShop_PersonWantsOrg_Information.Person2PWO&quot;">
+                    <ParameterFree Name="&quot;uidpersonwantsorg&quot;" Value="from personwantsorg select current UID_PersonWantsOrg" ScriptItemUID="ParameterFree1" />
+                  </LoadTable>
+                </Action>
+              </Activator>
+              <ControlReferenceContainer ID="VI_Common_DecisionHistory" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="DecisionHistory" DataTable="PWODecisionHistory" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualFunctionMapping ID="DecisionHistoryFilter()" Value="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualControlMapping VirtualControl="AdditionalEvents" ContainerType="ControlList">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <Container Condition="IsInWorkflow()&#xA;and&#xA;0 = select count() from personnextdecision where uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber = 1)" ScriptItemUID="Container8" EnableCustomAttributes="true" ItemUID="CaseIsBeingCalculated">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-event imx-pending&quot;" />
+                        <Property Name="TagName" Value="li" Comment="" />
+                      </HtmlAttributes>
+                      <Label Text="translate(&quot;#LDS#The next decision step is currently being calculated. The request might also be waiting on a pending decision of another request.&quot;)" ScriptItemUID="Label5" />
+                    </Container>
+                    <Container Condition="GetConfig('VI_ITShop_CurrentApproversCanBeSeen')=true AND&#xD;&#xA;IsInWorkflow()&#xD;&#xA;and&#xD;&#xA;0 &lt; select count() from personnextdecision where uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber = 1)" ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="CurrentDecisionMakers">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-event imx-pending&quot;" />
+                        <Property Name="TagName" Value="li" Comment="" />
+                      </HtmlAttributes>
+                      <Container ScriptItemUID="Container10">
+                        <Label Text="translate(&quot;#LDS#The following employees are currently entitled to approve this request.&quot;)" ScriptItemUID="Label4" />
+                      </Container>
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber = 1)">
+                        <Container ScriptItemUID="Container11">
+                          <Label Text="from personnextdecision select current display()" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                    <Container ScriptItemUID="Container6" EnableCustomAttributes="true" Condition="GetConfig('VI_ITShop_NextApproverCanBeSeen')=true AND&#xD;&#xA;IsInWorkflow()&#xD;&#xA;and&#xD;&#xA;0 &lt; select count() from personnextdecision where uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber &gt; 1) " ItemUID="NextDecisions">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute3x" Name="&quot;class&quot;" Value="&quot;imx-event imx-pending&quot;" />
+                        <Property Name="TagName" Value="li" Comment="" />
+                      </HtmlAttributes>
+                      <Container ScriptItemUID="Container16">
+                        <Label Text="translate(&quot;#LDS#The following employees are entitled to approve this request after the current workflow step.&quot;)" ScriptItemUID="Label10" />
+                      </Container>
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber &gt; 1)">
+                        <Container ScriptItemUID="Container9">
+                          <Label Text="from personnextdecision select current display()" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                  </ControlList>
+                </VirtualControlMapping>
+              </ControlReferenceContainer>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ScriptItemUID="QERTabPage1" Condition="from personwantsorg select current not(isnullorempty(uid_orgrequested))">
+            <ControlsHeader ScriptItemUID="QERContainer1">
+              <Label Text="translate(&quot;#LDS#Entitlements&quot;)" ScriptItemUID="QERLabel1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="QERContainer2">
+              <ControlReferenceControlList ID="QER_EntitlementList" ScriptItemUID="QERControlRef1">
+                <VirtualFunctionMapping ID="UidOrg()" Value="from PersonwantSOrg select current uid_orgrequested" ScriptItemUID="QERVirtualFunctionMapping1" />
+              </ControlReferenceControlList>
+            </ControlsBody>
+          </TabPage>
+          <ControlReferenceTabPageGroup ID="AdditionalTabs" ScriptItemUID="ControlRef2" />
+        </Tab>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="Person" Table="PersonNextDecision" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+        </DataTableDbObject>
+        <DataTableSQL Table="Person2PWO2OrderNumber" ScriptItemUID="DataTableLimitedSQL1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="OrderNumber" DataType="System.Int32" ScriptItemUID="Column7" />
+        </DataTableSQL>
+        <DataTableCRView Table="PWODecisionHistory" Class="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+        </DataTableCRView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsInWorkflow()" Expression="select current (orderstate in ( 'OrderProduct', 'OrderUnsubscribe', 'OrderProlongate')) from personwantsorg" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="GetOrgFromAssignmentKey(string key)" Expression="{{&#xD;&#xA;if(string.IsNullOrEmpty(key))&#xD;&#xA;return null;&#xD;&#xA;&#xD;&#xA;var k = new DbObjectKey(key);&#xD;&#xA;var vals = k.Keys;&#xD;&#xA;string result = null;&#xD;&#xA;&#xD;&#xA;// it Is an ESetHasEntitlement, so there Is only one key&#xD;&#xA;&#xD;&#xA; if(vals.Length == 1)&#xD;&#xA;return null;&#xD;&#xA;&#xD;&#xA;// one of the foreign-keys must point to Person, as we want to show entitlements that&#xD;&#xA;// will be inherited to the employee&#xD;&#xA;var isAssignToPerson = false;&#xD;&#xA;&#xD;&#xA;for (var i = 0; i &lt; vals.Length; i++)&#xD;&#xA;{&#xD;&#xA;   var fkRel = k.GetTable(_Connection).PrimaryKeyColumns[i].FKRelation;&#xD;&#xA;   &#xD;&#xA;   if (fkRel == null)&#xD;&#xA;      continue;&#xD;&#xA;   &#xD;&#xA;   var parentTable = fkRel.ParentColumn.TableDef;&#xD;&#xA;   if (parentTable.Tablename.Equals(&quot;Person&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;      isAssignToPerson = true;&#xD;&#xA;   &#xD;&#xA;   var b = parentTable.BaseTable;&#xD;&#xA;   &#xD;&#xA;   // is the foreign key pointing to a basetree deriving table?&#xD;&#xA;   &#xD;&#xA;   if (b != null &amp;&amp; b.Tablename.Equals(&quot;Basetree&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;   {&#xD;&#xA;      result = vals[i];&#xD;&#xA;      continue;&#xD;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return isAssignToPerson ? result : null;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="QERFunction1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable2">
+        <Column Name="UID_AccProduct" DataType="System.String" ScriptItemUID="Column1" DataSource="Expression" Expression="objectwalker(&quot;fk(uid_org).uid_accproduct&quot;)+&quot;&quot;" />
+        <Column Name="UID_OrgRequested" DataType="System.String" ScriptItemUID="QERColumn1" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;&#xD;&#xA;-- case 1: Org directly requested through IT Shop/QERAssign object&#xD;&#xA;singleproperty(&quot;Basetree&quot;, &quot;UID_Org&quot;, format(&quot;XObjectKey in (select a.ObjectKeyassignTarget from qerassign a where a.XObjectKey = '{0}')&quot;, from personwantsorg select current ObjectKeyOrdered)),&#xD;&#xA;&#xD;&#xA;-- case 2: Org requested by membership request&#xD;&#xA;&#xD;&#xA;uid_orgfromassignmentkey)" />
+        <Column Name="UID_OrgFromAssignmentKey" DataType="System.String" ScriptItemUID="QERColumn2" DataSource="Expression" Expression="GetOrgFromAssignmentKey(select current ObjectKeyAssignment from PersonwantsOrg)" />
+      </VirtualTable>
+      <VirtualFunction Signature="ShowAsPrimaryTab()" DataType="System.Boolean" DefaultValue="True" Comment="As a default this component has primary tabs.&#xD;&#xA;If this component is used in a Master-Detail-Control it looks nicer if you use a secondary tab." TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalTabs" ContainerType="TabPageGroup" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

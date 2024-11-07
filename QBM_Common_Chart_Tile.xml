@@ -1,0 +1,60 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_Chart_Tile">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="DashboardTile" ItemUID="DashboardTile">
+          <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+            <ActionComponent ScriptItemUID="Action15">
+              <CallAction ScriptItemUID="CallOnclick" ActionID="OnClick" />
+            </ActionComponent>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="Caption()" Value="Caption()" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="Identifier()" Value="Identifier()" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="ContentType()" Value="'Container'" ScriptItemUID="VirtualFunctionMapping7" />
+          <VirtualFunctionMapping ID="Size()" Value="'Dashboard'" ScriptItemUID="VirtualFunctionMapping11" />
+          <VirtualControlMapping ContainerType="Container" VirtualControl="Container">
+            <Container ScriptItemUID="Dashboard" EnableCustomAttributes="true" ItemUID="Dashboard">
+              <HtmlAttributes />
+              <CodeLiteral ScriptItemUID="CodeLiteral1">var myInfo = new ChartControlInfo { AutoSize = true, IconSize = true, Second = true };
+
+myInfo.DisplayName= _DisplayNameDialogDashboardDef;
+
+if (! string.IsNullOrEmpty(_ChartType)) 
+{
+	myInfo.ControlType = _ChartType;
+}
+
+if (_UseHistogramStyle != null) 
+{
+	myInfo.HistogramStyle = _UseHistogramStyle();
+}
+
+// limit all charts because of limited space
+myInfo.HistoryLength = 9;
+
+var myChart = new System.Collections.Generic.List&lt;object&gt; { myInfo};
+CustomizableView.CreateDashboardControl(myChart, Dashboard, true);</CodeLiteral>
+            </Container>
+          </VirtualControlMapping>
+        </ControlReferenceContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="DisplayNameDialogDashboardDef()" TriggerUpdates="Never" Comment="The display name of the DialogDashboardDef that should be displayed in the dashboard." />
+      <VirtualFunction DataType="System.String" Signature="ChartType()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="AdditionalWhereClause()" TriggerUpdates="Never" Comment="This property is no longer used." />
+      <VirtualFunction DataType="System.Boolean" Signature="UseHistogramStyle()" DefaultValue="false" />
+      <VirtualFunction DataType="System.String" Signature="Caption()" />
+      <VirtualFunction DataType="System.String" Signature="Identifier()" />
+      <VirtualControl ContainerType="ActionComponent" ID="OnClick" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

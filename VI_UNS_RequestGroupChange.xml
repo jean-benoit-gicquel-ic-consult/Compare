@@ -1,0 +1,168 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UNS_RequestGroupChange" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <LoadTable DataTable="AccProduct" RemoveDeleted="false" WhereClause="SqlCompareUid(&quot;uid_accproduct&quot;,uidaccproduct())" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ActionSequence Condition="not(isnullorempty(objectkeygroup()))" ScriptItemUID="Action2">
+          <LoadTable DataTable="ADSGroup" WhereClause="format(&quot;xobjectkey = {0}&quot;, sqlformatvalue(objectkeygroup(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable2">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+          <Update DataTable="LocalVars" DataColumn="Scope" Value="from adsgroup select top 1&#xD;&#xA;&#xD;&#xA;if(isglobal) then &quot;Global&quot;&#xD;&#xA;else if (islocal) then &quot;Local&quot;&#xD;&#xA;else if (isuniversal) then &quot;Universal&quot; else &quot;&quot;" ScriptItemUID="Update1" />
+          <Update DataTable="LocalVars" DataColumn="Type" Value="from adsgroup select top 1&#xA;&#xA;if(issecurity) then &quot;Security&quot;&#xA;else if (isdistributiongroup) then &quot;Distribution&quot; else &quot;&quot;" ScriptItemUID="Update2" />
+        </ActionSequence>
+        <LoadTable DataTable="ShoppingCartItemExisting" WhereClause="format(&quot;uid_shoppingcartorder = {0} and uid_accproduct = {2} and orderdetail1 like '%{1}%'&quot;,&#xD;&#xA;sqlformatvalue(UID_ShoppingCartOrder(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;from adsgroup select top 1 uid_adsgroup where xobjectkey = objectkeygroup(),&#xD;&#xA;sqlformatvalue( uidaccproduct(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeBulk="true" />
+        </LoadTable>
+        <ActionSequence Condition="0 &lt; select count() from shoppingcartitemexisting" ItemUID="CHECK SHOPPING CART" ScriptItemUID="Action3">
+          <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+            <VirtualControlMapping VirtualControl="OnNo" ContainerType="ActionComponent">
+              <ActionComponent ScriptItemUID="Action4">
+                <EndExecution />
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+              <ActionComponent ScriptItemUID="Action5">
+                <Delete DataTable="ShoppingCartItemExisting" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete1" />
+                <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction4" />
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#You already have a request for a modification of this group in your shopping cart. Would you like to make a new request?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Information&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+          </CallAction>
+        </ActionSequence>
+        <Update DataTable="LocalVars" DataColumn="ObjectKeyGroup" Value="objectkeygroup()" ScriptItemUID="Update3" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Please supply the following information for the group.&quot;)+&quot; &quot;+translate(&quot;#LDS#Your request will be added to the shopping cart.&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+              </ControlReferenceContainer>
+              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping5">
+                  <ColumnList ScriptItemUID="ColumnList1">
+                    <SingleColumn DataColumn="ObjectKeyGroup" ScriptItemUID="SingleColumn1" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="not(isnullorempty(objectkeygroup()))" ScriptItemUID="VirtualFunctionMapping6" />
+              </ControlReferenceContainer>
+              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef3">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping7">
+                  <ColumnList ScriptItemUID="ColumnList2">
+                    <SingleColumn DataColumn="Scope" ScriptItemUID="SingleColumn2" />
+                    <SingleColumn DataColumn="Type" ScriptItemUID="SingleColumn3" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping2" />
+              </ControlReferenceContainer>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container5">
+              <Button Text="translate(&quot;#LDS#OK&quot;)" EnabledCondition="from LocalVars select not (IsNullOrEmpty(objectkeygroup) or isnullorempty(scope) or isnullorempty(type))" ScriptItemUID="Button1">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <ActionSequence Condition="-- Deny modification of a security group from global to local&#xA;((from adsgroup select top 1 issecurity and isglobal) and (from localvars select type='security' and scope = 'local'))&#xA;or&#xA;-- Deny modification of a security group from local to global&#xA;((from adsgroup select top 1 issecurity and islocal) and (from localvars select type='security' and scope = 'global'))&#xA;" ItemUID="CHECK GROUP FLAGS" ScriptItemUID="Action6">
+                    <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call3">
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The requested group modification is invalid.&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                      <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping9" />
+                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Error&quot;)" ScriptItemUID="VirtualFunctionMapping10" />
+                      <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping11" />
+                    </CallAction>
+                    <EndExecution />
+                  </ActionSequence>
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <Update DataTable="LocalVars" DataColumn="InsertFailed" Value="false" ScriptItemUID="Update4" />
+                  <ActionOnControl />
+                  <ActionSequence ScriptItemUID="Action8">
+                    <CallAction ActionID="VI_ITShop_AddCartItem" ScriptItemUID="Call4">
+                      <VirtualFunctionMapping ID="uidaccproduct()" Value="uidaccproduct()" ScriptItemUID="VirtualFunctionMapping12" />
+                      <VirtualFunctionMapping ID="uidpersonordered()" Value="uidpersonordered()" ScriptItemUID="VirtualFunctionMapping13" />
+                      <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="UID_ShoppingCartOrder()" ScriptItemUID="VirtualFunctionMapping14" />
+                      <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping3" />
+                    </CallAction>
+                    <ForeachRow DataTable="ShoppingCartItem" WhereClause="uid_accproduct = uidaccproduct() and isnullorempty(orderdetail1)" ScriptItemUID="ForeachRow1">
+                      <Update DataTable="ShoppingCartItem" DataColumn="OrderDetail1" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" Value="(from adsgroup select top 1 uid_adsgroup where xobjectkey = objectkeygroup())&#xA;+ &quot;|&quot;&#xA;+ from localvars select scope&#xA;+ '|'&#xA;+ from localvars select type&#xA;" ScriptItemUID="Update5" />
+                      <Save DataTable="ShoppingCartItem" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" ScriptItemUID="Save1" />
+                      <CallAction ActionID="VI_ITShop_ShoppingCartItem_Editor" ScriptItemUID="CallAction1">
+                        <VirtualFunctionMapping ID="DeleteProductOnCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping15" />
+                        <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping4" />
+                        <VirtualControlMapping VirtualControl="OnInsertCancel" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action9">
+                            <Update DataTable="LocalVars" DataColumn="InsertFailed" Value="true" ScriptItemUID="Update6" />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                      </CallAction>
+                    </ForeachRow>
+                    <ActionSequence Condition="false = (from LocalVars select InsertFailed)" ScriptItemUID="Action10">
+                      <CallAction ActionID="OnAfterInsert" ScriptItemUID="CallAction2" />
+                    </ActionSequence>
+                    <ActionSequence Condition="true = (from LocalVars select InsertFailed)" ScriptItemUID="Action11">
+                      <CallAction ActionID="OnAfterInsertCancel" ScriptItemUID="CallAction3" />
+                    </ActionSequence>
+                  </ActionSequence>
+                </ServerActionCall>
+              </Button>
+              <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" ItemUID="Default Button" ScriptItemUID="Button2" EnableCustomAttributes="true">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                </ServerActionCall>
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                </HtmlAttributes>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="PopupTitle()" Value="from accproduct select top 1 display() where uid_accproduct = uidaccproduct()" ScriptItemUID="VirtualFunctionMapping16" />
+          <VirtualFunctionMapping ID="TableName()" Value="&quot;AccProduct&quot;" ScriptItemUID="VirtualFunctionMapping17" />
+        </CallAction>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action12" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Scope" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Group scope&quot;)" ScriptItemUID="Column1" DataType="System.String">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="Global" Display="translate(&quot;#LDS#Global group&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Local" Display="translate(&quot;#LDS#Local&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Universal" Display="translate(&quot;#LDS#Universal&quot;)" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+          <Column Name="Type" Caption="translate(&quot;#LDS#Group type&quot;)" ColumnDataSource="LimitedValues" ScriptItemUID="Column2" DataType="System.String">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues2">
+              <ColumnLimitedValue Name="Security" Display="translate(&quot;#LDS#Security group&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Distribution" Display="translate(&quot;#LDS#Distribution group&quot;)" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+          <Column Name="ObjectKeyGroup" ColumnDataSource="ForeignKey" DBTableName="&quot;ADSGroup&quot;" DBColumnName="&quot;XObjectKey&quot;" Caption="translate(&quot;#LDS#Group&quot;)" ScriptItemUID="Column3" DataType="System.String" FKWhereClause="" />
+          <Column Name="InsertFailed" DataType="System.Boolean" ScriptItemUID="Column4" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="AccProduct" Table="AccProduct" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action13" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ADSGroup" Table="ADSGroup" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action14" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartItem" Table="ShoppingCartItemExisting" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action15" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="uidpersonordered()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="uidaccproduct()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UID_ShoppingCartOrder()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable1" />
+      <VirtualControl ID="OnAfterInsert" ContainerType="ActionComponent" Comment="Signalisiert das erfolgreiche hinzufügen eines Items in den Einkaufswagen" />
+      <VirtualControl ID="OnAfterInsertCancel" ContainerType="ActionComponent" Comment="Fehler oder Abbruch beim Hinzufügen eines Items in den Einkaufswagen" />
+      <VirtualFunction Signature="ObjectKeyGroup()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

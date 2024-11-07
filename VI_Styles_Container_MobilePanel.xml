@@ -1,0 +1,71 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Container_MobilePanel" Type="Container" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS (jQuery Mobile 1.4)">.ui-panel {
+	width: %MobilePanelWidth%em;	
+}
+
+.ui-panel-position-left {
+	left: -%MobilePanelWidth%em;
+}
+
+/* for left panel */
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
+	-webkit-transform: translate3d(-%MobilePanelWidth%em,0,0);
+	-moz-transform: translate3d(-%MobilePanelWidth%em,0,0);
+	transform: translate3d(-%MobilePanelWidth%em,0,0);
+}
+
+.ui-panel-page-content-position-left {
+	left: %MobilePanelWidth%em;
+	right: -%MobilePanelWidth%em;
+}
+
+.ui-panel-animate.ui-panel-page-content-position-left {
+	-webkit-transform: translate3d(%MobilePanelWidth%em,0,0);
+	-moz-transform: translate3d(%MobilePanelWidth%em,0,0);
+	transform: translate3d(%MobilePanelWidth%em,0,0);
+}
+
+.ui-responsive-panel .ui-panel-page-content-open.ui-panel-page-content-position-left {
+	margin-right: %MobilePanelWidth%em;
+}
+.ui-panel-dismiss-open.ui-panel-dismiss-position-left {
+	left: %MobilePanelWidth%em;
+}
+
+/* for right panel*/
+.ui-panel-position-right {
+	right: -%MobilePanelWidth%em;
+}
+
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-overlay,
+.ui-panel-animate.ui-panel-position-right.ui-panel-display-push {
+	-webkit-transform: translate3d(%MobilePanelWidth%em,0,0);
+	-moz-transform: translate3d(%MobilePanelWidth%em,0,0);
+	transform: translate3d(%MobilePanelWidth%em,0,0);
+}
+
+.ui-panel-page-content-position-right {
+	left: -%MobilePanelWidth%em;
+	right: %MobilePanelWidth%em;
+}
+
+.ui-panel-animate.ui-panel-page-content-position-right {
+	-webkit-transform: translate3d(-%MobilePanelWidth%em,0,0);
+	-moz-transform: translate3d(-%MobilePanelWidth%em,0,0);
+	transform: translate3d(-%MobilePanelWidth%em,0,0);
+}
+
+.ui-responsive-panel .ui-panel-page-content-open.ui-panel-page-content-position-right {
+	margin-left: %MobilePanelWidth%em;
+}
+
+.ui-panel-dismiss-open.ui-panel-dismiss-position-right {
+	right: %MobilePanelWidth%em;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,33 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="QFENBxwcNZowjdLLTn4pSA==">
+  <GlobalControl ID="VI_Edit_Special_Person_TemporaryDeactivated" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="'display: inline-block; padding-right: 8px;'" />
+          </HtmlAttributes>
+          <CheckBox DataTable="EditTable" DataColumn="EditColumn" Text="translate(&quot;#LDS#Temporarily disable until&quot;)" ScriptItemUID="CheckBox1" />
+        </Container>
+        <FormItemLabel DataTable="EditTable" DataColumn="DeactivationEnd" IsInvisible="true" ScriptItemUID="FormItemLabel1">
+          <Label Text="translate(&quot;#LDS#until&quot;)" ScriptItemUID="Label1" />
+        </FormItemLabel>
+        <DateControl DataTable="EditTable" DataColumn="DeactivationEndProxy" ScriptItemUID="DateControl1" Type="DateTime" DefaultDate="AddDays(getdate(),1)" />
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" Class="Person" ScriptItemUID="VirtualTableExtension1">
+        <ColumnProxy Name="DeactivationEndProxy" ScriptItemUID="ColumnProxy1" DataColumn="DeactivationEnd">
+          <ParameterFree Name="&quot;MinDate&quot;" Value="getdate()" ScriptItemUID="ParameterFree1" />
+        </ColumnProxy>
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

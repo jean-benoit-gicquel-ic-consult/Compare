@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_UserLogon_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container27" ObjectType="Container" SortOrder="15" Condition="ispreprop(&quot;ITSHOP&quot;)">
+        <Container ScriptItemUID="Container16" ItemUID="Shopping Cart" EnableCustomAttributes="true" Condition="ispreprop(&quot;ITSHOP&quot;)">
+          <HtmlAttributes />
+          <ToolbarButton ScriptItemUID="QERToolbarButton1" DisplayType="Controls" Layout="'VI_Styles_ToolbarButton_Heading'">
+            <Menu ScriptItemUID="QERMenu1">
+              <MenuElement ScriptItemUID="QERMenuElement1" Text="translate('#LDS#Heading Request')">
+                <ServerActionCall ScriptItemUID="QERServerActionCall2">
+                  <Redirect ScriptItemUID="QERRedirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ProductSelection" NoLinkBackToThisForm="true" NoLinkObjectID="true" />
+                </ServerActionCall>
+              </MenuElement>
+              <MenuElement ScriptItemUID="QERMenuElement2" Text="if(from CountOpenDatabaseItems select CountProductsInShoppingCart &gt; 0) then&#xD;&#xA;  (translate('#LDS#Heading Shopping Cart') + ' (' +  from CountOpenDatabaseItems select CountProductsInShoppingCart +')')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Shopping Cart')">
+                <ServerActionCall ScriptItemUID="QERServerActionCall3">
+                  <Redirect ScriptItemUID="QERRedirect2" Target="Context" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" NoLinkObjectID="true" ContextID="VI_ITShop_ShoppingCart" />
+                </ServerActionCall>
+              </MenuElement>
+              <MenuElement ScriptItemUID="QERMenuElement3" Text="translate('#LDS#Renew or Unsubscribe')">
+                <ServerActionCall ScriptItemUID="QERServerActionCall4">
+                  <Redirect ScriptItemUID="QERRedirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_PWOSelection" />
+                </ServerActionCall>
+              </MenuElement>
+            </Menu>
+            <ControlList ScriptItemUID="QERControlList1">
+              <Label ScriptItemUID="QERLabel1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="QERHtmlAttribute2" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--shopping-cart&quot;" />
+                  <HtmlAttribute ScriptItemUID="QERHtmlAttribute1" Name="&quot;style&quot;" Value="if (from CountOpenDatabaseItems select CountProductsInShoppingCart &gt; 0) then&#xD;&#xA;  (variable(&quot;color: %VI_Common_Color_Badge_Warning%; font-size: 1.3em;&quot;))&#xD;&#xA;else&#xD;&#xA;  (variable(&quot;color: %VI_Common_Color_ColorBase1%; font-size: 1.3em;&quot;))" />
+                  <Property Name="TagName" Value="i" />
+                  <HtmlAttribute ScriptItemUID="QERHtmlAttribute4" Name="&quot;title&quot;" Value="translate(&quot;#LDS#Heading My Requests&quot;)" />
+                </HtmlAttributes>
+              </Label>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="QERServerActionCall1" />
+          </ToolbarButton>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

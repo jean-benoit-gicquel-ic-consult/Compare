@@ -1,0 +1,12 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="8391a72c-0c71-c4ec-6f6d-dd35d98eb22f">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Roles_Split_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action1" ObjectType="ActionSequence" SortOrder="55">
+        <Insert DataTable="CandidateTable" ScriptItemUID="RMBInsert1">
+          <ActionSequence ScriptItemUID="RMBAction1" />
+          <InsertValue Value="&quot;Org&quot;" DataColumn="Name" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

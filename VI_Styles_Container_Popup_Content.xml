@@ -1,0 +1,14 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Popup_Content" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="modal-body" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.modal-body { min-height: 90px; overflow: auto; padding: 0; }
+
+/* for showing scrollbars in popups */
+.ui-mobile .modal-body { 
+   -webkit-overflow-scrolling: touch;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

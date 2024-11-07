@@ -1,0 +1,75 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_DetailInit_EmployeeCertification" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <ReadOnlyTableModifier DataTable="AttestationCase" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="uid_attestationcase = ( select current uid_attestationcase from attestationcase)" Condition="from vars select isvalid">
+          <ColumnList ScriptItemUID="ColumnList3">
+            <SingleColumn ScriptItemUID="SingleColumn15" DataColumn="DoApprove" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">	var dict = (System.Collections.Generic.Dictionary&lt;IDataRow, IDbObjectRow&gt;)
+	_AttestationCase_Current.Row.Table.ExtendedProperties
+	.GetOrAdd("EmployeeCertification", _ =&gt; new System.Collections.Generic.Dictionary&lt;IDataRow, IDbObjectRow&gt;());
+	
+	// register event-like delegates
+    var actions = (System.Collections.Generic.List&lt;System.Action&gt;)
+	_AttestationCase_Current.Row.Table.ExtendedProperties
+	.GetOrAdd("EmployeeCertificationAction", _ =&gt; new System.Collections.Generic.List&lt;System.Action&gt;());
+
+	System.Action act = ()=&gt;
+	{
+		var isValid = false;
+ 	    IDbObjectRow dbObj;
+		
+		// object already loaded?
+	    if (dict.TryGetValue(_AttestationCase_Current.Row, out dbObj))
+	    {
+    		isValid = string.IsNullOrEmpty(dbObj.Entity.GetValue("UID_PersonHead")) || dbObj.Entity.IsChanged;
+	    }
+		else
+		{
+			// object not already loaded--&gt; query database		
+			
+			// NEW
+			var f = _Database.SqlFormatter();
+			var wc = f.AndRelation(			   
+			f.UidComparison("XObjectKey", _AttestationCase_Current.Row.GetValue("ObjectKeyBase")),		
+			f.OrRelation(
+				f.Comparison("IsExternal", false, VI.Base.ValType.Bool, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase), 
+				f.EmptyClause("ContactEmail", VI.Base.ValType.String)
+			)			
+			);
+			// NEW
+			
+			string phead;
+			if(_Database.Source().TryGetSingleValue&lt;string&gt;("Person", "UID_PersonHead", wc,
+				out phead))
+			{
+				isValid = string.IsNullOrEmpty(phead);
+			}
+		}
+		
+		Vars.GetColumn("Isvalid").SetValue(Vars.SingleRow, isValid);
+	};
+	
+	actions.Add(act);
+
+	act();</CodeLiteral>
+      </ActionSequence>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="IsValid" DataType="System.Boolean" ScriptItemUID="Column1" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_AttestationCase_DetailInit" />
+  </GlobalControl>
+</WebDesigner>

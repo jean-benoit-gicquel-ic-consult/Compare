@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Entitlement_Admin_Ext">
+    <Extensions>
+      <AddObject ObjectID="ColumnLimitedValues1" ObjectType="ColumnLimitedValues" SortOrder="45">
+        <ColumnLimitedValue Name="ESet" Display="datacaption(&quot;ESet&quot;)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

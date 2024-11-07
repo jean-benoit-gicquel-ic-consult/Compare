@@ -1,0 +1,28 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="C651qwvSJSXYSeAC0tRzag==">
+  <GlobalControl ID="VI_Details_AccProduct_Default" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container1">
+        <Label Text="from accproduct select current Display()" ScriptItemUID="Label1" EnableCustomAttributes="true" UseForeignWordsTagger="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from accproduct select current tablename" />
+          </HtmlAttributes>
+        </Label>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_AccProduct" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="AccProduct" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column1" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName }}+&quot;&quot;" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

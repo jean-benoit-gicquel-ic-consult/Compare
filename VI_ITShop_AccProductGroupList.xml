@@ -1,0 +1,148 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AccProductGroupList" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action4" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-left: 1em;&quot;" />
+        </HtmlAttributes>
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action7">
+            <Update DataColumn="UidByParentCombobox" DataTable="Vars" ScriptItemUID="Update14" Value="select top 1 uid_accproductgroup from accproductgroup where isactive" />
+          </Action>
+        </Activator>
+        <Container ScriptItemUID="Container3" EnableCustomAttributes="true" Condition="0 &lt; select count() from AccProductGroup where isselected&#xD;&#xA;OR&#xD;&#xA;-- include children of currently selected&#xD;&#xA;uid_accproductgroupparent = ( select top 1 uid_accproductgroup from accproductgroup where isactive)">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="'display: inline-block;'" />
+          </HtmlAttributes>
+          <ComboBox DataColumn="UidByParentCombobox" DataTable="Vars" ScriptItemUID="ComboBox2" SourceTable="AccProductGroup" WhereClause="isselected&#xD;&#xA;OR&#xD;&#xA;-- include children of currently selected&#xD;&#xA;uid_accproductgroupparent = ( select top 1 uid_accproductgroup from accproductgroup where isactive)" EnableCustomAttributes="true" OrderBy="'CompositeSortOrder, FullPath'" SourceDisplay="GetSpacing(Depth)+&quot; &quot; +display()">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="&quot;margin-right: 1em; width: auto;&quot;" />
+            </HtmlAttributes>
+          </ComboBox>
+        </Container>
+        <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#Change service category&quot;)" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;margin-right: 1em;&quot;" />
+          </HtmlAttributes>
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ScriptItemUID="Call1" ActionID="VI_Popup">
+              <VirtualControlMapping ContainerType="Container" VirtualControl="PopupContent">
+                <Container ScriptItemUID="Container2">
+                  <Tree ScriptItemUID="Tree1">
+                    <TreeBand DataTable="AccProductGroup" ScriptItemUID="TreeBand1" DataSourceType="Database" DBWhereClause="" ExpandedCondition="isselected">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                      <ControlList ScriptItemUID="ControlList1">
+                        <Label ScriptItemUID="Label1" Text="from accproductgroup select current display()" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-AccProductGroup&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <Update DataColumn="UidByParentCombobox" DataTable="Vars" ScriptItemUID="Update4" Value="select current uid_accproductgroup from accproductgroup" />
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </TreeBand>
+                  </Tree>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="Container" VirtualControl="PopupBottom">
+                <Container ScriptItemUID="Container4">
+                  <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef1" />
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="PopupTitle()" Value="datacaption(&quot;AccProductGroup&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="CssClass()" Value="&quot;imx-popup-large&quot;" />
+            </CallAction>
+          </ServerActionCall>
+        </Button>
+        <Button ScriptItemUID="Button2" Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_Pill'">
+          <ServerActionCall ScriptItemUID="ServerActionCall3">
+            <Update DataTable="AccProductGroup" DataColumn="IsActive" ScriptItemUID="Update17" Value="0" />
+            <Update DataTable="AccProductGroup" DataColumn="IsClicked" ScriptItemUID="Update16" Value="0" />
+            <Update DataTable="AccProductGroup" DataColumn="IsSelected" ScriptItemUID="Update15" Value="false" WhereClause="true" />
+            <Update DataTable="Container" DataColumn="IsShowProductList" ScriptItemUID="Update24" Value="false" />
+          </ServerActionCall>
+        </Button>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="UidByParentCombobox" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SelectGroup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action1">
+              <Update DataTable="Container" DataColumn="WhereClauseGroup" Value="sqlcompareuid(&quot;uid_accproductgroup&quot;, (from AccProductGroup select current uid_accproductgroup))" ScriptItemUID="Update9" />
+              <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="false" WhereClause="uid_accproductgroupparent = ( select current uid_accproductgroupparent from accproductgroup)" ScriptItemUID="Update10" />
+              <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="true" WhereClause="uid_accproductgroup = ( select current uid_accproductgroup from accproductgroup)" ScriptItemUID="Update11" />
+              <Update DataTable="AccProductGroup" DataColumn="IsActive" Value="false" WhereClause="uid_accproductgroup &lt;&gt; ( select current uid_accproductgroup from accproductgroup)" ScriptItemUID="Update12" />
+              <Update DataTable="AccProductGroup" DataColumn="IsActive" Value="true" WhereClause="uid_accproductgroup = ( select current uid_accproductgroup from accproductgroup)" ScriptItemUID="Update13" />
+              <Update DataTable="Container" DataColumn="IsShowProductList" ScriptItemUID="Update1" Value="true" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AccProductGroup" ScriptItemUID="DataTableCursor2" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="GetSpacing(int length)" DataType="System.String" Expression="{{ string.Concat(System.Linq.Enumerable.Repeat(&quot;--&quot;, length)) }}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="AccProductGroup" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action5">
+            <Update DataTable="Container" DataColumn="WhereClauseGroup" Value="sqlcompareuid(&quot;uid_accproductgroup&quot;, (from AccProductGroup select current uid_accproductgroup))" ScriptItemUID="Update6" />
+            <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="false" WhereClause="uid_accproductgroupparent = ( select current uid_accproductgroupparent from accproductgroup)" ScriptItemUID="Update7" />
+            <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="true" WhereClause="uid_accproductgroup = ( select current uid_accproductgroup from accproductgroup)" ScriptItemUID="Update8" />
+            <Update DataTable="Container" DataColumn="IsShowProductList" ScriptItemUID="Update2" Value="true" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsClicked" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="AccProductGroup" ScriptItemUID="DataEventHandler2" Operation="Update">
+          <ActionSequence ScriptItemUID="Action2" Condition="from accproductgroup select current not(isselected)">
+            <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="false" WhereClause="uid_accproductgroupparent = ( select current uid_accproductgroup from accproductgroup)" ScriptItemUID="Update3" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsSelected" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="AccProductGroup" ScriptItemUID="DataEventHandler4" Operation="Update">
+          <ActionSequence ScriptItemUID="Action6" Condition="from accproductgroup select current isactive">
+            <Update DataColumn="UidByParentCombobox" DataTable="Vars" ScriptItemUID="Update5" Value="select current uid_accproductgroup from accproductgroup" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsActive" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="AccProductGroup" ScriptItemUID="DataEventHandler3" Operation="Update">
+          <ActionSequence ScriptItemUID="Action3" Condition="from accproductgroup select current isselected">
+            <Update DataTable="AccProductGroup" DataColumn="IsSelected" Value="true" WhereClause="uid_accproductgroup = ( select current uid_accproductgroupparent from accproductgroup)" ScriptItemUID="Update18" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsSelected" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler5" Operation="Update">
+          <ActionSequence ScriptItemUID="Action8">
+            <ForeachRow DataTable="AccProductGroup" ScriptItemUID="ForeachRow2" WhereClause="uid_accproductgroup = (select uidbyparentcombobox from vars)">
+              <CallAction ScriptItemUID="Call2" ActionID="SelectGroup" />
+            </ForeachRow>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UidByParentCombobox" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AccProductGroup" Class="AccProductGroup" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="IsSelected" DataType="System.Boolean" TriggerUpdates="Updates" />
+        <VirtualColumn Name="IsClicked" DataType="System.Boolean" />
+        <VirtualColumn Name="IsActive" DataType="System.Boolean" />
+        <Column DataType="System.Int32" Name="CompositeSortOrder" ScriptItemUID="Column3" TriggerUpdates="Never" DataSource="Expression" Expression="if(isselected)&#xD;&#xA;then&#xD;&#xA;-- first the parent categories&#xD;&#xA;Len(fullpath)&#xD;&#xA;else&#xD;&#xA;-- then the child categories, sorted by SortOrder&#xD;&#xA;(100000 + try(convert(SortOrder, &quot;System.Int32&quot;), 0))" />
+        <Column DataType="System.Int32" Name="Depth" ScriptItemUID="Column1" TriggerUpdates="Never" DataSource="Expression" Expression="if(isnullorempty(uid_accproductgroupparent)) then 0 else 1+(from accproductgroup select top 1 depth where uid_accproductgroup = (select current uid_accproductgroupparent from accproductgroup))" />
+      </VirtualTable>
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable2" RequiresCursor="true">
+        <VirtualColumn Name="WhereClauseGroup" DataType="System.String" />
+        <VirtualColumn Name="IsShowProductList" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualTable Name="PersonsForOrder" ScriptItemUID="VirtualTable3" Class="Person" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

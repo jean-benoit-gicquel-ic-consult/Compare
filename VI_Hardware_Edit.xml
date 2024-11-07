@@ -1,0 +1,303 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Hardware_Edit" ScriptItemUID="Context1" AllowUrlNavigation="true" HelpChapterUid="&quot;F6390728-287E-4C9D-A016-195B33D903F9&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="UID_HardwareType" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="ObjectEdit" Description="datacaption(&quot;Hardware&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Hardware_Fields_PC" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;) + &quot; (&quot; + translate(&quot;#LDS#Personal computer&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+        <ConfigParam Key="VI_Hardware_Fields_SRV" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;)+ &quot; (&quot; + translate(&quot;#LDS#Server&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+        <ConfigParam Key="VI_Hardware_Fields_MP" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;)+ &quot; (&quot; + translate(&quot;#LDS#Mobile phone&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+        <ConfigParam Key="VI_Hardware_Fields_TAB" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;)+ &quot; (&quot; + translate(&quot;#LDS#Tablet&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+        <ConfigParam Key="VI_Hardware_Fields_PR" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;)+ &quot; (&quot; + translate(&quot;#LDS#Printer&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+        <ConfigParam Key="VI_Hardware_Fields_MO" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;)+ &quot; (&quot; + translate(&quot;#LDS#Monitor&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+        <ConfigParam Key="VI_Hardware_Fields_Default" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Hardware&quot;)+ &quot; (&quot; + translate(&quot;#LDS#Default&quot;)+&quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Hardware" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="HardwareType" Table="HardwareType" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="Ident_HardwareBasicType" DataType="System.String" ScriptItemUID="Column2" Caption="DataCaption(HardwareType,Ident_HardwareBasicType)" TriggerUpdates="Updates" />
+        <Column Name="UID_HardwareType" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBTableName="&quot;HardwareType&quot;" DBColumnName="&quot;UID_HardwareType&quot;" FKWhereClause="format(&quot;Ident_HardwareBasicType = '{0}'&quot;,from Vars select Ident_HardwareBasicType)" TriggerUpdates="Updates" />
+      </DataTableSingleRow>
+      <DataTableDbObject Class="Hardware" Table="Hardware" ScriptItemUID="DataTableDbObject2">
+        <ActionSequence ScriptItemUID="Action4" />
+      </DataTableDbObject>
+      <DataTableCustom Table="LimitedValues" PrimaryKeyColumn="Value" ScriptItemUID="DataTableCustom2" Comment="Limited Values" DisplayColumn="DisplayValue">
+        <Column Name="Value" ScriptItemUID="Column22" DataType="System.String" />
+        <Column Name="Description" ScriptItemUID="Column21" DataType="System.String" />
+        <Column Name="DisplayValue" ScriptItemUID="Column32" DataType="System.String" DisplayValueExpression="DisplayValue" />
+      </DataTableCustom>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="FormOverview">
+        <LocalControlContext ContainerType="FormGroup">
+          <FormGroup ScriptItemUID="FormGroup1">
+            <Form ScriptItemUID="Form2" ID="FormOverview">
+              <ActionSequence ScriptItemUID="Action8" />
+              <PagePartContainer ScriptItemUID="PagePartContainer4" ID="Title">
+                <Label Text="translate(&quot;#LDS#Overview&quot;) + &quot; - &quot; + FormCaption()" ScriptItemUID="Label8" />
+              </PagePartContainer>
+              <PagePartContainer ScriptItemUID="PagePartContainer5" ID="Main">
+                <Container ScriptItemUID="Container4">
+                  <ControlReferenceControlList ID="VI_Common_HyperView_Generic" ScriptItemUID="ControlRef8">
+                    <VirtualFunctionMapping ID="ObjectKey()" Value="from hardware select top 1 getobjectkey()" ScriptItemUID="VirtualFunctionMapping14" />
+                    <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping13" />
+                  </ControlReferenceControlList>
+                </Container>
+              </PagePartContainer>
+            </Form>
+          </FormGroup>
+        </LocalControlContext>
+      </Control>
+      <Control ID="FormMasterData">
+        <LocalControlContext ContainerType="FormGroup">
+          <FormGroup ScriptItemUID="FormGroup2">
+            <Form ScriptItemUID="Form3" ID="FormMasterData">
+              <ActionSequence ScriptItemUID="Action9" />
+              <PagePartContainer ScriptItemUID="PagePartContainer7" ID="Title">
+                <Label Text="translate(&quot;#LDS#Main data&quot;) + &quot; - &quot; + FormCaption()" ScriptItemUID="Label4" />
+              </PagePartContainer>
+              <PagePartContainer ScriptItemUID="PagePartContainer6" ID="Main">
+                <Container ScriptItemUID="Container6">
+                  <ContainerTemplate DataTable="Hardware" ScriptItemUID="ContainerTemplate3" WithoutParentContainer="true">
+                    <ControlReferenceContainer ID="VI_ObjectEdit_Hardware" ScriptItemUID="ControlRef2">
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="Hardware" ScriptItemUID="VirtualTableMapping7" />
+                    </ControlReferenceContainer>
+                    <Container ItemUID="Buttons" ScriptItemUID="Container9" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                      </HtmlAttributes>
+                      <Button Text="translate('#LDS#Save')" ItemUID="SAVE" ScriptItemUID="Button1">
+                        <ServerActionCall ScriptItemUID="ServerActionCall1">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <CallAction ActionID="VI_Hardware_CheckData" ScriptItemUID="Call1" ItemUID="VI_Employee_CheckData">
+                            <VirtualTableMapping VirtualTable="Hardware" DataTable="Hardware" ScriptItemUID="VirtualTableMapping1" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </ContainerTemplate>
+                </Container>
+              </PagePartContainer>
+            </Form>
+          </FormGroup>
+        </LocalControlContext>
+      </Control>
+      <Control ID="ContainerMasterData">
+        <LocalControlContext ContainerType="Container">
+          <Container ScriptItemUID="Container7" />
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="IsNewHardware()" Expression="isnullorempty(request(&quot;uid_hardware&quot;))" DataType="System.Boolean" ScriptItemUID="Function1" TriggerUpdates="Never" />
+      <Function ScriptItemUID="Function2" Name="FormCaption()" DataType="System.String" Expression="if ( isnull(request(&quot;uid_hardware&quot;),'')='')&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Heading Add a New Device')&#xD;&#xA;else&#xD;&#xA;from hardware select top 1 display()" TriggerUpdates="Never" />
+      <Function Name="IsOwnerOfObject()" Expression="from Hardware select Top 1 UID_PersonOwner = getuser()" DataType="System.Boolean" ScriptItemUID="Function3" TriggerUpdates="Never" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+        <ActionSequence ScriptItemUID="Action6">
+          <Update DataTable="Vars" DataColumn="UID_HardwareType" ScriptItemUID="Update1" />
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="Ident_HardwareBasicType" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action1">
+      <LoadTable DataTable="HardwareType" ScriptItemUID="LoadTable1x" LoadLimit="1" WhereClause="if(isnull(request(&quot;UID_HardwareType&quot;),'')&lt;&gt;'')then&#xD;&#xA;   SqlCompareUid(&quot;UID_HardwareType&quot;,isnull(request(&quot;UID_HardwareType&quot;),''))">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+      </LoadTable>
+      <ActionSequence ScriptItemUID="Action39" Condition="0 = select count() from LimitedValues" ItemUID="Fill LimitedValues">
+        <ForeachRow DataTable="HardwareType" ScriptItemUID="ForeachRow2" WhereClause="UID_HardwareType = from HardwareType select top 1 UID_HardwareType">
+          <FillTable DataTable="LimitedValues" DataColumn="" Expression="GetLimitedValues(HardwareType, Ident_HardwareBasicType)" ScriptItemUID="FillTable3">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType14" ConvertToInteractive="false" />
+          </FillTable>
+          <Update DataTable="LimitedValues" DataColumn="DisplayValue" WhereClause="isnull(displayvalue,'') = ''" Value="value" ScriptItemUID="Update31" />
+        </ForeachRow>
+      </ActionSequence>
+      <Delete DataTable="LimitedValues" ScriptItemUID="Delete1" WhereClause="not(value in (split(GetConfig(&quot;VI_Allowed_Ident_HardwareBasicType&quot;),&quot;,&quot;,false)))" />
+      <ActionSequence ScriptItemUID="Action5" Condition="isnull(request(&quot;UID_HardwareType&quot;),'')&lt;&gt;''&#xD;&#xA;and&#xD;&#xA;from HardwareType select top 1 (Ident_HardwareBasicType in (split(GetConfig(&quot;VI_Allowed_Ident_HardwareBasicType&quot;),&quot;,&quot;,false)))" ItemUID="Prefill Ident_HardwareBasicType and UID_HardwareType">
+        <Update DataTable="Vars" DataColumn="Ident_HardwareBasicType" ScriptItemUID="Update2" Value="from HardwareType select top 1 Ident_HardwareBasicType" />
+        <Update DataTable="Vars" DataColumn="UID_HardwareType" ScriptItemUID="Update3" Value="from HardwareType select top 1 UID_HardwareType" />
+      </ActionSequence>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="F1" ScriptItemUID="Form1" NavigationTitle="FormCaption()">
+        <ActionSequence ScriptItemUID="Action2">
+          <ActionSequence ScriptItemUID="Action11" Condition="isnull(request(&quot;uid_hardware&quot;),'')&lt;&gt;''">
+            <LoadTable DataTable="Hardware" WhereClause="SqlAnd(&#xD;&#xA;   format(&quot;uid_hardware = '{0}'&quot;, request(&quot;uid_hardware&quot;)),&#xD;&#xA;   getconfig(&quot;VI_Hardware_Person_Filter&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable2">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+            </LoadTable>
+            <ActionSequence ScriptItemUID="Action10" Condition="0 = (from Hardware select count())" ItemUID="Hardware edit forbidden or not found">
+              <Redirect ScriptItemUID="Redirect4" NoLinkBackToThisForm="true" Target="ReturnStartForm" />
+            </ActionSequence>
+            <Redirect ScriptItemUID="Redirect2" FormID="FormStatus" NoLinkBackToThisForm="true" />
+          </ActionSequence>
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label ScriptItemUID="Label1" Text="FormCaption()" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container3" ItemUID="New hardware" Condition="isnull(request(&quot;uid_hardware&quot;),'')='' and 0 = from Hardware select count()">
+            <Container ScriptItemUID="Container2">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Select the model of your new device.')" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+            </Container>
+            <LayoutPanel ScriptItemUID="LayoutPanel1">
+              <FormItemLabel DataTable="Vars" DataColumn="UID_HardwareType" ScriptItemUID="FormItemLabel5">
+                <Label Text="datacaption(vars, Ident_HardwareBasicType)" ScriptItemUID="Label12" />
+              </FormItemLabel>
+              <ControlReferenceContainer ID="VI_Edit_ComboBox" ScriptItemUID="ControlReferenceContainer1">
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping3">
+                  <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="Ident_HardwareBasicType" />
+                </VirtualTableMapping>
+                <VirtualTableMapping VirtualTable="SourceTable" DataTable="LimitedValues" ScriptItemUID="VirtualTableMapping2">
+                  <VirtualColumnMapping VirtualColumn="SourceColumn" DataColumn="Value" />
+                  <VirtualColumnMapping VirtualColumn="SourceDisplay" DataColumn="DisplayValue" />
+                </VirtualTableMapping>
+              </ControlReferenceContainer>
+              <FormItemLabel DataTable="Vars" DataColumn="UID_HardwareType" ScriptItemUID="FormItemLabel1">
+                <Label Text="datacaption(vars, UID_HardwareType)" ScriptItemUID="Label2" />
+              </FormItemLabel>
+              <AccessModifier>
+                <Container ScriptItemUID="Container5">
+                  <ColumnEditor DataTable="Vars" DataColumn="UID_HardwareType" ScriptItemUID="ColumnEditor1" />
+                </Container>
+                <ReadOnlyTableModifier DataTable="Vars" ScriptItemUID="ReadOnlyTableModifier1" Condition="from Vars select IsNullOrEmpty(Ident_HardwareBasicType)">
+                  <ColumnList ScriptItemUID="ColumnList2">
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="UID_HardwareType" />
+                  </ColumnList>
+                </ReadOnlyTableModifier>
+              </AccessModifier>
+            </LayoutPanel>
+            <Container ScriptItemUID="Container1" Layout="'VI_Styles_Container_ButtonBar'" ItemUID="ButtonBar">
+              <Button Text="translate(&quot;#LDS#Next&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button7" EnabledCondition="not(from Vars select IsNullOrEmpty(UID_HardwareType))">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall10">
+                  <Delete DataTable="Hardware" ScriptItemUID="Delete2" />
+                  <Insert DataTable="Hardware" ScriptItemUID="Insert2">
+                    <ActionSequence ScriptItemUID="Action7" />
+                    <InsertValue DataColumn="UID_HardwareType" Value="from Vars select UID_HardwareType" />
+                    <InsertValue DataColumn="UID_PersonOwner" Value="GetUser()" />
+                    <InsertValue DataColumn="AssetOwnership" Value="true" Condition="IsPreProp('ASSET')" />
+                  </Insert>
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </Container>
+          <ContainerTemplate DataTable="Hardware" ScriptItemUID="ContainerTemplate1" Layout="">
+            <ControlReferenceContainer ID="VI_ObjectEdit_Hardware" ScriptItemUID="ControlRef11">
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Hardware" ScriptItemUID="VirtualTableMapping5" />
+            </ControlReferenceContainer>
+            <Container ItemUID="Buttons" ScriptItemUID="Container8" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+              </HtmlAttributes>
+              <Button Text="translate('#LDS#Save')" ItemUID="SAVE" ScriptItemUID="Button5">
+                <ServerActionCall ScriptItemUID="ServerActionCall5">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CallAction ActionID="VI_Hardware_CheckData" ScriptItemUID="Call2" ItemUID="VI_Employee_CheckData">
+                    <VirtualTableMapping VirtualTable="Hardware" DataTable="Hardware" ScriptItemUID="VirtualTableMapping4" />
+                  </CallAction>
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="false" ContextID="VI_Hardware_Overview" NoLinkBackToThisForm="true" />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </ContainerTemplate>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ContainerTemplate DataTable="Hardware" ScriptItemUID="ContainerTemplate2" WithoutParentContainer="true">
+            <Container ScriptItemUID="Container17" Condition="isnull(request(&quot;uid_hardware&quot;),'')&lt;&gt;''" RefreshTriggerExpression="from Hardware select GetDataVersion(Ident_Hardwarelist)">
+              <ControlReferenceControlList ID="QBM_Common_FavoritesMarkObject" ScriptItemUID="ControlRef6">
+                <VirtualTableMapping VirtualTable="Object" DataTable="Hardware" ScriptItemUID="VirtualTableMapping6" />
+                <VirtualFunctionMapping ID="BookmarkCssClass()" Value="&quot;imx-table-Hardware&quot;" ScriptItemUID="VirtualFunctionMapping19" />
+                <VirtualFunctionMapping ID="BookmarkUrl()" Value="{{&#xD;&#xA;var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();&#xD;&#xA;dict[&quot;UID_Hardware&quot;] = ContainerTemplate2_Current.Row.GetValue(&quot;UID_Hardware&quot;);&#xD;&#xA;@return VI.WebRuntime.Communication.WebPage.GenericPageHandler + &quot;?&quot; + _Module.ModuleInfo.GetUrlParameterString(dict);&#xD;&#xA;}}" ScriptItemUID="VirtualFunctionMapping18" />
+                <VirtualFunctionMapping ID="BookmarkDisplay()" Value="from hardware select current display()" ScriptItemUID="VirtualFunctionMapping17" />
+              </ControlReferenceControlList>
+            </Container>
+          </ContainerTemplate>
+        </PagePartContainer>
+      </Form>
+      <Form ScriptItemUID="Form4" ID="FormStatus">
+        <ActionSequence ScriptItemUID="Action12" />
+        <PagePartContainer ScriptItemUID="PagePartContainer8" ID="Title">
+          <Label ScriptItemUID="Label3" Text="FormCaption()" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer9" ID="Main">
+          <Tab ScriptItemUID="Tab1">
+            <TabPage ScriptItemUID="TabPage1">
+              <ControlsHeader ScriptItemUID="Container11">
+                <Label ScriptItemUID="Label5" Text="translate('#LDS#Status')" />
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container12">
+                <ContainerTemplate DataTable="Hardware" ScriptItemUID="ContainerTemplate5" WithoutParentContainer="true">
+                  <LayoutPanel ScriptItemUID="LayoutPanel2" Columns="2" Layout="'VI_Styles_LayoutPanel_WideSplitted'">
+                    <ControlReferenceContainer ID="QER_BusinessOwner_Overview_Tile" ScriptItemUID="ControlRef5">
+                      <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                        <ActionComponent ScriptItemUID="Action17" />
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="SquareText()" Value="from Hardware select top 1 Display()" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="SquareTableName()" Value="&quot;Hardware&quot;" />
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping9" VirtualTable="EditTable" DataTable="Hardware" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="PropertyList()" Value="&quot;VI_ObjectView_Hardware_Fields&quot;" />
+                    </ControlReferenceContainer>
+                    <Container ScriptItemUID="Container13" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                      </HtmlAttributes>
+                      <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef9" ItemUID="Overview">
+                        <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                          <ActionComponent ScriptItemUID="Action13">
+                            <Redirect ScriptItemUID="Redirect12" Target="FormModule">
+                              <RedirectFormModule ScriptItemUID="RedirectForm2" ID="FormOverview" />
+                            </Redirect>
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="SquareText()" Value="translate(&quot;#LDS#Overview&quot;)" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Description()" Value="translate('#LDS#Shows the overview for the selected device with assignments, entitlements and memberships.')" />
+                      </ControlReferenceContainer>
+                      <Container ScriptItemUID="Container15" Condition="IsOwnerOfObject()" ItemUID="MasterData" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                        </HtmlAttributes>
+                        <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef4">
+                          <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                            <ActionComponent ScriptItemUID="Action14">
+                              <Redirect ScriptItemUID="Redirect11" Target="FormModule">
+                                <RedirectFormModule ScriptItemUID="RedirectForm1" ID="FormMasterData" />
+                              </Redirect>
+                            </ActionComponent>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="SquareText()" Value="translate('#LDS#Main Data')" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Description()" Value="Translate('#LDS#Shows the main data for this object.')" />
+                        </ControlReferenceContainer>
+                      </Container>
+                    </Container>
+                  </LayoutPanel>
+                </ContainerTemplate>
+              </ControlsBody>
+            </TabPage>
+          </Tab>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer10" ID="TitleBar">
+          <ContainerTemplate DataTable="Hardware" ScriptItemUID="ContainerTemplate4" WithoutParentContainer="true">
+            <Container ScriptItemUID="Container10" Condition="isnull(request(&quot;uid_hardware&quot;),'')&lt;&gt;''" RefreshTriggerExpression="from Hardware select GetDataVersion(Ident_Hardwarelist)">
+              <ControlReferenceControlList ID="QBM_Common_FavoritesMarkObject" ScriptItemUID="ControlRef3">
+                <VirtualTableMapping VirtualTable="Object" DataTable="Hardware" ScriptItemUID="VirtualTableMapping8" />
+                <VirtualFunctionMapping ID="BookmarkCssClass()" Value="&quot;imx-table-Hardware&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="BookmarkUrl()" Value="{{&#xD;&#xA;var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();&#xD;&#xA;dict[&quot;UID_Hardware&quot;] = ContainerTemplate4_Current.Row.GetValue(&quot;UID_Hardware&quot;);&#xD;&#xA;@return VI.WebRuntime.Communication.WebPage.GenericPageHandler + &quot;?&quot; + _Module.ModuleInfo.GetUrlParameterString(dict);&#xD;&#xA;}}" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="BookmarkDisplay()" Value="from hardware select current display()" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceControlList>
+            </Container>
+          </ContainerTemplate>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

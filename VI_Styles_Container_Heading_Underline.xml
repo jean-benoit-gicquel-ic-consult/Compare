@@ -1,0 +1,18 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Heading_Underline" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="Underline" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.Underline{ 
+padding: 3px 2px 3px 5px; 
+width: auto; 
+margin-bottom: 3px;
+line-height: 20px;
+border-bottom-style:solid;
+border-color:%VI_Common_Color_Font_Secondary%;
+border-width:1px;
+color:%VI_Common_Color_Font_Secondary%;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

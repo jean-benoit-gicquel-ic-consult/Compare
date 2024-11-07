@@ -1,0 +1,110 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c460eba9-3091-5b5c-b186-891709f38679">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RPS_ListReports">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="RPS_Resp_ListReports" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container2">
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="RPSReport" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()" DbOrderBy="" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_RPSReport" DisplayHeader="Always" EnableCustomAttributes="true" NoRowsText="translate('#LDS#No data available')">
+                  <HtmlAttributes>
+                    <Property Name="ApplyFilledHeight" Value="true" />
+                  </HtmlAttributes>
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumnSimple ScriptItemUID="Column1" Column="__Display" />
+                </GridBand>
+              </Grid>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container1">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="RPSReport" WhereClause="uid_rpsreport = (from vars select uid_rpsreport)">
+                <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;flex-fill&quot;" />
+                  </HtmlAttributes>
+                  <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Description" />
+                        <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="RiskIndex" Condition="IsPreProp('RISKINDEX')" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ExportFormat" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="RPSReport" ScriptItemUID="VirtualTableMapping1" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Container ScriptItemUID="Container3" Layout="'VI_Styles_Container_ButtonBar'">
+                  <Button Text="translate(&quot;#LDS#View report definition&quot;)" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Default'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall2">
+                      <Redirect ScriptItemUID="Redirect3" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
+                        <RedirectParameter Name="'ObjectKey'" Value="from rpsreport select current getobjectkey()" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </Button>
+                  <Button Text="translate(&quot;#LDS#View report&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="RPS_ListReport_Form" AllowReturnToThisContext="true">
+                        <RedirectParameter Name="'IdentRpsReport'" Value="from rpsreport select current ident_rpsreport" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="from rpsreport select top 1 display() where uid_rpsreport = (from vars select uid_rpsreport)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+        <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_ButtonBar'">
+          <Button ScriptItemUID="Button3" Text="translate('#LDS#New report')" Layout="'VI_Styles_Button_Primary'">
+            <ServerActionCall ScriptItemUID="ServerActionCall3">
+              <SwitchAction ScriptItemUID="Switch1">
+                <SwitchActionCase ScriptItemUID="Case1" Condition="{{ var userSession = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IUserSession&gt;(); @return userSession.IsPhoneDevice;}}">
+                  <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction2">
+                    <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#WD_NotAvailbleOnPhoneDevices')" ScriptItemUID="VirtualFunctionMapping6" />
+                    <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping7" />
+                  </CallAction>
+                </SwitchActionCase>
+                <SwitchActionCase ScriptItemUID="Case2">
+                  <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="RPS_NewReport" />
+                </SwitchActionCase>
+              </SwitchAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="RPSReport" Table="RPSReport" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_RPSReport" DataType="System.String" ScriptItemUID="Column3" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

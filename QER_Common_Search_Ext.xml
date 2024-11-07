@@ -1,0 +1,118 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="23b3cd98-b90e-9b41-8a40-abcc4792d885">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_Common_Search_Ext">
+    <Extensions>
+      <AddObject ObjectID="ServerActionCall3" ObjectType="ServerActionCall" SortOrder="10">
+        <ActionSequence Condition="ispreprop(&quot;ITSHOP&quot;)&#xD;&#xA;and&#xD;&#xA;(select current dbtablename from results)= 'AccProduct'" ItemUID="ACCPRODUCT" ScriptItemUID="QERAction4">
+          <CallAction ActionID="VI_Popup" ScriptItemUID="QERCall2">
+            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+              <Container ScriptItemUID="QERContainer1">
+                <ObjectSwitchContainer ScriptItemUID="QERObjectSwitchContainer1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, select current dbtable() from Results))" ActionType="ObjectView">
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="QERVirtualFunctionMapping2" />
+                  <VirtualTableMapping DataTable="Results" VirtualTable="SourceObject" ScriptItemUID="QERVirtualTableMapping1" />
+                </ObjectSwitchContainer>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+              <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="QERContainer2">
+                <Button Text="translate(&quot;#LDS#Go to overview&quot;)" ScriptItemUID="QERButton1">
+                  <ServerActionCall ScriptItemUID="QERServerActionCall1">
+                    <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="QERRedirect3">
+                      <RedirectParameter Name="'ObjectKey'" Value="from Results select current objectwalker(&quot;XObjectKey&quot;)" />
+                    </Redirect>
+                  </ServerActionCall>
+                </Button>
+                <Container Condition="Exists(&quot;AccProduct&quot;,&#xD;&#xA;format(&quot;uid_accproduct in (select uid_accproduct from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,&#xD;&#xA;sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;sqlformatvalue(&#xD;&#xA;   SingleProperty(&quot;AccProduct&quot;,&quot;UID_AccProduct&quot;,sqland(format(variable(getconfig(&quot;VI_ITShop_Filter_AccProduct&quot;)),getuser()),SqlInWithFormat(&quot;XObjectKey&quot;,&quot;string&quot;,&quot;NonUnicodeLiterals&quot;,from Results select current objectwalker(&quot;XObjectKey&quot;))))&#xD;&#xA;   ,&quot;string&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;&quot;null&quot;)&#xD;&#xA;)&#xD;&#xA;)" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="QERContainer3">
+                  <Button Text="translate('#LDS#Submit request now')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="QERButton2">
+                    <ServerActionCall ScriptItemUID="QERServerActionCall2">
+                      <Redirect Target="Context" ContextID="VI_ITShop_ProductSelection" AllowReturnToThisContext="true" ScriptItemUID="QERRedirect4">
+                        <RedirectParameter Name="'uid_accproduct'" Value="SingleProperty(&quot;AccProduct&quot;,&quot;UID_AccProduct&quot;,SqlInWithFormat(&quot;XObjectKey&quot;,&quot;string&quot;,&quot;NonUnicodeLiterals&quot;,from Results select current objectwalker(&quot;XObjectKey&quot;)))" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef7">
+                  <VirtualFunctionMapping ID="MoreThanOneButton()" Value="True" ScriptItemUID="QERVirtualFunctionMapping3" />
+                </ControlReferenceControlList>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="PopupTitle()" Value="from results select current Display()" ScriptItemUID="QERVirtualFunctionMapping4" />
+            <VirtualFunctionMapping ID="TableName()" Value="from results select current dbtablename" ScriptItemUID="QERVirtualFunctionMapping5" />
+          </CallAction>
+          <EndExecution />
+        </ActionSequence>
+        <ActionSequence Condition="(select current dbtablename from results)= 'PersonWantsOrg'" ItemUID="PERSONWANTSORG" ScriptItemUID="QERAction5">
+          <LoadTable DataTable="PersonWantsOrg" WhereClause="SqlInWithFormat(&quot;XObjectKey&quot;,&quot;string&quot;,&quot;NonUnicodeLiterals&quot;,from Results select current objectwalker(&quot;XObjectKey&quot;))" ScriptItemUID="QERLoadTable1">
+            <DbObjectLoadType ScriptItemUID="QERDbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+          <CallAction ActionID="VI_Popup" ScriptItemUID="QERCall3">
+            <VirtualFunctionMapping ID="PopupTitle()" Value="from results select current Display()" ScriptItemUID="QERVirtualFunctionMapping6" />
+            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+              <Container ScriptItemUID="QERContainer4">
+                <ContainerTemplate DataTable="PersonWantsOrg" ScriptItemUID="QERContainerTemplate1">
+                  <Container ScriptItemUID="QERContainer5">
+                    <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="QERControlRef1">
+                      <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="QERVirtualTableMapping2" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="QERVirtualFunctionMapping7" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+              <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="QERContainer6">
+                <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="QERControlRef2" />
+              </Container>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="TableName()" Value="from results select current dbtablename" ScriptItemUID="QERVirtualFunctionMapping8" />
+          </CallAction>
+          <EndExecution />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="30">
+        <DataTableDbObject Class="PersonWantsOrg" Table="PersonWantsOrg" ScriptItemUID="QERDataTableDbObject1">
+          <ActionSequence ScriptItemUID="QERAction6" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="QERColumn1" DataSource="Expression" Expression="true" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence">
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert1">
+          <ActionSequence ScriptItemUID="QERAction7" />
+          <InsertValue DataColumn="Name" Value="&quot;Person&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert2">
+          <ActionSequence ScriptItemUID="QERAction8" />
+          <InsertValue DataColumn="Name" Value="&quot;PersonWantsOrg&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert3">
+          <ActionSequence ScriptItemUID="QERAction9" />
+          <InsertValue DataColumn="Name" Value="&quot;Locality&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert4">
+          <ActionSequence ScriptItemUID="QERAction10" />
+          <InsertValue DataColumn="Name" Value="&quot;ProfitCenter&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert5">
+          <ActionSequence ScriptItemUID="QERAction11" />
+          <InsertValue DataColumn="Name" Value="&quot;Department&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert6">
+          <ActionSequence ScriptItemUID="QERAction12" />
+          <InsertValue DataColumn="Name" Value="&quot;AccProduct&quot;" />
+          <InsertValue DataColumn="DbWhereClause" Value="format(variable(getconfig(&quot;VI_ITShop_Filter_AccProduct&quot;)), getuser())" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert7">
+          <ActionSequence ScriptItemUID="QERAction13" />
+          <InsertValue DataColumn="Name" Value="&quot;Hardware&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert8">
+          <ActionSequence ScriptItemUID="QERAction14" />
+          <InsertValue DataColumn="Name" Value="&quot;HardwareType&quot;" />
+        </Insert>
+        <Insert DataTable="Tables" ScriptItemUID="QERInsert9">
+          <ActionSequence ScriptItemUID="QERAction3" />
+          <InsertValue DataColumn="Name" Value="&quot;ESet&quot;" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

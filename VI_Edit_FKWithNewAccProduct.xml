@@ -1,0 +1,96 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_FKWithNewAccProduct" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceControlList ID="VI_Edit_FK" ScriptItemUID="ControlRef3">
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1">
+            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="EditColumn" />
+          </VirtualTableMapping>
+          <VirtualControlMapping VirtualControl="AdditionalContentHeader" ContainerType="Container">
+            <Container Condition="(select current isnullorempty(editcolumn) from edittable)&#xD;&#xA;and&#xD;&#xA;(from edittable select current canedit(editcolumn))" ScriptItemUID="Container2">
+              <Button Text="translate(&quot;#LDS#Create a new service item&quot;)" ScriptItemUID="Button3" Layout="'VI_Styles_Button_Pill'">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Delete DataTable="AccProductNew" ScriptItemUID="Delete1" />
+                  <Insert DataTable="AccProductNew" ScriptItemUID="Insert1">
+                    <ActionSequence ScriptItemUID="Action1" />
+                    <InsertValue DataColumn="Ident_AccProduct" Value="select current display() from edittable" />
+                  </Insert>
+                  <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                    <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container3">
+                        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container4" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Container4style" Value="&quot;margin-top: 8px;&quot;" />
+                          </HtmlAttributes>
+                          <Label Text="translate(&quot;#LDS#Please supply the following information to create a new service item.&quot;)" ScriptItemUID="Label2" />
+                        </Container>
+                        <ContainerTemplate DataTable="AccProductNew" ScriptItemUID="ContainerTemplate1">
+                          <Container ScriptItemUID="Container5">
+                            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                                <ColumnList ScriptItemUID="ColumnList1">
+                                  <SingleColumn DataColumn="Ident_AccProduct" ScriptItemUID="SingleColumn1" />
+                                  <SingleColumn DataColumn="UID_AccProductGroup" ScriptItemUID="SingleColumn2" />
+                                  <SingleColumn DataColumn="UID_OrgRuler" ScriptItemUID="SingleColumn3" />
+                                  <SingleColumn DataColumn="Description" ScriptItemUID="SingleColumn4" />
+                                </ColumnList>
+                              </VirtualFunctionMapping>
+                              <VirtualTableMapping VirtualTable="EditTable" DataTable="AccProductNew" ScriptItemUID="VirtualTableMapping2" />
+                            </ControlReferenceContainer>
+                          </Container>
+                        </ContainerTemplate>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                      <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container6">
+                        <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Save&quot;)" />
+                          </HtmlAttributes>
+                          <ServerActionCall ScriptItemUID="ServerActionCall2">
+                            <Save DataTable="AccProductNew" ScriptItemUID="Save1" />
+                            <ForeachRow DataTable="AccProductNew" ScriptItemUID="ForeachRow1">
+                              <UpdateFK DataTable="EditTable" DataColumn="EditColumn" DataTableFK="AccProductNew" />
+                            </ForeachRow>
+                            <ActionOnControl />
+                          </ServerActionCall>
+                        </Button>
+                        <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" ItemUID="Default Button" ScriptItemUID="Button2" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Button2title" Value="translate(&quot;#LDS#Cancel&quot;)" />
+                          </HtmlAttributes>
+                          <ServerActionCall ScriptItemUID="ServerActionCall3">
+                            <ActionOnControl />
+                          </ServerActionCall>
+                        </Button>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#New service item&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                    <VirtualFunctionMapping ID="TableName()" Value="&quot;AccProduct&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+                  </CallAction>
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="ShowChangeValue()" Value="select current not(isnullorempty(editcolumn)) from edittable" ScriptItemUID="VirtualFunctionMapping4" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+        </ControlReferenceControlList>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AccProduct" Table="AccProductNew" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

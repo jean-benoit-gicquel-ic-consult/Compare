@@ -1,0 +1,46 @@
+﻿<WebDesigner>
+  <GlobalControl ID="VI_Compliance_GridColumn_RuleSeverity" MetamodelVersion="2015-01-01" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <GridColumnGroup DataTable="Object" ScriptItemUID="GridColumnGroup1">
+        <GridColumn Width="&quot;160px&quot;" SortColumn="RiskIndex" AutoFilterColumn="RiskIndex" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" ScriptItemUID="GridColumn1">
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Label Text="datacaption(object, RiskIndex)" ScriptItemUID="Label1" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell1">
+            <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlReferenceContainer1">
+              <VirtualTableMapping VirtualTable="Object" DataTable="Object">
+                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+              </VirtualTableMapping>
+            </ControlReferenceContainer>
+          </Cell>
+        </GridColumn>
+        <GridColumn Width="&quot;160px&quot;" SortColumn="RiskIndexReduced" AutoFilterColumn="RiskIndexReduced" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" ScriptItemUID="GridColumn2">
+          <GridColumnHeader ScriptItemUID="wctl2">
+            <Label Text="datacaption(object, RiskIndexReduced)" ScriptItemUID="Label2" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell2">
+            <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlReferenceContainer2">
+              <VirtualTableMapping VirtualTable="Object" DataTable="Object">
+                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+              </VirtualTableMapping>
+            </ControlReferenceContainer>
+          </Cell>
+        </GridColumn>
+      </GridColumnGroup>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="Object" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="RiskIndex" DataType="System.Double" />
+        <VirtualColumn Name="RiskIndexReduced" DataType="System.Double" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

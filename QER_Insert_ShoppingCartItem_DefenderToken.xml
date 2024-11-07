@@ -1,0 +1,179 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_Insert_ShoppingCartItem_DefenderToken">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ActionComponent ScriptItemUID="Action2">
+        <LoadTable DataTable="AccProduct" RemoveDeleted="false" WhereClause="SqlCompareUid(&quot;uid_accproduct&quot;,uidaccproduct())" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ForeachRow DataTable="PersonsForOrder" ScriptItemUID="ForeachRow1">
+          <CallAction ActionID="VI_Popup" ScriptItemUID="Call3">
+            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+              <Container ScriptItemUID="Container3">
+                <Container ScriptItemUID="Container7" ItemUID="no email adress -&gt; cancel request" Condition="from PersonsForOrder select current IsNullOrEmpty(DefaultEmailAddress)">
+                  <Label ScriptItemUID="Label2" Text="translate('#LDS#There is no e-mail address associated with your employee record. Please contact your system administrator to assign an e-mail address.')" />
+                </Container>
+                <Container ScriptItemUID="Container1" ItemUID="telephonenumber and country available" Condition="from PersonsForOrder select current (NOT IsNullOrEmpty(UID_DialogCountry) AND NOT IsNullOrEmpty(PhoneMobile) AND NOT IsNullOrEmpty(DefaultEmailAddress))">
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef2">
+                    <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Your Starling 2FA Token will be paired with the following mobile phone number and country.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                  </ControlReferenceContainer>
+                  <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef4">
+                    <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping2" IsPropertyList="true">
+                      <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="PhoneMobile" MinLength="1" ColumnComponentEdit="VI_Edit_Default" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="UID_DialogCountry" MinLength="1" ColumnComponentEdit="VI_Edit_FK" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonsForOrder" ScriptItemUID="VirtualTableMapping1" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Container ScriptItemUID="Container4" ItemUID="telephonenumber available" Condition="from PersonsForOrder select current (IsNullOrEmpty(UID_DialogCountry) AND NOT IsNullOrEmpty(PhoneMobile) AND NOT IsNullOrEmpty(DefaultEmailAddress))">
+                  <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+                    <Action ScriptItemUID="Action9">
+                      <LoadTable DataTable="Person" ScriptItemUID="LoadTable2" WhereClause="format(&quot;uid_person = '{0}'&quot;, (select current UID_Person from PersonsForOrder) )">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+                      </LoadTable>
+                    </Action>
+                  </Activator>
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef6">
+                    <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Additional information is required to create a Starling 2FA token. Enter the information below.&quot;)" ScriptItemUID="VirtualFunctionMapping15" />
+                  </ControlReferenceContainer>
+                  <ContainerTemplate DataTable="Person" ScriptItemUID="ContainerTemplate3">
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef7">
+                      <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping16" IsPropertyList="true">
+                        <ColumnList ScriptItemUID="ColumnList3" IsWithoutRow="true">
+                          <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="UID_DialogCountry" MinLength="1" ColumnComponentEdit="VI_Edit_FK" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="Person" ScriptItemUID="VirtualTableMapping5" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </Container>
+                <Container ScriptItemUID="Container5" ItemUID="country available" Condition="from PersonsForOrder select current (NOT IsNullOrEmpty(UID_DialogCountry) AND IsNullOrEmpty(PhoneMobile) AND NOT IsNullOrEmpty(DefaultEmailAddress))">
+                  <Activator ScriptItemUID="Activator3" ExecuteAlways="true">
+                    <Action ScriptItemUID="Action11">
+                      <LoadTable DataTable="Person" ScriptItemUID="LoadTable4" WhereClause="format(&quot;uid_person = '{0}'&quot;, (select current UID_Person from PersonsForOrder) )" RemoveDeleted="false" RevertExisting="false">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" />
+                      </LoadTable>
+                    </Action>
+                  </Activator>
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                    <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Additional information is required to create a Starling 2FA token. Enter the information below.&quot;)" ScriptItemUID="VirtualFunctionMapping17" />
+                  </ControlReferenceContainer>
+                  <ContainerTemplate DataTable="Person" ScriptItemUID="ContainerTemplate2">
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef9">
+                      <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping18" IsPropertyList="true">
+                        <ColumnList ScriptItemUID="ColumnList5" IsWithoutRow="true">
+                          <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="PhoneMobile" MinLength="1" ColumnComponentEdit="VI_Edit_Default" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="Person" ScriptItemUID="VirtualTableMapping7" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </Container>
+                <Container ScriptItemUID="Container6" ItemUID="no telephone no country" Condition="from PersonsForOrder select current (IsNullOrEmpty(UID_DialogCountry) AND IsNullOrEmpty(PhoneMobile) AND NOT IsNullOrEmpty(DefaultEmailAddress))">
+                  <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+                    <Action ScriptItemUID="Action10">
+                      <LoadTable DataTable="Person" ScriptItemUID="LoadTable3" WhereClause="format(&quot;uid_person = '{0}'&quot;, (select current UID_Person from PersonsForOrder) )" RemoveDeleted="false" RevertExisting="false">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+                      </LoadTable>
+                    </Action>
+                  </Activator>
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                    <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Additional information is required to create a Starling 2FA token. Enter the information below.&quot;)" ScriptItemUID="VirtualFunctionMapping14" />
+                  </ControlReferenceContainer>
+                  <ContainerTemplate DataTable="Person" ScriptItemUID="ContainerTemplate1">
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef3">
+                      <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping13" IsPropertyList="true">
+                        <ColumnList ScriptItemUID="ColumnList2" IsWithoutRow="true">
+                          <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="PhoneMobile" MinLength="1" ColumnComponentEdit="VI_Edit_Default" />
+                          <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_DialogCountry" MinLength="1" ColumnComponentEdit="VI_Edit_FK" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="Person" ScriptItemUID="VirtualTableMapping4" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </Container>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+              <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container2">
+                <Button Text="translate(&quot;#LDS#OK&quot;)" ScriptItemUID="Button3" EnabledCondition="from PersonsForOrder select current NOT IsNullOrEmpty(DefaultEmailAddress)">
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <Update DataTable="LocalVars" DataColumn="InsertFailed" Value="false" ScriptItemUID="Update2" />
+                    <ActionSequence ScriptItemUID="Action6">
+                      <CallAction ActionID="VI_ITShop_AddCartItem" ScriptItemUID="Call2">
+                        <VirtualFunctionMapping ID="uidaccproduct()" Value="uidaccproduct()" ScriptItemUID="VirtualFunctionMapping3" />
+                        <VirtualFunctionMapping ID="uidpersonordered()" Value="from PersonsForOrder select current UID_Person" ScriptItemUID="VirtualFunctionMapping4" />
+                        <VirtualFunctionMapping ID="UID_ShoppingCartItemParentForOptional()" Value="from ShoppingCartItem select IsNullOrEmpty(UID_ShoppingCartItem,UID_ShoppingCartItemParentForOptional())&#xD;&#xA;where ((UID_PersonOrdered = (from PersonsForOrder select current UID_Person))&#xD;&#xA;and (UID_AccProduct = (from ShoppingCartItem select UID_AccProduct where UID_ShoppingCartItem = UID_ShoppingCartItemParentForOptional())))&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping5" />
+                        <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="UID_ShoppingCartOrder()" ScriptItemUID="VirtualFunctionMapping6" />
+                        <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping2" />
+                        <VirtualFunctionMapping ID="autoITShopOrg()" Value="1 &lt; (from PersonsForOrder select count())" ScriptItemUID="VirtualFunctionMapping7" />
+                      </CallAction>
+                      <ForeachRow DataTable="ShoppingCartItem" WhereClause="(uid_accproduct = uidaccproduct() and isnullorempty(OrderReason) AND UID_PersonOrdered = (from PersonsForOrder select current UID_Person))" ScriptItemUID="ForeachRow2">
+                        <Update DataTable="ShoppingCartItem" DataColumn="OrderDetail2" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" Value="if ( from PersonsForOrder select current IsNullOrEmpty (PhoneMobile))&#xD;&#xA;  then (from Person select PhoneMobile where UID_Person = (from PersonsForOrder select current UID_Person))&#xD;&#xA;else&#xD;&#xA;  (from PersonsForOrder select current PhoneMobile)&#xD;&#xA;" ScriptItemUID="Update3" />
+                        <Update DataTable="ShoppingCartItem" DataColumn="OrderDetail1" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" Value="if ( from PersonsForOrder select current IsNullOrEmpty (UID_DialogCountry))&#xD;&#xA;  then (from Person select UID_DialogCountry where UID_Person = (from PersonsForOrder select current UID_Person))&#xD;&#xA;else&#xD;&#xA;  (from PersonsForOrder select current UID_DialogCountry)&#xD;&#xA;" ScriptItemUID="Update5" />
+                        <Save DataTable="ShoppingCartItem" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" ScriptItemUID="Save1" />
+                        <CallAction ActionID="VI_ITShop_ShoppingCartItem_Editor" ScriptItemUID="CallAction2">
+                          <VirtualFunctionMapping ID="DeleteProductOnCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                          <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping3" />
+                          <VirtualControlMapping VirtualControl="OnInsertCancel" ContainerType="ActionComponent">
+                            <ActionComponent ScriptItemUID="Action3">
+                              <Update DataTable="LocalVars" DataColumn="InsertFailed" Value="true" ScriptItemUID="Update4" />
+                            </ActionComponent>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="EditAllEqualAccProducts()" Value="true" ScriptItemUID="VirtualFunctionMapping9" />
+                        </CallAction>
+                      </ForeachRow>
+                      <ActionSequence Condition="false = (from LocalVars select IsNull(InsertFailed, false))" ScriptItemUID="Action4">
+                        <CallAction ActionID="OnAfterInsert" ScriptItemUID="CallAction1" />
+                      </ActionSequence>
+                      <ActionSequence Condition="true = (from LocalVars select IsNull(InsertFailed, false))" ScriptItemUID="Action5">
+                        <CallAction ActionID="OnAfterInsertCancel" ScriptItemUID="CallAction4" />
+                      </ActionSequence>
+                    </ActionSequence>
+                    <ActionOnControl />
+                    <Save DataTable="Person" ScriptItemUID="Save2" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="Button2" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ItemUID="Default Button">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute2" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <CallAction ActionID="OnAfterInsertCancel" ScriptItemUID="Call4" />
+                    <ActionOnControl />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="PopupTitle()" Value="format(&quot;{0} - {1}&quot;, from accproduct select top 1 display() where uid_accproduct = uidaccproduct(), from PersonsForOrder select current Display())" ScriptItemUID="VirtualFunctionMapping10" />
+            <VirtualFunctionMapping ID="TableName()" Value="&quot;AccProduct&quot;" ScriptItemUID="VirtualFunctionMapping12" />
+          </CallAction>
+          <Delete DataTable="Person" ScriptItemUID="Delete1" />
+        </ForeachRow>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="InsertFailed" DataType="System.Boolean" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="AccProduct" Table="AccProduct" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject2" Table="Person" Class="Person">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_Insert_ShoppingCartItem">
+      <VirtualTableExtension Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

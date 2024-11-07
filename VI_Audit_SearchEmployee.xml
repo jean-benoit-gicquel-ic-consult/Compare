@@ -1,0 +1,57 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <Context ID="VI_Audit_SearchEmployee" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08" HelpChapterUid="&quot;D7B34F18-D8E0-481C-8844-8D56C0EF229F&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="AuditMode" IsMandatory="false" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="Person" Class="Person" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Employee Details')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Employee Details')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Grid ScriptItemUID="Grid1">
+            <GridBand DataTable="Person" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="" RowSelection="Action">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+              <SelectionAction ScriptItemUID="ServerActionCall1">
+                <Redirect Target="Context" ContextID="VI_Audit_PersonHyperView" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                  <RedirectParameter Name="'UID_PERSON'" Value="select current uid_person from person" />
+                </Redirect>
+              </SelectionAction>
+              <GridFilters ScriptItemUID="GridFilters1" />
+              <GridRows />
+              <GridColumnColumnTemplate DataTable="Person" ScriptItemUID="GridColumnColumnTemplate1">
+                <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                  <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_Person_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                </ColumnList>
+                <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup1">
+                  <GridColumnSimple ScriptItemUID="Column3" Column="currentcolumn" />
+                </GridColumnGroup>
+              </GridColumnColumnTemplate>
+            </GridBand>
+          </Grid>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate('#LDS#Please choose an employee to view his/her data.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

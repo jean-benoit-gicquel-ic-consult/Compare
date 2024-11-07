@@ -1,0 +1,13 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="VI_Styles_ListView_Default" Type="ListView">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument ScriptItemUID="CssDocument1" CssName="CSS">.ListViewHead {background-color:%VI_Common_Color_LighterGray%; padding:6px; display: flex; flex-direction: row;}
+.ListViewTitle {margin-top:4px; flex: 1 1 auto; overflow: auto;}
+.ListViewActions {margin-top: 1px; flex: 1 1 auto; overflow: visible; text-align: right;}
+.ListViewContentRow {border:1px solid %VI_Common_Color_LighterGray%; padding:10px; padding-bottom:0px; display: flex; flex-direction: row;}
+.ListViewContentCell {flex: 1 1 auto;}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Image_Baseline" Type="Image" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="IconImageBaseLine" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.IconImageBaseLine  { padding-right: 6px; vertical-align: baseline; border-width: 0px; }
+.IconImageBaseLine a:link { text-decoration:none; color: %VI_Common_Color_Font_Secondary%; outline: none; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,110 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AddCartItem" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action7" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Insert DataTable="ShoppingCartItem" ScriptItemUID="Insert1">
+          <ActionSequence ScriptItemUID="Action2">
+            <ActionSequence ScriptItemUID="Action3">
+              <LoadTable DataTable="ITShopOrgOrderable" WhereClause="from ShoppingCartItem select current ITShopOrgWhereClauseOrderable(uid_personordered, uid_accproduct)" ScriptItemUID="LoadTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+              </LoadTable>
+              <Update DataTable="TempData" DataColumn="UID_ITShopOrg" WhereClause="1= select count() from ITShopOrgOrderable" Value="select top 1 uid_itshoporg from itshoporgorderable" ScriptItemUID="Update1" />
+              <ActionSequence Condition="1&lt; select count() from itshoporgorderable and not(autoITShopOrg())" ScriptItemUID="Action4">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container1">
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+                        <Image StockImage="Help" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image1" />
+                        <Label Text="translate(&quot;#LDS#This product can be requested from more than one shop. Please choose the correct shop.&quot;)" ScriptItemUID="Label1" />
+                      </Container>
+                      <ContainerTemplate DataTable="ITShopOrgOrderable" ScriptItemUID="ContainerTemplate1">
+                        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+                          <Label Text="from itshoporgorderable select current (DisplayValue(FullPath))" Action="Redirect" ScriptItemUID="Label2">
+                            <ServerActionCall ScriptItemUID="ServerActionCall1">
+                              <Update DataTable="TempData" DataColumn="UID_ITShopOrg" Value="from itshoporgorderable select current uid_itshoporg" ScriptItemUID="Update2" />
+                              <ActionOnControl />
+                            </ServerActionCall>
+                          </Label>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="from itshoporgorderable select top 1 display()" ScriptItemUID="VirtualFunctionMapping1" />
+                </CallAction>
+              </ActionSequence>
+              <Update DataTable="ShoppingCartItem" DataColumn="UID_ITShopOrg" Value="from TempData select UID_ITShopOrg" WhereClause="uid_shoppingcartitem = ( select current uid_shoppingcartitem from shoppingcartitem)" ScriptItemUID="Update3" />
+            </ActionSequence>
+            <LoadTable DataTable="AccProductDependencies" WhereClause="sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_accproduct&quot;, uidaccproduct()),&#xD;&#xA;sqlcompare(&quot;ismandatory&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable2">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </LoadTable>
+            <Save DataTable="ShoppingCartItem" WhereClause="uid_shoppingcartitem = (select current uid_shoppingcartitem from shoppingcartitem)&#xD;&#xA;" ScriptItemUID="Save1" />
+            <ForeachRow DataTable="AccProductDependencies" ScriptItemUID="ForeachRow1">
+              <LoadTable DataTable="ITShopOrgOrderable" WhereClause="ITShopOrgWhereClauseOrderable(isnull( uidpersonordered(), getuser()), from AccProductDependencies select current uid_accproductrelated)" ScriptItemUID="LoadTable3">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+              </LoadTable>
+              <ActionSequence Condition="-- #13472&#xD;&#xA;&#xD;&#xA;-- is it orderable?&#xD;&#xA;(0 &lt; select count() from itshoporgorderable)&#xD;&#xA;&#xD;&#xA;-- or is it in the shopping cart?&#xD;&#xA;and (not(exists(&quot;shoppingcartitem&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_accproduct&quot;, (select top 1 uid_accproduct from itshoporgorderable)),&#xD;&#xA;sqlcompareuid(&quot;uid_personordered&quot;, isnull(uidpersonordered(),getuser())),&#xD;&#xA;sqlcompareuid(&quot;uid_shoppingcartorder&quot;, from ShoppingCartItem select current UID_ShoppingCartOrder)&#xD;&#xA;))))" ScriptItemUID="Action5">
+                <Insert DataTable="ShoppingCartItem" ScriptItemUID="Insert2">
+                  <ActionSequence ScriptItemUID="Action6" />
+                  <InsertValue DataColumn="UID_AccProduct" Value="from AccProductDependencies select current uid_accproductrelated " />
+                  <InsertValue DataColumn="UID_PersonInserted" Value="getuser()" />
+                  <InsertValue DataColumn="UID_ShoppingCartItemParent" Value="from ShoppingCartItem select current UID_ShoppingCartItem" />
+                  <InsertValue DataColumn="UID_PersonOrdered" Value="isnull( uidpersonordered(), getuser())" />
+                  <InsertValue DataColumn="UID_ShoppingCartOrder" Value="from ShoppingCartItem select current UID_ShoppingCartOrder" />
+                  <InsertValue DataColumn="UID_ITShopOrg" Value="from ITShopOrgOrderable select top 1 uid_itshoporg" />
+                  <InsertValue DataColumn="IsActivated" Value="true" />
+                </Insert>
+              </ActionSequence>
+            </ForeachRow>
+            <Save DataTable="ShoppingCartItem" HandleDeleteDeferred="false" WhereClause="UID_ShoppingCartItemParent = (select current uid_shoppingcartitem from shoppingcartitem)" ScriptItemUID="Save2" />
+          </ActionSequence>
+          <InsertValue DataColumn="UID_AccProduct" Value="uidaccproduct()" />
+          <InsertValue DataColumn="UID_PersonInserted" Value="getuser()" />
+          <InsertValue DataColumn="UID_PersonOrdered" Value="isnull( uidpersonordered(), getuser())" />
+          <InsertValue DataColumn="IsActivated" Value="true" />
+          <InsertValue DataColumn="UID_ShoppingCartItemParent" Value="IsNull(UID_ShoppingCartItemParent(),isnull(UID_ShoppingCartItemParentForOptional(), ''))" />
+          <InsertValue DataColumn="IsOptionalChild" Value="isnull( UID_ShoppingCartItemParentForOptional(),'')&lt;&gt;''" />
+          <InsertValue DataColumn="UID_ShoppingCartOrder" Value="UID_ShoppingCartOrder()" />
+          <InsertValue DataColumn="ObjectKeyAssignment" Value="ObjectKeyAssignment()" Condition="isnull(objectkeyassignment(),'')&lt;&gt;''" />
+          <InsertValue DataColumn="OrderDetail1" Value="OrderDetail1()" Condition="isnull(OrderDetail1(),'')&lt;&gt;''" />
+          <InsertValue DataColumn="OrderDetail2" Value="OrderDetail2()" Condition="isnull(OrderDetail2(),'')&lt;&gt;''" />
+          <InsertValue Value="ObjectKeyOrgUsedInAssign()" DataColumn="ObjectKeyOrgUsedInAssign" Condition="isnull(ObjectKeyOrgUsedInAssign(),'')&lt;&gt;''" />
+          <InsertValue Value="ObjectKeyElementUsedInAssign()" DataColumn="ObjectKeyElementUsedInAssign" Condition="isnull(ObjectKeyElementUsedInAssign(),'')&lt;&gt;''" />
+        </Insert>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AccProductDependencies" Class="AccProductDependencies" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="ITShopOrgOrderable" Class="ITShopOrg" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action9" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="TempData" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_ITShopOrg" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="ITShopOrgWhereClauseOrderable(string uidPerson, string uidAccProduct)" Expression="format(&quot;uid_itshoporg in (select uid_itshoporgPR from {0}) &quot;,&#xD;&#xA;&#xD;&#xA;sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,&#xD;&#xA;sqlformatvalue(uidPerson, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;sqlformatvalue(uidAccProduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;&quot;null&quot;))" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="uidaccproduct()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="uidpersonordered()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UID_ShoppingCartItemParentForOptional()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UID_ShoppingCartItemParent()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UID_ShoppingCartOrder()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="ObjectKeyAssignment()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="OrderDetail1()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="OrderDetail2()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="autoITShopOrg()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ObjectKeyElementUsedInAssign()" />
+      <VirtualFunction DataType="System.String" Signature="ObjectKeyOrgUsedInAssign()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

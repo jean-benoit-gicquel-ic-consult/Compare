@@ -1,0 +1,79 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="VI_Common_AccessControl" AllowUrlNavigation="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="Passed">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action5">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">_UserSession.SessionVariables.Put(VI.WebRuntime.Communication.AccessControlModule.AccessControlPassed, "true");
+</CodeLiteral>
+            <Redirect ScriptItemUID="Redirect1" Target="ReturnStartForm" AbortExecution="false" NoLinkBackToThisForm="true" />
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="AccessControl" PageFileName="VI_FormTemplate_FullScreen">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+          <ControlList ScriptItemUID="ControlList2">
+            <Container ScriptItemUID="Container2" EnableCustomAttributes="true" Condition="{{ !VI.WebRuntime.HttpContextFactory.Current.Response.IsRequestBeingRedirected }}&#xD;&#xA;-- if the initializer caused a redirect, don't render the form content">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;data-imx-mainpage&quot;" Value="&quot;true&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceControlList ID="QBM_UserLogon_Slim" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="HeaderText()" Value="&quot;&quot;" />
+              </ControlReferenceControlList>
+              <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute2" Value="'ContentPart imx-flex'" />
+                  <HtmlAttribute Name="'role'" ScriptItemUID="HtmlAttribute5" Value="'main'" />
+                  <Property Name="TagName" Value="main" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute7" Value="'imx-pagetitlebar'" />
+                  </HtmlAttributes>
+                  <Container EnableCustomAttributes="true" ScriptItemUID="Container5" ItemUID="Title">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h1" Comment="" />
+                    </HtmlAttributes>
+                  </Container>
+                </Container>
+                <Literal Expression="variable('&lt;a name=&quot;main&quot;&gt;&lt;/a&gt;')" />
+                <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute3" />
+                  </HtmlAttributes>
+                </Container>
+                <Container EnableCustomAttributes="true" ScriptItemUID="Container6" ItemUID="Main Form">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'class'" Value="'PartMain'" ScriptItemUID="HtmlAttribute4" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;max-width: 600px; margin: 0 auto;&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container18" EnableCustomAttributes="true" ItemUID="message container">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute6" />
+                      </HtmlAttributes>
+                    </Container>
+                  </Container>
+                </Container>
+              </Container>
+            </Container>
+            <Literal Expression="&quot;&lt;style&gt;main {  max-width: 700px; margin: 0 auto; padding: 0 1em; }&lt;/style&gt;&quot;" />
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

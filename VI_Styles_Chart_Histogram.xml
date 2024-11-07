@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="VI_Styles_Chart_Histogram" Type="Chart" HasRelatedObject="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_Chart_Default" />
+    <Property Name="HistogramStyle" Value="true" />
+  </LayoutObject>
+</WebDesigner>

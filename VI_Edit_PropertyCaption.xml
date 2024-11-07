@@ -1,0 +1,52 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="M1cuxbgX6jd9T0yjiWP3WQ==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_PropertyCaption" MigrationNotes="DMLREPLACE;" DataTableDebugDisplay="EditTable" DataColumnDebugDisplay="EditColumn">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1" Condition="not(isboolean()) or IsAlwaysReadOnly()" RefreshTriggerExpression="-- refresh when the min len changes&#xA;from edittable select current getminlen(editcolumn)" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="CssClassName()" />
+        </HtmlAttributes>
+        <FormItemLabel DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="FormItemLabel1">
+          <Label Text="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Display }}" ScriptItemUID="Label1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Description }}" />
+            </HtmlAttributes>
+          </Label>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="from edittable select current getminlen(editcolumn)&gt;0 and canedit(editcolumn) and not(IsAlwaysReadOnly())">
+              <Label Text="&quot;*&quot;" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="abbr" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;title&quot;" Value="translate(&quot;#LDS#Mandatory field&quot;)" />
+                  <HtmlAttribute Name="&quot;aria-hidden&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;true&quot;" />
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Label2style" Value="variable('display: inline-block; color: %VI_Common_Color_SignaledOrMandatory%; margin-left: 8px;')" />
+                </HtmlAttributes>
+              </Label>
+              <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#Mandatory field&quot;)" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;imx-hidden&quot;" />
+                </HtmlAttributes>
+              </Label>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </FormItemLabel>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsBoolean()" Expression="{{&#xA;@return EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Type == VI.Base.ValType.Bool;&#xA;}} = true" DataType="System.Boolean" TriggerUpdates="Never" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="EditColumn" IsMultiType="true" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsAlwaysReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="CssClassName()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

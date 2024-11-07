@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Common_ObjectSheet_ESet_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container6" ObjectType="Container" SortOrder="40">
+        <ControlReferenceControlList ID="CPL_ObjectSheet_ComplianceTile" ScriptItemUID="CPLControlRef1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

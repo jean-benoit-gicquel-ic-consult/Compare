@@ -1,0 +1,50 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Tab_Default" Type="Tab" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="TabStyle" Value="Tab" Comment="" />
+    <Property Name="CssClassName" Value="imx-tabset" />
+    <Property Name="CssClassNameHeaderRow" Value="nav nav-tabs imx-tabs" />
+    <Property Name="CssClassName" Value="imx-tab-strip imx-primary" />
+    <Property Name="CssClassNameHeaderContainer" Value="imx-tab parent-tab-strip" />
+    <Property Name="CssClassNameBodyContainer" Value="tab-content imx-tabs-content tab-pane active" />
+    <CssDocument ScriptItemUID="CssDocument1" CssName="CSS">ul.nav.nav-tabs.imx-tabs {
+    position: relative;
+    border-bottom: 1px solid %VI_Common_Color_LightGray%;
+    margin: 0 0 8px;
+    padding: 0;
+}	
+
+li.imx-tab.parent-tab-strip {
+    display: inline-block;
+    margin-right: 36px;
+    vertical-align: top;
+    line-height: 36px;
+    padding: 0 4px;
+    position: relative;
+    text-decoration: none;
+    transition: color 90ms linear;
+	font-size: 1.1em;
+}
+li.imx-tab.parent-tab-strip a{
+   color: %VI_Common_Color_Font%;
+   text-decoration: none;
+   outline: none;
+}
+
+li.imx-tab.parent-tab-strip:hover {
+   border-bottom: 3px %VI_Common_Color_Blue_1% solid;
+}
+
+li.imx-tab.parent-tab-strip.active {
+border-bottom: 3px %VI_Common_Color_Blue_2% solid;
+}
+
+@media %IMX_Mediaquery_Smartphone% {
+   li.imx-tab.parent-tab-strip {
+        margin-right: 5px;
+	}
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

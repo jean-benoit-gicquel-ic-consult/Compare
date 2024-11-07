@@ -1,0 +1,43 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_EditWebAuthn" HelpChapterUid="&quot;8A5EA79F-D720-4EFC-8E53-A4B006919311&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Form1">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList2">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Text()" Value="translate('#LDS#Here you can manage your security keys.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate('#LDS#Security keys')" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1">
+            <ControlReferenceControlList ID="QER_WebAuthn" ScriptItemUID="ControlRef1">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="AfterSaving">
+                <ActionComponent ScriptItemUID="Action3">
+                  <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call1">
+                    <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#You have successfully updated your security keys.')" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="MessageType()" Value="&quot;Information&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                  </CallAction>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="Person" DataTable="User" />
+            </ControlReferenceControlList>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

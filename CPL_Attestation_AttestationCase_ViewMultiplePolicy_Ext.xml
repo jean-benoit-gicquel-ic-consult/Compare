@@ -1,0 +1,19 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Attestation_AttestationCase_ViewMultiplePolicy_Ext" RequiredDbModules="CPL,ATT">
+    <Extensions>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="5">
+        <ReadOnlyTableModifier DataTable="AttestationCase" WhereClause="HasComplianceRuleNoResolve" ScriptItemUID="CPLReadOnlyTableModifier1">
+          <ColumnList ScriptItemUID="CPLColumnList1">
+            <SingleColumn DataColumn="DoApprove" ScriptItemUID="CPLSingleColumn1" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </AddObject>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable" SortOrder="45">
+        <Column DataType="System.Boolean" Name="HasComplianceRuleNoResolve" DataSource="Expression" Expression="if(not(IsReadOnly()) and getObjectKeyTable(ObjectKey1) = &quot;Person&quot; or getObjectKeyTable(ObjectKey3) = &quot;Person&quot;)then(&#xD;&#xA;   if(getObjectKeyTable(ObjectKeyBase) in (&quot;PersonInDepartment&quot;,&quot;PersonInProfitCenter&quot;,&quot;PersonInLocality&quot;,&quot;PersonInAERole&quot;,&quot;PersonHasEset&quot;))then&#xD;&#xA;      Exists(&quot;ComplianceRule&quot;, format(&quot;IsExceptionAllowed = 0 and uid_compliancerule in (select uid_compliancerule from CPL_VCCSPersonCheckDetail where uid_person ='{0}' and objectkeyelement = '{1}')&quot;,GetUIDFromObjectKey(ObjectKey1),ObjectKey2))&#xD;&#xA;   else if(not(isnullOrEmpty(ObjectKey3)))then&#xD;&#xA;      Exists(&quot;ComplianceRule&quot;, format(&quot;EXISTS(SELECT 1 FROM UNSAccountInUNSGroup where XObjectKey = '{2}') and IsExceptionAllowed = 0 and uid_compliancerule in (select uid_compliancerule from CPL_VCCSPersonCheckDetail where uid_person ='{0}' and objectkeyelement = '{1}')&quot;,GetUIDFromObjectKey(ObjectKey3),ObjectKey1,ObjectKeyBase))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" IsMultiValued="true" ScriptItemUID="CPLColumn1" />
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="5">
+        <Function Name="GetUIDFromObjectKey(String objectkey)" Expression="Substring(Convert(objectkey,&quot;System.String&quot;),IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7,(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/P&gt;&lt;/Key&gt;&quot;,0)-(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7)))" DataType="System.String" ScriptItemUID="CPLFunction1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

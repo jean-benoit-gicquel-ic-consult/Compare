@@ -1,0 +1,72 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_ToolbarButton_PortalSelection" Type="ToolbarButton" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="toolbarButtonPortalSelection" Comment="" />
+    <CssDocument CssName="CSS" DisableCaching="true" ScriptItemUID="CssDocument1">.toolbarButtonPortalSelection span.imx-dropdown
+{ 
+   display: block;
+}
+
+.toolbarButtonPortalSelection a.imx-dropdown-toggle
+{ 
+	font-size: 1.2em;
+	font-weight: bolder;
+	padding-left: 10px;
+	display: block;
+	max-height: %UserNavigationHeight%px;	
+    width: calc(100% - 30px);
+}
+
+.toolbarButtonPortalSelection a:focus.imx-dropdown-toggle {
+text-decoration: none;
+}
+
+.toolbarButtonPortalSelection a:hover.imx-dropdown-toggle {
+color: %VI_Common_Color_ColorBase1%;
+}
+
+.toolbarButtonPortalSelection .imx-dropdown-toggle:after {
+margin-top: 15px;
+margin-right: 5px;
+border-left: 5px solid transparent;
+border-right: 5px solid transparent;
+float:right;
+border-top-color:%VI_Common_Color_ColorBase2%;
+}
+
+
+.toolbarButtonPortalSelection .imx-dropdown-menu
+{
+  color: %VI_Common_Color_Font%; 
+  font-size: 1.2em; 
+  font-weight: bold;
+  font-family: %baseFontFamily%;
+  width: %naviwidth%px;
+  max-height: 400px;
+  overflow-x: auto;
+}
+
+.toolbarButtonPortalSelection .IconImage
+{
+  float:right; 
+  padding-top: 9px;
+  padding-right: 5px;
+}
+
+.toolbarButtonPortalSelection .imx-dropdown-menu li:hover,
+.toolbarButtonPortalSelection .imx-dropdown-menu li:focus
+{
+  background: %VI_Common_Color_DarkerGray% none repeat scroll 0 0;
+  color: %VI_Common_Color_ColorBase1%;
+}
+</CssDocument>
+    <CssDocument CssName="CSS Mobile" ScriptItemUID="CssDocument2">/* style for mobile web */
+.ui-mobile .portalSelection .dropdown-menu,
+.ui-mobile .portalSelection .dropdown-menu a
+{
+   width: %MobileNaviWidth%em;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,18 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <LayoutObject ID="VI_Styles_Container_Menu_OpenItems" Type="Container" MetamodelVersion="2016-05-01" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="menuopenitems" Comment="" />
+    <CssDocument CssName="MenuOpenItems" ScriptItemUID="CssDocument1">.menuopenitems {
+  position: absolute; 
+  right: 8px; 
+  text-align: center; 
+  padding: 2px 6px 1px 6px; 
+  background-repeat: no-repeat; 
+  background-color: %VI_Common_Color_Badge_Important%;
+  color: %VI_Common_Color_ColorBase1%;
+}</CssDocument>
+    <Property Name="TagName" Value="span" />
+  </LayoutObject>
+</WebDesigner>

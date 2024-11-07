@@ -1,0 +1,24 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Common_Login_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container9" ObjectType="Container" SortOrder="60">
+        <Container Condition="not(IsEmbedded()) and (&#xD;&#xA;-- the config parm cannot be evaluated before log in!&#xD;&#xA;-- getconfigparm(&quot;QER\Attestation\UserApproval&quot;)=&quot;1&quot; and&#xD;&#xA;&#xD;&#xA;getconfig('VI_Common_UseRegistrationWeb')=true and&#xD;&#xA;true={{&#xD;&#xA;string userRegistrationWebName = &quot;VI_UserRegistration_Web&quot;;&#xD;&#xA;&#xD;&#xA;// is there a user registration web?&#xD;&#xA;@return _UserSession.ApplicationInfo.SubProjects.Any(p=&gt;p.Equals(userRegistrationWebName));&#xD;&#xA;}}&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="ATTContainer1" ItemUID="new account" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="ATTHtmlAttribute1" Name="&quot;class&quot;" Value="&quot;paddedTop imx-forgottenPassword imx-documentloading-hide imx-document-redirect-hide&quot;" />
+          </HtmlAttributes>
+          <Label Text="translate(&quot;#LDS#Click here if you do not have an account.&quot;)" Action="Redirect" ScriptItemUID="ATTLabel1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="ATTHtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-loginLink&quot;" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ATTServerActionCall1">
+              <Login Type="SubProject" WebProject="VI_UserRegistration_Web" />
+            </ServerActionCall>
+          </Label>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="40">
+        <ConfigParam Key="VI_Common_UseRegistrationWeb" Description="translate('#LDS#Enable self-registration page')" LongDescription="" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

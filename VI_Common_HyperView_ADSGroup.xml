@@ -1,0 +1,30 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_ADSGroup" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ElementEdit ScriptItemUID="ElementEdit1" DataTable="Object" EnableNavigation="EnableNavigation()">
+          <ControlReferenceControlList ID="VI_Common_HyperView_ShapeListTable" ItemUID="PersonInAERole Product Owners" ScriptItemUID="ControlRef30">
+            <VirtualFunctionMapping ID="Caption()" Value="from object select current objectwalker(&quot;fk(uid_accproduct).uid_orgruler[d]&quot;)" ScriptItemUID="VirtualFunctionMapping80" />
+            <VirtualFunctionMapping ID="HeaderText()" Value="translate(&quot;#LDS#Group owners&quot;)" ScriptItemUID="VirtualFunctionMapping81" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping82" />
+            <VirtualFunctionMapping ID="TableName()" Value="'Person'" ScriptItemUID="VirtualFunctionMapping83" />
+            <VirtualFunctionMapping ID="DbWhereClause()" Value="format(&quot;(uid_person in ( select uid_person from personinaerole where UID_AERole in (select uid_orgruler from accproduct where {0})))&quot;, sqlcompareuid(&quot;uid_accproduct&quot;, select current UID_AccProduct from Object))" ScriptItemUID="VirtualFunctionMapping84" />
+            <VirtualFunctionMapping ID="LayoutType()" Value="&quot;BottomLeft&quot;" ScriptItemUID="VirtualFunctionMapping85" />
+          </ControlReferenceControlList>
+          <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef32" />
+        </ElementEdit>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_HyperView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="Object" Class="ADSGroup" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

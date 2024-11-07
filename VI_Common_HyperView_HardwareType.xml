@@ -1,0 +1,34 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_HardwareType">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ElementEdit ScriptItemUID="ElementEdit1" DataTable="Object" EnableNavigation="EnableNavigation()">
+          <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef32" />
+        </ElementEdit>
+        <Container ScriptItemUID="Container4" EnableCustomAttributes="true" ItemUID="Buttonbar" Condition="getconfig(&quot;Vi_Allow_Hardware_Registration&quot;) = 'true'">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+          </HtmlAttributes>
+          <Button Text="translate('#LDS#Add a new device')" ScriptItemUID="Button2" EnabledCondition="caninsert(&quot;hardware&quot;)&#xD;&#xA;and&#xD;&#xA;from Object select current (Ident_HardwareBasicType in (split(GetConfig(&quot;VI_Allowed_Ident_HardwareBasicType&quot;),&quot;,&quot;,false)))">
+            <ServerActionCall ScriptItemUID="ServerActionCall3">
+              <Redirect ScriptItemUID="Redirect3" Target="Context" ContextID="VI_Hardware_Edit" AllowReturnToThisContext="true">
+                <RedirectParameter Name="'UID_HardwareType'" Value="from Object select current UID_HardwareType" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_HyperView">
+      <VirtualTableExtension Name="Object" ScriptItemUID="VirtualTableExtension1" Class="HardwareType" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

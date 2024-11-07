@@ -1,0 +1,95 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_CloneCartItems" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Update DataTable="LocalVars" DataColumn="UID_SelectedPerson" ScriptItemUID="Update1" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Request for multiple employees&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="Text()" Value="DescriptionText()" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceContainer>
+              <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef3">
+                <VirtualFunctionMapping ID="UidListDelimiter()" Value="char(7)" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="UidListTextQualifier()" Value="&quot;&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="CandidateDbTable()" Value="'Person'" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualTableMapping VirtualTable="Candidate" DataTable="PersonCandidate" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualTableMapping VirtualTable="SelectedItems" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping2">
+                  <VirtualColumnMapping VirtualColumn="uidList" DataColumn="UID_SelectedPerson" />
+                </VirtualTableMapping>
+              </ControlReferenceContainer>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container2">
+              <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" ScriptItemUID="Button1">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <ActionOnControl />
+                  <Delete DataTable="PersonTarget" ScriptItemUID="Delete1" />
+                  <FillTable DataTable="PersonTarget" Expression="split(from LocalVars select UID_SelectedPerson, char(7),false)" ScriptItemUID="FillTable1" DataColumn="uid_person">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  </FillTable>
+                  <ForeachRow DataTable="PersonTarget" ScriptItemUID="ForeachRow1">
+                    <ForeachRow DataTable="ShoppingCartItem" WhereClause="FilterCartItems()" ScriptItemUID="ForeachRow2">
+                      <ActionSequence Condition="0 = (&#xD;&#xA;select count() from ShoppingCartItem where &#xD;&#xA;uid_accproduct = (from ShoppingCartItem select current uid_accproduct) &#xD;&#xA;and uid_personordered = (from PersonTarget select current uid_person)&#xD;&#xA;and OrderDetail1 = (from ShoppingCartItem select current OrderDetail1)&#xD;&#xA;and OrderDetail2 = (from ShoppingCartItem select current OrderDetail2)&#xD;&#xA;)" ScriptItemUID="Action2">
+                        <AccProductSwitchCallAction ActionType="Clone_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="from ShoppingCartItem select current uid_accproduct" ScriptItemUID="wctl1">
+                          <VirtualFunctionMapping ID="uidpersonordered()" Value="from PersonTarget select current uid_person" ScriptItemUID="VirtualFunctionMapping6" />
+                          <VirtualFunctionMapping ID="uidaccproduct()" Value="from ShoppingCartItem select current uid_accproduct" ScriptItemUID="VirtualFunctionMapping7" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from shoppingcartitem select current uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping8" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartItemSource()" Value="select current uid_shoppingcartitem from shoppingcartitem" ScriptItemUID="VirtualFunctionMapping9" />
+                          <VirtualFunctionMapping ID="OrderDetail1()" Value="from ShoppingCartItem select current OrderDetail1" ScriptItemUID="VirtualFunctionMapping10" />
+                          <VirtualFunctionMapping ID="OrderDetail2()" Value="from ShoppingCartItem select current OrderDetail2" ScriptItemUID="VirtualFunctionMapping11" />
+                          <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping3" />
+                          <VirtualControlMapping VirtualControl="OnAfterInsert" ContainerType="ActionComponent">
+                            <ActionComponent ScriptItemUID="Action3" />
+                          </VirtualControlMapping>
+                        </AccProductSwitchCallAction>
+                      </ActionSequence>
+                    </ForeachRow>
+                  </ForeachRow>
+                  <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction9" />
+                </ServerActionCall>
+              </Button>
+              <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" AssociatedWithEscapeKey="true" ScriptItemUID="Button2">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <ActionOnControl />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping12" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="PersonTarget" ScriptItemUID="DataTableCustom1">
+          <Column Name="uid_person" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableCustom>
+        <DataTableDbObject Table="PersonCandidate" ScriptItemUID="DataTableDbObject1" WhereClauseSQL="isnullorempty(getconfig(&quot;VI_ITShop_Filter_PersonOrderFor&quot;),&quot;1=1&quot;)+ FilterPerson()" Class="Person">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_SelectedPerson" DataType="System.String" ScriptItemUID="Column11" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="FilterCartItems()" DataType="System.Boolean" FilterForTable="ShoppingCartItem" />
+      <VirtualFunction Signature="FilterPerson()" DataType="System.String" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="DescriptionText()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

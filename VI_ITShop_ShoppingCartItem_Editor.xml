@@ -1,0 +1,241 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_ShoppingCartItem_Editor" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember>internal void DeleteCartItemHierarchy()
+{
+	var itemStart = ShoppingCartItem_Current.Row;
+	var isOptionalChild = itemStart.GetValue("IsOptionalChild").Bool;
+	var itemParent = itemStart.GetValue("UID_ShoppingCartItemParent").String;
+	if (isOptionalChild || string.IsNullOrEmpty(itemParent))
+		return;
+	
+	// If we are cancelling the request of a mandatory child product,
+	// then delete the parent product (and all its child products) as well
+	
+	ShoppingCartItem.Delete(r =&gt; {		
+		return (r.GetValue("UID_ShoppingCartItemParent").String.Equals(itemParent)
+			|| r.GetValue("UID_ShoppingCartItem").String.Equals(itemParent));
+	}, DeletionMode.DeleteAndSave);
+	
+}</TypeMember>
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action8" />
+      <ActionComponent ScriptItemUID="Action1">
+        <LoadTable DataTable="AccProduct" WhereClause="format(&quot;uid_accproduct = ('{0}')&quot;, from shoppingcartitem select current uid_accproduct)" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <Update DataTable="Vars" DataColumn="HasMandatoryParameters" Value="isnull(GetAccProductParams(from accproduct select top 1 UID_AccProduct, sqlcompare(&quot;ismandatory&quot;,true,&quot;bool&quot;,&quot;equal&quot;)),'')&lt;&gt;''&#xA;-- does the product have any parameters?" ScriptItemUID="Update1" />
+        <ActionSequence ScriptItemUID="Action15" Condition="ispreprop(&quot;ITSHOP&quot;)">
+          <LoadTable DataTable="AccProductParamCategory" WhereClause="SqlCompareUid(&quot;UID_AccProductParamCategory&quot;,from AccProduct select isnullorempty(UID_AccProductParamCategory, objectwalker(&quot;FK(UID_AccProductGroup).UID_AccProductParamCategory&quot;)+&quot;&quot;))" ScriptItemUID="LoadTable2">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <ActionSequence Condition="from ShoppingCartItem select current isnull(UID_ShoppingCartItemParent,'') = ''" ItemUID="Load AccProductDependencies only for root items" ScriptItemUID="Action12">
+          <LoadTable DataTable="AccProductOptional" WhereClause="&quot;uid_accProduct in (&quot;+&#xD;&#xA;&quot;  select uid_accProductRelated from AccProductDependencies where &quot;+&#xD;&#xA;     SqlAnd(&#xD;&#xA;       SqlCompareuid(&quot;uid_accproduct&quot;, from ShoppingCartItem select current UID_AccProduct),&#xD;&#xA;	   SqlCompare(&quot;isoptional&quot;, true, &quot;bool&quot;, &quot;equal&quot;, &quot;none&quot;)&#xD;&#xA;	 ) +&#xD;&#xA;&quot;)&quot;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable3">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+          </LoadTable>
+          <ForeachRow DataTable="AccProductOptional" ScriptItemUID="ForeachRow3">
+            <Update DataColumn="Orderable" DataTable="AccProductOptional" ScriptItemUID="Update7" Value="exists(&quot;accproduct&quot;, format(&quot;uid_accproduct in (select uid_accproduct from {0})&quot;,  &#xD;&#xA;  SqlFunctionCallTable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;, sqlformatvalue(from ShoppingCartItem select Current uid_personordered,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;  &quot;null&quot;,&#xD;&#xA;  sqlformatvalue(UID_AccProduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;  &quot;null&quot;,&#xD;&#xA;  &quot;null&quot;)))" WhereClause="primarykey() = select current primarykey() from accproductoptional" />
+          </ForeachRow>
+          <Delete DataTable="AccProductOptional" ScriptItemUID="Delete3" WhereClause="not(Orderable)" />
+        </ActionSequence>
+        <ActionSequence Condition="from ShoppingCartItem select current isnull(UID_ShoppingCartItemParent,'') &lt;&gt; ''" ItemUID="Not load AccProductDependencies for non root items" ScriptItemUID="Action13">
+          <Delete DataTable="AccProductOptional" ScriptItemUID="Delete1" />
+        </ActionSequence>
+        <ForeachRow DataTable="AccProductOptional" ScriptItemUID="ForeachRow1">
+          <Update DataTable="AccProductOptional" DataColumn="IsAlreadyInShoppingCart" Value="if (0 = (select count() from ShoppingCartItem where &#xD;&#xA;uid_shoppingCartOrder = (from ShoppingCartItem select current uid_ShoppingCartOrder)&#xD;&#xA;and uid_PersonOrdered = (from ShoppingCartItem select current uid_personordered)&#xD;&#xA;and uid_accProduct = (from AccProductOptional select current UID_AccProduct)&#xD;&#xA;)&#xD;&#xA;) then&#xD;&#xA; false&#xD;&#xA;else&#xD;&#xA; true" WhereClause="uid_accproduct = (from AccProductOptional select current uid_accProduct)" ScriptItemUID="Update2" />
+        </ForeachRow>
+        <ActionSequence ScriptItemUID="Action2" Condition="(select count() from AccProductOptional &gt; 0) or (from vars select HasMandatoryParameters)">
+          <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+              <Container ScriptItemUID="Container1">
+                <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+                  <Container Layout="'VI_Styles_Container_Paragraph'" Condition="not(isnullorempty(GetAccProductParams(select current uid_accproduct from shoppingcartitem)))" ScriptItemUID="Container3">
+                    <Container Condition="not IsNullOrEmpty(from AccProductParamCategory select Description)" ItemUID="AccProductParamCategory has description" ScriptItemUID="Container4">
+                      <Label Text="from AccProductParamCategory select DisplayValue(Description)" ScriptItemUID="Label2" />
+                    </Container>
+                    <Container Condition="IsNullOrEmpty(from AccProductParamCategory select Description)" ItemUID="AccProductParamCategory has no description" ScriptItemUID="Container5">
+                      <Label Text="translate(&quot;#LDS#Please enter additional information about your request.&quot;)" ScriptItemUID="Label1" />
+                    </Container>
+                  </Container>
+                  <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlReferenceContainer1">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <ExpressionColumnList ColumnList="GetAccProductParams(select current uid_accproduct from shoppingcartitem)" ScriptItemUID="ExpressionColumnList1" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping1" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Container ItemUID="available ACCProducts" Condition="0 &lt; select count() from AccProductOptional" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container6">
+                  <Label Text="translate('#LDS#The following optional products are available.')" ScriptItemUID="Label3" />
+                  <Grid ScriptItemUID="Grid1">
+                    <GridBand DataTable="AccProductOptional" DisplayHeader="Always" ItemUID="AccProductsOptionalGrid" OrderBy="&quot;SortOrder, Ident_accproduct&quot;" ScriptItemUID="GridBand1" RowSelection="Action" RowSelectionActive="">
+                      <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                        <ControlList ScriptItemUID="ControlList1">
+                          <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                              <ControlList ScriptItemUID="ControlList7">
+                                <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from AccProductOptional select current tablename" />
+                                  </HtmlAttributes>
+                                  <Label ScriptItemUID="Label8" Text="from AccProductOptional select current Display()" />
+                                </Container>
+                              </ControlList>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                              <ControlList ScriptItemUID="ControlList8">
+                                <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef1">
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="IsReadOnly()" Value="false" />
+                                  <VirtualTableMapping ScriptItemUID="VirtualTableMapping6" VirtualTable="EditTable" DataTable="AccProductOptional">
+                                    <VirtualColumnMapping DataColumn="IsSelected" VirtualColumn="DoSelect" />
+                                  </VirtualTableMapping>
+                                </ControlReferenceControlList>
+                              </ControlList>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                              <ControlList ScriptItemUID="ControlList9">
+                                <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef28">
+                                  <VirtualTableMapping VirtualTable="EditTable" DataTable="AccProductOptional" ScriptItemUID="VirtualTableMapping31" />
+                                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping28">
+                                    <ColumnList ScriptItemUID="ColumnList5">
+                                      <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="UID_AccProductGroup" />
+                                      <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_OrgRuler" />
+                                      <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="Description" />
+                                    </ColumnList>
+                                  </VirtualFunctionMapping>
+                                </ControlReferenceContainer>
+                              </ControlList>
+                            </VirtualControlMapping>
+                          </ControlReferenceControlList>
+                        </ControlList>
+                      </GridBandListView>
+                      <SelectionAction ScriptItemUID="ServerActionCall3">
+                        <Update DataColumn="IsSelected" DataTable="AccProductOptional" ScriptItemUID="Update6" WhereClause="PrimaryKey() = (from AccProductOptional select current PrimaryKey())" Value="not(from AccProductOptional select current IsSelected)" />
+                      </SelectionAction>
+                      <GridFilters ScriptItemUID="GridFilters1" />
+                      <GridRows />
+                      <GridColumn Width="&quot;60px&quot;" ScriptItemUID="GridColumn1" HasHeaderCell="false">
+                        <Cell ScriptItemUID="Cell2">
+                          <FormItemLabel DataTable="AccProductOptional" DataColumn="IsSelected" IsInvisible="true" ScriptItemUID="FormItemLabel1">
+                            <Label Text="translate('#LDS#Select accessories')" ScriptItemUID="Label5" />
+                          </FormItemLabel>
+                          <CheckBox DataTable="AccProductOptional" DataColumn="IsSelected" ScriptItemUID="CheckBox1" Text="" />
+                        </Cell>
+                      </GridColumn>
+                      <ControlReferenceGridColumnGroup ID="VI_ITShop_AccProduct_GridColumns" DataTable="AccProductOptional" ScriptItemUID="wctl1">
+                        <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProductOptional" ScriptItemUID="VirtualTableMapping2" />
+                      </ControlReferenceGridColumnGroup>
+                    </GridBand>
+                  </Grid>
+                </Container>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+              <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container8">
+                <Button Text="translate('#LDS#OK')" ItemUID="Default Button" ScriptItemUID="Button1">
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <ActionSequence ScriptItemUID="Action6" ItemUID="MultiPerson" Condition="EditAllEqualAccProducts()">
+                      <Update DataTable="Vars" DataColumn="tmpValue" Value="from ShoppingCartItem select current UID_ShoppingCartItem" ScriptItemUID="Update3" />
+                      <ForeachColumn ScriptItemUID="ForeachColumn1" DataTable="ShoppingCartItem">
+                        <ColumnList ScriptItemUID="ColumnList2">
+                          <ExpressionColumnList ColumnList="GetAccProductParams(select current uid_accproduct from shoppingcartitem)" ScriptItemUID="ExpressionColumnList2" />
+                        </ColumnList>
+                        <ActionSequence ScriptItemUID="Action14">
+                          <Update DataTable="ShoppingCartItem" DataColumn="currentcolumn" Value="from ShoppingCartItem select currentcolumn where UID_ShoppingCartItem = (from vars select top 1 tmpValue)" WhereClause="UID_AccProduct = (from ShoppingCartItem select current UID_AccProduct)&#xD;&#xA;and UID_ShoppingCartItem &lt;&gt; (from ShoppingCartItem select current UID_ShoppingCartItem)" ScriptItemUID="Update4" />
+                        </ActionSequence>
+                      </ForeachColumn>
+                      <Save DataTable="ShoppingCartItem" WhereClause="UID_AccProduct = (from ShoppingCartItem select current UID_AccProduct)" ScriptItemUID="Save1" />
+                    </ActionSequence>
+                    <Save DataTable="ShoppingCartItem" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItem select current UID_ShoppingCartItem)" ScriptItemUID="Save2" />
+                    <ActionSequence ItemUID="Add selected AccProducts to ShoppingCart" ScriptItemUID="Action3">
+                      <ForeachRow DataTable="AccProductOptional" WhereClause="IsSelected" ScriptItemUID="ForeachRow2">
+                        <ActionSequence Condition="-- Product is already in the shopping cart and not multi-requestable&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;  0 &lt; (select count() from ShoppingCartItem where &#xD;&#xA;  uid_accproduct = ( select current uid_accproduct from accProductOptional) &#xD;&#xA;  and uid_personordered = (select current uid_personordered from shoppingcartitem))&#xD;&#xA;)&#xD;&#xA;and &#xD;&#xA;(select current not(helperisReusable) from AccProductOptional)&#xD;&#xA;" ScriptItemUID="Action4">
+                          <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction2">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate( '#LDS#This product is already in your cart.', select current display() from accproductoptional)" ScriptItemUID="VirtualFunctionMapping2" />
+                            <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                            <VirtualFunctionMapping ID="MessageBoxTitle()" Value="select current display() from accproductoptional" ScriptItemUID="VirtualFunctionMapping4" />
+                          </CallAction>
+                          <EndExecution AlsoAbortWaitingThreads="false" />
+                        </ActionSequence>
+                        <LoadTable DataTable="Person" ScriptItemUID="LoadTable4" WhereClause="If(EditAllEqualAccProducts())Then&#xD;&#xA;   Format(&quot;UID_Person in ({0})&quot;, listselect(ShoppingCartItem,UID_PersonOrdered,UID_AccProduct = (from ShoppingCartItem select Current UID_AccProduct)))&#xD;&#xA;Else&#xD;&#xA;   SqlCompareuid(&quot;UID_Person&quot;, from ShoppingCartItem select Current UID_PersonOrdered)">
+                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+                        </LoadTable>
+                        <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="from AccProductOptional select current uid_accProduct" ScriptItemUID="wctl2">
+                          <VirtualFunctionMapping ID="uidaccproduct()" Value="from AccProductOptional select current UID_AccProduct" ScriptItemUID="VirtualFunctionMapping5" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartItemParentForOptional()" Value="from ShoppingCartItem select current UID_ShoppingCartItem" ScriptItemUID="VirtualFunctionMapping6" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from shoppingcartitem select current uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping7" />
+                          <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping3" />
+                          <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="Person" ScriptItemUID="VirtualTableMapping4" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping61" ID="IsNoCopyParametersPerson()" Value="from AccProductOptional select current IsNoCopyParametersPerson" />
+                        </AccProductSwitchCallAction>
+                      </ForeachRow>
+                    </ActionSequence>
+                    <ActionOnControl />
+                    <CallAction ActionID="OnInsertSuccess" ScriptItemUID="CallAction3" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button2" AssociatedWithEscapeKey="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <ActionSequence Condition="DeleteProductOnCancel() = true" ItemUID="Delete request if selection of optional products was aborted" ScriptItemUID="Action7">
+                      <Delete DataTable="ShoppingCartItem" SetDeletionFlag="DeleteAndSave" WhereClause="if(EditAllEqualAccProducts())then(&#xD;&#xA;   (UID_AccProduct = (from ShoppingCartItem select current UID_AccProduct))&#xD;&#xA;or&#xD;&#xA;   (UID_AccProduct in (from ShoppingCartItem select UID_AccProduct where uid_shoppingcartitemparent = (from ShoppingCartItem select current uid_shoppingcartitem)))&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   uid_shoppingcartitem = (from ShoppingCartItem select current uid_shoppingcartitem) or&#xD;&#xA;   uid_shoppingcartitemparent = (from ShoppingCartItem select current uid_shoppingcartitem)&#xD;&#xA;)" ScriptItemUID="Delete2" />
+                      <CodeLiteral ScriptItemUID="CodeLiteral1">if(!DataContext.EditAllEqualAccProducts)
+	DataContext.DeleteCartItemHierarchy();</CodeLiteral>
+                    </ActionSequence>
+                    <CallAction ActionID="OnInsertCancel" ScriptItemUID="CallAction4" />
+                    <ActionOnControl />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="PopupTitle()" Value="if(EditAllEqualAccProducts() and (0 &lt; from ShoppingCartItem select count() where &#xD;&#xA;UID_PersonOrdered &lt;&gt; (from shoppingcartitem select current UID_PersonOrdered) and&#xD;&#xA;UID_AccProduct = (from shoppingcartitem select current UID_AccProduct))&#xD;&#xA;)then(&#xD;&#xA;   format(&quot;{0} - {1}&quot;,from Accproduct select top 1 display(),translate(&quot;#LDS#For all&quot;))   &#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   format(&quot;{0} - {1}&quot;,from Accproduct select top 1 display(),from ShoppingCartItem select current DisplayValue(UID_PersonOrdered))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping8" />
+          </CallAction>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="HasMandatoryParameters" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="tmpValue" DataType="System.String" ScriptItemUID="Column7" />
+        </DataTableSingleRow>
+        <DataTableDbObject Table="AccProductOptional" Class="AccProduct" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action9">
+            <Update DataTable="AccProductOptional" DataColumn="IsSelected" WhereClause="IsSelected" Value="false" ScriptItemUID="Update5" />
+          </ActionSequence>
+          <Column Name="IsAlreadyInShoppingCart" DataType="System.Boolean" ScriptItemUID="Column3" />
+          <Column Name="IsSelected" DataType="System.Boolean" ScriptItemUID="Column4" />
+          <Column Name="HelperIsReusable" DataType="System.Boolean" ScriptItemUID="Column6" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossible : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+          <Column Name="Orderable" ScriptItemUID="Column14" DataType="System.Boolean" MaxLength="" MinLength="" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column27" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName }}+&quot;&quot;" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="AccProduct" Class="AccProduct" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="AccProductParamCategory" Class="AccProductParamCategory" WhereClauseSQL="" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action11" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject4">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="DeleteProductOnCancel()" Comment="Legt fest, ob das übergebene Produkt aus dem ShoppingCart entfernt werden soll, wenn im geöffneten Popup mit den optionalen Produkten der Abbrechen Button betätigt wird." DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="OnInsertSuccess" ContainerType="ActionComponent" Comment="Signalisiert, das das Einfügen des Items in den Einkaufswagen erfolgreich war" />
+      <VirtualControl ID="OnInsertCancel" ContainerType="ActionComponent" Comment="Signalisiert, das das Einfügen des Items in den Einkaufswagen nicht erfolgreich war oder abgebrochen wurde" />
+      <VirtualFunction Signature="EditAllEqualAccProducts()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

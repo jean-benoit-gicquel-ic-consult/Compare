@@ -1,0 +1,42 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_SearchBox">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <TextBox DataTable="SearchTerm" DataColumn="Term" Columns="7" EnableCustomAttributes="true" ScriptItemUID="TextBox1" Layout="'VI_Styles_Textbox_Search'" EmptyText="translate(&quot;#LDS#Search&quot;)">
+          <HtmlAttributes>
+            <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Search_Header&quot;)" ScriptItemUID="HtmlAttribute3" />
+            <HtmlAttribute Name="'activate-input'" ScriptItemUID="HtmlAttribute11" Value="'true'" />
+            <HtmlAttribute Name="&quot;aria-label&quot;" ScriptItemUID="HtmlAttribute10" Value="translate(&quot;#LDS#WD_GridSearchLabel&quot;)" />
+          </HtmlAttributes>
+        </TextBox>
+        <Button ScriptItemUID="Button2" EnableCustomAttributes="true" ItemUID="SearchbtnHeader" DisplayType="Controls">
+          <ControlList ScriptItemUID="ControlList4" />
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;title&quot;" ScriptItemUID="HtmlAttribute6" Value="translate(&quot;#LDS#Search&quot;)" />
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;&quot;" />
+          </HtmlAttributes>
+          <ServerActionCall ScriptItemUID="ServerActionCall21">
+            <Redirect Target="FormModule" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect12" AbortExecution="false">
+              <RedirectFormModule ID="VI_Common_Search" ScriptItemUID="RedirectFormModule1">
+                <VirtualFunctionMapping ID="SearchTerm()" Value="from searchterm select term" ScriptItemUID="VirtualFunctionMapping7" />
+              </RedirectFormModule>
+            </Redirect>
+          </ServerActionCall>
+        </Button>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="SearchTerm" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="Term" DataType="System.String" ScriptItemUID="Column3" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,337 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_Heatmap_Detail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action2">
+        <Insert DataTable="TileSizeOption" ScriptItemUID="Insert1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Data size&quot;)" />
+          <InsertValue DataColumn="id" Value="&quot;Datasize&quot;" />
+        </Insert>
+        <Insert DataTable="TileSizeOption" ScriptItemUID="Insert2">
+          <ActionSequence ScriptItemUID="Action6" />
+          <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Unisize&quot;)" />
+          <InsertValue DataColumn="id" Value="&quot;Unisize&quot;" />
+        </Insert>
+        <Update DataTable="options" DataColumn="SizeOption" Value="&quot;Datasize&quot;" ScriptItemUID="Update2" />
+        <Insert DataTable="TimeOption" ScriptItemUID="Insert3">
+          <ActionSequence ScriptItemUID="Action7" />
+          <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Now&quot;)" />
+          <InsertValue DataColumn="id" Value="&quot;now&quot;" />
+          <InsertValue DataColumn="index" Value="1" />
+        </Insert>
+        <ActionSequence ScriptItemUID="Action15" Condition="not(isnullorempty(from HeatmapInfo select dashboarddefmonthly) or (from HeatmapInfo select dashboarddefmonthly='none'))">
+          <Insert DataTable="TimeOption" ScriptItemUID="Insert4">
+            <ActionSequence ScriptItemUID="Action8" />
+            <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Month-to-date changes&quot;) " />
+            <InsertValue DataColumn="id" Value="&quot;lastMonth&quot;" />
+            <InsertValue DataColumn="index" Value="2" />
+          </Insert>
+          <Insert DataTable="TimeOption" ScriptItemUID="Insert5">
+            <ActionSequence ScriptItemUID="Action9" />
+            <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Last month-to-date changes&quot;) " />
+            <InsertValue DataColumn="id" Value="&quot;lastlastMonth&quot;" />
+            <InsertValue DataColumn="index" Value="3" />
+          </Insert>
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="Action16" Condition="not(isnullorempty(from HeatmapInfo select dashboarddefyearly) or (from HeatmapInfo select dashboarddefyearly='none'))">
+          <Insert DataTable="TimeOption" ScriptItemUID="Insert6">
+            <ActionSequence ScriptItemUID="Action10" />
+            <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Year-to-date changes&quot;) " />
+            <InsertValue DataColumn="id" Value="&quot;lastYear&quot;" />
+            <InsertValue DataColumn="index" Value="4" />
+          </Insert>
+          <Insert DataTable="TimeOption" ScriptItemUID="Insert7">
+            <ActionSequence ScriptItemUID="Action11" />
+            <InsertValue DataColumn="Name" Value="translate(&quot;#LDS#Last year-to-date changes&quot;)" />
+            <InsertValue DataColumn="id" Value="&quot;lastlastYear&quot;" />
+            <InsertValue DataColumn="index" Value="5" />
+          </Insert>
+        </ActionSequence>
+        <Update DataTable="options" DataColumn="timeOption" Value="&quot;now&quot;" ScriptItemUID="Update3" />
+      </ActionSequence>
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="HeatmapDetailForm1" ScriptItemUID="Form1" NavigationTitle="IsNullOrEmpty(  from dashboarddef select current Title, from Dashboarddef select current displayname)">
+          <ActionSequence ScriptItemUID="Action1" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer2">
+            <Label Text="IsNullOrEmpty(  from dashboarddef select current Title, from Dashboarddef select current displayname)" ScriptItemUID="Label2" />
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+            <Container ScriptItemUID="Container1">
+              <LayoutPanel ScriptItemUID="LayoutPanel5" Columns="3">
+                <SwitchContainer ScriptItemUID="Switch1">
+                  <SwitchContainerCase ScriptItemUID="Case1" Condition="from ReferencedObjects select top 1 TableName in ('Department', 'Locality', 'ProfitCenter', 'Org')">
+                    <Label ScriptItemUID="Label13" Text="translate(&quot;#LDS#Filter by&quot;)" />
+                    <ColumnEditor DataTable="options" DataColumn="Filter" ScriptItemUID="ColumnEditor1" />
+                  </SwitchContainerCase>
+                </SwitchContainer>
+                <Container ScriptItemUID="Container7" Condition="from dashboarddef select isadhoc and 1&lt;select count() from timeoption">
+                  <ComboBox SourceTable="TimeOption" DataTable="options" DataColumn="timeOption" ScriptItemUID="ComboBox2" SourceValueColumn="id" ItemUID="Live vs Historic option" SourceDisplay="Name" Layout="'VI_Styles_DropDownList_Default'" OrderBy="'index'" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;data-imx-busyindicator&quot;" Value="&quot;true&quot;" />
+                    </HtmlAttributes>
+                  </ComboBox>
+                </Container>
+              </LayoutPanel>
+            </Container>
+            <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="HeatmapInfo" WhereClause="DisplayName = (from DashboardDef select current Ident_DialogDashboarddef)" WithoutParentContainer="true">
+              <Container ScriptItemUID="Container13" Condition="{{ !VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice }}" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;float: right;&quot;" />
+                </HtmlAttributes>
+                <ContainerTemplate ScriptItemUID="ContainerTemplate4" DataTable="DashboardContent" WhereClause="primarykey() =( from options select lastClicked) ">
+                  <ControlReferenceContainer ID="DetailShape" ScriptItemUID="ControlRef7" />
+                </ContainerTemplate>
+              </Container>
+              <Container ScriptItemUID="Container5" IsBeginRenderPart="true" RefreshTriggerExpression="from options select Filter + from options select timeOption" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="if ({{ !VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice }}) then &#xD;&#xA;&#xD;&#xA;&quot;margin-right:400px; overflow: visible;&quot; else &quot;&quot;" />
+                </HtmlAttributes>
+                <Heatmap DataTable="DashboardContent" Color="HeatmapColorColumn" Size="ObjectCount" ScriptItemUID="Heatmap2" Text="from dashboardcontent select current ElementText&#xD;&#xA;" Tooltip="from dashboardcontent select current ElementTooltip&#xD;&#xA;" SingleClickEvent="false" ValueForRed="if (from options select timeOption=&quot;now&quot;) then &#xD;&#xA;&#xD;&#xA;(from heatmapinfo select current RedLimit) else&#xD;&#xA;&#xD;&#xA;(from heatmapinfo select current RedLimitHistoric)" ValueForGreen="if (from options select timeOption=&quot;now&quot;) then &#xD;&#xA;&#xD;&#xA;(from heatmapinfo select GreenLimit) else&#xD;&#xA;&#xD;&#xA;(from heatmapinfo select GreenLimitHistoric)" EqualSizedBoxes="from heatmapinfo select EqualSized" SliderCaption="&quot;Filter&quot;" OrderBy="'ElementValue desc'" ValueForYellow="if (from options select timeOption=&quot;now&quot;) then &#xD;&#xA;&#xD;&#xA;(from heatmapinfo select YellowLimit) else&#xD;&#xA;&#xD;&#xA;(from heatmapinfo select YellowLimitHistoric)" BoxSideLength="" Width="">
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <Update DataTable="options" DataColumn="lastClicked" Value="select current primarykey() from dashboardContent" ScriptItemUID="Update1" />
+                    <ActionSequence ScriptItemUID="Action13">
+                      <ActionSequence ScriptItemUID="Action4" Condition="{{ VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice }}">
+                        <Popup DisplayType="Controls">
+                          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="'class'" Value="&quot;imx-popup-large&quot;" />
+                            </HtmlAttributes>
+                            <ContainerTemplate ScriptItemUID="ContainerTemplate5" DataTable="DashboardContent" WhereClause="primarykey() =( from options select lastClicked) ">
+                              <ContainerTemplate ScriptItemUID="ContainerTemplate6" DataTable="HeatmapInfo" WhereClause="DisplayName = (from DashboardDef select current Ident_DialogDashboarddef)">
+                                <Container ScriptItemUID="Container16" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="'class'" Value="'modal-body'" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="'style'" Value="'top: 10px;'" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="DetailShape" ScriptItemUID="ControlRef6" />
+                                </Container>
+                                <Container ScriptItemUID="Container15" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="'class'" Value="'modal-footer'" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef8" />
+                                </Container>
+                              </ContainerTemplate>
+                            </ContainerTemplate>
+                          </Container>
+                        </Popup>
+                      </ActionSequence>
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Heatmap>
+                <Container Condition="select count() from dashboardContent=0 and (from options select timeOption='now')" Layout="'VI_Styles_Container_SmallErrorBox'" ScriptItemUID="Container57">
+                  <Label Text="translate(&quot;#LDS#There is no matching data.&quot;)" ScriptItemUID="Label44" />
+                </Container>
+                <Container Condition="select count() from dashboardContent=0 and not(from options select timeOption='now')" Layout="'VI_Styles_Container_SmallErrorBox'" ScriptItemUID="Container58">
+                  <Label Text="translate(&quot;#LDS#No changes during selected time period.&quot;)" ScriptItemUID="Label11" />
+                </Container>
+              </Container>
+            </ContainerTemplate>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="options" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="SizeOption" DataType="System.String" ScriptItemUID="Column22" />
+          <Column Name="lastClicked" DataType="System.String" ScriptItemUID="Column10" />
+          <Column Name="Filter" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBTableName="from ReferencedObjects select top 1 TableName" DBColumnName="{{  _Connection.Tables[_result].PrimaryKeyColumns.First().Columnname }}" IsMultiValued="true" FKWhereClause="" Caption="translate(&quot;#LDS#Filter by&quot;)" />
+          <Column Name="FilterComputed" DataType="System.String" ScriptItemUID="Column2" MinLength="" MaxLength="" />
+          <Column Name="timeOption" DataType="System.String" ScriptItemUID="Column5" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="TileSizeOption" ScriptItemUID="DataTableCustom1" PrimaryKeyColumn="id">
+          <Column Name="Name" DataType="System.String" ScriptItemUID="Column9" />
+          <Column Name="id" DataType="System.String" ScriptItemUID="Column13" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="SelectedObjectKey" ScriptItemUID="Column37" DataType="System.String" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="TimeOption" ScriptItemUID="DataTableCustom2" PrimaryKeyColumn="id">
+          <Column Name="Name" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="id" DataType="System.String" ScriptItemUID="Column3" />
+          <Column Name="index" DataType="System.Int32" ScriptItemUID="Column27" />
+        </DataTableCustom>
+        <DataTableSQL Table="DashboardContent" ScriptItemUID="DataTableSQL1" PrimaryKeyColumn="pk">
+          <ActionSequence ScriptItemUID="Action32" />
+          <Column Name="uid_dialogdashboarddef" ScriptItemUID="Column14" DataType="System.String" />
+          <Column Name="ElementName" ScriptItemUID="Column15" DataType="System.String" />
+          <Column Name="ElementObjectKey" Comment="Empty on aggregate statistics" ScriptItemUID="Column16" DataType="System.String" />
+          <Column Name="ElementValue" ScriptItemUID="Column17" DataType="System.Double" />
+          <Column Name="ElementValue100" ScriptItemUID="Column18" DataType="System.Double" />
+          <Column Name="ElementOrder" DataType="System.Int32" ScriptItemUID="Column19" />
+          <Column Name="HistoryNumber" DataType="System.Int32" ScriptItemUID="Column20" />
+          <Column Name="ElementDate" DataType="System.DateTime" ScriptItemUID="Column21" />
+          <Column Name="isactive" Expression="isnull(elementobjectkey,'')=''&#xD;&#xA;or(&#xD;&#xA;0 &lt; select count() from ReferencedObjects where (key = ( select current elementobjectkey from dashboardcontent)))" DataSource="Expression" ScriptItemUID="Column23" DataType="System.Boolean" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column11" />
+          <Column Name="ElementObjectKeyTable" Expression="if(isnullorempty(elementobjectkey)) then getnull() else getobjectkeytable(elementobjectkey)" DataSource="Expression" ScriptItemUID="Column26" DataType="System.String" />
+          <Column Name="ElementText" DataType="System.String" ScriptItemUID="Column8" />
+          <Column Name="ElementTooltip" DataType="System.String" ScriptItemUID="Column7" />
+          <Column Name="ObjectCount" DataType="System.Int32" ScriptItemUID="Column6" Caption="IsNullOrEmpty( from dashboarddef select current SizeValueTerm , translate('#LDS#Size'))" />
+          <Column Name="ObjectDisplay" DataType="System.String" ScriptItemUID="Column51" DataSource="Expression" Expression="from ReferencedObjects select display() where key= (from dashboardcontent select current elementobjectkey)" />
+          <Column Name="ObjectDisplayLong" DataType="System.String" ScriptItemUID="Column52" DataSource="Expression" Expression="from ReferencedObjects select displaylong() where key= (from dashboardcontent select current elementobjectkey)" />
+          <Column Name="ElementValueDelta" ScriptItemUID="Column25" DataType="System.Double" />
+          <Column Name="HeatmapColorColumn" DataType="System.Double" ScriptItemUID="Column12" DataSource="Expression" Expression="if (from options select timeOption = 'now') then&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select current elementvalue) else&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select current elementvaluedelta)" />
+        </DataTableSQL>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Load">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action12">
+              <ForeachRow DataTable="HeatmapInfo" ScriptItemUID="ForeachRow1">
+                <CallAction ActionID="VI_Common_HeatmapLoadData" ScriptItemUID="CallAction1">
+                  <VirtualFunctionMapping ID="Filter()" Value="if (from options select FilterComputed=&quot;''&quot; or IsNullOrEmpty(from options select FilterComputed)) then &quot;&quot; else (&#xD;&#xA;&#xD;&#xA;format(&quot;ElementObjectKey in (select XObjectKey from {0} &#xD;&#xA;				                             where UID_{0} in (select UID_{0} from {0}Collection &#xD;&#xA;											                   where UID_Parent{0} in ({1}) ) )&quot;, from ReferencedObjects select top 1 TableName ,from options select FilterComputed)&#xD;&#xA;															   )" ScriptItemUID="VirtualFunctionMapping10" />
+                  <VirtualFunctionMapping ID="TimeFrame()" Value="from options select timeOption" ScriptItemUID="VirtualFunctionMapping11" />
+                </CallAction>
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="DetailShape">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container10">
+              <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                <HtmlAttributes />
+                <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="ReferencedObjects" WhereClause="key=(from  dashboardcontent select current elementobjectkey)">
+                  <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlRef1">
+                    <VirtualControlMapping VirtualControl="ShapeContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container4">
+                        <Container ScriptItemUID="Container6" Condition="GetObjectKeyTable(from dashboardcontent select current elementobjectkey) in ('Department', 'Locality', 'Org', 'Profitcenter') ">
+                          <ControlReferenceControlList ID="QBM_Common_HierarchyDisplay" ScriptItemUID="ControlRef2">
+                            <VirtualTableMapping VirtualTable="Object" DataTable="ReferencedObjects" ScriptItemUID="VirtualTableMapping1" />
+                          </ControlReferenceControlList>
+                        </Container>
+                        <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef3">
+                          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                            <ColumnList ScriptItemUID="ColumnList1">
+                              <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="ObjectCount" Condition="not( from heatmapinfo select equalsized)" />
+                              <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ElementValue" DisplayValueExpression="if (not(isinteger()))&#xD;&#xA;then numformat(ElementValue, &quot;0.00&quot;)&#xD;&#xA;else ElementValue" Caption="&#xD;&#xA;IsNullOrEmpty( from dashboarddef select current ColorValueTerm , translate('#LDS#Color value'))" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="DashboardContent" ScriptItemUID="VirtualTableMapping2" />
+                        </ControlReferenceContainer>
+                        <Container ScriptItemUID="Container8" Condition="not( from options select timeOption='now')">
+                          <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef9">
+                            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping13">
+                              <ColumnList ScriptItemUID="ColumnList3">
+                                <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="ElementValueDelta" Caption="(if ((from dashboardcontent select current ElementValueDelta)&gt;0) then (translate(&quot;#LDS#Increased by&quot;)) else (translate(&quot;#LDS#Decreased by&quot;)))" DisplayValueExpression="if (match((from dashboarddef select current Ident_DialogDashboardDef),'.*Risk.*')) then  (if (from dashboardcontent select current Abs(ElementValueDelta)&lt;0.01) then (&quot;&lt; &quot;+ numformat(0.01, '0.00')) else (from dashboardcontent select current numformat(Abs(ElementValueDelta), '0.00')))&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;(from dashboardcontent select current Abs(ElementValueDelta))" />
+                                <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="ElementDate" Caption="translate(&quot;#LDS#Changes since:&quot;)" DisplayValueExpression="formatdate(from dashboardcontent select top 1 ElementDate,'d')" />
+                              </ColumnList>
+                            </VirtualFunctionMapping>
+                            <VirtualTableMapping VirtualTable="EditTable" DataTable="DashboardContent" ScriptItemUID="VirtualTableMapping4" />
+                          </ControlReferenceContainer>
+                        </Container>
+                        <Container ScriptItemUID="Container54" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Container54style" Value="&quot;padding-left: 5px; padding-top:10px; text-align: center;&quot;" />
+                          </HtmlAttributes>
+                          <Button Text="translate(&quot;#LDS#View object detail&quot;)" ScriptItemUID="Button5" Layout="'VI_Styles_Button_Pill'">
+                            <ServerActionCall ScriptItemUID="ServerActionCall13">
+                              <ActionSequence ScriptItemUID="Action37">
+                                <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect4">
+                                  <RedirectParameter Name="'ObjectKey'" Value="from dashboardcontent  select current elementObjectKey" />
+                                  <RedirectParameter Name="'dashboard'" Value="from HeatmapInfo select current Ident" />
+                                </Redirect>
+                              </ActionSequence>
+                            </ServerActionCall>
+                          </Button>
+                        </Container>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="Caption()" Value="from referencedObjects select current displaylong()" ScriptItemUID="VirtualFunctionMapping2" />
+                    <VirtualFunctionMapping ID="HeaderText()" Value="from referencedObjects select current datacaptionsingle(getobjectkeytable(key)+&quot;&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="ImageURL()" Value="format(variable(&quot;%permanentlink%dialogimgTbl={0}&amp;size=big&quot;), &#xD;&#xA;Getobjectkeytable(from dashboardcontent select  current elementObjectKey))" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="ColorKey()" Value="&quot;MiddleCenter&quot;" ScriptItemUID="VirtualFunctionMapping5" />
+                  </ControlReferenceContainer>
+                </ContainerTemplate>
+                <Container ScriptItemUID="Container11" Condition="  IsNullOrEmpty(&#xD;&#xA;  &#xD;&#xA;  from  dashboardcontent select current elementobjectkey&#xD;&#xA;  )">
+                  <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlRef4">
+                    <VirtualControlMapping VirtualControl="ShapeContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container12">
+                        <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef5">
+                          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping6">
+                            <ColumnList ScriptItemUID="ColumnList2">
+                              <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="ObjectCount" Condition="not( from heatmapinfo select equalsized)" />
+                              <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="ElementValue" DisplayValueExpression="if (not(isinteger()))&#xD;&#xA;then numformat(ElementValue, &quot;0.00&quot;)&#xD;&#xA;else ElementValue" Caption="&#xD;&#xA;IsNullOrEmpty( from dashboarddef select current ColorValueTerm , translate('#LDS#Color value'))" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="DashboardContent" ScriptItemUID="VirtualTableMapping3" />
+                        </ControlReferenceContainer>
+                        <Container ScriptItemUID="Container14" Condition="not( from options select timeOption='now')">
+                          <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel2">
+                            <Label ScriptItemUID="Label9" Text="(if ((from dashboardcontent select current ElementValueDelta)&gt;0) then (translate(&quot;#LDS#Increased by&quot;)) else (translate(&quot;#LDS#Decreased by&quot;)))" />
+                            <Label ScriptItemUID="Label8" Text="if (match((from dashboarddef select current Ident_DialogDashboardDef),'.*Risk.*')) then  (if (from dashboardcontent select current Abs(ElementValueDelta)&lt;0.01) then (&quot;&lt; &quot;+ numformat(0.01, '0.00')) else (from dashboardcontent select current numformat(Abs(ElementValueDelta), '0.00')))&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;(from dashboardcontent select current Abs(ElementValueDelta))" />
+                            <Label Text="translate(&quot;#LDS#Changes since:&quot;)" ScriptItemUID="Label7" />
+                            <Label ScriptItemUID="Label6" Text="formatdate(from dashboardcontent select top 1 ElementDate,'d')" />
+                          </LayoutPanel>
+                        </Container>
+                        <Container ScriptItemUID="Container9" Condition="from options select timeOption='now' and not(from dashboarddef select isadhoc)">
+                          <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel4">
+                            <Label Text="translate(&quot;#LDS#Date&quot;)" ScriptItemUID="Label12" />
+                            <Label ScriptItemUID="Label10" Text="formatdate(from dashboardcontent select current  ElementDate,'d')" />
+                          </LayoutPanel>
+                        </Container>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="Caption()" Value="from dashboardcontent select current  ElementText" ScriptItemUID="VirtualFunctionMapping7" />
+                    <VirtualFunctionMapping ID="ColorKey()" Value="&quot;MiddleCenter&quot;" ScriptItemUID="VirtualFunctionMapping8" />
+                    <VirtualFunctionMapping ID="ImageURL()" Value="variable(&quot;%permanentlink%dialogimgTbl=DialogDashboardDef&amp;size=big&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                  </ControlReferenceContainer>
+                </Container>
+              </Container>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="HeatmapInfo" ScriptItemUID="DataTableCursor2" />
+          <DataTableCursor DataTable="DashboardContent" ScriptItemUID="DataTableCursor3" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="isInteger()" Expression="&#xD;&#xA;{{&#xD;&#xA; VI.WebRuntime.IDataColumn _ElementValue1 = this.DashboardContent.GetColumn(&quot;ElementValue&quot;);&#xD;&#xA; var theValue = _ElementValue1.GetValue(_DashboardContent_Current.Row).Double;&#xD;&#xA; @return (Math.Round(theValue)== theValue);&#xD;&#xA;}}&#xD;&#xA;" DataType="System.Boolean" ScriptItemUID="Function1" FilterForTable="DashboardContent">
+          <DataTableCursor DataTable="DashboardContent" ScriptItemUID="DataTableCursor1" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="options" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action14">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var theFilter = this.options.GetColumn("Filter").GetValue(this.options.SingleRow);
+
+var splitFilter = theFilter.Text.Split(new Char [] { (char)(7)});
+string joinedFilter ="";
+bool isFirst = true;
+foreach (var elem in splitFilter)
+{
+	if (!isFirst) joinedFilter += ",";
+	joinedFilter+="'" + elem + "'";
+	isFirst= false;
+}
+
+this.options.GetColumn("FilterComputed").SetValue(this.options.SingleRow,joinedFilter);
+
+
+</CodeLiteral>
+            <CallAction ActionID="Load" ScriptItemUID="Call1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="Filter" />
+          <DataEventHandlerColumn DataColumn="timeOption" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="HeatmapInfo" ElementType="VI.WebRuntime.WebControls.HeatmapControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable4" />
+      <VirtualTable Name="DashboardDef" Class="DialogDashBoardDef" RequiresCursor="true" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="Title" DataType="System.String" />
+        <VirtualColumn Name="SizeValueTerm" DataType="System.String" />
+        <VirtualColumn Name="ColorValueTerm" DataType="System.String" />
+        <VirtualColumn Name="ColorValueTermHistoric" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="ReferencedObjects" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="Key" DataType="System.String" />
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn DataType="System.String" Name="SourceKey" />
+      </VirtualTable>
+      <VirtualFunction Signature="ElementObjectKey()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ElementName()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

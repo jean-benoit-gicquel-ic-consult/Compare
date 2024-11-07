@@ -1,0 +1,117 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_Roles_UNSGroupInUNSGroup_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="20">
+        <DataTableCRView Class="ADSGroupInADSGroup" Table="ADSGroupInADSGroup" CRDataColumn="UID_ADSGroupParent" ViewFKDataTable="AllObjects" ViewFKWhereClause="TableName = &quot;ADSGroup&quot;" RelationDBWhereClause="" ScriptItemUID="ADSDataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType1" ConvertToInteractive="false" LoadTypeBulk="true" />
+          <Column Name="RemoveThis" DataType="System.Boolean" ScriptItemUID="ADSColumn1" />
+        </DataTableCRView>
+        <DataTableDbObject Class="ADSGroupInADSGroup" Table="ADSGroupInADSGroupNew" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <RedefineColumn DataColumn="UID_ADSGroupChild" ScriptItemUID="ADSRedefineColumn1">
+            <ValidationModifier ID="ExistCheck" Text="translate(&quot;#LDS#This child group is already assigned.&quot;)" Condition="exists(&quot;ADSGroupInADSGroup&quot;,&#xD;&#xA;sqland(sqlcompareuid(&quot;UID_ADSGroupParent&quot;, from adsgroupinadsgroupnew select top 1 uid_adsgroupparent),&#xD;&#xA;sqlcompareuid(&quot;UID_ADSGroupChild&quot;, from adsgroupinadsgroupnew select top 1 uid_adsgroupchild)))" />
+          </RedefineColumn>
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="10">
+        <Container ItemUID="ADS" Condition="from allobjects select current TableName='ADSGroup'" ScriptItemUID="ADSContainer1">
+          <Grid ScriptItemUID="ADSGrid1">
+            <GridBand DataTable="ADSGroupInADSGroup" WhereClause="uid_adsgroupparent = ( select current primarykey() from allobjects )" ScriptItemUID="ADSGridBand1" DisplayHeader="Always">
+              <GridBandListView ScriptItemUID="ADSGridBandListView1" />
+              <GridFilters ScriptItemUID="ADSGridFilters1" />
+              <GridRows />
+              <GridColumn ScriptItemUID="ADSColumn2">
+                <GridColumnHeader ScriptItemUID="ADSwctl1">
+                  <Label Text="datacaption( &quot;adsgroupinadsgroup&quot;, &quot;uid_adsgroupchild&quot; )" ScriptItemUID="ADSLabel1" />
+                </GridColumnHeader>
+                <Cell ScriptItemUID="ADSCell1">
+                  <Container ScriptItemUID="ADSContainer3">
+                    <Container Condition="CanInsertOrDelete() and select current not(isdeleted()) from adsgroupinadsgroup" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="ADSContainer4">
+                      <CheckBox DataTable="ADSGroupInADSGroup" DataColumn="RemoveThis" ScriptItemUID="ADSCheckBox1" Text="" />
+                      <FormItemLabel DataTable="ADSGroupInADSGroup" DataColumn="RemoveThis" IsInvisible="true" ScriptItemUID="ADSFormItemLabel1">
+                        <Label Text="translate(&quot;#LDS#Heading Select&quot;)" ScriptItemUID="ADSLabel2" />
+                      </FormItemLabel>
+                    </Container>
+                    <Image Source="File" FileName="from adsgroupinadsgroup select current &#xD;&#xA;(if(IsDeleted()) then &#xD;&#xA;variable(&quot;%permanentlink%stockImg=DeleteDocument&quot;)&#xD;&#xA;else&#xD;&#xA;variable(&quot;%permanentlink%dialogimgTbl=ADSGroup&quot;))" ScriptItemUID="ADSImage1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="ADSImage1alt" Value="datacaption(&quot;ADSGroup&quot;)" />
+                      </HtmlAttributes>
+                    </Image>
+                    <Label Text="select current displayvalue(uid_adsgroupchild) from adsgroupinadsgroup" ScriptItemUID="ADSLabel3" />
+                  </Container>
+                </Cell>
+              </GridColumn>
+            </GridBand>
+          </Grid>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Container23" ObjectType="Container" SortOrder="10">
+        <Container Layout="'VI_Styles_Container_Inline'" ItemUID="ADS" Condition="0 &lt; select count() from adsgroupinadsgroup&#xD;&#xA;and from allobjects select current TableName='ADSGroup'" ScriptItemUID="ADSContainer5">
+          <Button Text="translate(&quot;#LDS#Remove selected&quot;)" Layout="'VI_Styles_Button_Default'" EnabledCondition="0 &lt; (from ADSGroupInADSGroup select Count() where IsNull(RemoveThis, false) = true)" ScriptItemUID="ADSButton1a">
+            <ServerActionCall ScriptItemUID="ADSServerActionCall1a">
+              <Delete DataTable="ADSGroupInADSGroup" SetDeletionFlag="DeleteAndSave" WhereClause="removethis" ScriptItemUID="ADSDelete1" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="ADSCall1">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="ADSVirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="ADSVirtualFunctionMapping2" />
+              </CallAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+        <Container ScriptItemUID="ADSContainer6" Layout="'VI_Styles_Container_Inline'" Condition="from allobjects select Current TableName='ADSGroup' And CanInsert(&quot;ADSGroupInADSGroup&quot;)">
+          <Button Text="translate(&quot;#LDS#New child group&quot;)" ScriptItemUID="ADSButton1">
+            <ServerActionCall ScriptItemUID="ADSServerActionCall1">
+              <Delete DataTable="ADSGroupInADSGroupNew" ScriptItemUID="ADSDelete1a" />
+              <Insert DataTable="ADSGroupInADSGroupNew" ScriptItemUID="ADSInsert1">
+                <ActionSequence ScriptItemUID="ADSAction1" />
+                <InsertValue DataColumn="UID_ADSGroupParent" Value="from allobjects select current primarykey()" />
+              </Insert>
+              <CallAction ActionID="VI_Popup" ScriptItemUID="ADSCall1a">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="ADSContainer24a">
+                    <ContainerTemplate DataTable="ADSGroupInADSGroupNew" ScriptItemUID="ADSContainerTemplate1">
+                      <LayoutPanel ScriptItemUID="ADSLayoutPanel1">
+                        <Label Text="datacaption(&quot;ADSGroupInADSGroup&quot;, &quot;UID_ADSGroupParent&quot;)" ScriptItemUID="ADSLabel17" />
+                        <Label Text="select current displayvalue(uid_adsgroupparent) from ADSGroupInADSGroupNew" ScriptItemUID="ADSLabel18" />
+                        <Label Text="datacaption(&quot;ADSGroupInADSGroup&quot;, &quot;UID_ADSGroupChild&quot;)" ScriptItemUID="ADSLabel19" />
+                        <ColumnEditor DataTable="ADSGroupInADSGroupNew" DataColumn="UID_ADSGroupChild" ScriptItemUID="ADSColumnEditor1a">
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSGroupInADSGroupNew" ScriptItemUID="ADSVirtualTableMapping1">
+                            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="UID_ADSGroupChild" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ID="AdditionalWhereClause()" Value="Format(&quot;EXISTS(SELECT TOP 1 1 from ADSGroup acx join {0} va ON acx.XObjectKey = va.ObjectKeyMember and acx.UID_ADSGroup = ADSGroup.UID_ADSGroup)&quot;,&#xD;&#xA;   sqlfunctioncalltable(&quot;ADS&quot;,&quot;GGetInfo&quot;, &quot;FTGroupMembersValid_G_OC&quot;,&#xD;&#xA;      SqlFormatValue(from ADSGroupInADSGroupNew select Current UID_ADSGroupParent,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;      SqlFormatValue(&quot;ADSGroup&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;   )&#xD;&#xA;)" ScriptItemUID="ADSVirtualFunctionMapping3" />
+                        </ColumnEditor>
+                      </LayoutPanel>
+                      <Validator DataTable="ADSGroupInADSGroupNew" DataColumn="UID_ADSGroupChild" ScriptItemUID="ADSValidator1" />
+                    </ContainerTemplate>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="ADSContainer30">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="ADSButton2">
+                      <ServerActionCall ScriptItemUID="ADSServerActionCall2">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <Save DataTable="ADSGroupInADSGroupNew" ScriptItemUID="ADSSave1" />
+                        <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="ADSCall2">
+                          <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="ADSVirtualFunctionMapping4" />
+                          <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="ADSVirtualFunctionMapping5" />
+                        </CallAction>
+                        <ActionOnControl />
+                        <LoadTable DataTable="ADSGroupInADSGroup" ScriptItemUID="ADSLoadTable1">
+                          <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType2" ConvertToInteractive="false" LoadTypeBulk="true" />
+                        </LoadTable>
+                      </ServerActionCall>
+                    </Button>
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ADSControlRef1">
+                      <VirtualFunctionMapping ID="TriggerValidation()" Value="false" ScriptItemUID="ADSVirtualFunctionMapping6" />
+                    </ControlReferenceControlList>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Add member group&quot;)" ScriptItemUID="ADSVirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="TableName()" Value="&quot;ADSGroup&quot;" ScriptItemUID="ADSVirtualFunctionMapping8" />
+              </CallAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

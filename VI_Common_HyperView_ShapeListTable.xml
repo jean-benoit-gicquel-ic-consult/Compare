@@ -1,0 +1,106 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_ShapeListTable" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.WebControls.DynamicHyperView.IListShape" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList2">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">// assign custom display pattern
+
+if (!string.IsNullOrEmpty(DisplayPattern))
+{
+    Table.ExtendedProperties[BaseRuntimeTable.DisplayPatternKey] = DisplayPattern;
+}</CodeLiteral>
+        <Container ScriptItemUID="Element1" Condition="condition() and 0 &lt; select dbcount from container" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'imx-layout'" Value="isnullorempty( LayoutType(), &quot;BottomRight&quot;)" ScriptItemUID="HtmlAttribute1" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container1">
+            <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlReferenceContainer1">
+              <VirtualFunctionMapping ID="ObjectCount()" Value="select dbcount from container" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualControlMapping VirtualControl="ShapeContent" ContainerType="Container">
+                <Container ScriptItemUID="Container2">
+                  <Grid ScriptItemUID="Grid1" HideMenu="true">
+                    <GridBand DataTable="Table" Layout="'VI_Styles_GridBand_Borderless'" CustomStyleBlock="'margin-top: 4px; max-height: 200px; overflow-y: auto; overflow-x: hidden;'" DisplayHeader="Never" EnableCustomAttributes="true" ScriptItemUID="GridBand1" EntriesPerPage="5" DataSourceType="Database" DBWhereClause="" DbOrderBy="DbOrderBy()" DisableRecursiveData="true" EnableGridViewSetting="false" RowSelection="Action" RowSelectionActive="EnableNavigation()">
+                      <HtmlAttributes>
+                        <Property Name="RenderImmediately" Value="true" Comment="" />
+                      </HtmlAttributes>
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+                      <GridBandListView ScriptItemUID="GridBandListView1" />
+                      <SelectionAction ScriptItemUID="ServerActionCall2" EnableRedirectByUrl="true">
+                        <RedirectByUrl>
+                          <Redirect ScriptItemUID="Redirect12" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Common_ObjectSheet">
+                            <RedirectParameter Name="'ObjectKey'" Value="from table select current targetobjectkey" />
+                          </Redirect>
+                        </RedirectByUrl>
+                        <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                          <RedirectParameter Name="'ObjectKey'" Value="from table select current targetobjectkey" />
+                        </Redirect>
+                      </SelectionAction>
+                      <GridFilters ScriptItemUID="GridFilters1" />
+                      <GridRows />
+                      <GridColumn HasHeaderCell="false" ScriptItemUID="GridColumn1">
+                        <Cell ScriptItemUID="Cell1">
+                          <Label Text="from table select current (if(isnullorempty(displaypattern())) then DisplayLong() else Display())" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="from table select current (if(isnullorempty(displaypattern())) then DisplayLong() else Display())" />
+                            </HtmlAttributes>
+                          </Label>
+                          <ControlReferenceContainer ID="AdditionalObjectContent" ScriptItemUID="ControlReferenceContainer2" />
+                        </Cell>
+                      </GridColumn>
+                    </GridBand>
+                  </Grid>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="Caption()" Value="isnullorempty( Caption(), datacaption(tablename()))" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="ImageURL()" Value="variable(&quot;%permanentlink%dialogimgTbl=&quot;+TableName()+&quot;&amp;size=Big&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="DbTableName()" Value="TableName()" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualFunctionMapping ID="ColorKey()" Value="LayoutType()" ScriptItemUID="VirtualFunctionMapping5" />
+              <VirtualFunctionMapping ID="HeaderText()" Value="headertext()" ScriptItemUID="VirtualFunctionMapping6" />
+              <VirtualFunctionMapping ID="SizeType()" Value="SizeType()" ScriptItemUID="VirtualFunctionMapping7" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ShapeLinkUrl()" Value="ShapeLinkUrl()" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ElementColor()" Value="ElementColor()" />
+            </ControlReferenceContainer>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Table" DbObjectTypeDynamic="true" DynamicClass="TableName()" ScriptItemUID="DataTableDbObject1" WhereClauseSQL="DbWhereClause()">
+          <ActionSequence ScriptItemUID="Action1" />
+          <Column DataType="System.String" Name="TargetObjectKey" ScriptItemUID="Column2" DataSource="Expression" Expression="{{&#xD;&#xA;var dbr = (VI.WebRuntime.IDbObjectRow) queryRow;&#xD;&#xA;var str = QBM.CompositionApi.HyperView.ActivationFkHelper.GetTargetObjectKey(dbr.Entity, _Database, ListActivationFkList);&#xD;&#xA;@return string.IsNullOrEmpty(str) ? dbr.ObjectKey.ToXmlString() : str;&#xD;&#xA;}}&#xD;&#xA;+&quot;&quot;" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="DbCount" DataType="System.Int32" ScriptItemUID="Column1" DataSource="Expression" Expression="if(condition()&#xD;&#xA;and {{ !_Connection.Tables[TableName].IsDeactivated }}&#xD;&#xA;)&#xD;&#xA;then&#xD;&#xA;DbCount(tablename(), dbwhereclause(), true) else 0" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="Caption()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HeaderText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalObjectContent" ContainerType="Container" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="SizeType()" VirtualFunctionHasLimitedValues="true" DataType="System.String" TriggerUpdates="Never">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Normal" Comment="" />
+          <VirtualFunctionLimitedValue Name="Wide" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction Signature="TableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="LayoutType()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Condition()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="DisplayPattern()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ShapeLinkUrl()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ElementColor()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="DbOrderBy()" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ListActivationFkList()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

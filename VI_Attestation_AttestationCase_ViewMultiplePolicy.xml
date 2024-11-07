@@ -1,0 +1,158 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_AttestationCase_ViewMultiplePolicy">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+          <GridBand DataTable="AttestationCase" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="OptionalAttestationCaseFilter()" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_AttestationCaseSelected" DbOrderBy="&quot;ToSolveTill&quot;" EnableCustomAttributes="true" DisplayHeader="Always" NoRowsText="NoItemsText()">
+            <HtmlAttributes>
+              <Property Name="ApplyFilledHeight" Value="true" />
+              <CodeLiteral ScriptItemUID="CodeLiteral2">// configure for search-after-load to improve search experience
+
+// fix: for auditor view of all requests, disable search-after-load
+var disableSearchAfterLoad = _Module.ModuleInfo.ModuleName == "VI_Attestation_History" 
+  &amp;&amp; _Module.GetContextParameter("AuditMode") == "YES";
+
+GridBand1.IsSearchAfterLoad = !disableSearchAfterLoad;</CodeLiteral>
+            </HtmlAttributes>
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+              <ControlList ScriptItemUID="ControlList2">
+                <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef1">
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                    <ControlList ScriptItemUID="ControlList3">
+                      <Label ScriptItemUID="Label1" Text="from AttestationCase select current DisplayName&#xD;&#xA;+' - '&#xD;&#xA;+ from AttestationCase select current displayvalue(UID_AttestationPolicy)" />
+                      <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef2" />
+                    </ControlList>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                    <ControlList ScriptItemUID="ControlList4">
+                      <ControlReferenceControlList ID="VI_Common_DecisionControlListView" ScriptItemUID="ControlRef3">
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="IsReadOnly()" Value="IsReadOnly()" />
+                        <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="AttestationCase">
+                          <VirtualColumnMapping DataColumn="DoApprove" VirtualColumn="DoApprove" />
+                          <VirtualColumnMapping DataColumn="DoReject" VirtualColumn="DoReject" />
+                        </VirtualTableMapping>
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                    <ControlList ScriptItemUID="ControlList5">
+                      <LayoutPanel ScriptItemUID="LayoutPanel1">
+                        <ContainerColumnTemplate DataTable="AttestationCase" ScriptItemUID="ContainerColumnTemplate2">
+                          <ColumnList ScriptItemUID="ColumnList3">
+                            <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                            <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="AttestationStateDisplay" />
+                            <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="IsNotApprovedBeforeProxy" />
+                            <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="RiskIndex" />
+                          </ColumnList>
+                          <Container ScriptItemUID="Container8" ItemUID="Title column for normal properties">
+                            <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef5">
+                              <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping4">
+                                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                              </VirtualTableMapping>
+                              <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping11" />
+                            </ControlReferenceContainer>
+                          </Container>
+                          <Container ScriptItemUID="Container3" ItemUID="Value column for normal properties">
+                            <ColumnEditor DataTable="AttestationCase" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1" />
+                          </Container>
+                        </ContainerColumnTemplate>
+                        <ContainerColumnTemplate DataTable="AttestationCase" ScriptItemUID="ContainerColumnTemplate1">
+                          <ColumnList ScriptItemUID="ColumnList2">
+                            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="ToSolveTill" />
+                          </ColumnList>
+                          <Container ScriptItemUID="Container2" ItemUID="Title column for ToSolveUntil">
+                            <Label Text="datacaption(&quot;attestationcase&quot;, &quot;tosolvetill&quot;)" ScriptItemUID="Label6" />
+                          </Container>
+                          <Container ScriptItemUID="Container1" ItemUID="Value column for ToSolveUntil">
+                            <Label Text="from attestationcase select current (if(IsNullOrEmpty(tosolvetill)) then translate(&quot;#LDS#No date set&quot;) else formatdate(tosolvetill, &quot;d&quot;))&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="from attestationcase select current (&#xD;&#xA;if( NOT(IsClosed) AND not(isnullorempty(tosolvetill)) and tosolvetill&lt;nulltime(getdate()))&#xD;&#xA;then &quot;imx-grid-warninglabel&quot;&#xD;&#xA;else &quot;&quot;)" />
+                              </HtmlAttributes>
+                            </Label>
+                          </Container>
+                        </ContainerColumnTemplate>
+                      </LayoutPanel>
+                    </ControlList>
+                  </VirtualControlMapping>
+                </ControlReferenceControlList>
+              </ControlList>
+            </GridBandListView>
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn ScriptItemUID="Column5" Width="'40%'" AutoFilterColumn="DisplayName" SortColumn="DisplayName">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label ScriptItemUID="Label2" Text="DataCaption(AttestationCase,DisplayName)" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1">
+                <Label ScriptItemUID="Label4" Text="from AttestationCase select current DisplayValue(DisplayName)" />
+                <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef9" />
+              </Cell>
+            </GridColumn>
+            <GridColumnSimple ScriptItemUID="Column3" Column="UID_AttestationPolicy" Width="&quot;140px&quot;" />
+            <GridColumnSimple ScriptItemUID="Column4" Column="AttestationStateDisplay" Width="&quot;90px&quot;" />
+            <GridColumnSimple ScriptItemUID="Column6" Column="IsNotApprovedBeforeProxy" Width="&quot;80px&quot;" />
+            <GridColumn SortColumn="ToSolveTill" Width="&quot;90px&quot;" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="GridColumn7" AutoFilterColumn="ToSolveTill">
+              <GridColumnHeader ScriptItemUID="wctl6">
+                <Label Text="datacaption(&quot;attestationcase&quot;, &quot;tosolvetill&quot;)" ScriptItemUID="Label14" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell7">
+                <Label Text="from attestationcase select current (if(IsNullOrEmpty(tosolvetill)) then translate(&quot;#LDS#No date set&quot;) else formatdate(tosolvetill, &quot;d&quot;))&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Label15" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'class'" ScriptItemUID="Label15style" Value="from attestationcase select current (&#xD;&#xA;if( NOT(IsClosed) AND not(isnullorempty(tosolvetill)) and tosolvetill&lt;nulltime(getdate()))&#xD;&#xA;then &quot;imx-grid-warninglabel&quot;&#xD;&#xA;else &quot;&quot;)" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+            <GridColumnSimple ScriptItemUID="Column1" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" Width="&quot;130px&quot;" Column="RiskIndex" />
+            <ControlReferenceGridColumnGroup ID="VI_Common_DecisionControl" DataTable="AttestationCase" ScriptItemUID="ColumnGroup1">
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping1">
+                <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DoApprove" />
+                <VirtualColumnMapping VirtualColumn="DoReject" DataColumn="DoReject" />
+              </VirtualTableMapping>
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="DenySelectAll()" Value="not(&quot;true&quot;=getconfig(&quot;VI_Attestation_AllowSelectAll&quot;))" ScriptItemUID="VirtualFunctionMapping2" />
+            </ControlReferenceGridColumnGroup>
+          </GridBand>
+        </Grid>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="AttestationCase" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action1" ItemUID="Initialize view for attestation case">
+            <ObjectSwitchCallAction ScriptItemUID="ObjectSwitchCallAction1" ObjectKey="getobjectkey(&quot;AttestationPolicy&quot;, from attestationcase select current uid_attestationpolicy, &quot;&quot;)" ActionType="AttestationCase_DetailInit" />
+          </ActionSequence>
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" Class="AttestationCase" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <VirtualColumn Name="AttestationStateDisplay" DataType="System.String" />
+        <ColumnProxy DataColumn="IsNotApprovedBefore" Name="IsNotApprovedBeforeProxy" ScriptItemUID="ColumnProxy1" Caption="translate(&quot;#LDS#Heading New&quot;)" />
+      </VirtualTable>
+      <VirtualFunction Signature="OptionalAttestationCaseFilter()" DataType="System.String" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="AttestationPolicy" Class="AttestationPolicy" ScriptItemUID="VirtualTable2" TriggerUpdates="Never">
+        <Column Name="IsPDFBased" DataType="System.Boolean" ScriptItemUID="Column2" DataSource="Expression" Expression="from attestationobject select top 1 (not(isnullorempty(ObjectKeyReport))) where uid_attestationobject = ( select current uid_attestationobject from attestationpolicy)" />
+      </VirtualTable>
+      <VirtualTable Name="AttestationObject" Class="AttestationObject" ScriptItemUID="VirtualTable3" TriggerUpdates="Never" />
+      <VirtualTable Name="Vars" ScriptItemUID="VirtualTable4" RequiresCursor="true">
+        <VirtualColumn Name="UID_AttestationCaseSelected" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction DataType="System.String" Signature="NoItemsText()" TriggerUpdates="Never" />
+      <VirtualTable Name="DialogParameter" ScriptItemUID="VirtualTable5" Class="DialogParameter" />
+      <VirtualTable Name="DialogParameterSet" ScriptItemUID="VirtualTable6" Class="DialogParameterSet" />
+      <VirtualControl ContainerType="Container" ID="AdditionalControlsColumn1">
+        <VirtualTableCursor DataTable="AttestationCase" />
+      </VirtualControl>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

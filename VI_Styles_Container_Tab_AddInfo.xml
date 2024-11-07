@@ -1,0 +1,19 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Tab_AddInfo" Type="Container" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="tabAddInfo" Comment="" />
+    <CssDocument CssName="MenuOpenItemsSmall">.tabAddInfo {
+  display: inline; 
+  float: none; 
+  position: relative;  
+  text-align: center; 
+  top: 11px;
+  padding: 2px 4px 3px 4px; 
+  color: %VI_Common_Color_ColorBase1%; 
+  background-repeat: no-repeat; 
+  background-color: %VI_Common_Color_Badge_Info%;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

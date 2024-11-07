@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="O3E_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection">
+        <ConfigEntry ScriptItemUID="O3EConfigEntry1" Key="ColumnEditor_O3EDL.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" />
+        <ConfigEntry ScriptItemUID="O3EConfigEntry2" Value="VI_Edit_Special_RiskIndexEditor" Key="ColumnEditor_O3EUnifiedGroup.RiskIndex" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

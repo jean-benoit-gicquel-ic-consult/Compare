@@ -1,0 +1,46 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_Generic" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action1">
+            <Update DataTable="Container" DataColumn="XObjectKey" Value="ObjectKey()" ScriptItemUID="Update1" />
+            <Delete DataTable="Obj" ScriptItemUID="Delete1" />
+            <FillTable Source="XObjectKey" DataTable="Obj" DataTableSource="Container" DataColumnSource="XObjectKey" ResolveMNObjects="CreateMNObject" ScriptItemUID="FillTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+            </FillTable>
+          </Action>
+        </Activator>
+        <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="Obj" WithoutParentContainer="true">
+          <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', sqlcompare(&quot;TableName&quot;, select current dbtable() from Obj, &quot;string&quot;, &quot;equal&quot;))" ActionType="Object_Overview" ScriptItemUID="ObjectSwitchContainer1">
+            <VirtualControlMapping VirtualControl="AdditionalShapes" ContainerType="ControlList">
+              <ControlList ScriptItemUID="ControlList2">
+                <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef1" />
+              </ControlList>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" Value="EnableNavigation()" />
+            <VirtualTableMapping VirtualTable="Object" ScriptItemUID="VirtualTableMapping1" DataTable="Obj" />
+          </ObjectSwitchContainer>
+        </ContainerTemplate>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableGeneric Table="Obj" ScriptItemUID="DataTableGeneric1" />
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ObjectKey()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalShapes" ContainerType="ControlList" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

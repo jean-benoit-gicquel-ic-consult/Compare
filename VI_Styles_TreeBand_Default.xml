@@ -1,0 +1,12 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="de80a04e-648d-8f20-dfc5-d2957d6d257a">
+  <LayoutObject ID="VI_Styles_TreeBand_Default" Type="TreeBand" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument ScriptItemUID="CssDocument1" CssName="NoDataIndication">.k-treeview .imx-nodataindication
+{
+  font-style: italic;
+  background-color: inherit;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

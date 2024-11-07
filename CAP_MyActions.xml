@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="CAP_MyActions" HelpChapterUid="&quot;E83E4F05-D3AD-4399-A6F4-C4228CC309DF&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="CAP_MyActions" NavigationTitle="translate(&quot;#LDS#Heading My Actions&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Heading My Actions&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

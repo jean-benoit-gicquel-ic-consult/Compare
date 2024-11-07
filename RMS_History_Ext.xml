@@ -1,0 +1,39 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_History_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="RMSCodeLiteral1">dataProvider.AddMemberRelationTable("PersonHasESet", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");
+dataProvider.AddAssignmentColumn("ESet", "UID_PersonResponsible", "AddResponsibility", "RemoveResponsibility", "Responsibility");</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="Action4" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="RMSCodeLiteral2">if (!Type.Equals("AERole"))
+{
+	dataProvider.AddMemberRelationTable(Type + "HasESet", "UID_" + Type, "AddPermission", "RemovePermission", "ObjectHasPermission");
+}
+
+
+</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="20">
+        <ActionSequence ScriptItemUID="RMSAction1" Condition="Type() = &quot;ESet&quot;">
+          <CodeLiteral ScriptItemUID="RMSCodeLiteral3">dataProvider.AddMemberRelationTable("PersonHasEset", "UID_ESet", "AddMembership", "RemoveMembership", "MemberOf");
+dataProvider.AddMemberRelationTable("ESetHasEntitlement", "UID_ESet", "AddPermission", "RemovePermission", "MemberOf");
+
+var q = Query.From("DialogTable").SelectDisplays().Where("uid_dialogtablebase = 'QER-T-BaseTreeHasESet' and tablename not in ('ITShopOrgHasESet', 'ITShopSrcHasESet')");
+
+var esetAssignTables = _Database.Source().GetCollection(q);
+foreach(var asgnTable in esetAssignTables.Select(e =&gt; e.GetValue("TableName")))
+{
+	dataProvider.AddMemberRelationTable(asgnTable, "UID_ESet", "AddMembership", "RemoveMembership", "MemberOf");
+}
+</CodeLiteral>
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="RMSAction2" Condition="-- can this base object be assigned to a system role?&#xD;&#xA;exists(&quot;DialogTable&quot;, sqland(sqlcompare(&quot;TableName&quot;, Type(), &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;), &quot;uid_dialogtable in (select UID_DialogTableReference from DialogValidDynamicRef where UID_DialogColumn = 'QER-1D7E2DF935964A3781EE665411E31F1C')&quot;))">
+          <CodeLiteral ScriptItemUID="RMSCodeLiteral4">// load any system roles that this base object is in
+
+dataProvider.AddMemberRelationTable("ESetHasEntitlement", "Entitlement", "AddMembership", "RemoveMembership", "MemberOf");</CodeLiteral>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

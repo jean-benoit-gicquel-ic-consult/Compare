@@ -1,0 +1,18 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMS_ObjectView_AccProduct_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab2" ObjectType="Tab">
+        <TabPage ScriptItemUID="RMSTabPage1" ItemUID="ESET" Condition="0 &lt; select count() from qeraccproductusage where tablename = 'ESet'">
+          <ControlsHeader ScriptItemUID="RMSContainer1">
+            <Label Text="translate(&quot;#LDS#Entitlements&quot;)" ScriptItemUID="RMSLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RMSContainer2">
+            <ControlReferenceControlList ID="RMS_EntitlementList" ScriptItemUID="RMSControlRef1">
+              <VirtualFunctionMapping ID="UidAccProduct()" Value="from SourceObject select current UID_AccProduct" />
+            </ControlReferenceControlList>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

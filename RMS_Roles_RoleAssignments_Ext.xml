@@ -1,0 +1,95 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Roles_RoleAssignments_Ext">
+    <Extensions>
+      <AddObject ObjectID="ServerActionCall4" ObjectType="ServerActionCall" SortOrder="10">
+        <ActionSequence ScriptItemUID="RMSAction4" ItemUID="ESET" Condition="tablename()=&quot;ESET&quot;">
+          <Insert DataTable="ESetHasEntitlement" ScriptItemUID="RMSInsert2">
+            <ActionSequence ScriptItemUID="RMSAction3" />
+            <InsertValue DataColumn="UID_ESet" Value="pk()" />
+            <InsertValue DataColumn="Entitlement" Value="from Container select objectkeyselected" />
+          </Insert>
+          <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="RMSCall5">
+            <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="RMSVirtualTableMapping1" />
+          </CallAction>
+          <CallAction ActionID="VI_ITShop_AddCartItem" ScriptItemUID="RMSCall8">
+            <VirtualFunctionMapping ID="uidaccproduct()" Value="VI_GetAccproductAssignmentMember(getuser(), BuildObjectKeyAssignment())" ScriptItemUID="RMSVirtualFunctionMapping12" />
+            <VirtualFunctionMapping ID="uidpersonordered()" Value="getuser()" ScriptItemUID="RMSVirtualFunctionMapping11" />
+            <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from ShoppingCartOrder select top 1 UID_ShoppingCartOrder" ScriptItemUID="RMSVirtualFunctionMapping10" />
+            <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="RMSVirtualTableMapping3" />
+            <VirtualFunctionMapping ID="ObjectKeyAssignment()" Value="BuildObjectKeyAssignment()" ScriptItemUID="RMSVirtualFunctionMapping9" />
+            <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping5" ID="ObjectKeyElementUsedInAssign()" Value="from Container select objectkeyselected" />
+            <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping6" ID="ObjectKeyOrgUsedInAssign()" Value="GetObjectKey(TableName(),pk(),'')" />
+          </CallAction>
+          <Delete DataTable="ESetHasEntitlement" ScriptItemUID="RMSDelete1" WhereClause="IsNullOrEmpty(xdateinserted)" />
+          <CallAction ActionID="UpdateOpenItems" ScriptItemUID="RMSCall7" />
+          <ActionOnControl />
+          <Redirect Target="Context" AbortExecution="false" ContextID="VI_ITShop_ShoppingCart" AllowReturnToThisContext="true" ScriptItemUID="RMSRedirect1" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="90">
+        <DataTableDbObject Class="ESetHasEntitlement" Table="ESetHasEntitlement" ScriptItemUID="RMSDataTableDbObject2">
+          <ActionSequence ScriptItemUID="RMSAction6">
+            <FillTable Source="XObjectKey" DataTable="AssignedObjects" ScriptItemUID="FillTable3" DataTableSource="ESetHasEntitlement" DataColumnSource="Entitlement" DataColumnXObjectKey="XObjectKey" ResolveMNObjects="NoResolve" DataColumnTableName="TableName" DataColumnSourceKey="pk">
+              <DbObjectLoadType ScriptItemUID="RMSDbObjectLoadType1" ConvertToInteractive="false" LoadTypeBulk="true" />
+            </FillTable>
+          </ActionSequence>
+          <Column Name="SourceObject" DataType="System.String" ScriptItemUID="RMSColumn2" />
+          <Column DataType="System.String" Name="pk" ScriptItemUID="RMSColumn1" DataSource="Expression" Expression="GetUIDFromObjectKey(XObjectKey)" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="ServerActionCall8" ObjectType="ServerActionCall" SortOrder="0">
+        <ActionSequence Condition="tablename() = &quot;ESET&quot;" ItemUID="Remove from ESET" ScriptItemUID="RMSAction10">
+          <CallAction ScriptItemUID="RMSCall6" ActionID="UNSUBSCRIBE" />
+          <Delete DataTable="ESetHasEntitlement" SetDeletionFlag="DeleteAndSave" WhereClause="uid_eset = pk() And entitlement in ( select xobjectkey from assignedobjects Where deletethis) And isdirectassignment(xorigin)" ScriptItemUID="RMSDelete2" />
+          <CallAction ActionID="Reinitialize" ScriptItemUID="RMSCall3" />
+          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="RMSCall4">
+            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="RMSVirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="RMSVirtualFunctionMapping4" />
+          </CallAction>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Action30" ObjectType="ActionSequence" SortOrder="20">
+        <ActionSequence Condition="tablename()=&quot;ESet&quot;" ScriptItemUID="RMSRMSAction9">
+          <LoadTable DataTable="ESetHasEntitlement" WhereClause="format( &quot;uid_eset = '{0}' and XOrigin &gt; 0&quot;, pk())" ScriptItemUID="RMSRMSLoadTable2">
+            <DbObjectLoadType ScriptItemUID="RMSDbObjectLoadType2" />
+            <InsertValue DataColumn="SourceObject" Value="pk()" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <RemoveObject ObjectID="Function3" />
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function ScriptItemUID="RMSFunction1" Name="BuildObjectKeyAssignment()" DataType="System.String" Expression="If(IsBasetreeAssignment())Then&#xD;&#xA;-- build object key XML for the M:N assignment table&#xD;&#xA;&#xD;&#xA;GetObjectKeyRelation(assignmenttable(),&#xD;&#xA;OrgBaseTable(), -- ADSGroup, NDOGroup, SAPGroup, etc....&#xD;&#xA;&quot;&quot;+{{&#xD;&#xA;&#xD;&#xA;string _r = null;&#xD;&#xA;try{&#xD;&#xA;var objectKey = Container.GetColumn(&quot;ObjectKeySelected&quot;).GetValue(Container.SingleRow).String;&#xD;&#xA;_r = new DbObjectKey(objectKey).Keys[0];&#xD;&#xA;} catch{&#xD;&#xA;}&#xD;&#xA;@return _r;&#xD;&#xA;&#xD;&#xA;}},&#xD;&#xA;TableName(), pk())&#xD;&#xA;&#xD;&#xA;   &#xD;&#xA;Else If (tablename()=&quot;ESET&quot;) Then &#xD;&#xA;  from ESetHasEntitlement select XObjectKey Where IsChanged()" />
+      </AddObject>
+      <AddObject ObjectID="Switch2" ObjectType="SwitchAction" SortOrder="15">
+        <SwitchActionCase Condition="tablename()=&quot;ESet&quot;" ItemUID="ESET" ScriptItemUID="RMSCase1">
+          <LoadTable DataTable="PWOForUnsubscribe" WhereClause="format( &quot;orderstate in (select orderstate from QER_VPWOOrderState where IsAssigned=1 and IsOrder=0 ) and objectkeyassignment = {0}&quot;, from ESetHasEntitlement select sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;) Where Entitlement = (&#xD;&#xA;from assignedobjects select Current XObjectKey))" ScriptItemUID="RMSLoadTable1">
+            <DbObjectLoadType ScriptItemUID="RMSDbObjectLoadType3" />
+          </LoadTable>
+        </SwitchActionCase>
+      </AddObject>
+      <AddObject ObjectID="Switch3" ObjectType="SwitchAction" SortOrder="25">
+        <SwitchActionCase Condition="tablename()=&quot;ESet&quot;" ItemUID="ESet" ScriptItemUID="RMSCase2">
+          <LoadTable DataTable="PWOForUnsubscribe" WhereClause="format( &quot;orderstate in (select orderstate from QER_VPWOOrderState where IsAssigned=1 and IsOrder=0 ) and objectkeyassignment = {0}&quot;, from ESetHasEntitlement select sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;) Where Entitlement = (&#xD;&#xA;from assignedobjects select Current XObjectKey))" ScriptItemUID="RMSLoadTable2">
+            <DbObjectLoadType ScriptItemUID="RMSDbObjectLoadType4" />
+          </LoadTable>
+        </SwitchActionCase>
+      </AddObject>
+      <AddObject ObjectID="Case1" ObjectType="SwitchContainerCase" SortOrder="5">
+        <Container ScriptItemUID="RMSContainer1">
+          <ContainerTemplate DataTable="AssignedObjects" WhereClause="primarykey()= ( from vars select pkselected)" ScriptItemUID="RMSContainerTemplate1">
+            <Container ScriptItemUID="RMSContainer2">
+              <ControlReferenceContainer ID="VI_Roles_EntitlementDetective" ScriptItemUID="RMSControlRef1">
+                <VirtualFunctionMapping ID="ObjectKeyEntitlement()" Value="from ESetHasEntitlement select XObjectKey where pk = (from assignedobjects select Current pk)" ScriptItemUID="RMSVirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+            </Container>
+          </ContainerTemplate>
+        </Container>
+      </AddObject>
+      <RemoveObject ObjectID="Column7" />
+      <AddObject ObjectID="DataTableGeneric3" ObjectType="DataTableGeneric">
+        <Column DataType="System.Int32" Name="XOrigin" ScriptItemUID="RMSColumn3" DataSource="Expression" Expression="If(IsBasetreeAssignment())Then&#xD;&#xA;   Convert(objectwalker(&quot;XOrigin&quot;),&quot;System.Int32&quot;)&#xD;&#xA;&#xD;&#xA;Else If (tablename()=&quot;ESET&quot;) Then &#xD;&#xA;   Convert(from ESetHasEntitlement select XOrigin Where pk = (from AssignedObjects select Current pk),&quot;System.Int32&quot;)&#xD;&#xA;&#xD;&#xA;Else&#xD;&#xA;   1 " />
+      </AddObject>
+      <ModifyProperty ObjectID="Column10" PropertyName="Expression" Value="If(IsOrderAssignment(xorigin))Then&#xD;&#xA;   If (tablename()=&quot;ESET&quot;) Then&#xD;&#xA;      Exists(&quot;PersonWantsOrg&quot;,format(&quot;orderstate = 'Assigned' and objectkeyassignment = {0}&quot;, from ESetHasEntitlement select sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;) Where pk = (from assignedobjects select Current pk)))&#xD;&#xA;   Else&#xD;&#xA;      Exists(&quot;PersonWantsOrg&quot;,format(&quot;orderstate = 'Assigned' and objectkeyassignment = {0}&quot;, sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" />
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

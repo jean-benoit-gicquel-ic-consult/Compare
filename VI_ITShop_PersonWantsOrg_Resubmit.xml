@@ -1,0 +1,196 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PersonWantsOrg_Resubmit" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action6" />
+      <ActionComponent ScriptItemUID="Action1">
+        <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="CallAction2">
+          <VirtualFunctionMapping ID="CreateNew()" Value="false" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping1" />
+        </CallAction>
+        <LoadTable DataTable="ITShopOrg" WhereClause="format(&quot;uid_itshoporg in (select uid_itshoporgpr from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,sqlformatvalue(from personwantsorg select current uid_personordered, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),sqlformatvalue(from personwantsorg select current uid_org, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,&quot;null&quot;,&quot;null&quot;))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ActionSequence Condition="-- Not Ordable&#xD;&#xA;(0 = select count() from itshoporg)&#xD;&#xA;or&#xD;&#xA;(&#xD;&#xA;   AllReadyInOrder(from ITShopOrg select top 1 uid_accproduct,from personwantsorg select current UID_PersonOrdered,from ShoppingCartOrder select top 1 UID_ShoppingCartOrder)&#xD;&#xA;)" ScriptItemUID="Action2">
+          <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction3">
+            <VirtualFunctionMapping ID="MessageText()" Value="if(0 = select count() from itshoporg)then&#xD;&#xA;   translate( '#LDS#You are currently not authorized to request this product.', select current displayorg from personwantsorg)&#xD;&#xA;else&#xD;&#xA;   translate('#LDS#This product is already in your shopping cart.')" ScriptItemUID="VirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Submit request again&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+          </CallAction>
+          <EndExecution />
+        </ActionSequence>
+        <Delete DataTable="ShoppingCartItemNew" ScriptItemUID="Delete1" />
+        <LoadTable DataTable="PWO" WhereClause="sqlcompareuid(&quot;UID_PersonWantsOrg&quot;,from PersonWantsOrg select current UID_PersonWantsOrg)" ScriptItemUID="LoadTable4">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+        <CallAction ActionID="CreateCopy" ScriptItemUID="Call1" />
+        <Update DataTable="ShoppingCartItemNew" DataColumn="IsFirst" ScriptItemUID="Update4" Value="true" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction4">
+          <VirtualFunctionMapping ID="PopupTitle()" Value="Translate('#LDS#Submit request again')" ScriptItemUID="VirtualFunctionMapping5" />
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <ContainerTemplate DataTable="ShoppingCartItemNew" ScriptItemUID="ContainerTemplate1" WhereClause="UID_ShoppingCartItem = from ShoppingCartItemNew select UID_ShoppingCartItem where IsFirst">
+                <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+                  <FormItemLabel DataTable="PersonWantsOrg" DataColumn="OrderReason" ScriptItemUID="FormItemLabel1">
+                    <Label Text="translate('#LDS#Please enter a reason for re-submitting this request.')" ScriptItemUID="Label1" />
+                  </FormItemLabel>
+                </Container>
+                <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+                  <TextBox DataTable="ShoppingCartItemNew" DataColumn="OrderReason" TextMode="MultiLine" Rows="3" CustomStyle="&quot;width:520px;&quot;" ScriptItemUID="TextBox1" />
+                </Container>
+              </ContainerTemplate>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container4">
+              <Button Text="translate('#LDS#OK')" ScriptItemUID="Button1">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Save DataTable="ShoppingCartItemNew" ScriptItemUID="Save1" />
+                  <LoadTable DataTable="AccProductDependencies" WhereClause="sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_accproduct&quot;, from itshoporg select top 1 uid_accproduct),&#xD;&#xA;sqlcompare(&quot;ismandatory&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable2">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+                  </LoadTable>
+                  <ActionSequence ScriptItemUID="Action15" ItemUID="HaveMandatoryChilds" Condition="0 &lt; from AccProductDependencies select count()">
+                    <Comment Comment="Load old mandatory PWO´s and copy them" />
+                    <LoadTable DataTable="PWOChilds" WhereClause="sqland(&#xD;&#xA;sqlcompareuid(&quot;UID_PersonWantsOrgParent&quot;,from PersonWantsOrg select current UID_PersonWantsOrg),&#xD;&#xA;sqlcompare(&quot;isoptionalchild&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)" ScriptItemUID="LoadTable3">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+                    </LoadTable>
+                    <ForeachRow DataTable="PWOChilds" ScriptItemUID="ForeachRow3">
+                      <LoadTable DataTable="ITShopOrg" WhereClause="format(&quot;uid_itshoporg in (select uid_itshoporgpr from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,sqlformatvalue(from PWOChilds select current uid_personordered, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),sqlformatvalue(from PWOChilds select current uid_org, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,&quot;null&quot;,&quot;null&quot;))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable5">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+                      </LoadTable>
+                      <ActionSequence ScriptItemUID="Action13" Condition="(0 &lt; from ITShopOrg select count())&#xD;&#xA;and&#xD;&#xA;(0 &lt; from AccProductDependencies select count() where UID_AccProductRelated in (from ITShopOrg select UID_AccProduct))&#xD;&#xA;and not(&#xD;&#xA;   AllReadyInOrder(from ITShopOrg select top 1 uid_accproduct,from PWOChilds select current UID_PersonOrdered,from ShoppingCartOrder select top 1 UID_ShoppingCartOrder)&#xD;&#xA;)">
+                        <LoadTable DataTable="PWO" WhereClause="sqlcompareuid(&quot;UID_PersonWantsOrg&quot;,from PWOChilds select current UID_PersonWantsOrg)&#xD;&#xA;" ScriptItemUID="LoadTable6">
+                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" />
+                        </LoadTable>
+                        <CallAction ActionID="CreateCopy" ScriptItemUID="Call2" />
+                      </ActionSequence>
+                    </ForeachRow>
+                    <Comment Comment="Load new mandatory AccProducts and create new Orders" />
+                    <LoadTable DataTable="PersonOrdered" ScriptItemUID="LoadTable7" WhereClause="sqlcompareuid(&quot;UID_Person&quot;,from PersonWantsOrg select current UID_PersonOrdered)">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" ConvertToInteractive="false" />
+                    </LoadTable>
+                    <ForeachRow DataTable="AccProductDependencies" ScriptItemUID="ForeachRow1" WhereClause="not(UID_AccProductRelated in (from ShoppingCartItemNew select UID_AccProduct))">
+                      <LoadTable DataTable="ITShopOrg" WhereClause="format(&quot;uid_itshoporg in (select uid_itshoporgpr from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,sqlformatvalue(from PersonWantsOrg select current UID_PersonOrdered, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,sqlformatvalue(from AccProductDependencies select current UID_AccProductRelated, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,&quot;null&quot;))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable8">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" ConvertToInteractive="false" />
+                      </LoadTable>
+                      <ActionSequence ScriptItemUID="Action19" Condition="(0 &lt; from ITShopOrg select count())&#xD;&#xA;and not(&#xD;&#xA;   AllReadyInOrder(from ITShopOrg select top 1 uid_accproduct,from PersonWantsOrg select current UID_PersonOrdered,from ShoppingCartOrder select top 1 UID_ShoppingCartOrder)&#xD;&#xA;)">
+                        <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="from AccProductDependencies select current UID_AccProductRelated" ScriptItemUID="wctl1">
+                          <VirtualControlMapping VirtualControl="OnAfterInsert" ContainerType="ActionComponent">
+                            <ActionComponent ScriptItemUID="Action16">
+                              <Update DataTable="ShoppingCartItemNew" DataColumn="UID_ShoppingCartItemParent" ScriptItemUID="Update2" Value="from ShoppingCartItemNew select UID_ShoppingCartItem where IsFirst" WhereClause="IsNullOrEmpty(UID_ShoppingCartItemParent)&#xD;&#xA;and&#xD;&#xA;not(UID_ShoppingCartItem = (from ShoppingCartItemNew select UID_ShoppingCartItem where IsFirst))&#xD;&#xA;" />
+                            </ActionComponent>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping VirtualControl="OnAfterInsertCancel" ContainerType="ActionComponent">
+                            <ActionComponent ScriptItemUID="Action17">
+                              <ActionOnControl />
+                              <Delete DataTable="ShoppingCartItemNew" ScriptItemUID="Delete2" SetDeletionFlag="DeleteAndSave" />
+                              <EndExecution />
+                            </ActionComponent>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="uidaccproduct()" Value="from AccProductDependencies select current UID_AccProductRelated" ScriptItemUID="VirtualFunctionMapping7" />
+                          <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from ShoppingCartOrder select top 1 UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping6" />
+                          <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItemNew" ScriptItemUID="VirtualTableMapping3" />
+                          <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="PersonOrdered" ScriptItemUID="VirtualTableMapping2" />
+                        </AccProductSwitchCallAction>
+                      </ActionSequence>
+                    </ForeachRow>
+                    <Save DataTable="ShoppingCartItemNew" WhereClause="not(UID_ShoppingCartItem in(from ShoppingCartItemNew select UID_ShoppingCartItem where IsFirst))" ScriptItemUID="Save2" />
+                  </ActionSequence>
+                  <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction1" />
+                  <ActionOnControl />
+                  <Redirect Target="Context" ScriptItemUID="Redirect1" AllowReturnToThisContext="true" ContextID="VI_ITShop_ShoppingCart" />
+                </ServerActionCall>
+              </Button>
+              <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" ScriptItemUID="Button2" AssociatedWithEscapeKey="true" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="ShoppingCartItem" Table="ShoppingCartItemNew" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+          <Column Name="IsFirst" DataType="System.Boolean" ScriptItemUID="Column2" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ITShopOrg" Table="ITShopOrg" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrder" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action9" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="AccProductDependencies" Class="AccProductDependencies" ScriptItemUID="DataTableDbObject4">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="PWOChilds" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject5">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWO" ScriptItemUID="DataTableDbObject6">
+          <ActionSequence ScriptItemUID="Action12" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="PersonOrdered" ScriptItemUID="DataTableDbObject7">
+          <ActionSequence ScriptItemUID="Action18" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="CreateCopy">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action11">
+              <ForeachRow DataTable="PWO" ScriptItemUID="ForeachRow2">
+                <Insert DataTable="ShoppingCartItemNew" ScriptItemUID="Insert1">
+                  <ActionSequence ScriptItemUID="Action4">
+                    <ForeachRow DataTable="ShoppingCartItemNew" ScriptItemUID="ForeachRow4" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItemNew select current UID_ShoppingCartItem)">
+                      <ForeachColumn DataTable="ShoppingCartItemNew" ScriptItemUID="ForeachColumn2">
+                        <ColumnList ScriptItemUID="ColumnList2">
+                          <ExpressionColumnList ColumnList="GetAccProductParams(from itshoporg select top 1 uid_accproduct, getnull())" ScriptItemUID="ExpressionColumnList2" />
+                        </ColumnList>
+                        <ActionSequence ScriptItemUID="Action14">
+                          <Update DataTable="ShoppingCartItemNew" DataColumn="currentcolumn" Value="-- copy attributes from source table to target table&#xD;&#xA;&#xD;&#xA;from PWO select current objectwalker(datacolumnname(shoppingcartitemnew, currentcolumn))" WhereClause="canedit(currentcolumn)&#xD;&#xA;and&#xD;&#xA;UID_ShoppingCartItem = (from ShoppingCartItemNew select current UID_ShoppingCartItem)" ScriptItemUID="Update3" />
+                        </ActionSequence>
+                      </ForeachColumn>
+                    </ForeachRow>
+                    <ActionSequence ScriptItemUID="Action5" Condition="0 &lt; (from ShoppingCartItemNew select count() where IsFirst)">
+                      <Update DataTable="ShoppingCartItemNew" DataColumn="UID_ShoppingCartItemParent" ScriptItemUID="Update1" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItemNew select current UID_ShoppingCartItem)" Value="from ShoppingCartItemNew select UID_ShoppingCartItem where IsFirst" />
+                    </ActionSequence>
+                  </ActionSequence>
+                  <InsertValue DataColumn="UID_AccProduct" Value="from itshoporg select top 1 uid_accproduct" />
+                  <InsertValue DataColumn="UID_ITShopOrg" Value="-- Try to copy the old UID_ITShopOrg&#xD;&#xA;if(0 &lt; from ITShopOrg select UID_ITShopOrg where UID_ITShopOrg = (from PWO select current UID_Org))then(&#xD;&#xA;   from PWO select current UID_Org&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   from itshoporg select top 1 uid_itshoporg&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+                  <InsertValue DataColumn="UID_PersonOrdered" Value="from PWO select current uid_personordered" />
+                  <InsertValue DataColumn="UID_PersonInserted" Value="getuser()" />
+                  <InsertValue DataColumn="CustomProperty01" Value="from PWO select current customproperty01" />
+                  <InsertValue DataColumn="CustomProperty02" Value="from PWO select current customproperty02" />
+                  <InsertValue DataColumn="CustomProperty03" Value="from PWO select current customproperty03" />
+                  <InsertValue DataColumn="CustomProperty04" Value="from PWO select current customproperty04" />
+                  <InsertValue DataColumn="CustomProperty05" Value="from PWO select current customproperty05" />
+                  <InsertValue DataColumn="CustomProperty06" Value="from PWO select current customproperty06" />
+                  <InsertValue DataColumn="CustomProperty07" Value="from PWO select current customproperty07" />
+                  <InsertValue DataColumn="CustomProperty08" Value="from PWO select current customproperty08" />
+                  <InsertValue DataColumn="CustomProperty09" Value="from PWO select current customproperty09" />
+                  <InsertValue DataColumn="CustomProperty10" Value="from PWO select current customproperty10" />
+                  <InsertValue DataColumn="ObjectKeyAssignment" Value="from PWO select current objectkeyassignment" Condition="from PWO select current not(isnullorempty(objectkeyassignment))" />
+                  <InsertValue DataColumn="UID_ShoppingCartOrder" Value="from shoppingcartorder select top 1 uid_shoppingcartorder" />
+                  <InsertValue DataColumn="OrderDetail1" Value="from PWO select current orderdetail1" />
+                  <InsertValue DataColumn="OrderDetail2" Value="from PWO select current orderdetail2" />
+                </Insert>
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="AllReadyInOrder(String UIDAccProduct, String UIDPersonOrdered, String UIDShoppingCartOrder)" Expression="exists(&quot;shoppingcartitem&quot;,&#xD;&#xA;   sqland(&#xD;&#xA;      sqlcompareuid(&quot;uid_accproduct&quot;, UIDAccProduct),&#xD;&#xA;      sqlcompareuid(&quot;uid_personordered&quot;, UIDPersonOrdered),&#xD;&#xA;      sqlcompareuid(&quot;uid_shoppingcartorder&quot;, UIDShoppingCartOrder),&#xD;&#xA;	  format(&quot;uid_accproduct not in (select u.uid_accproduct from basetreeassign a join dialogtable dt on dt.uid_dialogtable = a.uid_dialogtableelement&#xD;&#xA;	     join QERAccProductUsage u on u.TableName = dt.tablename where u.uid_accproduct = '{0}' and a.IsReusePossible = 1)&quot;, UIDAccProduct)&#xD;&#xA;   )  &#xD;&#xA;)" DataType="System.Boolean" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

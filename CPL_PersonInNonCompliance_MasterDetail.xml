@@ -1,0 +1,188 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="CPL_PersonInNonCompliance_MasterDetail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Governance" Description="translate(&quot;#LDS#Governance&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="CPL_PersonInNonCompliance_AllowAllMControls" Description="translate(&quot;#LDS#Allow assignment of all mitigating controls on all rule violations&quot;)" />
+        <ConfigParam Key="CPL_PersonInNonCompliance_AllowSelectAll" Description="translate('#LDS#Approver can select all visible items at once') + &quot; (&quot; +DataCaption(&quot;PersonInNonCompliance&quot;) + &quot;)&quot;" LongDescription="translate('#LDS#Display a checkbox to select all items.')" />
+        <ConfigParam Key="CPL_PersonInNonCompliance_ApproverReasonMandatoryOnDeny" Description="translate('#LDS#Approver must enter a reason for rejection of a request') + &quot; (&quot; +DataCaption(&quot;PersonInNonCompliance&quot;) + &quot;)&quot;" LongDescription="translate('#LDS#Approver must enter a reason when denying an exception approval for a rule violation.')" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <ActionSequence ScriptItemUID="Action5" Condition="getconfigparm(&quot;QER\ComplianceCheck\DisableSelfExceptionGranting&quot;) = &quot;1&quot;">
+          <DataEventHandler DataTable="PersonInNonCompliance" ScriptItemUID="DataEventHandler1" Operation="Update">
+            <ActionSequence ScriptItemUID="Action6" Condition="from personinnoncompliance select current ((doapprove or DoReject) and (getuser()=uid_person)) -- TODO: should query QER_FTPersonsAreMe">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call2">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#You are not allowed to decide your own rule violation.&quot;)" ScriptItemUID="VirtualFunctionMapping15" />
+                <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping14" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Error&quot;)" ScriptItemUID="VirtualFunctionMapping12" />
+                <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping13" />
+              </CallAction>
+              <Update DataTable="PersonInNonCompliance" DataColumn="DoApprove" ScriptItemUID="Update1" Value="false" WhereClause="primarykey()=(select current primarykey() from personinnoncompliance)" />
+              <Update DataTable="PersonInNonCompliance" DataColumn="DoReject" ScriptItemUID="Update2" Value="false" WhereClause="primarykey()=(select current primarykey() from personinnoncompliance)" />
+            </ActionSequence>
+            <DataEventHandlerColumn DataColumn="DoApprove" />
+            <DataEventHandlerColumn DataColumn="DoReject" />
+          </DataEventHandler>
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container2">
+              <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+                <ControlReferenceGridBand ID="VI_Compliance_ExceptionApprovalGrid" ScriptItemUID="ControlRef1">
+                  <VirtualFunctionMapping ID="showpersonnoncompliance()" Value="showpersonnoncompliance()" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="DbWhereClause()" Value="DbWhereClause()" ScriptItemUID="VirtualFunctionMapping3" />
+                </ControlReferenceGridBand>
+              </Grid>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container1">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PersonInNonCompliance" WhereClause="primarykey()=(from container select uidselected)">
+                <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+                  <Action ScriptItemUID="Action3">
+                    <ConvertInteractiveEntity DataTable="PersonInNonCompliance" />
+                  </Action>
+                </Activator>
+                <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_Secondary'">
+                  <TabPage ScriptItemUID="TabPage2" ItemUID="Rule violation">
+                    <ControlsHeader ScriptItemUID="Container6">
+                      <Label Text="translate(&quot;#LDS#Rule violation&quot;)" ScriptItemUID="Label3" />
+                    </ControlsHeader>
+                    <ControlsBody ScriptItemUID="Container5">
+                      <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping4">
+                          <ColumnList ScriptItemUID="ColumnList1">
+                            <SingleColumn ScriptItemUID="SingleColumn10" DataColumn="UID_Person" />
+                            <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="displaystatus" />
+                            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="DecisionReason" />
+                            <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="UID_QERJustification" />
+                            <SingleColumn ScriptItemUID="SingleColumn11" DataColumn="UID_PersonDecisionMade" />
+                            <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DecisionDate" />
+                            <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="RiskIndexCalculated" />
+                            <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="RiskIndexReduced" />
+                          </ColumnList>
+                        </VirtualFunctionMapping>
+                        <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonInNonCompliance" ScriptItemUID="VirtualTableMapping1" />
+                      </ControlReferenceContainer>
+                      <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef3">
+                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping6">
+                          <ColumnList ScriptItemUID="ColumnList2">
+                            <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="ExceptionValidUntil" CannotEdit="IsReadOnly()" />
+                            <SingleColumn ScriptItemUID="SingleColumn12" DataColumn="MControls" CannotEdit="IsReadOnly()" FKWhereClause="if(getconfig(&quot;CPL_PersonInNonCompliance_AllowAllMControls&quot;)=&quot;true&quot;)&#xA;then &quot;1=1&quot;&#xA;else&#xA;-- only allow mitigating controls assigned to the rule&#xA;&#xA;format(&quot;uid_mitigatingcontrol in ( select uid_mitigatingcontrol from compliancerulehasmcontrol where uid_compliancerule in ( select uid_compliancerule from compliancerule where uid_noncompliance = {0}))&quot;, sqlformatvalue(from personinnoncompliance select current uid_noncompliance, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" Condition="GetConfigParm(&quot;QER\CalculateRiskIndex\MitigatingControlsPerViolation&quot;)=&quot;1&quot;" />
+                          </ColumnList>
+                        </VirtualFunctionMapping>
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonInNonCompliance" ScriptItemUID="VirtualTableMapping2" />
+                        <VirtualFunctionMapping ID="IsReadOnly()" Value="false" ScriptItemUID="VirtualFunctionMapping7" />
+                      </ControlReferenceContainer>
+                      <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_ButtonBar'" Condition="not(IsReadOnly())">
+                        <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#Resolve&quot;)">
+                          <ServerActionCall ScriptItemUID="ServerActionCall1">
+                            <CallAction ScriptItemUID="Call3" ActionID="CPL_PersonInNonCompliance_Resolve">
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="UIDPerson()" Value="from personinnoncompliance select current uid_person" />
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="UIDComplianceRule()" Value="from compliancerule select top 1 uid_compliancerule where uid_noncompliance = ( from personinnoncompliance select current uid_noncompliance)" />
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="DisplayRule()" Value="from compliancerule select top 1 display() where uid_noncompliance = ( from personinnoncompliance select current uid_noncompliance)" />
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="DisplayPerson()" Value="from personinnoncompliance select current displayvalue(uid_person)" />
+                            </CallAction>
+                          </ServerActionCall>
+                        </Button>
+                      </Container>
+                    </ControlsBody>
+                  </TabPage>
+                  <TabPage ScriptItemUID="TabPage1" ItemUID="Rule">
+                    <ControlsHeader ScriptItemUID="Container4">
+                      <Label Text="datacaptionsingle(&quot;ComplianceRule&quot;)" ScriptItemUID="Label2" />
+                    </ControlsHeader>
+                    <ControlsBody ScriptItemUID="Container3">
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="ComplianceRule" WhereClause="uid_noncompliance = ( select current uid_noncompliance from personinnoncompliance)">
+                        <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;ComplianceRule&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                          <VirtualTableMapping VirtualTable="SourceObject" DataTable="ComplianceRule" ScriptItemUID="VirtualTableMapping3" />
+                        </ObjectSwitchContainer>
+                      </ContainerTemplate>
+                    </ControlsBody>
+                  </TabPage>
+                </Tab>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="from personinnoncompliance select top 1 display() where primarykey()=(from container select uidselected)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+        <Container ItemUID="Buttonpanel" ScriptItemUID="Container11" EnableCustomAttributes="true" Condition="not(IsReadOnly())">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+          </HtmlAttributes>
+          <Button Text="translate('#LDS#Next')" EnabledCondition="0 &lt; select count() from PersonInNonCompliance where (DoApprove or DoReject)" ScriptItemUID="Button6" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'title'" ScriptItemUID="Button6title" Value="translate('#LDS#Save decisions to database')" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall3">
+              <ActionOnControl ActionType="PerformValidation" />
+              <ActionSequence Condition="0 = select count() from PersonInNonCompliance where (doapprove or doreject)" ScriptItemUID="Action21">
+                <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+                  <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#You have not made any decisions.')" ScriptItemUID="VirtualFunctionMapping9" />
+                  <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#No decisions were made')" ScriptItemUID="VirtualFunctionMapping10" />
+                  <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping11" />
+                </CallAction>
+                <EndExecution AlsoAbortWaitingThreads="false" />
+              </ActionSequence>
+              <Redirect Target="FormModule" ScriptItemUID="Redirect3">
+                <RedirectFormModule ScriptItemUID="RedirectFormModule1" ID="CPL_ExceptionApprovals_Detail" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UidSelected" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="Reason" DataType="System.String" ScriptItemUID="Column2" Caption="translate(&quot;#LDS#Reason&quot;)" />
+        </DataTableSingleRow>
+        <DataTableFKView Table="NonCompliance" ViewFKDataTable="PersonInNonCompliance" ViewFKDataColumn="UID_NonCompliance" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableCRView Table="ComplianceRule" Class="ComplianceRule" CRDataColumn="UID_NonCompliance" ViewFKDataTable="NonCompliance" ScriptItemUID="DataTableCRView1" RelationDBWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;isinactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;isworkingcopy&quot;, false, &quot;bool&quot;, &quot;equal&quot;))">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableCRView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="PersonInNonCompliance" ScriptItemUID="DataEventHandler2" Operation="Update">
+          <ActionSequence ScriptItemUID="Action4">
+            <Save DataTable="PersonInNonCompliance" WhereClause="primarykey()=(select current primarykey() from personinnoncompliance)" ScriptItemUID="Save1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="MControls" />
+          <DataEventHandlerColumn DataColumn="ExceptionValidUntil" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="showpersonnoncompliance()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="PersonInNonCompliance" Class="PersonInNonCompliance" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="displaystatus" DataType="System.String" />
+        <ColumnMemberRelation Name="MControls" RelationTableName="&quot;PersonInNCHasMControl&quot;" ColumnNameLeft="&quot;ObjectKeyPersonInNonCompliance&quot;" Caption="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="ColumnMemberRelation1" />
+        <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="Column3" />
+        <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="Column4" />
+        <Column Name="UID_QERJustificationSelected" DataType="System.String" ScriptItemUID="Column5" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, if(select current doapprove from personinnoncompliance) then 64 else 128, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)&#xD;&#xA;)" />
+        <Column Name="ReasonForDecision" ScriptItemUID="Column6" DataType="System.String" Caption="translate(&quot;#LDS#Approval reasons&quot;)" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,203 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="915deccf-028f-f40d-f1d7-da1b1064f373">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_ITShop_AcceptTermsOfUse">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="System.DirectoryServices.dll" />
+        <AssemblyReference Assembly="System.DirectoryServices.AccountManagement.dll" />
+        <TypeMember>internal void CheckIdentityMatchesConnection(System.Security.Principal.WindowsIdentity identity)
+{
+	var f = _Connection.SqlFormatter;
+
+	var whereClause = f.AndRelation(
+				  "UID_Person IN (SELECT UID_Person FROM ADSAccount WHERE (" +
+				  f.Comparison("ObjectSID", identity.User, VI.Base.ValType.String) + "))",
+				  f.Comparison("IsInActive", false, VI.Base.ValType.Bool),
+				  f.IsNotDeleted(),
+				  f.Comparison("IsTemporaryDeactivated", false, VI.Base.ValType.Bool));
+	
+	var uidPerson =_Connection.GetSingleProperty("Person", "UID_Person", whereClause);
+	
+	if (!string.Equals(uidPerson.String, _Connection.User.Uid))
+	{
+		throw new Exception(GetLoginAsUserMessage());
+	}
+}</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action2">
+        <ActionSequence ScriptItemUID="Action5" Condition="getconfig(&quot;VI_ITShop_TermsOfUseRequireADAuthentication&quot;)=&quot;true&quot;">
+          <CodeLiteral ScriptItemUID="CodeLiteral3">LoginData.ObjectList.Add(new LoginDataContainer());</CodeLiteral>
+        </ActionSequence>
+      </ActionSequence>
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="Form" ScriptItemUID="Form1" NavigationTitle="datacaption(&quot;QERTermsOfUse&quot;)">
+          <ActionSequence ScriptItemUID="Action4">
+            <Update DataTable="Vars" DataColumn="Accepted" Value="false" ScriptItemUID="Update1" />
+          </ActionSequence>
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+            <Label Text="datacaption(&quot;QERTermsOfUse&quot;)" ScriptItemUID="Label3" />
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+            <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;flex-fill&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="Text()" Value="HeaderText()" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+              <Container ScriptItemUID="Container8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;data-imx-layout&quot;" Value="&quot;flex-fill&quot;" />
+                </HtmlAttributes>
+                <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="QERTermsOfUse" WhereClause="uid_qertermsofuse in ( select uid_qertermsofuse from accproduct where AccProductFilter() )">
+                  <Label Text="from qertermsofuse select current display()" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Container ScriptItemUID="Container3">
+                    <Label ScriptItemUID="Label5" Text="translate(&quot;#LDS#Related service items&quot;)+&quot;:&quot;" />
+                  </Container>
+                  <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="AccProduct" WhereClause="uid_qertermsofuse = ( select current uid_qertermsofuse from qertermsofuse) and AccProductFilter()" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="ul" />
+                    </HtmlAttributes>
+                    <Label ScriptItemUID="Label6" EnableCustomAttributes="true" Text="from accproduct select current display()">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="li" />
+                      </HtmlAttributes>
+                    </Label>
+                  </ContainerTemplate>
+                  <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container6style" Value="variable(&quot;padding: 1em; max-height: 300px; overflow: auto; border: solid 1px %VI_Common_Color_LighterGray%;&quot;)" />
+                    </HtmlAttributes>
+                    <CodeLiteral ScriptItemUID="CodeLiteral4">var str = ContainerTemplate2_Current.Row.Table.GetColumn("DisplayContent").GetDisplayValue(ContainerTemplate2_Current.Row);
+
+var lbl = new System.Web.UI.WebControls.Label();
+lbl.Text = str.Replace(Environment.NewLine, "&lt;br /&gt;");
+Container6.Controls.Add(lbl);</CodeLiteral>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </Container>
+            <Container ScriptItemUID="Container4" ItemUID="NO MFA" Condition="not(IsAcceptByMfa())">
+              <Container ScriptItemUID="Container2">
+                <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Container7style" Value="&quot;font-weight: bold; height: 4em;&quot;" />
+                  </HtmlAttributes>
+                  <CheckBox DataTable="Vars" DataColumn="Accepted" Text="translate(&quot;#LDS#I have read and understood the terms of use.&quot;)" ScriptItemUID="CheckBox1" />
+                </Container>
+                <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="LoginData">
+                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                    <FormItemLabel DataTable="LoginData" DataColumn="UserName" ScriptItemUID="FormItemLabel1">
+                      <Label Text="translate(&quot;#LDS#User name&quot;)" ScriptItemUID="Label1" />
+                    </FormItemLabel>
+                    <TextBox ScriptItemUID="TextBox1" DataTable="LoginData" DataColumn="UserName" />
+                    <FormItemLabel ScriptItemUID="FormItemLabel2" DataTable="LoginData" DataColumn="Password">
+                      <Label Text="translate(&quot;#LDS#Password&quot;)" ScriptItemUID="Label2" />
+                    </FormItemLabel>
+                    <TextBox ScriptItemUID="TextBox2" DataTable="LoginData" DataColumn="Password" TextMode="Password" />
+                  </LayoutPanel>
+                </ContainerTemplate>
+              </Container>
+              <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_ButtonBar'">
+                <Button Text="translate(&quot;#LDS#Decline&quot;)" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Default'">
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <Redirect ScriptItemUID="Redirect2" Target="ReturnLastForm" NoLinkBackToThisForm="true" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Accept&quot;)" ScriptItemUID="Button1" EnabledCondition="from vars select accepted" ItemUID="Default Button">
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <CodeLiteral ScriptItemUID="CodeLiteral2">var loginData = this.DataContext.LoginData.ObjectList.FirstOrDefault();
+
+if (loginData != null)
+{
+    // Get auth props from secure login data container
+	var widentity = loginData.GetWindowsIdentity(_Connection);
+	
+	// remove password from memory after successful authentication
+	loginData.DeletePassword();
+	
+	// Has the user logged in with his own credentials?
+	DataContext.CheckIdentityMatchesConnection(widentity);
+}</CodeLiteral>
+                    <CallAction ActionID="OnTermsOfUseAccepted" ScriptItemUID="Call1" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+            <Container ScriptItemUID="Container9" Condition="IsAcceptByMfa()" ItemUID="MFA">
+              <Container ScriptItemUID="Container12" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="&quot;font-weight: bold; height: 4em;&quot;" />
+                </HtmlAttributes>
+                <CheckBox DataTable="Vars" DataColumn="Accepted" Text="translate(&quot;#LDS#I have read and understood the terms of use.&quot;)" ScriptItemUID="CheckBox2" />
+              </Container>
+              <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_ButtonBar'">
+                <Button Text="translate(&quot;#LDS#Decline&quot;)" ScriptItemUID="Button4" Layout="'VI_Styles_Button_Default'">
+                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                    <Redirect ScriptItemUID="Redirect1" Target="ReturnLastForm" NoLinkBackToThisForm="true" />
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Accept&quot;)" ScriptItemUID="Button3" EnabledCondition="from vars select accepted" ItemUID="Default Button">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <CallAction ScriptItemUID="Call2" ActionID="VI_Popup">
+                      <VirtualControlMapping ContainerType="Container" VirtualControl="PopupContent">
+                        <Container ScriptItemUID="Container13">
+                          <ControlReferenceControlList ID="QER_DefenderAuthentication" ScriptItemUID="ControlRef2">
+                            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="CodeVerified">
+                              <ActionComponent ScriptItemUID="Action1">
+                                <ActionOnControl />
+                                <CallAction ScriptItemUID="Call3" ActionID="OnTermsOfUseAccepted" />
+                              </ActionComponent>
+                            </VirtualControlMapping>
+                            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate(&quot;#LDS#An authentication is required to request this product.&quot;)+&quot; &quot;+&#xD;&#xA;translate(&quot;#LDS#Get the token response from the Starling 2FA Cloud app. If you do not have the app, request a token response through SMS or phone call.&quot;)" />
+                            <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="MfaResponse" DataTable="Vars">
+                              <VirtualColumnMapping DataColumn="CodeCorrect" VirtualColumn="CodeCorrect" />
+                            </VirtualTableMapping>
+                          </ControlReferenceControlList>
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping ContainerType="Container" VirtualControl="PopupBottom">
+                        <Container ScriptItemUID="Container14">
+                          <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ATTControlRef1">
+                            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping5" ID="TriggerValidation()" Value="false" />
+                            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping3" ID="MoreThanOneButton()" Value="true" />
+                          </ControlReferenceControlList>
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="PopupTitle()" Value="translate(&quot;#LDS#Authentication required&quot;)" />
+                    </CallAction>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Accepted" DataType="System.Boolean" ScriptItemUID="Column1" />
+          <Column DataType="System.Boolean" Name="CodeCorrect" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+        <DataTableObjectView Table="LoginData" ElementType="VI.WebRuntime.LoginDataContainer, VI.WebRuntime" ScriptItemUID="DataTableObjectView1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetLoginAsUserMessage()" Expression="translate(&quot;#LDS#The supplied login does not match the current user.&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function ScriptItemUID="Function2" Name="IsAcceptByMfa()" DataType="System.Boolean" Expression="not(isnullorempty(getconfigparm(&quot;QER\Person\Defender\ApiKey&quot;)) and isnullorempty(getconfigparm(&quot;QER\Person\Defender\CredentialString&quot;)) and&#xD;&#xA;isnullorempty(getconfigparm(&quot;QER\Person\Starling\ApiEndpoint&quot;)))&#xD;&#xA;and&#xD;&#xA;&quot;true&quot;=getconfig(&quot;VI_ITShop_TermsOfUseRequireMFA&quot;)" TriggerUpdates="Never" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="QERTermsOfUse" ScriptItemUID="VirtualTable1" Class="QERTermsOfUse" />
+      <VirtualControl ID="OnTermsOfUseAccepted" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="HeaderText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="AccProduct" ScriptItemUID="VirtualTable2" Class="AccProduct" />
+      <VirtualFunction Signature="AccProductFilter()" DataType="System.Boolean" FilterForTable="AccProduct" DefaultValue="true" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

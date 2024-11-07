@@ -1,0 +1,33 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Common_PageDescription" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Container CustomStyle="'margin-bottom: 6px;'" ItemUID="Header" Condition="getHeadLine() &lt;&gt; ''" ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="CssClass()" />
+          </HtmlAttributes>
+          <Label Text="getHeadLine()" CustomStyle="'font-size: 1.0em; font-weight: bolder;'" ScriptItemUID="Label1" />
+        </Container>
+        <Container Layout="'VI_Styles_Container_ParagraphLargeMarging'" ItemUID="Text" Condition="getText() &lt;&gt; ''" ScriptItemUID="Container4">
+          <Label Text="getText()" CustomStyle="'font-size: 1.0em;'" ScriptItemUID="Label2" />
+        </Container>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="getHeadLine()" Expression="IsNullOrEmpty(HeadLine(),'')" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="getText()" Expression="IsNullOrEmpty(Text(),'')" DataType="System.String" ScriptItemUID="Function2" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualFunction Signature="HeadLine()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Text()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="CssClass()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,200 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Compliance_HighRiskOverview" HelpChapterUid="&quot;c936d2ee-2fb3-4337-b77d-53a0ae018faf&quot;" MigrationNotes="DIALOGCONFIGPARM;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="VI_Compliance_HighRiskOverview" Description="translate(&quot;#LDS#High Risk Overview&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Compliance_RiskIndex_MaxCount" Description="translate('#LDS#Number of high risk objects to display')" LongDescription="translate('#LDS#A value of 10 means that the top 10 high risk objects will be displayed.')" Type="Text" />
+        <ConfigParam Key="VI_Compliance_RiskIndex_Threshold" Description="translate('#LDS#Risk threshold')" LongDescription="translate('#LDS#Only objects with an associated risk index higher than this threshold value will be displayed.')" Type="Text" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="Person" Table="Person" WhereClauseSQL="if (getsystem()=&quot;ORACLE&quot;) then&#xA;Format(&quot;UID_Person in (select uid_person from(select uid_person from Person where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated desc) where rownum &lt; {0})&quot;,havecount()+1, threshold())&#xA;else&#xA;Format(&quot;UID_Person in (select top {0} UID_Person from Person where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated desc)&quot;,havecount(), threshold())" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+      <DataTableView Table="AllObjects" PrimaryKeyColumn="PK" ViewExpression="Union(getobjectsunion())" DisplayColumn="Display" ScriptItemUID="DataTableView1" TriggerUpdates="Never">
+        <Column Name="PK" ScriptItemUID="Column6" DataType="System.String" />
+        <Column Name="Display" ScriptItemUID="Column7" DataType="System.String" />
+        <Column Name="Type" ScriptItemUID="Column8" DataType="System.String" />
+        <Column Name="RiskIndex" DataType="System.Double" ScriptItemUID="Column9" />
+        <Column Name="XObjectKey" ScriptItemUID="Column10" DataType="System.String" />
+      </DataTableView>
+      <DataTableView Table="TOPX" PrimaryKeyColumn="PK" ViewExpression="from AllObjects select top havecount() (PK, Display,Type, RiskIndex, xobjectkey) order by RiskIndex desc" DisplayColumn="Display" ScriptItemUID="DataTableView2">
+        <Column Name="PK" ScriptItemUID="Column11" DataType="System.String" />
+        <Column Name="Display" ScriptItemUID="Column12" DataType="System.String" Caption="translate('#LDS#Display name')" />
+        <Column Name="Type" ScriptItemUID="Column13" DataType="System.String" />
+        <Column Name="RiskIndex" DataType="System.Double" ScriptItemUID="Column14" Caption="translate('#LDS#Risk Index')" />
+        <Column Name="XObjectKey" ScriptItemUID="Column15" DataType="System.String" />
+        <Column Name="DisplayType" Expression="from TOPX select current datacaptionsingle(Type+&quot;&quot;)" DataSource="Expression" ScriptItemUID="Column16" DataType="System.String" Caption="translate('#LDS#Object type')" />
+      </DataTableView>
+      <DataTableSingleRow Table="Container" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="ShowAll" DataType="System.Boolean" ScriptItemUID="Column17" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="Load">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action10">
+            <LoadTable DataTable="Person" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="havecount()" Expression="if(from Container select IsNullOrEmpty(ShowAll,false))then(&#xD;&#xA;10000000&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;if(Convert(getconfig(&quot;VI_Compliance_RiskIndex_MaxCount&quot;),&quot;System.Int32&quot;) = 0)then&#xD;&#xA;10000000&#xD;&#xA;else&#xD;&#xA;IsNullOrEmpty(Convert(getconfig(&quot;VI_Compliance_RiskIndex_MaxCount&quot;),&quot;System.Int32&quot;),10)&#xD;&#xA;)" DataType="System.Int32" ScriptItemUID="Function1" />
+      <Function Name="threshold()" Expression="if(from Container select IsNull(ShowAll,false))then&#xD;&#xA;&quot;0&quot;&#xD;&#xA;else&#xD;&#xA;IsNullOrEmpty(getconfig(&quot;VI_Compliance_RiskIndex_Threshold&quot;),&quot;0.1&quot;)" DataType="System.String" ScriptItemUID="Function2" />
+      <Function Name="mkdesc(string s)" Expression="if(havecount() = 10000000)then&#xD;&#xA;format(&quot;{0} {1}&quot;,translate('#LDS#All High Risk',havecount()),s)&#xD;&#xA;else&#xD;&#xA;format(&quot;{0} {1}&quot;,translate('#LDS#Top {0} High Risk',havecount()),s)" DataType="System.String" ScriptItemUID="Function3" />
+      <Function Name="GetObjectsUnion()" FunctionType="FunctionResultSetList" ScriptItemUID="Function4">
+        <FunctionValueList ScriptItemUID="FunctionValueList1">
+          <FunctionValue Expression="from Person select (PrimaryKey() as PK, DisplayLong() as Display,'Person' as Type, RiskIndexCalculated as RiskIndex, xobjectkey)&#xA;" />
+        </FunctionValueList>
+      </Function>
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="Container" Operation="Update" ScriptItemUID="DataEventHandler1">
+        <ActionSequence ScriptItemUID="Action13">
+          <CallAction ActionID="Load" ScriptItemUID="Call2" />
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="ShowAll" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action9">
+      <CallAction ActionID="Load" ScriptItemUID="Call1" />
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Heading High Risk Overview&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action14" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#Heading High Risk Overview&quot;)" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1">
+            <Container Condition="0 &lt; select count() from TOPX" ScriptItemUID="Container2">
+              <CheckBox DataTable="Container" DataColumn="ShowAll" ScriptItemUID="CheckBox2" Text="translate('#LDS#Show all high risk objects')" />
+            </Container>
+            <Container ScriptItemUID="Container4">
+              <Tab Layout="'VI_Styles_Tab_AccordeonMultiselect'" ScriptItemUID="Tab1">
+                <TabPage ItemUID="Top 10" ExpandedCondition="true" Condition="0 &lt; select count() from TOPX" ScriptItemUID="TabPage1">
+                  <ControlsHeader ScriptItemUID="Container5">
+                    <Label Text="mkdesc(translate('#LDS#Objects'))" ScriptItemUID="Label3" />
+                  </ControlsHeader>
+                  <ControlsBody ScriptItemUID="Container7">
+                    <Grid AllowExport="true" ScriptItemUID="Grid1" ExportFileName="" ExportTitle="">
+                      <GridBand DataTable="TOPX" OrderBy="'RiskIndex desc, __Display'" ScriptItemUID="GridBand1" RowSelection="Action" RowSelectionActive="">
+                        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                        <SelectionAction ScriptItemUID="ServerActionCall2">
+                          <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                            <RedirectParameter Name="'ObjectKey'" Value="from TOPX select current xobjectkey" />
+                          </Redirect>
+                        </SelectionAction>
+                        <GridFilters ScriptItemUID="GridFilters1" />
+                        <GridRows />
+                        <GridColumn SortColumn="Display" AutoFilterColumn="Display" ScriptItemUID="Column18">
+                          <GridColumnHeader ScriptItemUID="wctl1">
+                            <Label Text="translate('#LDS#Display name')" ScriptItemUID="Label4" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell3">
+                            <Label Text="from TOPX select current Display" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-icon imx-table-&quot;+(from topx select current type)" />
+                              </HtmlAttributes>
+                            </Label>
+                          </Cell>
+                        </GridColumn>
+                        <GridColumn SortColumn="DisplayType" AutoFilterColumn="DisplayType" ScriptItemUID="Column19">
+                          <GridColumnHeader ScriptItemUID="wctl2">
+                            <Container ScriptItemUID="Container11">
+                              <Label Text="translate('#LDS#Object type')" ScriptItemUID="Label6" />
+                            </Container>
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell5">
+                            <Label Text="from TOPX select current DisplayType" ScriptItemUID="Label7" />
+                          </Cell>
+                        </GridColumn>
+                        <GridColumn SortColumn="RiskIndex" AutoFilterColumn="RiskIndex" Width="&quot;150px;&quot;" ScriptItemUID="Column20">
+                          <GridColumnHeader ScriptItemUID="wctl3">
+                            <Container ScriptItemUID="Container9">
+                              <Label Text="translate('#LDS#Risk Index')" ScriptItemUID="Label8" />
+                            </Container>
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell4">
+                            <Container ScriptItemUID="Container10">
+                              <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef3">
+                                <VirtualTableMapping VirtualTable="Object" DataTable="TOPX" ScriptItemUID="VirtualTableMapping1">
+                                  <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                                </VirtualTableMapping>
+                                <VirtualFunctionMapping ID="UseCaption()" Value="IsNullOrEmpty(DataCaption(from TOPX select current Type,&quot;RiskIndex&quot;),DataCaption(from TOPX select current Type,&quot;RiskIndexCalculated&quot;))" ScriptItemUID="VirtualFunctionMapping5" />
+                              </ControlReferenceContainer>
+                            </Container>
+                          </Cell>
+                        </GridColumn>
+                      </GridBand>
+                    </Grid>
+                  </ControlsBody>
+                </TabPage>
+                <TabPage ItemUID="Person" Condition="0 &lt; select count() from person" ScriptItemUID="TabPage8">
+                  <ControlsHeader ScriptItemUID="Container61">
+                    <Label Text="mkdesc(datacaption(&quot;Person&quot;))" ScriptItemUID="Label39" />
+                  </ControlsHeader>
+                  <ControlsBody ScriptItemUID="Container39">
+                    <Grid AllowExport="true" ExportTitle="mkdesc(datacaption(&quot;Person&quot;))" ScriptItemUID="Grid8" ExportFileName="">
+                      <GridBand DataTable="Person" OrderBy="'RiskIndexCalculated desc, InternalName'" ScriptItemUID="GridBand8" RowSelection="Action" RowSelectionActive="">
+                        <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="Auto" />
+                        <SelectionAction ScriptItemUID="ServerActionCall1">
+                          <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                            <RedirectParameter Name="'ObjectKey'" Value="from person select current xobjectkey" />
+                          </Redirect>
+                        </SelectionAction>
+                        <GridFilters ScriptItemUID="GridFilters2" />
+                        <GridRows />
+                        <GridColumnColumnTemplate DataTable="Person" ScriptItemUID="GridColumnColumnTemplate7">
+                          <ColumnList ScriptItemUID="ColumnList7">
+                            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="InternalName" />
+                            <SingleColumn DataColumn="UID_Department" ScriptItemUID="SingleColumn18" />
+                            <SingleColumn DataColumn="RiskIndexCalculated" ScriptItemUID="SingleColumn19" />
+                          </ColumnList>
+                          <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup7">
+                            <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" Width="if(DataColumnName(Person,currentcolumn) = 'RiskIndexCalculated') then &quot;150px;&quot;" ScriptItemUID="Column34">
+                              <GridColumnHeader ScriptItemUID="wctl5">
+                                <Container ScriptItemUID="Container65">
+                                  <Label Text="datacaption(person, currentcolumn)" ScriptItemUID="Label42" />
+                                </Container>
+                              </GridColumnHeader>
+                              <Cell ScriptItemUID="Cell20">
+                                <Container ScriptItemUID="Container66">
+                                  <Container Condition="not(from Person select current DataColumnName(Person,currentcolumn) = 'RiskIndexCalculated')" ScriptItemUID="Container67">
+                                    <Label Text="select current displayvalue(currentcolumn) from Person" ScriptItemUID="Label43" />
+                                  </Container>
+                                  <Container Condition="from Person select current DataColumnName(Person ,currentcolumn) = 'RiskIndexCalculated'" ScriptItemUID="Container68">
+                                    <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef10">
+                                      <VirtualTableMapping VirtualTable="Object" DataTable="Person" ScriptItemUID="VirtualTableMapping2">
+                                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexCalculated" />
+                                      </VirtualTableMapping>
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                </Container>
+                              </Cell>
+                            </GridColumn>
+                          </GridColumnGroup>
+                        </GridColumnColumnTemplate>
+                      </GridBand>
+                    </Grid>
+                  </ControlsBody>
+                </TabPage>
+              </Tab>
+            </Container>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList10">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Text()" Value="format(&quot;{0} {1}&quot;,&#xD;&#xA;translate(&quot;#LDS#The following high risk objects currently exist in the system.&quot;),&#xD;&#xA;if(0 &lt; select count() from TOPX)then&#xD;&#xA;   translate(&quot;#LDS#Click on one tab to view a list.&quot;)&#xD;&#xA;else&#xD;&#xA;   translate(&quot;#LDS#There are no high risk objects in the database.&quot;)&#xD;&#xA;)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

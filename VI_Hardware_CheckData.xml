@@ -1,0 +1,76 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Hardware_CheckData" MigrationNotes="DMLREPLACE;" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <Delete DataTable="Hardware_Exists" ScriptItemUID="Delete2" />
+        <ActionSequence Condition="isnull(request(&quot;uid_hardware&quot;),'')=''" ScriptItemUID="Action10">
+          <LoadTable DataTable="Hardware_Exists" ScriptItemUID="LoadTable2">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <SwitchAction ScriptItemUID="Switch1">
+          <SwitchActionCase ScriptItemUID="Newandexists" Condition="-- Hardware exists in DB&#xD;&#xA;((select count() from Hardware_Exists) &gt; 0)&#xD;&#xA;and&#xD;&#xA;-- Hardware loaded from DB&#xD;&#xA;not(from Hardware select IsLoaded())&#xD;&#xA;&#xD;&#xA;">
+            <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call2">
+              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#A device with the same name already exists in the database.&quot;)" ScriptItemUID="VirtualFunctionMapping11" />
+              <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+              <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from Hardware select current display()" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualControlMapping VirtualControl="OnOK" ContainerType="ActionComponent">
+                <ActionComponent ScriptItemUID="Action4">
+                  <ActionOnControl />
+                </ActionComponent>
+              </VirtualControlMapping>
+            </CallAction>
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="Save">
+            <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call6">
+              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to save your changes?&quot;)" ScriptItemUID="VirtualFunctionMapping14" />
+              <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping13" />
+              <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from Hardware select current display()" ScriptItemUID="VirtualFunctionMapping12" />
+              <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                <ActionComponent ScriptItemUID="Action12">
+                  <ActionOnControl />
+                  <CallAction ActionID="SaveChanges" ScriptItemUID="Call7" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualControlMapping VirtualControl="OnNo" ContainerType="ActionComponent">
+                <ActionComponent ScriptItemUID="Action5">
+                  <ActionOnControl />
+                </ActionComponent>
+              </VirtualControlMapping>
+            </CallAction>
+          </SwitchActionCase>
+        </SwitchAction>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action7" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Hardware_Exists" Class="Hardware" WhereClauseSQL="sqlcompare(&quot;Ident_Hardwarelist&quot;, from Hardware select current Ident_Hardwarelist,&quot;string&quot;,&quot;equal&quot;)" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SaveChanges">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <Update DataTable="Hardware" DataColumn="IsLoaded" ScriptItemUID="Update1" Value="from Hardware select current IsLoaded()" />
+              <Save DataTable="Hardware" ScriptItemUID="Save1" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call5c">
+                <VirtualFunctionMapping ID="MessageText()" Value="if(not(from Hardware select current IsLoaded))then&#xD;&#xA;translate(&quot;#LDS#The new device {0} was successfully added.&quot;, from hardware select current display())&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping6" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Hardware" Class="Hardware" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <Column Name="IsLoaded" DataType="System.Boolean" ScriptItemUID="Column1" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

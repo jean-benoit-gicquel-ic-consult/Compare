@@ -1,0 +1,40 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4da96f52-cf84-6bf4-64a8-a37adc5c1c3d">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_LimitedValues_RadioButtons">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action1">
+            <Delete DataTable="LimitedValues" ScriptItemUID="Delete1" />
+            <FillTable DataTable="LimitedValues" DataColumn="" Expression="GetLimitedValues(edittable, editcolumn)" ScriptItemUID="FillTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+            </FillTable>
+            <Update DataTable="LimitedValues" DataColumn="DisplayValue" WhereClause="isnull(displayvalue,'')=''" Value="value" ScriptItemUID="Update1" />
+          </Action>
+        </Activator>
+        <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="LimitedValues" OrderBy="'Index'" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="TagName" Value="fieldset" />
+            <HtmlAttribute Name="&quot;data-imx-cellid&quot;" ScriptItemUID="HtmlAttribute1" Value="{{ EditTable.TableStore.GetCellId(EditTable_Current.Row, EditTable_EditColumn) }}" />
+          </HtmlAttributes>
+          <RadioButton DataTable="EditTable" DataColumn="EditColumn" Text="from limitedvalues select current displayvalue" ScriptItemUID="RadioButton1" DataValue="from limitedvalues select current value" />
+        </ContainerTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="LimitedValues" PrimaryKeyColumn="Value" ScriptItemUID="DataTableCustom1">
+          <Column Name="Value" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="Description" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="DisplayValue" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column4" MinLength="" MaxLength="" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

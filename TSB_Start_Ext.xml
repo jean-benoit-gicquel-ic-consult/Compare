@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Start_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="85">
+        <SwitchContainer ScriptItemUID="DashboardTargetSystems">
+          <SwitchContainerCase ScriptItemUID="TSBCase1" Condition="exists(&quot;Person&quot;, getconfig(&quot;VI_Start_Governance_Target_System_Condition&quot;))" ItemUID="Target Systems">
+            <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="TSBControlRef2">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="TSBAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false" ScriptItemUID="TSBRedirect2">
+                    <RedirectParameter Value="&quot;TargetSystems&quot;" Name="'Part'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping1" ID="DisplayNameDialogDashboardDef()" Value="&quot;ManagedVsUnmanagedGroups&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping2" ID="ChartType()" Value="&quot;ChartBar&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping5" ID="Caption()" Value="translate('#LDS#Target systems')" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping6" ID="Identifier()" Value="&quot;Dashboard_TargetSystems&quot;" />
+            </ControlReferenceControlList>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

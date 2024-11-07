@@ -1,0 +1,259 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl ID="VI_Edit_Multiselect" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08" Comment="Component for selecting multiple entries.&#xD;&#xA;The selected objects are represented as a string encoding a comma separated list of uids.&#xD;&#xA;&#xD;&#xA;----- BASIC INTERFACE-----&#xD;&#xA;[in] Candidate collection: the objects that are available for selection&#xD;&#xA;[in/out] SelectedItems: the result collection from/to which the uid list for the selected objects gets read/written.&#xD;&#xA;&#xD;&#xA;There are several virtual functions available allowing to fine-tune the behaviour of this component.&#xD;&#xA;E.g. you can specifiy what kind of separator is used for the separation of uids using the virtual function UidListDelimiter().&#xD;&#xA;See the description of each function for details.&#xD;&#xA;&#xD;&#xA;----- UPDATE BEHAVIOUR -----&#xD;&#xA;In general the input values are regarded only during initialization, but some basic changes are automatically detected and safely handled, those are:&#xD;&#xA;&#xD;&#xA;1. Changes to SelectedItems.uidList&#xD;&#xA;2. Bulk insert/delete operations (e.g. &quot;load collection&quot;) on the Candidates collection.&#xD;&#xA;&#xD;&#xA;Other changes usually aren't detected automatically, which can lead to unexpected behaviour.&#xD;&#xA;If you need to, you can force an update by temporarily changing SelectedItems.uidList and then resetting it to its former value.&#xD;&#xA;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Report Subscriptions" Description="translate(&quot;#LDS#Report Subscriptions&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Reporting_Subscription_AllowTree" Description="translate(&quot;#LDS#Allows global tree selection for specific tables&quot;)" Type="Text" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action5" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="-- &quot;width:655px&quot;" />
+        </HtmlAttributes>
+        <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <CallAction ActionID="LoadData" ScriptItemUID="CallAction2" />
+          </Action>
+        </Activator>
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container2">
+              <Container ScriptItemUID="Container11">
+                <ObjectSwitchContainer ScriptItemUID="TableSwitchContainer1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, candidatetablename()))" ActionType="ObjectCollection">
+                  <VirtualControlMapping VirtualControl="ElementSelected" ContainerType="ActionComponent">
+                    <ActionComponent ScriptItemUID="Action3">
+                      <CallAction ActionID="ToggleIsSelected" ScriptItemUID="CallAction3" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="TableName()" Value="candidatetablename()" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="CssClass()" Value="CssClass()" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="Candidate" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualFunctionMapping ID="DbWhereClause()" Value="CandidateDbWhereClause()" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="StatusDescriptor()" Value="StatusDescriptor()" ScriptItemUID="VirtualFunctionMapping10" />
+                  <VirtualFunctionMapping ID="DisplayType()" Value="'MultiSelect'" ScriptItemUID="VirtualFunctionMapping11" />
+                </ObjectSwitchContainer>
+              </Container>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+              <HtmlAttributes />
+              <Container ScriptItemUID="Container21">
+                <Container ItemUID="Liste" ScriptItemUID="Container22">
+                  <ContainerTemplate DataTable="SelectedItemsCollection" OrderBy="'Display'" ScriptItemUID="ContainerTemplate3">
+                    <Container ItemUID="clickable line for selected entry" ScriptItemUID="Container26">
+                      <LinkContainer ScriptItemUID="LinkContainer1">
+                        <ControlList ScriptItemUID="ControlList1">
+                          <Label Text="from selecteditemscollection select current Display" ScriptItemUID="Label8" EnableCustomAttributes="true" ItemUID="display selected entry">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-icon imx-icon-AssignedDirect imx-multiselect-delete&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="wctl1">
+                          <ActionSequence ItemUID="Item is selected" ScriptItemUID="Action4" Condition="not(&#xD;&#xA;-- mandatory field, and removing last element?&#xD;&#xA;1= select count() from selecteditemscollection&#xD;&#xA;and (0 &lt; from selecteditems select current getminlen(uidlist)))">
+                            <Delete DataTable="SelectedItemsCollection" WhereClause="primarykey() = select current primarykey() from selecteditemscollection" ScriptItemUID="Delete1" />
+                            <CallAction ActionID="UpdateSelectedItemsString" ScriptItemUID="CallAction5" />
+                            <CallAction ActionID="OnDeSelectItem" ScriptItemUID="CallAction6" />
+                            <EndExecution AlsoAbortWaitingThreads="false" />
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </ContainerTemplate>
+                  <Container Condition="0 = select count() from selecteditemscollection" ScriptItemUID="Container3">
+                    <Label Text="translate(&quot;#LDS#No objects selected&quot;)" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'data-imx-nulltext'" ScriptItemUID="HtmlAttribute1" Value="'true'" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                </Container>
+              </Container>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="IsNull(ListHeaderSelected(), translate(&quot;#LDS#Selected&quot;))" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="tmpSelectedItems" Comment="Ths is a temporary collection used for extracting the separate uids from the current uidList." ScriptItemUID="DataTableCustom1">
+          <Column Name="result" ScriptItemUID="Column1" DataType="System.String" />
+        </DataTableCustom>
+        <DataTableCustom Table="SelectedItemsCollection" Comment="Internal collection of selected items used as base collection for the selection and deselection trees." ScriptItemUID="DataTableCustom2">
+          <Column Name="UID_SelectedItem" Comment="The primary key of a single one selected item" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="Display" Comment="The display value of a single on selected item." ScriptItemUID="Column4" DataType="System.String" TriggerUpdates="Never" />
+          <Column Name="TargetValue" Comment="The target value of the parameter. This may be the UID, but objects may be referenced by other columns as well." ScriptItemUID="Column5" DataType="System.String" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="SkipEvents" DataType="System.Boolean" ScriptItemUID="Column9" />
+        </DataTableSingleRow>
+        <DataTableGeneric Table="tmpHelperObject" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="PrepareSelectedObjects">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Updates the uids that SelectedItemsCollection contains">
+            <ActionComponent ScriptItemUID="Action6">
+              <ActionSequence ItemUID="Clear old selected items" ScriptItemUID="Action7">
+                <Delete DataTable="SelectedItemsCollection" ScriptItemUID="Delete2" />
+                <Delete DataTable="tmpSelectedItems" ScriptItemUID="Delete3" />
+              </ActionSequence>
+              <ActionSequence ItemUID="Fill tmpSelectedItems with uids from Split(uidList)" ScriptItemUID="Action8">
+                <FillTable DataTable="tmpSelectedItems" DataColumn="result" Expression="split(from SelectedItems select current uidList, Delimiter(), false)" ScriptItemUID="FillTable1">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+                </FillTable>
+                <Update DataTable="tmpSelectedItems" DataColumn="result" Value="Trim(Replace(result, TextQualifier(), &quot;&quot;))" WhereClause="not(isnullorempty(textqualifier()))" ScriptItemUID="Update1" />
+                <Delete DataTable="tmpSelectedItems" WhereClause="IsNullOrEmpty(result)" ScriptItemUID="Delete4" />
+                <ActionSequence Condition="RestrictToSingleSelection() AND ((select count() from tmpSelectedItems) &gt; 1)" ItemUID="discard selection upon conflict with restriction to single selection" ScriptItemUID="Action9">
+                  <Delete DataTable="tmpSelectedItems" ScriptItemUID="Delete5" />
+                  <WriteLog Text="&quot;DISCARDED multiple selection due to requested restriction to single selection&quot;" WriteApplicationLog="true" />
+                </ActionSequence>
+              </ActionSequence>
+              <ActionSequence ItemUID="For current usage key copy uids from tmpSelectedItems to SelectedItemsCollection" ScriptItemUID="Action10">
+                <ForeachRow DataTable="tmpSelectedItems" ScriptItemUID="ForeachRow1">
+                  <Delete DataTable="tmpHelperObject" ScriptItemUID="Delete6" />
+                  <ActionSequence Condition="not(isnullorempty(candidatetablename()))" ItemUID="load object matching given UID from database (if candidatetablename() specified)" ScriptItemUID="Action11">
+                    <LoadTable ScriptItemUID="FillTable2" DataTable="tmpHelperObject" DBTableName="CandidateTableName()" WhereClause="sqlcompare(&#xD;&#xA;&#xD;&#xA;-- Determine column name&#xD;&#xA;(IsNullOrEmpty(CandidateTargetValueColumn(), CandidateTablePrimaryKeyColumnName() )),&#xD;&#xA;&#xD;&#xA;-- comparison value&#xD;&#xA;from tmpSelectedItems select current result,&#xD;&#xA;&#xD;&#xA;-- data type&#xD;&#xA;(if(IsNullOrEmpty(CandidateTargetValueColumn())) then &quot;string&quot; else&#xD;&#xA;GetValType(CandidateTableName(), CandidateTargetValueColumn()))&#xD;&#xA;,&#xD;&#xA;&#xD;&#xA;&quot;equal&quot;, &quot;NonUnicodeLiterals&quot;)" RemoveDeleted="false" LoadLimit="1">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                    </LoadTable>
+                  </ActionSequence>
+                  <Insert DataTable="SelectedItemsCollection" ScriptItemUID="Insert1">
+                    <ActionSequence ItemUID="copy uid and complete row" ScriptItemUID="Action12" />
+                    <InsertValue DataColumn="TargetValue" Value="from tmpSelectedItems select current result" />
+                    <InsertValue DataColumn="UID_SelectedItem" Value="if (IsNullOrEmpty(CandidateTableName()))&#xD;&#xA;then (from tmpSelectedItems select current result)&#xD;&#xA;else from tmphelperobject select top 1 primarykey() where primarykey() = (from tmpSelectedItems select current result)&#xD;&#xA;" />
+                    <InsertValue DataColumn="Display" Value="isnullorempty(&#xD;&#xA;if(0 &lt; select count() from tmphelperobject)&#xD;&#xA;then (from tmpHelperObject select top 1 IsNullOrEmpty(DisplayLong(),Display()))&#xD;&#xA;else (from Candidate select top 1 IsNullOrEmpty(DisplayLong(),Display()) where primarykey()=(from tmpSelectedItems select current result)),&#xD;&#xA;&#xD;&#xA;(translate(&quot;#LDS#Object not found&quot;)+&quot;: &quot;+(from tmpSelectedItems select current result)))" />
+                  </Insert>
+                </ForeachRow>
+                <ForeachRow DataTable="SelectedItemsCollection" ScriptItemUID="ForeachRow2">
+                  <Update DataTable="SelectedItemsCollection" DataColumn="UID_SelectedItem" Value="from candidate select top 1 primarykey() where&#xA;((&#xA;isnull(candidatetargetvalue(), primarykey())=(from selecteditemscollection select current targetvalue)&#xA;))" WhereClause="primarykey()=select current primarykey() from selecteditemscollection" ScriptItemUID="Update2" />
+                </ForeachRow>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UpdateSelectedItemsString">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Builds a new commaseparated list from the selected items and overwrites uidList on the current row of SelectedItems with it.">
+            <ActionComponent ScriptItemUID="Action13">
+              <Update DataTable="LocalVars" DataColumn="SkipEvents" Value="true" ScriptItemUID="Update3" />
+              <Update DataTable="SelectedItems" DataColumn="uidList" Value="GetSelectedPKList()" WhereClause="primarykey()= (select current primarykey() from selecteditems)" ScriptItemUID="Update4" />
+              <Update DataTable="LocalVars" DataColumn="SkipEvents" Value="false" ScriptItemUID="Update5" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ToggleIsSelected">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Toggles the selected state of the appropriate item.&#xD;&#xA;If called from a selected item, the item becomes unselected and vice versa.">
+            <ActionComponent ScriptItemUID="Action14">
+              <ActionSequence ItemUID="Item is selected" Condition="IsCurrentCandidateSelected()" ScriptItemUID="Action15">
+                <ActionSequence ScriptItemUID="Action21" Condition="-- mandatory field, and removing last element?&#xA;1= select count() from selecteditemscollection&#xA;and (0 &lt; from selecteditems select current getminlen(uidlist))">
+                  <EndExecution AlsoAbortWaitingThreads="false" />
+                </ActionSequence>
+                <Delete DataTable="SelectedItemsCollection" WhereClause="uid_selectedItem = (from Candidate select current primarykey())" ScriptItemUID="Delete7" />
+                <ActionSequence Condition="TreeSelectAllowed()" ItemUID="TreeSelectAllowed" ScriptItemUID="Action2">
+                  <CallAction ActionID="VI_Edit_Multiselect_SelectRecursive" ScriptItemUID="CallAction8">
+                    <VirtualFunctionMapping ID="IsDeSelect()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="GetSelectedKey()" Value="from Candidate select current primarykey()" ScriptItemUID="VirtualFunctionMapping5" />
+                    <VirtualTableMapping VirtualTable="Candidate" DataTable="Candidate" ScriptItemUID="VirtualTableMapping2" />
+                    <VirtualTableMapping VirtualTable="SelectedItemsCollection" DataTable="SelectedItemsCollection" ScriptItemUID="VirtualTableMapping3" />
+                    <VirtualFunctionMapping ID="CandidateTargetValue()" Value="CandidateTargetValue()" ScriptItemUID="VirtualFunctionMapping6" />
+                  </CallAction>
+                </ActionSequence>
+                <CallAction ActionID="UpdateSelectedItemsString" ScriptItemUID="CallAction71" />
+                <CallAction ActionID="OnDeSelectItem" ScriptItemUID="CallAction91" />
+                <EndExecution AlsoAbortWaitingThreads="false" />
+              </ActionSequence>
+              <ActionSequence ItemUID="Item is not selected" Condition="not IsCurrentCandidateSelected()" ScriptItemUID="Action16">
+                <ActionSequence Condition="RestrictToSingleSelection()" ItemUID="RestrictToSingleSelection" ScriptItemUID="Action17">
+                  <Delete DataTable="SelectedItemsCollection" ScriptItemUID="Delete8" />
+                </ActionSequence>
+                <ActionSequence Condition="NOT TreeSelectAllowed()" ItemUID="NOT TreeSelectAllowed" ScriptItemUID="Action25">
+                  <Insert DataTable="SelectedItemsCollection" ScriptItemUID="Insert2">
+                    <ActionSequence ScriptItemUID="Action18" />
+                    <InsertValue DataColumn="UID_SelectedItem" Value="from Candidate select current primarykey()" />
+                    <InsertValue DataColumn="Display" Value="from Candidate select current IsNullOrEmpty(displaylong(),Display())" />
+                    <InsertValue DataColumn="TargetValue" Value="from Candidate select current isnull( candidatetargetvalue(), primarykey() )" />
+                  </Insert>
+                </ActionSequence>
+                <ActionSequence Condition="TreeSelectAllowed()" ItemUID="TreeSelectAllowed" ScriptItemUID="Action26">
+                  <CallAction ActionID="VI_Edit_Multiselect_SelectRecursive" ScriptItemUID="CallAction13">
+                    <VirtualFunctionMapping ID="IsDeSelect()" Value="false" ScriptItemUID="VirtualFunctionMapping7" />
+                    <VirtualFunctionMapping ID="GetSelectedKey()" Value="from Candidate select current primarykey()" ScriptItemUID="VirtualFunctionMapping8" />
+                    <VirtualTableMapping VirtualTable="Candidate" DataTable="Candidate" ScriptItemUID="VirtualTableMapping4" />
+                    <VirtualTableMapping VirtualTable="SelectedItemsCollection" DataTable="SelectedItemsCollection" ScriptItemUID="VirtualTableMapping5" />
+                    <VirtualFunctionMapping ID="CandidateTargetValue()" Value="CandidateTargetValue()" ScriptItemUID="VirtualFunctionMapping9" />
+                  </CallAction>
+                </ActionSequence>
+                <CallAction ActionID="UpdateSelectedItemsString" ScriptItemUID="CallAction9" />
+                <CallAction ActionID="OnSelectItem" ScriptItemUID="CallAction101" />
+                <EndExecution AlsoAbortWaitingThreads="false" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="Candidate" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="LoadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action19">
+              <ActionSequence ItemUID="prepare SelectedItems" ScriptItemUID="Action20">
+                <CallAction ActionID="PrepareSelectedObjects" ScriptItemUID="CallAction1" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetSelectedPKList()" Expression="listselect(selecteditemscollection, targetvalue, true, TextQualifier(), Delimiter())" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="IsCurrentCandidateSelected()" Expression="0 &lt;&gt; (from SelectedItemsCollection select count() where uid_selectedItem = (from Candidate select current PrimaryKey())&#xA;)" DataType="System.Boolean" ScriptItemUID="Function2">
+          <DataTableCursor DataTable="Candidate" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="Delimiter()" Expression="UidListDelimiter()" DataType="System.String" ScriptItemUID="Function9" />
+        <Function Name="CssClass()" Expression="if (IsCurrentCandidateSelected()) then &quot;imx-icon imx-icon-AssignedDirect&quot; else &quot;imx-icon imx-icon-AssignedNone&quot;" FilterForTable="Candidate" DataType="System.String" ScriptItemUID="Function10" />
+        <Function Name="CandidateTableName()" Expression="isnullorempty( candidatedbtable(), dbtable(candidate))" DataType="System.String" ScriptItemUID="Function11" />
+        <Function Name="TextQualifier()" Expression="IsNull(UidListTextQualifier(), &quot;'&quot;)" DataType="System.String" ScriptItemUID="Function12" />
+        <Function Name="TreeSelectAllowed()" Expression="if(IsPreProp('REPORT_SUBSCRIPTION'))&#xA;then ( CandidateTableName() in (split(GetConfig(&quot;VI_Reporting_Subscription_AllowTree&quot;), &quot;,&quot;,  false)) )&#xA;else&#xA;false" DataType="System.Boolean" ScriptItemUID="Function13" />
+        <Function Name="CandidateTablePrimaryKeyColumnName()" Expression="{{&#xD;&#xA;var tableName = CandidateTableName();&#xD;&#xA;@return _Connection.Tables[tableName].Columns.First(c=&gt;c.IsPK).Columnname;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="StatusDescriptor()" Expression="if (IsCurrentCandidateSelected()) then &quot;ASSIGNED&quot; else &quot;NOTASSIGNED&quot;" FilterForTable="Candidate" DataType="System.String" ScriptItemUID="Function4" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="SelectedItems" ScriptItemUID="DataEventHandler1">
+          <ActionSequence Condition="(not(select SkipEvents from LocalVars))&#xD;&#xA;and (0 &lt; select count() from Candidate)" ScriptItemUID="Action23">
+            <CallAction ActionID="PrepareSelectedObjects" ScriptItemUID="CallAction11" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="uidList" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="Candidate" Operation="Bulk" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ScriptItemUID="Action24">
+            <CallAction ActionID="PrepareSelectedObjects" ScriptItemUID="CallAction10" />
+          </ActionSequence>
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Candidate" Comment="Collection of objects that are available for de/selection." ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="SelectedItems" Comment="Collection holding definitions for which of the objects from Candidate collection are selected.&#xD;&#xA;The uidList of the CURRENT cursor on the SelectedItems collection defines the selected objects.&#xD;&#xA;" RequiresCursor="true" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="uidList" Comment="comma separated list of uids matching the primary keys of Candidate collection for the selected objects." DataType="System.String" />
+      </VirtualTable>
+      <VirtualControl ID="OnSelectItem" ContainerType="ActionComponent" />
+      <VirtualControl ID="OnDeSelectItem" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="CandidateFilter()" DataType="System.Boolean" FilterForTable="Candidate" />
+      <VirtualFunction Signature="ListHeaderAvailable()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ListHeaderSelected()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UidListDelimiter()" Comment="The string used for separating the uids in the uidList.&#xD;&#xA;This is an optional parameter - if not specified the char(7) character is used." DataType="System.String" DefaultValue="char(7)" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UidListTextQualifier()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="RestrictToSingleSelection()" DataType="System.Boolean" Comment="If set to true, selection is restricted to a single object. This property is deprecated." TriggerUpdates="Never" />
+      <VirtualFunction Signature="CandidateDbTable()" DataType="System.String" />
+      <VirtualFunction Signature="CandidateTargetValue()" FilterForTable="Candidate" DataType="System.String" />
+      <VirtualFunction Signature="CandidateTargetValueColumn()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="CandidateDbWhereClause()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

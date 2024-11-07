@@ -1,0 +1,20 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Object_Overview" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ComponentInterfaceObject ContainerType="Container" />
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualControl ID="AdditionalShapes" ContainerType="ControlList" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" DefaultValue="true" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

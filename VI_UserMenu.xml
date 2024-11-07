@@ -1,0 +1,197 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3cebb972-fae4-0607-0b4b-d818a5639d86">
+  <GlobalControl ID="VI_UserMenu" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" IsInSessionScope="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <ActionSequence ScriptItemUID="Action2">
+          <Delete DataTable="UserMenu" WhereClause="isnull(contextid, '')='' and not(id in ( select idparent from usermenu)) and type='fixed'&#xA;-- remove &quot;blind&quot; menu items that do not have child items" ScriptItemUID="Delete1" />
+        </ActionSequence>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="{{ !IsMobileDevice() ? &quot;overflow-x:hidden;&quot; : &quot;&quot; }}" />
+        </HtmlAttributes>
+        <Container ScriptItemUID="Container34">
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action5">
+              <Update DataTable="LocalVars" DataColumn="Selected" Value="GetSelectedArea()" ScriptItemUID="Update1" />
+              <Update DataTable="LocalVars" DataColumn="Selected" Value="from usermenu select top 1 id where isnullorempty(idparent) order by ordernumber" WhereClause="isnullorempty(selected)&#xD;&#xA;or&#xD;&#xA;-- selected area not in menu structure anymore&#xD;&#xA;(0 = select count() from usermenu where id = (from LocalVars select Selected))" ScriptItemUID="Update2" />
+            </Action>
+          </Activator>
+          <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_NavigationMenu'" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute9" Value="&quot;navigation&quot;" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container4style" Value="if(1=(from userMenu select count() where isnull(idparent,'')='' and id in ( select idparent from usermenu)))&#xD;&#xA;then&#xD;&#xA;Variable(&quot;  top: %HeaderHeight%px; &quot;)" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container23" EnableCustomAttributes="true" ItemUID="Link to start page">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute30" Name="&quot;class&quot;" Value="&quot;nav-header imx-startpage-link&quot;" />
+              </HtmlAttributes>
+              <LinkContainer ScriptItemUID="LinkContainer1">
+                <ControlList ScriptItemUID="ControlList3">
+                  <Label ScriptItemUID="Label4" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-home&quot;" />
+                      <Property Name="TagName" Value="i" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Label ScriptItemUID="Label1" Text="translate('#LDS#Home')" Layout="'VI_Styles_Label_NavListHeading'" />
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <Redirect Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect11" />
+                </ServerActionCall>
+              </LinkContainer>
+            </Container>
+            <ContainerTemplate DataTable="UserMenu" OrderBy="'OrderNumber'" WhereClause="idparent = &quot;&quot;" ScriptItemUID="ContainerTemplate1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="ul" />
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;imx-list&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="li" />
+                </HtmlAttributes>
+                <ControlReferenceControlList ID="MenuItemList" ScriptItemUID="ControlRef1" />
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Selected" DataType="System.String" ScriptItemUID="Column1" />
+          <Column DataType="System.String" Name="LastExpanded" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="MenuItemList">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList5">
+              <Container ScriptItemUID="Container11" EnableCustomAttributes="true" RefreshTriggerExpression="from usermenu select current isexpandedproxy">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="ul" Comment="" />
+                  <HtmlAttribute Name="&quot;class&quot;" Value="&quot;nav nav-list&quot;" ScriptItemUID="HtmlAttribute47" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="li" Comment="" />
+                    <HtmlAttribute Name="&quot;class&quot;" Value="&quot;nav-header&quot; + ( if( IsSelectedMenuItem() ) then &quot; active&quot;)" ScriptItemUID="HtmlAttribute48" />
+                  </HtmlAttributes>
+                  <LinkContainer ScriptItemUID="LinkContainer3" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="if((from usermenu select current not(isnullorempty(accesskey))) and getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="from usermenu select current accesskey" />
+                    </HtmlAttributes>
+                    <ControlList ScriptItemUID="ControlList2">
+                      <Label ScriptItemUID="Label3" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute35" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--angle-right&quot;" />
+                          <Property Name="TagName" Value="i" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_Inline'">
+                        <ControlReferenceControlList ID="MainMenuItem" ScriptItemUID="ControlRef3" />
+                      </Container>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <ActionSequence ScriptItemUID="Action3">
+                        <Update DataColumn="LastExpanded" DataTable="LocalVars" ScriptItemUID="Update3" Value="select id from usermenu where isexpandedproxy = true" />
+                        <ActionSequence ScriptItemUID="Action6" Condition="getconfig('VI_Common_OnlyOneExpandedMenu') = 'true'">
+                          <Comment Comment="Collapse all menu items" />
+                          <Update DataTable="UserMenu" DataColumn="IsExpanded" ScriptItemUID="Update5" Value="false" />
+                        </ActionSequence>
+                        <Update DataTable="UserMenu" DataColumn="IsExpanded" WhereClause="id = ( select current id from usermenu) and id &lt;&gt; (from LocalVars select LastExpanded)" Value="ToggleIsExpanded(isexpanded)" ScriptItemUID="Update4" />
+                      </ActionSequence>
+                      <CallAction ActionID="RedirectUserMenu" ScriptItemUID="Call2" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                </Container>
+                <ContainerTemplate ScriptItemUID="ContainerTemplate8" DataTable="UserMenu" WhereClause="(idparent = ( select current id from usermenu ) AND&#xD;&#xA;(select current isexpandedproxy from UserMenu))&#xD;&#xA;" OrderBy="'OrderNumber'" Layout="">
+                  <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="li" Comment="" />
+                      <HtmlAttribute Name="&quot;class&quot;" Value="&quot;Inline &quot;+if(isselectedmenuitem()) then &quot; active&quot;" ScriptItemUID="HtmlAttribute49" />
+                    </HtmlAttributes>
+                    <LinkContainer ScriptItemUID="LinkContainer2" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="if((from usermenu select current not(isnullorempty(accesskey))) and getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="from usermenu select current accesskey" />
+                      </HtmlAttributes>
+                      <ControlList ScriptItemUID="ControlList154">
+                        <ControlReferenceControlList ID="SubMenuItem" ScriptItemUID="ControlRef2" />
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall3" EnableRedirectByUrl="true">
+                        <RedirectByUrl Condition="from UserMenu select current not(isnullorempty(contextid))">
+                          <Redirect ScriptItemUID="Redirect1" Target="MenuItem" MenuItemID="from usermenu select current id" NoLinkBackToThisForm="true" />
+                        </RedirectByUrl>
+                        <CallAction ActionID="RedirectUserMenu" ScriptItemUID="Call3" />
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="UserMenu" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="MainMenuItem">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList13">
+              <Label Text="from usermenu select current title" ScriptItemUID="Label10" Layout="'VI_Styles_Label_NavListHeading'" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label10title" Value="from usermenu select current tooltip" />
+                </HtmlAttributes>
+              </Label>
+              <Container Condition="select current isnull(additionaldata,'')&lt;&gt;'' from usermenu" ScriptItemUID="Container24" Layout="'VI_Styles_Container_Menu_OpenItems'" ItemUID="Count Bubble" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Container24title" Value="translate(&quot;#LDS#Number of currently pending objects&quot;)" />
+                </HtmlAttributes>
+                <Label Text="select current additionaldata from usermenu" ScriptItemUID="Label18" Layout="'VI_Styles_Label_NavList'" />
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="UserMenu" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="SubMenuItem">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList15">
+              <Label Text="from usermenu select current title" ScriptItemUID="Label2" Layout="'VI_Styles_Label_NavList'" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label2title" Value="from usermenu select current tooltip" />
+                </HtmlAttributes>
+              </Label>
+              <Container ScriptItemUID="Container26" Condition="select current isnull(additionaldata,'')&lt;&gt;'' from usermenu" Layout="'VI_Styles_Container_Menu_OpenItems_small'" ItemUID="Count Bubble" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Container26title" Value="translate(&quot;#LDS#Number of currently pending objects&quot;)" />
+                </HtmlAttributes>
+                <Label Text="select current additionaldata from usermenu" ScriptItemUID="Label9" Layout="'VI_Styles_Label_NavList'" />
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="UserMenu" ScriptItemUID="DataTableCursor4" />
+        </Control>
+        <Control ID="RedirectUserMenu">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <Code ClassName="VI.WebRuntime.RedirectUserMenu, VI.WebRuntime" ScriptItemUID="Control3">
+                <ControlList ScriptItemUID="ControlList1" />
+                <CodeParameter Name="UserMenuRow" Value="UserMenu" ScriptItemUID="CodeParameter2" />
+              </Code>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="UserMenu" ScriptItemUID="DataTableCursor6" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsSelectedMenuItem()" Expression="select current isexpandedproxy from UserMenu" DataType="System.Boolean" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="UserMenu" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="IsMobileDevice()" Expression="{{ VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice }} = true" DataType="System.Boolean" ScriptItemUID="Function2" />
+        <Function Name="GetSelectedArea()" Expression="from usermenu select id&#xA;where&#xA;isconnectable(idparent, id,&#xA;(&#xA;(id in (select linkobjectid from UserRuntimeModule where UidModule = GetRuntimeContextID())&#xA;))) and isnullorempty(idparent)" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="ToggleIsExpanded(bool expanded)" Expression="if(expanded) then false&#xA;else true" DataType="System.Boolean" ScriptItemUID="Function4" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

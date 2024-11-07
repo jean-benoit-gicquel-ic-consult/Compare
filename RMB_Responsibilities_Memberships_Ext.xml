@@ -1,0 +1,24 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="RMB_Responsibilities_Memberships_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="'Org'" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList2" ObjectType="FunctionValueList">
+        <FunctionValue Expression="&quot;Org&quot;" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList3" ObjectType="FunctionValueList" SortOrder="0">
+        <FunctionValue Expression="&quot;Org&quot;" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList4" ObjectType="FunctionValueList" SortOrder="50">
+        <FunctionValue Expression="'Org'" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList5" ObjectType="FunctionValueList">
+        <FunctionValue Expression="&quot;Org&quot;" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList6" ObjectType="FunctionValueList" SortOrder="20">
+        <FunctionValue Expression="select (&quot;Org&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_Org&quot;) as pattern)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

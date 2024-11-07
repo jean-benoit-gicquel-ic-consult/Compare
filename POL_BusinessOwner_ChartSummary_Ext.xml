@@ -1,0 +1,15 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="POL_BusinessOwner_ChartSummary_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigEntry5" ObjectType="ConfigEntryObjects" SortOrder="10">
+        <ConfigEntryObject ScriptItemUID="POLConfigEntryObject1">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;CompliancePolicyViolationsByProfitCenter&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Company policy violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;1&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;noclick&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;CompliancePolicyViolationsByProfitCenterMonthly&lt;/DashboardDefHistoric&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigEntry6" ObjectType="ConfigEntryObjects" SortOrder="10">
+        <ConfigEntryObject ScriptItemUID="POLConfigEntryObject2">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;CompliancePolicyViolationsByLocality&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Company policy violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;1&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;noclick&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;CompliancePolicyViolationsByLocalityMonthly&lt;/DashboardDefHistoric&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigEntry3" ObjectType="ConfigEntryObjects" SortOrder="10">
+        <ConfigEntryObject ScriptItemUID="POLConfigEntryObject3">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;CompliancePolicyViolationsByDepartment&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Company policy violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;1&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;noclick&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;&lt;/DashboardDefHistoric&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

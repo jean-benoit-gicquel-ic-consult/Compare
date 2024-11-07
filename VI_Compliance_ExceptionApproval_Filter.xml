@@ -1,0 +1,161 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Compliance_ExceptionApproval_Filter" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action7">
+        <CallAction ActionID="SetInitial" ScriptItemUID="Call6" />
+        <CallAction ActionID="LoadData" ScriptItemUID="Call7" />
+        <SwitchAction ScriptItemUID="Switch1">
+          <SwitchActionCase ScriptItemUID="case2" Condition="showaudit() and (from vars select isnull(uid_personaudit,'') = '')" ItemUID="ShowAudit">
+            <SwitchAction ScriptItemUID="Switch2">
+              <SwitchActionCase ScriptItemUID="Case2" Condition="not(showpersonnoncompliance())" ItemUID="all rule violations">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update18" Value="translate('#LDS#The page displays all approveable rule violations in the selected period. Select an employee to show only the rule violations which have been edited by the employee.') " />
+              </SwitchActionCase>
+              <SwitchActionCase ScriptItemUID="Case3" Condition="showpersonnoncompliance()" ItemUID="all exception approvals">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update21" Value="translate('#LDS#The page displays all rule violations in the selected period. Select an employee to show only the rule violations which have been edited by the employee.')" />
+              </SwitchActionCase>
+            </SwitchAction>
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search person, with preselected User in tabs">
+            <SwitchAction ScriptItemUID="Switch3">
+              <SwitchActionCase ScriptItemUID="Case5" Condition="showpersonnoncompliance()" ItemUID="all rule violations">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update23" Value="translate('#LDS#The page displays all rule violations in the selected period.')" />
+              </SwitchActionCase>
+              <SwitchActionCase ScriptItemUID="Case4" Condition="not showpersonnoncompliance()" ItemUID="all exception approvals">
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update22" Value="translate('#LDS#The page displays all rule violations which were edited by the selected employee in the selected period.')" />
+              </SwitchActionCase>
+            </SwitchAction>
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case1" Condition="not (showaudit()) and not(showhistory()) and isnull(setuseraudit(),'') = ''" ItemUID="NoAudit - NoHistory">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update14" Value="translate('#LDS#You are entitled to approve or deny the following compliance rule violations.')" />
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="Case1" Condition="not(showaudit()) and (showhistory())  and isnull(setuseraudit(),'') = ''" ItemUID="NoAudit - History">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update19" Value="translate('#LDS#This page shows the history of your rule violation decisions.')" />
+          </SwitchActionCase>
+        </SwitchAction>
+        <CodeLiteral ScriptItemUID="Try">{{
+try{</CodeLiteral>
+        <Update DataColumn="HeadLine" DataTable="Container" ScriptItemUID="Update13" Value="from Vars select HeadLine" />
+        <Update DataColumn="HeadLineIsExternal" DataTable="Vars" ScriptItemUID="Update20" Value="true" />
+        <CodeLiteral ScriptItemUID="Catch">}
+catch{}
+}}</CodeLiteral>
+      </ActionSequence>
+      <Container ItemUIDReference="Search" ScriptItemUID="Container1">
+        <Container ItemUID="HeadLine" ScriptItemUID="Container2" Condition="not(from Vars select HeadLineIsExternal)">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="Text()" Value="from Vars select HeadLine" ScriptItemUID="VirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ScriptItemUID="Container12" Condition="not(IsRestrictToSingleObject()) and showaudit()">
+          <LayoutPanel ScriptItemUID="LayoutPanel2">
+            <Label Text="if(showpersonnoncompliance())then&#xA;translate('#LDS#Select employee')&#xA;else&#xA;translate('#LDS#Select approver')" ScriptItemUID="Label1" />
+            <ColumnEditor DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="ColumnEditor1" />
+          </LayoutPanel>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ShowOpen" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="ShowApproved" DataType="System.Boolean" ScriptItemUID="Column3" />
+          <Column Name="ShowDenied" DataType="System.Boolean" ScriptItemUID="Column4" />
+          <Column Name="UID_PersonAudit" DataType="System.String" ScriptItemUID="Column6" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column Name="HideOpen" DataType="System.Boolean" ScriptItemUID="Column9" TriggerUpdates="Never" />
+          <Column Name="HideApproved" DataType="System.Boolean" ScriptItemUID="Column10" TriggerUpdates="Never" />
+          <Column Name="HideDenied" DataType="System.Boolean" ScriptItemUID="Column11" TriggerUpdates="Never" />
+          <Column Name="aeweb_UID_NonCompliance" DataType="System.String" ScriptItemUID="Column12" />
+          <Column Name="aeweb_UID_Person" DataType="System.String" ScriptItemUID="Column13" />
+          <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column5" />
+          <Column DataType="System.Boolean" Name="HeadLineIsExternal" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SetInitial">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <ActionSequence Condition="isnull(setuseraudit(),'') &lt;&gt; '' " ItemUID="User pre-selected" ScriptItemUID="Action10">
+                <Update DataTable="Vars" DataColumn="UID_PersonAudit" Value="setuseraudit()" ScriptItemUID="Update1" />
+              </ActionSequence>
+              <ActionSequence Condition="isnull(Request(&quot;aeweb_UID_NonCompliance&quot;),'') &lt;&gt; ''&#xD;&#xA;and&#xD;&#xA;isnull(Request(&quot;aeweb_UID_Person&quot;),'') &lt;&gt; ''" ItemUID="ComplianceRule und Person pre-selected" ScriptItemUID="Action11">
+                <Update DataTable="Vars" DataColumn="aeweb_UID_NonCompliance" Value="Request(&quot;aeweb_UID_NonCompliance&quot;)" ScriptItemUID="Update2" />
+                <Update DataTable="Vars" DataColumn="aeweb_UID_Person" Value="Request(&quot;aeweb_UID_Person&quot;)" ScriptItemUID="Update3" />
+              </ActionSequence>
+              <Update DataTable="Vars" DataColumn="ShowApproved" Value="true" ScriptItemUID="Update4" />
+              <Update DataTable="Vars" DataColumn="ShowDenied" Value="true" ScriptItemUID="Update5" />
+              <Update DataTable="Vars" DataColumn="ShowOpen" Value="true" ScriptItemUID="Update6" />
+              <ActionSequence Condition="not showaudit() and isnull(setuseraudit(),'') = ''" ItemUID="Kein Audit" ScriptItemUID="Action12">
+                <ActionSequence Condition="showhistory()" ItemUID="History view" ScriptItemUID="Action13">
+                  <Update DataTable="Vars" DataColumn="ShowOpen" Value="false" ScriptItemUID="Update7" />
+                  <Update DataTable="Vars" DataColumn="HideOpen" Value="true" ScriptItemUID="Update8" />
+                </ActionSequence>
+                <ActionSequence Condition="not(showhistory())" ItemUID="Pending view" ScriptItemUID="Action14">
+                  <Update DataTable="Vars" DataColumn="ShowDenied" Value="false" ScriptItemUID="Update9" />
+                  <Update DataTable="Vars" DataColumn="ShowApproved" Value="false" ScriptItemUID="Update10" />
+                </ActionSequence>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="LoadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action15">
+              <ActionSequence Condition="not showaudit() and isnull(setuseraudit(),'') = ''" ItemUID="No auditing mode" ScriptItemUID="Action16">
+                <ActionSequence ScriptItemUID="Action17">
+                  <ActionSequence Condition="showhistory()" ItemUID="History view" ScriptItemUID="Action18">
+                    <Update DataTable="Container" DataColumn="DbWhereClause" Value="sqland(&#xD;&#xA;SingleObjWhereClause(),&#xD;&#xA;statuswhereclause(),&#xD;&#xA;sqlcompareuid(&quot;UID_PersonDecisionMade&quot;, GetUser()),&#xD;&#xA;&quot;uid_noncompliance in ( select cr.uid_noncompliance from compliancerule cr join personinaerole pae on pae.uid_aerole =  cr.uid_orgruler and &quot;+ sqlcompareuid(&quot;pae.uid_person&quot;, getuser())+&quot;)&quot;)" ScriptItemUID="Update11" />
+                  </ActionSequence>
+                  <ActionSequence Condition="not(showhistory())" ItemUID="Pending view" ScriptItemUID="Action19">
+                    <Update DataTable="Container" DataColumn="DbWhereClause" Value="sqland(&#xD;&#xA;SingleObjWhereClause(),&#xD;&#xA;&quot;uid_noncompliance in ( select cr.uid_noncompliance from compliancerule cr join personinaerole pae on pae.uid_aerole =  cr.uid_orgruler and &quot;+ sqlcompare(&quot;pae.uid_person&quot;, getuser(),&quot;string&quot;,&quot;equal&quot;,&quot;NonUnicodeLiterals&quot;)+&quot; where cr.isexceptionallowed=1 )&quot;)" ScriptItemUID="Update12" />
+                  </ActionSequence>
+                </ActionSequence>
+              </ActionSequence>
+              <ActionSequence Condition="showaudit() or isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Auditing mode" ScriptItemUID="Action21">
+                <CallAction ActionID="LoadAuditData" ScriptItemUID="Call8" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="LoadAuditData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action22">
+              <ActionSequence Condition="not showpersonnoncompliance()" ItemUID="Show exceptions" ScriptItemUID="Action23">
+                <Update DataTable="Container" DataColumn="DbWhereClause" Value="sqland(&#xD;&#xA;statuswhereclause(),&#xD;&#xA;if(from Vars select isnull(UID_PersonAudit,'') &lt;&gt; '')then&#xD;&#xA;sqlcompareUid(&quot;uid_persondecisionmade&quot;, (from Vars select UID_PersonAudit))&#xD;&#xA;)" ScriptItemUID="Update16" />
+              </ActionSequence>
+              <ActionSequence Condition="showpersonnoncompliance()" ItemUID="Show violations" ScriptItemUID="Action24">
+                <Update DataTable="Container" DataColumn="DbWhereClause" Value="sqland(&#xD;&#xA;(if(from Vars select isnull(UID_PersonAudit,'') &lt;&gt; '')then&#xD;&#xA;sqlcompareUid(&quot;uid_person&quot;, from Vars select UID_PersonAudit)),&#xD;&#xA;statuswhereclause()&#xD;&#xA;)" ScriptItemUID="Update17" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="statuswhereclause()" Expression="sqlor(&#xA;--pending&#xA;if( (from vars select not(ShowOpen))) then &quot;1=0&quot; else&#xA;sqlcompare(&quot;isdecisionmade&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xA;&#xA;--denied&#xA;if( (from vars select not(ShowDenied))) then &quot;1=0&quot; else&#xA;sqland(&#xA;sqlcompare(&quot;isdecisionmade&quot;, true, &quot;bool&quot;, &quot;equal&quot;),&#xA;sqlcompare(&quot;IsExceptionGranted&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xA;),&#xA;&#xA;--approved&#xA;if( (from vars select not(ShowApproved))) then &quot;1=0&quot; else&#xA;sqlcompare(&quot;IsExceptionGranted&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xA;)&#xA;" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="SingleObjWhereClause()" Expression="from Vars select&#xD;&#xA;if(IsRestrictToSingleObject())&#xD;&#xA;then&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareUid(&quot;UID_NonCompliance&quot;, from Vars select aeweb_UID_NonCompliance),&#xD;&#xA;sqlcompareUid(&quot;UID_Person&quot;, from Vars select aeweb_UID_Person))&#xD;&#xA;else&#xD;&#xA;getnull()" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="IsRestrictToSingleObject()" Expression="from vars select not(isnullorempty(aeweb_UID_NonCompliance) or isnullorempty(aeweb_UID_Person))" DataType="System.Boolean" ScriptItemUID="Function2" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action26">
+            <CallAction ActionID="LoadData" ScriptItemUID="Call1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonAudit" />
+          <DataEventHandlerColumn DataColumn="ShowApproved" />
+          <DataEventHandlerColumn DataColumn="ShowDenied" />
+          <DataEventHandlerColumn DataColumn="ShowOpen" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="showaudit()" Comment="Set the auditing mode person search control" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="setuseraudit()" Comment="Set the user for auditing and the auditing mode" DataType="System.String" />
+      <VirtualFunction Signature="showpersonnoncompliance()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="showhistory()" Comment="Visible in My Actions / Pending rule violation" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="DbWhereClause" DataType="System.String" />
+        <VirtualColumn Name="HeadLine" DataType="System.String" IsMandatory="false" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

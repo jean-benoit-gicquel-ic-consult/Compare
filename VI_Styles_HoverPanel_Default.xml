@@ -1,0 +1,247 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <LayoutObject ID="VI_Styles_HoverPanel_Default" Type="HoverPanel" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="css" ScriptItemUID="CssDocument1">.tooltip {
+  position: absolute;
+  z-index: 1070;
+  display: block;
+}
+.tooltip.in {
+  filter: alpha(opacity=90);
+  opacity: .9;
+}
+.tooltip.top {
+  padding: 5px 0;
+  margin-top: -3px;
+}
+.tooltip.right {
+  padding: 0 5px;
+  margin-left: 3px;
+}
+.tooltip.bottom {
+  padding: 5px 0;
+  margin-top: 3px;
+}
+.tooltip.left {
+  padding: 0 5px;
+  margin-left: -3px;
+}
+.tooltip-inner {
+  max-width: 200px;
+  padding: 3px 8px;
+  color: %VI_Common_Color_ColorBase1%;
+  text-align: center;
+  background-color: %VI_Common_Color_ColorBase2%;
+  border-radius: 4px;
+}
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.tooltip.top .tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.top-left .tooltip-arrow {
+  right: 5px;
+  bottom: 0;
+  margin-bottom: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.top-right .tooltip-arrow {
+  bottom: 0;
+  left: 5px;
+  margin-bottom: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.right .tooltip-arrow {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-right-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.left .tooltip-arrow {
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  border-width: 5px 0 5px 5px;
+  border-left-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.bottom .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.bottom-left .tooltip-arrow {
+  top: 0;
+  right: 5px;
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: %VI_Common_Color_ColorBase2%;
+}
+.tooltip.bottom-right .tooltip-arrow {
+  top: 0;
+  left: 5px;
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: %VI_Common_Color_ColorBase2%;
+}
+.popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1060;
+  display: none;
+  max-width: 276px;
+  padding: 1px;
+  background-color: %VI_Common_Color_ColorBase1%;
+  border: 1px solid %VI_Common_Color_LighterGray%;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  line-break: auto;
+}
+.popover.top {
+  margin-top: -10px;
+}
+.popover.right {
+  margin-left: 10px;
+}
+.popover.bottom {
+  margin-top: 10px;
+}
+.popover.left {
+  margin-left: -10px;
+}
+.popover-title {
+  padding: 8px 14px;
+  margin: 0;
+  font-size: 14px;
+  background-color: %VI_Common_Color_LighterGray%;
+  border-bottom: 1px solid %VI_Common_Color_LighterGray%;
+  border-radius: 5px 5px 0 0;
+}
+.popover-content {
+  padding: 9px 14px;
+}
+.popover &gt; .arrow,
+.popover &gt; .arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.popover &gt; .arrow {
+  border-width: 11px;
+}
+.popover &gt; .arrow:after {
+  content: "";
+  border-width: 10px;
+}
+.popover.top &gt; .arrow {
+  bottom: -11px;
+  left: 50%;
+  margin-left: -11px;
+  border-top-color: %VI_Common_Color_Gray% !important;
+  border-bottom-width: 0;
+}
+.popover.top &gt; .arrow:after {
+  bottom: 1px;
+  margin-left: -10px;
+  content: " ";
+  border-top-color: %VI_Common_Color_ColorBase1%;
+  border-bottom-width: 0;
+}
+.popover.right &gt; .arrow {
+  top: 50%;
+  left: -11px;
+  margin-top: -11px;
+  border-right-color: %VI_Common_Color_Gray% !important;
+  border-left-width: 0;
+}
+.popover.right &gt; .arrow:after {
+  bottom: -10px;
+  left: 1px;
+  content: " ";
+  border-right-color: %VI_Common_Color_ColorBase1%;
+  border-left-width: 0;
+}
+.popover.bottom &gt; .arrow {
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: %VI_Common_Color_Gray% !important;
+}
+.popover.bottom &gt; .arrow:after {
+  top: 1px;
+  margin-left: -10px;
+  content: " ";
+  border-top-width: 0;
+  border-bottom-color: %VI_Common_Color_ColorBase1%;
+}
+.popover.left &gt; .arrow {
+  top: 50%;
+  right: -11px;
+  margin-top: -11px;
+  border-right-width: 0;
+  border-left-color: %VI_Common_Color_Gray% !important;
+}
+.popover.left &gt; .arrow:after {
+  right: 1px;
+  bottom: -10px;
+  content: " ";
+  border-right-width: 0;
+  border-left-color: %VI_Common_Color_ColorBase1%;
+}
+
+*    
+ end of bootstrap css
+*/
+
+
+
+.imx-popover
+{
+   display: inline-block;
+}
+
+.claro .popover {
+background-color: %VI_Common_Color_ColorBase1%;
+width: auto !important;
+max-width: none;
+}
+
+.claro .right.popover .arrow, .claro .left.popover .arrow  {
+border-right-color: %VI_Common_Color_ColorBase1%;
+border-left-color: %VI_Common_Color_ColorBase1%;
+}
+
+.claro .top.popover .arrow {
+border-top-color: %VI_Common_Color_ColorBase1%;
+}
+
+.claro .bottom .popover .arrow {
+border-bottom-color: %VI_Common_Color_ColorBase1%;
+}
+
+.popover-content {
+word-wrap: break-word;
+}</CssDocument>
+    <Property Name="CssClassName" Value="imx-popover" />
+  </LayoutObject>
+</WebDesigner>

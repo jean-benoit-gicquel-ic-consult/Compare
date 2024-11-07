@@ -1,0 +1,65 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Common_CompactLabel" MigrationNotes="DIALOGCONFIGPARM;" Comment="A label displaying multiple items from a given collection with the option to switch between collapsed and expanded display mode.&#xD;&#xA;In collapsed mode only a certain number (i.e. the first x) of items will be displayed in addition to a &quot;expand&quot; link.&#xD;&#xA;When expanded all items will be displayed in addition to an &quot;collapse&quot; link.">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ItemUID="compact string label" ScriptItemUID="Container1">
+        <ContainerTemplate DataTable="AvailableItems" WhereClause="  IsExpanded() OR&#xD;&#xA;  &#xD;&#xA;  primarykey() in ( from availableitems select select top CountItemsVisibleCollapsed() primarykey() order by __Display)" ScriptItemUID="ContainerTemplate1">
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="not MultiLine()">
+              <Label Text="from AvailableItems select current format(&quot;{0}{1}&quot;, display(), Separator(IterationIndex(), IterationCount()))" Tooltip="from AvailableItems select current ToolTip()" ScriptItemUID="Label1" />
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2">
+              <Label Text="from AvailableItems select current display()" ScriptItemUID="Label2" />
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </ContainerTemplate>
+        <Container ItemUID="Toggle Expanded" ScriptItemUID="Container5">
+          <LinkContainer ScriptItemUID="LinkContainer1">
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="ToggleExpanded" ScriptItemUID="Call1" />
+            </ServerActionCall>
+            <ControlList ScriptItemUID="ControlList1">
+              <Container ItemUID="expand label" Condition="(not IsExpanded()) AND (UsedItems() &gt; CountItemsVisibleCollapsed())" Tooltip="translate(&quot;#LDS#Expand&quot;)" ScriptItemUID="Container6">
+                <Label Text="translate(&quot;#LDS#and {0} more...&quot;,  UsedItems()- CountItemsVisibleCollapsed())" ScriptItemUID="ctl5" />
+              </Container>
+              <Container ItemUID="collapse label" Condition="IsExpanded()" ScriptItemUID="Container8" Tooltip="translate(&quot;#LDS#Close&quot;)">
+                <Label Text="&quot;&lt;&lt;&quot;" ScriptItemUID="Label4" />
+              </Container>
+            </ControlList>
+          </LinkContainer>
+        </Container>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Expanded" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ToggleExpanded">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <Update DataTable="LocalVars" DataColumn="Expanded" Value="not IsExpanded()" ScriptItemUID="Update1" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsExpanded()" Expression="from LocalVars select top 1 Expanded" Comment="Determines whether the label is expanded." DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="Unquote(string text)" Expression="Replace(IsNullOrEmpty(text, &quot;&quot;), &quot;'&quot;, &quot;&quot;)" Comment="Removes all single quotes from the given text.&#xD;&#xA;@text: a text possibly containing single quotes (i.e. ' )&#xD;&#xA;@returns: the given text with single quotes removed" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="UsedItems()" Expression="select count() from AvailableItems" DataType="System.Int32" Comment="Returns the number of all items to display (when not collapsed)." ScriptItemUID="Function3" />
+        <Function Name="Separator(int index, int count)" Expression="if ((index + 1) &lt; count) then &quot;, &quot; else &quot;&quot;" Comment="Returns the separator to be used when concatenating the items to a single line string.&#xD;&#xA;@index: the index of the current item after which the separator will be added&#xD;&#xA;@count: the number of all items that will be concatenated." DataType="System.String" ScriptItemUID="Function4" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="AvailableItems" Comment="The items that are available for display.&#xD;&#xA;The actual items to displayed are defined (and ordered) in UIDList()." ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="CountItemsVisibleCollapsed()" DataType="System.Int32" Comment="Optional: the number of items that will be displayed in collapsed mode.&#xD;&#xA;If not specified the default value is 3." DefaultValue="3" TriggerUpdates="Never" />
+      <VirtualFunction Signature="MultiLine()" DataType="System.Boolean" Comment="Optional: determines whether the label should display each item in a separate line (MuliLine=True)&#xD;&#xA;or all items in a single line (MultiLine=false).&#xD;&#xA;If not specified the default value is MultiLine=false." DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ToolTip()" FilterForTable="AvailableItems" Comment="Optional function that yields the tooltip to display for every single entry from AvailableItems that will be displayed." DataType="System.String" />
+      <VirtualFunction Signature="UidSeperatorChar()" DataType="System.String" DefaultValue="char(7)" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

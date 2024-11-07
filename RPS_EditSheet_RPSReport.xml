@@ -1,0 +1,81 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RPS_EditSheet_RPSReport">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <ActionSequence ScriptItemUID="Action1" Condition="from edittable select current not(isloaded()) -- new object?">
+          <CodeLiteral ScriptItemUID="CodeLiteral1">var mrc = (MemberRelationColumn) TableStore.GetLocalColumn(EditTable, "PersonHasRPSReport");
+var mr = (MemberRelation) await mrc.GetMemberRelationAsync((IDbObjectRow)_EditTable_Current.Row, ct).ConfigureAwait(false);
+var loadInfo = new DbObjectLoadInfo("Person", _Database.SqlFormatter().UidComparison("UID_Person", _Database.User().Uid));
+foreach (var person in await mr.Candidates.LoadAsync(loadInfo, ct: ct).ConfigureAwait(false))
+{
+	mr.MemberColumn.SetValue(person, true);
+}</CodeLiteral>
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;flex-fill&quot;" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping1" IsPropertyList="true">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Ident_RPSReport" />
+                <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="ReportDefinition" />
+                <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="RiskIndex" />
+                <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="UID_PersonOwner" />
+                <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_AccProduct" />
+                <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="IsInActive" />
+                <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="Description" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
+          </ControlReferenceContainer>
+          <Label ScriptItemUID="Label1" EnableCustomAttributes="true" Text=" translate(&quot;#LDS#To manage who can view this report, you can assign it to employees and organizational units here.&quot;)">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="p" />
+            </HtmlAttributes>
+          </Label>
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+            <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping2" IsPropertyList="true">
+              <ColumnList ScriptItemUID="ColumnList2">
+                <SingleColumn ScriptItemUID="SingleColumn13" DataColumn="PersonHasRPSReport" />
+                <SingleColumn ScriptItemUID="SingleColumn12" DataColumn="DepartmentHasRPSReport" />
+                <SingleColumn ScriptItemUID="SingleColumn11" DataColumn="LocalityHasRPSReport" />
+                <SingleColumn ScriptItemUID="SingleColumn10" DataColumn="ProfitCenterHasRPSReport" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping2" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ScriptItemUID="Container1" Layout="'VI_Styles_Container_ButtonBar'">
+          <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button1">
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <ActionOnControl ActionType="PerformValidation" />
+              <Save DataTable="EditTable" ScriptItemUID="Save1" WhereClause="primarykey()=(select current primarykey() from edittable)" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction1">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping10" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping11" />
+              </CallAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="RPSReport">
+        <ColumnMemberRelation Name="PersonHasRPSReport" ScriptItemUID="ColumnMemberRelation1" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to employees&quot;)" RelationTableName="&quot;PersonHasRPSReport&quot;" />
+        <ColumnMemberRelation Name="DepartmentHasRPSReport" ScriptItemUID="ColumnMemberRelation2" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to departments&quot;)" RelationTableName="&quot;DepartmentHasRPSReport&quot;" Description="translate(&quot;#LDS#This report will be available to members of the assigned organizational units.&quot;)" />
+        <ColumnMemberRelation Name="LocalityHasRPSReport" ScriptItemUID="ColumnMemberRelation3" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to locations&quot;)" RelationTableName="&quot;LocalityHasRPSReport&quot;" Description="translate(&quot;#LDS#This report will be available to members of the assigned organizational units.&quot;)" />
+        <ColumnMemberRelation Name="ProfitCenterHasRPSReport" ScriptItemUID="ColumnMemberRelation4" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to cost centers&quot;)" RelationTableName="&quot;ProfitCenterHasRPSReport&quot;" Description="translate(&quot;#LDS#This report will be available to members of the assigned organizational units.&quot;)" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

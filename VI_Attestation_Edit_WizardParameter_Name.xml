@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_Edit_WizardParameter_Name" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <LayoutPanel ScriptItemUID="LayoutPanel1">
+          <ControlList ScriptItemUID="ControlList1">
+            <Container ScriptItemUID="Container2">
+              <FormItemLabel DataTable="ParameterInEdit" DataColumn="ParameterValue" ScriptItemUID="FormItemLabel1">
+                <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label1" />
+              </FormItemLabel>
+            </Container>
+          </ControlList>
+          <ControlList ScriptItemUID="ControlList2">
+            <Container ScriptItemUID="Container3">
+              <Activator ScriptItemUID="Activator1">
+                <Action ScriptItemUID="Action2">
+                  <Update DataTable="ParameterInEdit" DataColumn="CompareType" Value="&quot;like&quot;" ScriptItemUID="Update1" />
+                </Action>
+              </Activator>
+              <TextBox DataTable="ParameterInEdit" DataColumn="ParameterValue" ScriptItemUID="TextBox1" />
+            </Container>
+          </ControlList>
+        </LayoutPanel>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ParameterInEdit" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="ParameterValue" DataType="System.String" />
+        <VirtualColumn Name="CompareType" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

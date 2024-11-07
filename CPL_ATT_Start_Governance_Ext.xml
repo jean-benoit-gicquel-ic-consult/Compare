@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="CPL_ATT_Start_Governance_Ext" RequiredDbModules="CPL,ATT">
+    <Extensions>
+      <AddObject ObjectID="CPLConfigEntry1" ObjectType="ConfigEntryObjects" SortOrder="55">
+        <ConfigEntryObject ScriptItemUID="CPLConfigEntryObject17">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ComplianceRuleViolationsByFramework&lt;/DisplayName&gt;&lt;Text&gt;ObjectDisplay&lt;/Text&gt;&lt;Tooltip&gt;translate("#LDS#{2} has {0} rule violations and {1} pending attestation cases", SizeValue ,ColorValue,ObjectDisplayLong)&lt;/Tooltip&gt;&lt;FilterByObject&gt;False&lt;/FilterByObject&gt;&lt;isHeatmap&gt;true&lt;/isHeatmap&gt;&lt;EqualSized&gt;false&lt;/EqualSized&gt;&lt;IconLayout&gt;false&lt;/IconLayout&gt;&lt;DashboardDefMonthly&gt;AttestationOpenCasesByFrameworkMonthly&lt;/DashboardDefMonthly&gt;&lt;DashboardDefYearly&gt;AttestationOpenCasesByFrameworkYearly&lt;/DashboardDefYearly&gt;&lt;RedLimit&gt;max&lt;/RedLimit&gt;&lt;GreenLimit&gt;0&lt;/GreenLimit&gt;&lt;RedLimitHistoric&gt;max&lt;/RedLimitHistoric&gt;&lt;GreenLimitHistoric&gt;min&lt;/GreenLimitHistoric&gt;&lt;YellowLimitHistoric&gt;0&lt;/YellowLimitHistoric&gt;&lt;TextHistoric&gt;ObjectDisplay&lt;/TextHistoric&gt;&lt;TooltipHistoric&gt;translate("#LDS#Number of pending attestation cases in {1} {2} by {0}", abs(ColorValue) ,ObjectDisplayLong, if ( ColorValue&amp;gt;0) then translate("#LDS#increased") else translate("#LDS#decreased"),)&lt;/TooltipHistoric&gt;&lt;ColorValueTerm&gt;translate("#LDS#Pending attestation cases")&lt;/ColorValueTerm&gt;&lt;SizeValueTerm&gt;translate("#LDS#Attestation policies in this framework")&lt;/SizeValueTerm&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,36 @@
+﻿<WebDesigner TdnsHash="fc1cc689-c628-cdb4-bd82-bac9c207c56a">
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Attestation_Edit_WizardParameter_Origin" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef1">
+          <VirtualTableMapping VirtualTable="Candidate" DataTable="AttestationWizardParameterOptions" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualTableMapping VirtualTable="SelectedItems" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping2">
+            <VirtualColumnMapping VirtualColumn="uidList" DataColumn="ParameterValue" />
+          </VirtualTableMapping>
+          <VirtualFunctionMapping ID="ListHeaderAvailable()" Value="translate(&quot;#LDS#Available origins&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="ListHeaderSelected()" Value="translate(&quot;#LDS#Selected origins&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="CandidateDbWhereClause()" Value="format(&quot;uid_attestationwizardparm = {0}&quot;, sqlformatvalue( UID_AttestationWizardParm(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="UidListDelimiter()" Value="&quot;,&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+        </ControlReferenceContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AttestationWizardParmOpt" Table="AttestationWizardParameterOptions" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ParameterInEdit" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="ParameterValue" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="UID_AttestationWizardParm()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

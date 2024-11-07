@@ -1,0 +1,43 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_ComplianceRule" MigrationNotes="DIALOGCONFIGPARM;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ElementEdit ScriptItemUID="ElementEdit1" DataTable="Object" EnableNavigation="EnableNavigation()">
+          <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef17" />
+        </ElementEdit>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" Condition="-- Verantwortlicher&#xD;&#xA;exists(&quot;aerolecollection&quot;,format(&quot;uid_aerole = '{0}' and uid_parentaerole in (select uid_aerole from personinaerole where uid_person = '{1}')&quot;,from Object select uid_orgresponsible,GetUser()))&#xD;&#xA;or&#xD;&#xA;-- Ausnahmegenehmiger&#xD;&#xA;exists(&quot;aerolecollection&quot;,format(&quot;uid_aerole = '{0}' and uid_parentaerole in (select uid_aerole from personinaerole where uid_person = '{1}')&quot;,from Object select uid_orgruler,GetUser()))" ScriptItemUID="Container30">
+          <Button Text="translate(&quot;#LDS#Report&quot;)" ScriptItemUID="Button1">
+            <ServerActionCall ScriptItemUID="ServerActionCall7">
+              <Update DataTable="ReportParameters" DataColumn="Rule" Value="from Object select PrimaryKey()" ScriptItemUID="Update2" />
+              <Update DataTable="ReportParameters" DataColumn="ReportName" Value="'VI_ComplianceRule_Overview_UID'" ScriptItemUID="Update3" />
+              <Update DataTable="ReportParameters" DataColumn="LastCompiledReportUID" Value="newid()" ScriptItemUID="Update4" />
+              <PrepareReport ReportName="select current reportname from reportparameters" CompiledReportUID="select lastcompiledreportuid from reportparameters">
+                <ParameterFree Name="'Rule'" Value="select rule from reportparameters" ScriptItemUID="ParameterFree1" />
+              </PrepareReport>
+              <Redirect Target="Context" InNewFrame="true" AbortExecution="false" PopupID="Report" Width="'800'" Height="'400'" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" ScriptItemUID="Redirect7">
+                <RedirectParameter Name="'uid_compiledreport'" Value="from ReportParameters select LastCompiledReportUID" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="ReportParameters" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="Rule" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="ReportName" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="LastCompiledReportUID" ScriptItemUID="Column4" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_HyperView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="Object" Class="ComplianceRule" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

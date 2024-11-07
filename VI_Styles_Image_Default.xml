@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Image_Default" Type="Image" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="IconImage" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.IconImage  { padding-right: 6px; vertical-align: middle; border-width: 0px; }
+.IconImage a:link { text-decoration:none; color: %VI_Common_Color_Font_Secondary%; outline: none; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

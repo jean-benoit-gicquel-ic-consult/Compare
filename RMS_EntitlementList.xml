@@ -1,0 +1,63 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RMS_EntitlementList">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="RMSActivator1" ExecuteAlways="true">
+          <Action ScriptItemUID="RMSAction1">
+            <LoadTable DataTable="QERAccProductUsage" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+            <LoadTable DataTable="ESetHasEntitlement" ScriptItemUID="RMSLoadTable1" WhereClause="format(&quot;UID_ESet in ( select uid_eset from eset where xobjectkey in ({0}))&quot;, listselect(qeraccproductusage, xobjectkey))">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </LoadTable>
+            <FillTable DataTable="Entitlements" ScriptItemUID="RMSFillTable1" Source="XObjectKey" DataTableSource="ESetHasEntitlement" DataColumnSource="Entitlement" WhereClause="" DataColumnTableName="" DataColumnSourceKey="" DataColumnXObjectKey="">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+            </FillTable>
+          </Action>
+        </Activator>
+        <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="RMSControlRef1">
+          <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#The following entitlements are assigned to the system role.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+        </ControlReferenceContainer>
+        <Grid ScriptItemUID="RMSGrid1" AllowExport="true" ExportFileName="" ExportTitle="" HideMenu="true">
+          <GridBand DataTable="Entitlements" ScriptItemUID="RMSGridBand1" EntriesPerPage="10" EnableGridViewSetting="false" DisplayHeader="Always">
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn ScriptItemUID="RMSColumn2">
+              <GridColumnHeader ScriptItemUID="RMSHeader">
+                <Label Text="translate(&quot;#LDS#Entitlement&quot;)" ScriptItemUID="RMSLabel3" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="RMSCell1">
+                <Label Text="from entitlements select current display()" ScriptItemUID="RMSLabel2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="RMSHtmlAttribute1" Value="&quot;imx-icon imx-table-&quot;+(from entitlements select current dbtable())" />
+                    <HtmlAttribute Name="'title'" ScriptItemUID="RMSLabel2title" Value="from entitlements select current format(&quot;{0}: {1}&quot;, datacaptionsingle(dbtable()), displaylong())" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+          </GridBand>
+        </Grid>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="ESetHasEntitlement" Table="ESetHasEntitlement" ScriptItemUID="RMSDataTableDbObject1">
+          <ActionSequence ScriptItemUID="RMSAction2" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="Entitlements" ScriptItemUID="RMSDataTableGeneric1" />
+        <DataTableDbObject Class="QERAccProductUsage" Table="QERAccProductUsage" ScriptItemUID="DataTableDbObject3" WhereClauseSQL="format(&quot;uid_accproduct = {0}&quot;, sqlformatvalue(uidaccproduct(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="UidAccProduct()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

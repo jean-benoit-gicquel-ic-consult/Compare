@@ -1,0 +1,117 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_Shape" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Hyperviews" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_Common_HyperView_CollapseLimit" Description="translate(&quot;#LDS#Maximum number of elements in a shape before the shape is collapsed&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_HyperView_Colors" Description="translate('#LDS#Color settings for the shapes of the hyperview.')" Type="ColorDictionary" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <Update DataTable="Vars" DataColumn="IsExpanded" Value="'true'" ScriptItemUID="Update2" />
+        <FillTable DataTable="ColorScheme" DataColumn="Key" Expression="getfromxml(getconfig(&quot;VI_Common_HyperView_Colors&quot;))" ScriptItemUID="FillTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </FillTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <CodeLiteral ScriptItemUID="CodeLiteral1">if (!string.IsNullOrEmpty(ShapeLinkUrl))
+{
+	Container1.TagName = "a";
+	Container1.Attributes["href"] = ShapeLinkUrl;
+}</CodeLiteral>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;class&quot;" Value="&quot;imx-hyperviewshape&quot;" />
+        </HtmlAttributes>
+        <RoundedCorners Width="if(sizetype()=&quot;Wide&quot;) then variable(&quot;%HyperViewShapeWidthWide%&quot;)&#xD;&#xA;else&#xD;&#xA;variable(&quot;%HyperViewShapeWidth%&quot;)" ColorStart="ShapeColorEffective()" ColorEnd="ShapeColorEffective()" ScriptItemUID="RoundedCorners1" AlphaStart="255" AlphaEnd="255">
+          <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-hyperview-shapehead&quot;" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container6style" Value="if(not(isnullorempty(imageurl())))&#xD;&#xA;then (&quot;background-image: url('&quot;+imageurl() + &quot;&amp;effect=Whiten');&quot;)" />
+            </HtmlAttributes>
+            <SwitchContainer ScriptItemUID="Switch2">
+              <SwitchContainerCase ScriptItemUID="Case2" Condition="not(isnullorempty(headertext()))">
+                <Label Text="headertext()" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;class&quot;" Value="&quot;hyperviewcaption&quot;" ScriptItemUID="HtmlAttribute2" />
+                    <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="headertext()" />
+                    <Property Name="TagName" Value="div" />
+                  </HtmlAttributes>
+                </Label>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="&quot;imx-flex-row&quot;" />
+              </HtmlAttributes>
+              <Label Text="caption()+ (if(objectcount()&gt;(-1)) then (&quot; (&quot;+(objectcount())+&quot;)&quot;) else &quot;&quot;)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" Value="&quot;hyperviewheader&quot;" ScriptItemUID="HtmlAttribute3" />
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label2title" Value="caption()+&#xA;(if(objectcount()&gt;(-1)) then (&quot; (&quot;+(objectcount())+&quot;)&quot;) else &quot;&quot;)" />
+                  <Property Name="TagName" Value="div" />
+                </HtmlAttributes>
+              </Label>
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="CanBeExpanded()">
+                  <LinkContainer ScriptItemUID="Image1Link">
+                    <ControlList ScriptItemUID="Image1Ctl">
+                      <Image Source="File" FileName="from vars select&#xD;&#xA;&#xD;&#xA;variable(format(&quot;%link%img={0}&quot;, (if(IsExpanded) then &quot;ElementCollapse.png&quot; else &quot;ElementExpand.png&quot;))) + &quot;&amp;effect=Whiten&quot;" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'data-imx-hyperview'" Value="'expandicon'" ScriptItemUID="HtmlAttribute1" />
+                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="if(from vars select IsExpanded) then translate('#LDS#Close') else translate(&quot;#LDS#Expand&quot;)" />
+                        </HtmlAttributes>
+                      </Image>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <Update DataTable="Vars" DataColumn="IsExpanded" Value="not(isexpanded)" ScriptItemUID="Update1" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </Container>
+          <Container Condition="from vars select (not(CanBeExpanded()) or IsExpanded)" ScriptItemUID="Container7" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'data-imx-hyperview'" Value="'shapecontent'" ScriptItemUID="HtmlAttribute4" />
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;hyperviewshapecontent&quot;" ScriptItemUID="HtmlAttribute5" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="ShapeContent" ScriptItemUID="ControlRef1" />
+          </Container>
+        </RoundedCorners>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="IsExpanded" DataType="System.Boolean" ScriptItemUID="Column1" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="ColorScheme" ScriptItemUID="DataTableCustom2">
+          <Column Name="Key" ScriptItemUID="Column38" DataType="System.String" />
+          <Column Name="Color" ScriptItemUID="Column37" DataType="System.String" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="CanBeExpanded()" Expression="objectcount() &gt; CollapseLimit()&#xD;&#xA;or ({{VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IDeviceTypeProvider&gt;().IsMobileDevice}} = true)" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="CollapseLimit()" Expression="isnull(convert(getconfig(&quot;VI_Common_HyperView_CollapseLimit&quot;), &quot;System.Int32&quot;), 10)" DataType="System.Int32" ScriptItemUID="Function2" />
+        <Function Name="ShapeColorEffective()" Expression="if (ColorKey() ='MiddleCenter')&#xD;&#xA;then (isnullorempty(select top 1 replace(color,&quot;#&quot;,&quot;&quot;) from colorscheme where key = colorkey(),colorkey()))&#xD;&#xA;else if(NOT IsNullOrEmpty(ElementColor()))&#xD;&#xA;then&#xD;&#xA;(replace(ElementColor(),&quot;#&quot;,&quot;&quot;))&#xD;&#xA;else if(isnullorempty(colorkey()))&#xD;&#xA;then&#xD;&#xA;(select top 1 replace(color,&quot;#&quot;,&quot;&quot;) from colorscheme where key = &quot;BottomRight&quot;)&#xD;&#xA;else (&#xD;&#xA;isnullorempty(select top 1 replace(color,&quot;#&quot;,&quot;&quot;) from colorscheme where key = colorkey(),colorkey())&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ObjectCount()" DefaultValue="-1" DataType="System.Int32" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Caption()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ImageURL()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ColorKey()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbTableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualControl ID="ShapeContent" ContainerType="Container" />
+      <VirtualFunction Signature="HeaderText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="SizeType()" VirtualFunctionHasLimitedValues="true" DataType="System.String" TriggerUpdates="Never">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Normal" Comment="" />
+          <VirtualFunctionLimitedValue Name="Wide" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction DataType="System.String" Signature="ShapeLinkUrl()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ElementColor()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

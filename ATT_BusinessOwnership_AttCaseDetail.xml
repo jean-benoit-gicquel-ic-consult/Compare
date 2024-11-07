@@ -1,0 +1,52 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="ATT_BusinessOwnership_AttCaseDetail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <SwitchContainer ScriptItemUID="Switch1">
+          <SwitchContainerCase ScriptItemUID="Case1" Condition="not(isreadonly())" ItemUID="not readonly">
+            <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+              <Action ScriptItemUID="Action2" Condition="0 = select count() from dialogparameter where parametername = &quot;UID_PROPOSED_OWNER&quot;">
+                <ActionSequence ScriptItemUID="Action4" Condition="0 = select count() from dialogparameterset Where objectkeyusedby = (from attestationcase select Current xobjectkey)">
+                  <FillDialogParameter TargetTableParameter="DialogParameter" TargetTableParameterSet="DialogParameterSet" DataTable="AttestationCase" Name="from attestationcase select current display()" WhereClause="primarykey()=  ( select current primarykey() from attestationcase)" ParentObjectKey="from attestationcase select current getobjectkey(uid_attestationpolicy)" />
+                </ActionSequence>
+                <ActionSequence ScriptItemUID="Action3" Condition="0 = select count() from dialogparameter where parametername = &quot;UID_PROPOSED_OWNER&quot; and uid_dialogparameterset = (select uid_dialogparameterset from dialogparameterset where objectkeyusedby = (from attestationcase select current xobjectkey))">
+                  <CodeLiteral ScriptItemUID="CodeLiteral1">	var ackey = AttestationCase_Current.Row.GetValue("XObjectKey").String;
+	var uiddps = DialogParameterSet.First(s =&gt; s.GetValue("ObjectKeyUsedBy").String.Equals(ackey)).GetValue("UID_DialogParameterSet").String;
+	var dp = await _Database.Source().CreateNewAsync("DialogParameter", EntityCreationType.DelayedLogic, ct).ConfigureAwait(false);
+	dp.PutValue("UID_DialogParameterSet", uiddps);
+	dp.PutValue("ParameterName", "UID_PROPOSED_OWNER");
+	dp.PutValue("DisplayName", "Suggested owner");
+	dp.PutValue("IsMandatory", true);
+	dp.PutValue("UID_DialogColumnQuery", "QER-CA9C55F788954D2CBB1B864D8D21B17F"); // Person.UID_Person
+	dp.PutValue("ParameterType", "Query");
+	dp.PutValue("DataSourceType", "Table");
+	dp.PutValue("DataType", 6); // string
+	dp.PutValue("ParameterValue", _Database.User().Uid);
+	dp.PutValue("Description", GetParameterDescription());
+	await ((IDbObjectStore)DialogParameter).InsertEntityAsync(dp, null, ct).ConfigureAwait(false);</CodeLiteral>
+                </ActionSequence>
+              </Action>
+            </Activator>
+            <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Approve this attestation case to confirm that you are the owner of this business object. If you are not the correct owner, you can assign a different owner.&quot;)" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-message&quot;" />
+                <Property Name="TagName" Value="div" />
+              </HtmlAttributes>
+            </Label>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="GetParameterDescription()" DataType="System.String" Expression="translate(&quot;#LDS#If the selected owner for the business object is not correct, select the correct owner.&quot;)" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_AttestationCase_Detail" />
+  </GlobalControl>
+</WebDesigner>

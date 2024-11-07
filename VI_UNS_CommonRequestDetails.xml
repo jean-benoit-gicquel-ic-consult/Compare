@@ -1,0 +1,115 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UNS_CommonRequestDetails" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <CallAction ActionID="ReloadObjects" ScriptItemUID="Call1" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container Condition="isnewgroup()&#xA;and&#xA;(&#xA;DBTable(BASETABLE) = &quot;PersonWantsOrg&quot;&#xA;or&#xA;exists(&quot;Personinaerole&quot;, variable(&quot;uid_person = '%useruid%' and uid_aerole = 'ADS-AEROLE-NAMESPACEADMIN-ADS'&quot;))&#xA;-- AD target system administrators must enter additional information on ShoppingCartItem&#xA;)" ItemUID="NEW GROUP" ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="ADSHtmlAttribute1" Value="&quot;imx-icon&quot;" />
+          </HtmlAttributes>
+          <Label Text="if(isnullorempty(from basetable select current orderdetail1))&#xA;then&#xA;(from basetable select current orderreason)&#xA;else&#xA;((from adscontainer select top 1 display() where uid_adscontainer = ( select result from valuelist where index=0))&#xA;+&quot; - &quot;+&#xA;select result from valuelist where (index=1)&#xA;+&quot; - &quot;+&#xA;select result from valuelist where (index=2))" ScriptItemUID="Label2" />
+        </Container>
+        <Container Condition="isgroupchange()" ItemUID="GROUP CHANGE" ScriptItemUID="Container15" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-icon&quot;" />
+          </HtmlAttributes>
+          <Label Text="(from adsgroup select top 1 display() where uid_adsgroup = ( select result from valuelist where index=0))&#xA;+&quot; - &quot;+&#xA;select result from valuelist where (index=1)&#xA;+&quot; - &quot;+&#xA;select result from valuelist where (index=2)" ScriptItemUID="Label5" />
+        </Container>
+        <Container Condition="isgroupdelete()" ItemUID="GROUP DELETE" ScriptItemUID="Container16" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-icon&quot;" />
+          </HtmlAttributes>
+          <Label Text="if(0 &lt; (from adsgroup select count() where uid_adsgroup = (select result from valuelist where index=0)))then(&#xA;   from adsgroup select top 1 display() where uid_adsgroup = (select result from valuelist where index=0)&#xA;)   &#xA;else(   select result from valuelist where index=1)" ScriptItemUID="Label6" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="ADSGroup" Table="ADSGroup" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+        <DataTableCustom Table="ValueList" PrimaryKeyColumn="pk" DisplayColumn="" ScriptItemUID="DataTableCustom1">
+          <Column Name="pk" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="result" ScriptItemUID="Column4" DataType="System.String" />
+          <Column Name="index" DataType="System.Int32" ScriptItemUID="Column5" />
+        </DataTableCustom>
+        <DataTableDbObject Class="AccProduct" Table="AccProduct" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ADSContainer" Table="ADSContainer" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ReinitADS">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="ADSAction2">
+              <Delete DataTable="ValueList" ScriptItemUID="ADSDelete1" />
+              <FillTable DataTable="ValueList" DataColumn="result" Expression="split(from basetable select current orderdetail1, '|', true)" ScriptItemUID="FillTable2">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              </FillTable>
+              <LoadTable DataTable="ADSContainer" WhereClause="SqlCompareUid(&quot;uid_adscontainer&quot;,from valuelist select result where index=0)" RemoveDeleted="false" ScriptItemUID="LoadTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+              </LoadTable>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ReloadObjects">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <Delete DataTable="ValueList" ScriptItemUID="Delete1" />
+              <FillTable DataTable="ValueList" DataColumn="result" Expression="split(from basetable select current orderdetail1, '|', true)" ScriptItemUID="FillTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+              </FillTable>
+              <ActionSequence Condition="isnewgroup()" ItemUID="new AD group" ScriptItemUID="Action2">
+                <ActionSequence Condition="not(IsReadOnly())" ScriptItemUID="Action3">
+                  <Update DataTable="BASETABLE" DataColumn="DoNotAllowApprove" WhereClause="PrimaryKey() = ( select current PrimaryKey() from BASETABLE)" Value="isnullorempty(OrderDetail1)" ScriptItemUID="Update1" />
+                </ActionSequence>
+                <LoadTable DataTable="ADSContainer" WhereClause="SqlCompareUid(&quot;uid_adscontainer&quot;,from valuelist select result where index=0)" RemoveDeleted="false" ScriptItemUID="ADSLoadTable2">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" />
+                </LoadTable>
+              </ActionSequence>
+              <ActionSequence Condition="IsGroupChange()" ItemUID="group change" ScriptItemUID="Action4">
+                <LoadTable DataTable="ADSGroup" WhereClause="SqlCompareUid(&quot;uid_adsgroup&quot;,from valuelist select result where index=0)" RemoveDeleted="false" ScriptItemUID="LoadTable3">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" />
+                </LoadTable>
+              </ActionSequence>
+              <ActionSequence Condition="IsGroupDelete()" ItemUID="group delete" ScriptItemUID="Action5">
+                <LoadTable DataTable="ADSGroup" WhereClause="SqlCompareUid(&quot;uid_adsgroup&quot;,from valuelist select result where index=0)" RemoveDeleted="false" ScriptItemUID="LoadTable4">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" />
+                </LoadTable>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsNewGroup()" Expression="UIDAccProduct() in ('ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB')" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="IsGroupChange()" Expression="UIDAccProduct() in ('ADS-81F10A79075441E8B47EEC91D04E01D4')" DataType="System.Boolean" ScriptItemUID="Function2" />
+        <Function Name="IsGroupDelete()" Expression="UIDAccProduct() in ('ADS-A261D1D7E0D04060899D679C002A7543')" DataType="System.Boolean" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="BASETABLE" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action13">
+            <Update DataTable="BASETABLE" DataColumn="DoNotAllowApprove" WhereClause="PrimaryKey() = ( select current PrimaryKey() from BASETABLE)" Value="isnullorempty(OrderDetail1)" ScriptItemUID="Update4" />
+            <CallAction ActionID="ReloadObjects" ScriptItemUID="Call2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="OrderDetail1" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="UIDAccProduct()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="BASETABLE" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="OrderDetail1" DataType="System.String" />
+        <VirtualColumn Name="OrderReason" DataType="System.String" />
+        <VirtualColumn Name="UID_PersonInserted" DataType="System.String" />
+        <VirtualColumn Name="DoNotAllowApprove" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

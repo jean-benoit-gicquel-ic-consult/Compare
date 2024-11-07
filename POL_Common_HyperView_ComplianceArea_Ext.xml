@@ -1,0 +1,33 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="20c47cec-b8c0-02f3-76bd-ec3a8dd1d28c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Common_HyperView_ComplianceArea_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container10" ObjectType="Container" SortOrder="10">
+        <Container Layout="'VI_Styles_Container_Inline'" Condition="0 &lt; (from QERPolicy select count())" ScriptItemUID="POLContainer1">
+          <Button Text="translate(&quot;#LDS#Policy overview report&quot;)" ScriptItemUID="POLButton1">
+            <ServerActionCall ScriptItemUID="POLServerActionCall1">
+              <Update DataTable="ReportParameters" DataColumn="Area" Value="from Object select PrimaryKey()" ScriptItemUID="POLUpdate1" />
+              <Update DataTable="ReportParameters" DataColumn="ReportName" Value="'VI_ComplianceFramework_Policy_Overview_UID'" ScriptItemUID="POLUpdate2" />
+              <Update DataTable="ReportParameters" DataColumn="LastCompiledReportUID" Value="newid()" ScriptItemUID="POLUpdate3" />
+              <PrepareReport ReportName="select current reportname from reportparameters" CompiledReportUID="select lastcompiledreportuid from reportparameters">
+                <ParameterFree Name="'Area'" Value="select Area from reportparameters" ScriptItemUID="POLParameterFree1" />
+              </PrepareReport>
+              <Redirect Target="Context" InNewFrame="true" AbortExecution="false" PopupID="Report" Width="'800'" Height="'400'" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" ScriptItemUID="POLRedirect1">
+                <RedirectParameter Name="'uid_compiledreport'" Value="from ReportParameters select LastCompiledReportUID" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="10">
+        <LoadTable DataTable="QERPolicy" RemoveDeleted="false" ScriptItemUID="POLLoadTable1" WhereClause="format(&quot;uid_qerpolicy in ( select uid_qerpolicy from qerpolicyinarea where uid_compliancearea = {0})&quot;, sqlformatvalue(from object select current uid_compliancearea, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+          <DbObjectLoadType ScriptItemUID="POLDbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="10">
+        <DataTableDbObject Class="QERPolicy" Table="QERPolicy" ScriptItemUID="POLDataTableDbObject1">
+          <ActionSequence ScriptItemUID="POLAction1" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

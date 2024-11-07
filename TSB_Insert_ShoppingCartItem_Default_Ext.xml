@@ -1,0 +1,55 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Insert_ShoppingCartItem_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="10">
+        <ConfigParam Key="VI_ITShop_OrderMissingAccounts" Description="translate(&quot;#LDS#Submit a request for an account if the account is missing&quot;)" LongDescription="" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="11">
+        <ConfigEntry Key="VI_ITShop_OrderMissingAccounts" Value="True" ScriptItemUID="TSBConfigEntry1" />
+      </AddObject>
+      <AddObject ObjectID="ActionTSB" ObjectType="ActionSequence" SortOrder="12">
+        <ActionSequence Condition="getconfig(&quot;VI_ITShop_OrderMissingAccounts&quot;)=&quot;true&quot; and GetConfigParm(&quot;TargetSystem\UNS&quot;)=&quot;1&quot;" ScriptItemUID="TSBAction1">
+          <LoadTable DataTable="UNSGroup" WhereClause="format(&quot;uid_accproduct = '{0}'&quot;, uidaccproduct())" ScriptItemUID="TSBLoadTable1">
+            <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+          <ActionSequence Condition="(0 &lt; select count() from UNSGroup)&#xD;&#xA;and&#xD;&#xA;exists(&quot;person&quot;,&#xD;&#xA;-- does the user have an active account or is one being requested?&#xD;&#xA;format(&quot;&#xD;&#xA;   UID_Person = '{0}' &#xD;&#xA;and &#xD;&#xA;   not exists(select 1 from PersonHasTSBAccountDef tab&#xD;&#xA;      where tab.XOrigin &gt; 0 and tab.UID_Person = '{0}' and exists ({1})&#xD;&#xA;   )   &#xD;&#xA;and&#xD;&#xA;   not exists(select 1 from PersonWantsOrg pwo join itshoporg its on its.uid_itshoporg = pwo.uid_org join TSBAccountDef tab on tab.uid_accproduct = its.uid_accproduct&#xD;&#xA;      where pwo.UID_PersonOrdered = '{0}' and pwo.OrderState  = 'OrderProduct' and exists({1})&#xD;&#xA;   )&#xD;&#xA;and&#xD;&#xA;   not exists(select 1 from shoppingcartitem sci join TSBAccountDef tab on tab.uid_accproduct = sci.uid_accproduct&#xD;&#xA;      where sci.UID_PersonOrdered = '{0}' and exists({1})&#xD;&#xA;   )&#xD;&#xA;&quot;, &#xD;&#xA;from PersonsForOrder select current UID_Person,&#xD;&#xA;if(from unsgroup select top 1 UID_DPRNameSpace &lt;&gt; &quot;ADS-DPRNameSpace-ADS&quot;)then(&#xD;&#xA;   format(&quot;select 1 from tsbaccountdef t join unsroot r on r.uid_tsbaccountdef = t.uid_tsbaccountdef join unsgroup ug on ug.uid_unsroot = r.uid_unsroot where ug.uid_unsgroup = {0} and t.uid_accproduct &gt; ' ' and t.UID_TSBAccountDef = tab.UID_TSBAccountDef&quot;,sqlformatvalue(from UNSGroup select top 1 UID_UNSGroup, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   format(&quot;select 1 from ADSDomain d where d.uid_ADSDomain in (select distinct uid_adsdomainmember from ADS_VGroupMemberValid_Group where UID_ADSGroupContainer = {0}) and d.UID_TSBAccountDef = tab.UID_TSBAccountDef&quot;, sqlformatvalue(from UNSGroup select top 1 UID_UNSGroup, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="TSBAction9">
+            <LoadTable DataTable="TSBAccountDef" WhereClause="-- find account def&#xD;&#xA;format(&quot;uid_tsbaccountdef in ( select t.uid_tsbaccountdef from tsbaccountdef t join unsroot r on r.uid_tsbaccountdef = t.uid_tsbaccountdef join unsgroup ug on ug.uid_unsroot = r.uid_unsroot where ug.uid_unsgroup = '{0}') and not ({1})&quot;,&#xD;&#xA;from unsgroup select top 1 uid_unsgroup,&#xD;&#xA;sqlempty(&quot;uid_accproduct&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="TSBLoadTable6">
+              <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType6" ConvertToInteractive="false" />
+            </LoadTable>
+            <ActionSequence Condition="(0 &lt; (from TSBAccountDef select count()))&#xD;&#xA;and &#xD;&#xA;(IsOrderable(from TSBAccountDef select top 1 UID_AccProduct, from PersonsForOrder select current UID_Person))" ScriptItemUID="TSBAction11">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="TSBCall5">
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="TSBAction12">
+                    <CallAction ActionID="VI_ITShop_AddCartItem" ScriptItemUID="TSBCall6">
+                      <VirtualFunctionMapping ID="uidaccproduct()" Value="from tsbaccountdef select top 1 uid_accproduct" ScriptItemUID="TSBVirtualFunctionMapping18" />
+                      <VirtualFunctionMapping ID="uidpersonordered()" Value="from PersonsForOrder select current UID_Person" ScriptItemUID="TSBVirtualFunctionMapping17" />
+                      <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="UID_ShoppingCartOrder()" ScriptItemUID="TSBVirtualFunctionMapping16" />
+                      <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="TSBVirtualTableMapping3" />
+                    </CallAction>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="MessageText()" Value="if(from PersonsForOrder select current (UID_Person=getuser()))&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#You do not currently have an account in the system {0}. Would you like to request an account?&quot;, from unsgroup select top 1 displayvalue(uid_unsroot))&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The employee {0} does not have an account in the system {1}. Would you like to request an account for {0}?&quot;, from PersonsForOrder select current display(), from unsgroup select top 1 displayvalue(uid_unsroot))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="TSBVirtualFunctionMapping15" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="TSBVirtualFunctionMapping14" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Missing user account&quot;)" ScriptItemUID="TSBVirtualFunctionMapping13" />
+              </CallAction>
+            </ActionSequence>
+          </ActionSequence>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="13">
+        <DataTableDbObject Table="UNSGroup" Class="UNSGroup" ScriptItemUID="TSBDataTableDbObject1">
+          <ActionSequence ScriptItemUID="TSBAction4" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="TargetPerson" Class="Person" ScriptItemUID="TSBDataTableDbObject2">
+          <ActionSequence ScriptItemUID="TSBAction5" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="TSBAccountDef" Class="TSBAccountDef" ScriptItemUID="TSBDataTableDbObject3">
+          <ActionSequence ScriptItemUID="TSBAction6" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="14">
+        <Function Name="IsOrderable(string uidAccProduct, string uidPerson)" Expression="{{&#xD;&#xA;var p = new System.Collections.Generic.List&lt;VI.DB.Entities.QueryParameter&gt;();&#xD;&#xA;p.Add(VI.DB.Entities.QueryParameter.Create&lt;string&gt;(&quot;uidaccproduct&quot;, uidAccProduct));&#xD;&#xA;p.Add(VI.DB.Entities.QueryParameter.Create&lt;string&gt;(&quot;uidperson&quot;, uidPerson));&#xD;&#xA;bool result;&#xD;&#xA;using(var r = UserTable.GetLimitedSqlDataReader(&quot;QER_FGIPWOOrderPerson&quot;, p))&#xD;&#xA;{&#xD;&#xA;   r.Read();&#xD;&#xA;   if( r.GetValue(0) is bool)&#xD;&#xA;   {&#xD;&#xA;      result = (bool)r.GetValue(0);&#xD;&#xA;   }&#xD;&#xA;   else&#xD;&#xA;   {&#xD;&#xA;       result = r.GetValue(0).ToString().Equals(&quot;1&quot;);&#xD;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return result;&#xD;&#xA;}}" DataType="System.Boolean" ScriptItemUID="CCCFunction1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

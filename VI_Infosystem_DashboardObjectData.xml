@@ -1,0 +1,107 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Infosystem_DashboardObjectData" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action8">
+        <Insert DataTable="AvailableQueries" ScriptItemUID="Insert1">
+          <ActionSequence ScriptItemUID="Action15" />
+          <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#Members: Risk indexes and entitlements&quot;)" />
+          <InsertValue DataColumn="Key" Value="&quot;Person&quot;" />
+        </Insert>
+        <Update DataTable="option" DataColumn="Selected" Value="if (request('dashboard') like 'ComplianceRuleViolationsBy%') then 'Compliance' else&#xD;&#xA;if (request('dashboard') like 'CompliancePolicyViolationsBy%') then 'PolicyViolations' else&#xD;&#xA;if (request('dashboard') like 'QAMPoICountClassifiedAsSecretByOwners%') then 'SecretClassified' else&#xD;&#xA;if (request('dashboard') like 'QAMPoICountCategorizedAsSecretByOwners%') then 'SecretCategorized' else&#xD;&#xA;&quot;Person&quot;" ScriptItemUID="Update1" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <LayoutPanel Layout="'VI_Styles_LayoutPanel_Default'" Columns="2" ScriptItemUID="LayoutPanel1">
+          <Label Text="translate(&quot;#LDS#View&quot;)" ScriptItemUID="Label31" />
+          <ComboBox SourceTable="AvailableQueries" DataTable="option" DataColumn="Selected" ScriptItemUID="ComboBox1" SourceDisplay="display" SourceValueColumn="Key" />
+        </LayoutPanel>
+        <Container Condition=" from option select selected = &quot;Person&quot;" ScriptItemUID="Container13">
+          <Activator ExecuteAlways="true" ScriptItemUID="Activator3">
+            <Action ScriptItemUID="Action3">
+              <LoadTable DataTable="RightsInfo" Type="LimitedSQL" ScriptItemUID="LoadTable4" IdentLimitedSQL="&quot;Webportal.VI_Infosystem_DashboardObjectData.RightsInfo&quot;">
+                <ParameterFree Name="&quot;uidorg&quot;" Value="from object select current PrimaryKey()" ScriptItemUID="ParameterFree1" />
+              </LoadTable>
+            </Action>
+          </Activator>
+          <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container14style" Value="'padding-bottom: 7px; padding-top: 7px;'" />
+            </HtmlAttributes>
+            <Label Text="translate('#LDS#This view shows all primary and secondary members of {0}.',select current displaylong() from object) + &quot; &quot; +translate('#LDS#Note: This view displays live data.')" ScriptItemUID="Label23" />
+          </Container>
+          <Container ScriptItemUID="Container33">
+            <Grid AllowExport="true" ScriptItemUID="Grid4" ExportFileName="" ExportTitle="">
+              <GridBand DataTable="Person" DisplayHeader="Always" ScriptItemUID="GridBand2" DataSourceType="Database" DbOrderBy="if(request('dashboard')= 'AverageNoOfRightsBy')&#xD;&#xA;then &quot;noOfRights desc&quot;&#xD;&#xA;else if(match(request('dashboard'),'.*Risk.*'))&#xD;&#xA;then &quot;RiskIndexCalculated desc&quot;&#xD;&#xA;" DBWhereClause="" RowSelection="Action">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="ServerActionCall1">
+                  <CallAction ActionID="VI_Common_PersonQuickInfo" ScriptItemUID="CallAction3">
+                    <VirtualFunctionMapping ID="uidPerson()" Value="select current uid_person from person" ScriptItemUID="VirtualFunctionMapping1" />
+                  </CallAction>
+                </SelectionAction>
+                <GridFilters ScriptItemUID="GridFilters1" />
+                <GridRows />
+                <GridColumn ScriptItemUID="GridColumn9" SortColumn="__Display" AutoFilterColumn="__Display">
+                  <GridColumnHeader ScriptItemUID="wctl7">
+                    <Label Text="translate(&quot;#LDS#Employee&quot;)" ScriptItemUID="Label21" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell10">
+                    <Label Text="from person select current __display" ScriptItemUID="Label22" />
+                  </Cell>
+                </GridColumn>
+                <GridColumn ScriptItemUID="GridColumn8" SortColumn="RiskIndexCalculated" AutoFilterColumn="RiskIndexCalculated" Condition="ispreprop(&quot;RISKINDEX&quot;)">
+                  <GridColumnHeader ScriptItemUID="wctl8">
+                    <Label Text="datacaption(&quot;Person&quot;, &quot;riskindexcalculated&quot;)" ScriptItemUID="Label20" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell11">
+                    <Container Condition="from person select current cansee(riskindexcalculated)" ScriptItemUID="Container38">
+                      <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef4">
+                        <VirtualTableMapping VirtualTable="Object" DataTable="Person" ScriptItemUID="VirtualTableMapping1">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexCalculated" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                    </Container>
+                  </Cell>
+                </GridColumn>
+                <GridColumnSimple ScriptItemUID="Column122" Column="noOfRights" />
+              </GridBand>
+            </Grid>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSQL Table="RightsInfo" DisplayColumn="" SQLStatement="" ScriptItemUID="DataTableLimitedSQL1">
+          <ActionSequence ScriptItemUID="Action12" />
+          <Column Name="noOfRights" DataType="System.Int32" ScriptItemUID="Column10" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column11" />
+        </DataTableSQL>
+        <DataTableSingleRow Table="option" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Selected" DataType="System.String" ScriptItemUID="Column12" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject4" WhereClauseSQL="format(&quot;uid_person in (select uid_person from helperpersonorg where uid_org = {0} union all select uid_Person from Person{2}{3} where UID_{1}= {0})&quot;,&#xD;&#xA;   sqlformatvalue(from object select current PrimaryKey(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;   select current GetObjectKeyTable(XObjectKey) from object,&#xD;&#xA;   if(IsBaseTree())then &quot;In&quot; else &quot;Has&quot;,&#xD;&#xA;   if((select current GetObjectKeyTable(XObjectKey)+&quot;&quot; from Object) = &quot;Application&quot;)then &quot;App&quot; else (select current GetObjectKeyTable(XObjectKey) from object)&#xD;&#xA;)">
+          <ActionSequence ScriptItemUID="Action13" />
+          <Column Name="noOfRights" DataType="System.Int32" DataSource="Expression" Expression="IsNull( select top 1 noofrights from rightsinfo where uid_person = ( select current uid_person from person),0)" ScriptItemUID="Column13" Caption="translate(&quot;#LDS#Assigned permissions&quot;)" />
+        </DataTableDbObject>
+        <DataTableCustom Table="AvailableQueries" ScriptItemUID="DataTableCustom1">
+          <Column Name="Display" DataType="System.String" ScriptItemUID="Column14" />
+          <Column Name="Key" DataType="System.String" ScriptItemUID="Column15" />
+          <Column Name="Ident_RPSReport" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="IsBaseTree()" DataType="System.Boolean" Expression="exists(&quot;DialogTable&quot;,format(&quot;Tablename = {0} and UID_DialogTableBase = 'QER-T-BaseTree'&quot;, sqlformatvalue(select current GetObjectKeyTable(XObjectKey) from object, &quot;string&quot;)))">
+          <DataTableCursor DataTable="Object" ScriptItemUID="DataTableCursor1" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

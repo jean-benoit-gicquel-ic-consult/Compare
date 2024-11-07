@@ -1,0 +1,28 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <LayoutObject ID="VI_Styles_Label_NavList" Type="Label" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="NavListLabel" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.NavListLabel {
+text-decoration: none;
+text-transform: none;
+}
+
+.NavListLabelActive
+{
+border-bottom: 3px %VI_Common_Color_Blue_2% solid;
+padding-bottom: 4px;
+}
+
+
+@media %IMX_Mediaquery_Smartphone%
+{
+.NavListLabel {
+  font-size: 1.2em;
+  padding-left: 40px;
+  line-height: 1.8em;
+}
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,74 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="ATT_AttestationCase_ViewObjects">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Delete DataTable="DeserializedObjects" ScriptItemUID="Delete1" />
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var xmlString = DataContext.AttestationCase_Current.Row.GetValue("ReportContent").String;
+DataContext.DeserializedObjects.InsertFromXml(xmlString);
+</CodeLiteral>
+        <Update DataTable="Container" DataColumn="UidDeserializedObject" ScriptItemUID="Update1" Value="select top 1 primarykey() from deserializedobjects" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container24">
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef4">
+                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#The following data was saved on {0} and should be reviewed.&quot;, from attestationcase select current objectwalker(&quot;FK(uid_attestationrun).PolicyProcessed[d]&quot;))" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+              <LayoutPanel ScriptItemUID="LayoutPanel1">
+                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef8">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="Container" ScriptItemUID="VirtualTableMapping1">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="UidDeserializedObject" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <ComboBox SourceTable="DeserializedObjects" DataTable="Container" DataColumn="UidDeserializedObject" ScriptItemUID="ComboBox1" SourceValueColumn="pk" SourceDisplay="TableNameAndDisplay" OrderBy="'TableNameAndDisplay'" />
+              </LayoutPanel>
+              <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="DeserializedObjects" WhereClause="primarykey()=select uiddeserializedobject from container">
+                <ObjectSwitchContainer ObjectKey="singleproperty(&quot;DialogTable&quot;, &quot;XObjectKey&quot;, sqlcompare(&quot;TableName&quot;, from deserializedobjects select current dbtable(), &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer3">
+                  <VirtualTableMapping VirtualTable="SourceObject" DataTable="DeserializedObjects" ScriptItemUID="VirtualTableMapping2" />
+                  <VirtualFunctionMapping ID="ShowHeading()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="false&#xA;-- do not allow navigation. reason: the linked objects cannot be displayed in their serialized state." ScriptItemUID="VirtualFunctionMapping3" />
+                </ObjectSwitchContainer>
+              </ContainerTemplate>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container ScriptItemUID="Container25" Layout="'VI_Styles_Container_ButtonBar'">
+              <Button Text="translate(&quot;#LDS#View current state of the object&quot;)" ScriptItemUID="Button1">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                    <RedirectParameter Name="'ObjectKey'" Value="from attestationcase select current objectkeybase" />
+                  </Redirect>
+                </ServerActionCall>
+              </Button>
+              <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef3" />
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Attested object&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+          <VirtualFunctionMapping ID="TableName()" Value="from attestationpolicy select top 1 tablename where uid_attestationpolicy = (select current uid_attestationpolicy from attestationcase)" ScriptItemUID="VirtualFunctionMapping5" />
+          <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UidDeserializedObject" DataType="System.String" ScriptItemUID="Column21" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableSingleRow>
+        <DataTableGeneric Table="DeserializedObjects" ScriptItemUID="DataTableGeneric1">
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column22" DataSource="Expression" Expression="primarykey()" />
+          <Column Name="TableNameAndDisplay" DataType="System.String" ScriptItemUID="Column23" DataSource="Expression" Expression="datacaptionsingle(dbtable()) +&quot; - &quot;+display()" />
+        </DataTableGeneric>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="AttestationCase" />
+      <VirtualTable Name="AttestationPolicy" ScriptItemUID="VirtualTable2" Class="AttestationPolicy">
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column20" DataSource="Expression" Expression="objectwalker(&quot;FK(UID_AttestationObject).FK(UID_DialogTable).TableName&quot;)+&quot;&quot;" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,155 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_AboutDialog" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-aboutdialog&quot;" ScriptItemUID="HtmlAttribute3" />
+        </HtmlAttributes>
+        <Tab ScriptItemUID="Tab1">
+          <TabPage ScriptItemUID="TabPage1">
+            <ControlsHeader ScriptItemUID="Container2">
+              <Label Text="translate('#LDS#About')" ScriptItemUID="Label6" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container3">
+              <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-productLink&quot;" />
+                </HtmlAttributes>
+                <ControlList ScriptItemUID="ControlList2">
+                  <Label ScriptItemUID="Label12" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-logoWithProduct&quot;" />
+                      <Property Name="TagName" Value="i" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase3%;&quot;)" />
+                    </HtmlAttributes>
+                  </Label>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall4">
+                  <Redirect Target="Link" NoLinkObjectID="true" HREF="getconfig(&quot;VI_Common_CompanyLink&quot;)" ScriptItemUID="Redirect4" />
+                </ServerActionCall>
+              </LinkContainer>
+              <Container ItemUID="PoductName and Version" ScriptItemUID="Container14" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container14style" Value="Variable('padding: 15px 0; margin: 30px 20px; border: solid %VI_Common_Color_Gray%; border-width: 1px 0; text-align: center;')" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label15" Text="&quot;One Identity Manager&quot;" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute1" Value="'font-size: 1.5em; padding: 8px 0;'" />
+                    <Property Name="TagName" Value="div" />
+                  </HtmlAttributes>
+                </Label>
+                <Label Text="variable(&quot;Version %PRODUCTVERSION%&quot;)" ScriptItemUID="Label14" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Label14style" Value="'font-size: 1.2em; padding: 8px 0;'" />
+                    <Property Name="TagName" Value="div" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+              <Container ScriptItemUID="Container7" ItemUID="Patents, Trademark, Copyright" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container7style" Value="'padding-top:10px; margin: 0 30px'" />
+                </HtmlAttributes>
+                <Label Text="variable('%COPYRIGHT%')" ScriptItemUID="Label9" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="div" />
+                  </HtmlAttributes>
+                </Label>
+                <Label ScriptItemUID="Label10" Text="&quot;This product is protected by U.S. and international copyright and intellectual property laws.&quot;" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="div" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ScriptItemUID="TabPage2" Condition="{{ _UserSession.IsAuthenticated }}">
+            <ControlsHeader ScriptItemUID="Container9">
+              <Label ScriptItemUID="Label11" Text="translate('#LDS#Legal notice')" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container10">
+              <Container ScriptItemUID="Container5">
+                <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                  <VirtualFunctionMapping ID="HeadLine()" Value="Translate('#LDS#Third-Party Contributions')" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#This product contains some third party components (listed below). Copies of their licenses may be found at https://www.oneidentity.com/legal/third-party-licenses.aspx.')" ScriptItemUID="VirtualFunctionMapping2" />
+                </ControlReferenceContainer>
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="QBMV3rdPartyLicence" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="" DbOrderBy="" EnableGridViewSetting="false">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumnColumnTemplate ScriptItemUID="GridColumnColumnTemplate1" DataTable="QBMV3rdPartyLicence">
+                      <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="ComponentName" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="CopyRight" />
+                        <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="EmailOrURl" />
+                        <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="LicenceName" />
+                      </ColumnList>
+                      <GridColumnGroup DataTable="QBMV3rdPartyLicence" ScriptItemUID="GridColumnGroup1">
+                        <GridColumnSimple ScriptItemUID="Column2" Column="currentcolumn" />
+                      </GridColumnGroup>
+                    </GridColumnColumnTemplate>
+                  </GridBand>
+                </Grid>
+              </Container>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ScriptItemUID="TabPage3">
+            <ControlsHeader ScriptItemUID="Container11">
+              <Label ScriptItemUID="Label13" Text="translate('#LDS#Contact')" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container12">
+              <Container ScriptItemUID="Container13" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container13style" Value="'padding-top: 15px; padding-bottom: 20px;'" />
+                </HtmlAttributes>
+                <Label Text="Translate('#LDS#Contacting Us')" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Label7style" Value="'font-size: 1.6em;'" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+              <Container ScriptItemUID="Container23" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container23style" Value="'padding-top: 5px;'" />
+                </HtmlAttributes>
+                <Label Text="Translate('#LDS#For sales or other inquiries, visit') + &quot; &quot;" ScriptItemUID="Label28" />
+                <Label ScriptItemUID="Label3" Text="&quot;https://www.oneidentity.com/company/contact-us.aspx&quot;" Action="Redirect">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Redirect ScriptItemUID="Redirect3" Target="Link" HREF="&quot;https://www.oneidentity.com/company/contact-us.aspx&quot;" />
+                  </ServerActionCall>
+                </Label>
+                <Label Text="&quot;.&quot;" ScriptItemUID="Label4" />
+              </Container>
+              <Container ScriptItemUID="Container24" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container24style" Value="'padding-top: 5px;'" />
+                </HtmlAttributes>
+                <Label ScriptItemUID="Label5" Text="Translate('#LDS#To access the Support Portal, go to') + &quot; &quot;" />
+                <Label ScriptItemUID="Label29" Text="&quot;https://support.oneidentity.com&quot;" Action="Redirect">
+                  <ServerActionCall ScriptItemUID="ServerActionCall5">
+                    <Redirect ScriptItemUID="Redirect5" Target="Link" HREF="&quot;https://support.oneidentity.com&quot;" />
+                  </ServerActionCall>
+                </Label>
+                <Label Text="&quot;.&quot;" ScriptItemUID="Label8" />
+              </Container>
+            </ControlsBody>
+          </TabPage>
+        </Tab>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="QBMV3rdPartyLicence" Table="QBMV3rdPartyLicence" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,28 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="xryKOt5jucb0cajKZe097Q==">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Delegation" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;81CA7881-5B24-488C-8D9B-F820E7FC5616&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="F1" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Delegation')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Heading Delegation')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <ControlReferenceContainer ID="VI_Delegation_Wizard" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="Uid_Person()" Value="GetUser()" ScriptItemUID="VirtualFunctionMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

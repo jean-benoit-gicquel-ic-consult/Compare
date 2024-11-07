@@ -1,0 +1,45 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="18dd120b-1dbc-1d04-3402-88ef0a261276">
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_ITShop_PWOOverviewForShoppingCartOrder">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="ShoppingCartOrderOverviewForm" ScriptItemUID="Form1" NavigationTitle="translate(&quot;#LDS#Request overview&quot;)">
+          <ActionSequence ScriptItemUID="Action8" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+            <Label Text="translate(&quot;#LDS#Request overview&quot;)" ScriptItemUID="Label4" />
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+            <Container ScriptItemUID="Container11">
+              <ControlReferenceControlList ID="VI_ITShop_PWO_MasterDetail" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="DbWhereClause()" Value="format(&quot;UID_ShoppingCartOrder = '{0}'&quot;, from PersonWantsOrg select current UID_ShoppingCartOrder) " ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="ShowCancelOrder()" Value="if(isnull(Request(&quot;AuditMode&quot;),'') = 'YES') then&#xD;&#xA;false&#xD;&#xA;else&#xD;&#xA;true" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOShoppingCartOrder" ScriptItemUID="VirtualTableMapping1" />
+              </ControlReferenceControlList>
+            </Container>
+            <Container ItemUIDReference="Default Button" ScriptItemUID="Container12" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceControlList ID="AdditionalButtons" ScriptItemUID="ControlRef2" />
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOShoppingCartOrder" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="PersonWantsOrg" />
+      <VirtualControl ID="AdditionalButtons" ContainerType="ControlList" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

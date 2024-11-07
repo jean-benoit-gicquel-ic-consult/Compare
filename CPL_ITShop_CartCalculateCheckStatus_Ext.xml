@@ -1,0 +1,82 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c460eba9-3091-5b5c-b186-891709f38679">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ITShop_CartCalculateCheckStatus_Ext">
+    <Extensions>
+      <AddObject ObjectID="CompilationSettings1" ObjectType="CompilationSettings">
+        <AssemblyReference Assembly="CPL.Customizer.dll" />
+        <NamespaceImport Namespace="CPL.Customizer" />
+        <NamespaceImport Namespace="CPL.CompositionApi.ITShop" />
+        <AssemblyReference Assembly="CPL.CompositionApi.dll" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="0">
+        <ConfigParam Key="VI_ITShop_CalculateComplianceCheck" Description="translate('#LDS#Check compliance rules in simulation mode before submitting a request')" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_AllowRequestsWithNonResolvableViolations" Description="translate(&quot;#LDS#Allow requests that cause an unresolvable compliance violation&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="0">
+        <ConfigEntry Key="VI_ITShop_CalculateComplianceCheck" Value="True" ScriptItemUID="CPLConfigEntry1" />
+        <ConfigEntry Key="VI_ITShop_AllowRequestsWithNonResolvableViolations" ScriptItemUID="CPLConfigEntry3" Value="false" />
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="130">
+        <ActionSequence Condition="getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;)=&quot;1&quot;&#xD;&#xA;and&#xD;&#xA;getconfig(&quot;VI_ITShop_CalculateComplianceCheck&quot;) = &quot;true&quot;" ItemUID="Compliance Checks" ScriptItemUID="Action3">
+          <Delete DataTable="ComplianceCheckSimple" ScriptItemUID="Delete1" />
+          <Delete DataTable="ComplianceCheckSimpleObjects" ScriptItemUID="Delete2" />
+          <ActionSequence ScriptItemUID="CPLAction1" ItemUID="placeholder for legacy extensions" />
+          <ActionSequence ScriptItemUID="Action11">
+            <CodeLiteral ScriptItemUID="CPLCodeLiteral1">foreach (var r in checkResult.Items
+	.SelectMany(i =&gt; i.Results.OfType&lt;CartItemComplianceCheckResult&gt;()))
+{ 
+	foreach (var v in r.Violations)
+	{
+		var newValues = new ColumnInsertValues(ComplianceCheckSimple);
+	
+	newValues[_ComplianceCheckSimple_DBObjectKey] = v.ObjectKeyElement;
+	newValues[_ComplianceCheckSimple_UID_ComplianceRule] = v.UidComplianceRule;
+	newValues[_ComplianceCheckSimple_UID_Person] = v.UidPerson;
+	newValues[_ComplianceCheckSimple_UID_ComplianceSubRule] = v.UidComplianceSubRule;
+	newValues[_ComplianceCheckSimple_ViolationType] = v.ViolationType;
+	newValues[_ComplianceCheckSimple_UID_ShoppingCartItem] = v.UidShoppingCartItem;
+	newValues[_ComplianceCheckSimple_IsNoEffectivePerson] = v.IsNoEffectivePerson;
+	ComplianceCheckSimple.Insert(newValues);
+
+		var status = r.IsNoException ? "RuleNoException" : "Rule";
+	
+	var scitem = ShoppingCartItem.GetRowForPrimaryKey(v.UidShoppingCartItem);
+	ShoppingCartItem_CheckStatus.SetValue(scitem, status);
+	
+	if (r.IsNoException)
+	{
+		ShoppingCartItem_CanOrder.SetValue(scitem, false);
+	}
+}
+}</CodeLiteral>
+          </ActionSequence>
+          <Comment Comment="Load objects corresponding to the found object keys" />
+          <FillTable Source="XObjectKey" DataTable="ComplianceCheckSimpleObjects" DataTableSource="ComplianceCheckSimple" DataColumnSource="DBObjectKey" DataColumnSourceKey="sourcekey" ScriptItemUID="FillTable1">
+            <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType1" ConvertToInteractive="false" />
+          </FillTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="190">
+        <ActionSequence Condition="not(hidePopUps())&#xD;&#xA;and&#xD;&#xA;0 &lt; (select count() from ComplianceCheckSimple)&#xD;&#xA;and&#xD;&#xA;0 &lt; (select count() from ShoppingCartItem where (isactivated and CheckStatus = 'Rule'))&#xD;&#xA;and&#xD;&#xA;0 = (select count() from ShoppingCartItem where (isactivated and not(canorder)))" ScriptItemUID="Action10">
+          <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction1">
+            <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="CPLVirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#At least one request is not compliant with company regulations. You can still choose to submit your shopping cart.&quot;)" ScriptItemUID="CPLVirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Compliance rule violation detected&quot;)" ScriptItemUID="CPLVirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="MessageBoxType()" Value="'Warning'" ScriptItemUID="CPLVirtualFunctionMapping4" />
+          </CallAction>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Action19" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="CPLCodeLiteral2">// set up compliance simulation check
+
+foreach (var cplCheck in check.PostSubmitChecks.OfType&lt;CartComplianceCheck&gt;())
+{
+	var configSettings = _UserSession.ApplicationInfo.ConfigSettings;
+	cplCheck.AllowRequestsWithNonResolvableViolations = string.Equals(configSettings.GetValueOrDefault("VI_ITShop_AllowRequestsWithNonResolvableViolations") as string, "true", StringComparison.OrdinalIgnoreCase);
+}</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="&quot;Rule&quot; -- rule with allowed exception" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

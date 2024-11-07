@@ -1,0 +1,77 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6644f01e-17bd-61d8-97a5-cf4d01153fad">
+  <GlobalControl ID="VI_ITShop_PwoOverviewGrid" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridBand DataTable="PersonWantsOrg" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="dbwhereclause()" RowSelection="true" DataTableForSelection="TargetTable" DataColumnForSelection="UID_PWOSelected" DbOrderBy="&quot;OrderDate desc&quot;" EnableCustomAttributes="true" AdditionalGridHeader="true">
+        <HtmlAttributes>
+          <Property Name="ApplyFilledHeight" Value="true" />
+          <CodeLiteral ScriptItemUID="CodeLiteral1">VI.WebRuntime.Data.StringLikeEvaluator _likeEvaluator = new VI.WebRuntime.Data.StringLikeEvaluator("% do not ParentConnectColumn %");
+if (!_likeEvaluator.Match(this.DbWhereClause())){
+	// connect by parent column
+	_dataSource.ParentConnectColumn = _Database.MetaData().GetTable("PersonWantsOrg").Columns["UID_PersonWantsOrgParent"];
+}</CodeLiteral>
+          <CodeLiteral ScriptItemUID="CodeLiteral2">// configure for search-after-load to improve search experience
+
+// fix: for auditor view of all requests, disable search-after-load
+var disableSearchAfterLoad = _Module.ModuleInfo.ModuleName == "VI_ITShop_OrderHistory" 
+  &amp;&amp; _Module.GetContextParameter("AuditMode") == "YES";
+
+GridBand1.IsSearchAfterLoad = !disableSearchAfterLoad;</CodeLiteral>
+        </HtmlAttributes>
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_ITShop_PersonWantsOrg_ListViewItem" ScriptItemUID="ControlRef4">
+              <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping2" />
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="AdditionalContent">
+                <ControlList ScriptItemUID="ControlList2">
+                  <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef3" />
+                </ControlList>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <AdditionalGridHeaderContent ScriptItemUID="ControlList3">
+          <ControlReferenceControlList ID="HeaderControls" ScriptItemUID="ControlRef2" />
+        </AdditionalGridHeaderContent>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <ControlReferenceGridColumnGroup ID="VI_ITShop_PersonWantsOrg_GridColumns" DataTable="PersonWantsOrg" ScriptItemUID="wctl1">
+          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="AdditionalControlsColumn1" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef1" />
+            </Container>
+          </VirtualControlMapping>
+        </ControlReferenceGridColumnGroup>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="VirtualTable1">
+        <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column2" />
+        <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualTable Name="TargetTable" ScriptItemUID="VirtualTable2" RequiresCursor="true">
+        <VirtualColumn Name="UID_PWOSelected" DataType="System.String" />
+      </VirtualTable>
+      <VirtualControl ID="AdditionalControlsColumn1" ContainerType="Container">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualControl ContainerType="ControlList" ID="HeaderControls" />
+      <VirtualTable Name="AccProduct" ScriptItemUID="VirtualTable3" Class="AccProduct">
+        <VirtualColumn Name="HelperIsReusable" DataType="System.Boolean" />
+        <VirtualColumn Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

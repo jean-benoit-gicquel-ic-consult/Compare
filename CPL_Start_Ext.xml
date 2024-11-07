@@ -1,0 +1,43 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Start_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="35">
+        <SwitchContainer ScriptItemUID="DashboardRuleViolations">
+          <SwitchContainerCase ScriptItemUID="CPLCase2" Condition="IsPreProp(&quot;COMPLIANCE&quot;) and exists(&quot;person&quot;, getconfig(&quot;VI_Start_Governance_Compliance_Condition&quot;))">
+            <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="CPLControlRef2">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CPLAction3">
+                  <Redirect ScriptItemUID="CPLRedirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false">
+                    <RedirectParameter Value="&quot;Compliance&quot;" Name="'Part'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping3" ID="DisplayNameDialogDashboardDef()" Value="&quot;Compliance.OpenPersonInNonCompliance&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping5" ID="ChartType()" Value="&quot;ChartLine&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping8" ID="Caption()" Value="translate(&quot;#LDS#Rule violations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping9" ID="Identifier()" Value="&quot;Dashboard_RuleViolations&quot;" />
+            </ControlReferenceControlList>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="Container7" ObjectType="Container" SortOrder="65">
+        <SwitchContainer ScriptItemUID="TilePendingRuleViolations">
+          <SwitchContainerCase ScriptItemUID="CPLCase1" Condition="IsPreProp(&quot;COMPLIANCE&quot;) and 0 &lt; from countopendatabaseitems select OpenNonCompliance">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="CPLContainer4" ItemUID="pending rule violations">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CPLAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_ExceptionApproval" ScriptItemUID="CPLRedirect2">
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading Pending Rule Violations&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Pending rule violations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping4" ID="Value()" Value="from countopendatabaseitems select OpenNonCompliance" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping2" ID="Identifier()" Value="&quot;pending rule violations&quot;" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

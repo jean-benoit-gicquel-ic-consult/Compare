@@ -1,0 +1,82 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_ToolbarButton_Heading" Type="ToolbarButton" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="toolbarButtonHeading" Comment="" />
+    <CssDocument CssName="CSS" DisableCaching="true" ScriptItemUID="CssDocument1">.toolbarButtonHeading .imx-dropdown
+{
+display: inline-block;
+width: %headerheight%px;
+height: %headerheight%px;
+line-height: %headerheight%px;
+}
+
+.toolbarButtonHeading .imx-dropdown i
+{
+display: inline-block;
+line-height: %headerheight%px;
+width: %headerheight%px;
+}
+
+.toolbarButtonHeading .imx-dropdown:hover
+{
+background-color: %VI_Common_Color_Blue_1%;
+}
+
+.toolbarButtonHeading a.imx-dropdown-toggle
+{ 
+color: %VI_Common_Color_ColorBase1%; 
+width: 100%;
+height: 100%;
+text-overflow: clip;
+}
+
+.toolbarButtonHeading img {
+margin-left: 10px;
+margin-top: 10px;
+}
+
+.toolbarButtonHeading a:focus.imx-dropdown-toggle,
+.toolbarButtonHeading a:hover.imx-dropdown-toggle 
+{
+color: %VI_Common_Color_ColorBase1%; 
+}
+
+.toolbarButtonHeading .imx-dropdown-toggle:after
+{ 
+content:"";
+content:none;  
+}
+
+.toolbarButtonHeading .imx-dropdown-menu 
+{ 
+left: auto; 
+right: 0; 
+background-color: %VI_Common_Color_Blue_2%; 
+max-height: calc(100vh - 2*%headerheight%px);
+overflow-x: auto;
+}
+
+.toolbarButtonHeading .imx-dropdown-menu-left 
+{ 
+left: 0 !important; 
+right: auto !important; 
+}
+
+.toolbarButtonHeading .imx-dropdown-menu li 
+{ 
+color: %VI_Common_Color_ColorBase1%; 
+}
+
+.toolbarButtonHeading .imx-dropdown-menu li:hover
+{ 
+background-color: %VI_Common_Color_Blue_1%;
+}
+.toolbarButtonHeading .imx-dropdown-menu li:focus
+{ 
+background-color: %VI_Common_Color_Blue_3%;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,8 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Tab_Secondary" Type="Tab" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1" HasRelatedObject="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_Tab_Default" />
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,74 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="41fb4bbd-bf3c-aa4e-8c97-97604ad5e5aa">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Employee_CheckData" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action7" />
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence ScriptItemUID="Action5">
+          <Delete DataTable="Person_Exists" ScriptItemUID="Delete1" />
+          <ActionSequence Condition="not(from Person select top 1 IsLoaded())" ScriptItemUID="Action10">
+            <LoadTable DataTable="Person_Exists" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+            </LoadTable>
+          </ActionSequence>
+          <SwitchAction ScriptItemUID="Switch1">
+            <SwitchActionCase Condition="(from Person select top 1 IsLoaded())&#xD;&#xA;or&#xD;&#xA;(0 = from Person_Exists select Count())" ScriptItemUID="Case1">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call4">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to save your changes?&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from Person select current display()" ScriptItemUID="VirtualFunctionMapping8" />
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action11">
+                    <ActionOnControl />
+                    <ActionSequence Condition="(select count() from Person_Exists) &gt; 0" ItemUID="Person already exists" ScriptItemUID="Action12">
+                      <CallAction ActionID="OnExist" ScriptItemUID="Call6" />
+                    </ActionSequence>
+                    <ActionSequence Condition="(select count() from Person_Exists) = 0" ItemUID="Person noch nicht da" ScriptItemUID="Action13">
+                      <CallAction ActionID="OnNotExist" ScriptItemUID="Call7" />
+                    </ActionSequence>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="OnNo" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action14">
+                    <ActionOnControl />
+                  </ActionComponent>
+                </VirtualControlMapping>
+              </CallAction>
+            </SwitchActionCase>
+            <SwitchActionCase ScriptItemUID="Case2">
+              <CallAction ActionID="OnExist" ScriptItemUID="Call8" />
+            </SwitchActionCase>
+          </SwitchAction>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Person_Exists" Class="Person" WhereClauseSQL="-- format(&quot;Upper(Firstname) = Upper({0}) and Upper(Lastname) = Upper({1})&quot;,sqlformatvalue(from Person select firstname, &quot;string&quot;),sqlformatvalue(from Person select Lastname, &quot;string&quot;))&#xD;&#xA;&#xD;&#xA;WhereClauseForExistingEmployees()" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SaveChanges">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <Save DataTable="Person" ScriptItemUID="Save1" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call5">
+                <VirtualFunctionMapping ID="MessageText()" Value="if(isnull(request(&quot;uid_person&quot;),'')='') then&#xD;&#xA;translate(&quot;#LDS#The new employee {0} was successfully added.&quot;, from person select current display())&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The employee data for {0} have been updated.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping6" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Person" Class="Person" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualControl ContainerType="ActionComponent" ID="OnExist" />
+      <VirtualControl ContainerType="ActionComponent" ID="OnNotExist" />
+      <VirtualFunction DataType="System.String" Signature="WhereClauseForExistingEmployees()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

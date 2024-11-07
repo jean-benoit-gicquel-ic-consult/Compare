@@ -1,0 +1,32 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
+  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Verify_ShoppingCartItem_Default" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <ForeachColumn DataTable="ShoppingCartItem" ScriptItemUID="ForeachColumn1">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <ExpressionColumnList ColumnList="GetAccProductParams(from ShoppingCartItem select current UID_AccProduct)" ScriptItemUID="ExpressionColumnList1" />
+          </ColumnList>
+          <ActionSequence Condition="from ShoppingCartItem select current GetMinLen(currentcolumn)&gt;0 and IsNullOrEmpty(currentcolumn)" ScriptItemUID="Action2">
+            <Update DataTable="ShoppingCartItem" DataColumn="CheckStatus" Value="-- Mark request as invalid&#xD;&#xA;&quot;Invalid&quot;" WhereClause="primarykey()=select current primarykey() from ShoppingCartItem" ScriptItemUID="Update1" />
+            <Update DataTable="ShoppingCartItem" DataColumn="CanOrder" Value="false" WhereClause="primarykey()=select current primarykey() from ShoppingCartItem" ScriptItemUID="Update2" />
+            <ActionSequence ScriptItemUID="Action4" Condition="not(hideMessages())">
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction1">
+                <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Please fill in the field &quot;{0}&quot; on the request &quot;{1}&quot;.', datacaption(shoppingcartitem, currentcolumn), from shoppingcartitem select current displayvalue(uid_accproduct))" ScriptItemUID="VirtualFunctionMapping2" />
+              </CallAction>
+            </ActionSequence>
+          </ActionSequence>
+        </ForeachColumn>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action3" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Verify_ShoppingCartItem" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

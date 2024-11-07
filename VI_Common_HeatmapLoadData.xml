@@ -1,0 +1,255 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3cebb972-fae4-0607-0b4b-d818a5639d86">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HeatmapLoadData" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Delete DataTable="DashboardContent" ScriptItemUID="Delete1" />
+        <ActionSequence ScriptItemUID="Action12">
+          <LoadTable DataTable="DashboardDef" RemoveDeleted="false" RevertExisting="false" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInActive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsDeactivatedByPreProcessor&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;ident_dialogdashboarddef&quot;, (from HeatmapInfo select current DisplayName), &quot;string&quot;, &quot;equal&quot;, &quot;ignorecase&quot;))" ScriptItemUID="LoadTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+            <FillTableDisplayColumn DataColumn="RedLimit" />
+            <FillTableDisplayColumn DataColumn="GreenLimit" />
+          </LoadTable>
+          <ActionSequence ScriptItemUID="Action6" Condition="select count() from dashboarddef=1">
+            <ActionSequence ScriptItemUID="Action3" ItemUID="Live Data" Condition="TimeFrame()=&quot;now&quot;">
+              <ActionSequence ScriptItemUID="Action8" Condition="select isadhoc from dashboarddef">
+                <CodeLiteral ScriptItemUID="CodeLiteral21">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+
+var currentStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)(HeatmapInfo_Current.Row)).TargetObject;
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.AdHoc, currentStat.Ident).ConfigureAwait(false);
+
+if (stat==null) {
+	LogManager.GetCurrentClassLogger().Warn(string.Format("Can't get statistic '{0}'", currentStat.Ident));
+} else {
+	var sFilter = new VI.DB.Statistic.StatisticsFilter();
+	sFilter.Take= _Take;
+	
+	if (IncreasingCriticality()) {
+	
+		sFilter.OrderBy = "ElementValue desc, ElementValueZ desc";
+	} else {
+		sFilter.OrderBy = "ElementValue, ElementValueZ desc";
+	}
+	if (!currentStat.EqualSized) {		
+		sFilter.FilterClause= "ElementValueZ &gt; 0";
+	} 
+	
+	var theFilter = _Filter;
+	if (!String.IsNullOrEmpty(theFilter)){
+		if (!String.IsNullOrEmpty(sFilter.FilterClause))
+			sFilter.FilterClause += " and ";
+		sFilter.FilterClause+= theFilter;
+	}
+	
+	if (!String.IsNullOrEmpty(currentStat.AdditionalWhereClause)){
+		if (!String.IsNullOrEmpty(sFilter.FilterClause)) {
+			sFilter.FilterClause += " and ";
+		}
+		sFilter.FilterClause += currentStat.AdditionalWhereClause;
+	}
+	
+	var values = await stat.GetValuesAsync(sFilter).ConfigureAwait(false);
+	int count = 1;
+	foreach (var value in values) {
+		var iv = new ColumnInsertValues(DashboardContent);
+		iv.Add("ElementValue",value.Value);
+		iv.Add("ObjectCount", value.ValueZ);
+		iv.Add("ElementObjectKey", value.ElementObjectKey);
+		iv.Add("ElementName", value.Display);
+		iv.Add("ElementOrder", count++);
+		iv.Add("UID_DialogDashboardDef", stat.Uid);
+		DashboardContent.Insert(iv);
+	}
+}</CodeLiteral>
+              </ActionSequence>
+              <ActionSequence ScriptItemUID="Action9" Condition="not(select isadhoc from dashboarddef)">
+                <CodeLiteral ScriptItemUID="CodeLiteral3">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+
+var currentStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)(HeatmapInfo_Current.Row)).TargetObject;
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.Regular, currentStat.Ident).ConfigureAwait(false);
+
+if (stat != null)
+{
+	var sFilter = new VI.DB.Statistic.StatisticsFilter();
+	sFilter.Take = Take;
+	sFilter.OrderBy = "ElementValue DESC";
+	sFilter.FilterClause = GetDynamicWhereClause();
+	var statValues = await stat.GetValuesAsync(sFilter).ConfigureAwait(false);
+
+int myCount=0;
+foreach (var statValue in statValues)
+{		
+	var iv = new ColumnInsertValues(DashboardContent);	
+	iv.Add("ElementValue", statValue.Value);
+	iv.Add("ObjectCount", statValue.ValueZ);
+	iv.Add("ElementObjectKey", statValue.ElementObjectKey);
+	iv.Add("ElementOrder", myCount++);
+	iv.Add("UID_DialogDashboardDef", stat.Uid);
+	iv.Add("ElementDate", statValue.MeasureDate);
+	iv.Add("ElementName", statValue.Display.Original);	
+	DashboardContent.Insert(iv);	
+}
+}
+</CodeLiteral>
+              </ActionSequence>
+            </ActionSequence>
+            <ActionSequence ScriptItemUID="Action2" Condition="not (TimeFrame()=&quot;now&quot;)" ItemUID="Historic Data">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">var svc = _Database.Resolve&lt;VI.DB.Statistic.ISystemStatisticService&gt;(); 
+
+var currentStat = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)(HeatmapInfo_Current.Row)).TargetObject;
+
+var historicStat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.Regular, HistoricDashboardDefName()).ConfigureAwait(false);
+var historicValues = await historicStat.GetValuesAsync(null).ConfigureAwait(false);
+
+var stat = await svc.GetStatisticAsync(_Database, VI.DB.Statistic.SystemStatisticType.AdHoc, currentStat.Ident).ConfigureAwait(false);
+
+if (stat==null) {
+	Logger.Warn(string.Format("Can't get statistic '{0}'", currentStat.Ident));
+} else {
+
+	var sFilter = new VI.DB.Statistic.StatisticsFilter();	
+	sFilter.OrderBy= "ElementValueZ desc";
+	
+	if (!currentStat.EqualSized) {
+		sFilter.OrderBy= "ElementValueZ desc";		
+	} else {
+		sFilter.OrderBy= "ElementValue desc";
+	}
+	
+	
+	var theFilter = _Filter;
+	if (!String.IsNullOrEmpty(theFilter)){
+		sFilter.FilterClause = theFilter;
+	}
+
+	var values = await stat.GetValuesAsync(sFilter).ConfigureAwait(false);
+
+	var currentValues = new StringDictionary&lt;VI.DB.Statistic.IStatisticValue&gt;();
+	foreach (var value in values) {
+		currentValues.Add(value.ElementObjectKey, value);
+	}
+	 
+	var count = 1;
+	var historyNumber = HistoryNumber();
+	foreach (var historicValueI in historicValues)
+	{
+		var historicValue = historicValueI; // copy to local variable
+		if (historyNumber &gt; 0)
+		{
+			// look up value in the value history
+			historicValue = historicValue.History != null &amp;&amp; historicValue.History.Length &gt;= historyNumber
+				? historicValue.History[historyNumber - 1]
+				: null;
+			if (historicValue == null)
+				continue;
+		}
+
+		if (historicValue.ValueZ == 0)
+			continue;
+		
+		var theElementObjectKey = historicValue.ElementObjectKey;
+		if (!currentValues.ContainsKey(theElementObjectKey)) 
+			continue;
+		var theCurrentValue = currentValues[theElementObjectKey]; 
+		var deltaValue = theCurrentValue.Value - historicValue.Value;
+		if (deltaValue == 0)
+			continue;
+		
+		var iv = new ColumnInsertValues(DashboardContent);
+		iv.Add("ElementValueDelta", deltaValue);
+		iv.Add("ElementValue",theCurrentValue.Value);
+		iv.Add("ObjectCount", theCurrentValue.ValueZ);
+		iv.Add("ElementObjectKey", theCurrentValue.ElementObjectKey);
+		iv.Add("ElementOrder", count++);
+		iv.Add("UID_DialogDashboardDef", stat.Uid);
+		iv.Add("ElementDate", historicValue.MeasureDate);
+		iv.Add("ElementName", historicValue.Display.Original);
+		DashboardContent.Insert(iv);	
+	}
+}
+
+</CodeLiteral>
+            </ActionSequence>
+            <FillTable DataTable="ReferencedObjects" Source="XObjectKey" DataColumnSourceKey="SourceKey" DataTableSource="ObjectKeys" DataColumnSource="ElementObjectKey" WhereClause="" DataColumnTableName="TableName" DataColumnXObjectKey="key" ResolveMNObjects="NoResolve" ScriptItemUID="FillTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+            </FillTable>
+            <CodeLiteral ScriptItemUID="CodeLiteral1">foreach (var row in DashboardContent)
+{
+	var cci = (VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.HeatmapControlInfo&gt;)HeatmapInfo_Current.Row;
+	var datapoint = new HeatmapDataPoint();
+	
+	VI.WebRuntime.IDataColumn _ObjectDisplay1 = this.TableStore.GetLocalColumn(this.DashboardContent, "ObjectDisplay");
+    datapoint.ObjectDisplay = _ObjectDisplay1.GetValue(row).String;
+	_ObjectDisplay1 = this.TableStore.GetLocalColumn(this.DashboardContent, "ObjectDisplayLong");
+    datapoint.ObjectDisplayLong = _ObjectDisplay1.GetValue(row).String;
+	datapoint.ElementObjectKey = row.GetValue("ElementObjectKey").String;
+	datapoint.SizeValue = row.GetValue("ObjectCount").Double;
+	datapoint.ColorValue = row.GetValue("ElementValue").Double;
+	
+	if (!(TimeFrame=="now")) {
+		datapoint.ColorValue = row.GetValue("ElementValueDelta").Double;
+	}
+		
+	if(cci.TargetObject.Text != null &amp;&amp; TimeFrame.Equals("now")) {
+			row.SetValue("ElementText", cci.TargetObject.Text(datapoint));
+	} 
+	
+	if(cci.TargetObject.TextHistoric != null &amp;&amp; !TimeFrame.Equals("now")) {
+			row.SetValue("ElementText", cci.TargetObject.TextHistoric(datapoint));
+	}
+	
+	if(cci.TargetObject.Tooltip != null &amp;&amp; TimeFrame.Equals("now")) {
+			row.SetValue("ElementTooltip", cci.TargetObject.Tooltip(datapoint));
+	} 
+	
+	if(cci.TargetObject.TooltipHistoric != null &amp;&amp; !TimeFrame.Equals("now")) {
+			row.SetValue("ElementTooltip", cci.TargetObject.TooltipHistoric(datapoint));
+	}	
+} </CodeLiteral>
+          </ActionSequence>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableView Table="ObjectKeys" PrimaryKeyColumn="pk" ViewExpression="from DashboardContent select distinct ElementObjectKey" ScriptItemUID="DataTableView1">
+          <Column Name="ElementObjectKey" ScriptItemUID="Column28" DataType="System.String" />
+          <Column Name="pk" ScriptItemUID="Column29" DataType="System.String" />
+        </DataTableView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="HistoryNumber()" Expression="if (TimeFrame() like '%lastlast%') then 1 else 0" DataType="System.Int32" ScriptItemUID="Function1" />
+        <Function ScriptItemUID="Function2" Name="IncreasingCriticality()" DataType="System.Boolean" Expression="Try(&#xD;&#xA;if ((from HeatmapInfo select RedLimit=&quot;max&quot;) or (from HeatmapInfo select GreenLimit=&quot;min&quot;)) then true&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;convert(from HeatmapInfo select RedLimit, &quot;Double&quot;) &gt; convert(from HeatmapInfo select GreenLimit, &quot;Double&quot;)&#xD;&#xA;,&#xD;&#xA;true)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+        <Function ScriptItemUID="Function3" Name="GetDynamicWhereClause()" DataType="System.String" Expression="sqland(&#xD;&#xA;sqlcompare(&quot;HistoryNumber&quot;, 0, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;from heatmapinfo select current AdditionalWhereClause&#xD;&#xA;)" />
+        <Function ScriptItemUID="Function5" Name="HistoricDashboardDefName()" DataType="System.String" Expression="if (TimeFrame() like '%Month%') then &#xD;&#xA;(from HeatmapInfo select current DashboardDefMonthly)&#xD;&#xA;else &#xD;&#xA;(from HeatmapInfo select current DashboardDefYearly)" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="HeatmapInfo" ElementType="VI.WebRuntime.WebControls.HeatmapControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable1" RequiresCursor="true" />
+      <VirtualTable Name="DashboardContent" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="ElementObjectKey" DataType="System.String" />
+        <VirtualColumn Name="ElementValue" DataType="System.Double" />
+        <VirtualColumn Name="ElementText" DataType="System.String" />
+        <VirtualColumn Name="ElementName" DataType="System.String" />
+        <VirtualColumn Name="ElementTooltip" DataType="System.String" />
+        <Column Name="ObjectDisplay" DataType="System.String" ScriptItemUID="Column51" DataSource="Expression" Expression="IsNullOrEmpty(  from ReferencedObjects select display() where key= (from dashboardcontent select current elementobjectkey), from dashboardcontent select current Elementname)" />
+        <Column Name="ObjectDisplayLong" DataType="System.String" ScriptItemUID="Column52" DataSource="Expression" Expression="from ReferencedObjects select displaylong() where key= (from dashboardcontent select current elementobjectkey)" />
+        <VirtualColumn Name="ElementValueDelta" DataType="System.Double" />
+      </VirtualTable>
+      <VirtualTable Name="DashboardDef" Class="DialogDashBoardDef" ScriptItemUID="VirtualTable3" />
+      <VirtualTable Name="ReferencedObjects" ScriptItemUID="VirtualTable4">
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn DataType="System.String" Name="key" />
+        <VirtualColumn DataType="System.String" Name="SourceKey" />
+      </VirtualTable>
+      <VirtualFunction Signature="Filter()" DataType="System.String" DefaultValue="&quot;&quot;" TriggerUpdates="Never" />
+      <VirtualFunction Signature="TimeFrame()" DataType="System.String" DefaultValue="&quot;now&quot;" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Take()" DataType="System.Int32" Comment="How many items to load max" DefaultValue="500" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

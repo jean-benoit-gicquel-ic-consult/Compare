@@ -1,0 +1,85 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c460eba9-3091-5b5c-b186-891709f38679">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_DecisionHistory" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="EventBar" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-eventbar&quot;" />
+            <Property Name="TagName" Value="ul" Comment="" />
+          </HtmlAttributes>
+          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="DecisionHistory" WhereClause="DecisionHistoryFilter()  and  not(IsToHideInHistory)" OrderBy="'XDateInserted'" WithoutParentContainer="true">
+            <Container ScriptItemUID="EventItem" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-event &quot;+GetDecisionTypeCssClass(from decisionhistory select current Decisiontype)" />
+                <Property Name="TagName" Value="li" Comment="" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container4">
+                <Label Text="select current displayvalue(decisiontype) from decisionhistory" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Label1style" Value="&quot;font-weight: bold;&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Label Text="from DecisionHistory select current (&#xD;&#xA;&#xD;&#xA;if(rulerlevel&gt;0) then (&quot; - &quot;+displayvalue(rulerlevel))&#xD;&#xA;else if(isnullorempty(ident_pwodecisionstep)) then &quot;&quot; else (&quot; - &quot;+TranslateColumn(Ident_PwoDecisionStep, &quot;pwodecisionstep&quot;, &quot;ident_pwodecisionstep&quot;)))+&quot; - &quot;" ScriptItemUID="Label2" />
+                <ControlReferenceControlList ID="VI_Edit_View_DateTimeago" ScriptItemUID="ControlRef3">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="DecisionHistory" ScriptItemUID="VirtualTableMapping1">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="XDateInserted" />
+                  </VirtualTableMapping>
+                </ControlReferenceControlList>
+              </Container>
+              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                  <ColumnList ScriptItemUID="ColumnList1">
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ReasonHead" DisplayValueExpression="isnullorempty( displayvalue(reasonhead), translate(&quot;#LDS#No reason entered&quot;) )" Condition="from decisionhistory select current&#xD;&#xA;(not(decisiontype in ('Order', 'Create', 'ResetReservation'))&#xD;&#xA;&#xD;&#xA;-- do not display an empty reason field if there is a UID_QERJustification&#xD;&#xA;and ( not(isnullorempty(reasonhead)) or isnullorempty(uid_qerjustification) ))" Caption="from decisionhistory select current&#xD;&#xA;(&#xD;&#xA;if(decisiontype = 'Query') then translate(&quot;#LDS#Query&quot;)&#xD;&#xA;else if(decisiontype = 'Answer') then translate(&quot;#LDS#Answer&quot;)&#xD;&#xA;else datacaption(decisionhistory,reasonhead)&#xD;&#xA;)" />
+                    <SingleColumn ScriptItemUID="SingleColumn7" Condition="from decisionhistory select current not(isnullorempty(uid_qerjustification))" DataColumn="UID_QERJustification" />
+                    <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="DisplayPersonHead" Caption="translate(&quot;#LDS#By&quot;)" Condition="from decisionhistory select current&#xD;&#xA;(&#xD;&#xA;not(isnullorempty(displaypersonhead))&#xD;&#xA;and&#xD;&#xA;decisiontype in ('Direct', 'Escalate', 'Query', 'Answer', 'Unsubscribe', 'Grant', 'Dismiss', 'Reject', 'Unsubscribe', 'Prolongate' , 'Order', 'RecallQuery', 'ResetReservation', 'Cancel')&#xD;&#xA;)" />
+                    <SingleColumn ScriptItemUID="SingleColumn8" Condition="from DecisionHistory select current rulerlevel&lt;&gt;0" DataColumn="RulerLevel" />
+                    <SingleColumn ScriptItemUID="SingleColumn4" Condition="from DecisionHistory select current &#xD;&#xA;(not(IsNullOrEmpty(uid_pwodecisionrule)) and rulerlevel&lt;&gt;2)" DataColumn="UID_PWODecisionRule" />
+                    <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="UID_PersonHead" Condition="from decisionhistory select current ( (decisiontype in ( 'AddInsteadOf', 'AddAdditional', 'Deny')) AND (IsNullOrEmpty(UID_PersonHead,'')&lt;&gt;''))" />
+                    <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="UID_PersonRelated" Condition="from decisionhistory select current ( (decisiontype in ('Query', 'AddInsteadOf', 'AddAdditional')) AND (IsNullOrEmpty(UID_PersonRelated,'')&lt;&gt;''))" Caption="if((from decisionhistory select current decisiontype) = 'Query') then&#xA;Translate(&quot;#LDS#Recipient&quot;)&#xA;else&#xA;DataCaption(&quot;Pwodecisionhistory&quot;, &quot;uid_personrelated&quot;)" />
+                    <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="ValidUntilUnsubscribe" Caption="datacaption(&quot;PersonWantsOrg&quot;,&quot;ValidUntilUnsubscribe&quot;)" Condition="{{ DecisionHistory_ValidUntilUnsubscribe != null }}&#xD;&#xA;and HasValidUntilUnsubscribeValue()" />
+                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="XDateInserted" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="DecisionHistory" ScriptItemUID="VirtualTableMapping2" />
+              </ControlReferenceContainer>
+            </Container>
+          </ContainerTemplate>
+          <ControlReferenceControlList ID="AdditionalEvents" ScriptItemUID="ControlRef2" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetDecisionTypeColor(string decisiontype)" Expression="if(decisiontype=&quot;dismiss&quot;) then variable(&quot;%QBM_Primary_Red%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;reset&quot;) then variable(&quot;%QBM_Primary_Blue%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Escalate&quot;) then variable(&quot;%QBM_Primary_Red%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;reject&quot;) then variable(&quot;%QBM_Primary_Blue%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;grant&quot;) then variable(&quot;%QBM_Primary_Green%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Create&quot;) then variable(&quot;%QBM_Primary_Yellow%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Order&quot;) then variable(&quot;%QBM_Primary_Yellow%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Reaction&quot;) then variable(&quot;%QBM_Primary_Violet%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;cancel&quot;) then variable(&quot;%VI_Common_Color_DarkerGray%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;prolongate&quot;) then variable(&quot;%QBM_Primary_Violet%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;query&quot;) then variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;unsubscribe&quot;) then variable(&quot;%VI_Common_Color_DarkerGray%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;answer&quot;) then variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;recall&quot;) then variable(&quot;%QBM_Primary_Red%&quot;)&#xD;&#xA;else&#xD;&#xA;variable(&quot;%VI_Common_Color_LighterGray%&quot;)" DataType="System.String" TriggerUpdates="Never" ScriptItemUID="Function1" />
+        <Function Name="GetDecisionTypeCssClass(string decisiontype)" Expression="if(decisiontype=&quot;dismiss&quot;) then &quot;imx-negative&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;reset&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Escalate&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;reject&quot;) then &quot;imx-negative&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;grant&quot;) then &quot;imx-positive&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Create&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Order&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;Reaction&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;cancel&quot;) then &quot;imx-negative&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;prolongate&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;query&quot;) then &quot;imx-question&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;unsubscribe&quot;) then &quot;imx-negative&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;answer&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;if(decisiontype=&quot;recall&quot;) then &quot;imx-info&quot;&#xD;&#xA;else&#xD;&#xA;&quot;imx-info&quot;" DataType="System.String" TriggerUpdates="Never" ScriptItemUID="Function2" />
+        <Function ScriptItemUID="Function3" Name="HasValidUntilUnsubscribeValue()" DataType="System.Boolean" Expression="from decisionhistory select current (decisiontype = 'Unsubscribe'&#xD;&#xA;and&#xD;&#xA;IsNull(ValidUntilUnsubscribe,#1899-12-30#) &gt; #1900-01-01#)" TriggerUpdates="Never">
+          <DataTableCursor DataTable="DecisionHistory" ScriptItemUID="DataTableCursor1" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DecisionHistory" ScriptItemUID="VirtualTable1" TriggerUpdates="Never">
+        <VirtualColumn Name="XDateInserted" DataType="System.DateTime" />
+        <VirtualColumn Name="ReasonHead" DataType="System.String" />
+        <VirtualColumn Name="DateHead" DataType="System.DateTime" />
+        <VirtualColumn Name="UID_PersonHead" DataType="System.String" />
+        <VirtualColumn Name="UID_PWODecisionRule" DataType="System.String" />
+        <VirtualColumn Name="Decisiontype" DataType="System.String" />
+        <VirtualColumn Name="DisplayPersonHead" DataType="System.String" />
+        <VirtualColumn Name="Ident_PwoDecisionStep" DataType="System.String" />
+        <VirtualColumn Name="UID_PersonRelated" DataType="System.String" />
+        <VirtualColumn Name="IsToHideInHistory" DataType="System.Boolean" />
+        <VirtualColumn Name="UID_QERJustification" DataType="System.String" />
+        <VirtualColumn Name="RulerLevel" DataType="System.Int32" />
+        <VirtualColumn Name="ValidUntilUnsubscribe" DataType="System.DateTime" IsMandatory="false" />
+      </VirtualTable>
+      <VirtualFunction Signature="DecisionHistoryFilter()" DataType="System.Boolean" FilterForTable="DecisionHistory" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalEvents" ContainerType="ControlList" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,60 @@
+﻿<WebDesigner>
+  <Context ID="VI_QERPolicy_ExceptionApproval" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" HelpChapterUid="--Compliance &gt; Auditing &gt; Policy Violations&#xD;&#xA;if (IsNull(request(&quot;AuditMode&quot;), &quot;NO&quot;) = &quot;YES&quot;) then&#xD;&#xA;  &quot;ED965B11-5165-4CBA-915C-2FA371B509D2&quot;&#xD;&#xA;&#xD;&#xA;--Compliance &gt; My Actions &gt; Policy Violations&#xD;&#xA;else if (IsNull(request(&quot;HistoryMode&quot;), &quot;NO&quot;) = &quot;YES&quot;) then&#xD;&#xA;  &quot;99AD090D-A9FD-4D4D-9CE9-F1B5A25D1386&quot;&#xD;&#xA;&#xD;&#xA;--Compliance &gt; My Actions &gt; Pending Policy Violations&#xD;&#xA;else&#xD;&#xA;   &quot;270239B5-77E4-43EC-A226-54612BC77837&quot;&#xD;&#xA;" MetamodelVersion="2016-05-08" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="AuditMode" IsMandatory="false" />
+        <Parameter Name="HistoryMode" IsMandatory="false" />
+        <Parameter Name="Title" IsMandatory="false" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="QERPolicyWhereClause" DataType="System.String" ScriptItemUID="Column1" />
+        <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column2" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="getTitleAndHeadline()" Expression="If(isnullorempty(GetTitle()))Then&#xD;&#xA;   translate(&quot;#LDS#Heading Pending Policy Violations&quot;)&#xD;&#xA;Else&#xD;&#xA;   GetTitle()" DataType="System.String" ScriptItemUID="Function1" />
+      <Function ScriptItemUID="Function2" Name="GetTitle()" DataType="System.String" Expression="If(Request(&quot;AuditMode&quot;) = 'YES') Then (&#xD;&#xA;translate('#LDS#Heading Auditing') + &#xD;&#xA;&quot; - &quot; + &#xD;&#xA;(If(Not IsNullOrEmpty(Request('Title'))) Then&#xD;&#xA; Request('Title')&#xD;&#xA;Else  ( from UserMenu select Title Where id in (select linkobjectid from UserRuntimeModule Where UidModule = GetRuntimeContextID() ))&#xD;&#xA;) )&#xD;&#xA;&#xD;&#xA;Else If(Not IsNullOrEmpty(Request('Title'))) Then&#xD;&#xA; Request('Title')&#xD;&#xA;Else  ( from UserMenu select Title Where id in (select linkobjectid from UserRuntimeModule Where UidModule = GetRuntimeContextID() ))&#xD;&#xA;" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="getTitleAndHeadline()" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <Label Text="getTitleAndHeadline()" ScriptItemUID="Label1" />
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <ControlReferenceContainer ID="VI_QERPolicy_ExceptionApproval_Filter" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="showaudit()" Value="request(&quot;AuditMode&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="showhistory()" Value="Request(&quot;HistoryMode&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="popuptitle()" Value="getTitleAndHeadline()" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                <VirtualColumnMapping VirtualColumn="QERPolicyWhereClause" DataColumn="QERPolicyWhereClause" />
+              </VirtualTableMapping>
+            </ControlReferenceContainer>
+            <ControlReferenceControlList ID="POL_Policy_MasterDetail" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="Request(&quot;AuditMode&quot;) = 'YES' or request('HistoryMode')='YES' " ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualFunctionMapping ID="QERPolicyWhereClause()" Value="from vars select qerpolicywhereclause" ScriptItemUID="VirtualFunctionMapping5" />
+            </ControlReferenceControlList>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <Container ScriptItemUID="Container3" RefreshTriggerExpression="from Vars select GetDataVersion(HeadLine)">
+            <ControlList ScriptItemUID="ControlList10">
+              <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef14">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Text()" Value="from Vars select HeadLine" />
+              </ControlReferenceControlList>
+            </ControlList>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,35 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_SelectControlListView" MigrationNotes="DMLREPLACE;" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1" EnableCustomAttributes="true" ItemUID="Select">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="'checkbox_yes'" />
+          </HtmlAttributes>
+          <CheckBox DataTable="EditTable" DataColumn="DoSelect" Text="&quot;&quot;" ScriptItemUID="CheckBox1" Layout="'VI_Styles_CheckBox_DecisionControl'" EnableCustomAttributes="true" ItemUID="Select">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="IsNullOrEmpty(SelectText(),translate(&quot;#LDS#Heading Select&quot;))" />
+              <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute8" Value="IsNullOrEmpty(SelectText(),translate(&quot;#LDS#Heading Select&quot;))" />
+              <HtmlAttribute Name="&quot;disabled&quot;" ScriptItemUID="HtmlAttribute7" Value="if(IsReadOnly())then&#xD;&#xA;   &quot;disabled&quot;" />
+            </HtmlAttributes>
+          </CheckBox>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="DoSelect" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="SelectText()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

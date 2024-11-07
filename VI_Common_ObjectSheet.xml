@@ -1,0 +1,79 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Common_ObjectSheet" MigrationNotes="DIALOGCONFIGPARM;" Cardinality="Single" AllowUrlNavigation="true" ScriptItemUID="Context1" SingleInstanceTimeout="" HelpChapterUid="if not(IsNullOrEmpty(Request(&quot;HelpChapterID&quot;)))then&#xD;&#xA;   Request(&quot;HelpChapterID&quot;)">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="ObjectKey" Type="ObjectKey" IsMandatory="false" />
+        <Parameter Name="UID" IsMandatory="false" />
+        <Parameter Name="TableName" IsMandatory="false" />
+        <Parameter Name="dashboard" IsMandatory="false" />
+        <Parameter Name="HelpChapterID" IsMandatory="false" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="Container" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column1" />
+        <Column Name="ViewComponent" DataSource="Expression" DataType="System.String" Expression="GetObjectSwitch(from container select xobjectkey, &quot;Object_Overview&quot;)" ScriptItemUID="Column2" />
+      </DataTableSingleRow>
+      <DataTableGeneric Table="Obj" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric1" TriggerUpdates="Never">
+        <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column3" />
+      </DataTableGeneric>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="GetTableObjectKey()" Expression="getobjectkey(&quot;DialogTable&quot;, from container select getobjectkeytable(xobjectkey), &quot;&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="GetSinglePk(string input, int index)" Expression="{{&#xD;&#xA;var parts = input.Split(',');&#xD;&#xA;string result = string.Empty;&#xD;&#xA;if (index &lt; parts.Length)&#xD;&#xA;   result = parts[index];&#xD;&#xA;@return result;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function2" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1">
+      <Update DataTable="Container" DataColumn="XObjectKey" Value="isnullorempty(&#xD;&#xA;-- either take the object key&#xD;&#xA;request(&quot;objectkey&quot;),&#xD;&#xA;&#xD;&#xA;-- or the table name + UID. Note: The object key contains angular brackets which should not go in a URL&#xD;&#xA;getobjectkey(request(&quot;TableName&quot;), GetSinglePk(request(&quot;UID&quot;), 0), GetSinglePk(request(&quot;UID&quot;), 1))&#xD;&#xA;)" ScriptItemUID="Update1" />
+      <FillTable DataTable="Obj" Source="XObjectKey" DataTableSource="Container" DataColumnSource="XObjectKey" WhereClause="" DataColumnTableName="" DataColumnSourceKey="" DataColumnXObjectKey="XObjectKey" ResolveMNObjects="NoResolve" ScriptItemUID="FillTable1">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+      </FillTable>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="from obj select top 1 displaylong()" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="from obj select top 1&#xA;(&#xA;if(len(displaylong())&gt;128)&#xA;then (substring(displaylong(),0,128)+&quot;...&quot;)&#xA;else displaylong()&#xA;)+&quot; (&quot;+ datacaptionsingle(getobjectkeytable(xobjectkey))+&quot;)&quot;" ScriptItemUID="Label1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="from obj select top 1 displaylong()" />
+            </HtmlAttributes>
+          </Label>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1">
+            <Container Condition="0 = select count() from obj" ScriptItemUID="Container2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="CPLHtmlAttribute1" Value="&quot;imx-message imx-message-exception&quot;" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#The requested object could not be found. Possibly it has been deleted.&quot;)" ScriptItemUID="Label2" />
+            </Container>
+            <ContainerTemplate DataTable="Obj" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">
+              <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="'clear: both;'" />
+                </HtmlAttributes>
+                <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', sqlcompare(&quot;TableName&quot;, select current dbtable() from Obj, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;))" ActionType="ObjectSheet" ScriptItemUID="ObjectSwitchContainer1">
+                  <VirtualTableMapping DataTable="Obj" VirtualTable="Object" ScriptItemUID="VirtualTableMapping2" />
+                </ObjectSwitchContainer>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList1">
+            <ContainerTemplate DataTable="Obj" ScriptItemUID="ContainerTemplate2" WithoutParentContainer="true">
+              <ControlReferenceControlList ID="QBM_Common_FavoritesMarkObject" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="Object" DataTable="Obj" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualFunctionMapping ID="BookmarkDisplay()" Value="from obj select current display()" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="BookmarkUrl()" Value="{{&#xD;&#xA;var objKey = ((IDbObjectRow)ContainerTemplate2_Current.Row).ObjectKey;&#xD;&#xA;&#xD;&#xA;var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();&#xD;&#xA;dict[&quot;TableName&quot;] = objKey.Tablename;&#xD;&#xA;dict[&quot;UID&quot;] = objKey.Keys[0];&#xD;&#xA;&#xD;&#xA;@return VI.WebRuntime.Communication.WebPage.GenericPageHandler + &quot;?&quot; + _Module.ModuleInfo.GetUrlParameterString(dict);&#xD;&#xA;}}" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="BookmarkCssClass()" Value="&quot;imx-table-&quot;+from obj select current getobjectkeytable(xobjectkey)" ScriptItemUID="VirtualFunctionMapping3" />
+              </ControlReferenceControlList>
+            </ContainerTemplate>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

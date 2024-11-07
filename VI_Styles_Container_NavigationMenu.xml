@@ -1,0 +1,49 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="4909cc4e-f2af-af7b-4e48-6cba77845fde">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Container_NavigationMenu" Type="Container" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="NavList imx-scrollbars1" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.NavList {
+  top: %HeaderUserNavigationHeight%px; 
+  bottom: 0;
+  left: 0; 
+  width: 270px; 
+  overflow-y: auto; 
+  overflow-x: hidden;
+  background-color: %VI_Common_Color_ColorBase1%;
+  padding: 10px 0 10px 10px;
+  border-right: solid 1px %VI_Common_Color_LighterGray%;
+}</CssDocument>
+    <CssDocument CssName="CSS Mobile" ScriptItemUID="CssDocument2">.ui-mobile .NavList {
+    background-color: inherit;
+    position: inherit;
+    overflow: inherit;
+	width: %MobileNaviWidth%em;
+}
+
+.imx-menudropdown .NavList {
+  border-bottom: solid 2px %VI_Common_Color_LighterGray%;
+  border-right: solid 2px %VI_Common_Color_LighterGray%;
+}
+
+.nav-header .cux-icon--angle-right {
+    display: inline-block;
+}
+
+.nav-header.active .cux-icon--angle-right {
+    transform: rotate(90deg);
+}
+
+.imx-startpage-link .NavListHeading
+{
+  vertical-align: middle;
+  margin-left: 1px;
+}
+
+.imx-startpage-link 
+{
+  margin-left: 1px;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

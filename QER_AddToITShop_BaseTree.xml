@@ -1,0 +1,140 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_AddToITShop_BaseTree" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action1">
+        <Update DataColumn="Ident_AccProduct" DataTable="Vars" ScriptItemUID="Update1" Value="from object select current display()" />
+      </ActionSequence>
+      <ActionComponent ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral2">var key = ((IDbObjectRow)Object_Current.Row).ObjectKey;
+var bts = new QER.CompositionApi.ITShop.BaseTreeToShop(key.Tablename, key.Keys[0]);
+
+Vars.GetColumn("CanAddToShop").SetValue(Vars.SingleRow, await bts.CanAddToShopAsync(_Database, ct).ConfigureAwait(false));
+Vars.GetColumn("IsAssignedToShop").SetValue(Vars.SingleRow, await bts.IsAssignedToShopAsync(_Database, ct).ConfigureAwait(false));
+Vars.GetColumn("HasAccProduct").SetValue(Vars.SingleRow, !string.IsNullOrEmpty(await bts.GetUidAccProductAsync(_Database, ct).ConfigureAwait(false)));
+</CodeLiteral>
+        <Popup DisplayType="Controls">
+          <Container ScriptItemUID="Container11" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+            </HtmlAttributes>
+            <Wizard ScriptItemUID="Wizard1">
+              <OnCancel ScriptItemUID="Action11">
+                <ActionOnControl />
+              </OnCancel>
+              <WizardPage ScriptItemUID="WizardPage1" Title="translate(&quot;#LDS#IT Shop Configuration&quot;)" AllowBackAction="false">
+                <OnNext ScriptItemUID="Action12">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral1">using (var u = _Database.StartUnitOfWork())
+{
+	var dict = new System.Collections.Generic.Dictionary&lt;string, object&gt;();
+	dict["EntitlementKey"] = ((IDbObjectRow)Object_Current.Row).ObjectKey.ToXmlString();
+    dict["Ident_AccProduct"] = Vars.SingleRow.GetValue("Ident_AccProduct").String;
+	dict["UID_AccProductGroup"] = Vars.SingleRow.GetValue("UID_AccProductGroup").String;
+	dict["UID_PWODecisionMethod"] = Vars.SingleRow.GetValue("UID_PWODecisionMethod").String;
+	dict["UID_ITShopOrgBoard"] = Vars.SingleRow.GetValue("UID_ITShopOrg").String;
+	
+	var personKey = new DbObjectKey("Person", _Database.User().Uid);
+	var obj = await _Database.Source().GetAsync(personKey, EntityLoadType.DelayedLogic).ConfigureAwait(false);
+    await u.GenerateAsync(obj, "ADDTOITSHOP", dict).ConfigureAwait(false);
+    await u.CommitAsync().ConfigureAwait(false);
+}</CodeLiteral>
+                </OnNext>
+                <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#Add to IT Shop&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container18" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute6" />
+                  </HtmlAttributes>
+                </Container>
+                <SwitchContainer ScriptItemUID="Switch1">
+                  <SwitchContainerCase ScriptItemUID="Case1" Condition="from vars select not(IsAssignedToShop)">
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef8">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="Text()" Value="translate(&quot;#LDS#Use this wizard to make memberships in this organizational unit requestable through the IT shop.&quot;)" />
+                    </ControlReferenceContainer>
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="PropertyList()" IsPropertyList="true">
+                        <ColumnList ScriptItemUID="ColumnList1">
+                          <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="Ident_AccProduct" Condition="not(from vars select hasaccproduct)" />
+                          <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="UID_AccProductGroup" />
+                          <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="UID_ITShopOrg" />
+                          <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_PWODecisionMethod" />
+                          <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_QERResourceType" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="EditTable" DataTable="Vars" />
+                    </ControlReferenceContainer>
+                  </SwitchContainerCase>
+                  <SwitchContainerCase ScriptItemUID="Case2">
+                    <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Memberships for this object are already requestable through the IT shop.&quot;)" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-message&quot;" />
+                        <Property Name="TagName" Value="div" />
+                      </HtmlAttributes>
+                    </Label>
+                  </SwitchContainerCase>
+                </SwitchContainer>
+                <Validator ScriptItemUID="Validator1" DisplayType="Generic">
+                  <ValidationModifier Condition="from vars select not(canaddtoshop)" ID="CanAddToItShop" Text="translate(&quot;#LDS#Memberships in this object are already requestable through the IT shop.&quot;)" />
+                </Validator>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage4" Title="translate(&quot;#LDS#Results&quot;)" AllowBackAction="false" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowCancelAction="false">
+                <OnNext ScriptItemUID="Action9">
+                  <ActionOnControl />
+                </OnNext>
+                <Label ScriptItemUID="Label5" Text="translate(&quot;#LDS#Add to IT Shop&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container8" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute9" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container9">
+                  <Label ScriptItemUID="Label4" Text="translate(&quot;#LDS#The changes are now queued for execution. You can track the progress in the page header.&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="div" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+              </WizardPage>
+            </Wizard>
+          </Container>
+        </Popup>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="UID_AccProductGroup" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_AccProductGroup&quot;" DBTableName="&quot;AccProductGroup&quot;" FKWhereClause="" Caption="translate(&quot;#LDS#Service category&quot;)" MinLength="1" />
+          <Column DataType="System.String" Name="UID_ITShopOrg" ScriptItemUID="Column2" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_ITShopOrg&quot;" DBTableName="&quot;ITShopOrg&quot;" FKWhereClause="sqlcompare(&quot;itshopinfo&quot;, &quot;BO&quot;, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;)" Caption="translate(&quot;#LDS#IT shop shelf&quot;)" MinLength="1" />
+          <Column DataType="System.String" Name="UID_QERResourceType" ScriptItemUID="Column3" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_QERResourceType&quot;" DBTableName="&quot;QERResourceType&quot;" Caption="translate(&quot;#LDS#Resource type&quot;)" />
+          <Column DataType="System.String" Name="Ident_AccProduct" ScriptItemUID="Column4" MaxLength="256" Caption="datacaption(&quot;AccProduct&quot;, &quot;Ident_AccProduct&quot;)" />
+          <Column DataType="System.String" Name="UID_PWODecisionMethod" ScriptItemUID="Column5" Caption="datacaptionsingle(&quot;PWODecisionMethod&quot;)" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_PWODecisionMethod&quot;" DBTableName="&quot;PWODecisionMethod&quot;" FKWhereClause="sqlcompare(&quot;UsageArea&quot;, &quot;I&quot;, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;)" />
+          <Column DataType="System.Boolean" Name="HasAccProduct" ScriptItemUID="Column6" />
+          <Column DataType="System.Boolean" Name="CanAddToShop" ScriptItemUID="Column7" />
+          <Column DataType="System.Boolean" Name="IsAssignedToShop" ScriptItemUID="Column8" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" ScriptItemUID="VirtualTable1" RequiresCursor="true" TriggerUpdates="Never">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="UID_OrgRoot" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

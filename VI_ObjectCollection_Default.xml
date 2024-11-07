@@ -1,0 +1,60 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_Default" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Grid ScriptItemUID="Grid1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;data-imx-grid-displaytype&quot;" Value="DisplayType()" />
+          </HtmlAttributes>
+          <GridBand DataTable="HierarchyTable" EntriesPerPage="10" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="dbwhereclause()" DisplayHeader="Always" RowSelection="Action" RowSelectionActive="select current not(isnonselectable()) from hierarchytable" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="RenderImmediately" Value="true" />
+              <Property Name="ApplyFilledHeight" Value="true" />
+            </HtmlAttributes>
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <SelectionAction ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="ElementSelected" ScriptItemUID="CallAction1" />
+            </SelectionAction>
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn SortColumn="__Display" AutoFilterColumn="__Display" ScriptItemUID="GridColumn1">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label Text="IsNullOrEmpty(from HierarchyTable select top 1 Try(DataCaptionSingle(Try(GetObjectKeyTable(PrimaryKey()),&quot;&quot;)),&quot;&quot;),Try(DataCaptionSingle(TableName()),&quot;&quot;))" ScriptItemUID="Label1" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute2" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                </HtmlAttributes>
+                <Label Text="select current display() from hierarchytable" ScriptItemUID="Label51" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from hierarchytable select current CssClass()" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+            <GridColumnColumnTemplate ScriptItemUID="GridColumnColumnTemplate1" DataTable="HierarchyTable">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" ColumnList="AdditionalDisplayColumns()" />
+              </ColumnList>
+              <GridColumnGroup DataTable="HierarchyTable" ScriptItemUID="GridColumnGroup1">
+                <GridColumnSimple ScriptItemUID="Column1" Column="currentcolumn" />
+              </GridColumnGroup>
+            </GridColumnColumnTemplate>
+          </GridBand>
+        </Grid>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Dummy" ScriptItemUID="DataTableSingleRow1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,142 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_DashboardFilterPopup">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember>private System.Collections.Generic.HashSet&lt;string&gt; myD;</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container2" Layout="'VI_Styles_Container_Inline'" Condition="{{&#xD;&#xA;var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();&#xD;&#xA;var chartSettingProvider = provider as ChartSettingsProvider;&#xD;&#xA;@return !(chartSettingProvider == null || !chartSettingProvider.IsEnabled());&#xD;&#xA;}}">
+        <ControlReferenceControlList ID="Title" ScriptItemUID="ControlRef1" />
+        <Button ScriptItemUID="Button1" Text="translate('#LDS#Chart filter')" Layout="'QBM_Styles_Button_StartPage'">
+          <ServerActionCall ScriptItemUID="ServerActionCall2">
+            <LoadTable DataTable="DialogDashboarddef" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+            </LoadTable>
+            <CodeLiteral ScriptItemUID="CodeLiteral2">var us = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();
+
+var abc = us.ApplicationInfo.ConfigObjects[ConfigKey()];
+
+DashboardInfo.ObjectList.Clear();
+
+foreach (IChartControlInfo bla in abc as System.Collections.Generic.List&lt;object&gt;)
+{
+ DashboardInfo.ObjectList.Add(bla);
+}
+
+var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();
+var settings = provider.Get();
+
+myD = new System.Collections.Generic.HashSet&lt;string&gt;();
+
+foreach (var exc in settings.ExcludedIdents) {
+ myD.Add(exc.ToLower());
+}
+VI.WebRuntime.IDataColumn _radio2 = this.TableStore.GetLocalColumn(this.DashboardInfo, "radio");
+var _dddColumn = this.TableStore.GetColumn(this.DashboardInfo,"ident");
+
+System.Collections.Generic.IEnumerator&lt;VI.WebRuntime.RowCursor&gt; _enumerating1 = new VI.WebRuntime.RowCursorList(this.DashboardInfo).GetEnumerator();
+for (int _rowIndex1 = 0; _enumerating1.MoveNext(); _rowIndex1 = (_rowIndex1 + 1))
+{
+	VI.WebRuntime.RowCursor Update2_Current = _enumerating1.Current;
+	
+	_radio2.SetValue(Update2_Current.Row, !myD.Contains(_dddColumn.GetValue(Update2_Current.Row).String.ToLower()));	
+}</CodeLiteral>
+            <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+              <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                <Container ScriptItemUID="Container3">
+                  <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#This is a list of all charts in this section. Unchecking an item will hide the chart for your account.&quot;)" />
+                  <HtmlNode ScriptItemUID="HtmlNode6" HtmlNodeName="br">
+                    <HtmlAttributes />
+                  </HtmlNode>
+                  <CheckBoxMulti DataTable="DashboardInfo" ScriptItemUID="CheckBoxMulti2" DataColumn="radio" Text="translate(&quot;#LDS#Select all&quot;)" />
+                  <HtmlNode ScriptItemUID="HtmlNode5" HtmlNodeName="br">
+                    <HtmlAttributes />
+                  </HtmlNode>
+                  <ContainerTemplate DataTable="DashboardInfo" ScriptItemUID="ContainerTemplate2" OrderBy="'computedTitle'">
+                    <CheckBox DataTable="DashboardInfo" ScriptItemUID="CheckBox2" DataColumn="radio" Text="from dashboardinfo select current computedTitle" />
+                    <HtmlNode ScriptItemUID="HtmlNode4" HtmlNodeName="br">
+                      <HtmlAttributes />
+                    </HtmlNode>
+                  </ContainerTemplate>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                <Container ScriptItemUID="Container1" Layout="'VI_Styles_Container_ButtonPanel'">
+                  <Button Text="translate(&quot;#LDS#Close&quot;)" ItemUID="Default Button" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Primary'">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute2" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <CodeLiteral ScriptItemUID="CodeLiteral3">var us = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();
+
+var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();
+
+VI.WebRuntime.IDataColumn _radio2 = this.TableStore.GetLocalColumn(this.DashboardInfo, "radio");
+var _dddColumn = this.TableStore.GetColumn(this.DashboardInfo,"ident");
+
+var removeSet = new System.Collections.Generic.List&lt;string&gt;();
+
+var addSet = new System.Collections.Generic.List&lt;string&gt;();
+
+System.Collections.Generic.IEnumerator&lt;VI.WebRuntime.RowCursor&gt; _enumerating1 = new VI.WebRuntime.RowCursorList(this.DashboardInfo).GetEnumerator();
+
+var detectChanges= false;
+
+for (int _rowIndex1 = 0; _enumerating1.MoveNext(); _rowIndex1 = (_rowIndex1 + 1))
+{
+	VI.WebRuntime.RowCursor Update2_Current = _enumerating1.Current;
+	var theIdent = _dddColumn.GetValue(Update2_Current.Row).String;
+	var theVal =_radio2.GetValue(Update2_Current.Row).Bool;
+	
+	if (!theVal) {
+		addSet.Add(theIdent);
+		if (!myD.Contains(theIdent.ToLower())){
+			detectChanges = true;
+		}
+	} else {
+		removeSet.Add(theIdent);
+		if (myD.Contains(theIdent.ToLower())){
+			detectChanges = true;
+		}
+	}
+}
+
+if (detectChanges) {
+provider.ChangeExcluded(addSet, removeSet);
+	VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.Communication.IAjaxResponse&gt;().AddCommand(new VI.WebRuntime.AjaxScriptCommand("location.reload();"));
+}</CodeLiteral>
+                      <ActionOnControl />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Chart filter&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping1" />
+            </CallAction>
+          </ServerActionCall>
+        </Button>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject ScriptItemUID="DataTableDbObject2" Table="DialogDashboarddef" Class="DialogDashBoardDef" WhereClauseSQL="AllChartsWhereClause2()">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableObjectView Table="DashboardInfo" ScriptItemUID="DataTableObjectView1" ElementType="VI.WebRuntime.WebControls.IChartControlInfo, VI.WebRuntime">
+          <Column DataType="System.Boolean" Name="radio" ScriptItemUID="Column6" />
+          <Column DataType="System.String" Name="computedTitle" ScriptItemUID="Column1" DataSource="Expression" Expression="{{&#xD;&#xA;VI.WebRuntime.IDataRow _row2 = this.DialogDashboarddef.Where(_row1 =&gt; &#xD;&#xA;                            {&#xD;&#xA;                                VI.WebRuntime.IDataColumn _Ident_DialogDashboardDef = this.DialogDashboarddef.GetColumn(&quot;Ident_DialogDashboardDef&quot;);&#xD;&#xA;                                return VI.WebRuntime.WebSql.StringEquals(_Ident_DialogDashboardDef.GetValue(_row1).String, ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.IChartControlInfo&gt;)(queryRow)).TargetObject.Ident);&#xD;&#xA;                            }&#xD;&#xA;                        ).FirstOrDefault();&#xD;&#xA;@return ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.IChartControlInfo&gt;)(queryRow)).TargetObject.computeTitle(_row2, null,null);&#xD;&#xA;}}+&quot;&quot;" />
+        </DataTableObjectView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="AllChartsWhereClause()" DataType="System.String" Expression="{{&#xD;&#xA;IUserSession us = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();&#xD;&#xA;var returnValue = &quot;ident_dialogdashboarddef in (&quot;;&#xD;&#xA;var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();&#xD;&#xA;var isFirst = true;&#xD;&#xA;foreach (var bla in provider.Get().ExcludedIdents)&#xD;&#xA;{&#xD;&#xA;    if (!isFirst) {&#xD;&#xA;	returnValue += &quot;,&quot;;&#xD;&#xA;	} else {&#xD;&#xA;	isFirst= false;}&#xD;&#xA;	&#xD;&#xA;	returnValue += &quot;'&quot;+bla+ &quot;'&quot;;&#xD;&#xA;}&#xD;&#xA;returnValue +=&quot;)&quot;;&#xD;&#xA;&#xD;&#xA;@return returnValue;&#xD;&#xA;&#xD;&#xA;}}" />
+        <Function ScriptItemUID="Function2" Name="AllChartsWhereClause2()" DataType="System.String" Expression="{{&#xD;&#xA;IUserSession us = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();&#xD;&#xA;var abc = us.ApplicationInfo.ConfigObjects[ConfigKey()];&#xD;&#xA;var returnValue = &quot;ident_dialogdashboarddef in (&quot;;&#xD;&#xA;&#xD;&#xA;var isFirst = true;&#xD;&#xA;foreach (IChartControlInfo bla in abc as System.Collections.Generic.List&lt;object&gt;)&#xD;&#xA;{&#xD;&#xA;    if (!isFirst) {&#xD;&#xA;	returnValue += &quot;,&quot;;&#xD;&#xA;	} else {&#xD;&#xA;	isFirst= false;}&#xD;&#xA;	&#xD;&#xA;	string a;&#xD;&#xA;	&#xD;&#xA;	var d = bla.Ident;&#xD;&#xA;	&#xD;&#xA;	returnValue += &quot;'&quot;+d+ &quot;'&quot;;&#xD;&#xA;}&#xD;&#xA;returnValue +=&quot;)&quot;;&#xD;&#xA;&#xD;&#xA;@return returnValue;&#xD;&#xA;&#xD;&#xA;}}" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="ConfigKey()" />
+      <VirtualControl ContainerType="ControlList" ID="Title" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

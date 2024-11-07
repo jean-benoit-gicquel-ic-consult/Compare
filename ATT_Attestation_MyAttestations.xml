@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="ATT_Attestation_MyAttestations" HelpChapterUid="&quot;CA4146ED-452F-4F48-9014-783E9C1C18A3&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="AttestationCase" Table="AttestationCase" ScriptItemUID="ATTDataTableDbObject1">
+        <ActionSequence ScriptItemUID="ATTAction1" />
+        <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="ATTColumn1" />
+        <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="ATTColumn2" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="ATT_Attestation_MyAttestations" NavigationTitle="translate(&quot;#LDS#My Attestations&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#My Attestation Status&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar">
+          <Label ScriptItemUID="Label2" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1">
+            <ContainerTemplate DataTable="User" ScriptItemUID="ContainerTemplate1" WhereClause="uid_person = getuser()">
+              <ControlReferenceContainer ID="VI_Roles_AttestationCasesForObject" ScriptItemUID="ATTControlRef1">
+                <VirtualTableMapping VirtualTable="BaseObject" DataTable="User" ScriptItemUID="ATTVirtualTableMapping1" />
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="ATTVirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="ATTVirtualFunctionMapping2" />
+              </ControlReferenceContainer>
+            </ContainerTemplate>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

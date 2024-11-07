@@ -1,0 +1,51 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_ExploreButton">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1" ItemUID="TelefonLayout" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute21" Name="&quot;class&quot;" Value="&quot;imx-mobile-mobileonly&quot;" />
+          </HtmlAttributes>
+          <Button ScriptItemUID="Button1" ItemUID="Right-Arrow-Button (telefon layout)" Layout="'QBM_Styles_Button_StartPage'" DisplayType="Controls">
+            <ControlList ScriptItemUID="ControlList2">
+              <Label ScriptItemUID="Label9" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute35" Name="&quot;class&quot;" Value="&quot;cux-icon cux-icon--arrow-circle-right&quot;" />
+                  <Property Name="TagName" Value="i" />
+                </HtmlAttributes>
+              </Label>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ScriptItemUID="Call2" ActionID="RedirectAction" />
+            </ServerActionCall>
+          </Button>
+        </Container>
+        <Container ScriptItemUID="Container2" ItemUID="DefaultLayout" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-mobile-nomobile&quot;" />
+          </HtmlAttributes>
+          <Button ScriptItemUID="Button2" Text="translate('#LDS#Explore')" Layout="'QBM_Styles_Button_StartPage'" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;data-imx-identifier&quot;" Value="Identifier()" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall2">
+              <CallAction ScriptItemUID="Call1" ActionID="RedirectAction" />
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualControl ContainerType="ActionComponent" ID="RedirectAction" />
+      <VirtualFunction DataType="System.String" Signature="Identifier()" DefaultValue="&quot;Explore-Button&quot;" Comment="Optional value for the data-imx-identifier of the 'Explore' button (default is 'Explore-Button')." />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,101 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <Context MetamodelVersion="2016-05-08" ID="VI_ITShop_MyRoles" MigrationNotes="DMLREPLACE;" HelpChapterUid="--Departments&#xD;&#xA;if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;Department&quot;) then&#xD;&#xA;  &quot;878F1D58-F1B0-42CB-A666-A2D397BD7ACB&quot;&#xD;&#xA;  &#xD;&#xA;--Cost centers&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;ProfitCenter&quot;) then&#xD;&#xA;  &quot;FBA781DD-78F1-4C73-9502-503D1296E1DA&quot;&#xD;&#xA;  &#xD;&#xA;--Locations&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;Locality&quot;) then&#xD;&#xA;  &quot;FB511EFB-43CD-488E-B7CA-3EF2E47C9E12&quot;&#xD;&#xA;  &#xD;&#xA;--Business roles&#xD;&#xA;else if (IsNull(request(&quot;Area&quot;), &quot;&quot;) = &quot;BusinessRoles&quot;) then&#xD;&#xA;  &quot;86174B55-9F89-4A46-BDF8-B66E275856CF&quot;&#xD;&#xA;  &#xD;&#xA;--System roles&#xD;&#xA;else if (IsNull(request(&quot;Area&quot;), &quot;&quot;) = &quot;SystemRoles&quot;) then&#xD;&#xA;  &quot;86174B55-9F89-4A46-BDF8-B66E275856CF&quot;&#xD;&#xA;  &#xD;&#xA;--System entitlements&#xD;&#xA;else if (IsNull(request(&quot;Area&quot;), &quot;&quot;) = &quot;SystemEntitlements&quot;) then&#xD;&#xA;  &quot;D529E375-00D2-451F-ABE0-131DBBC52EA6&quot;&#xD;&#xA;  &#xD;&#xA;--Resources&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;QERResource&quot;) then&#xD;&#xA;  &quot;6B020098-4254-4740-991B-6E6E1C8A7FCD&quot;&#xD;&#xA;  &#xD;&#xA;--Assignment resources&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;QERAssign&quot;) then&#xD;&#xA;  &quot;F82BE0F5-4FD5-4DC2-8B77-42284F28AF46&quot;&#xD;&#xA;  &#xD;&#xA;--Multi request resources&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;QERreuse&quot;) then&#xD;&#xA;  &quot;C0811A15-0A74-46E2-A32F-F6925716E745&quot;&#xD;&#xA;&#xD;&#xA;--Multi requestable resources&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;QERReuseUs&quot;) then&#xD;&#xA;  &quot;F78C53F9-9BB0-4D65-B462-666F19D70D3C&quot;&#xD;&#xA;&#xD;&#xA;--Applications&#xD;&#xA;else if (IsNull(request(&quot;TableName&quot;), &quot;&quot;) = &quot;application&quot;) then&#xD;&#xA;  &quot;C2A65C5B-8481-41C8-BD45-F875232465C2&quot;&#xD;&#xA;&#xD;&#xA;--Application roles&#xD;&#xA;else if (IsNull(request(&quot;Area&quot;), &quot;&quot;) = &quot;AERole&quot;) then&#xD;&#xA;  &quot;AFC4B3C4-2AAD-40F0-9A47-719D5777642D&quot;&#xD;&#xA;&#xD;&#xA;--Everything that does not match the above&#xD;&#xA;else&#xD;&#xA;  &quot;5ED7E9A8-1174-41A3-AE6E-278E3BF201AD&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="Area" />
+        <Parameter Name="ObjectKey" IsMandatory="false" Type="ObjectKey" />
+        <Parameter Name="TableName" IsMandatory="false" />
+        <Parameter Name="Title" IsMandatory="false" />
+        <Parameter Name="HideObjectTypSelect" IsMandatory="false" Type="Boolean" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_Filter_PersonMembershipInAERole" Type="SQL" Description="translate('#LDS#Employees who can be member of a application role as owner or attestor')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Filter_PersonMembershipRequestFor" Type="SQL" Description="translate('#LDS#Employees for whom a membership can be requested')" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="UID_Org" DataType="System.String" ScriptItemUID="Column1" />
+        <Column Name="Area" DataType="System.String" ScriptItemUID="Column2" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="Area()" Expression="from vars select area" DataType="System.String" ScriptItemUID="Function2" />
+      <Function Name="Captions()" ScriptItemUID="Function3" FunctionType="FunctionResultSetList">
+        <FunctionValueList ScriptItemUID="FunctionValueList1">
+          <FunctionValue Expression="select (&quot;OtherServices&quot; as area, translate(&quot;#LDS#Heading Other Services&quot;) as caption)" />
+          <FunctionValue Expression="select (&quot;Organization&quot; as area, translate(&quot;#LDS#Heading Organization&quot;) as caption)" />
+          <FunctionValue Expression="select (&quot;AERole&quot; as area, translate(&quot;#LDS#Heading Application role&quot;) as caption)" />
+        </FunctionValueList>
+      </Function>
+      <Function Name="Caption()" Expression="if( NOT IsNullOrEmpty(Request('Title')) ) then&#xD;&#xA;Request('Title')&#xD;&#xA;else&#xD;&#xA;  select top 1 caption from (captions()) where (area()=area)" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="HeaderTexts()" ScriptItemUID="Function4" FunctionType="FunctionResultSetList">
+        <FunctionValueList ScriptItemUID="FunctionValueList2">
+          <FunctionValue Expression="select (&quot;Organization&quot; as area, translate('#LDS#You are responsible for the following departments, cost centers and locations.') as caption)&#xA;" />
+          <FunctionValue Expression="select (&quot;OtherServices&quot; as area, translate('#LDS#You are responsible for the following resources.') as caption)" />
+          <FunctionValue Expression="select (&quot;AERole&quot; as area, translate('#LDS#You are responsible for the following application roles.') as caption)&#xD;&#xA;" />
+        </FunctionValueList>
+      </Function>
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2">
+      <Update DataTable="Vars" DataColumn="Area" Value="request(&quot;Area&quot;)" ScriptItemUID="Update1" />
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Roles" PageFileName="VI_FormTemplate_Standard" NavigationTitle="Caption()" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="Caption()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList2">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Text()" Value="select top 1 caption from (headertexts()) where (area()=area)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ScriptItemUID="Container9" EnableCustomAttributes="true" ItemUID="Message for QER-AEROLE-STRUCTADMIN-ADMIN" Condition="Area() = 'Organization'&#xD;&#xA;and&#xD;&#xA;exists(&quot;Person&quot;, variable(&quot;uid_person = '%useruid%' and uid_person in ( select piae.uid_person from personinaerole piae join AERoleCollection aec on aec.UID_AERole = piae.uid_aerole where aec.UID_ParentAERole = 'QER-AEROLE-STRUCTADMIN-ADMIN')&quot;))">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container29style" Value="&quot;padding-bottom: +10px;&quot;" />
+              </HtmlAttributes>
+              <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#This page shows organizational units you are directly responsible for. To view all organizational units, click here.&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Action="Redirect" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute10" Value="&quot;imx-message&quot;" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall7">
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="QER_Organizations_Admin" />
+                </ServerActionCall>
+              </Label>
+            </Container>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true" ItemUID="Message for QER-AEROLE-STRUCTADMIN-ADMIN QER-AEROLE-ITSHOPADMIN-ADMIN RMB-AEROLE-ROLEADMIN-ADMIN" Condition="(Area() = &quot;SystemRoles&quot; or Request(&quot;TableName&quot;) in (&quot;ESet&quot;, &quot;QERAssign&quot;, &quot;QERResource&quot;, &quot;QERReuse&quot;, &quot;QERReuseUS&quot;))&#xD;&#xA;and&#xD;&#xA;exists(&quot;Person&quot;, variable(&quot;uid_person = '%useruid%' and uid_person in ( select piae.uid_person from personinaerole piae join AERoleCollection aec on aec.UID_AERole = piae.uid_aerole where aec.UID_ParentAERole in ('QER-AEROLE-STRUCTADMIN-ADMIN', 'QER-AEROLE-ITSHOPADMIN-ADMIN', 'RMB-AEROLE-ROLEADMIN-ADMIN'))&quot;))">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="&quot;padding-bottom: +10px;&quot;" />
+              </HtmlAttributes>
+              <Label ScriptItemUID="Label3" Text="if(Request(&quot;TableName&quot;) = &quot;QERResource&quot;)then&#xD;&#xA;   translate(&quot;#LDS#This page shows resources you are directly responsible for. To view all resources, click here.&quot;)&#xD;&#xA;else if(Request(&quot;TableName&quot;) = &quot;QERAssign&quot;)then&#xD;&#xA;   translate(&quot;#LDS#This page shows assignment resources you are directly responsible for. To view all assignment resources, click here.&quot;)&#xD;&#xA;else if(Request(&quot;TableName&quot;) = &quot;QERReuse&quot;)then&#xD;&#xA;   translate(&quot;#LDS#This page shows multi-request resources you are directly responsible for. To view all multi-request resources, click here.&quot;)&#xD;&#xA;else if(Request(&quot;TableName&quot;) = &quot;QERReuseUs&quot;)then&#xD;&#xA;   translate(&quot;#LDS#This page shows multi-requestable/unsubscribable resources you are directly responsible for. To view all multi-requestable/unsubscribable resources, click here.&quot;)&#xD;&#xA;else if(Area() = &quot;SystemRoles&quot; or Request(&quot;TableName&quot;) = &quot;ESet&quot;)then&#xD;&#xA;   translate(&quot;#LDS#This page shows system roles you are directly responsible for. To view all system roles, click here.&quot;)" Action="Redirect" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;imx-message&quot;" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="QER_Entitlement_Admin">
+                    <RedirectParameter Value="if(Area() = &quot;SystemRoles&quot;)then&#xD;&#xA;   &quot;ESet&quot;&#xD;&#xA;else&#xD;&#xA;   Request(&quot;TableName&quot;)" Name="'TableName'" />
+                  </Redirect>
+                </ServerActionCall>
+              </Label>
+            </Container>
+            <ControlReferenceContainer ID="VI_Roles_RolesAndEntitlements" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ID="Area()" Value="from vars select area" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="Caption()" Value="Caption()" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="ObjectKey()" Value="request(&quot;ObjectKey&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="TableNamePreSelect()" Value="request(&quot;TableName&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="HideObjectTypSelect()" Value="convert(isnull(request(&quot;HideObjectTypSelect&quot;), 'false'), 'System.Boolean')" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

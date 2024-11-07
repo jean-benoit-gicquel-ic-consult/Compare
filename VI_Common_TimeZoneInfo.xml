@@ -1,0 +1,34 @@
+﻿<WebDesigner>
+  <GlobalControl MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ID="VI_Common_TimeZoneInfo" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral2">timeZoneId.SingleRow.SetValue("id", _Connection.TimeZone.DisplayName);</CodeLiteral>
+      </ActionSequence>
+      <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container1">
+        <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'title'" ScriptItemUID="LinkContainer1title" Value="translate(&quot;#LDS#Time zone&quot;)" />
+          </HtmlAttributes>
+          <ControlList ScriptItemUID="ControlList2">
+            <Label Text="(from timeZoneId select id)" ScriptItemUID="Label2" />
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ScriptItemUID="Call1" ActionID="VI_Common_TimeZoneInfo_PopUp" />
+          </ServerActionCall>
+        </LinkContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="timeZoneId" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="id" DataType="System.String" ScriptItemUID="Column4" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

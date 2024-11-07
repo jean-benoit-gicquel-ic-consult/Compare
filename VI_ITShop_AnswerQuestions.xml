@@ -1,0 +1,139 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_ITShop_AnswerQuestions" MigrationNotes="DMLREPLACE;" HelpChapterUid="if(Request('isRequest')='true') then&#xD;&#xA;&quot;4468BD3C-FBED-48F4-9B16-8B2A0746644E&quot;&#xD;&#xA;else&#xD;&#xA;&quot;A1BAE0DD-6397-496A-A6AC-EAA52F20A8F1&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="aeweb_uid_pwohelperpwo" IsMandatory="false" />
+        <Parameter Name="isRequest" IsMandatory="false" Type="Boolean" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="PersonWantsOrg" Class="PersonWantsOrg" WhereClauseSQL="PWOWhereClause()" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+        <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column1" MinLength="" MaxLength="" Comment="dummy property, required for interface compatibility" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="Notice" DataType="System.String" ScriptItemUID="Column4" Caption="translate(&quot;#LDS#Your answer&quot;)" MinLength="1" />
+      </DataTableSingleRow>
+      <DataTableCRView Table="PWODecisionHistory" Class="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView1">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+      </DataTableCRView>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="PWOWhereClause()" Expression="sqland(&#xD;&#xA;format(&quot;uid_personwantsorg in (select P.Uid_PersonWantsOrg from PWOHelperPWO P&#xD;&#xA;join personwantsorg PWO on PWO.Uid_PersonWantsOrg = P.Uid_PersonWantsOrg&#xD;&#xA;join ItShopOrg ITO on ITO.uid_itshoporg = PWO.uid_org&#xD;&#xA;where P.uid_personhead = '{0}' and p.decision = 'Q' and {1})&#xD;&#xA;/* do not ParentConnectColumn in VI_ITShop_PwoOverviewGrid */&#xD;&#xA;&quot;,select uid_person from user,&#xD;&#xA;if(isnullorempty(request(&quot;aeweb_uid_pwohelperpwo&quot;))) then &quot;1=1&quot; else sqlcompare(&quot;p.uid_pwohelperpwo&quot;, request(&quot;aeweb_uid_pwohelperpwo&quot;),&quot;string&quot;,&quot;equal&quot;,&quot;NonUnicodeLiterals&quot;)))" DataType="System.String" ScriptItemUID="Function1" />
+      <Function ScriptItemUID="Function2" Name="getTitleAndHeadline()" DataType="System.String" Expression="if(Request('isRequest')='true') then&#xD;&#xA; translate('#LDS#Heading Request Inquiries')&#xD;&#xA;else&#xD;&#xA; translate('#LDS#Heading Attestation Inquiries')" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action6">
+      <ActionSequence ScriptItemUID="Action3" Condition="(Request('isRequest') = true ) or (not IsNullOrEmpty(Request('aeweb_uid_pwohelperpwo')) )">
+        <LoadTable DataTable="PersonWantsOrg" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+        </LoadTable>
+      </ActionSequence>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="F1" PageFileName="VI_FormTemplate_Standard" NavigationTitle="getTitleAndHeadline()" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action7" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="getTitleAndHeadline()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <SwitchContainer ScriptItemUID="Switch1">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="(Request('isRequest') = true ) or (not IsNullOrEmpty(Request('aeweb_uid_pwohelperpwo')) )" ItemUID="request">
+                <Container ScriptItemUID="Container4" ItemUID="Request">
+                  <Container Condition="0 = select count() from personwantsorg" ItemUID="no questions" ScriptItemUID="Container30">
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer4">
+                      <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#There are no pending approval inquiries.')" ScriptItemUID="VirtualFunctionMapping1" />
+                    </ControlReferenceContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container7" ItemUID="questions" Condition="0 &lt; select count() from personwantsorg">
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef4">
+                      <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#You have been asked to answer inquiries about the following requests.&quot;)" ScriptItemUID="VirtualFunctionMapping12" />
+                    </ControlReferenceContainer>
+                    <ControlReferenceControlList ID="VI_ITShop_PWO_MasterDetail" ScriptItemUID="ControlRef5">
+                      <VirtualControlMapping VirtualControl="AdditionalActions" ContainerType="Container">
+                        <Container ScriptItemUID="Container13">
+                          <Button Text="translate('#LDS#Respond')" ScriptItemUID="Button3">
+                            <ServerActionCall ScriptItemUID="ServerActionCall3">
+                              <ActionSequence ScriptItemUID="Action2">
+                                <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update2" />
+                                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Respond to an inquiry&quot;)" ScriptItemUID="VirtualFunctionMapping21" />
+                                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                    <Container ScriptItemUID="Container16">
+                                      <LayoutPanel ScriptItemUID="LayoutPanel2">
+                                        <Label Text="translate(&quot;#LDS#Question&quot;)" ScriptItemUID="Label10" />
+                                        <Label Text="select top 1 DateHead + ' - ' + displayvalue(DisplayPersonHead) + ' - ' + displayvalue(Reasonhead)&#xD;&#xA;from PWODecisionHistory where DecisionType = 'Query' and UID_PersonRelated = GetUser() and uid_personwantsorg = (select current uid_personwantsorg from PersonWantsOrg) order by datehead desc&#xD;&#xA;" ScriptItemUID="Label8" />
+                                      </LayoutPanel>
+                                      <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef7">
+                                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping20">
+                                          <ColumnList ScriptItemUID="ColumnList2">
+                                            <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="Notice" ColumnComponentEdit="VI_Edit_TextLong" />
+                                          </ColumnList>
+                                        </VirtualFunctionMapping>
+                                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping2" />
+                                      </ControlReferenceContainer>
+                                    </Container>
+                                  </VirtualControlMapping>
+                                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container15">
+                                      <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button4">
+                                        <HtmlAttributes>
+                                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute2" />
+                                        </HtmlAttributes>
+                                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                                          <ActionOnControl ActionType="PerformValidation" />
+                                          <Method DataTable="PersonWantsOrg" Method="AnswerFromPerson" WhereClause="uid_personwantsorg = (select current uid_personwantsorg from PersonWantsOrg)">
+                                            <MethodParameter Name="'strUID_Person'" Value="select uid_person from user" />
+                                            <MethodParameter Name="'strAnswer'" Value="select Notice from Vars" />
+                                          </Method>
+                                          <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call3" />
+                                          <ActionOnControl />
+                                          <Delete DataTable="PersonWantsOrg" ScriptItemUID="Delete2" WhereClause="uid_Personwantsorg = ( select current uid_personwantsorg from personwantsorg)" />
+                                          <CodeLiteral ScriptItemUID="CodeLiteral2">// invalidate tablestore --&gt; reload data 
+PersonWantsOrg_Current.Row.Table.TableStore.Invalidate();</CodeLiteral>
+                                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your answer has been submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping19" />
+                                            <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping18" />
+                                          </CallAction>
+                                        </ServerActionCall>
+                                      </Button>
+                                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef6">
+                                        <VirtualFunctionMapping ID="MoreThanOneButton()" Value="True" ScriptItemUID="VirtualFunctionMapping17" />
+                                        <VirtualFunctionMapping ID="TriggerValidation()" Value="False" ScriptItemUID="VirtualFunctionMapping16" />
+                                      </ControlReferenceControlList>
+                                    </Container>
+                                  </VirtualControlMapping>
+                                </CallAction>
+                              </ActionSequence>
+                            </ServerActionCall>
+                          </Button>
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping VirtualControl="AdditionalControlsColumn1" ContainerType="Container">
+                        <Container ScriptItemUID="Container9">
+                          <Label Text="select top 1 DateHead + ' - ' + displayvalue(DisplayPersonHead)&#xD;&#xA;from PWODecisionHistory where DecisionType = 'Query' and UID_PersonRelated = GetUser() and uid_personwantsorg = (select current uid_personwantsorg from PersonWantsOrg) order by datehead desc&#xD;&#xA;" ScriptItemUID="Label7" />
+                          <Container ScriptItemUID="Container12">
+                            <Label Text="select top 1 displayvalue(Reasonhead)&#xD;&#xA;from PWODecisionHistory where DecisionType = 'Query' and UID_PersonRelated = GetUser() and uid_personwantsorg = (select current uid_personwantsorg from PersonWantsOrg) order by datehead desc&#xD;&#xA;" ScriptItemUID="Label2" />
+                          </Container>
+                        </Container>
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ID="ShowCancelOrder()" Value="false" ScriptItemUID="VirtualFunctionMapping15" />
+                      <VirtualFunctionMapping ID="DbWhereClause()" Value="PWOWhereClause()" ScriptItemUID="VirtualFunctionMapping14" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping13" />
+                    </ControlReferenceControlList>
+                  </Container>
+                </Container>
+              </SwitchContainerCase>
+              <SwitchContainerCase ScriptItemUID="Case2" Condition="not((Request('isRequest') = true )) or (not IsNullOrEmpty(Request('aeweb_uid_attestationhelper')) )" ItemUID="Attestation">
+                <Container ScriptItemUID="Container5" ItemUID="Attestation" />
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

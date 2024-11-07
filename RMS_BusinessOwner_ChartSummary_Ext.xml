@@ -1,0 +1,14 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_BusinessOwner_ChartSummary_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action6" ObjectType="ActionSequence">
+        <Insert ScriptItemUID="RMSInsert1" DataTable="Ownerships">
+          <ActionSequence ScriptItemUID="RMSAction1" />
+          <InsertValue Value="&quot;ESet&quot;" DataColumn="TableName" />
+          <InsertValue Value="dbcount(&quot;ESet&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_ESet&quot;)))" DataColumn="Count" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=SystemRoles&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

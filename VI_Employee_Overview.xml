@@ -1,0 +1,112 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context ID="VI_Employee_Overview" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="--My responsibilities &gt; people&#xD;&#xA;&quot;0C2A6133-35A5-4AC1-A6E1-497FA545920A&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Employee_Edit" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Employee_Person_Filter" Type="SQL" Description="translate('#LDS#Employees which can be edited by the current user')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_Employee_Person_ManagerCondition" Type="SQL" Description="translate('#LDS#Employees authorized to add and edit employees')" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_Employee_Person_ResultAttributes" Type="ColumnList" Description="translate('#LDS#Fields displayed in the result list')" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="Person" Class="Person" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+      <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars" Caption="translate('#LDS#My Direct Reports')">
+        <Column DataType="System.Boolean" Name="ShowDirectReports" ScriptItemUID="Column1" Caption="translate('#LDS#Show only direct reports')" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function ScriptItemUID="Function1" Name="ShowOnlyDirectReports()" DataType="System.Boolean" Expression="from Vars select ShowDirectReports" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2">
+      <Update DataColumn="ShowDirectReports" DataTable="Vars" ScriptItemUID="Update1" Value="1" />
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#People&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#People')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate('#LDS#On this page you can view and edit employees you are responsible for.')+&quot; &quot;+translate('#LDS#Please choose an employee to view his/her data.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ScriptItemUID="Container9" EnableCustomAttributes="true" ItemUID="Message for QER-AEROLE-PERSONADMIN-ADMIN" Condition="Exists(&#xD;&#xA;   &quot;Person&quot;, &#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;, GetUser()),&#xD;&#xA;      Format(&quot;UID_Person in (select piae.UID_Person from personinaerole piae join AERoleCollection aec on aec.UID_AERole = piae.uid_aerole where aec.UID_ParentAERole = 'QER-AEROLE-PERSONADMIN-ADMIN')&quot;)&#xD;&#xA;   )&#xD;&#xA;)">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container29style" Value="&quot;padding-bottom: +10px;&quot;" />
+              </HtmlAttributes>
+              <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#Here you can see the employees you are responsible for. To view all employees, click this note.&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Action="Redirect" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute10" Value="&quot;imx-message&quot;" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall7">
+                  <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="QER_Person_Admin" />
+                </ServerActionCall>
+              </Label>
+            </Container>
+            <Container ScriptItemUID="Container3">
+              <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;flex-fill&quot;" />
+                </HtmlAttributes>
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="Person" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="If(ShowOnlyDirectReports()) Then&#xD;&#xA;   format(&quot;uid_person in (select uid_person from QER_VEditEmployee where uid_personhead = '{0}' and UID_OrgRoot = 'Person')&quot;,GetUser())&#xD;&#xA;Else&#xD;&#xA;   variable(getconfig(&quot;VI_Employee_Person_Filter&quot;))" EnableCustomAttributes="true" RowSelection="Action" AdditionalGridHeader="true">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <SelectionAction ScriptItemUID="ServerActionCall2">
+                      <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1" AbortExecution="false">
+                        <RedirectParameter Name="&quot;ObjectKey&quot;" Value="select current xobjectkey from person" />
+                      </Redirect>
+                    </SelectionAction>
+                    <AdditionalGridHeaderContent ScriptItemUID="ControlList2">
+                      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;Style&quot;" Value="&quot;padding-top: 7px;&quot; " />
+                        </HtmlAttributes>
+                        <ColumnEditor DataColumn="ShowDirectReports" DataTable="Vars" ScriptItemUID="ColumnEditor1" />
+                      </Container>
+                    </AdditionalGridHeaderContent>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumnColumnTemplate DataTable="Person" ScriptItemUID="GridColumnColumnTemplate1">
+                      <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                        <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_Person_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                      </ColumnList>
+                      <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup1">
+                        <GridColumnSimple ScriptItemUID="Column3" Column="currentcolumn" />
+                      </GridColumnGroup>
+                    </GridColumnColumnTemplate>
+                  </GridBand>
+                </Grid>
+              </Container>
+              <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                </HtmlAttributes>
+                <Button Text="translate('#LDS#Add a new employee')" ScriptItemUID="Button2" EnabledCondition="caninsert(&quot;persoN&quot;)">
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Redirect ScriptItemUID="Redirect3" Target="Context" ContextID="VI_Employee_Edit" AllowReturnToThisContext="true" AbortExecution="false" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

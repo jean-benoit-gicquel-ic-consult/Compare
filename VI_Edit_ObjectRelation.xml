@@ -1,0 +1,173 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="915deccf-028f-f40d-f1d7-da1b1064f373">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_ObjectRelation" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember>internal MemberRelation GetMemberRelation()
+{
+	return ((MemberRelationColumn)EditTable_EditColumn.ExtendedProperties["MemberRelationColumn"]).GetMemberRelation(EditTable_Current.Row);
+}</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">// Get the candidate information from the column
+
+var mr = GetMemberRelation();
+Candidate = mr.Candidates;
+Candidate_IsMember = mr.MemberColumn;
+Candidate_XOrigin = mr.OriginColumn;
+Candidate_IsUnsaved = mr.UnsavedColumn;
+</CodeLiteral>
+        <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-flex-row&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;imx-flex-child imx-proped-viewbox&quot;" />
+            </HtmlAttributes>
+            <ColumnEditor DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="ColumnEditor1" Type="IsForView" />
+          </Container>
+          <Container ScriptItemUID="Container3" Condition="select current canedit(editcolumn) from edittable" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute5" Value="&quot;imx-proped-actions&quot;" />
+            </HtmlAttributes>
+            <Button Text="if (from edittable select current isnullorempty(editcolumn)) then translate(&quot;#LDS#Assign&quot;) else translate(&quot;#LDS#Change&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Pill'">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container1">
+                      <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                        <HtmlAttributes />
+                        <MasterPane ScriptItemUID="MasterPane1">
+                          <Container ScriptItemUID="Container9">
+                            <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, CandidateTableName()))" ActionType="ObjectSelection">
+                              <VirtualTableMapping VirtualTable="TargetTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping1">
+                                <VirtualColumnMapping VirtualColumn="TargetWhereClause" DataColumn="PreSelectWhereClause" />
+                              </VirtualTableMapping>
+                            </ObjectSwitchContainer>
+                            <Container ItemUID="Available entries" ScriptItemUID="Container12" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Container12style" Value="&quot;min-height:150px;&quot;" />
+                              </HtmlAttributes>
+                              <ObjectSwitchContainer ScriptItemUID="TableRef2" ObjectKey="GetObjectKey(&quot;DialogTable&quot;, {{ _Connection.Tables[ DataContext.CandidateTableName()].Uid }}, &quot;&quot;)" ActionType="ObjectCollection">
+                                <VirtualControlMapping VirtualControl="ElementSelected" ContainerType="ActionComponent">
+                                  <ActionComponent ScriptItemUID="Action8">
+                                    <Update DataTable="Candidate" DataColumn="IsMember" Value="not(ismember)" WhereClause="primarykey() = select current primarykey() from candidate" ScriptItemUID="Update1" />
+                                  </ActionComponent>
+                                </VirtualControlMapping>
+                                <VirtualFunctionMapping ID="TableName()" Value="candidatetablename()" ScriptItemUID="VirtualFunctionMapping1" />
+                                <VirtualFunctionMapping ID="CssClass()" Value="CssClass()" ScriptItemUID="VirtualFunctionMapping2" />
+                                <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="Candidate" ScriptItemUID="VirtualTableMapping2" />
+                                <VirtualFunctionMapping ID="DbWhereClause()" Value="sqland(&#xD;&#xA;from localvars select PreSelectWhereClause,&#xD;&#xA;AdditionalWhereClause(),&#xD;&#xA;&#xD;&#xA;-- read column-level WHERE clause&#xD;&#xA;{{&#xD;&#xA;DataContext.EditTable_EditColumn.GetMetadata(DataContext.EditTable_Current.Row).ForeignKeyWhereClause&#xD;&#xA;}}&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping3" />
+                                <VirtualFunctionMapping ID="StatusDescriptor()" Value="StatusDescriptor()" ScriptItemUID="VirtualFunctionMapping6" />
+                                <VirtualFunctionMapping ID="DisplayType()" Value="'MultiSelect'" ScriptItemUID="VirtualFunctionMapping7" />
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="AdditionalDisplayColumns()" IsPropertyList="true">
+                                  <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="XOrigin" Caption="datacaption(&quot;PersonInBaseTree&quot;, &quot;XOrigin&quot;)" Condition="{{ GetMemberRelation().IsXOriginSupported }}" />
+                                  </ColumnList>
+                                </VirtualFunctionMapping>
+                              </ObjectSwitchContainer>
+                            </Container>
+                          </Container>
+                        </MasterPane>
+                        <DetailPane ScriptItemUID="DetailPane1">
+                          <Container ScriptItemUID="Container10">
+                            <ContainerTemplate DataTable="Candidate" WhereClause="xorigin &gt; 0 or isunsaved" OrderBy="'__LongDisplay'" ScriptItemUID="ContainerTemplate3">
+                              <Container ScriptItemUID="Container13" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;class&quot;" Value="if(from candidate select current isunsaved) then &quot;imx-data-changedassignment&quot;" />
+                                </HtmlAttributes>
+                                <LinkContainer ScriptItemUID="LinkContainer2">
+                                  <ControlList ScriptItemUID="ControlList4">
+                                    <Label Text="from Candidate select current DisplayLong()" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                                      <HtmlAttributes>
+                                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from candidate select current&#xD;&#xA;&quot;imx-icon &quot;+&#xD;&#xA;(if(IsDirectAssignment(xorigin)) then &quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else &quot;imx-icon-AssignedNone&quot;)&#xD;&#xA;" />
+                                      </HtmlAttributes>
+                                    </Label>
+                                  </ControlList>
+                                  <ServerActionCall ScriptItemUID="ServerActionCall4" DoNotAllowFocusInResponse="true">
+                                    <Update DataTable="Candidate" DataColumn="IsMember" WhereClause="primarykey() = select current primarykey() from candidate" Value="not(ismember)" ScriptItemUID="Update2" />
+                                  </ServerActionCall>
+                                </LinkContainer>
+                                <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_Inline'" EnableCustomAttributes="true" Condition="from candidate select current xorigin&gt;0">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;style&quot;" Value="&quot;padding-left: 16px;&quot;" />
+                                  </HtmlAttributes>
+                                  <Label ScriptItemUID="Label1" Text="&quot;(&quot;+from candidate select current displayvalue(xorigin)+&quot;)&quot;" />
+                                </Container>
+                              </Container>
+                            </ContainerTemplate>
+                          </Container>
+                          <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                            <ControlList ScriptItemUID="ControlList2">
+                              <Label Text="translate(&quot;#LDS#Assigned&quot;)" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <Property Name="TagName" Value="h2" />
+                                </HtmlAttributes>
+                              </Label>
+                            </ControlList>
+                          </DetailPaneHeader>
+                        </DetailPane>
+                      </MasterDetailControl>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container ScriptItemUID="Container2" Layout="'VI_Styles_Container_ButtonPanel'">
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" ItemUID="Default Button" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ScriptItemUID="Button9" Layout="'VI_Styles_Button_LabelOnly'">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall18">
+                          <CodeLiteral ScriptItemUID="CodeLiteral3">var mr = DataContext.GetMemberRelation();
+mr.ResetChanges();
+mr.RaiseMemberStatusBulk();
+</CodeLiteral>
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#OK&quot;)" ScriptItemUID="Button2">
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <CodeLiteral ScriptItemUID="CodeLiteral2">DataContext.GetMemberRelation().RaiseMemberStatusBulk();
+</CodeLiteral>
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Assign&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                  <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping5" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="PreSelectWhereClause" ScriptItemUID="Column8" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="CssClass()" Expression="from candidate select current (&#xD;&#xA;if (xorigin=1) then &quot;imx-icon imx-icon-AssignedDirect&quot;&#xD;&#xA;else if(xorigin=0) then &quot;imx-icon imx-icon-AssignedNone&quot;&#xD;&#xA;else &quot;imx-icon imx-icon-AssignedDirectIndirect&quot;)" DataType="System.String" ScriptItemUID="Function7">
+          <DataTableCursor DataTable="Candidate" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="CandidateTableName()" Expression="{{ ((MemberRelationColumn)EditTable_EditColumn.ExtendedProperties[&quot;MemberRelationColumn&quot;]).CandidateTable }}" DataType="System.String" ScriptItemUID="Function8" />
+        <Function Name="StatusDescriptor()" Expression="from candidate select current ( if (ismember) then &quot;ASSIGNED&quot; else &quot;NOTASSIGNED&quot;)" DataType="System.String" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="Candidate" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="IsDirectAssignment(int xorigin)" Expression="-- the first bit of XOrigin means that it is a direct assignment&#xD;&#xA;{{ (xorigin &amp; (int)XOrigin.Direct) == (int) XOrigin.Direct }}" DataType="System.Boolean" ScriptItemUID="Function6" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Candidate" ScriptItemUID="VirtualTable1" IsMandatory="false">
+        <VirtualColumn Name="IsMember" DataType="System.Boolean" IsMandatory="false" Comment="this property is assigned internally - do not set a value." TriggerUpdates="Updates" />
+        <VirtualColumn Name="XOrigin" DataType="System.Int32" IsMandatory="false" Comment="this property is assigned internally - do not set a value." TriggerUpdates="Updates" />
+        <VirtualColumn Name="IsUnsaved" DataType="System.Boolean" IsMandatory="false" Comment="this property is assigned internally - do not set a value." TriggerUpdates="Updates" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

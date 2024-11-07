@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_GovernanceAdministration_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="25">
+        <SwitchContainer ScriptItemUID="TilePolicyViolations">
+          <SwitchContainerCase ScriptItemUID="POLCase1" Condition="IsPreProp(&quot;QERPOLICY&quot;) and (&#xD;&#xA;-- visible for Compliance &amp; Security Officer&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for Auditor&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- Whereclause for: ComplianceArea.UID_OrgResponsible, QERPolicy.UID_AERoleResponsible, QERPolicy.UID_AERoleRuler&#xD;&#xA;exists(&quot;person&quot;, format(&quot;uid_person = {1} and (uid_person in ( select piae.UID_Person from PersonInAERole piae join AERoleCollection aec on aec.UID_ParentAERole = piae.UID_AERole&#xD;&#xA;where piae.xorigin &gt; 0 and piae.UID_AERole in ( select cr.uid_aeroleruler from qerpolicy cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select cr.uid_aeroleresponsible from qerpolicy cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select ca.uid_orgresponsible from compliancearea ca ))&#xD;&#xA;)&quot;&#xD;&#xA;, sqlor(sqlcompare(&quot;cr.isinactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),sqlcompare(&quot;cr.isworkingcopy&quot;,false,&quot;bool&quot;,&quot;equal&quot;)), sqlformatvalue(getuser(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;))&#xD;&#xA;)">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="POLContainer1" ItemUID="Policy Violations">
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping9" ID="Identifier()" Value="&quot;Policy Violations&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="POLAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_QERPolicy_Report" ScriptItemUID="POLRedirect2" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping3" ID="Caption()" Value="translate('#LDS#Heading Policy Violations')" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping10" ID="Image()" Value="&quot;QERPolicy&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#See an overview of all policies and their violations.')" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

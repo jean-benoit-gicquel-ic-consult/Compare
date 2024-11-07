@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Heading" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="Heading" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.Heading	{ width: auto; font-weight: bold; padding: 3px 6px 3px 6px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

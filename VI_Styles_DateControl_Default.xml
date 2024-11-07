@@ -1,0 +1,33 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_DateControl_Default" Type="DateControl" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="datecontrol" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">
+/*
+
+todo: no more qui
+
+.qui-date-picker-popup .k-calendar a {
+    color: %VI_Common_Color_Font%;
+}
+.qui-date-picker-popup .k-calendar .k-header .k-link:link, 
+.qui-date-picker-popup .k-calendar .k-footer .k-link:link, 
+.qui-date-picker-popup .k-calendar .k-header .k-link:visited, 
+.qui-date-picker-popup .k-calendar .k-footer .k-link:visited {
+    color: %VI_Common_Color_Font%;
+}
+
+
+.imx-calendar { display: inline-block; }
+
+/* checkbox to indicate the status 'no (null) date entered' 
+.imx-calendar-checkbox { margin-right: 0.5em !important; margin-top: 13px; }
+
+/* for mandatory or read-only date properties, hide the calendar 
+.imx-calendar-mandatory .imx-calendar-checkbox { display: none; }
+.imx-calendar-readonly .imx-calendar-checkbox { display: none; }
+*/</CssDocument>
+  </LayoutObject>
+</WebDesigner>

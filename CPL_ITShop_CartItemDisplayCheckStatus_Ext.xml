@@ -1,0 +1,51 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ITShop_CartItemDisplayCheckStatus_Ext" RequiredDbModules="">
+    <Extensions>
+      <AddObject ObjectID="Container2" ObjectType="Container" SortOrder="40">
+        <Container Condition="from ShoppingCartItem select current CheckStatus in ('Rule', 'RuleNoException')" ItemUID="Checkstatus = Rule" ScriptItemUID="CPLContainer1" EnableCustomAttributes="true">
+          <HtmlAttributes />
+          <LinkContainer ScriptItemUID="CPLLinkContainer1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="If(from ShoppingCartItem select Current CheckStatus = 'RuleNoException') Then &quot;imx-message imx-message-exception&quot;&#xD;&#xA;Else &quot;imx-message imx-message-warning&quot;" ScriptItemUID="CPLHtmlAttribute1" />
+            </HtmlAttributes>
+            <ControlList ScriptItemUID="CPLControlList1">
+              <Label Text="if(from ShoppingCartItem select current CheckStatus = 'RuleNoException') then translate(&quot;#LDS#This request cannot be submitted because it would cause a non-approvable compliance violation.&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#This request will cause a compliance violation. You may still submit the request.&quot;)" ScriptItemUID="CPLLabel1" />
+            </ControlList>
+            <ServerActionCall ScriptItemUID="CPLServerActionCall1">
+              <LoadTable DataTable="ComplianceRule" WhereClause="format(&quot;uid_compliancerule in ({0})&quot;,&#xD;&#xA;&#xD;&#xA;listselect(compliancechecksimple, uid_compliancerule, (uid_shoppingcartitem = ( select current uid_shoppingcartitem from ShoppingCartItem))))" ScriptItemUID="CPLLoadTable1">
+                <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType1" ConvertToInteractive="false" />
+              </LoadTable>
+              <CallAction ActionID="VI_Popup" ScriptItemUID="CPLCall1">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="CPLContainer3">
+                    <Container ScriptItemUID="CPLContainer2" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="p" />
+                      </HtmlAttributes>
+                      <Label Text="translate(&quot;#LDS#The following rule violations are caused by this request.&quot;)" ScriptItemUID="CPLLabel2" />
+                    </Container>
+                    <ControlReferenceContainer ID="VI_Compliance_SimulationResultOverview" ScriptItemUID="CPLControlRef1">
+                      <VirtualFunctionMapping ID="ComplianceCheckSimpleFilter()" Value="uid_shoppingcartitem = ( select current uid_shoppingcartitem from shoppingcartitem)" ScriptItemUID="CPLVirtualFunctionMapping1" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container ScriptItemUID="CPLContainer4">
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="CPLControlRef2" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Compliance rule violations&quot;)+&quot; - &quot;+from shoppingcartitem select current display()" ScriptItemUID="CPLVirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="CPLVirtualFunctionMapping3" />
+              </CallAction>
+            </ServerActionCall>
+          </LinkContainer>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="30">
+        <DataTableDbObject Table="ComplianceRule" Class="ComplianceRule" ScriptItemUID="CPLDataTableDbObject1">
+          <ActionSequence ScriptItemUID="CPLAction2" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

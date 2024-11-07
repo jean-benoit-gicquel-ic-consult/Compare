@@ -1,0 +1,126 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_UserMenu_horizontal" IsInSessionScope="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Styles_Label_NavList" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <ActionSequence ScriptItemUID="Action3">
+          <Delete DataTable="UserMenu" WhereClause="isnull(contextid, '')='' and not(id in ( select idparent from usermenu)) and type='fixed'&#xA;-- remove &quot;blind&quot; menu items that do not have child items" ScriptItemUID="Delete1" />
+        </ActionSequence>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" Layout="'QBM_Styles_Container_UserMenu_horizontal'">
+        <Container ScriptItemUID="Container2" ItemUID="start page" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;class&quot;" Value="&quot;imx-startpagelink imx-mobile-nomobile&quot;" />
+          </HtmlAttributes>
+          <Label ScriptItemUID="Label1" EnableCustomAttributes="true" Action="Redirect">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-home&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;title&quot;" Value="translate('#LDS#Home')" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall2">
+              <Redirect Target="ReturnStartForm" NoLinkObjectID="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect3" />
+            </ServerActionCall>
+          </Label>
+        </Container>
+        <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-navigationMenu&quot;" />
+          </HtmlAttributes>
+          <ContainerTemplate DataTable="UserMenu" ScriptItemUID="ContainerTemplate2" EnableCustomAttributes="true" WhereClause="idparent = &quot;&quot;" OrderBy="'OrderNumber'">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="ul" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;kendo-menu&quot;" Value="&quot;&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;k-animation&quot;" Value="&quot;false&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;k-scrollable&quot;" Value="&quot;true&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute15" Name="&quot;k-open-on-click&quot;" Value="{{ VI.WebRuntime.HttpContextFactory.Current.Request.UserAgent.IndexOf(&quot;@WebDesigner&quot;) &gt; -1 ? &quot;true&quot; : &quot;false&quot;}}" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="LI">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="li" />
+              </HtmlAttributes>
+              <Label Text="from usermenu select current title" ScriptItemUID="Label11" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute7" Value="from usermenu select current tooltip" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;NavListLabel &quot;&#xD;&#xA;+&#xD;&#xA;if(select current id from usermenu in (from usermenu select id&#xD;&#xA;where&#xD;&#xA;isconnectable(idparent, id,&#xD;&#xA;(&#xD;&#xA;(id in (select linkobjectid from UserRuntimeModule where UidModule = GetRuntimeContextID())&#xD;&#xA;))) and isnullorempty(idparent)))&#xD;&#xA;then &quot;NavListLabelActive&quot;" />
+                </HtmlAttributes>
+              </Label>
+              <ContainerTemplate DataTable="UserMenu" ScriptItemUID="ContainerTemplate3" OrderBy="'OrderNumber'" EnableCustomAttributes="true" WhereClause="idparent = ( select current id from usermenu )">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="ul" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container8" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="li" />
+                  </HtmlAttributes>
+                  <Label Text="from usermenu select current title" ScriptItemUID="Label2" Layout="'VI_Styles_Label_NavList'" EnableCustomAttributes="true" Action="Redirect">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="from usermenu select current tooltip" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="ServerActionCall3" EnableRedirectByUrl="true">
+                      <RedirectByUrl Condition="from UserMenu select current not(isnullorempty(contextid))">
+                        <Redirect ScriptItemUID="Redirect1" Target="MenuItem" MenuItemID="from usermenu select current id" NoLinkBackToThisForm="true" />
+                      </RedirectByUrl>
+                      <CallAction ActionID="RedirectUserMenu" ScriptItemUID="Call3" />
+                    </ServerActionCall>
+                  </Label>
+                </Container>
+              </ContainerTemplate>
+            </Container>
+          </ContainerTemplate>
+        </Container>
+        <Container ScriptItemUID="Container3" ItemUID="settings" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-settingsmenu imx-mobile-nomobile&quot;" />
+          </HtmlAttributes>
+          <LinkContainer ScriptItemUID="LinkContainer1" Layout="'VI_Styles_LinkContainer_UserMenu'">
+            <ControlList ScriptItemUID="ControlList4">
+              <Label ScriptItemUID="Label6" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute17" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-settings&quot;" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;style&quot;" Value="&quot;font-size: 1.3em;&quot;" />
+                  <Property Name="TagName" Value="i" />
+                </HtmlAttributes>
+              </Label>
+              <Label ScriptItemUID="Label3" EnableCustomAttributes="true" Text="translate('#LDS#Settings')">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;style&quot;" Value="variable('font-size: 1.1em; padding-left: 0.75em; font-family: %baseFontFamily%; font-weight: 400; font-style: normal;')" />
+                </HtmlAttributes>
+              </Label>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_MyData_PersonalData" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect2" />
+            </ServerActionCall>
+          </LinkContainer>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Selected" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+        <DataTableSingleRow Table="SearchTerm" DisplayColumn="" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="Term" ScriptItemUID="Column2" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="RedirectUserMenu">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <Code ClassName="VI.WebRuntime.RedirectUserMenu, VI.WebRuntime" ScriptItemUID="Control3">
+                <ControlList ScriptItemUID="ControlList2" />
+                <CodeParameter Name="UserMenuRow" Value="UserMenu" ScriptItemUID="CodeParameter2" />
+              </Code>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="UserMenu" ScriptItemUID="DataTableCursor6" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

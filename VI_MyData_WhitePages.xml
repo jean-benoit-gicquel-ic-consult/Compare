@@ -1,0 +1,111 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="983854b2-31ce-5370-256b-1405de18fc41">
+  <Context ID="VI_MyData_WhitePages" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;B3CFCD2F-A7D7-41B6-9623-7FCFAB943137&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1" DefaultLinkObjectID="Portal_IAM_MyIdentity">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="White Pages" Description="translate(&quot;#LDS#White pages settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_MyData_WhitePages_ResultAttributes" Type="ColumnList" Description="translate('#LDS#Fields displayed in the result list')" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="Person" Class="Person" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+        <Column Name="EditThis" DataType="System.Boolean" ScriptItemUID="Column7" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="UID_PersonSelected" DataType="System.String" ScriptItemUID="Column1" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="DetailPaneContent">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList3">
+            <ObjectSwitchContainer ScriptItemUID="ObjectSwitchContainer3" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;Person&quot;))" ActionType="ObjectView">
+              <VirtualTableMapping VirtualTable="SourceObject" DataTable="Person" ScriptItemUID="VirtualTableMapping1" />
+              <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="ShowHeading()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+            </ObjectSwitchContainer>
+            <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_ButtonBar'">
+              <Button Text="translate(&quot;#LDS#Overview&quot;)" ScriptItemUID="Button3">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                    <RedirectParameter Name="'ObjectKey'" Value="from person select current xobjectkey" />
+                  </Redirect>
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="Person" ScriptItemUID="DataTableCursor1" />
+      </Control>
+      <Control ID="DetailPaneHeader">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList4">
+            <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef6">
+              <VirtualFunctionMapping ID="Value1()" Value="from Person select current display()" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-Person&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="Person" ScriptItemUID="DataTableCursor2" />
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Search" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading White Pages')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Heading White Pages')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+              <HtmlAttributes />
+              <MasterPane ScriptItemUID="MasterPane1">
+                <Container ScriptItemUID="Container6" ItemUID="person grid">
+                  <Grid AllowExport="true" ScriptItemUID="Grid2" ExportFileName="" ExportTitle="">
+                    <GridBand DataTable="Person" DisplayHeader="Always" ScriptItemUID="GridBand2" DataSourceType="Database" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_PersonSelected" DBWhereClause="" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="ApplyFilledHeight" Value="true" />
+                        <Property Name="IsSearchActive" Value="true" />
+                      </HtmlAttributes>
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                      <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                      <GridFilters ScriptItemUID="GridFilters1" />
+                      <GridRows />
+                      <GridColumnColumnTemplate DataTable="Person" ScriptItemUID="GridColumnColumnTemplate2">
+                        <ColumnList ScriptItemUID="ColumnList2" IsWithoutRow="true">
+                          <SingleColumn DataColumn="__Display" ScriptItemUID="SingleColumn2" FKWhereClause="" />
+                          <ExpressionColumnList ColumnList="getconfig(&quot;VI_MyData_WhitePages_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                        </ColumnList>
+                        <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup2">
+                          <GridColumnSimple ScriptItemUID="Column3" Column="currentcolumn" />
+                        </GridColumnGroup>
+                      </GridColumnColumnTemplate>
+                    </GridBand>
+                  </Grid>
+                </Container>
+              </MasterPane>
+              <DetailPane ScriptItemUID="DetailPane1">
+                <Container ScriptItemUID="Container7">
+                  <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="Person" WhereClause="UID_Person = ( from vars select UID_PersonSelected)">
+                    <ControlReferenceControlList ID="DetailPaneContent" ScriptItemUID="ControlRef3" />
+                  </ContainerTemplate>
+                </Container>
+                <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                  <ControlList ScriptItemUID="ControlList2">
+                    <ContainerTemplate ScriptItemUID="ContainerTemplate4" DataTable="Person" WhereClause="UID_Person = ( from vars select UID_PersonSelected)">
+                      <ControlReferenceControlList ID="DetailPaneHeader" ScriptItemUID="ControlRef4" />
+                    </ContainerTemplate>
+                  </ControlList>
+                </DetailPaneHeader>
+              </DetailPane>
+            </MasterDetailControl>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

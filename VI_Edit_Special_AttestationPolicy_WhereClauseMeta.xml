@@ -1,0 +1,807 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_Special_AttestationPolicy_WhereClauseMeta" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="ATT.Customizer.dll" />
+        <TypeMember>
+        private ATT.Customizer.PolicyFilter.PolicyFilterBuilder _policyFilterBuilder
+		{
+			get{
+				return _TableStore.UserData["PolicyFilterBuilder"] as ATT.Customizer.PolicyFilter.PolicyFilterBuilder;
+			}
+			set {
+				_TableStore.UserData["PolicyFilterBuilder"] = value;
+			}
+		}
+		</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action5">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">_policyFilterBuilder = new ATT.Customizer.PolicyFilter.PolicyFilterBuilder(_Database);</CodeLiteral>
+        <LoadTable DataTable="AttestationWizardParameters" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <LoadTable DataTable="AttestationWizardParameterOptions" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+        <Delete DataTable="AttestationWizardParameterOptions" WhereClause="not (UID_AttestationWizardParm in (select UID_AttestationWizardParm from AttestationWizardParameters))" ScriptItemUID="Delete2" />
+        <LoadTable DataTable="AttestationObjectsWithTypes" WhereClause="sqland(&#xD;&#xA; SqlCompare(&quot;IsDeactivatedByPreprocessor&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA; SqlCompare(&quot;UID_AttestationType&quot;, &quot;&quot;, &quot;string&quot;, &quot;notequal&quot;, &quot;ConvertNull&quot;),&#xD;&#xA; format(&quot;uid_dialogtable in (select uid_dialogtable from dialogtable where {0})&quot;,&#xD;&#xA; SqlCompare(&quot;IsDeactivatedByPreprocessor&quot;, false, &quot;bool&quot;, &quot;equal&quot;)),&#xD;&#xA; SqlInWithFormat(&quot;UID_AttestationObject&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;, select distinct UID_AttestationObject from AttestationWizardParameters)&#xD;&#xA;)" RevertExisting="false" ScriptItemUID="LoadTable4">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+        </LoadTable>
+        <ActionSequence ItemUID="Initialize Concatenationtype" ScriptItemUID="Action6">
+          <Delete DataTable="PARAMETER_ConcatenationType" ScriptItemUID="Delete3" />
+          <Insert DataTable="PARAMETER_ConcatenationType" ScriptItemUID="Insert1">
+            <ActionSequence ScriptItemUID="Action7" />
+            <InsertValue DataColumn="id" Value="&quot;AND&quot;" />
+            <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#AND&quot;)" />
+          </Insert>
+          <Insert DataTable="PARAMETER_ConcatenationType" ScriptItemUID="Insert2">
+            <ActionSequence ScriptItemUID="Action8" />
+            <InsertValue DataColumn="id" Value="&quot;OR&quot;" />
+            <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#OR&quot;)" />
+          </Insert>
+        </ActionSequence>
+        <CallAction ActionID="WhereClauseMeta_Parse" ScriptItemUID="Call2" />
+      </ActionSequence>
+      <Container ItemUID="Object Selection Conditions" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action1">
+            <CallAction ActionID="WhereClauseMeta_Parse" ScriptItemUID="CallAction19" />
+          </Action>
+        </Activator>
+        <Label Text="translate(&quot;#LDS#Object selection&quot;)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="TagName" Value="h2" />
+          </HtmlAttributes>
+        </Label>
+        <Container Layout="'VI_Styles_Container_Paragraph'" ItemUID="Introducing Text" ScriptItemUID="Container3" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;margin-top:12px&quot;" />
+          </HtmlAttributes>
+          <Label Text="FieldCaptionConditions()" ScriptItemUID="Label5" />
+        </Container>
+        <Container ItemUID="Logical Junction" Condition="CountRealParams() &gt; 1" ScriptItemUID="Container4">
+          <ContainerTemplate DataTable="AttestationPolicy_ParameterInformations" WhereClause="not IsRealParam()" ScriptItemUID="ContainerTemplate1">
+            <RadioButton DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterValue" Text="translate(&quot;#LDS#All conditions have to be met.&quot;)" DataValue="&quot;AND&quot;" ScriptItemUID="RadioButton1" />
+            <RadioButton DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterValue" Text="translate(&quot;#LDS#At least one condition has to be met.&quot;)" DataValue="&quot;OR&quot;" ScriptItemUID="RadioButton2" />
+          </ContainerTemplate>
+        </Container>
+        <Container ItemUID="Table showing conditions" Condition="CountRealParams() &gt; 0" ScriptItemUID="Container5">
+          <Grid ScriptItemUID="Grid1">
+            <GridBand DataTable="AttestationPolicy_ParameterInformations" WhereClause="IsRealParam()" OrderBy="'Index'" ScriptItemUID="GridBand1" EnableGridViewSetting="false">
+              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                <ControlList ScriptItemUID="ControlList4">
+                  <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef4">
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                      <ControlList ScriptItemUID="ControlList5">
+                        <Label Text="translate(&quot;#LDS#Condition type&quot;)+&#xD;&#xA;': '+&#xD;&#xA;from AttestationWizardParameters select top 1 displayvalue(DisplayValue) where uid_attestationwizardparm = (from AttestationPolicy_ParameterInformations select current AttestationSubType)" ScriptItemUID="Label11" />
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                      <ControlList ScriptItemUID="ControlList6">
+                        <Container ItemUID="Edit Button" Layout="'VI_Styles_Container_Inline'" Condition="try(not IsNull(RequiredParameterForType(CurrentParameterType())), false)" ScriptItemUID="Container6">
+                          <LinkContainer ScriptItemUID="LinkContainer1">
+                            <ControlList ScriptItemUID="ControlList8">
+                              <Image StockImage="Edit" ScriptItemUID="Image5" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute3" Value="translate(&quot;#LDS#Edit condition&quot;)" />
+                                </HtmlAttributes>
+                              </Image>
+                            </ControlList>
+                            <ServerActionCall ScriptItemUID="ServerActionCall1">
+                              <CallAction ActionID="EditCurrentParameterRule" ScriptItemUID="Call7" />
+                            </ServerActionCall>
+                          </LinkContainer>
+                        </Container>
+                        <Container Layout="'VI_Styles_Container_Inline'" ItemUID="Delete Button" ScriptItemUID="Container9">
+                          <LinkContainer ScriptItemUID="LinkContainer2">
+                            <ControlList ScriptItemUID="ControlList9">
+                              <Image StockImage="DeleteDocument" ScriptItemUID="Image6" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute4" Value="translate(&quot;#LDS#Delete condition&quot;)" />
+                                </HtmlAttributes>
+                              </Image>
+                            </ControlList>
+                            <ServerActionCall ScriptItemUID="ServerActionCall8">
+                              <Delete DataTable="AttestationPolicy_ParameterInformations" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" ScriptItemUID="Delete6" />
+                              <CallAction ActionID="RecalcWhereClause" ScriptItemUID="Call10" />
+                              <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="Call9" />
+                              <CallAction ActionID="WhereClauseMeta_Build" ScriptItemUID="Call8" />
+                            </ServerActionCall>
+                          </LinkContainer>
+                        </Container>
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                      <ControlList ScriptItemUID="ControlList7">
+                        <LayoutPanel ScriptItemUID="LayoutPanel2">
+                          <Label Text="translate(&quot;#LDS#Condition value&quot;)" ScriptItemUID="Label12" />
+                          <Container ScriptItemUID="Container10" RefreshTriggerExpression="CurrentParameterType() + from attestationpolicy_parameterinformations select current parametervalue">
+                            <SwitchContainer ScriptItemUID="Switch2">
+                              <SwitchContainerCase ScriptItemUID="Case12" Condition="RequiredParameterType()=&quot;UID&quot;" ItemUID="Label for generic UID parameters">
+                                <ControlReferenceControlList ID="VI_Attestation_Display_WizardParameter_Generic" ScriptItemUID="ControlRef9">
+                                  <VirtualFunctionMapping ID="DBTableName()" Value="RequiredParameterTable()" ScriptItemUID="VirtualFunctionMapping27" />
+                                  <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping20">
+                                    <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                                  </VirtualTableMapping>
+                                </ControlReferenceControlList>
+                              </SwitchContainerCase>
+                              <SwitchContainerCase ScriptItemUID="Case11" ItemUID="Label for Parameter: ORIGIN" Condition="CurrentParameterRequires(&quot;UID_ORIGIN&quot;)">
+                                <ControlReferenceControlList ID="VI_Attestation_Display_WizardParameter_Generic" ScriptItemUID="ControlRef8">
+                                  <VirtualFunctionMapping ID="DBTableName()" Value="&quot;AttestationWizardParmOpt&quot;" ScriptItemUID="VirtualFunctionMapping26" />
+                                  <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping19">
+                                    <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                                  </VirtualTableMapping>
+                                </ControlReferenceControlList>
+                              </SwitchContainerCase>
+                              <SwitchContainerCase ScriptItemUID="Case10" Condition="CurrentParameterRequires(&quot;THRESHOLD&quot;)" ItemUID="Label for Parameter: THRESHOLD">
+                                <ControlList ScriptItemUID="ControlList11">
+                                  <ControlReferenceContainer ID="VI_Attestation_Display_WizardParameter_Threshold" ScriptItemUID="ControlRef7">
+                                    <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping18">
+                                      <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                                      <VirtualColumnMapping VirtualColumn="Value2" DataColumn="ParameterValue2" />
+                                    </VirtualTableMapping>
+                                  </ControlReferenceContainer>
+                                </ControlList>
+                              </SwitchContainerCase>
+                              <SwitchContainerCase ScriptItemUID="Case9" ItemUID="Label for Parameter: DOMAIN" Condition="CurrentParameterRequires(&quot;DOMAIN&quot;)">
+                                <ControlReferenceControlList ID="VI_Attestation_Display_WizardParameter_Generic" ScriptItemUID="ControlRef6">
+                                  <VirtualFunctionMapping ID="DBTableName()" Value="&quot;TSBVUNSDomain&quot;" ScriptItemUID="VirtualFunctionMapping25" />
+                                  <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping17">
+                                    <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                                  </VirtualTableMapping>
+                                  <VirtualFunctionMapping ID="CandidateTargetValueColumn()" Value="&quot;Ident_Domain&quot;" ScriptItemUID="VirtualFunctionMapping24" />
+                                </ControlReferenceControlList>
+                              </SwitchContainerCase>
+                              <SwitchContainerCase ScriptItemUID="Case8" Condition="CurrentParameterRequiresNoValue()" ItemUID="Label for constant parameter (without value to set, such as &quot;All ...&quot;)">
+                                <Label Text="translate(&quot;#LDS#N/A&quot;)" ScriptItemUID="Label13" />
+                              </SwitchContainerCase>
+                              <SwitchContainerCase ScriptItemUID="Case5" ItemUID="Default Label for all other cases...">
+                                <ControlList ScriptItemUID="ControlList10">
+                                  <ControlReferenceContainer ID="VI_Attestation_Display_WizardParameter_Default" ScriptItemUID="ControlRef5">
+                                    <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping16">
+                                      <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                                    </VirtualTableMapping>
+                                  </ControlReferenceContainer>
+                                </ControlList>
+                              </SwitchContainerCase>
+                            </SwitchContainer>
+                          </Container>
+                        </LayoutPanel>
+                      </ControlList>
+                    </VirtualControlMapping>
+                  </ControlReferenceControlList>
+                </ControlList>
+              </GridBandListView>
+              <GridFilters ScriptItemUID="GridFilters1" />
+              <GridRows>
+                <GridRow ScriptItemUID="GridRow1">
+                  <HtmlAttributes />
+                </GridRow>
+              </GridRows>
+              <GridColumn Width="&quot;220px&quot;" ScriptItemUID="Column1" HasFooterCell="true">
+                <GridColumnHeader ScriptItemUID="wctl1">
+                  <Label Text="translate(&quot;#LDS#Condition type&quot;)" ScriptItemUID="Label6" />
+                </GridColumnHeader>
+                <GridColumnFooter ScriptItemUID="wctl5" />
+                <Cell ScriptItemUID="Cell5">
+                  <Label Text="from AttestationWizardParameters select top 1 displayvalue(DisplayValue) where uid_attestationwizardparm = (from AttestationPolicy_ParameterInformations select current AttestationSubType)" ScriptItemUID="Label7" />
+                </Cell>
+              </GridColumn>
+              <GridColumn ScriptItemUID="Column2" HasFooterCell="true">
+                <GridColumnHeader ScriptItemUID="wctl2">
+                  <Label Text="translate(&quot;#LDS#Condition value&quot;)" ScriptItemUID="Label8" />
+                </GridColumnHeader>
+                <GridColumnFooter ScriptItemUID="wctl6" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;text-align: right;&quot;" />
+                  </HtmlAttributes>
+                  <Label Text="translate(&quot;#LDS#Number of objects matching in total:&quot;)" ScriptItemUID="Label3" />
+                </GridColumnFooter>
+                <Cell ScriptItemUID="Cell6">
+                  <Container ScriptItemUID="Container2" RefreshTriggerExpression="CurrentParameterType() + from attestationpolicy_parameterinformations select current parametervalue">
+                    <SwitchContainer ScriptItemUID="Switch1">
+                      <SwitchContainerCase ScriptItemUID="Case1" Condition="RequiredParameterType()=&quot;UID&quot;" ItemUID="Label for generic UID parameters">
+                        <ControlReferenceControlList ID="VI_Attestation_Display_WizardParameter_Generic" ScriptItemUID="ControlRef46a">
+                          <VirtualFunctionMapping ID="DBTableName()" Value="RequiredParameterTable()" ScriptItemUID="VirtualFunctionMapping6" />
+                          <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping2">
+                            <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                          </VirtualTableMapping>
+                        </ControlReferenceControlList>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case2" ItemUID="Label for Parameter: ORIGIN" Condition="CurrentParameterRequires(&quot;UID_ORIGIN&quot;)">
+                        <ControlReferenceControlList ID="VI_Attestation_Display_WizardParameter_Generic" ScriptItemUID="ControlRef46n">
+                          <VirtualFunctionMapping ID="DBTableName()" Value="&quot;AttestationWizardParmOpt&quot;" ScriptItemUID="VirtualFunctionMapping7" />
+                          <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping3">
+                            <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                          </VirtualTableMapping>
+                        </ControlReferenceControlList>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case3" Condition="CurrentParameterRequires(&quot;THRESHOLD&quot;)" ItemUID="Label for Parameter: THRESHOLD">
+                        <ControlList ScriptItemUID="ControlList1">
+                          <ControlReferenceContainer ID="VI_Attestation_Display_WizardParameter_Threshold" ScriptItemUID="ControlRef13">
+                            <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping4">
+                              <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                              <VirtualColumnMapping VirtualColumn="Value2" DataColumn="ParameterValue2" />
+                            </VirtualTableMapping>
+                          </ControlReferenceContainer>
+                        </ControlList>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case4" ItemUID="Label for Parameter: DOMAIN" Condition="CurrentParameterRequires(&quot;DOMAIN&quot;)">
+                        <ControlReferenceControlList ID="VI_Attestation_Display_WizardParameter_Generic" ScriptItemUID="ControlRef18">
+                          <VirtualFunctionMapping ID="DBTableName()" Value="&quot;TSBVUNSDomain&quot;" ScriptItemUID="VirtualFunctionMapping8" />
+                          <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping5">
+                            <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ID="CandidateTargetValueColumn()" Value="&quot;Ident_Domain&quot;" ScriptItemUID="VirtualFunctionMapping9" />
+                        </ControlReferenceControlList>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case6" Condition="CurrentParameterRequiresNoValue()" ItemUID="Label for constant parameter (without value to set, such as &quot;All ...&quot;)">
+                        <Label Text="translate(&quot;#LDS#N/A&quot;)" ScriptItemUID="Label9" />
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case7" ItemUID="Default Label for all other cases...">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <ControlReferenceContainer ID="VI_Attestation_Display_WizardParameter_Default" ScriptItemUID="ControlRef21">
+                            <VirtualTableMapping VirtualTable="Parameter" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping6">
+                              <VirtualColumnMapping VirtualColumn="Value" DataColumn="ParameterValue" />
+                            </VirtualTableMapping>
+                          </ControlReferenceContainer>
+                        </ControlList>
+                      </SwitchContainerCase>
+                    </SwitchContainer>
+                  </Container>
+                </Cell>
+              </GridColumn>
+              <GridColumn ScriptItemUID="GridColumn1" Width="&quot;150px&quot;" Layout="'VI_Styles_GridColumn_Centered'" HasFooterCell="true">
+                <GridColumnHeader ScriptItemUID="wctl3">
+                  <Label Text="translate(&quot;#LDS#Matching objects&quot;)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Label2title" Value="translate(&quot;#LDS#Number of matching objects&quot;)" />
+                    </HtmlAttributes>
+                  </Label>
+                </GridColumnHeader>
+                <GridColumnFooter ScriptItemUID="wctl7">
+                  <ControlList ScriptItemUID="ControlList3">
+                    <ControlReferenceControlList ID="VI_Attestation_SelectedObjectsInfo" ScriptItemUID="ControlRef3">
+                      <VirtualTableMapping VirtualTable="QueryData" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping1">
+                        <VirtualColumnMapping VirtualColumn="SourceKey" DataColumn="SourceKey" />
+                        <VirtualColumnMapping VirtualColumn="BaseTable" DataColumn="BaseTable" />
+                        <VirtualColumnMapping VirtualColumn="WhereClauseSnippet" DataColumn="WhereClauseSnippet" />
+                      </VirtualTableMapping>
+                      <VirtualFunctionMapping ID="SourceKey()" Value="from AttestationPolicy_ParameterInformations select top 1 primarykey() where not IsRealParam()" ScriptItemUID="VirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Objects matching all conditions combined&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                      <VirtualFunctionMapping ID="ReloadSemaphor()" Value="from LocalVars select ReloadSemaphor" ScriptItemUID="VirtualFunctionMapping3" />
+                      <VirtualFunctionMapping ID="FilterQueryData()" Value="not(IsRealParam())" ScriptItemUID="VirtualFunctionMapping4" />
+                      <VirtualFunctionMapping ID="NumberChangedMessage()" Value="NumberChangedMessage()" ScriptItemUID="VirtualFunctionMapping5" />
+                      <VirtualControlMapping VirtualControl="AfterCloseWhenCountChanged" ContainerType="ActionComponent">
+                        <ActionComponent ScriptItemUID="Action2">
+                          <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction14" />
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                    </ControlReferenceControlList>
+                    <Activator ExecuteAlways="true" ScriptItemUID="Activator2">
+                      <Action ScriptItemUID="Action3">
+                        <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction15" />
+                      </Action>
+                    </Activator>
+                  </ControlList>
+                </GridColumnFooter>
+                <Cell ScriptItemUID="Cell7">
+                  <ControlReferenceControlList ID="VI_Attestation_SelectedObjectsInfo" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping VirtualTable="QueryData" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="VirtualTableMapping7">
+                      <VirtualColumnMapping VirtualColumn="SourceKey" DataColumn="SourceKey" />
+                      <VirtualColumnMapping VirtualColumn="BaseTable" DataColumn="BaseTable" />
+                      <VirtualColumnMapping VirtualColumn="WhereClauseSnippet" DataColumn="WhereClauseSnippet" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="SourceKey()" Value="from AttestationPolicy_ParameterInformations select current primarykey()" ScriptItemUID="VirtualFunctionMapping10" />
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Objects matching the condition '{0}'&quot;, &#xA;from AttestationWizardParameters select top 1 displayvalue(DisplayValue) where uid_attestationwizardparm = (from AttestationPolicy_ParameterInformations select current AttestationSubType))" ScriptItemUID="VirtualFunctionMapping11" />
+                    <VirtualFunctionMapping ID="ReloadSemaphor()" Value="from LocalVars select ReloadSemaphor" ScriptItemUID="VirtualFunctionMapping12" />
+                    <VirtualFunctionMapping ID="FilterQueryData()" Value="from AttestationPolicy_ParameterInformations select current IsRealParam()" ScriptItemUID="VirtualFunctionMapping13" />
+                    <VirtualFunctionMapping ID="NumberChangedMessage()" Value="NumberChangedMessage()" ScriptItemUID="VirtualFunctionMapping14" />
+                    <VirtualControlMapping VirtualControl="AfterCloseWhenCountChanged" ContainerType="ActionComponent">
+                      <ActionComponent ScriptItemUID="Action4">
+                        <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction13" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                  </ControlReferenceControlList>
+                </Cell>
+              </GridColumn>
+              <GridColumn Width="&quot;100px&quot;" Condition="CanEditWhereClause()" ScriptItemUID="Column3" HasFooterCell="true">
+                <GridColumnHeader ScriptItemUID="wctl4">
+                  <Label Text="translate(&quot;#LDS#Actions&quot;)" ScriptItemUID="Label4" />
+                </GridColumnHeader>
+                <GridColumnFooter ScriptItemUID="wctl8" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Cell4style" Value="&quot;padding-left:5px;padding-top:5px;&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container8" Condition="CanEditWhereClause()">
+                    <LinkContainer ScriptItemUID="Image2Link">
+                      <ControlList ScriptItemUID="Image2Ctl">
+                        <Image StockImage="Refresh" ScriptItemUID="Image2" ItemUID="Reload" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Reload matching objects&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction5" />
+                      </ServerActionCall>
+                    </LinkContainer>
+                    <Container Layout="'VI_Styles_Container_Inline'" ItemUID="New condition button" ScriptItemUID="Container7">
+                      <ControlReferenceContainer ID="New condition button" ScriptItemUID="ControlRef2" />
+                    </Container>
+                  </Container>
+                </GridColumnFooter>
+                <Cell ScriptItemUID="Cell8" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Cell8style" Value="&quot;padding-left:5px;&quot;" />
+                  </HtmlAttributes>
+                  <Container ItemUID="Edit Button" Layout="'VI_Styles_Container_Inline'" Condition="try(not IsNull(RequiredParameterForType(CurrentParameterType())), false)" ScriptItemUID="Container33">
+                    <LinkContainer ScriptItemUID="Image1Link">
+                      <ControlList ScriptItemUID="Image1Ctl">
+                        <Image StockImage="Edit" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Edit condition&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall3">
+                        <CallAction ActionID="EditCurrentParameterRule" ScriptItemUID="Call1" />
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                  <Container Layout="'VI_Styles_Container_Inline'" ItemUID="Delete Button" ScriptItemUID="Container34">
+                    <LinkContainer ScriptItemUID="Image3Link">
+                      <ControlList ScriptItemUID="Image3Ctl">
+                        <Image StockImage="DeleteDocument" ScriptItemUID="Image3" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="translate(&quot;#LDS#Delete condition&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall4">
+                        <Delete DataTable="AttestationPolicy_ParameterInformations" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" ScriptItemUID="Delete1" />
+                        <CallAction ActionID="RecalcWhereClause" ScriptItemUID="CallAction11" />
+                        <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction12" />
+                        <CallAction ActionID="WhereClauseMeta_Build" ScriptItemUID="CallAction16" />
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                </Cell>
+              </GridColumn>
+            </GridBand>
+          </Grid>
+        </Container>
+        <Container ItemUID="Button for adding VERY FIRST condition" Condition="CanEditWhereClause() AND (CountRealParams() = 0)" ScriptItemUID="Container35">
+          <ControlReferenceContainer ID="New condition button" ScriptItemUID="ControlRef23" />
+          <Comment Comment="Normally the &quot;new condition&quot; button is shown in the footer row if the table showing conditions.&#xD;&#xA;In the rare case, when no condition is present, no footer row is shown, making this extra container necessary." />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="AttestationPolicy_ParameterInformations" Comment="Stores information about the settings of the selected parameters." DisplayColumn="ConditionTypeDisplay" ScriptItemUID="DataTableCustom1">
+          <Column Name="AttestationSubType" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="ParameterName" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="ParameterValue" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="ParameterValue2" DataType="System.String" ScriptItemUID="Column7" />
+          <Column Name="WhereClauseMeta" DataType="System.String" ScriptItemUID="Column8" />
+          <Column Name="WhereClauseSnippet" DataType="System.String" ScriptItemUID="Column9" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column10" />
+          <Column Name="SourceKey" DataType="System.String" DataSource="Expression" Expression="primarykey()" ScriptItemUID="Column11" />
+          <Column Name="BaseTable" DataType="System.String" DataSource="Expression" Expression="BaseTable()" ScriptItemUID="Column12" />
+          <Column Name="ConditionTypeDisplay" DataType="System.String" DataSource="Expression" Expression="from AttestationWizardParameters select top 1 displayvalue(DisplayValue) where uid_attestationwizardparm = (from AttestationPolicy_ParameterInformations select current AttestationSubType)" ScriptItemUID="Column13" />
+        </DataTableCustom>
+        <DataTableDbObject Class="AttestationObject" Table="AttestationObjectsWithTypes" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action9" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AttestationWizardParmOpt" Table="AttestationWizardParameterOptions" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AttestationWizardParm" Table="AttestationWizardParameters" ScriptItemUID="DataTableDbObject3" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action11" />
+          <Column Name="RequiredParameterType" DataType="System.String" ScriptItemUID="Column29" ColumnDataSource="LimitedValues" DataSource="Expression" Expression="if(requiredparameter = &quot;UID_ORIGIN&quot;) then &quot;UID_ORIGIN&quot;&#xD;&#xA;else if (requiredparameter like 'UID_%') then &quot;UID&quot;&#xD;&#xA;else requiredparameter">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="DOMAIN" Display="&quot;Domain&quot;" Comment="" />
+              <ColumnLimitedValue Name="UID" Display="&quot;UID&quot;" Comment="" />
+              <ColumnLimitedValue Name="UID_ORIGIN" Display="&quot;UID_ORIGIN&quot;" Comment="" />
+              <ColumnLimitedValue Name="THRESHOLD" Display="&quot;THRESHOLD&quot;" Comment="" />
+              <ColumnLimitedValue Name="NAME" Display="&quot;NAME&quot;" Comment="" />
+              <ColumnLimitedValue Name="UINT" Display="&quot;UINT&quot;" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+          <Column Name="RequiredParameterTable" DataType="System.String" ScriptItemUID="Column30" DataSource="Expression" Expression="if(RequiredParameter like 'uid_%') then substring(requiredparameter,4, len(requiredparameter)-4)" />
+        </DataTableDbObject>
+        <DataTableCustom Table="PARAMETER_ConcatenationType" Comment="Holds the logical operators available for concatenation of the parameters within the WhereClause." ScriptItemUID="DataTableCustom2">
+          <Column Name="id" DataType="System.String" ScriptItemUID="Column14" />
+          <Column Name="Display" DataType="System.String" ScriptItemUID="Column15" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="LocalVars" Comment="Stores the variables for simple settings." ScriptItemUID="DataTableSingleRow1">
+          <Column Name="NextIndex" DataType="System.Int32" Comment="Stores the index that the next created parameter would get." ScriptItemUID="Column17" />
+          <Column Name="ReloadSemaphor" DataType="System.Int32" ScriptItemUID="Column19" />
+          <Column Name="WhereClauseDirty" DataType="System.Boolean" ScriptItemUID="Column20" />
+          <Column Name="UpdateDisabled" DataType="System.Boolean" Comment="if set, no updates will be performed on edittable" ScriptItemUID="Column21" />
+        </DataTableSingleRow>
+        <DataTableSingleRow Table="ParameterInEdit" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="AttestationSubType" DataType="System.String" ScriptItemUID="Column22" />
+          <Column Name="ParameterName" DataType="System.String" ScriptItemUID="Column23" />
+          <Column Name="ParameterValue" DataType="System.String" ScriptItemUID="Column24" />
+          <Column Name="ParameterValue2" DataType="System.String" ScriptItemUID="Column25" />
+          <Column Name="ParameterValueInt" DataType="System.Int32" ScriptItemUID="Column26" />
+          <Column Name="ParameterValueDecimal" DataType="System.Decimal" ScriptItemUID="Column27" />
+          <Column Name="ParameterValueDecimal2" DataType="System.Decimal" ScriptItemUID="Column28" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Add  ParameterInformation">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Adds a new empty parameter at the right index position and increments the index.">
+            <ActionComponent ScriptItemUID="Action13">
+              <Insert DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="Insert3">
+                <ActionSequence ScriptItemUID="Action14">
+                  <CallAction ActionID="IncrementNextIndex" ScriptItemUID="Call3" />
+                </ActionSequence>
+                <InsertValue DataColumn="Index" Value="NextIndex()" />
+              </Insert>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="EditCurrentParameterRule">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Opens a popup editor for the current parameter condition.">
+            <ActionComponent ScriptItemUID="Action15">
+              <Update DataTable="ParameterInEdit" DataColumn="AttestationSubType" Value="CurrentParameterType()" ScriptItemUID="Update2" />
+              <Update DataTable="ParameterInEdit" DataColumn="ParameterName" Value="CurrentParameterName()" ScriptItemUID="Update3" />
+              <Update DataTable="ParameterInEdit" DataColumn="ParameterValue" Value="CurrentParameterValue()" ScriptItemUID="Update4" />
+              <Update DataTable="ParameterInEdit" DataColumn="ParameterValue2" Value="CurrentParameterValue2()" ScriptItemUID="Update5" />
+              <ActionSequence Condition="EditedParameterRequires(&quot;THRESHOLD&quot;)" ItemUID="Parse invariant decimals" ScriptItemUID="Action16">
+                <Update DataTable="ParameterInEdit" DataColumn="ParameterValueDecimal" Value="EvalInCulture('', Convert(ParameterValue, 'decimal'))" ScriptItemUID="Update6" />
+                <Update DataTable="ParameterInEdit" DataColumn="ParameterValueDecimal2" Value="EvalInCulture('', Convert(ParameterValue2, 'decimal'))" ScriptItemUID="Update7" />
+              </ActionSequence>
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container36">
+                    <ControlReferenceContainer ID="EditorPanelForCurrentParameterRule" ScriptItemUID="ControlRef24" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container37">
+                    <Button Text="translate('#LDS#OK')" ItemUID="Close Button" EnabledCondition="EditedParameterIsComplete()" ScriptItemUID="Button1">
+                      <ServerActionCall ScriptItemUID="ServerActionCall5">
+                        <Update DataTable="LocalVars" DataColumn="WhereClauseDirty" Value="true" ScriptItemUID="Update8" />
+                        <ActionSequence ItemUID="Save changes and close popup" ScriptItemUID="Action17">
+                          <ActionSequence Condition="EditedParameterRequires(&quot;THRESHOLD&quot;)" ItemUID="Serialize decimals invariant" ScriptItemUID="Action18">
+                            <Update DataTable="ParameterInEdit" DataColumn="ParameterValue" Value="EvalInCulture('', NumFormat(ParameterValueDecimal, 'G'))" ScriptItemUID="Update9" />
+                            <Update DataTable="ParameterInEdit" DataColumn="ParameterValue2" Value="EvalInCulture('', NumFormat(ParameterValueDecimal2, 'G'))" ScriptItemUID="Update10" />
+                          </ActionSequence>
+                          <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="AttestationSubType" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" Value="EditedParameterType()" ScriptItemUID="Update11" />
+                          <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterName" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" Value="RequiredParameterForType(EditedParameterType())" ScriptItemUID="Update12" />
+                          <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterValue" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" Value="EditedParameterValue()" ScriptItemUID="Update13" />
+                          <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterValue2" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" Value="EditedParameterValue2()" ScriptItemUID="Update14" />
+                          <ActionOnControl />
+                        </ActionSequence>
+                        <Update DataTable="LocalVars" DataColumn="WhereClauseDirty" Value="false" ScriptItemUID="Update15" />
+                        <CallAction ActionID="RecalcWhereClause" ScriptItemUID="CallAction4" />
+                        <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction6" />
+                        <CallAction ActionID="WhereClauseMeta_Build" ScriptItemUID="CallAction3" />
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate('#LDS#Cancel')" ItemUID="Default Button" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ScriptItemUID="Button2">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall6">
+                        <ActionSequence ItemUID="Revert changes and close popup" ScriptItemUID="Action19">
+                          <Delete DataTable="AttestationPolicy_ParameterInformations" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey()) AND IsNullOrEmpty(AttestationSubType)" ScriptItemUID="Delete4" />
+                          <ActionOnControl />
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Edit condition&quot;)" ScriptItemUID="VirtualFunctionMapping15" />
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping16" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="EditorPanelForCurrentParameterRule">
+          <LocalControlContext ContainerType="Container">
+            <Container ItemUID="Condition" ScriptItemUID="Container38">
+              <Container ItemUID="select condition type" ScriptItemUID="Container39" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container39style" Value="&quot;padding-top: 2px; padding-bottom:3px;&quot;" />
+                </HtmlAttributes>
+                <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                  <Label Text="translate(&quot;#LDS#Condition type&quot;)" Layout="'VI_Styles_Label_Default'" ScriptItemUID="Label10" />
+                  <Container ItemUID="Selection of AttestationWizardParameter" ScriptItemUID="Container41">
+                    <ControlReferenceContainer ID="VI_Edit_ComboBox" ScriptItemUID="ControlRef25">
+                      <VirtualFunctionMapping ID="SourceTableFilter()" Value="UID_AttestationObject = (from EditTable select top 1 UID_AttestationObject)" ScriptItemUID="VirtualFunctionMapping17" />
+                      <VirtualFunctionMapping ID="SelectedDisplay()" Value="from AttestationWizardParameters select top 1 Display()&#xA;where uid_attestationwizardparm = (from ParameterInEdit select top 1 AttestationSubType)" ScriptItemUID="VirtualFunctionMapping18" />
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping8">
+                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="AttestationSubType" />
+                      </VirtualTableMapping>
+                      <VirtualTableMapping VirtualTable="SourceTable" DataTable="AttestationWizardParameters" ScriptItemUID="VirtualTableMapping9">
+                        <VirtualColumnMapping VirtualColumn="SourceColumn" DataColumn="UID_AttestationWizardParm" />
+                        <VirtualColumnMapping VirtualColumn="SourceDisplay" DataColumn="DisplayValue" />
+                      </VirtualTableMapping>
+                    </ControlReferenceContainer>
+                  </Container>
+                </LayoutPanel>
+              </Container>
+              <Container ItemUID="generic UID parameter" Condition="&quot;UID&quot; =&#xD;&#xA;(&#xD;&#xA;from AttestationWizardParameters select top 1 RequiredParameterType where uid_attestationwizardparm = from ParameterInEdit select top 1 AttestationSubType)" ScriptItemUID="Container42" RefreshTriggerExpression="-- reload when the DB table name changes&#xA;&#xA;from AttestationWizardParameters select top 1 RequiredParameterTable where uid_attestationwizardparm = from ParameterInEdit select top 1 AttestationSubType">
+                <ControlReferenceContainer ID="VI_Attestation_Edit_WizardParameter_Generic" ScriptItemUID="ControlRef26">
+                  <VirtualTableMapping VirtualTable="ParameterInEdit" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping10">
+                    <VirtualColumnMapping VirtualColumn="ParameterValue" DataColumn="ParameterValue" />
+                  </VirtualTableMapping>
+                  <VirtualFunctionMapping ID="DBTableName()" Value="from AttestationWizardParameters select top 1 RequiredParameterTable where uid_attestationwizardparm = from ParameterInEdit select top 1 AttestationSubType" ScriptItemUID="VirtualFunctionMapping19" />
+                  <VirtualFunctionMapping ID="DbWhereClause()" Value="-- special case for OrgRoot&#xD;&#xA;if(&quot;OrgRoot&quot;=from AttestationWizardParameters select top 1 RequiredParameterTable where uid_attestationwizardparm = from ParameterInEdit select top 1 AttestationSubType)&#xD;&#xA;then&#xD;&#xA;&quot;uid_orgroot in (select uid_orgroot from org)&quot;" ScriptItemUID="VirtualFunctionMapping20" />
+                </ControlReferenceContainer>
+              </Container>
+              <Container ItemUID="PARAMETER DOMAIN" Condition="EditedParameterRequires(&quot;DOMAIN&quot;)" ScriptItemUID="Container44">
+                <ControlReferenceContainer ID="VI_Attestation_Edit_WizardParameter_Generic" ScriptItemUID="ControlRef28">
+                  <VirtualTableMapping VirtualTable="ParameterInEdit" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping11">
+                    <VirtualColumnMapping VirtualColumn="ParameterValue" DataColumn="ParameterValue" />
+                  </VirtualTableMapping>
+                  <VirtualFunctionMapping ID="DBTableName()" Value="&quot;TSBVUNSDomain&quot;" ScriptItemUID="VirtualFunctionMapping21" />
+                  <VirtualFunctionMapping ID="CandidateTargetValueColumn()" Value="&quot;Ident_Domain&quot;" ScriptItemUID="VirtualFunctionMapping22" />
+                </ControlReferenceContainer>
+              </Container>
+              <Container ItemUID="PARAMETER ORIGIN" Condition="EditedParameterRequires(&quot;UID_ORIGIN&quot;)" ScriptItemUID="Container48">
+                <ControlReferenceContainer ID="VI_Attestation_Edit_WizardParameter_Origin" ScriptItemUID="ControlRef32">
+                  <VirtualTableMapping VirtualTable="ParameterInEdit" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping12">
+                    <VirtualColumnMapping VirtualColumn="ParameterValue" DataColumn="ParameterValue" />
+                  </VirtualTableMapping>
+                  <VirtualFunctionMapping ID="UID_AttestationWizardParm()" Value="select top 1 AttestationSubType from ParameterInEdit" ScriptItemUID="VirtualFunctionMapping23" />
+                </ControlReferenceContainer>
+              </Container>
+              <Container ItemUID="PARAMETER THRESHOLD" Condition="EditedParameterRequires(&quot;THRESHOLD&quot;)" ScriptItemUID="Container55">
+                <ControlReferenceContainer ID="VI_Attestation_Edit_WizardParameter_Threshold" ScriptItemUID="ControlRef39">
+                  <VirtualTableMapping VirtualTable="ParameterInEdit" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping13">
+                    <VirtualColumnMapping VirtualColumn="LowerBound" DataColumn="ParameterValueDecimal" />
+                    <VirtualColumnMapping VirtualColumn="UpperBound" DataColumn="ParameterValueDecimal2" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </Container>
+              <Container ItemUID="PARAMETER NAME" Condition="EditedParameterRequires(&quot;NAME&quot;)" ScriptItemUID="Container56">
+                <ControlReferenceContainer ID="VI_Attestation_Edit_WizardParameter_Name" ScriptItemUID="ControlRef40">
+                  <VirtualTableMapping VirtualTable="ParameterInEdit" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping14">
+                    <VirtualColumnMapping VirtualColumn="ParameterValue" DataColumn="ParameterValue" />
+                    <VirtualColumnMapping VirtualColumn="CompareType" DataColumn="ParameterValue2" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </Container>
+              <Container ItemUID="PARAMETER UINT" Condition="EditedParameterRequires(&quot;UINT&quot;)" ScriptItemUID="Container59">
+                <ControlReferenceContainer ID="VI_Attestation_Edit_WizardParameter_UINT" ScriptItemUID="ControlRef43">
+                  <VirtualTableMapping VirtualTable="ParameterInEdit" DataTable="ParameterInEdit" ScriptItemUID="VirtualTableMapping15">
+                    <VirtualColumnMapping VirtualColumn="ParameterValue" DataColumn="ParameterValueInt" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </Container>
+            </Container>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ForceReloadSelectedObjectsInfo">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent Condition="not (from LocalVars select WhereClauseDirty)" ScriptItemUID="Action20">
+              <Update DataTable="LocalVars" DataColumn="ReloadSemaphor" Value="from LocalVars select ReloadSemaphor + 1" ScriptItemUID="Update16" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="IncrementNextIndex">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Increments the value of LocalVars NextIndex">
+            <ActionComponent ScriptItemUID="Action21">
+              <Update DataTable="LocalVars" DataColumn="NextIndex" Value="select 1 + (from LocalVars select NextIndex)" ScriptItemUID="Update17" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="New condition button">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container62">
+              <LinkContainer ScriptItemUID="Image4Link">
+                <ControlList ScriptItemUID="Image4Ctl">
+                  <Image StockImage="NewDocument" ScriptItemUID="Image4" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="if (CountRealParams() &gt; 0) then translate(&quot;#LDS#Add another condition&quot;) else translate(&quot;#LDS#Add condition&quot;)" />
+                    </HtmlAttributes>
+                  </Image>
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall7">
+                  <CallAction ActionID="Add  ParameterInformation" ScriptItemUID="Call5" />
+                  <Comment Comment="Buggy: Exceute action for each row&#xD;&#xA;filter &quot;index = nextIndex() -1&quot; does not evaluate BUT filter: &quot;Index + 1 = NextIndex()&quot; DOES" />
+                  <ForeachRow DataTable="AttestationPolicy_ParameterInformations" WhereClause="Index + 1 = NextIndex()&#xA;-- Index = NextIndex() - 1" ScriptItemUID="ForeachRow1">
+                    <CallAction ActionID="EditCurrentParameterRule" ScriptItemUID="Call6" />
+                  </ForeachRow>
+                </ServerActionCall>
+              </LinkContainer>
+            </Container>
+          </LocalControlContext>
+        </Control>
+        <Control ID="RecalcWhereClause">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ItemUID="Recalc Where Clause" Condition="not (from LocalVars select WhereClauseDirty)" ScriptItemUID="Action22">
+              <ActionSequence ItemUID="Serialize WhereClause foreach ParameterInformation" ScriptItemUID="Action23">
+                <ForeachRow DataTable="AttestationPolicy_ParameterInformations" WhereClause="IsNullOrEmpty(AttestationSubType, &quot;&quot;) &lt;&gt; &quot;CONCATENATIONTYPE&quot;" OrderBy="'Index'" ScriptItemUID="ForeachRow2">
+                  <ActionSequence ItemUID="Take the &quot;raw&quot; snippet as defined for parameter type" ScriptItemUID="Action24">
+                    <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="WhereClauseSnippet" Value="-- Übernahme des rohen Snippets&#xA;WhereClauseSnippetTemplateForCurrentParameter()&#xA;" WhereClause="PrimaryKey() in (from AttestationPolicy_ParameterInformations select current PrimaryKey())" ScriptItemUID="Update18" />
+                  </ActionSequence>
+                </ForeachRow>
+                <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="WhereClauseSnippet" Value="FormatSnippet(WhereClauseSnippet, ParameterValue, ParameterValue2, ParameterName)" WhereClause="IsNullOrEmpty(AttestationSubType, &quot;&quot;) &lt;&gt; &quot;CONCATENATIONTYPE&quot;" ScriptItemUID="Update19" />
+              </ActionSequence>
+              <ActionSequence ItemUID="Set joined WhereClauseSnippet on the Join-ParameterInformation" ScriptItemUID="Action25">
+                <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="WhereClauseSnippet" Value="if (0 &lt; select count() from AttestationPolicy_ParameterInformations where IsNullOrEmpty(AttestationSubType,'') &lt;&gt; 'CONCATENATIONTYPE' AND NOT IsNullOrEmpty(WhereClauseSnippet)) &#xD;&#xA;then Concat (&#xD;&#xA;    from AttestationPolicy_ParameterInformations select (&quot;(&quot;+ IsNullOrEmpty(WhereClauseSnippet, &quot;1=1&quot;) + &quot;)&quot;) where IsNullOrEmpty(AttestationSubType,'') &lt;&gt; 'CONCATENATIONTYPE',&#xD;&#xA;    from AttestationPolicy_ParameterInformations select ParameterValue where IsNullOrEmpty(AttestationSubType,'') = 'CONCATENATIONTYPE'&#xD;&#xA;  )&#xD;&#xA;else &quot;1=1&quot;" WhereClause="not IsRealParam()" ScriptItemUID="Update20" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="WhereClauseMeta_Parse">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Parses the WhereClauseMeta XML and populates the parameter settings from it accordingly.">
+            <ActionComponent ScriptItemUID="Action26">
+              <Update DataTable="LocalVars" DataColumn="UpdateDisabled" Value="true" ScriptItemUID="Update21" />
+              <Delete DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="Delete5" />
+              <ActionSequence Condition="not IsNullOrEmpty(from EditTable select current WhereClauseMeta)" ItemUID="Fill AttestationPolicy_ParameterInformations" ScriptItemUID="Action27">
+                <FillTable DataTable="AttestationPolicy_ParameterInformations" DataColumn="AttestationSubType" Expression="GetFromXML(from EditTable select current WhereClauseMeta)" ScriptItemUID="FillTable1">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+                </FillTable>
+              </ActionSequence>
+              <ActionSequence ItemUID="Add the CONCATENATIONTYPE if not present" Condition="0 = (from AttestationPolicy_ParameterInformations select count() where AttestationSubType = 'CONCATENATIONTYPE')" ScriptItemUID="Action28">
+                <Insert DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="Insert4">
+                  <ActionSequence ScriptItemUID="Action29" />
+                  <InsertValue DataColumn="ParameterName" Value="&quot;CONCATENATIONTYPE&quot;" />
+                  <InsertValue DataColumn="AttestationSubType" Value="&quot;CONCATENATIONTYPE&quot;" />
+                  <InsertValue DataColumn="ParameterValue" Value="from PARAMETER_ConcatenationType select top 1 id" />
+                </Insert>
+              </ActionSequence>
+              <ActionSequence ItemUID="LocalVars.NextIndex = Max(Index) + 1" ScriptItemUID="Action30">
+                <Update DataTable="LocalVars" DataColumn="NextIndex" Value="select 1 + (from AttestationPolicy_ParameterInformations select Max(Index))" ScriptItemUID="Update22" />
+              </ActionSequence>
+              <Update DataTable="LocalVars" DataColumn="UpdateDisabled" Value="false" ScriptItemUID="Update23" />
+              <CallAction ActionID="RecalcWhereClause" ScriptItemUID="CallAction9" />
+              <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction10" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="WhereClauseMeta_Build">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Builds the WhereClause SQL and the WhereClauseMeta XML from the parameter settings.">
+            <ActionComponent Condition="from LocalVars select not(UpdateDisabled)" ScriptItemUID="Action31">
+              <ActionSequence Condition="CanBuildWhereClause()" ItemUID="Build where clause  if possible" ScriptItemUID="Action32">
+                <ActionSequence ItemUID="Recalculate Indexes" ScriptItemUID="Action33">
+                  <Update DataTable="LocalVars" DataColumn="NextIndex" Value="0" ScriptItemUID="Update24" />
+                  <ForeachRow DataTable="AttestationPolicy_ParameterInformations" OrderBy="'Index'" WhereClause="IsNullOrEmpty(AttestationSubType, &quot;&quot;) &lt;&gt; &quot;CONCATENATIONTYPE&quot;" ScriptItemUID="ForeachRow3">
+                    <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="Index" WhereClause="PrimaryKey() in (from AttestationPolicy_ParameterInformations select current PrimaryKey())" Value="NextIndex()" ScriptItemUID="Update25" />
+                    <CallAction ActionID="IncrementNextIndex" ScriptItemUID="CallAction2" />
+                  </ForeachRow>
+                </ActionSequence>
+                <ActionSequence ItemUID="Serialize WhereClauseMeta foreach ParameterInformation" ScriptItemUID="Action34">
+                  <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="WhereClauseMeta" Value="Format(&quot;&lt;Parameter&gt;&lt;AttestationSubType&gt;{0}&lt;/AttestationSubType&gt;&lt;ParameterName&gt;{1}&lt;/ParameterName&gt;&lt;ParameterValue&gt;{2}&lt;/ParameterValue&gt;&lt;ParameterValue2&gt;{3}&lt;/ParameterValue2&gt;&lt;Index&gt;{4}&lt;/Index&gt;&lt;/Parameter&gt;&quot;,&#xA;IsNullOrEmpty(AttestationSubType, ''),&#xA;IsNullOrEmpty(ParameterName, ''),&#xA;IsNullOrEmpty(ParameterValue, ''),&#xA;IsNullOrEmpty(ParameterValue2, ''),&#xA;Index&#xA;)&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;" ScriptItemUID="Update26" />
+                </ActionSequence>
+                <CallAction ActionID="RecalcWhereClause" ScriptItemUID="CallAction1" />
+                <ActionSequence ItemUID="Set policy's WhereClauseMeta as concat of parameters' WhereClauseMetas" ScriptItemUID="Action35">
+                  <Update DataTable="EditTable" DataColumn="WhereClauseMeta" Value="Format(&quot;&lt;Attestation&gt;{0}&lt;/Attestation&gt;&quot;, Concat((from AttestationPolicy_ParameterInformations select WhereClauseMeta order by Index), &quot;&quot;))" ScriptItemUID="Update27" />
+                </ActionSequence>
+                <ActionSequence ItemUID="Set policy's WhereClause as Join of parameters' where clauses" ScriptItemUID="Action36">
+                  <Update DataTable="EditTable" DataColumn="WhereClause" Value="IsNullOrEmpty(&#xD;&#xA;  Concat (&#xD;&#xA;    from AttestationPolicy_ParameterInformations select (&quot;(&quot;+ WhereClauseSnippet + &quot;)&quot;) where IsNullOrEmpty(AttestationSubType,'') &lt;&gt; 'CONCATENATIONTYPE',&#xD;&#xA;    from AttestationPolicy_ParameterInformations select ParameterValue where IsNullOrEmpty(AttestationSubType,'') = 'CONCATENATIONTYPE'&#xD;&#xA;  ), &quot;1=1&quot;)" ScriptItemUID="Update28" />
+                </ActionSequence>
+              </ActionSequence>
+              <ActionSequence Condition="NOT CanBuildWhereClause()" ItemUID="otherwise clear it" ScriptItemUID="Action37">
+                <Update DataTable="EditTable" DataColumn="WhereClauseMeta" Value="&quot;&quot;" ScriptItemUID="Update29" />
+                <Update DataTable="EditTable" DataColumn="WhereClause" Value="&quot;1=1&quot;" ScriptItemUID="Update30" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="BaseTable()" Expression="SELECT TOP 1 (&quot;&quot;+objectwalker(&quot;fk(UID_DialogTable).TableName&quot;))&#xD;&#xA;FROM AttestationObjectsWithTypes&#xD;&#xA;WHERE UID_AttestationObject =  (FROM EditTable SELECT TOP 1 UID_AttestationObject)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="CanEditWhereClause()" Expression="from EditTable select current (CanEdit(WhereClause) AND CanEdit(WhereClauseMeta))" DataType="System.Boolean" ScriptItemUID="Function2">
+          <DataTableCursor DataTable="EditTable" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="CanBuildWhereClause()" Expression="1 &lt;= CountRealParams() AND NOT HasIncompleteParameters()" DataType="System.Boolean" ScriptItemUID="Function3" />
+        <Function Name="CountRealParams()" Expression="from AttestationPolicy_ParameterInformations select count() where IsRealParam()" Comment="Returns the number of real parameters." DataType="System.Int32" ScriptItemUID="Function5" />
+        <Function Name="CurrentParameterRequires(string parameterName)" Expression="ParameterTypeRequires(CurrentParameterType(), parameterName)&#xA;&#xA;&#xA;" Comment="Determines if the current parameter information requires a parameter from a given type (e.g. &quot;Person&quot;).&#xD;&#xA;This function is used in a switch-case manner for fetching the appropriate editor container when iterating over the parameter informations." DataType="System.Boolean" ScriptItemUID="Function6">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor67" />
+        </Function>
+        <Function Name="CurrentParameterRequiresNoValue()" Expression="CurrentParameterRequires(&quot;&quot;)" DataType="System.Boolean" ScriptItemUID="Function7">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor4" />
+        </Function>
+        <Function Name="CurrentParameterName()" Expression="from AttestationPolicy_ParameterInformations select current IsNull(ParameterName, &quot;&quot;)" DataType="System.String" ScriptItemUID="Function8">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor3" />
+        </Function>
+        <Function Name="CurrentParameterType()" Expression="from AttestationPolicy_ParameterInformations select current AttestationSubType" Comment="Returns the type set for the current parameter." DataType="System.String" ScriptItemUID="Function9">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor411" />
+        </Function>
+        <Function Name="CurrentParameterValue()" Expression="IsNull(from AttestationPolicy_ParameterInformations select current ParameterValue, &quot;&quot;)" Comment="Returns the value set for the current parameter." DataType="System.String" ScriptItemUID="Function10">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor5" />
+        </Function>
+        <Function Name="CurrentParameterValue2()" Expression="IsNull(from AttestationPolicy_ParameterInformations select current ParameterValue2, &quot;&quot;)" Comment="Returns the value set for the current parameter." DataType="System.String" ScriptItemUID="Function11">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor6" />
+        </Function>
+        <Function Name="EditedParameterIsComplete()" Expression="IsComplete(EditedParameterType(), EditedParameterValue(), EditedParameterValue2())" Comment="Returns whether the settings for the current parameter are complete." DataType="System.Boolean" ScriptItemUID="Function13">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor8" />
+        </Function>
+        <Function Name="EditedParameterRequires(string parameterName)" Expression="ParameterTypeRequires(from ParameterInEdit select top 1 AttestationSubType, parameterName)" Comment="Determines if the current parameter information requires a parameter from a given type (e.g. &quot;Person&quot;).&#xD;&#xA;This function is used in a switch-case manner for fetching the appropriate editor container when iterating over the parameter informations." DataType="System.Boolean" ScriptItemUID="Function14" />
+        <Function Name="EditedParameterType()" Expression="from ParameterInEdit select AttestationSubType" Comment="Returns the type set for the current parameter." DataType="System.String" ScriptItemUID="Function15" />
+        <Function Name="FieldCaptionConditions()" Expression="translate(&quot;#LDS#Please specify at least one condition to select objects to be attested.&quot;)" DataType="System.String" ScriptItemUID="Function16" />
+        <Function Name="EditedParameterValue()" Expression="IsNull(from ParameterInEdit select ParameterValue, &quot;&quot;)" Comment="Returns the value set for the edited parameter." DataType="System.String" ScriptItemUID="Function17" />
+        <Function Name="EditedParameterValue2()" Expression="IsNull(from ParameterInEdit select ParameterValue2, &quot;&quot;)" Comment="Returns the second value set for the edited parameter." DataType="System.String" ScriptItemUID="Function18" />
+        <Function Name="EditedParameterValueAsInt()" Expression="try(EvalInCulture('', Convert(EditedParameterValue(), &quot;int32&quot;)), 0)" Comment="Returns the value set for the edited parameter." DataType="System.Int32" ScriptItemUID="Function19" />
+        <Function Name="FormatSnippet(string snippet, string value1, string value2, string parameterType)" Expression="{{&#xD;&#xA;_policyFilterBuilder.FormatSnippetAsync(snippet, value1, value2, parameterType).Result&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function20" />
+        <Function Name="EditedParameterValueIntAsString()" Expression="try(EvalInCulture('', Convert(from ParameterInEdit select ParameterValueInt, &quot;string&quot;)), &quot;0&quot;)" Comment="Returns the value set for the edited parameter." DataType="System.String" ScriptItemUID="Function21" />
+        <Function Name="GetJunctor()" Expression="from AttestationPolicy_ParameterInformations select top 1 ParameterValue where IsNullOrEmpty(AttestationSubType,'') = 'CONCATENATIONTYPE'" DataType="System.String" ScriptItemUID="Function22" />
+        <Function Name="HasIncompleteParameters()" Expression="0 &lt; (&#xA;FROM AttestationPolicy_ParameterInformations SELECT count() &#xA;WHERE NOT IsComplete(AttestationSubType, ParameterValue, ParameterValue2)&#xA;)" Comment="Determines if any required parameter is missing." DataType="System.Boolean" ScriptItemUID="Function23" />
+        <Function Name="IsComplete(string attestationSubType, string parameterValue, string parameterValue2)" Expression="NOT IsNullOrEmpty(attestationSubType) AND&#xD;&#xA;(&#xD;&#xA;  ParameterTypeRequires(attestationSubType, &quot;&quot;)  OR &#xD;&#xA;  (&#xD;&#xA;    NOT IsEmpty(parameterValue) AND &#xD;&#xA;	( &#xD;&#xA;	  NOT ParameterRequiresValue2(attestationSubType) OR NOT IsEmpty(parameterValue2)&#xD;&#xA;	)&#xD;&#xA;  )&#xD;&#xA;)" DataType="System.Boolean" ScriptItemUID="Function24" />
+        <Function Name="IsEmpty(string parameterValue)" Expression="if (IsNullOrEmpty(parameterValue))&#xD;&#xA;then true&#xD;&#xA;else Len(Unquote(parameterValue)) = 0" DataType="System.Boolean" ScriptItemUID="Function25" />
+        <Function Name="IsRealParam()" Expression="IsNull(AttestationSubType, '')&lt;&gt; &quot;CONCATENATIONTYPE&quot;" Comment="Returns whether a paramater is &quot;real&quot;.&#xD;&#xA;This is necessary because besides the real parameters we store the concatenation type within the parameters collection&#xD;&#xA;which in most cases can not be regarded as a real parameter, i.e. we just want to skip it." DataType="System.Boolean" FilterForTable="AttestationPolicy_ParameterInformations" ScriptItemUID="Function26" />
+        <Function Name="IsUidListParam(string paramName)" Expression="(not IsNull(paramName))&#xD;&#xA;and (Len(paramName) &gt; 4)&#xD;&#xA;and (Substring(paramName, 0, 4) = &quot;UID_&quot;)" Comment="Returns whether a parameter is expecting a list of uids as value." DataType="System.Boolean" ScriptItemUID="Function27" />
+        <Function Name="NextIndex()" Expression="from LocalVars select NextIndex" Comment="Delivers the index for the next attestation policy parameter" DataType="System.Int32" ScriptItemUID="Function28" />
+        <Function Name="NumberChangedMessage()" Expression="Translate(&quot;#LDS#The number of matching objects has changed from {0} to {1} recently. Upon closing this popup the matching objects will be reloaded automatically for all conditions.&quot;)" DataType="System.String" ScriptItemUID="Function29" />
+        <Function Name="ParameterRequiresValue2(string parameterName)" Expression="ParameterTypeRequires(parameterName, &quot;THRESHOLD&quot;)" DataType="System.Boolean" ScriptItemUID="Function30" />
+        <Function Name="ParameterTypeRequires(string parameterType, string parameterName)" Expression="parameterName =&#xA;(from AttestationWizardParameters select RequiredParameter where uid_attestationwizardparm = parameterType)" DataType="System.Boolean" TriggerUpdates="Never" ScriptItemUID="Function31" />
+        <Function Name="RequiredParameterTable()" Expression="from AttestationWizardParameters select RequiredParameterTable where uid_attestationwizardparm = CurrentParameterType()" DataType="System.String" ScriptItemUID="Function32">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor10" />
+        </Function>
+        <Function Name="RequiredParameterType()" Expression="from AttestationWizardParameters select top 1 RequiredParameterType where uid_attestationwizardparm = CurrentParameterType()" DataType="System.String" ScriptItemUID="Function33">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor68" />
+        </Function>
+        <Function Name="RequiredParameterForType(string parameterType)" Expression="select top 1 RequiredParameter from AttestationWizardParameters where uid_attestationwizardparm = parameterType" DataType="System.String" ScriptItemUID="Function34" />
+        <Function Name="Unquote(string text)" Expression="Replace(IsNullOrEmpty(text, &quot;&quot;), &quot;'&quot;, &quot;&quot;)" DataType="System.String" ScriptItemUID="Function35" />
+        <Function Name="WhereClauseSnippetTemplateForCurrentParameter()" Expression="from AttestationWizardParameters &#xA;select top 1 WhereClauseSnippet&#xA;where uid_attestationwizardparm in (&#xA;  from AttestationPolicy_ParameterInformations &#xA;  select current AttestationSubType)" FilterForTable="AttestationPolicy_ParameterInformations" DataType="System.String" ScriptItemUID="Function36">
+          <DataTableCursor DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataTableCursor9" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action38">
+            <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterValue" Value="''" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" ScriptItemUID="Update31" />
+            <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterName" Value="from AttestationWizardParameters select RequiredParameter where uid_attestationwizardparm = ( from AttestationPolicy_ParameterInformations select current AttestationSubType)&#xD;&#xA;&#xD;&#xA;" WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" ScriptItemUID="Update32" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="AttestationSubType" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Update" DataTable="AttestationPolicy_ParameterInformations" ScriptItemUID="DataEventHandler2">
+          <ActionSequence Condition="CurrentParameterRequires(&quot;THRESHOLD&quot;)" ScriptItemUID="Action39">
+            <Update DataTable="AttestationPolicy_ParameterInformations" DataColumn="ParameterValue" Value="&quot;1.0&quot;&#xA; &#xA; &#xA; " WhereClause="primarykey() = (from AttestationPolicy_ParameterInformations select current primarykey())" ScriptItemUID="Update33" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="ParameterName" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Update" DataTable="ParameterInEdit" ScriptItemUID="DataEventHandler3">
+          <ActionSequence ItemUID="Reset Values and Name" ScriptItemUID="Action40">
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterValue" Value="IF (ParameterTypeRequires(AttestationSubType, &quot;THRESHOLD&quot;) OR ParameterTypeRequires(AttestationSubType, &quot;UINT&quot;)) THEN &quot;0&quot; ELSE &quot;&quot;" ScriptItemUID="Update34" />
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterValue2" Value="IF (ParameterTypeRequires(AttestationSubType, &quot;THRESHOLD&quot;)) THEN &quot;1&quot; ELSE &quot;&quot;" ScriptItemUID="Update35" />
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterValueDecimal" Value="IF (ParameterTypeRequires(AttestationSubType, &quot;THRESHOLD&quot;)) THEN 0 ELSE -1" ScriptItemUID="Update36" />
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterValueDecimal2" Value="IF (ParameterTypeRequires(AttestationSubType, &quot;THRESHOLD&quot;)) THEN 1 ELSE -1" ScriptItemUID="Update37" />
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterName" Value="RequiredParameterForType(EditedParameterType())&#xA;&#xA;" ScriptItemUID="Update38" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="AttestationSubType" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="ParameterInEdit" Operation="Update" ScriptItemUID="DataEventHandler4">
+          <ActionSequence Condition="EditedParameterRequires(&quot;UINT&quot;) AND (EditedParameterValue() &lt;&gt; EditedParameterValueIntAsString())" ScriptItemUID="Action41">
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterValueInt" Value="EditedParameterValueAsInt()" ScriptItemUID="Update39" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="ParameterValue" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="ParameterInEdit" Operation="Update" ScriptItemUID="DataEventHandler5">
+          <ActionSequence Condition="EditedParameterRequires(&quot;UINT&quot;) AND (EditedParameterValue() &lt;&gt; EditedParameterValueIntAsString())" ScriptItemUID="Action42">
+            <Update DataTable="ParameterInEdit" DataColumn="ParameterValue" Value="EditedParameterValueIntAsString()" ScriptItemUID="Update40" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="ParameterValueInt" />
+        </DataEventHandler>
+        <ExpressionEventHandler Value="GetJunctor()" ScriptItemUID="ExpressionEventHandler1">
+          <ActionSequence ScriptItemUID="Action43">
+            <CallAction ActionID="RecalcWhereClause" ScriptItemUID="CallAction7" />
+            <CallAction ActionID="ForceReloadSelectedObjectsInfo" ScriptItemUID="CallAction8" />
+            <CallAction ActionID="WhereClauseMeta_Build" ScriptItemUID="CallAction17" />
+          </ActionSequence>
+        </ExpressionEventHandler>
+        <DataEventHandler DataTable="EditTable" Operation="Update" ScriptItemUID="DataEventHandler6">
+          <ActionSequence ScriptItemUID="Action44">
+            <Update DataTable="EditTable" DataColumn="WhereClauseMeta" Value="&quot;&quot;" ScriptItemUID="Update41" />
+            <Update DataTable="EditTable" DataColumn="WhereClause" Value="&quot;1=1&quot;" ScriptItemUID="Update42" />
+            <CallAction ActionID="WhereClauseMeta_Parse" ScriptItemUID="CallAction18" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_AttestationObject" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" Class="AttestationPolicy" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

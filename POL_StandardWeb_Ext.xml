@@ -1,0 +1,9 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection">
+        <ConfigEntry ScriptItemUID="POLConfigEntry1" Key="ColumnEditor_QERPolicy.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

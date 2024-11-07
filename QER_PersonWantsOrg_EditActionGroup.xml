@@ -1,0 +1,103 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_PersonWantsOrg_EditActionGroup">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="QBM.CompositionApi.UiAction" />
+        <NamespaceImport Namespace="System.Collections.Generic" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <ReadOnlyTableModifier DataTable="Changes" ScriptItemUID="ReadOnlyTableModifier1" Condition="IsReadOnly()">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="IsActive" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+        <ReadOnlyTableModifier DataTable="Changes" ScriptItemUID="ReadOnlyTableModifier2" WhereClause="DisallowUncheck">
+          <ColumnList ScriptItemUID="ColumnList2">
+            <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsActive" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action1">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">// clear
+Changes.ObjectList.Clear();
+
+var xml = PWO_Data.GetValue(PWO_Current.Row).String;
+if (!string.IsNullOrEmpty(xml))
+{
+	// deserialize actions from XML ...
+	var group = new XmlUiActionGroup();
+	await group.FromXmlAsync(_Database, xml, ct).ConfigureAwait(false);
+	
+	// ... and add to internal collection
+	foreach (var action in group.Actions)
+	{
+		Changes.ObjectList.Add(action);
+	}
+}
+
+// save AdditionalDataWrite delegate
+var dict = (IDictionary&lt;IDataRow, Action&gt;) PWO.ExtendedProperties.GetOrAdd("AdditionalDataWrite", _ =&gt; new Dictionary&lt;IDataRow, Action&gt;());
+dict[PWO_Current.Row] = () =&gt;
+{
+	// write back actions to target column
+	var group = new XmlUiActionGroup();
+	foreach (var action in Changes.ObjectList)
+	{
+		if (MarkActiveActionsIrreversible &amp;&amp; action.IsActive)
+			action.UserData["DisallowUncheck"] = "true";
+		
+		group.Actions.Add(action);
+	}
+
+	var dbObjRow = ((VI.WebRuntime.IDbObjectRow)PWO_Current.Row);
+	
+	PWO_Data.SetValueAsync(PWO_Current.Row, group.GetXmlAsync(_Database, ct).Result, ct).Wait();
+};
+</CodeLiteral>
+          </Action>
+        </Activator>
+        <Container ScriptItemUID="Container3">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#The following changes will be made when this request is granted.&quot;)" />
+        </Container>
+        <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+          <GridBand DataTable="Changes" ScriptItemUID="GridBand1" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Multiple" DataColumnSelectState="IsActive" RowSelectionActive="">
+            <HtmlAttributes>
+              <Property Name="ApplyFilledHeight" Value="true" />
+            </HtmlAttributes>
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumnSimple ScriptItemUID="Column2" Column="DisplayProxy" />
+            <GridColumnSimple ScriptItemUID="Column6" Column="ObjectTableName" Width="&quot;200px&quot;" />
+            <GridColumnSimple ScriptItemUID="Column3" Column="ObjectDisplayProxy" />
+          </GridBand>
+        </Grid>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableObjectView Table="Changes" ElementType="QBM.CompositionApi.UiAction.IXmlUiAction, QBM.CompositionApi" ScriptItemUID="DataTableObjectView1" Caption="translate(&quot;#LDS#Changes&quot;)">
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy2" Caption="translate(&quot;#LDS#Description&quot;)" />
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy1" Caption="translate(&quot;#LDS#Related object&quot;)" />
+          <Column Name="DisallowUncheck" DataType="System.Boolean" ScriptItemUID="Column4" DataSource="Expression" Expression="true = {{&#xD;&#xA;((ObjectViewRow&lt;IXmlUiAction&gt;)queryRow).TargetObject.UserData.ContainsKey(&quot;DisallowUncheck&quot;)&#xD;&#xA;}}" />
+          <Column Name="ObjectTableName" DataType="System.String" ScriptItemUID="Column5" Caption="translate(&quot;#LDS#Object type&quot;)" DataSource="Expression" Expression="getobjectkeytable(&quot;&quot;+{{&#xD;&#xA;((ObjectViewRow&lt;IXmlUiAction&gt;)queryRow).TargetObject.UserData.GetValueOrDefault(&quot;ObjectKeyForDisplay&quot;)&#xD;&#xA;}})" DisplayValueExpression="datacaptionsingle(objecttablename+&quot;&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xD;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree4" />
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree5" />
+          </Column>
+        </DataTableObjectView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PWO" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="Data" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="MarkActiveActionsIrreversible()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

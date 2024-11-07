@@ -1,0 +1,113 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <Context MetamodelVersion="2016-05-08" ID="VI_BusinessOwnership_ClaimOwnership" MigrationNotes="DIALOGCONFIGPARM;" AllowUrlNavigation="true" HelpChapterUid="&quot;BE535478-FCBB-4DC0-ABF0-C5B20697A231&quot;" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="General settings" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_BusinessOwnership_ClaimOwnership_FilterPerson" Description="translate(&quot;#LDS#Employees who can claim ownership of a business object&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="ADSGroup" Class="ADSGroup" WhereClauseSQL="" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Container" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="UID_ADSGroup" MaxLength="" ColumnDataSource="ForeignKey" DBTableName="&quot;ADSGroup&quot;" DBColumnName="&quot;UID_ADSGroup&quot;" FKWhereClause="format(&quot;uid_accproduct in ( select uid_accproduct from accproduct where {0})&quot;,&#xD;&#xA;sqlor(sqlempty(&quot;uid_orgruler&quot;,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;uid_orgruler = 'ADS-AEROLE-ADSGROUP-OWNER-EMPTY'&quot;))" Caption="translate(&quot;#LDS#Select a group&quot;)" ScriptItemUID="Column1" DataType="System.String" />
+      </DataTableSingleRow>
+      <DataTableFKView Table="AccProduct" ViewFKDataTable="ADSGroup" ViewFKDataColumn="UID_AccProduct" ViewFKWhereClause="" ScriptItemUID="DataTableFKView1">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+      </DataTableFKView>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="Container" Operation="Update" ScriptItemUID="DataEventHandler1">
+        <ActionSequence ScriptItemUID="Action3">
+          <LoadTable DataTable="ADSGroup" WhereClause="SqlCompareUid(&quot;uid_adsgroup&quot;,from container select uid_adsgroup)" ScriptItemUID="LoadTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="UID_ADSGroup" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action2" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Main" NavigationTitle="translate(&quot;#LDS#Claim Ownership&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action4" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#Claim Ownership&quot;)" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1">
+            <Label ScriptItemUID="Label8" EnableCustomAttributes="true" Text="translate(&quot;#LDS#Select the group you would like to become the owner of.&quot;)">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="p" />
+              </HtmlAttributes>
+            </Label>
+            <ContainerTemplate DataTable="Container" ScriptItemUID="ContainerTemplate1">
+              <Container ScriptItemUID="Container2">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <SingleColumn DataColumn="UID_ADSGroup" FKWhereClause="" ScriptItemUID="SingleColumn1" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="Container" ScriptItemUID="VirtualTableMapping1" />
+                </ControlReferenceContainer>
+              </Container>
+            </ContainerTemplate>
+            <ContainerTemplate DataTable="ADSGroup" ScriptItemUID="ContainerTemplate2">
+              <Container ScriptItemUID="Container3">
+                <Container ScriptItemUID="Container4">
+                  <Image Source="File" FileName="from adsgroup select current variable(format(&quot;%permanentlink%dialogImgTbl={0}&amp;size=Huge&quot;, dbtable(adsgroup)))" ScriptItemUID="Image1" />
+                  <Label Text="from adsgroup select current display()" ScriptItemUID="Label2" />
+                </Container>
+                <Container ScriptItemUID="Container5">
+                  <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;ADSGroup&quot;))" ActionType="ObjectView">
+                    <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualTableMapping VirtualTable="SourceObject" DataTable="ADSGroup" ScriptItemUID="VirtualTableMapping2" />
+                  </ObjectSwitchContainer>
+                </Container>
+                <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container6">
+                  <Button Text="translate(&quot;#LDS#Claim ownership&quot;)" ScriptItemUID="Button1">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+                        <VirtualControlMapping VirtualControl="OnOK" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action5">
+                            <Method DataTable="AccProduct" ObjectMethodType="FireEvent" ObjectEventName="takeownership">
+                              <MethodParameter Name="&quot;NoReuse&quot;" Value="true" />
+                              <MethodParameter Name="'UID_Person'" Value="getuser()" />
+                              <MethodParameter Name="&quot;CopyAllMembers&quot;" Value="false" />
+                            </Method>
+                            <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                              <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#You successfully claimed ownership of the group &quot;{0}&quot;. The changes may take a couple of minutes to become effective.', from adsgroup select current displaylong())" ScriptItemUID="VirtualFunctionMapping9" />
+                              <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping10" />
+                            </CallAction>
+                            <Delete DataTable="ADSGroup" ScriptItemUID="Delete1" />
+                            <Update DataTable="Container" DataColumn="UID_ADSGroup" Value="-- reset" ScriptItemUID="Update1" />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Please confirm that you would like to be the owner of this group.&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                        <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+                        <VirtualFunctionMapping ID="ShowCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from adsgroup select current displaylong()" ScriptItemUID="VirtualFunctionMapping8" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList10">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef14">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate(&quot;#LDS#You can use this form to claim ownership of an existing group which currently has no assigned owner.&quot;)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

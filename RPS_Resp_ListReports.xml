@@ -1,0 +1,68 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <Context MetamodelVersion="2016-05-08" ID="RPS_Resp_ListReports" ScriptItemUID="Context1" AllowUrlNavigation="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="Reports" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#Reports&quot;)">
+        <ConfigParam Key="VI_Roles_Responsibility_RPSReport" Type="SQL" DatabaseTable="RPSReport" Description="translate(&quot;#LDS#Reports that can be viewed and edited in the web portal.&quot;)" />
+        <ConfigParam Key="RPS_Resp_ListReports_Condition" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Employees authorized to edit and create reports in the web portal.&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="RPSReport" Table="RPSReportEdit" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form1" ScriptItemUID="Form1" NavigationTitle="translate(&quot;#LDS#Reports&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Reports&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;flex-fill&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="RPSControlRef1">
+              <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#This page shows your current report subscriptions and reports available for subscription.&quot;)" ScriptItemUID="RPSVirtualFunctionMapping1" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="VI_Reporting_Subscriptions" ScriptItemUID="RPSControlRef2" />
+          </Container>
+          <Container ScriptItemUID="Container2" Layout="'VI_Styles_Container_ButtonBar'" Condition="exists(&quot;Person&quot;, variable(sqland(&quot;uid_person = '%useruid%'&quot;, getconfig(&quot;RPS_Resp_ListReports_Condition&quot;))))">
+            <Button Text="translate(&quot;#LDS#Create a new report&quot;)" ScriptItemUID="Button1">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Delete DataTable="RPSReportEdit" ScriptItemUID="Delete1" />
+                <Insert DataTable="RPSReportEdit" ScriptItemUID="Insert1">
+                  <ActionSequence ScriptItemUID="Action4" />
+                  <InsertValue DataColumn="IsListReport" Value="true" />
+                  <InsertValue DataColumn="UID_PersonOwner" Value="getuser()" />
+                  <InsertValue DataColumn="Ident_RPSReport" Value="-- user must enter an identifier" />
+                  <InsertValue DataColumn="Description" Value="-- user should enter a description" />
+                </Insert>
+                <Redirect ScriptItemUID="Redirect1" FormID="Form2" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ID="Form2" ScriptItemUID="Form2" NavigationTitle="from rpsreportedit select top 1 isnullorempty(display(), translate(&quot;#LDS#Create a new report&quot;))">
+        <ActionSequence ScriptItemUID="Action5" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+          <Label ScriptItemUID="Label2" Text="from rpsreportedit select top 1 (if(isloaded()) then display() else translate(&quot;#LDS#Create a new report&quot;))" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="RPSReportEdit" WithoutParentContainer="true">
+            <ControlReferenceControlList ID="RPS_EditSheet_RPSReport" ScriptItemUID="ControlRef1">
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="RPSReportEdit" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceControlList>
+          </ContainerTemplate>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,60 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="18dd120b-1dbc-1d04-3402-88ef0a261276">
+  <PageTypeObject MetamodelVersion="2016-05-08" ID="VI_FormTemplate_FullScreen">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <PageParts>
+      <PagePart ID="Title" />
+      <PagePart ID="Main" />
+    </PageParts>
+    <Literal Expression="{{ VI.WebRuntime.Communication.WebPage.DocTypeHtml5 }}" />
+    <HtmlNode HtmlNodeName="html" ScriptItemUID="HtmlNode1">
+      <HtmlAttributes>
+        <HtmlAttribute Name="'class'" Value="'claro'" ScriptItemUID="HtmlAttribute1" />
+        <HtmlAttribute Name="'lang'" Value="{{ VI.Base.LanguageManager.Culture.TwoLetterISOLanguageName }}" ScriptItemUID="HtmlAttribute2" />
+      </HtmlAttributes>
+      <Code ClassName="System.Web.UI.HtmlControls.HtmlHead, System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" ScriptItemUID="Control1">
+        <ControlList ScriptItemUID="ControlList1">
+          <Literal Expression="'&lt;meta charset=&quot;utf-8&quot; /&gt;'" />
+          <Literal Expression="variable(&#xD;&#xA;'&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;&#xD;&#xA;&lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;&#xD;&#xA;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no&quot;/&gt;&#xD;&#xA;&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;57x57&quot; href=&quot;%link%img=OneIdentityManager57-01.png&quot;&gt;&#xD;&#xA;&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;76x76&quot; href=&quot;%link%img=OneIdentityManager76-01.png&quot;&gt;&#xD;&#xA;&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;120x120&quot; href=&quot;%link%img=OneIdentityManager120-01.png&quot;&gt;&#xD;&#xA;&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;152x152&quot; href=&quot;%link%img=OneIdentityManager152-01.png&quot;&gt;&#xD;&#xA;&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;180x180&quot; href=&quot;%link%img=OneIdentityManager180-01.png&quot;&gt;&#xD;&#xA;')" />
+          <Literal Expression="variable('&lt;meta name=&quot;application-name&quot; content=&quot;%PRODUCTNAME%&quot;&gt;&lt;meta name=&quot;apple-mobile-web-app-title&quot; content=&quot;%PRODUCTNAME%&quot;&gt;')" />
+          <Literal Expression="variable('&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;&lt;link rel=&quot;shortcut icon&quot; type=&quot;image/x-icon&quot; href=&quot;%VI_Common_FavIcon_URL%&quot;&gt;')" />
+        </ControlList>
+        <CodeParameter Name="Title" Value="format(&quot;{0} - {1}&quot;,(select top 1 htmlencode(title) from usernavigation where UidForm = (getruntimeformid())),variable(&quot;%PRODUCTNAME%&quot;))" ScriptItemUID="CodeParameter1" />
+      </Code>
+      <HtmlNode HtmlNodeName="body" ScriptItemUID="HtmlNode2">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute42" Name="&quot;ng-controller&quot;" Value="&quot;imxWebSQLBindController&quot;" />
+          <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute45" Value="{{&#xD;&#xA;string cssClass = (System.Web.HttpContext.Current.Items[&quot;BaseCssClass&quot;] ?? &quot;&quot;).ToString()&#xD;&#xA;+ &quot; &quot;&#xD;&#xA;+ _Module.GetRequestParameter(&quot;BaseCssClass&quot;);&#xD;&#xA;@return cssClass;&#xD;&#xA;}}" />
+        </HtmlAttributes>
+        <Code ClassName="VI.WebRuntime.WebControls.WebHtmlForm, VI.WebRuntime" ScriptItemUID="Control2">
+          <ControlList ScriptItemUID="ControlList2">
+            <Code ClassName="VI.WebRuntime.WebControls.BaseScripts, VI.WebRuntime" ScriptItemUID="Control3">
+              <ControlList ScriptItemUID="ControlList3" />
+            </Code>
+            <Code ClassName="VI.WebRuntime.WebControls.PopupContainer, VI.WebRuntime" ScriptItemUID="Control4">
+              <ControlList ScriptItemUID="ControlList4" />
+            </Code>
+            <Container ScriptItemUID="Container9" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;data-imx-mainpage&quot;" Value="&quot;true&quot;" />
+              </HtmlAttributes>
+              <Container EnableCustomAttributes="true" ScriptItemUID="Container1">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="h1" Comment="" />
+                </HtmlAttributes>
+                <PageRenderContent PagePart="Title" />
+              </Container>
+              <Container EnableCustomAttributes="true" ScriptItemUID="Container3">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" Value="'PartMain'" ScriptItemUID="HtmlAttribute3" />
+                </HtmlAttributes>
+                <PageRenderContent PagePart="Main" />
+              </Container>
+            </Container>
+          </ControlList>
+        </Code>
+      </HtmlNode>
+    </HtmlNode>
+  </PageTypeObject>
+</WebDesigner>

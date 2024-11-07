@@ -1,0 +1,96 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl ID="VI_Attestation_EditCases_Default" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Attestation" Description="translate(&quot;#LDS#Attestation&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Attestation_AllowSelectAll" Description="translate('#LDS#Approver can select all visible items at once') + &quot; (&quot; +DataCaption(&quot;AttestationCase&quot;) + &quot;)&quot;" LongDescription="translate('#LDS#Display a checkbox to select all items.')" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+          <GridBand DataTable="AttestationCase" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="sqland(&#xD;&#xA;format(&quot;uid_attestationpolicy = '{0}'&quot;, select current uid_attestationpolicy from attestationpolicy), OptionalAttestationCaseFilter())" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_AttestationCaseSelected" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="ApplyFilledHeight" Value="true" />
+              <CodeLiteral ScriptItemUID="CodeLiteral2">// configure for search-after-load to improve search experience
+
+// fix: for auditor view of all requests, disable search-after-load
+var disableSearchAfterLoad = _Module.ModuleInfo.ModuleName == "VI_Attestation_History" 
+  &amp;&amp; _Module.GetContextParameter("AuditMode") == "YES";
+
+GridBand1.IsSearchAfterLoad = !disableSearchAfterLoad;</CodeLiteral>
+            </HtmlAttributes>
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn Width="'40%'" SortColumn="DisplayName" AutoFilterColumn="DisplayName" Condition="from AttestationObject select current isnullorempty(PropertyInfoPattern1)&#xD;&#xA;or&#xD;&#xA;isnull(getconfig(&quot;VI_Attestation_HideDisplayIfPropertyInfoSet&quot;),&quot;false&quot;)=&quot;false&quot;" ScriptItemUID="GridColumn1">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label Text="datacaption(attestationcase,displayname)" ScriptItemUID="Label3" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1">
+                <Label Text="from AttestationCase select current DisplayName" ScriptItemUID="Label4" />
+              </Cell>
+            </GridColumn>
+            <GridColumnSimple ScriptItemUID="Column2" Column="StructureDisplay1Helper" EnableCustomAttributes="true" Condition="not(hidestructureinfo()) and&#xA;(from attestationobject select current not(isnullorempty(structuredisplaypattern1)))">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-grid-expandedonly&quot;" />
+              </HtmlAttributes>
+            </GridColumnSimple>
+            <GridColumnSimple ScriptItemUID="Column3" Column="StructureDisplay2Helper" EnableCustomAttributes="true" Condition="not(hidestructureinfo()) and&#xA;(from attestationobject select current not(isnullorempty(structuredisplaypattern2)))">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-grid-expandedonly&quot;" />
+              </HtmlAttributes>
+            </GridColumnSimple>
+            <GridColumnSimple ScriptItemUID="Column5" Column="StructureDisplay3Helper" EnableCustomAttributes="true" Condition="not(hidestructureinfo()) and&#xA;(from attestationobject select current not(isnullorempty(structuredisplaypattern3)))">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;imx-grid-expandedonly&quot;" />
+              </HtmlAttributes>
+            </GridColumnSimple>
+            <GridColumnSimple ScriptItemUID="Column4" Column="AttestationStateDisplay" Width="&quot;90px&quot;" />
+            <GridColumnSimple ScriptItemUID="Column6" Column="IsNotApprovedBeforeProxy" Width="&quot;80px&quot;" />
+            <GridColumn SortColumn="ToSolveTill" Width="&quot;90px&quot;" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="GridColumn7" AutoFilterColumn="ToSolveTill">
+              <GridColumnHeader ScriptItemUID="wctl6">
+                <Label Text="datacaption(&quot;attestationcase&quot;, &quot;tosolvetill&quot;)" ScriptItemUID="Label14" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell7">
+                <Label Text="select current (if(isnullorempty(tosolvetill)) then translate(&quot;#LDS#No date set&quot;) else formatdate(tosolvetill, &quot;d&quot;)) from attestationcase&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Label15" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'class'" ScriptItemUID="Label15style" Value="from attestationcase select current (&#xD;&#xA;if( NOT(IsClosed) AND not(isnullorempty(tosolvetill)) and tosolvetill&lt;nulltime(getdate()))&#xD;&#xA;then &quot;imx-grid-warninglabel&quot;&#xD;&#xA;else &quot;&quot;)" />
+                  </HtmlAttributes>
+                </Label>
+              </Cell>
+            </GridColumn>
+            <GridColumnSimple ScriptItemUID="Column1" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" Width="&quot;130px&quot;" Column="RiskIndex" />
+            <ControlReferenceGridColumnGroup ID="VI_Common_DecisionControl" DataTable="AttestationCase" ScriptItemUID="ColumnGroup1">
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationCase" ScriptItemUID="VirtualTableMapping1">
+                <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DoApprove" />
+                <VirtualColumnMapping VirtualColumn="DoReject" DataColumn="DoReject" />
+              </VirtualTableMapping>
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="DenySelectAll()" Value="not(&quot;true&quot;=getconfig(&quot;VI_Attestation_AllowSelectAll&quot;))" ScriptItemUID="VirtualFunctionMapping2" />
+            </ControlReferenceGridColumnGroup>
+          </GridBand>
+        </Grid>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="HasReports()" Expression="0 &lt; select count() from attestationcase &#xD;&#xA;where &#xD;&#xA;uid_attestationpolicy in (select uid_attestationpolicy from attestationpolicy where ispdfbased=true and UID_AttestationPolicy = (from AttestationPolicy select current UID_AttestationPolicy))" DataType="System.Boolean" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="AttestationCase" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action1" ItemUID="Initialize view for attestation case">
+            <ObjectSwitchCallAction ScriptItemUID="ObjectSwitchCallAction1" ObjectKey="getobjectkey(&quot;AttestationPolicy&quot;, from attestationcase select current uid_attestationpolicy, &quot;&quot;)" ActionType="AttestationCase_DetailInit" />
+          </ActionSequence>
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Attestation_EditCases" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="AttestationCase" ScriptItemUID="VirtualTableExtension1">
+        <ColumnProxy DataColumn="IsNotApprovedBefore" Name="IsNotApprovedBeforeProxy" ScriptItemUID="ColumnProxy1" Caption="translate(&quot;#LDS#Heading New&quot;)" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

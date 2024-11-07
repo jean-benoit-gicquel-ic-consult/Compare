@@ -1,0 +1,17 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <LayoutObject ID="VI_Styles_Container_Menu_OpenItems_small" Type="Container" MetamodelVersion="2016-05-01" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="menuopenitemssmall" Comment="" />
+    <CssDocument CssName="MenuOpenItemsSmall" ScriptItemUID="CssDocument1">.menuopenitemssmall {
+  position: absolute; 
+  right: 8px; 
+  text-align: center; 
+  padding: 2px 4px 1px 4px; 
+  color: %VI_Common_Color_ColorBase1%; 
+  background-repeat: no-repeat; 
+  background-color: %VI_Common_Color_Badge_Info%;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

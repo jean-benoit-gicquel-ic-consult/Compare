@@ -1,0 +1,27 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Roles_RolesAndEntitlements_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="0">
+        <ConfigParam Key="VI_Roles_Responsibility_UNSGroup" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;UNSGroup&quot;)" Type="SQL" DatabaseTable="UNSGroup" LongDescription="" />
+        <ConfigParam Key="VI_Roles_Responsibility_UNSGroup_LimitedSQL" Type="Text" Description="translate(&quot;#LDS#SQL prepared statement identifier to check for system entitlement ownership&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="0">
+        <ConfigEntry Key="VI_Roles_Responsibility_UNSGroup" Value="&quot;uid_accproduct in ( select accp.uid_accproduct from AccProduct accp join PersonInBaseTree piae on piae.uid_org = accp.uid_orgruler where piae.uid_person = '%useruid%')&quot;" ScriptItemUID="TSBConfigEntry1" />
+        <ConfigEntry Key="VI_Roles_Responsibility_UNSGroup_LimitedSQL" ScriptItemUID="TSBConfigEntry2" Value="Webportal.TSB_BusinessOwner_SystemEntitlements" />
+      </AddObject>
+      <AddObject ObjectID="Action22" ObjectType="ActionSequence" SortOrder="28">
+        <ActionSequence Condition="area() = &quot;SystemEntitlements&quot;" ItemUID="SYSTEMENTITLEMENTS" ScriptItemUID="TSBAction2">
+          <Insert ScriptItemUID="TSBInsert1" DataTable="LimitedValues">
+            <ActionSequence ScriptItemUID="TSBAction1" />
+            <InsertValue Value="&quot;UNSGroup&quot;" DataColumn="Value" />
+          </Insert>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="GridBand2" ObjectType="GridBand" SortOrder="45">
+        <ControlReferenceGridColumnGroup DataTable="DbObjects" ID="TSB_UNSGroup_GridColumns" ScriptItemUID="TSBControlRef1">
+          <VirtualTableMapping VirtualTable="UNSGroup" DataTable="DbObjects" ScriptItemUID="TSBVirtualTableMapping1" />
+        </ControlReferenceGridColumnGroup>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

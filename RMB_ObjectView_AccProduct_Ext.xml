@@ -1,0 +1,8 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_ObjectView_AccProduct_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab2" ObjectType="Tab" />
+      <AddObject ObjectID="VirtualTableExtension1" ObjectType="VirtualTableExtension" />
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

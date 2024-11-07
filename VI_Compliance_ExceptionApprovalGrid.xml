@@ -1,0 +1,121 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Compliance_ExceptionApprovalGrid" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action7" />
+      <GridBand DataTable="PersonInNonCompliance" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="dbwhereclause()" DbOrderBy="" RowSelection="true" DataTableForSelection="Container" DataColumnForSelection="UidSelected" DisplayHeader="Always" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <CodeLiteral ScriptItemUID="CodeLiteral1">if(!_IsReadOnly){
+	VI.WebRuntime.Data.WhereClauseFilter y = new VI.WebRuntime.Data.WhereClauseFilter("pending",VI.WebRuntime.WebSql.Translate("#LDS#Decision pending"),_Connection.SqlFormatter.Comparison("IsDecisionMade", 0, VI.Base.ValType.Bool, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase));
+	y.Column = this._PersonInNonCompliance_displaystatus;
+	_dataSource.Filters.Add(y);
+}
+</CodeLiteral>
+          <Property Name="ApplyFilledHeight" Value="true" />
+        </HtmlAttributes>
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef2">
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                <ControlList ScriptItemUID="ControlList2">
+                  <ColumnEditor DataColumn="UID_Person" DataTable="PersonInNonCompliance" ScriptItemUID="ColumnEditor1" Type="IsForView" />
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                <ControlList ScriptItemUID="ControlList3">
+                  <ControlReferenceControlList ID="VI_Common_DecisionControlListView" ScriptItemUID="ControlRef3">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="IsReadOnly()" Value="IsReadOnly()" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="DenyText()" Value="translate(&quot;#LDS#Deny exception&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="ApproveText()" Value="translate(&quot;#LDS#Grant exception&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ApproveAllText()" Value="translate(&quot;#LDS#Grant all exceptions&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="DenyAllText()" Value="translate(&quot;#LDS#Deny all exceptions&quot;)" />
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="PersonInNonCompliance">
+                      <VirtualColumnMapping DataColumn="DoApprove" VirtualColumn="DoApprove" />
+                      <VirtualColumnMapping DataColumn="DoReject" VirtualColumn="DoReject" />
+                    </VirtualTableMapping>
+                  </ControlReferenceControlList>
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                <ControlList ScriptItemUID="ControlList4">
+                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                    <ContainerColumnTemplate DataTable="PersonInNonCompliance" ScriptItemUID="ContainerColumnTemplate2">
+                      <ColumnList ScriptItemUID="ColumnList3">
+                        <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                        <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_NonCompliance" />
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="displaystatus" />
+                        <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="RiskIndexReduced" />
+                      </ColumnList>
+                      <Container ScriptItemUID="Container8" ItemUID="Title column for normal properties">
+                        <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef5">
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonInNonCompliance" ScriptItemUID="VirtualTableMapping4">
+                            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping13" />
+                        </ControlReferenceContainer>
+                      </Container>
+                      <Container ScriptItemUID="Container3" ItemUID="Value column for normal properties">
+                        <ColumnEditor DataTable="PersonInNonCompliance" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2" />
+                      </Container>
+                    </ContainerColumnTemplate>
+                  </LayoutPanel>
+                </ControlList>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <GridColumnSimple ScriptItemUID="Column6" Column="UID_Person" Condition="showpersonnoncompliance()" />
+        <GridColumnSimple ScriptItemUID="Column1" Column="UID_NonCompliance" />
+        <GridColumn Width="'170px'" ScriptItemUID="Column3" AutoFilterColumn="displaystatus" SortColumn="displaystatus">
+          <GridColumnHeader ScriptItemUID="wctl3">
+            <Label Text="datacaption(PersonInNonCompliance, DisplayStatus)" ScriptItemUID="Label7" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell4">
+            <Label Text="from PersonInNonCompliance select current displayvalue(displaystatus)" ScriptItemUID="Label10" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="from PersonInNonCompliance select current&#xD;&#xA;(if(isdecisionmade) then (&#xD;&#xA;if(IsExceptionGranted) then&#xD;&#xA;&quot;imx-icon imx-icon-AssignedDirect&quot;&#xD;&#xA;else&#xD;&#xA;&quot;imx-icon imx-icon-Error&quot;)&#xD;&#xA;else&#xD;&#xA;&quot;imx-icon imx-icon-Workflow&quot;&#xD;&#xA;)" />
+              </HtmlAttributes>
+            </Label>
+          </Cell>
+        </GridColumn>
+        <GridColumnSimple ScriptItemUID="Column7" Column="RiskIndexReduced" Width="&quot;120px&quot;" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" />
+        <ControlReferenceGridColumnGroup ID="VI_Common_DecisionControl" DataTable="PersonInNonCompliance" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="DenySelectAll()" Value="not(&quot;true&quot;=getconfig(&quot;CPL_PersonInNonCompliance_AllowSelectAll&quot;))" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonInNonCompliance" ScriptItemUID="VirtualTableMapping1">
+            <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DoApprove" />
+            <VirtualColumnMapping VirtualColumn="DoReject" DataColumn="DoReject" />
+          </VirtualTableMapping>
+          <VirtualFunctionMapping ID="ApproveText()" Value="translate(&quot;#LDS#Grant exception&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="DenyText()" Value="translate(&quot;#LDS#Deny exception&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+          <VirtualFunctionMapping ID="ApproveAllText()" Value="translate(&quot;#LDS#Grant all exceptions&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+          <VirtualFunctionMapping ID="DenyAllText()" Value="translate(&quot;#LDS#Deny all exceptions&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+        </ControlReferenceGridColumnGroup>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="showpersonnoncompliance()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="PersonInNonCompliance" Class="PersonInNonCompliance" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="displaystatus" DataType="System.String" />
+        <VirtualColumn Name="UID_QERJustificationSelected" DataType="System.String" />
+        <VirtualColumn Name="ReasonForDecision" DataType="System.String" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable2" RequiresCursor="true">
+        <VirtualColumn Name="UidSelected" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

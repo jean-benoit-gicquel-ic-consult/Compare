@@ -1,0 +1,65 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_PropertyViewer" MigrationNotes="DMLREPLACE;" DataTableDebugDisplay="EditTable">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Styles_LayoutPanel_Default" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="Class()" />
+        </HtmlAttributes>
+        <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate1" DataTable="EditTable">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <ExpressionColumnList ColumnList="PropertyList()" ScriptItemUID="ExpressionColumnList1" />
+          </ColumnList>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="ShowProperty()">
+              <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;LayoutpPropRow&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-layoutpanel-cell LayoutpPropCol LayoutpPropCol0&quot;" />
+                  </HtmlAttributes>
+                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1">
+                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-layoutpanel-cell LayoutpPropCol LayoutpPropCol1&quot;" />
+                  </HtmlAttributes>
+                  <ColumnEditor DataTable="EditTable" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1">
+                    <VirtualFunctionMapping ID="EnableNavigation()" Value="Enablenavigation()" ScriptItemUID="VirtualFunctionMapping2" />
+                  </ColumnEditor>
+                </Container>
+              </Container>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </ContainerColumnTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="ShowProperty()" Expression="-- show hidden properties?&#xD;&#xA;(from edittable select current (cansee(currentcolumn) or ShowHiddenProperties()))&#xD;&#xA;&#xD;&#xA;and&#xD;&#xA;&#xD;&#xA;-- show empty properties?&#xD;&#xA;(from edittable select current not(isnullorempty(currentcolumn))&#xD;&#xA;or getconfig(&quot;VI_Common_DisplayEmptyProperties&quot;) = &quot;true&quot;)" DataType="System.Boolean" ScriptItemUID="Function1" TriggerUpdates="Never">
+          <DataTableCursor DataTable="EditTable" ScriptItemUID="DataTableCursor1" IsColumnCursor="true" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="PropertyList()" PropertyListForTable="EditTable" DataType="System.String" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowHiddenProperties()" DataType="System.Boolean" TriggerUpdates="Never" Comment="If this flag is set, object properties will be shown even if the user has no read permission on the property." />
+      <VirtualFunction DataType="System.String" Signature="Class()" DefaultValue="&quot;LayoutpPropItems&quot;" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,33 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="18dd120b-1dbc-1d04-3402-88ef0a261276">
+  <Context MetamodelVersion="2015-01-01" ID="VI_UserRegistration_Session" ContextType="SessionContext" HelpChapterUid="" MigrationNotes="DIALOGCONFIGPARM;" AllowUrlNavigation="true" ScriptItemUID="Context1" AllowPreLoginAccess="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableObjectView Table="UserMenu" ElementType="VI.WebRuntime.IMenuItem, VI.WebRuntime" ScriptItemUID="DataTableObjectView3" />
+      <DataTableDbObject Table="User" Class="Person" WhereClauseSQL="&quot;uid_person = '&quot;+ getuser() + &quot;'&quot;" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1212" />
+      </DataTableDbObject>
+      <DataTableObjectView Table="UserRuntimeModule" ElementType="VI.WebRuntime.IUserModuleInfo, VI.WebRuntime" ScriptItemUID="DataTableObjectView1" />
+      <DataTableObjectView Table="UserNavigation" ElementType="VI.WebRuntime.IUserNavigationInfo, VI.WebRuntime" ScriptItemUID="DataTableObjectView2" />
+    </Tables>
+    <ActionSequence ScriptItemUID="Action1" />
+    <LoginAction ScriptItemUID="Action2" />
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="UpdateOpenItems">
+        <LocalControlContext ContainerType="ActionComponent" Comment="Updates the indicator numbers of open requests, attestation cases and approval cases.">
+          <ActionComponent ScriptItemUID="Action7" />
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="listselect(object tablename, bound(tablename) string columnname)" Expression="isnullorempty( concat( select distinct &quot;'&quot;+columnname+&quot;'&quot; from tablename, ', ' ), &quot;''&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="listselect(object tablename, bound(tablename) string columnname, bound(tablename) bool whereclause)" Expression="isnullorempty( concat( select distinct &quot;'&quot;+columnname+&quot;'&quot; from tablename where whereclause, ', ' ), &quot;''&quot;)" DataType="System.String" ScriptItemUID="Function2" />
+      <Function Name="listselect(object tablename, bound(tablename) string columnname, bound(tablename) bool whereclause, string delimiter)" Expression="isnullorempty( concat( select distinct delimiter+columnname+delimiter from tablename where whereclause, ', ' ), (delimiter+delimiter))" DataType="System.String" ScriptItemUID="Function3" />
+      <Function Name="listselect(object tablename, bound(tablename) string columnname, bound(tablename) bool whereclause, string delimiter, string seperator)" Expression="isnullorempty( concat( select distinct delimiter+columnname+delimiter from tablename where whereclause, seperator ), (delimiter+delimiter) )" DataType="System.String" ScriptItemUID="Function4" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <Forms ScriptItemUID="Forms1" />
+  </Context>
+</WebDesigner>

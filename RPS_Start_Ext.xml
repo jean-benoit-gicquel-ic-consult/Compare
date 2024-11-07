@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RPS_Start_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="20">
+        <ControlReferenceControlList ID="RPS_BusinessOwner_StartPage" ScriptItemUID="ControlRef2" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

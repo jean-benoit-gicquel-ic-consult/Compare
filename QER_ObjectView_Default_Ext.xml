@@ -1,0 +1,233 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="f3d8f205-ea40-afab-6b0d-af8484fee9f8">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="5">
+        <ConfigEntry Key="VI_ObjectView_AccProduct_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry1">
+          <SingleColumn DataColumn="Ident_AccProduct" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn1" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn2" />
+          <SingleColumn DataColumn="ProductURL" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn3" Condition="not(isnullorempty(producturl))" />
+          <SingleColumn DataColumn="ArticleCode" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn4" Condition="not(isnullorempty(articlecode))" />
+          <SingleColumn DataColumn="UID_AccProductGroup" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn5" />
+          <SingleColumn DataColumn="InternalPrice" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn6" Condition="internalprice &gt; 0" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn7" Condition="not(isnullorempty(uid_profitcenter))" />
+          <SingleColumn DataColumn="UID_FirmPartner" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn8" Condition="not(isnullorempty(uid_firmpartner))" />
+          <SingleColumn ScriptItemUID="QERQBMSingleColumn9" DataColumn="MaxValidDays" Condition="maxvaliddays &gt; 0" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_Profitcenter_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry4">
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn19" />
+          <SingleColumn DataColumn="UID_ParentProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn20" />
+          <SingleColumn DataColumn="UID_PersonHead" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn21" />
+          <SingleColumn DataColumn="UID_PersonHeadSecond" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn22" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn24" />
+          <SingleColumn DataColumn="UID_Locality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn25" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_QERResource_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry5">
+          <SingleColumn DataColumn="Ident_QERResource" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn26" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn27" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_PersonWantsOrg_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry8">
+          <SingleColumn FKWhereClause="" ScriptItemUID="QERQBMSingleColumn50" FkTableName="&quot;AccProduct&quot;" DisplayValueExpression="displayvalue(displayorg)" Value="-- define a column pointing to AccProduct, but displayed as PWO.DisplayOrg&#xA;&#xA;objectwalker(&quot;FK(UID_Org).UID_AccProduct&quot;)" FkColumnName="&quot;UID_AccProduct&quot;" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;DisplayOrg&quot;)" />
+          <SingleColumn DataColumn="DisplayPersonOrdered" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn51" />
+          <SingleColumn DataColumn="DisplayPersonInserted" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn52" />
+          <SingleColumn DataColumn="UiOrderState" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn53" Caption="translate(&quot;#LDS#Status&quot;)" />
+          <SingleColumn ScriptItemUID="QERSingleColumn1" DataColumn="PWOPriority" />
+          <SingleColumn DataColumn="OrderDate" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn54" />
+          <SingleColumn DataColumn="ValidFrom" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn55" />
+          <SingleColumn DataColumn="ValidUntil" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn56" />
+          <SingleColumn DataColumn="ValidUntilProlongation" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn57" />
+          <SingleColumn ScriptItemUID="QERSingleColumn3" DataColumn="ValidUntilUnsubscribe" />
+          <SingleColumn ScriptItemUID="QERSingleColumn2" DataColumn="UID_PersonWantsOrgParent" Condition="not(isnullorempty(uid_personwantsorgparent))" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn58" Condition="not(isnullorempty(uid_department))" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn59" Condition="not(isnullorempty(uid_profitcenter))" />
+          <SingleColumn DataColumn="OrderReason" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn60" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_AeRole_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry11">
+          <SingleColumn DataColumn="Ident_AERole" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn76" />
+          <SingleColumn ScriptItemUID="QERSingleColumn18" DataColumn="FullPath" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn77" />
+          <SingleColumn DataColumn="UID_DialogGroup" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn78" />
+          <SingleColumn ScriptItemUID="QERSingleColumn20" DataColumn="UID_PersonHead" />
+          <SingleColumn ScriptItemUID="QERSingleColumn21" DataColumn="UID_PersonHeadSecond" />
+          <SingleColumn DataColumn="RiskIndex" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn79" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn80" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn81" />
+          <SingleColumn DataColumn="UID_Locality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn82" />
+          <SingleColumn ScriptItemUID="QERSingleColumn19" DataColumn="ApprovalState" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_Locality_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry15">
+          <SingleColumn DataColumn="UID_ParentLocality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn100" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn101" />
+          <SingleColumn DataColumn="Street" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn102" />
+          <SingleColumn DataColumn="City" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn103" />
+          <SingleColumn DataColumn="ZIPCode" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn104" />
+          <SingleColumn DataColumn="UID_DialogCountry" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn105" />
+          <SingleColumn DataColumn="UID_PersonHead" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn106" />
+          <SingleColumn DataColumn="UID_PersonHeadSecond" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn107" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn108" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_Department_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry9">
+          <SingleColumn DataColumn="DepartmentName" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn61" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn62" />
+          <SingleColumn DataColumn="UID_PersonHead" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn63" />
+          <SingleColumn DataColumn="UID_PersonHeadSecond" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn64" />
+          <SingleColumn DataColumn="UID_ParentDepartment" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn65" />
+          <SingleColumn DataColumn="UID_Locality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn66" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn67" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_FunctionalArea_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry12">
+          <SingleColumn DataColumn="Ident_FunctionalArea" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn83" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn84" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_Person_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry6">
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn28" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn29" />
+          <SingleColumn DataColumn="UID_Locality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn30" />
+          <SingleColumn DataColumn="UID_PersonHead" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn31" />
+          <SingleColumn DataColumn="Phone" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn32" />
+          <SingleColumn DataColumn="PhoneMobile" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn33" />
+          <SingleColumn DataColumn="Building" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn34" />
+          <SingleColumn DataColumn="Floor" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn35" />
+          <SingleColumn DataColumn="Room" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn36" />
+          <SingleColumn DataColumn="Street" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn37" />
+          <SingleColumn DataColumn="ZIPCode" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn38" />
+          <SingleColumn DataColumn="City" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn39" />
+          <SingleColumn DataColumn="UID_DialogCountry" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn40" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_Workdesk_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry19">
+          <SingleColumn DataColumn="Ident_WorkDesk" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn126" />
+          <SingleColumn DataColumn="UID_PersonWorkDeskResponsible" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn127" />
+          <SingleColumn DataColumn="UID_WorkDeskState" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn128" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn129" />
+          <SingleColumn DataColumn="Building" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn130" />
+          <SingleColumn DataColumn="Room" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn131" />
+          <SingleColumn DataColumn="Phone" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn132" />
+          <SingleColumn DataColumn="Fax" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn133" />
+        </ConfigEntry>
+        <ConfigEntry ScriptItemUID="QERConfigEntry2" Key="VI_ObjectView_QERAssign_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn DataColumn="Ident_QERAssign" FKWhereClause="" ScriptItemUID="QERSingleColumn14" />
+          <SingleColumn ScriptItemUID="QERSingleColumn7" DataColumn="Description" />
+        </ConfigEntry>
+        <ConfigEntry ScriptItemUID="QERConfigEntry3" Key="VI_ObjectView_QERReuse_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn DataColumn="Ident_QERReuse" FKWhereClause="" ScriptItemUID="QERSingleColumn15" />
+          <SingleColumn ScriptItemUID="QERSingleColumn10" DataColumn="Description" />
+        </ConfigEntry>
+        <ConfigEntry ScriptItemUID="QERConfigEntry4" Key="VI_ObjectView_QERReuseUS_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn DataColumn="Ident_QERReuseUS" FKWhereClause="" ScriptItemUID="QERSingleColumn17" />
+          <SingleColumn ScriptItemUID="QERSingleColumn16" DataColumn="Description" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="135">
+        <ConfigEntry Key="VI_ObjectView_ITShopOrg_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry24">
+          <SingleColumn DataColumn="Ident_Org" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn149" />
+          <SingleColumn DataColumn="FullPath" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn150" />
+          <SingleColumn DataColumn="InternalName" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn151" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn152" />
+          <SingleColumn DataColumn="UID_Locality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn153" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn154" />
+          <SingleColumn DataColumn="UID_PersonHead" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn155" />
+          <SingleColumn DataColumn="UID_PersonHeadSecond" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn156" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn157" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="145">
+        <ConfigEntry Key="VI_ObjectView_ShoppingCartOrder_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry28">
+          <SingleColumn DataColumn="DocumentNumber" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn175" />
+          <SingleColumn DataColumn="UID_Person" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn176" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn177" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="155">
+        <ConfigEntry Key="VI_ObjectView_PWODecisionStep_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry31">
+          <SingleColumn DataColumn="Ident_PWODecisionStep" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn193" />
+          <SingleColumn DataColumn="LevelDisplay" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn194" />
+          <SingleColumn DataColumn="UID_PWODecisionRule" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn195" />
+          <SingleColumn DataColumn="UID_PWODecisionSubMethod" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn196" />
+          <SingleColumn DataColumn="UID_PWOStateFinalSuccess" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn197" />
+          <SingleColumn DataColumn="UID_PWOStateFinalError" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn198" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn199" />
+          <SingleColumn DataColumn="LevelNumber" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn200" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_QERWorkingStep_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERConfigEntry1">
+          <SingleColumn DataColumn="Ident_PWODecisionStep" FKWhereClause="" ScriptItemUID="QERSingleColumn13" />
+          <SingleColumn DataColumn="LevelDisplay" FKWhereClause="" ScriptItemUID="QERSingleColumn12" />
+          <SingleColumn DataColumn="UID_PWODecisionRule" FKWhereClause="" ScriptItemUID="QERSingleColumn11" />
+          <SingleColumn DataColumn="UID_PWOStateFinalSuccess" FKWhereClause="" ScriptItemUID="QERSingleColumn9" />
+          <SingleColumn DataColumn="UID_PWOStateFinalError" FKWhereClause="" ScriptItemUID="QERSingleColumn8" />
+          <SingleColumn DataColumn="LevelNumber" FKWhereClause="" ScriptItemUID="QERSingleColumn6" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="165">
+        <ConfigEntry Key="VI_ObjectView_Hardware_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERQBMConfigEntry35">
+          <SingleColumn ScriptItemUID="QERSingleColumn4" DataColumn="DisplayName" />
+          <SingleColumn DataColumn="UID_HardwareType" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn230" />
+          <SingleColumn DataColumn="UID_HardwareState" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn231" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn232" />
+          <SingleColumn DataColumn="UID_WorkDesk" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn233" />
+          <SingleColumn DataColumn="UID_Department" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn234" />
+          <SingleColumn DataColumn="UID_ProfitCenter" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn235" />
+          <SingleColumn DataColumn="UID_Locality" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn236" />
+          <SingleColumn ScriptItemUID="QERSingleColumn5" DataColumn="AssetNumber" />
+          <SingleColumn DataColumn="SerialNumber" FKWhereClause="" ScriptItemUID="QERQBMSingleColumn239" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="5">
+        <ConfigParam Key="VI_ObjectView_Person_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Person&quot;))" DatabaseTable="Person" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="25">
+        <ConfigParam Key="VI_ObjectView_QERResource_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERResource&quot;))" DatabaseTable="QERResource" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_QERAssign_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERAssign&quot;))" DatabaseTable="QERAssign" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_QERReuse_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERReuse&quot;))" DatabaseTable="QERReuse" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_QERReuseUS_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERReuseUS&quot;))" DatabaseTable="QERReuseUS" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="15">
+        <ConfigParam Key="VI_ObjectView_Profitcenter_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Profitcenter&quot;))" DatabaseTable="ProfitCenter" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="35">
+        <ConfigParam Key="VI_ObjectView_AccProduct_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;AccProduct&quot;))" DatabaseTable="AccProduct" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="55">
+        <ConfigParam Key="VI_ObjectView_PersonWantsOrg_Fields" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;PersonWantsOrg&quot;))" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="PersonWantsOrg" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="105">
+        <ConfigParam Key="VI_ObjectView_Department_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Department&quot;))" DatabaseTable="Department" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="115">
+        <ConfigParam Key="VI_ObjectView_AeRole_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;AeRole&quot;))" DatabaseTable="AERole" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="135">
+        <ConfigParam Key="VI_ObjectView_FunctionalArea_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;FunctionalArea&quot;))" DatabaseTable="FunctionalArea" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="145">
+        <ConfigParam Key="VI_ObjectView_Locality_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Locality&quot;))" DatabaseTable="Locality" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="155">
+        <ConfigParam Key="VI_ObjectView_Workdesk_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Workdesk&quot;))" DatabaseTable="WorkDesk" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="165">
+        <ConfigParam Key="VI_ObjectView_ITShopOrg_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ITShopOrg&quot;))" DatabaseTable="ITShopOrg" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="175">
+        <ConfigParam Key="VI_ObjectView_ShoppingCartOrder_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ShoppingCartOrder&quot;))" DatabaseTable="ShoppingCartOrder" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="225">
+        <ConfigParam Key="VI_ObjectView_PWODecisionStep_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;PWODecisionStep&quot;))" DatabaseTable="PWODecisionStep" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_QERWorkingStep_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERWorkingStep&quot;))" DatabaseTable="QERWorkingStep" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="245">
+        <ConfigParam Key="VI_ObjectView_Hardware_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;Hardware&quot;))" DatabaseTable="Hardware" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="246">
+        <ConfigParam Key="VI_ObjectView_QERWebAuthnKey_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERWebAuthnKey&quot;))" DatabaseTable="QERWebAuthnKey" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="146">
+        <ConfigEntry Key="VI_ObjectView_QERWebAuthnKey_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERConfigEntry5">
+          <SingleColumn DataColumn="DisplayName" FKWhereClause="" ScriptItemUID="QERSingleColumn24" />
+          <SingleColumn DataColumn="UID_Person" FKWhereClause="" ScriptItemUID="QERSingleColumn23" />
+          <SingleColumn DataColumn="DateRegistered" FKWhereClause="" ScriptItemUID="QERSingleColumn22" />
+          <SingleColumn DataColumn="DateLastUsed" FKWhereClause="" ScriptItemUID="QERSingleColumn26" />
+          <SingleColumn DataColumn="UID_QBMIdentityProvider" FKWhereClause="" ScriptItemUID="QERSingleColumn25" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

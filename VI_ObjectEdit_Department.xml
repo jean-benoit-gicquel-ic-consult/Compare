@@ -1,0 +1,32 @@
+﻿<WebDesigner>
+  <GlobalControl ID="VI_ObjectEdit_Department" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" MetamodelVersion="2014-01-03">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectEdit" Description="" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Roles_Fields_Department" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;Department&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="Department" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+            <ColumnList ScriptItemUID="ColumnList1">
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_Roles_Fields_Department&quot;)" />
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" />
+        </ControlReferenceContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit">
+      <VirtualTableExtension Name="EditTable" Class="Department" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,470 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl ID="VI_Responsibilities_Memberships" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08" RequiredDbModules="" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <Update DataTable="Vars" DataColumn="uid_personaudit" ScriptItemUID="Update2" Value="setuseraudit()" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container Condition="isnull(setuseraudit(),'') &lt;&gt; ''" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+          <Label Text="translate('#LDS#The selected employee is responsible for the following roles, permissions and resources.')" ScriptItemUID="Label1" />
+        </Container>
+        <Container ScriptItemUID="Container7" Condition="isnull(setuseraudit(),'') = '' and DbTableName() &lt;&gt; 'AERole'">
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="uid_personaudit" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1" />
+          </ControlReferenceContainer>
+        </Container>
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container5">
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case2">
+                  <ControlReferenceControlList ID="QBM_ObjectGridView_Default" ScriptItemUID="ControlRef2">
+                    <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="DbObjects" ScriptItemUID="VirtualTableMapping2" />
+                    <VirtualTableMapping VirtualTable="TargetTable" DataTable="Container" ScriptItemUID="VirtualTableMapping3">
+                      <VirtualColumnMapping VirtualColumn="TargetSelectedKey" DataColumn="UID_ObjectSelected" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="DbWhereClause()" Value="sqland(&#xD;&#xA;dbwhereclause(),&#xD;&#xA;if(not(isnullorempty(from vars select uid_personaudit)))&#xD;&#xA;then&#xD;&#xA;(&#xD;&#xA;&#xD;&#xA;-- replace the logged in user's UID with the selected person&#xD;&#xA;select top 1 format(replace(pattern, getuser(), '{0}'), from vars select uid_personaudit) from (PersonResponsibleWhereClauses())  where dbtablename() = tablename&#xD;&#xA;)&#xD;&#xA;else &quot;1=1&quot;&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping2" />
+                  </ControlReferenceControlList>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container4">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="DbObjects" WhereClause="primarykey() = ( from container select uid_objectselected)">
+                <Container ScriptItemUID="Container3">
+                  <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, select current dbtable() from dbobjects))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer2">
+                    <VirtualFunctionMapping ID="ShowHeading()" Value="false" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualTableMapping VirtualTable="SourceObject" DataTable="DbObjects" ScriptItemUID="VirtualTableMapping4" />
+                    <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                  </ObjectSwitchContainer>
+                </Container>
+                <Container ScriptItemUID="Container6" Layout="'VI_Styles_Container_ButtonBar'">
+                  <Button Text="translate(&quot;#LDS#Show details&quot;)" ScriptItemUID="Button1">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <Redirect ScriptItemUID="Redirect1" Target="FormModule">
+                        <RedirectFormModule ID="DetailView" ScriptItemUID="RedirectForm1" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="from dbobjects select top 1 display() where primarykey() = ( from container select uid_objectselected)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="uid_personaudit" ScriptItemUID="Column1" DataType="System.String" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" Caption="translate('#LDS#Select an employee')" TriggerUpdates="Updates" FKWhereClause="" />
+        </DataTableSingleRow>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="UID_ObjectSelected" ScriptItemUID="Column34" DataType="System.String" />
+          <Column Name="ObjectKeySelected" ScriptItemUID="Column35" DataType="System.String" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject15">
+          <ActionSequence ScriptItemUID="Action16" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="DbObjects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="DbTableName()">
+          <ActionSequence ScriptItemUID="Action2" />
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column2" DataSource="Expression" Expression="objectwalker(&quot;XobjectKey&quot;)+&quot;&quot;" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column3" DataSource="Expression" Expression="dbtable()" />
+          <Column Name="UID_AccProduct" DataType="System.String" ScriptItemUID="Column4" DataSource="Expression" Expression="objectwalker(&quot;UID_AccProduct&quot;)+&quot;&quot;" />
+          <Column Name="UID_Object" DataType="System.String" ScriptItemUID="Column5" DataSource="Expression" Expression="PrimaryKey()" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SetInitial">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action25">
+              <ActionSequence Condition="isnull(setuseraudit(),'') &lt;&gt; '' " ScriptItemUID="Action31">
+                <Update DataTable="Vars" DataColumn="uid_personaudit" Value="setuseraudit()" ScriptItemUID="Update1" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="DetailView">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup1">
+              <Form ID="Form2" PageFileName="VI_FormTemplate_Standard" ScriptItemUID="Form1" NavigationTitle="from dbobjects select current display()">
+                <ActionSequence ScriptItemUID="Action95" />
+                <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+                  <Label Text="translate('#LDS#Auditing') + &quot; - &quot; + translate('#LDS#Roles and entitlements')+&quot;: &quot;+ (from dbobjects select current display())" ScriptItemUID="Label13" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+                  <Container ScriptItemUID="Container24">
+                    <Tab ScriptItemUID="Tab1">
+                      <TabPage ItemUID="OVERVIEW" ScriptItemUID="TabPage1">
+                        <ControlsHeader ScriptItemUID="Container28">
+                          <Label Text="translate(&quot;#LDS#Status&quot;)" ScriptItemUID="Label3" />
+                        </ControlsHeader>
+                        <ControlsBody ScriptItemUID="Container29">
+                          <Container ScriptItemUID="Container26" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;data-imx-layout&quot;" Value="&quot;flex-fill&quot;" />
+                            </HtmlAttributes>
+                            <LayoutPanel ScriptItemUID="LayoutPanel1" Columns="2" Layout="'VI_Styles_LayoutPanel_WideSplitted'">
+                              <ControlReferenceContainer ID="QER_BusinessOwner_Overview_Tile" ScriptItemUID="ControlRef6">
+                                <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                  <ActionComponent ScriptItemUID="Action9" />
+                                </VirtualControlMapping>
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping52" ID="SquareText()" Value="from DbObjects select current Display()" />
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="SquareTableName()" Value="(select current dbtable() from DbObjects)" />
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="PropertyList()" Value="&quot;VI_ObjectView_&quot;+ (select current dbtable() from DbObjects)+&quot;_Fields&quot;" />
+                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping7" VirtualTable="EditTable" DataTable="DbObjects" />
+                              </ControlReferenceContainer>
+                              <Container ScriptItemUID="Container12" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                </HtmlAttributes>
+                                <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef7" ItemUID="Overview">
+                                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                    <ActionComponent ScriptItemUID="Action12">
+                                      <Redirect ScriptItemUID="Redirect9" Target="FormModule" AbortExecution="false">
+                                        <RedirectFormModule ScriptItemUID="RedirectForm9" ID="FormOverview" />
+                                      </Redirect>
+                                    </ActionComponent>
+                                  </VirtualControlMapping>
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="SquareText()" Value="translate(&quot;#LDS#Overview&quot;)" />
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="Description()" Value="translate('#LDS#Shows the overview for the selected object.')" />
+                                </ControlReferenceContainer>
+                                <Container ScriptItemUID="Container40" EnableCustomAttributes="true" ItemUID="Master Data" Condition="dbtablename() in (tablenamesupportmasterdata())">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef8">
+                                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                      <ActionComponent ScriptItemUID="Action13">
+                                        <Redirect ScriptItemUID="Redirect7" Target="FormModule" AbortExecution="false">
+                                          <RedirectFormModule ScriptItemUID="RedirectForm7" ID="FormMasterData" />
+                                        </Redirect>
+                                      </ActionComponent>
+                                    </VirtualControlMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping24" ID="SquareText()" Value="translate(&quot;#LDS#Main data&quot;)" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping23" ID="Description()" Value="Translate('#LDS#Shows the main data for this object.')" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container14" EnableCustomAttributes="true" ItemUID="Memberships" Condition="(dbtablename() in (tablenamesupportmembership()))&#xD;&#xA;Or&#xD;&#xA;(dbtablename() = &quot;QERReuseUS&quot;)">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef12">
+                                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                      <ActionComponent ScriptItemUID="Action14">
+                                        <Redirect ScriptItemUID="Redirect2" Target="FormModule" AbortExecution="false">
+                                          <RedirectFormModule ScriptItemUID="RedirectForm2" ID="FormMemberships" />
+                                        </Redirect>
+                                      </ActionComponent>
+                                    </VirtualControlMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="SquareText()" Value="translate(&quot;#LDS#Memberships&quot;)" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows all members of this object.')" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container35" EnableCustomAttributes="true" ItemUID="Entitlements" Condition="dbtablename() in (tablenamesupportassignment())">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef5">
+                                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                      <ActionComponent ScriptItemUID="Action15">
+                                        <Redirect ScriptItemUID="Redirect3" Target="FormModule" AbortExecution="false">
+                                          <RedirectFormModule ScriptItemUID="RedirectForm3" ID="FormEntitlements" />
+                                        </Redirect>
+                                      </ActionComponent>
+                                    </VirtualControlMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping28" ID="SquareText()" Value="translate(&quot;#LDS#Entitlements&quot;)" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping27" ID="Description()" Value="translate('#LDS#Shows the list of entitlements associated with this object.')" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container34" EnableCustomAttributes="true" ItemUID="Risk" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;&#xD;&#xA;and&#xD;&#xA;dbtablename() in (tablenamesupportriskanalysis())">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef13">
+                                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                      <ActionComponent ScriptItemUID="Action7">
+                                        <Redirect ScriptItemUID="Redirect4" Target="FormModule" AbortExecution="false">
+                                          <RedirectFormModule ScriptItemUID="RedirectForm4" ID="FormRisk" />
+                                        </Redirect>
+                                      </ActionComponent>
+                                    </VirtualControlMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="SquareText()" Value="translate(&quot;#LDS#Risk&quot;)" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Description()" Value="translate('#LDS#The calculated risk index is {0}. Click to analyze the risk index.',&#xD;&#xA;   NumFormat(&#xD;&#xA;      Convert(SingleProperty(&#xD;&#xA;         select current Replace(select current TableName from DbObjects,&quot;AERole&quot;,&quot;BaseTree&quot;) from DbObjects,&#xD;&#xA;         &quot;RiskIndexCalculated&quot;,&#xD;&#xA;         SqlCompareUid(&quot;XObjectKey&quot;, select current XObjectKey from DbObjects)&#xD;&#xA;         ),&#xD;&#xA;      &quot;double&quot;),&#xD;&#xA;   '0.00')&#xD;&#xA;)" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container17" EnableCustomAttributes="true" ItemUID="History" Condition="dbtableName() in (tablenamesupporthistory())&#xD;&#xA;AND&#xD;&#xA;(GetConfigParm(&quot;Common\ProcessState\PropertyLog&quot;) = &quot;1&quot;)">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef14">
+                                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                      <ActionComponent ScriptItemUID="Action17">
+                                        <Redirect ScriptItemUID="Redirect5" Target="FormModule" AbortExecution="false">
+                                          <RedirectFormModule ScriptItemUID="RedirectForm5" ID="FormHistory" />
+                                        </Redirect>
+                                      </ActionComponent>
+                                    </VirtualControlMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="SquareText()" Value="translate(&quot;#LDS#History&quot;)" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Description()" Value="translate('#LDS#Shows historical data for the selected object.')" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                                <Container ScriptItemUID="Container18" EnableCustomAttributes="true" ItemUID="Usage" Condition="dbtablename() in (tablenamesupportmembership())">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+                                  </HtmlAttributes>
+                                  <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ControlRef4">
+                                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+                                      <ActionComponent ScriptItemUID="Action18">
+                                        <Redirect ScriptItemUID="Redirect6" Target="FormModule" AbortExecution="false">
+                                          <RedirectFormModule ScriptItemUID="RedirectForm6" ID="FormUsage" />
+                                        </Redirect>
+                                      </ActionComponent>
+                                    </VirtualControlMapping>
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this organizational unit belong to.')" />
+                                  </ControlReferenceContainer>
+                                </Container>
+                              </Container>
+                            </LayoutPanel>
+                          </Container>
+                        </ControlsBody>
+                      </TabPage>
+                    </Tab>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DbObjects" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="FormOverview">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup2">
+              <Form ScriptItemUID="Form2" ID="FormOverview">
+                <ActionSequence ScriptItemUID="Action3" />
+                <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Title">
+                  <Label Text="translate(&quot;#LDS#Overview&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label16" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer4" ID="Main">
+                  <ContainerTemplate DataTable="DbObjects" ScriptItemUID="ContainerTemplate3" WhereClause="UID_Object = (from Container select UID_ObjectSelected)">
+                    <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, dbtablename()))" ActionType="HyperView">
+                      <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+                      <VirtualTableMapping DataTable="DbObjects" VirtualTable="Object" ScriptItemUID="VirtualTableMapping5" />
+                    </ObjectSwitchContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormMasterData">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup3">
+              <Form ScriptItemUID="Form3" ID="FormMasterData">
+                <ActionSequence ScriptItemUID="Action4" />
+                <PagePartContainer ScriptItemUID="PagePartContainer6" ID="Title">
+                  <Label Text="translate(&quot;#LDS#Main data&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label18" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer5" ID="Main">
+                  <ContainerTemplate DataTable="DbObjects" ScriptItemUID="ContainerTemplate4" WhereClause="UID_Object = (from Container select UID_ObjectSelected)">
+                    <ObjectSwitchContainer ScriptItemUID="TableRef2" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, select current dbtable() from DbObjects))" ActionType="ObjectEdit">
+                      <VirtualTableMapping DataTable="DbObjects" VirtualTable="EditTable" ScriptItemUID="VirtualTableMapping7d" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping16" />
+                    </ObjectSwitchContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormMemberships">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup4">
+              <Form ScriptItemUID="Form4" ID="FormMemberships">
+                <ActionSequence ScriptItemUID="Action5" />
+                <PagePartContainer ScriptItemUID="PagePartContainer8" ID="Title">
+                  <Label Text="translate(&quot;#LDS#Memberships&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label17" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer7" ID="Main">
+                  <ContainerTemplate DataTable="DbObjects" ScriptItemUID="ContainerTemplate2" WhereClause="UID_Object = (from Container select UID_ObjectSelected)">
+                    <ControlReferenceContainer ID="VI_Roles_Membership" ScriptItemUID="ControlRef9">
+                      <VirtualTableMapping VirtualTable="AllObjects" DataTable="DbObjects" ScriptItemUID="VirtualTableMapping6" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormEntitlements">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup5">
+              <Form ScriptItemUID="Form5" ID="FormEntitlements">
+                <ActionSequence ScriptItemUID="Action6" />
+                <PagePartContainer ScriptItemUID="PagePartContainer10" ID="Title">
+                  <Label Text="translate(&quot;#LDS#Entitlements&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label19" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer9" ID="Main">
+                  <Container ScriptItemUID="Container11">
+                    <ControlReferenceContainer ID="VI_Roles_RoleAssignments" ScriptItemUID="ControlRef10">
+                      <VirtualFunctionMapping ID="pk()" Value="from dbobjects select primarykey() where UID_Object = (from Container select UID_ObjectSelected)" ScriptItemUID="VirtualFunctionMapping7" />
+                      <VirtualFunctionMapping ID="TableName()" Value="dbtablename()" ScriptItemUID="VirtualFunctionMapping8" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping9" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormUsage">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup7">
+              <Form ScriptItemUID="Form7" ID="FormUsage">
+                <ActionSequence ScriptItemUID="Action8" />
+                <PagePartContainer ScriptItemUID="PagePartContainer14" ID="Title">
+                  <Label Text="translate(&quot;#LDS#Usage&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label24" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer13" ID="Main">
+                  <Container ScriptItemUID="Container13">
+                    <ControlReferenceContainer ID="VI_Roles_EntitlementUsageDetective" ScriptItemUID="ControlRef15">
+                      <VirtualFunctionMapping ID="TableName()" Value="dbtablename()" ScriptItemUID="VirtualFunctionMapping11" />
+                      <VirtualFunctionMapping ID="PK()" Value="from container select uid_objectselected" ScriptItemUID="VirtualFunctionMapping12" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormRisk">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup9">
+              <Form ScriptItemUID="Form9" ID="FormRisk">
+                <ActionSequence ScriptItemUID="Action10" />
+                <PagePartContainer ScriptItemUID="PagePartContainer18" ID="Title">
+                  <Label Text="translate(&quot;#LDS#Risk&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label20" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer17" ID="Main">
+                  <Container ScriptItemUID="Container15">
+                    <ControlReferenceContainer ID="VI_Compliance_RiskAssessment" ScriptItemUID="ControlRef11">
+                      <VirtualFunctionMapping ID="ObjectKey()" Value="from dbobjects select XObjectKey where UID_Object = (from Container select UID_ObjectSelected)" ScriptItemUID="VirtualFunctionMapping10" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormHistory">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup10">
+              <Form ScriptItemUID="Form10" ID="FormHistory">
+                <ActionSequence ScriptItemUID="Action11" />
+                <PagePartContainer ScriptItemUID="PagePartContainer20" ID="Title">
+                  <Label Text="translate(&quot;#LDS#History&quot;)  + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="Label26" />
+                </PagePartContainer>
+                <PagePartContainer ScriptItemUID="PagePartContainer19" ID="Main">
+                  <Container ScriptItemUID="Container16">
+                    <ControlReferenceContainer ID="VI_History" ScriptItemUID="ControlRef17">
+                      <VirtualFunctionMapping ID="BaseUid()" Value="from Container select UID_ObjectSelected" ScriptItemUID="VirtualFunctionMapping13" />
+                      <VirtualFunctionMapping ID="Type()" Value="from dbobjects select getobjectkeytable(xobjectkey) where UID_Object = (from Container select UID_ObjectSelected)" ScriptItemUID="VirtualFunctionMapping14" />
+                      <VirtualFunctionMapping ID="ShowAudit()" Value="Request(&quot;AuditMode&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping15" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="TableNameSupportMasterData()" ScriptItemUID="Function2" FunctionType="FunctionValueList" DataType="System.String">
+          <FunctionValueList ScriptItemUID="FunctionValueList1">
+            <FunctionValue Expression="'Person'&#xA;" />
+            <FunctionValue Expression="'QERReuse'" />
+            <FunctionValue Expression="'QERReuseUS'" />
+            <FunctionValue Expression="'QERResource'" />
+            <FunctionValue Expression="'QERAssign'" />
+            <FunctionValue Expression="'Department'" />
+            <FunctionValue Expression="'Locality'" />
+            <FunctionValue Expression="'AERole'" />
+            <FunctionValue Expression="'ProfitCenter'" />
+            <FunctionValue Expression="'Hardware'" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="TableNameSupportMembership()" DataType="System.String" ScriptItemUID="Function3" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList2">
+            <FunctionValue Expression="&quot;ProfitCenter&quot;" />
+            <FunctionValue Expression="&quot;Department&quot;" />
+            <FunctionValue Expression="&quot;Locality&quot;" />
+            <FunctionValue Expression="&quot;QERResource&quot;" />
+            <FunctionValue Expression="&quot;AERole&quot;" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="TableNameSupportAssignment()" DataType="System.String" ScriptItemUID="Function4" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList3">
+            <FunctionValue Expression="&quot;Department&quot;" />
+            <FunctionValue Expression="&quot;ProfitCenter&quot;" />
+            <FunctionValue Expression="&quot;Locality&quot;" />
+            <FunctionValue Expression="&quot;AERole&quot;" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="TableNameSupportRiskAnalysis()" DataType="System.String" ScriptItemUID="Function7" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList4">
+            <FunctionValue Expression="'Person'" />
+            <FunctionValue Expression="&quot;Department&quot;" />
+            <FunctionValue Expression="&quot;ProfitCenter&quot;" />
+            <FunctionValue Expression="&quot;Locality&quot;" />
+            <FunctionValue Expression="&quot;AERole&quot;" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="TableNameSupportHistory()" DataType="System.String" ScriptItemUID="Function8" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList5">
+            <FunctionValue Expression="&quot;Department&quot;" />
+            <FunctionValue Expression="&quot;ProfitCenter&quot;" />
+            <FunctionValue Expression="&quot;Locality&quot;" />
+            <FunctionValue Expression="&quot;AERole&quot;" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="PersonResponsibleWhereClauses()" ScriptItemUID="Function9" FunctionType="FunctionResultSetList">
+          <FunctionValueList ScriptItemUID="FunctionValueList6">
+            <FunctionValue Expression="select (&quot;Department&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_Department&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;Locality&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_Locality&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;ProfitCenter&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_ProfitCenter&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;QERResource&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;QERReuse&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;QERReuseUS&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;QERAssign&quot; as tablename, getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;) as pattern)" />
+            <FunctionValue Expression="select (&quot;Person&quot; as tablename, getconfig(&quot;VI_Employee_Person_Filter&quot;) as pattern)" />
+          </FunctionValueList>
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="DbTableName()" DataType="System.String" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="showMemberships()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="setuseraudit()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

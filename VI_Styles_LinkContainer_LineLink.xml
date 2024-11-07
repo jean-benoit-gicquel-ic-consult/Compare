@@ -1,0 +1,15 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <LayoutObject MetamodelVersion="2016-05-01" ID="VI_Styles_LinkContainer_LineLink" Type="LinkContainer" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">/* CSS for single-row */
+.hyperviewlink { text-decoration: none; display: block; width: auto; }
+
+.hyperviewlink:hover {  color: %VI_Common_Color_ColoredLink_Secondary%; }
+
+.hyperviewlink:focus { color: %VI_Common_Color_ColoredLink_Secondary%; }
+</CssDocument>
+    <Property Name="CssClassName" Value="hyperviewlink" Comment="" />
+  </LayoutObject>
+</WebDesigner>

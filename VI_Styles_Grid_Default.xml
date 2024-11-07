@@ -1,0 +1,92 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject ID="VI_Styles_Grid_Default" Type="Grid" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="Grid" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.Grid { 
+    border-collapse: collapse; 
+    margin-bottom: 4px;
+	/* #26459 fix s repaint/refresh bug in chrome*/
+	transform: translate3d(0,0,0)
+}
+.Grid:focus { outline: none; }
+
+.Grid .qui-inset-pane {background-color: %VI_Common_Color_LighterGray%;}
+
+/* focused row */
+.GridTable .gridRowSelected {
+    background-color: %VI_Common_Color_Blue_1%;
+}
+
+/* selected row  */
+.GridTable .gridRowAction {
+    background-color: %VI_Common_Color_LighterGray%;
+}
+
+.imx-grid-multirowselection .GridTable .gridRowAction {
+    background-color: transparent;
+}
+
+.imx-grid-multirowselection .GridTable .gridRowAction.gridRowSelected {
+    background-color: %VI_Common_Color_Blue_1%;
+}
+
+.imx-grid-listview li.gridRowAction .ListViewHead
+{
+    border-color: %VI_Common_Color_Gray%;
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+}
+
+.imx-grid-listview li.gridRowAction .ListViewContentRow
+{
+    border-color: %VI_Common_Color_Gray%;
+	border-width: 0 1px 1px 1px;
+}
+
+.GridTable tr.gridRowAction:hover {
+    background-color: %VI_Common_Color_LighterGray%;
+}
+
+.imx-grid-multirowselection tr.gridRowActionable &gt; td:first-child,
+.imx-grid-multirowselection ul &gt; li.gridRowActionable
+{
+    padding-left: 30px;
+}
+
+.imx-grid-multirowselection tr.gridRowActionable &gt; td:first-child,
+.imx-grid-multirowselection li.gridRowActionable
+{
+    background-image: url('%link%stockImg=CheckBoxUnchecked&amp;size=Small&amp;state=Normal');
+	background-repeat: no-repeat;
+	background-position: 0.7em center;
+}
+
+.imx-grid-multirowselection tr.gridRowAction &gt; td:first-child,
+.imx-grid-multirowselection li.gridRowAction
+{
+    background-image: url('%link%stockImg=Checked&amp;size=Small&amp;state=Normal');
+	background-repeat: no-repeat;
+	background-position: 0.7em center;
+}
+
+@media %IMX_Mediaquery_Smartphone%
+{
+   .imx-grid-multirowselection tr.gridRowActionable &gt; td:first-child,
+   .imx-grid-multirowselection li.gridRowActionable,
+   .imx-grid-multirowselection tr.gridRowAction &gt; td:first-child,
+   .imx-grid-multirowselection li.gridRowAction
+   {
+       background-position: 0 .5em;
+   }
+}
+
+.imx-grid-absbottom {
+   min-height: 5px;
+   /* avoid extra scrollbar when grid with ApplyFilledHeight=true has a hidden paging control */
+}</CssDocument>
+    <CssDocument ScriptItemUID="CssDocument2" CssName="HideMenu">.imx-hidemenu .imx-hidemenu-inherit { display: none; }
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

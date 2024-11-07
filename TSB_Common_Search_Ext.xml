@@ -1,0 +1,27 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Common_Search_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="TSBCodeLiteral1">                var tsbQuery = Query.From("DialogTable").Select("TableName").Where(_Database.SqlFormatter().UidComparison("uid_dialogtableunion", "TSB-T-UNSGroup"));
+				var tsbTables = await _Database.Source().GetCollectionAsync(tsbQuery, EntityCollectionLoadType.Slim, ct).ConfigureAwait(false);
+				// look up all UNSGroup base tables and search on those
+				foreach(var tsbTable in tsbTables)
+				{
+					var tsbInsertValues = new VI.WebRuntime.ColumnInsertValues();
+					var tableName = tsbTable.GetValue("TableName");
+					tsbInsertValues[Tables.GetColumn("Name")] = tableName;
+					var metaTable = await _Database.MetaData().GetTableAsync(tableName).ConfigureAwait(false);
+					var hasAccProduct = metaTable.Columns.Contains("UID_AccProduct");
+					var whereClause = _Connection.Variables.Replace("UID_AccProduct in ( select uid_accproduct from accproduct where UID_OrgRuler in (select bc.UID_Org from PersonInBaseTree pib join BaseTreeCollection bc on pib.UID_Org = bc.UID_Org and bc.UID_ParentOrg = 'QER-AEROLE-ITSHOPADMIN-OWNER' and pib.UID_Person = '%UserUID%'))");
+					if (!hasAccProduct)
+					{
+						// not all UNSGroup-related tables have a direct link to AccProduct
+						whereClause = string.Format("XObjectKey in (select XObjectKey from UNSGroup where {0})", whereClause);
+					}
+					tsbInsertValues[Tables.GetColumn("DbWhereClause")] = whereClause;
+					Tables.Insert(tsbInsertValues);
+				}</CodeLiteral>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

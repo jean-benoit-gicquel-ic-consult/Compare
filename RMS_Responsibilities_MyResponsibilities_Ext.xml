@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Responsibilities_MyResponsibilities_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="18">
+        <SwitchContainer ScriptItemUID="TileSystemRoles">
+          <SwitchContainerCase ScriptItemUID="RMSCase1" Condition="-- check PreProcessorCondition first&#xD;&#xA;IsPreProp('ESET')&#xD;&#xA;AND &#xD;&#xA;exists(&quot;eset&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_ESet&quot;)))&#xD;&#xA;">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="RMSContainer1" ItemUID="SystemRoles">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="RMSAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ScriptItemUID="RMSRedirect2" ContextID="VI_ITShop_MyRoles">
+                    <RedirectParameter Name="&quot;Area&quot;" Value="&quot;SystemRoles&quot;" />
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading System Roles&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Heading System Roles&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping10" ID="Image()" Value="&quot;ESet&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows your system roles, their members and the associated entitlements. You can also create a new system role.')" />
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping9" ID="Identifier()" Value="&quot;SystemRoles&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="RMSVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

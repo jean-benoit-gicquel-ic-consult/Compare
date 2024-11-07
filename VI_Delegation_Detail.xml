@@ -1,0 +1,188 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Delegation_Detail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Tab ScriptItemUID="Tab1" Layout="if (ShowAsPrimaryTab()) then 'VI_Styles_Tab_Default' else 'VI_Styles_Tab_Secondary'">
+          <TabPage ScriptItemUID="TabPage1" ItemUID="Delegations" Condition="0 &lt; (from DelegationSend select count() where ObjectKeyDelegated())">
+            <ControlsHeader ScriptItemUID="Container5">
+              <Label Text="translate(&quot;#LDS#Delegations&quot;)" ScriptItemUID="Label3" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container4">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="DelegationSend" WhereClause="ObjectKeyDelegated()">
+                <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef4">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="UID_PersonReceiver" />
+                      <SingleColumn ScriptItemUID="SingleColumn6" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;OrderState&quot;)" Value="select DisplayValue(OrderState) from PWOALL where Uid_PersonWantsOrg =&#xA;from DelegationSend select current Uid_PersonWantsOrg" />
+                      <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="IsDelegable" />
+                      <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="KeepMeInformed" />
+                      <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="ValidFrom" />
+                      <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="ValidUntil" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="DelegationSend" ScriptItemUID="VirtualTableMapping1" />
+                </ControlReferenceContainer>
+                <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;ButtonBar&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container2" Layout="'VI_Styles_Container_Inline'" Condition="from DelegationSend select current OrderState = 'Assigned' and not(ReadOnly())">
+                    <LinkContainer ScriptItemUID="Image1Link">
+                      <ControlList ScriptItemUID="Image1Ctl">
+                        <Image StockImage="Delete" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate('#LDS#Delete')" />
+                          </HtmlAttributes>
+                        </Image>
+                      </ControlList>
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <CallAction ActionID="Unsubscribe" ScriptItemUID="Call1" />
+                        <CallAction ActionID="CallReload" ScriptItemUID="Call3" />
+                      </ServerActionCall>
+                    </LinkContainer>
+                  </Container>
+                  <Container ScriptItemUID="Container3" Layout="'VI_Styles_Container_Inline'" Condition="from DelegationSend select current OrderState in ('Granted','Waiting','OrderProlongate','OrderUnsubscribe','OrderProduct') and not(ReadOnly())">
+                    <Button ScriptItemUID="Button2" Text="translate('#LDS#Cancel request')" Layout="'VI_Styles_Button_Default'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall3">
+                        <CallAction ActionID="Withdraw" ScriptItemUID="CallAction4" />
+                        <CallAction ActionID="CallReload" ScriptItemUID="CallAction5" />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                  <Container ScriptItemUID="Container8" Condition="not(from delegationsend select current IsNullOrEmpty(UID_PersonWantsOrg))">
+                    <Button Text="translate(&quot;#LDS#Details&quot;)" ScriptItemUID="Button3">
+                      <ServerActionCall ScriptItemUID="ServerActionCall4">
+                        <ForeachRow DataTable="PWOALL" WhereClause="UID_PersonWantsOrg = (from DelegationSend select current UID_PersonWantsOrg)" ScriptItemUID="ForeachRow1">
+                          <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+                            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                              <Container ScriptItemUID="Container9">
+                                <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlRef3">
+                                  <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="PersonWantsOrg" DataTable="PWOALL" />
+                                </ControlReferenceContainer>
+                              </Container>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                              <Container ScriptItemUID="Container10" Layout="'VI_Styles_Container_ButtonPanel'">
+                                <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef1" />
+                              </Container>
+                            </VirtualControlMapping>
+                            <VirtualFunctionMapping ID="PopupTitle()" Value="from PWOALL select current Display()" ScriptItemUID="VirtualFunctionMapping3" />
+                          </CallAction>
+                        </ForeachRow>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </ContainerTemplate>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ScriptItemUID="TabPage2">
+            <ControlsHeader ScriptItemUID="Container7">
+              <Label Text="datacaptionsingle(from delegatedobjects select current DBTable())" ScriptItemUID="Label4" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container6">
+              <ObjectSwitchContainer ObjectKey="singleproperty(&quot;DialogTable&quot;, &quot;XobjectKey&quot;, format(&quot;tablename = {0}&quot;, sqlformatvalue(from delegatedobjects select current DBTable(), &quot;string&quot;)))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                <VirtualTableMapping VirtualTable="SourceObject" DataTable="DelegatedObjects" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualFunctionMapping ID="ShowHeading()" Value="false" ScriptItemUID="VirtualFunctionMapping10" />
+              </ObjectSwitchContainer>
+            </ControlsBody>
+          </TabPage>
+        </Tab>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Unsubscribe">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction7">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you wish to cancel this delegation?')" ScriptItemUID="VirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Delegation&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action6">
+                    <SwitchAction ScriptItemUID="Switch1">
+                      <SwitchActionCase ScriptItemUID="Case1" Condition="exists(&quot;PersonWantsOrg&quot;,&#xD;&#xA;from DelegationSend select current &#xD;&#xA;SqlAnd(&#xD;&#xA;SqlCompareUid(&quot;UID_PersonWantsOrg&quot;, UID_PersonWantsOrg),&#xD;&#xA;SqlCompare(&quot;OrderState&quot;, OrderState, &quot;string&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)">
+                        <Method DataTable="PWOALL" Method="Unsubscribe" WhereClause="uid_personwantsorg = ( from DelegationSend select current Uid_PersonWantsOrg)" />
+                      </SwitchActionCase>
+                      <SwitchActionCase ScriptItemUID="Case2">
+                        <CallAction ActionID="ChangeMessage" ScriptItemUID="Call4" />
+                      </SwitchActionCase>
+                    </SwitchAction>
+                  </ActionComponent>
+                </VirtualControlMapping>
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DelegationSend" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="Withdraw">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction8">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you wish to cancel this delegation request?')" ScriptItemUID="VirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Delegation&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action9">
+                    <SwitchAction ScriptItemUID="Switch2">
+                      <SwitchActionCase ScriptItemUID="Case4" Condition="exists(&quot;PersonWantsOrg&quot;,&#xD;&#xA;from DelegationSend select current &#xD;&#xA;SqlAnd(&#xD;&#xA;SqlCompareUID(&quot;UID_PersonWantsOrg&quot;, UID_PersonWantsOrg),&#xD;&#xA;SqlCompare(&quot;OrderState&quot;, OrderState, &quot;string&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)">
+                        <Method DataTable="PWOALL" Method="CancelOrder" WhereClause="uid_personwantsorg = ( from DelegationSend select current Uid_PersonWantsOrg)">
+                          <MethodParameter Name="'strUID_PersonHead'" Value="GetUser()" />
+                          <MethodParameter Name="'strReasonText'" Value="''" />
+                        </Method>
+                      </SwitchActionCase>
+                      <SwitchActionCase ScriptItemUID="Case3">
+                        <CallAction ActionID="ChangeMessage" ScriptItemUID="Call6" />
+                      </SwitchActionCase>
+                    </SwitchAction>
+                  </ActionComponent>
+                </VirtualControlMapping>
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DelegationSend" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="ChangeMessage">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call7">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The status of the selected delegation has been changed. The delegation will be reloaded.')" ScriptItemUID="VirtualFunctionMapping18" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Delegation&quot;)" ScriptItemUID="VirtualFunctionMapping17" />
+                <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping16" />
+                <VirtualControlMapping VirtualControl="OnOK" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action10">
+                    <LoadTable DataTable="PWOALL" ScriptItemUID="LoadTable1" WhereClause="Format(&quot;uid_personwantsorg = '{0}'&quot;,  from DelegationSend select current Uid_PersonWantsOrg)" RemoveDeleted="false" LoadNew="false">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+                    </LoadTable>
+                  </ActionComponent>
+                </VirtualControlMapping>
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DelegationSend" ScriptItemUID="DataTableCursor3" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DelegationSend" Class="Delegation" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="ValidFrom" DataType="System.DateTime" />
+        <VirtualColumn Name="ValidUntil" DataType="System.DateTime" />
+      </VirtualTable>
+      <VirtualTable Name="DelegatedObjects" ScriptItemUID="VirtualTable2" RequiresCursor="true" />
+      <VirtualTable Name="PWOALL" Class="PersonWantsOrg" ScriptItemUID="VirtualTable3">
+        <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column1" DataSource="Expression" Expression="true" />
+      </VirtualTable>
+      <VirtualControl ID="CallReload" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="ObjectKeyDelegated()" DataType="System.Boolean" FilterForTable="DelegationSend" />
+      <VirtualFunction Signature="ShowAsPrimaryTab()" DataType="System.Boolean" DefaultValue="True" Comment="As a default this component has primary tabs.&#xD;&#xA;If this component is used in a Master-Detail-Control it looks nicer if you use a secondary tab." TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.Boolean" Signature="ReadOnly()" DefaultValue="false" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

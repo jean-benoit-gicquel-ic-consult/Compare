@@ -1,0 +1,90 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Roles_RolesAndEntitlements_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action22" ObjectType="ActionSequence" SortOrder="28">
+        <ActionSequence Condition="area() = &quot;SystemRoles&quot;" ItemUID="SYSTEMROLES" ScriptItemUID="RMSAction1">
+          <Insert ScriptItemUID="RMSInsert2" DataTable="LimitedValues">
+            <ActionSequence ScriptItemUID="RMSAction5" />
+            <InsertValue Value="&quot;ESet&quot;" DataColumn="Value" />
+          </Insert>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="30">
+        <ConfigParam Key="VI_Roles_Responsibility_ESet" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;ESet&quot;)" Type="SQL" DatabaseTable="ESet" LongDescription="" />
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="40">
+        <Control ID="NewESet">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="RMSFormGroup1">
+              <Form ID="Detail4" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#New system role&quot;)" ScriptItemUID="RMSForm1">
+                <ActionSequence ScriptItemUID="RMSAction2" />
+                <PagePartContainer ID="Title" ScriptItemUID="RMSPagePartContainer1">
+                  <Container ScriptItemUID="RMSContainer1">
+                    <Label Text="translate(&quot;#LDS#New system role&quot;)" ScriptItemUID="RMSLabel1" />
+                  </Container>
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="RMSPagePartContainer2">
+                  <Container ScriptItemUID="RMSContainer2">
+                    <ContainerTemplate DataTable="ESetNew" ScriptItemUID="RMSContainerTemplate1">
+                      <Container ScriptItemUID="RMSContainer3">
+                        <ObjectSwitchContainer ScriptItemUID="RMSObjectSwitchContainer1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;ESet&quot;))" ActionType="ObjectEdit">
+                          <VirtualTableMapping DataTable="ESetNew" VirtualTable="EditTable" ScriptItemUID="RMSVirtualTableMapping1" />
+                        </ObjectSwitchContainer>
+                      </Container>
+                    </ContainerTemplate>
+                    <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="RMSContainer4">
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="RMSButton1">
+                        <ServerActionCall ScriptItemUID="RMSServerActionCall1">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <Save DataTable="ESetNew" ScriptItemUID="RMSSave1" />
+                          <CallAction ActionID="Reinitialize" ScriptItemUID="RMSCall1" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="RMSCall2">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="RMSVirtualFunctionMapping1" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="RMSVirtualFunctionMapping2" />
+                          </CallAction>
+                          <Redirect Target="ReturnLastForm" ScriptItemUID="RMSRedirect1" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="RMSButton2" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="RMSHtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="RMSServerActionCall2">
+                          <Redirect Target="ReturnLastForm" ScriptItemUID="RMSRedirect2" />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container7" ObjectType="Container" SortOrder="40">
+        <Container Condition="CanInsert ( &quot;ESet&quot; ) and area()=&quot;SystemRoles&quot;" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="RMSContainer5" ItemUID="new system role">
+          <Button Text="translate(&quot;#LDS#New system role&quot;)" ScriptItemUID="RMSButton3" Layout="'VI_Styles_Button_Default'">
+            <ServerActionCall ScriptItemUID="RMSServerActionCall3">
+              <Delete DataTable="ESetNew" ScriptItemUID="RMSDelete1" />
+              <Insert DataTable="ESetNew" ScriptItemUID="RMSInsert1">
+                <ActionSequence ScriptItemUID="RMSAction3" />
+                <InsertValue DataColumn="UID_PersonResponsible" Value="getuser()" />
+              </Insert>
+              <Redirect Target="FormModule" ScriptItemUID="RMSRedirect3">
+                <RedirectFormModule ID="NewESet" ScriptItemUID="RMSRedirectForm1" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableDbObject Class="ESet" Table="ESetNew" ScriptItemUID="RMSDataTableDbObject1">
+          <ActionSequence ScriptItemUID="RMSAction4" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="30">
+        <ConfigEntry Key="VI_Roles_Responsibility_ESet" Value="&quot;uid_personresponsible = '%useruid%'&quot;" ScriptItemUID="RMSConfigEntry1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

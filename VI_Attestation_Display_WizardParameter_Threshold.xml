@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_Display_WizardParameter_Threshold" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Label Text="IsNullOrEmpty(from Parameter select current Value, &quot;?&quot;)" ScriptItemUID="Label1" />
+        <Literal Expression="&quot; &amp;ndash; &quot;" />
+        <Label Text="IsNullOrEmpty(from Parameter select current Value2, &quot;?&quot;)" ScriptItemUID="Label2" />
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Parameter" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="Value" DataType="System.String" />
+        <VirtualColumn Name="Value2" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

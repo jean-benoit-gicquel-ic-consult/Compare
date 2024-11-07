@@ -1,0 +1,71 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_MultiFK">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral2">object customDisplayPattern;
+// Copy custom display pattern from the column to the collection holding the target objects
+if (EditTable_EditColumn.ExtendedProperties.TryGetValue(BaseRuntimeTable.DisplayPatternKey, out customDisplayPattern))
+{
+	Keys.GetColumn("Key").ExtendedProperties[BaseRuntimeTable.DisplayPatternKey] = customDisplayPattern;
+}</CodeLiteral>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container3" RefreshTriggerExpression="select count() from keys">
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="1 &lt; select count() from keys and {{ EditTable_EditColumn.ExtendedProperties.ContainsKey(&quot;MultiValueDisplayPattern&quot;) }}">
+              <Label Text="format({{ EditTable_EditColumn.ExtendedProperties[&quot;MultiValueDisplayPattern&quot;].ToString()}}, from keys select count())" ScriptItemUID="Label2" />
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="Keys" OrderBy="'__Display'" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-valuelist&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container2">
+                  <LinkContainer ScriptItemUID="LinkContainer1" EnabledCondition="EnableNavigation()">
+                    <ControlList ScriptItemUID="ControlList2">
+                      <Label Text="from keys select current display()" ScriptItemUID="Label1" />
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
+                        <RedirectParameter Name="'TableName'" Value="fkparenttablename()" />
+                        <RedirectParameter Name="'UID'" Value="from keys select current key" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </LinkContainer>
+                </Container>
+              </ContainerTemplate>
+            </SwitchContainerCase>
+          </SwitchContainer>
+          <Container ScriptItemUID="Container1" Layout="'VI_Styles_Container_Inline'" Condition="from edittable select current IsNullOrEmpty(editcolumn)">
+            <Label Text="from edittable select current NullText()" ScriptItemUID="Label3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'data-imx-nulltext'" ScriptItemUID="HtmlAttribute1" Value="'true'" />
+              </HtmlAttributes>
+            </Label>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableView Table="Keys" ScriptItemUID="DataTableView1" ViewExpression="from edittable select current split(editcolumn, char(7), true)" PrimaryKeyColumn="pk" DisplayColumn="Displaykey">
+          <Column Name="Key" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBTableName="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).ForeignKeyColumn.Table.Tablename }}" DBColumnName="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).ForeignKeyColumn.Columnname }}" FKWhereClause="" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column2" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="Displaykey" DataType="System.String" ScriptItemUID="Column3" TriggerUpdates="Never" DataSource="Expression" Expression="displayvalue(key)" />
+        </DataTableView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="FKParentTableName()" Expression="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).ForeignKeyColumn.Table.Tablename }}" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension1">
+        <VirtualColumnExtension Name="EditColumn" DataType="System.String" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

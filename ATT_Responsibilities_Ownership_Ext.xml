@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Responsibilities_Ownership_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="15">
+        <SwitchContainer ScriptItemUID="TileAssignOwnership">
+          <SwitchContainerCase ScriptItemUID="ATTCase1" Condition="getconfig(&quot;ATT_BusinessOwnership_Assign_Active&quot;) = &quot;true&quot;">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ATTContainer1" ItemUID="AssignOwnership">
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping9" ID="Identifier()" Value="&quot;AssignOwnership&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="ATTAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="ATT_BusinessOwnership_Assign" ScriptItemUID="ATTRedirect2" AbortExecution="false" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Heading Assign Ownership&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping10" ID="Image()" Value="&quot;cux-icon cux-icon--hand-o-up&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Assigns a business object without an owner to yourself, or to somebody else. This change may be followed by an approval workflow.')&#xD;&#xA;" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping8" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

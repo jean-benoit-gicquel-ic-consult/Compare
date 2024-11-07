@@ -1,0 +1,38 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="TSB_ObjectGridView_UNSGroup" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Grid ScriptItemUID="Grid1">
+          <GridBand DataTable="HierarchyTable" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()" DbOrderBy="" RowSelection="true" DataTableForSelection="TargetTable" DataColumnForSelection="TargetSelectedKey" DisplayHeader="Always" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="ApplyFilledHeight" Value="true" />
+            </HtmlAttributes>
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumnSimple ScriptItemUID="Column1" Column="__Display" />
+            <GridColumnSimple ScriptItemUID="Column2" Column="UID_DPRNameSpace" Condition="1 &lt; DbCount(&quot;DPRNameSpace&quot;,Format(&quot;UID_DPRNameSpace in (select distinct UID_DPRNameSpace from UNSGroup where {0})&quot;,DbWhereClause()),false)" />
+            <ControlReferenceGridColumnGroup DataTable="HierarchyTable" ScriptItemUID="ControlRef1" ID="AdditionalColumns" />
+          </GridBand>
+        </Grid>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="HierarchyTable" ScriptItemUID="VirtualTable1" Class="UNSGroup" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualTable Name="TargetTable" ScriptItemUID="VirtualTable2" RequiresCursor="true">
+        <VirtualColumn Name="TargetSelectedKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualControl ContainerType="GridColumnGroup" ID="AdditionalColumns" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

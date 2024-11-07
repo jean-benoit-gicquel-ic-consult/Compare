@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Menu_Default" Type="Menu" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" DisableCaching="true" ScriptItemUID="CssDocument1">.qui .dropdown-menu {border-width: 0;} 
+.qui .dropdown-menu a {color: %VI_Common_Color_Font%;}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

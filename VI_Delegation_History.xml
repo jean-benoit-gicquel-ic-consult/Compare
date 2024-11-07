@@ -1,0 +1,70 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="xryKOt5jucb0cajKZe097Q==">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Delegation_History" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" HelpChapterUid="&quot;B77C7984-AE84-4A3B-BF71-90217A7EA420&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="DelegationWhereClause" DataType="System.String" ScriptItemUID="Column12" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action3" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="F1" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Delegation History')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action4" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Delegation History')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <ControlReferenceContainer ID="VI_Delegation_History_Filter" ScriptItemUID="ControlRef2">
+              <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                <VirtualColumnMapping VirtualColumn="TargetWhereClause" DataColumn="DelegationWhereClause" />
+              </VirtualTableMapping>
+            </ControlReferenceContainer>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="'padding-top: 10px;'" />
+              </HtmlAttributes>
+              <Tab ScriptItemUID="Tab1">
+                <TabPage ScriptItemUID="TabPage1" ItemUID="Delegated to other employees">
+                  <ControlsHeader ScriptItemUID="Container4">
+                    <Label Text="translate('#LDS#Delegated to other employees')" ScriptItemUID="Label2" />
+                  </ControlsHeader>
+                  <ControlsBody ScriptItemUID="Container5">
+                    <ControlReferenceControlList ID="QER_DelegationHistory_MasterDetail" ScriptItemUID="ControlRef6">
+                      <VirtualFunctionMapping ID="ShowReceiver()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                      <VirtualFunctionMapping ID="DbWhereClause()" Value="from vars select delegationwhereclause" ScriptItemUID="VirtualFunctionMapping3" />
+                    </ControlReferenceControlList>
+                  </ControlsBody>
+                </TabPage>
+                <TabPage ScriptItemUID="TabPage2" ItemUID="Delegated to you">
+                  <ControlsHeader ScriptItemUID="Container6">
+                    <Label Text="translate('#LDS#Delegated to you')" ScriptItemUID="Label3" />
+                  </ControlsHeader>
+                  <ControlsBody ScriptItemUID="Container7">
+                    <ControlReferenceControlList ID="QER_DelegationHistory_MasterDetail" ScriptItemUID="ControlRef7">
+                      <VirtualFunctionMapping ID="ShowReceiver()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+                      <VirtualFunctionMapping ID="DbWhereClause()" Value="from vars select delegationwhereclause" ScriptItemUID="VirtualFunctionMapping5" />
+                    </ControlReferenceControlList>
+                  </ControlsBody>
+                </TabPage>
+              </Tab>
+            </Container>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate(&quot;#LDS#This page shows the history of your role delegations.&quot;)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

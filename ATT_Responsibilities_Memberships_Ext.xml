@@ -1,0 +1,54 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Responsibilities_Memberships_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCase" ScriptItemUID="ATTDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ATTAction1" />
+          <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="ATTColumn1" />
+          <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="ATTColumn2" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="65">
+        <Control ID="FormAttestation">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="ATTFormGroup1">
+              <Form ID="FormAttestation" ScriptItemUID="ATTForm1">
+                <ActionSequence ScriptItemUID="ATTAction2" />
+                <PagePartContainer ID="Title" ScriptItemUID="ATTPagePartContainer1">
+                  <Label Text="translate(&quot;#LDS#Attestation&quot;) + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="ATTLabel1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="ATTPagePartContainer2">
+                  <ContainerTemplate DataTable="DbObjects" ScriptItemUID="ATTContainerTemplate1" WhereClause="UID_Object = (from Container select UID_ObjectSelected)">
+                    <ControlReferenceContainer ID="VI_Roles_AttestationCasesForObject" ScriptItemUID="ATTControlRef1">
+                      <VirtualTableMapping VirtualTable="BaseObject" DataTable="DbObjects" ScriptItemUID="ATTVirtualTableMapping1" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="ATTVirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="ATTVirtualFunctionMapping2" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container12" ObjectType="Container" SortOrder="46">
+        <Container EnableCustomAttributes="true" ItemUID="Attestation" Condition="getconfigparm(&quot;QER\Attestation&quot;)=&quot;1&quot;" ScriptItemUID="ATTContainer3">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="ATTHtmlAttribute1" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ATTControlRef2">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="ATTAction3">
+                <Redirect Target="FormModule" AbortExecution="false" ScriptItemUID="ATTRedirect1">
+                  <RedirectFormModule ID="FormAttestation" ScriptItemUID="ATTRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Attestation&quot;)" ScriptItemUID="ATTVirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="Description()" Value="translate('#LDS#Shows the attestation status of this object.')" ScriptItemUID="ATTVirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

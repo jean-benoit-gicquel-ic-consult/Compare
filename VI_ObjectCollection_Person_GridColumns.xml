@@ -1,0 +1,34 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_ObjectCollection_Person_GridColumns" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup1">
+        <GridColumnColumnTemplate DataTable="Person" ScriptItemUID="GridColumnColumnTemplate1">
+          <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+            <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectCollection_Person_Fields&quot;)" />
+          </ColumnList>
+          <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup2">
+            <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" ScriptItemUID="GridColumn1">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label Text="datacaption(person, currentcolumn)" ScriptItemUID="Label1" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1">
+                <Label Text="from person select current displayvalue(currentcolumn)" ScriptItemUID="Label2" />
+              </Cell>
+            </GridColumn>
+          </GridColumnGroup>
+        </GridColumnColumnTemplate>
+      </GridColumnGroup>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="Person" Class="Person" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

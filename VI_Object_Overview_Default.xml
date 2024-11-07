@@ -1,0 +1,64 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Object_Overview_Default" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var currentRow = (IDbObjectRow)_Object_Current.Row;
+var key = currentRow.GetObjectKey(_Database);
+var tableName = currentRow.Entity.Tablename;
+var keyTable = await _Database.Source().GetSingleValueAsync&lt;string&gt;("DialogTable", "XObjectKey", "TableName = '"+tableName+"'", ct).ConfigureAwait(false);
+var svc = _UserSession.Services.Resolve&lt;IObjectReferenceService&gt;();
+var cmpName = await svc.GetComponentNameAsync("HyperView", keyTable, true /* no fallback */, ct).ConfigureAwait(false);
+
+// #25811 if no direct hyperview is defined, lookup the corresponding union table
+if (cmpName == null)
+{
+	var q = Query.From("DialogTable")
+	   .Select("XObjectKey", "TableName")
+	   .Where("UID_DialogTable in ( select UID_DialogTableUnion from DialogTable where TableName = '" + tableName + "')");
+	var tryGet = await _Database.Source().TryGetAsync(q, ct).ConfigureAwait(false);
+	if (tryGet.Success)
+	{		
+		var cmpName2 = await svc.GetComponentNameAsync("HyperView", tryGet.Result.GetValue("XObjectKey").String, true /* no fallback */, ct).ConfigureAwait(false);
+		if (!string.IsNullOrEmpty(cmpName2))
+		{
+			var newTableName = tryGet.Result.GetValue("TableName").String;
+			Logger.Info("Using table {0} because table {1} has no hyperview", newTableName, tableName);
+			tableName = newTableName;
+			// build same object key but with new table name
+			key = new DbObjectKey(newTableName, new DbObjectKey(key.ToXmlString()).Keys);
+		}
+	}
+}
+
+var q2 = Query.From(tableName).Where(key).SelectAll();
+await Obj.LoadAsync(new DbObjectLoadInfo(q2), LoadTableOptions.Default, ct).ConfigureAwait(false);</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <ContainerTemplate DataTable="Obj" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">
+          <ObjectSwitchContainer ScriptItemUID="TableSwitchContainer1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', sqlcompare(&quot;TableName&quot;, select current dbtable() from Obj, &quot;string&quot;, &quot;equal&quot;))" ActionType="HyperView">
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualTableMapping DataTable="Obj" VirtualTable="Object" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualControlMapping VirtualControl="AdditionalShapes" ContainerType="ControlList">
+              <ControlList ScriptItemUID="ControlList1">
+                <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef1" />
+              </ControlList>
+            </VirtualControlMapping>
+          </ObjectSwitchContainer>
+        </ContainerTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Container" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+        <DataTableGeneric Table="Obj" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Object_Overview" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

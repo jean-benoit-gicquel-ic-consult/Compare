@@ -1,0 +1,248 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Responsibilities_MyResponsibilities" AllowUrlNavigation="true" HelpChapterUid="&quot;5ED7E9A8-1174-41A3-AE6E-278E3BF201AD&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="QER_Responsibilities_MyResponsibilities" NavigationTitle="translate('#LDS#My Responsibilities')">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate('#LDS#My Responsibilities')" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <SwitchContainer ScriptItemUID="TileEmployees">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="exists(&quot;person&quot;,&#xD;&#xA;sqland(variable(isnullorempty( getconfig(&quot;VI_Employee_Person_ManagerCondition&quot;), &#xD;&#xA;  &quot;uid_person in ( select uid_personhead from QER_VEditEmployee where uid_personhead = '%useruid%')&quot;))))  ">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="Employees">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action12">
+                      <Redirect ScriptItemUID="Redirect10" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Employee_Overview" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping28" ID="Caption()" Value="translate('#LDS#People')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Value()" Value="translate('#LDS#Shows the list of your direct reports. You can also add a new employee.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Identifier()" Value="&quot;Employees&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="Image()" Value="&quot;Person&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping35" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping36" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileDepartment">
+              <SwitchContainerCase ScriptItemUID="Case2" Condition="exists(&quot;person&quot;, variable(&quot;uid_person in ( select hho.uid_personhead from HelperHeadOrg hho join BaseTree bt on bt.UID_Org = hho.UID_Org and bt.UID_OrgRoot in ('QER-V-Department')) and uid_person = '%useruid%'&quot;))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container4" ItemUID="Department">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action3">
+                      <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;Organization&quot;" />
+                        <RedirectParameter Value="&quot;Department&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="datacaption(&quot;Department&quot;)" Name="'Title'" />
+                        <RedirectParameter Value="&quot;true&quot;" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="datacaption(&quot;Department&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Value()" Value="translate('#LDS#Shows your managed departments. You can add members, request entitlements and view changes. You can also restore deleted departments.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping39" ID="Image()" Value="&quot;Department&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping40" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping38" ID="Identifier()" Value="&quot;Department&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping41" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileProfitCenter">
+              <SwitchContainerCase ScriptItemUID="Case3" Condition="exists(&quot;person&quot;, variable(&quot;uid_person in ( select hho.uid_personhead from HelperHeadOrg hho join BaseTree bt on bt.UID_Org = hho.UID_Org and bt.UID_OrgRoot in ('QER-V-ProfitCenter')) and uid_person = '%useruid%'&quot;))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container5" ItemUID="ProfitCenter">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action5">
+                      <Redirect ScriptItemUID="Redirect5" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;Organization&quot;" />
+                        <RedirectParameter Value="&quot;ProfitCenter&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="datacaption(&quot;ProfitCenter&quot;)" Name="'Title'" />
+                        <RedirectParameter Value="&quot;true&quot;" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping44" ID="Caption()" Value="datacaption(&quot;ProfitCenter&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping43" ID="Value()" Value="translate('#LDS#Shows your cost centers, their members and the associated entitlements.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping42" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping24" ID="Image()" Value="&quot;ProfitCenter&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Identifier()" Value="&quot;ProfitCenter&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileLocality">
+              <SwitchContainerCase ScriptItemUID="Case4" Condition="exists(&quot;person&quot;, variable(&quot;uid_person in ( select hho.uid_personhead from HelperHeadOrg hho join BaseTree bt on bt.UID_Org = hho.UID_Org and bt.UID_OrgRoot in ('QER-V-Locality')) and uid_person = '%useruid%'&quot;))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container6" ItemUID="Locality">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action6">
+                      <Redirect ScriptItemUID="Redirect6" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;Organization&quot;" />
+                        <RedirectParameter Value="&quot;Locality&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="datacaption(&quot;Locality&quot;)" Name="'Title'" />
+                        <RedirectParameter Value="&quot;true&quot;" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Caption()" Value="datacaption(&quot;Locality&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping49" ID="Image()" Value="&quot;Locality&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping47" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping50" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping46" ID="Value()" Value="translate('#LDS#Shows your managed locations. You can add members, request entitlements and view changes. You can also restore deleted locations.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping48" ID="Identifier()" Value="&quot;Locality&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping51" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileAERole">
+              <SwitchContainerCase ScriptItemUID="Case10" Condition="exists(&quot;person&quot;, variable(&quot;uid_person in ( select hho.uid_personhead from HelperHeadOrg hho join BaseTree bt on bt.UID_Org = hho.UID_Org and bt.UID_OrgRoot = 'QER-V-AERole') and uid_person = '%useruid%'&quot;))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef1" ItemUID="AERole">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action4">
+                      <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;AERole&quot;" />
+                        <RedirectParameter Value="&quot;AERole&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="datacaption(&quot;AERole&quot;)" Name="'Title'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Caption()" Value="datacaption(&quot;AERole&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Image()" Value="&quot;AERole&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="Value()" Value="translate('#LDS#Shows your managed application roles. You can add members and view changes. You can also create a new application role.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Identifier()" Value="&quot;AERole&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileQERResource">
+              <SwitchContainerCase ScriptItemUID="Case5" Condition="exists(&quot;qerresource&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container7" ItemUID="OtherServices - QERResource">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action8">
+                      <Redirect ScriptItemUID="Redirect4" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;OtherServices&quot; " />
+                        <RedirectParameter Value="datacaption(&quot;QERResource&quot;)" Name="'Title'" />
+                        <RedirectParameter Value="'QERResource'" Name="'TableName'" />
+                        <RedirectParameter Value="true" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Caption()" Value="DataCaption(&quot;QERResource&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="Value()" Value="translate('#LDS#Shows your managed resources.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping52" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping53" ID="Identifier()" Value="&quot;OtherServices - QERResource&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping54" ID="Image()" Value="&quot;QERResource&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping55" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping56" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileQERAssign">
+              <SwitchContainerCase ScriptItemUID="Case6" Condition="exists(&quot;qerassign&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container8" ItemUID="OtherServices - QERAssign">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping58" ID="Identifier()" Value="&quot;OtherServices - QERAssign&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action9">
+                      <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;OtherServices&quot; " />
+                        <RedirectParameter Value="DataCaption('QERAssign')" Name="'Title'" />
+                        <RedirectParameter Value="&quot;QERAssign&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="true" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Caption()" Value="DataCaption('QERAssign')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping59" ID="Image()" Value="&quot;QERAssign&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="Value()" Value="translate('#LDS#Shows your managed resources.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping57" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping60" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping61" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileQERReuse">
+              <SwitchContainerCase ScriptItemUID="Case7" Condition="exists(&quot;qerreuse&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container9" ItemUID="OtherServices - QERreuse">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping63" ID="Identifier()" Value="&quot;OtherServices - QERreuse&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action7">
+                      <Redirect ScriptItemUID="Redirect7" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;OtherServices&quot; " />
+                        <RedirectParameter Value="DataCaption('QERreuse')" Name="'Title'" />
+                        <RedirectParameter Value="&quot;QERreuse&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="true" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Caption()" Value="DataCaption('QERreuse')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping64" ID="Image()" Value="&quot;QERreuse&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="Value()" Value="translate('#LDS#Shows your resources, their members and the associated entitlements.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping62" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping65" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping66" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileQERReuseUs">
+              <SwitchContainerCase ScriptItemUID="Case8" Condition="exists(&quot;qerreuseus&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container10" ItemUID="OtherServices - QERReuseUs">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping68" ID="Identifier()" Value="&quot;OtherServices - QERReuseUs&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action10">
+                      <Redirect ScriptItemUID="Redirect8" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles">
+                        <RedirectParameter Name="&quot;Area&quot;" Value="&quot;OtherServices&quot; " />
+                        <RedirectParameter Value="DataCaption('QERReuseUs')" Name="'Title'" />
+                        <RedirectParameter Value="&quot;QERReuseUs&quot;" Name="'TableName'" />
+                        <RedirectParameter Value="true" Name="'HideObjectTypSelect'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Caption()" Value="DataCaption('QERReuseUs')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping69" ID="Image()" Value="&quot;QERReuseUS&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="Value()" Value="translate('#LDS#Shows your managed resources.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping67" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping70" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping71" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <SwitchContainer ScriptItemUID="TileHardware">
+              <SwitchContainerCase ScriptItemUID="Case9" Condition="ispreprop('MAC')&#xD;&#xA;and&#xD;&#xA;(if(isnullorempty(getconfig(&quot;VI_Hardware_Person_ManagerCondition&quot;)))then true else exists(&quot;person&quot;,variable(getconfig(&quot;VI_Hardware_Person_ManagerCondition&quot;))))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container3" ItemUID="Hardware">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping73" ID="Identifier()" Value="&quot;Hardware&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action11">
+                      <Redirect ScriptItemUID="Redirect9" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Hardware_Overview" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="Caption()" Value="datacaption(&quot;Hardware&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping74" ID="Image()" Value="&quot;Hardware&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping27" ID="Value()" Value="translate('#LDS#Shows the list of devices that you are responsible for. You can also register new devices.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping72" ID="ImageType()" Value="'TableName'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping75" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping76" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

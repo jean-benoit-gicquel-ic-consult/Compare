@@ -1,0 +1,121 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="10fa832d-4d82-5101-419f-6ddd38dbbb63">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RPS_ListReport_DefinitionEditor">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="VI.WebRuntime.WebControls.dll" />
+        <TypeMember>private string _sqlWizardScript, _columnSelectorScript;
+private IFormRenderPart _renderPart;
+private VI.WebRuntime.Data.ReportDefinition _reportDef;
+private VI.WebRuntime.WebControls.Helper.ReportDefinitionAdapter _reportAdapter;
+</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action1">
+            <Update DataTable="Vars" DataColumn="WhereClause" ScriptItemUID="Update1" />
+            <CodeLiteral ScriptItemUID="CodeLiteral6">_reportDef.TableName = Vars.SingleRow.GetValue("TableName");
+</CodeLiteral>
+            <CallAction ActionID="InitScripts" ScriptItemUID="Call1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="TableName" />
+        </DataEventHandler>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+          <Action ScriptItemUID="Action6">
+            <CodeLiteral ScriptItemUID="CodeLiteral5">var xml = _EditTable_EditColumn.GetValue(_EditTable_Current.Row).String;
+_reportDef = new VI.WebRuntime.Data.ReportDefinition(xml);
+Vars.GetColumn("TableName").SetValue(Vars.SingleRow, _reportDef.TableName);</CodeLiteral>
+          </Action>
+        </Activator>
+        <SwitchContainer ScriptItemUID="Switch1">
+          <SwitchContainerCase ScriptItemUID="Case1" Condition="from edittable select current canedit(editcolumn)">
+            <ColumnEditor DataTable="Vars" DataColumn="TableName" ScriptItemUID="ColumnEditor1">
+              <VirtualFunctionMapping ID="NullText()" Value="translate(&quot;#LDS#(no table selected)&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+            </ColumnEditor>
+            <Container ScriptItemUID="Container1" Condition="from vars select not(isnullorempty(tablename))" RefreshTriggerExpression="from edittable select current editcolumn" Layout="'VI_Styles_Container_ButtonBar'" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="'style'" Value="'padding-right: 0px;'" />
+              </HtmlAttributes>
+              <Button Text="translate(&quot;#LDS#Result columns&quot;)" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Pill'">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <CodeLiteral ScriptItemUID="CodeLiteral4">var queueScript = "imx.comm.processing.done(function(){ " + _columnSelectorScript + " });";
+VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.Communication.IAjaxResponse&gt;().AddCommand(new AjaxScriptCommand(queueScript));</CodeLiteral>
+                </ServerActionCall>
+              </Button>
+              <Button Text="translate(&quot;#LDS#Edit filter&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Pill'">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <CodeLiteral ScriptItemUID="CodeLiteral1">var queueScript = "imx.comm.processing.done(function(){ " + _sqlWizardScript + " });";
+VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.Communication.IAjaxResponse&gt;().AddCommand(new AjaxScriptCommand(queueScript));</CodeLiteral>
+                </ServerActionCall>
+              </Button>
+            </Container>
+            <CodeLiteral ScriptItemUID="CodeLiteral2">// load SQL wizard
+
+var scriptContainer = ((IScriptContainerProvider)Container1.Page).ScriptContainer;
+scriptContainer.AddRequirement("controls/SqlWizard/script/SqlWizardControl");
+scriptContainer.AddRequirement("controls/TableColumnSelector/script/TableColumnSelectorControl");
+
+_renderPart = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IoC.IObjectFactory&gt;().FormRenderPartFunc(Container1);
+</CodeLiteral>
+            <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+              <Action ScriptItemUID="Action5">
+                <CallAction ActionID="InitScripts" ScriptItemUID="Call2" />
+              </Action>
+            </Activator>
+            <Validator DataTable="Vars" DataColumn="TableName" ScriptItemUID="Validator1" />
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case2">
+            <ColumnEditor DataTable="Vars" DataColumn="TableName" ScriptItemUID="ColumnEditor2" Type="IsForView" />
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBTableName="&quot;DialogTable&quot;" DBColumnName="&quot;TableName&quot;" FKWhereClause="" TriggerUpdates="Updates" Caption="translate(&quot;#LDS#Base table&quot;)" DisplayValueExpression="datacaption(from vars select tablename)">
+            <ValidationModifier ID="ValidateTableName" Text="translate(&quot;#LDS#The report table name is not set.&quot;)" Condition="from vars select isnullorempty(TableName)" />
+            <ValidationModifier ID="ValidateColumns" Text="translate(&quot;#LDS#The report must contain at least one column.&quot;)" Condition="{{ _reportAdapter != null &amp;&amp; !_reportAdapter.ReportDef.ReportColumns.Any() }}" />
+          </Column>
+          <Column Name="WhereClause" DataType="System.String" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="ResultColumns" ScriptItemUID="DataTableCustom1">
+          <Column Name="ColumnName" DataType="System.String" ScriptItemUID="Column3" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="InitScripts">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <ActionSequence ScriptItemUID="Action3" Condition="from vars select not(isnullorempty(tablename))">
+                <CodeLiteral ScriptItemUID="CodeLiteral3">if(_renderPart != null)
+{
+var tableName = Vars.SingleRow.GetValue("TableName").String;
+
+// call sql wizard
+var sqlwiz = new VI.WebRuntime.WebControls.SqlWizard.QueryWizardController(_renderPart, tableName, Vars.SingleRow.GetValue("WhereClause").String);
+	
+_sqlWizardScript = sqlwiz.ClientOpenCommand;
+
+var columnSelector = new VI.WebRuntime.WebControls.TableColumnSelector.TableColumnSelectorModalController(_renderPart, tableName);
+
+_columnSelectorScript = columnSelector.ClientOpenCommand;
+
+_reportAdapter = new VI.WebRuntime.WebControls.Helper.ReportDefinitionAdapter(_EditTable_EditColumn, _EditTable_Current.Row, _reportDef, sqlwiz, columnSelector);
+
+_reportAdapter.SaveToTarget();
+}</CodeLiteral>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="FilterDefinitionText()" Expression="translate(&quot;#LDS#{0} column(s) selected&quot;, {{ _reportDef.ReportColumns.Count }})" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+  </GlobalControl>
+</WebDesigner>

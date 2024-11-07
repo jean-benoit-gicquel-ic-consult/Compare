@@ -1,0 +1,95 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_ITShop_ShoppingCart_DetailPane_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container5" ObjectType="Container" SortOrder="20">
+        <Container ScriptItemUID="ADSContainer1" Condition="IsNewGroup()&#xD;&#xA;and&#xD;&#xA;(&#xD;&#xA;exists(&quot;Personinaerole&quot;, variable(&quot;uid_person = '%useruid%' and uid_aerole = 'ADS-AEROLE-NAMESPACEADMIN-ADS'&quot;))&#xD;&#xA;-- AD target system administrators must enter additional information on ShoppingCartItem&#xD;&#xA;)" ItemUID="NEW AD GROUP (for target system admin)">
+          <Activator ScriptItemUID="ADSActivator1">
+            <Action ScriptItemUID="ADSAction5">
+              <Delete DataTable="ADSGroupTemp" ScriptItemUID="ADSDelete1" />
+              <Insert DataTable="ADSGroupTemp" ScriptItemUID="ADSInsert1">
+                <ActionSequence ScriptItemUID="ADSAction2" />
+                <InsertValue DataColumn="cn" Value="select result from valuelist where (index=1)" />
+                <InsertValue DataColumn="UIDX_ADSContainer" Value="select result from valuelist where (index=0)" />
+                <InsertValue DataColumn="IsGlobal" Value="'Global' = from localvars select scope" />
+                <InsertValue DataColumn="IsLocal" Value="'Local' = from localvars select scope" />
+                <InsertValue DataColumn="IsUniversal" Value="'Universal' = from localvars select scope" />
+                <InsertValue DataColumn="IsSecurity" Value="(from shoppingcartitem select current uid_accproduct) = 'ADS-FADE2DA6501F4A26AC7791D257A128DB'" />
+                <InsertValue DataColumn="IsDistributionGroup" Value="(from shoppingcartitem select current uid_accproduct) = 'ADS-EFFB4A3D760248949257BC4781592E7C'" />
+              </Insert>
+              <Update DataTable="LocalVars" DataColumn="Scope" Value="select result from valuelist where (index=2)" ScriptItemUID="ADSUpdate1" />
+            </Action>
+          </Activator>
+          <Validator DisplayType="Generic" ScriptItemUID="ADSValidator1">
+            <ValidationModifier Condition="exists(&quot;unsgroup&quot;, format( &quot;uid_unscontainer = ( select uid_unscontainer from unscontainer where uid_unscontainer = {0}) and cn = {1}&quot;, sqlformatvalue(from adsgrouptemp select top 1 uidx_adscontainer, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;), sqlformatvalue(from adsgrouptemp select top 1 cn, &quot;string&quot;)))&#xD;&#xA;&#xD;&#xA;or&#xD;&#xA;&#xD;&#xA;exists(&quot;personwantsorg&quot;, format(&quot;UID_Org in ( select uid_itshoporg from itshoporg where uid_accproduct in ( 'ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB' )) and OrderDetail1 like '{0}|{1}|%' and orderstate = 'OrderProduct' and {2}&quot;, from adsgrouptemp select top 1 uidx_adscontainer, from adsgrouptemp select top 1 cn,SqlCompare(&quot;UID_PersonWantsOrg&quot;,select current primarykey() from shoppingcartitem,&quot;string&quot;,&quot;NotEqual&quot;,&quot;NonUnicodeLiterals&quot;)))&#xD;&#xA;&#xD;&#xA;or&#xD;&#xA;&#xD;&#xA;exists(&quot;shoppingcartitem&quot;, format(&quot;UID_AccProduct in ('ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB' )&#xD;&#xA;and OrderDetail1 like '{0}|{1}|%' and {2}&quot;, from adsgrouptemp select top 1 uidx_adscontainer, from adsgrouptemp select top 1 cn, SqlCompare(&quot;UID_ShoppingCartItem&quot;,select current primarykey() from shoppingcartitem,&quot;string&quot;,&quot;NotEqual&quot;,&quot;NonUnicodeLiterals&quot;)))" ID="NameValidator" Text="translate(&quot;#LDS#The selected group name is already assigned.&quot;)" />
+          </Validator>
+          <Validator DisplayType="Generic" ScriptItemUID="ADSValidator2">
+            <ValidationModifier Condition="from adsgrouptemp select top 1 cn like '%|%'" ID="NameValidator2" Text="translate(&quot;#LDS#The name contains invalid characters.&quot;)" />
+          </Validator>
+          <Container ScriptItemUID="ADSContainer6">
+            <ContainerTemplate DataTable="ADSGroupTemp" ScriptItemUID="ADSContainerTemplate1">
+              <Container ScriptItemUID="ADSContainer7">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ADSControlRef2">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ADSVirtualFunctionMapping1">
+                    <ColumnList ScriptItemUID="ADSColumnList2">
+                      <SingleColumn ScriptItemUID="ADSSingleColumn2" DataColumn="cn" Description="translate(&quot;#LDS#Enter the technical name for the new group.&quot;)" />
+                      <SingleColumn ScriptItemUID="ADSSingleColumn3" DataColumn="UIDX_ADSContainer" Description="translate(&quot;#LDS#Select the container that the group should be created in.&quot;)" MinLength="1" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSGroupTemp" ScriptItemUID="ADSVirtualTableMapping1" />
+                </ControlReferenceContainer>
+              </Container>
+            </ContainerTemplate>
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ADSControlRef3">
+              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ADSVirtualFunctionMapping2">
+                <ColumnList ScriptItemUID="ADSColumnList1">
+                  <SingleColumn ScriptItemUID="ADSSingleColumn1" DataColumn="Scope" MinLength="1" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="LocalVars" ScriptItemUID="ADSVirtualTableMapping2" />
+            </ControlReferenceContainer>
+          </Container>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function Name="IsNewGroup()" Expression="(from shoppingcartitem select current uid_accproduct) in ('ADS-EFFB4A3D760248949257BC4781592E7C', 'ADS-FADE2DA6501F4A26AC7791D257A128DB')" DataType="System.Boolean" ScriptItemUID="ADSFunction1" />
+        <Function Name="InfoString()" Expression="IsNullOrEmpty(from shoppingcartitem select Current orderdetail1, (&quot;|&quot; + from shoppingcartitem select Current orderreason) + &quot;|&quot;)" DataType="System.String" ScriptItemUID="ADSFunction2" />
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableDbObject Class="ADSGroup" Table="ADSGroup" ScriptItemUID="ADSDataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ADSGroup" Table="ADSGroupTemp" ScriptItemUID="ADSDataTableDbObject2">
+          <ActionSequence ScriptItemUID="ADSAction4" />
+          <Column DataType="System.String" Name="UIDX_ADSContainer" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_ADSContainer&quot;" DBTableName="&quot;ADSContainer&quot;" FKWhereClause="" ScriptItemUID="ADSColumn5" />
+        </DataTableDbObject>
+        <DataTableCustom Table="ValueList" PrimaryKeyColumn="pk" DisplayColumn="" ScriptItemUID="ADSDataTableCustom1">
+          <Column Name="pk" DataType="System.String" ScriptItemUID="ADSColumn1" />
+          <Column Name="result" DataType="System.String" ScriptItemUID="ADSColumn2" />
+          <Column Name="index" DataType="System.Int32" ScriptItemUID="ADSColumn3" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="ADSDataTableSingleRow1">
+          <Column Name="Scope" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Group scope&quot;)" DataType="System.String" ScriptItemUID="ADSColumn4">
+            <ColumnLimitedValues ScriptItemUID="ADSColumnLimitedValues1">
+              <ColumnLimitedValue Name="Global" Display="translate(&quot;#LDS#Global group&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Local" Display="translate(&quot;#LDS#Local group&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Universal" Display="translate(&quot;#LDS#Universal group&quot;)" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+        </DataTableSingleRow>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence">
+        <FillTable DataTable="ValueList" DataColumn="result" Expression="split(infostring(), '|', true)" ScriptItemUID="ADSFillTable2">
+          <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType1" ConvertToInteractive="false" />
+        </FillTable>
+      </AddObject>
+      <AddObject ObjectID="ServerActionCall1" ObjectType="ServerActionCall" SortOrder="1">
+        <Update DataColumn="UID_ADSContainer" DataTable="ADSGroupTemp" ScriptItemUID="ADSUpdate3" Value="from ADSGroupTemp select top 1 UIDX_ADSContainer" />
+        <Update DataTable="ShoppingCartItem" DataColumn="OrderDetail1" ScriptItemUID="ADSUpdate2" WhereClause="IsNewGroup() and uid_shoppingcartitem = ( select current uid_shoppingcartitem from shoppingcartitem)" Value="from adsgrouptemp select top 1 uid_adscontainer + &quot;|&quot; + from adsgrouptemp select top 1 cn + '|' + from LocalVars select Scope" />
+      </AddObject>
+      <ModifyProperty ObjectID="SingleColumn3" PropertyName="Condition" Value="({{!productparametersstring.Contains(&quot;OrderReason&quot;)}}) and Not IsNewGroup()" />
+      <AddObject ObjectID="ColumnList3" ObjectType="ColumnList" ExtensionPosition="After" ReferenceObjectID="SingleColumn3">
+        <SingleColumn ScriptItemUID="ADSSingleColumn4" DataColumn="OrderReason" Condition="({{!productparametersstring.Contains(&quot;OrderReason&quot;)}}) and IsNewGroup()" Caption="Translate('#LDS#Group name')" MinLength="1" Description="translate('#LDS#Group name')" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

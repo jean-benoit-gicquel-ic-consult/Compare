@@ -1,0 +1,20 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Edit_Special_RiskIndexEditor" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Slider Ticks="&quot;0;;;;;&quot; + numformat((convert(1, &quot;double&quot;)/2), '0.00') + &quot;;;;;;1&quot;" Minimum="0" Maximum="1" InputFieldsDecimalPlaces="2" Range="101" ScriptItemUID="Slider1">
+          <SliderValue1 DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="SliderValue1" />
+        </Slider>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+  </GlobalControl>
+</WebDesigner>

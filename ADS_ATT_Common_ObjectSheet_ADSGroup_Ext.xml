@@ -1,0 +1,93 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="dbb8bc56-e4e9-0bc6-ef9f-efbd47f27ad4">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_ATT_Common_ObjectSheet_ADSGroup_Ext" RequiredDbModules="ADS,ATT">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="15">
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCase" ScriptItemUID="ATTATTDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ATTATTAction1" />
+          <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="ATTATTColumn1" />
+          <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="ATTATTColumn2" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="35">
+        <Control ID="FormAttestation">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="ADSFormGroup1">
+              <Form ScriptItemUID="ADSForm1" ID="FormAttestation">
+                <ActionSequence ScriptItemUID="ADSAction6" />
+                <PagePartContainer ID="Title" ScriptItemUID="ADSPagePartContainer1">
+                  <Label ScriptItemUID="ATTLabel2" Text="GetObjectDisplay(translate(&quot;#LDS#Attestation&quot;))" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="ADSPagePartContainer2">
+                  <Container ScriptItemUID="ADSContainer1">
+                    <ControlReferenceContainer ID="VI_Roles_AttestationCasesForObject" ScriptItemUID="ATTControlRef2">
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="ADSVirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="ADSVirtualFunctionMapping2" />
+                      <VirtualTableMapping VirtualTable="BaseObject" DataTable="Object" ScriptItemUID="ADSVirtualTableMapping1" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+        <Control ID="FormAttestors">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="ADSFormGroup2">
+              <Form ID="FormAttestors" ScriptItemUID="ADSForm2">
+                <ActionSequence ScriptItemUID="ADSAction7" />
+                <PagePartContainer ID="Title" ScriptItemUID="ADSPagePartContainer3">
+                  <Label Text="GetObjectDisplay(translate(&quot;#LDS#Attestors&quot;))" ScriptItemUID="ADSLabel1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="ADSPagePartContainer4">
+                  <Container ScriptItemUID="ADSContainer2">
+                    <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = ( from Object select current uid_accproduct)" ScriptItemUID="ADSContainerTemplate1">
+                      <ControlReferenceContainer ID="VI_Edit_AERoleAttestator" ScriptItemUID="ADSControlRef2">
+                        <VirtualTableMapping VirtualTable="Object" DataTable="AccProduct" ScriptItemUID="ADSVirtualTableMapping5">
+                          <VirtualColumnMapping VirtualColumn="UID_OrgAttestator" DataColumn="UID_OrgAttestator" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                    </ContainerTemplate>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container10" ObjectType="Container" SortOrder="45">
+        <Container ItemUID="Attestation" EnableCustomAttributes="true" ScriptItemUID="ADSContainer3" Condition="from vars select isEditEffective&#xD;&#xA;or&#xD;&#xA;exists(&quot;Personinaerole&quot;, variable(&quot;uid_person = '%useruid%' and uid_aerole in ('CAP-AEROLE-IAG-CISO','CAP-AEROLE-AUDITING-AUDITOR')&quot;))">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="ADSHtmlAttribute1" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ADSControlRef3">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="ATTAction3">
+                <Redirect ScriptItemUID="ATTRedirect1" Target="FormModule" AbortExecution="false">
+                  <RedirectFormModule ScriptItemUID="ATTRedirectForm1" ID="FormAttestation" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping4" ID="SquareText()" Value="translate(&quot;#LDS#Attestation&quot;)" />
+            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping1" ID="Description()" Value="translate('#LDS#Shows all attestation cases for the selected organizational unit.')" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ItemUID="Attestors (for AccProduct on group)" EnableCustomAttributes="true" ScriptItemUID="ADSContainer4" Condition="from vars select isediteffective and&#xD;&#xA;IsPreProp(&quot;ATTESTATION&quot;) and&#xD;&#xA;from object select current not(isnullorempty(UID_AccProduct))">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="ADSHtmlAttribute2" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="TSBControlRef2">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="TSBAction2">
+                <Redirect Target="FormModule" AbortExecution="false" ScriptItemUID="TSBRedirect1">
+                  <RedirectFormModule ID="FormAttestors" ScriptItemUID="TSBRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Attestors&quot;)" ScriptItemUID="TSBVirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="Description()" Value="translate('#LDS#Assign attestors for this entitlement.')" ScriptItemUID="TSBVirtualFunctionMapping2" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

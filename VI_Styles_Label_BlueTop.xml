@@ -1,0 +1,15 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Label_BlueTop" Type="Label" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="BlueTop" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.BlueTop{
+color: %VI_Common_Color_ColoredLink%;
+font-size: 1.2em;
+text-decoration: none;
+}
+
+a.BlueTop { color: %VI_Common_Color_ColoredLink%; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

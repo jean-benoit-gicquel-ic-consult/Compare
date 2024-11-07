@@ -1,0 +1,630 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_History" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <TypeMember>public ITranslator Translator = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;ITranslator&gt;();</TypeMember>
+        <NamespaceImport Namespace="QER.CompositionApi.History" />
+        <NamespaceImport Namespace="VI.DB.Entities" />
+        <NamespaceImport Namespace="QBM.CompositionApi.UiAction" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <ReadOnlyTableModifier DataTable="Comparisons" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="not(HasChanged)">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="IsSelectedForRollback" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+        <ReadOnlyTableModifier DataTable="Actions" ScriptItemUID="ReadOnlyTableModifier2" WhereClause="not(CanExecute)">
+          <ColumnList ScriptItemUID="ColumnList2">
+            <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsActive" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+        <Update DataTable="LocalVars" DataColumn="ShowOnlyChanged" ScriptItemUID="Update2" Value="true" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" RefreshTriggerExpression="from localvars select semaphore">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action2" ItemUID="configure HistoryDataProvider to load history data">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var providers = new System.Collections.Generic.Dictionary&lt;DbObjectKey, QBM.CompositionApi.History.HistoryDataProvider&gt;();
+
+var dataProvider = new QBM.CompositionApi.History.HistoryDataProvider(_UserSession.UserDataConnection.Session, Type, BaseUid);
+providers[new DbObjectKey(Type, BaseUid)] = dataProvider;
+
+dataProvider.DataSources.Add(new QER.CompositionApi.History.DynamicGroupHistory(Type, BaseUid));</CodeLiteral>
+            <ActionSequence ScriptItemUID="Action3" Condition="Type() = &quot;Person&quot;" ItemUID="Person">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">dataProvider.AddMemberRelationTable("PersonInAERole", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");
+dataProvider.AddMemberRelationTable("PersonInDepartment", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");
+dataProvider.AddMemberRelationTable("PersonInLocality", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");
+dataProvider.AddMemberRelationTable("PersonInProfitCenter", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");
+
+dataProvider.AddMemberRelationTable("PersonHasQERResource", "UID_Person", "AddPermission", "RemovePermission", "MemberOf");
+
+dataProvider.AddAssignmentColumn("HelperHeadPerson", "UID_PersonHead", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+
+dataProvider.AddAssignmentColumn("Department", "UID_PersonHead", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+dataProvider.AddAssignmentColumn("Department", "UID_PersonHeadSecond", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+
+dataProvider.AddAssignmentColumn("ProfitCenter", "UID_PersonHead", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+dataProvider.AddAssignmentColumn("ProfitCenter", "UID_PersonHeadSecond", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+
+dataProvider.AddAssignmentColumn("Locality", "UID_PersonHead", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+dataProvider.AddAssignmentColumn("Locality", "UID_PersonHeadSecond", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+</CodeLiteral>
+            </ActionSequence>
+            <ActionSequence ScriptItemUID="Action4" Condition="exists( &quot;DialogTable&quot;, format(&quot;Tablename = {0} and UID_DialogTableBase = 'QER-T-BaseTree'&quot;, sqlformatvalue( Type(), &quot;string&quot;)))" ItemUID="Department, ProfitCenter, Locality, AERole (and other basetree-deriving tables)">
+              <CodeLiteral ScriptItemUID="CodeLiteral4">dataProvider.AddMemberRelationTable("PersonIn" + Type, "UID_" + Type, "AddMembership", "RemoveMembership", "PersonIsMember");
+
+dataProvider.AddMemberRelationTable(Type + "HasQERResource", "UID_" + Type, "AddPermission", "RemovePermission", "ObjectHasPermission");
+
+// Primary membership of person
+var primaryPersonAssignColumnName = "UID_" + Type;
+if (_Connection.Tables["Person"].Columns.Contains(primaryPersonAssignColumnName))
+{
+	dataProvider.AddAssignmentColumn("Person", primaryPersonAssignColumnName, "AddMembership", "RemoveMembership", "MemberOf");
+}
+</CodeLiteral>
+            </ActionSequence>
+            <CodeLiteral ScriptItemUID="CodeLiteral3">LocalVars.GetColumn("DateStart").SetValue(LocalVars.SingleRow, dataProvider.DateStart);
+
+// Load history data from configured provider object
+HistoryEvents.ObjectList.Clear();
+StateOverview.ObjectList.Clear();
+Periods.ObjectList.Clear();
+
+var historyDataList = new System.Collections.Generic.Dictionary&lt;IDbObjectKey, QBM.CompositionApi.History.HistoryObjectData&gt;();
+foreach (var baseKey in providers.Keys)
+{
+	var provider = providers[baseKey];
+	var historyObjectData = provider.LoadDataAsync().Result;
+	historyDataList[baseKey] = historyObjectData;
+	
+	var baseKeyColumn = TableStore.GetLocalColumn(HistoryEvents, "BaseKey");
+	foreach (var evt in historyObjectData.Events)
+	{
+		HistoryEvents.ObjectList.Add(evt);
+		var newRow = HistoryEvents.Rows.First(r =&gt; ((ObjectViewRow&lt;QBM.CompositionApi.History.IHistoryEvent&gt;)r).TargetObject == evt);
+		baseKeyColumn.SetValue(newRow, baseKey.ToXmlString());
+	}
+
+	var baseKeyColumn2 = TableStore.GetLocalColumn(StateOverview, "BaseKey");
+	foreach (var state in historyObjectData.StateItems)
+	{
+		StateOverview.ObjectList.Add(state);
+		var newRow = StateOverview.Rows.First(r =&gt; ((ObjectViewRow&lt;QBM.CompositionApi.History.IStateOverviewItem&gt;)r).TargetObject == state);
+		baseKeyColumn2.SetValue(newRow, baseKey.ToXmlString());
+	}
+	
+	foreach (var period in historyObjectData.GetPeriods(Translator))
+	{
+		Periods.ObjectList.Add(period);
+	}
+
+}
+
+// save history object data for later
+TableStore.UserData["HistoryObjectData"] = historyDataList;</CodeLiteral>
+          </Action>
+        </Activator>
+        <Container ItemUID="View" ScriptItemUID="Container100">
+          <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_Secondary'" ItemUID="HistoryTab">
+            <TabPage ScriptItemUID="TabPage1" ItemUID="Events">
+              <ControlsHeader ScriptItemUID="Container3">
+                <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Events&quot;)" />
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container4">
+                <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute8" Value="&quot;flex-fill&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container22" ItemUID="Timeline view" Condition="from localvars select (not(iseventviewastable) and istimelineviewavailable)">
+                    <TimeLine ScriptItemUID="TimeLine1" DataTableForSelection="LocalVars" DataColumnForSelection="SelectedEvent" MinDate="from localvars select addmonths(datestart, -12)" MaxDate="addmonths(getdate(), 12)">
+                      <TimeLineItemIteration DataTable="HistoryEvents" TimePoint="ChangeTime" ScriptItemUID="TimeLineItemIteration1" CssClassName="CssClass">
+                        <HoverPanel ScriptItemUID="Popover1">
+                          <Controls ScriptItemUID="Container12">
+                            <Label ScriptItemUID="Label3" Text="from historyevents select current displayvalue(ChangeTypeDisplay)+&quot;: &quot;+&#xA;{{ ((VI.WebRuntime.ObjectViewRow&lt;QBM.CompositionApi.History.IHistoryEvent&gt;)(TimeLineItemIteration1_Current.Row)).TargetObject.GetDisplay(Translator, false, _Connection.Session) }}" />
+                          </Controls>
+                          <ControlsHover ScriptItemUID="Container2">
+                            <Container ScriptItemUID="Container21" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Container21style" Value="&quot;text-align: center;&quot;" />
+                              </HtmlAttributes>
+                              <Label ScriptItemUID="Label20" EnableCustomAttributes="true" Text="from historyevents select current formatdate(changetime, &quot;g&quot;)">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;imx-timeline-detail-header&quot;" />
+                                  <Property Name="TagName" Value="div" />
+                                </HtmlAttributes>
+                              </Label>
+                              <Label ScriptItemUID="Label5" Text="from historyevents select current displayvalue(ChangeTypeDisplay)&#xD;&#xA;+&quot;: &quot;+&#xD;&#xA;{{ var historyEvent = ((ObjectViewRow&lt;QBM.CompositionApi.History.IHistoryEvent&gt;) TimeLineItemIteration1_Current.Row).TargetObject;&#xD;&#xA;@return historyEvent.GetDisplay(Translator, true, _Connection.Session); }}+&quot;&quot;" EnableCustomAttributes="true">
+                                <HtmlAttributes />
+                              </Label>
+                              <Container ScriptItemUID="Container14">
+                                <Button Text="translate(&quot;#LDS#Compare&quot;)" ScriptItemUID="Button4">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                                    <CallAction ActionID="SwitchToComparisonView" ScriptItemUID="Call3" />
+                                  </ServerActionCall>
+                                </Button>
+                              </Container>
+                            </Container>
+                          </ControlsHover>
+                        </HoverPanel>
+                      </TimeLineItemIteration>
+                      <TimeLineItemIteration DataTable="Periods" ScriptItemUID="TimeLineItemIteration2" TimePoint="StartTime" EndTime="EndTime" CssClassName="CssClass">
+                        <Label ScriptItemUID="Label9" Text="from periods select current display" />
+                      </TimeLineItemIteration>
+                    </TimeLine>
+                  </Container>
+                  <Container ScriptItemUID="Container23" ItemUID="Table view" Condition="from localvars select (not(istimelineviewavailable) or iseventviewastable)">
+                    <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                      <HtmlAttributes />
+                      <MasterPane ScriptItemUID="MasterPane1">
+                        <Container ScriptItemUID="Container18">
+                          <Grid ScriptItemUID="Grid5" AllowExport="true" ExportFileName="" ExportTitle="">
+                            <GridBand DataTable="HistoryEvents" ScriptItemUID="GridBand5" OrderBy="'ChangeTime'" DisplayHeader="Always" RowSelection="true" DataTableForSelection="LocalVars" DataColumnForSelection="SelectedEvent" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <Property Name="ApplyFilledHeight" Value="true" />
+                              </HtmlAttributes>
+                              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                              <GridFilters ScriptItemUID="GridFilters1" />
+                              <GridRows />
+                              <GridColumn ScriptItemUID="Column21" SortColumn="ChangeTypeDisplay" AutoFilterColumn="ChangeTypeDisplay">
+                                <GridColumnHeader ScriptItemUID="wctl4">
+                                  <Label ScriptItemUID="Label14" Text="datacaption(historyevents, changetypedisplay)" />
+                                </GridColumnHeader>
+                                <Cell ScriptItemUID="Cell4">
+                                  <Label ScriptItemUID="Label15" Text="from historyevents select current displayvalue(changetypedisplay)" />
+                                </Cell>
+                              </GridColumn>
+                              <GridColumnSimple ScriptItemUID="Column70" Column="PropertyProxy" />
+                              <GridColumnSimple ScriptItemUID="Column71" Column="DisplayProxy" />
+                              <GridColumnSimple ScriptItemUID="Column72" Column="ChangeTimeProxy" Width="&quot;150px&quot;" />
+                              <GridColumnSimple ScriptItemUID="Column73" Column="DisplayUser" />
+                            </GridBand>
+                          </Grid>
+                        </Container>
+                      </MasterPane>
+                      <DetailPane ScriptItemUID="DetailPane1">
+                        <Container ScriptItemUID="Container19">
+                          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="HistoryEvents" WhereClause="primarykey()= ( from localvars select selectedevent)">
+                            <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+                              <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping3" IsPropertyList="true">
+                                <ColumnList ScriptItemUID="ColumnList3">
+                                  <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="ChangeTypeDisplay" />
+                                  <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="ChangeTimeProxy" />
+                                  <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="BaseKeyDisplay" />
+                                  <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="PropertyProxy" Condition="not(isnullorempty(propertyproxy))" />
+                                  <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="LongDisplay" Caption="translate(&quot;#LDS#Value&quot;)" />
+                                  <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="OldValue" Caption="translate(&quot;#LDS#Previous value&quot;)" />
+                                  <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="DisplayUser" />
+                                </ColumnList>
+                              </VirtualFunctionMapping>
+                              <VirtualTableMapping VirtualTable="EditTable" DataTable="HistoryEvents" ScriptItemUID="VirtualTableMapping1" />
+                            </ControlReferenceContainer>
+                            <Container ScriptItemUID="Container20" Layout="'VI_Styles_Container_ButtonBar'">
+                              <Button Text="translate(&quot;#LDS#Compare&quot;)" ScriptItemUID="Button5">
+                                <ServerActionCall ScriptItemUID="ServerActionCall5">
+                                  <CallAction ActionID="SwitchToComparisonView" ScriptItemUID="Call2" />
+                                </ServerActionCall>
+                              </Button>
+                            </Container>
+                          </ContainerTemplate>
+                        </Container>
+                        <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                          <ControlList ScriptItemUID="ControlList1">
+                            <Label ScriptItemUID="Label2" Text="from historyevents select top 1 displayvalue(changetypedisplay) where primarykey()= ( from localvars select selectedevent)" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <Property Name="TagName" Value="h2" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                        </DetailPaneHeader>
+                      </DetailPane>
+                    </MasterDetailControl>
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="Container6" EnableCustomAttributes="true" Condition="from localvars select istimelineviewavailable">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                  </HtmlAttributes>
+                  <Button Text="if(from localvars select iseventviewastable) then translate(&quot;#LDS#Switch to timeline view&quot;) else translate(&quot;#LDS#Switch to table view&quot;)" ScriptItemUID="Button1">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <Update DataTable="LocalVars" DataColumn="IsEventViewAsTable" ScriptItemUID="Update3" Value="not(iseventviewastable)" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </ControlsBody>
+            </TabPage>
+            <TabPage ScriptItemUID="TabPage3" ItemUID="State overview">
+              <ControlsHeader ScriptItemUID="Container8">
+                <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#State overview&quot;)" />
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container9">
+                <Grid AllowExport="true" ScriptItemUID="Grid4" ExportFileName="" ExportTitle="">
+                  <GridBand DataTable="StateOverview" ScriptItemUID="GridBand3" OrderBy="'PropertyDisplay, DateBegin'" DisplayHeader="Always" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="True" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters2" />
+                    <GridRows />
+                    <GridColumnSimple ScriptItemUID="Column25" Column="StateTypeProxy" />
+                    <GridColumnSimple ScriptItemUID="Column19" Column="PropertyDisplayProxy" />
+                    <GridColumn ScriptItemUID="Column22" AutoFilterColumn="ValueDisplay" SortColumn="ValueDisplayProxy">
+                      <GridColumnHeader ScriptItemUID="wctl2">
+                        <Label ScriptItemUID="Label10" Text="datacaption(stateoverview, valuedisplayproxy)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell2">
+                        <Label ScriptItemUID="Label11" EnableCustomAttributes="true" Text="from stateoverview select current isnullorempty( valuedisplay, &quot;(&quot;+translate(&quot;#LDS#No value&quot;)+&quot;)&quot;)">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute4" Value="if(from stateoverview select current isnullorempty(valuedisplay)) then &quot;font-style: italic;&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumnSimple ScriptItemUID="Column20" Column="DateBeginProxy" Width="&quot;130px&quot;" />
+                    <GridColumn ScriptItemUID="Column18" Width="&quot;130px&quot;" SortColumn="DateEndProxy" AutoFilterColumn="DateEndProxy">
+                      <GridColumnHeader ScriptItemUID="wctl3">
+                        <Label ScriptItemUID="Label12" Text="datacaption(stateoverview, dateendproxy)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell3">
+                        <Label ScriptItemUID="Label13" Text="from stateoverview select current isnullorempty(displayvalue(dateendproxy), &quot;(&quot;+ translate(&quot;#LDS#current&quot;)+&quot;)&quot;)" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute2" Value="if(from stateoverview select current isnullorempty(displayvalue(dateend))) then &quot;font-style: italic;&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+              </ControlsBody>
+            </TabPage>
+            <TabPage ScriptItemUID="TabPage4" ItemUID="State comparison">
+              <ControlsHeader ScriptItemUID="Container10">
+                <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#State comparison&quot;)" ItemUID="StateComparisonTab" />
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container11">
+                <Container ScriptItemUID="Container26" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute7" Value="&quot;flex-fill&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container7">
+                    <Label ScriptItemUID="Label21" Text="translate(&quot;#LDS#Compare the current data with the state of the object on&quot;)" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Label21style" Value="&quot;padding-right: 12px;&quot;" />
+                      </HtmlAttributes>
+                    </Label>
+                    <DateControl DataTable="LocalVars" DataColumn="CompareDate" ScriptItemUID="DateControl1" Type="DateTime" />
+                  </Container>
+                  <Container ScriptItemUID="Container131" Condition="from localvars select not(isnull(comparedate))" RefreshTriggerExpression="from localvars select comparedate">
+                    <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+                      <Action ScriptItemUID="Action6">
+                        <CodeLiteral ScriptItemUID="CodeLiteral5">// retrieve history object data
+
+var historyData = (System.Collections.Generic.Dictionary&lt;IDbObjectKey, QBM.CompositionApi.History.HistoryObjectData&gt;)TableStore.UserData["HistoryObjectData"];
+var compareDate = LocalVars.GetColumn("CompareDate").GetValue(LocalVars.SingleRow).Date;
+
+var translator = new SessionTranslator(_UserSession.UserDataConnection);
+
+// initialize the provider for membership change actions - that part happens in QER
+var changeProvider = new QER.CompositionApi.History.AssignChangeActionProvider(_UserSession.UserDataConnection.Session, compareDate){
+	UidQerJustification = "QER-08c907fb807a4087a3fd9af51b70e9de"
+};
+
+// Load comparisons
+Comparisons.ObjectList.Clear();
+var baseKeyColumn = TableStore.GetLocalColumn(Comparisons, "BaseKey");
+foreach (var baseKey in historyData.Keys)
+{
+	var data = historyData[baseKey];
+	var comparison = data.GetComparisonAsync(compareDate, translator, changeProvider).Result;
+	foreach (var cmp in comparison)
+	{
+		Comparisons.ObjectList.Add(cmp);
+		var newRow = Comparisons.Rows.First(r =&gt; ((ObjectViewRow&lt;QBM.CompositionApi.History.IHistoryCompare&gt;)r).TargetObject == cmp);
+		baseKeyColumn.SetValue(newRow, baseKey.ToXmlString());
+	}
+}
+</CodeLiteral>
+                      </Action>
+                    </Activator>
+                    <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="">
+                      <GridBand DataTable="Comparisons" ScriptItemUID="GridBand1" EnableCustomAttributes="true" WhereClause="if(from localvars select ShowOnlyChanged) then HasChanged else true" DisplayHeader="Always" RowSelection="Multiple" DataColumnSelectState="IsSelectedForRollback" RowSelectionActive="from localvars select AllowRollback">
+                        <HtmlAttributes>
+                          <CodeLiteral ScriptItemUID="CodeLiteral8">if(!this.LocalVars.GetColumn("AllowRollback").GetValue(this.LocalVars.SingleRow).Bool){
+	GridBand1.RowSelectionMode = VI.WebRuntime.WebControls.GridRowSelectionMode.None;
+}</CodeLiteral>
+                        </HtmlAttributes>
+                        <GridBandListView ScriptItemUID="GridBandListView3" EnableListView="Auto" />
+                        <GridFilters ScriptItemUID="GridFilters3" />
+                        <GridRows />
+                        <GridColumnSimple ScriptItemUID="Column10" Column="HasChangedProxy" Width="&quot;120px&quot;" />
+                        <GridColumnSimple ScriptItemUID="Column16" Column="ChangeTypeProxy" />
+                        <GridColumnSimple ScriptItemUID="Column24" Column="TableNameDisplay" />
+                        <GridColumnSimple ScriptItemUID="Column9" Column="PropertyProxy" />
+                        <GridColumn ScriptItemUID="Column8" SortColumn="HistoryValueProxy" AutoFilterColumn="HistoryValueProxy">
+                          <GridColumnHeader ScriptItemUID="wctl5">
+                            <Label ScriptItemUID="Label18" Text="datacaption(comparisons, historyvalueproxy)" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell6">
+                            <Label ScriptItemUID="Label19" EnableCustomAttributes="true" Text="from comparisons select current isnullorempty( displayvalue(historyvalueproxy), &quot;(&quot;+translate(&quot;#LDS#No value&quot;)+&quot;)&quot;)">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute6" Value="if(from comparisons select current isnullorempty(displayvalue(historyvalueproxy))) then &quot;font-style: italic;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </Cell>
+                        </GridColumn>
+                        <GridColumn ScriptItemUID="Column23" SortColumn="CurrentValueProxy" AutoFilterColumn="CurrentValueProxy">
+                          <GridColumnHeader ScriptItemUID="wctl6">
+                            <Label ScriptItemUID="Label17" Text="datacaption(comparisons, currentvalueproxy)" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell5">
+                            <Label ScriptItemUID="Label16" EnableCustomAttributes="true" Text="from comparisons select current isnullorempty( displayvalue(currentvalueproxy), &quot;(&quot;+translate(&quot;#LDS#No value&quot;)+&quot;)&quot;)">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute5" Value="if(from comparisons select current isnullorempty(displayvalue(currentvalueproxy))) then &quot;font-style: italic;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </Cell>
+                        </GridColumn>
+                      </GridBand>
+                    </Grid>
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="Container15" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;ButtonBar&quot;" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container24" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="span" />
+                    </HtmlAttributes>
+                    <CheckBox DataTable="LocalVars" DataColumn="ShowOnlyChanged" ScriptItemUID="CheckBox2" Text="datacaption(localvars, showonlychanged)" />
+                  </Container>
+                  <Container ScriptItemUID="Container25" EnableCustomAttributes="true" Condition="from localvars select AllowRollback">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="span" />
+                    </HtmlAttributes>
+                    <Button Text="translate(&quot;#LDS#Rollback changes&quot;)" ScriptItemUID="Button2" EnabledCondition="0 &lt; select count() from Comparisons where IsSelectedForRollback">
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <CodeLiteral ScriptItemUID="CodeLiteral6">// Collect possible rollback actions
+var rollbackTasks = DataContext.Comparisons.ObjectList.Where(t =&gt; t.IsSelectedForRollback).Select(c =&gt; System.Threading.Tasks.Task.Run(() =&gt; c.GetRollbackActionsAsync())).ToArray();
+var actions = rollbackTasks.SelectMany(c =&gt; c.Result);
+
+DataContext.Actions.ObjectList.Clear();
+foreach(var a in actions)
+{
+	DataContext.Actions.ObjectList.Add(a);
+}</CodeLiteral>
+                        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                            <Container ScriptItemUID="Container16">
+                              <Grid ScriptItemUID="Grid2">
+                                <GridBand DataTable="Actions" ScriptItemUID="GridBand2" RowSelection="Multiple" DataColumnSelectState="IsActiveProxy" RowSelectionActive="">
+                                  <GridBandListView ScriptItemUID="GridBandListView4" EnableListView="Auto" />
+                                  <GridFilters ScriptItemUID="GridFilters4" />
+                                  <GridRows />
+                                  <GridColumnSimple ScriptItemUID="Column13" Column="DisplayProxy" />
+                                  <GridColumnSimple ScriptItemUID="Column14" Column="ObjectDisplayProxy" />
+                                </GridBand>
+                              </Grid>
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                            <Container ScriptItemUID="Container17" Layout="'VI_Styles_Container_ButtonBar'">
+                              <Button Text="translate(&quot;#LDS#Cancel&quot;)" ItemUID="Default Button" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ScriptItemUID="Button9" Layout="'VI_Styles_Button_LabelOnly'">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute10" />
+                                </HtmlAttributes>
+                                <ServerActionCall ScriptItemUID="ServerActionCall18">
+                                  <ActionOnControl />
+                                </ServerActionCall>
+                              </Button>
+                              <Button Text="translate(&quot;#LDS#Roll back&quot;)" ScriptItemUID="Button3" EnabledCondition="0 &lt; select count() from actions where IsActive">
+                                <ServerActionCall ScriptItemUID="ServerActionCall3">
+                                  <CodeLiteral ScriptItemUID="CodeLiteral7">// Collect selected rollback actions
+var actions = DataContext.Actions.ObjectList.Where(t =&gt; t.IsActive);
+
+var runner = new QBM.CompositionApi.UiAction.ActionRunner(_Connection.Session, actions);
+
+var results = runner.RunAsync().Result;
+
+var hasAnyErrors = results.Any(r =&gt; r.State != ActionState.Succeeded);
+	
+DataContext.Results.ObjectList.Clear();
+
+foreach (var result in results)
+{
+	DataContext.Results.ObjectList.Add(result);
+}
+
+</CodeLiteral>
+                                  <ActionOnControl />
+                                  <SwitchAction ScriptItemUID="Switch1">
+                                    <SwitchActionCase ScriptItemUID="Case1" Condition="{{ hasAnyErrors }}">
+                                      <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                          <Container ScriptItemUID="Container27">
+                                            <Container ScriptItemUID="Container29">
+                                              <ControlReferenceControlList ID="QBM_Common_ActionResultViewer" ScriptItemUID="ControlRef1">
+                                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="Results" DataTable="Results" />
+                                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="Actions" DataTable="Actions" />
+                                              </ControlReferenceControlList>
+                                            </Container>
+                                          </Container>
+                                        </VirtualControlMapping>
+                                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                          <Container ScriptItemUID="Container28">
+                                            <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef3">
+                                              <VirtualFunctionMapping ID="MoreThanOneButton()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                                            </ControlReferenceControlList>
+                                          </Container>
+                                        </VirtualControlMapping>
+                                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Rollback changes&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                                        <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+                                      </CallAction>
+                                    </SwitchActionCase>
+                                    <SwitchActionCase ScriptItemUID="Case2" />
+                                  </SwitchAction>
+                                  <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call5">
+                                    <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping7" />
+                                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                                  </CallAction>
+                                  <Update DataTable="LocalVars" DataColumn="Semaphore" ScriptItemUID="Update5" Value="semaphore+1&#xA;-- trigger reload of the entire control" />
+                                </ServerActionCall>
+                              </Button>
+                            </Container>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Rollback changes&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                          <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                        </CallAction>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </ControlsBody>
+            </TabPage>
+          </Tab>
+          <Container ScriptItemUID="Container13" Condition="false&#xA;-- keep Container13 for backwards compatibility because of existing extensions" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="SelectedObjectUid" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="IsEventViewAsTable" ScriptItemUID="Column5" DataType="System.Boolean" TriggerUpdates="Updates" />
+          <Column Name="DateStart" DataType="System.DateTime" ScriptItemUID="Column2" />
+          <Column Name="SelectedEvent" DataType="System.String" ScriptItemUID="Column7" TriggerUpdates="Updates" />
+          <Column Name="CompareDate" DataType="System.DateTime" ScriptItemUID="Column4" MinLength="1" />
+          <Column Name="AllowRollback" DataType="System.Boolean" ScriptItemUID="Column11" TriggerUpdates="Never" />
+          <Column Name="ShowOnlyChanged" DataType="System.Boolean" ScriptItemUID="Column15" Caption="translate(&quot;#LDS#Show only changed values&quot;)" />
+          <Column Name="Semaphore" DataType="System.Int32" ScriptItemUID="Column30" />
+          <Column Name="IsTimeLineViewAvailable" DataType="System.Boolean" ScriptItemUID="Column37" DataSource="Expression" Expression="{{&#xD;&#xA;var settings = _UserSession.GetWebSettings();&#xD;&#xA;&#xD;&#xA;var isAvailable = true;&#xD;&#xA;object isHighA11yEnabled;&#xD;&#xA;if (settings != null &amp;&amp; settings.TryGetValue(&quot;EnableHighAccessibility&quot;, out isHighA11yEnabled))&#xD;&#xA;{&#xD;&#xA;   isAvailable = !string.Equals(Boolean.TrueString, isHighA11yEnabled.ToString(), StringComparison.OrdinalIgnoreCase);&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return isAvailable;&#xD;&#xA;&#xD;&#xA;}} = true" />
+        </DataTableSingleRow>
+        <DataTableObjectView Table="HistoryEvents" ElementType="QBM.CompositionApi.History.IHistoryEvent, QBM.CompositionApi" ScriptItemUID="DataTableObjectView1">
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column3" DataSource="Expression" Expression="{{ var key = ((VI.WebRuntime.ObjectViewRow&lt;QBM.CompositionApi.History.IHistoryEvent&gt;) queryRow).TargetObject.RelatedObjectKey;&#xA;@return (key == null ? null : key.Tablename);&#xA;}}+&quot;&quot;" />
+          <ColumnProxy DataColumn="User" Name="DisplayUser" ScriptItemUID="ColumnProxy1" DisplayValueExpression="GetDisplayFriendlyUserName(User)" Caption="translate(&quot;#LDS#User&quot;)">
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree1" />
+          </ColumnProxy>
+          <Column Name="CssClass" DataType="System.String" ScriptItemUID="Column6" DataSource="Expression" Expression="&quot;imx-timeline-event imx-timeline-event-&quot; + lower(ChangeType)" />
+          <ColumnProxy DataColumn="ChangeType" Name="ChangeTypeDisplay" ScriptItemUID="ColumnProxy2" DefineLimitedValues="true" Caption="translate(&quot;#LDS#Change type&quot;)">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="AddResponsibility" Display="translate(&quot;#LDS#Ownership added&quot;)" Comment="" />
+              <ColumnLimitedValue Name="RemoveResponsibility" Display="translate(&quot;#LDS#Ownership removed&quot;)" Comment="" />
+              <ColumnLimitedValue Name="AddMembership" Display="translate(&quot;#LDS#Membership added&quot;)" Comment="" />
+              <ColumnLimitedValue Name="RemoveMembership" Display="translate(&quot;#LDS#Membership removed&quot;)" Comment="" />
+              <ColumnLimitedValue Name="AddManagerOf" Display="translate(&quot;#LDS#Manager assignment created&quot;)" Comment="" />
+              <ColumnLimitedValue Name="RemoveMemberOf" Display="translate(&quot;#LDS#Manager assignment removed&quot;)" Comment="" />
+              <ColumnLimitedValue Name="AddPermission" Display="translate(&quot;#LDS#Entitlement added&quot;)" Comment="" />
+              <ColumnLimitedValue Name="RemovePermission" Display="translate(&quot;#LDS#Entitlement removed&quot;)" Comment="" />
+              <ColumnLimitedValue Name="ObjectCreate" Display="translate(&quot;#LDS#Object created&quot;)" Comment="" />
+              <ColumnLimitedValue Name="ObjectDelete" Display="translate(&quot;#LDS#Object deleted&quot;)" Comment="" />
+              <ColumnLimitedValue Name="PropertyChange" Display="translate(&quot;#LDS#Property change&quot;)" Comment="" />
+              <ColumnLimitedValue Name="DynamicGroupRemoved" Display="translate(&quot;#LDS#Dynamic role removed&quot;)" Comment="" />
+              <ColumnLimitedValue Name="DynamicGroupAdded" Display="translate(&quot;#LDS#Dynamic role added&quot;)" Comment="" />
+            </ColumnLimitedValues>
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree2" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ChangeTime" Name="ChangeTimeProxy" ScriptItemUID="ColumnProxy12" FKWhereClause="" DisplayValueExpression="formatdate(changetime, &quot;d&quot;)" Caption="translate(&quot;#LDS#Date&quot;)">
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree3" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="Property" Name="PropertyProxy" ScriptItemUID="ColumnProxy13" Caption="translate(&quot;#LDS#Property&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree4" />
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree5" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy14" Caption="translate(&quot;#LDS#Display&quot;)">
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree6" />
+          </ColumnProxy>
+          <Column Name="BaseKey" DataType="System.String" ScriptItemUID="Column31" ColumnDataSource="ForeignKeyDynamic">
+            <ColumnDynamicFkTables ScriptItemUID="ColumnDynamicFkTables1" />
+          </Column>
+          <Column Name="BaseKeyDisplay" DataType="System.String" ScriptItemUID="Column33" Caption="translate(&quot;#LDS#Object&quot;)" DataSource="Expression" Expression="format(&quot;{0}: {1}&quot;, datacaptionsingle(GetObjectKeyTable(basekey)), displayvalue(basekey))">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree7" />
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree8" />
+            <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="&quot;true&quot;" ScriptItemUID="ParameterFree9" />
+          </Column>
+        </DataTableObjectView>
+        <DataTableObjectView Table="Comparisons" ElementType="QBM.CompositionApi.History.IHistoryCompare, QBM.CompositionApi" ScriptItemUID="DataTableObjectView2" DisplayColumn="ChangeTypeProxy">
+          <ColumnProxy DataColumn="HistoryValueDisplay" Name="HistoryValueProxy" ScriptItemUID="ColumnProxy5" Caption="translate(&quot;#LDS#Historical value&quot;)" />
+          <ColumnProxy DataColumn="CurrentValueDisplay" Name="CurrentValueProxy" ScriptItemUID="ColumnProxy6" Caption="translate(&quot;#LDS#Current value&quot;)" />
+          <ColumnProxy DataColumn="HasChanged" Name="HasChangedProxy" ScriptItemUID="ColumnProxy10" Caption="translate(&quot;#LDS#Changed&quot;)" />
+          <ColumnProxy DataColumn="ChangeType" Name="ChangeTypeProxy" ScriptItemUID="ColumnProxy11" Caption="translate(&quot;#LDS#Change type&quot;)" DefineLimitedValues="true">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues2">
+              <ColumnLimitedValue Name="MemberOf" Display="translate(&quot;#LDS#Membership&quot;)" Comment="" />
+              <ColumnLimitedValue Name="ObjectHasPermission" Display="translate(&quot;#LDS#Entitlement assignment&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Property" Display="translate(&quot;#LDS#Property change&quot;)" Comment="" />
+              <ColumnLimitedValue Name="LinkedDynamicGroup" Display="translate(&quot;#LDS#LinkedDynamicGroup&quot;)" Comment="" />
+              <ColumnLimitedValue Name="PersonIsMember" Display="translate(&quot;#LDS#Employee membership&quot;)" Comment="" />
+            </ColumnLimitedValues>
+          </ColumnProxy>
+          <ColumnProxy DataColumn="Property" Name="PropertyProxy" ScriptItemUID="ColumnProxy17" Caption="translate(&quot;#LDS#Property&quot;)" />
+          <ColumnProxy DataColumn="TableName" Name="TableNameDisplay" ScriptItemUID="ColumnProxy18" DisplayValueExpression="datacaptionsingle(tablename+&quot;&quot;)" Caption="translate(&quot;#LDS#Object type&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree10" />
+          </ColumnProxy>
+          <Column Name="BaseKey" DataType="System.String" ScriptItemUID="Column35" ColumnDataSource="ForeignKeyDynamic" MinLength="" MaxLength="">
+            <ColumnDynamicFkTables ScriptItemUID="ColumnDynamicFkTables3" />
+          </Column>
+          <Column Name="BaseKeyDisplay" DataType="System.String" ScriptItemUID="Column36" Caption="translate(&quot;#LDS#Object&quot;)" DataSource="Expression" Expression="format(&quot;{0}: {1}&quot;, datacaptionsingle(GetObjectKeyTable(basekey)), displayvalue(basekey))">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree11" />
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree12" />
+            <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="&quot;true&quot;" ScriptItemUID="ParameterFree13" />
+          </Column>
+        </DataTableObjectView>
+        <DataTableObjectView Table="Actions" ElementType="QBM.CompositionApi.UiAction.IUiAction, QBM.CompositionApi" ScriptItemUID="DataTableObjectView3" DisplayColumn="Display">
+          <ColumnProxy ScriptItemUID="ColumnProxy4" DataColumn="IsActive" Name="IsActiveProxy" Caption="translate(&quot;#LDS#Execute&quot;)" />
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy15" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree14" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy16" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableObjectView>
+        <DataTableObjectView Table="StateOverview" ElementType="QBM.CompositionApi.History.IStateOverviewItem, QBM.CompositionApi" ScriptItemUID="DataTableObjectView4">
+          <ColumnProxy DataColumn="DateEnd" Name="DateEndProxy" ScriptItemUID="ColumnProxy3" Caption="translate(&quot;#LDS#End&quot;)" DisplayValueExpression="if(isnull(dateend)) then getnull() else formatdate(dateend, &quot;d&quot;)" />
+          <ColumnProxy DataColumn="DateBegin" Name="DateBeginProxy" ScriptItemUID="ColumnProxy7" Caption="translate(&quot;#LDS#Start&quot;)" DisplayValueExpression="formatdate(datebegin, &quot;d&quot;)" />
+          <ColumnProxy DataColumn="PropertyDisplay" Name="PropertyDisplayProxy" ScriptItemUID="ColumnProxy8" Caption="translate(&quot;#LDS#Property&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree15" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ValueDisplay" Name="ValueDisplayProxy" ScriptItemUID="ColumnProxy9" Caption="translate(&quot;#LDS#Value&quot;)" />
+          <ColumnProxy Name="StateTypeProxy" ScriptItemUID="ColumnProxy19" Caption="translate(&quot;#LDS#Display&quot;)" DefineLimitedValues="true" DataColumn="StateType">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues3">
+              <ColumnLimitedValue Name="MemberOf" Display="translate(&quot;#LDS#Membership&quot;)" Comment="" />
+              <ColumnLimitedValue Name="ObjectHasPermission" Display="translate(&quot;#LDS#Entitlement assignment&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Property" Display="translate(&quot;#LDS#Property&quot;)" Comment="" />
+              <ColumnLimitedValue Name="PersonIsMember" Display="translate(&quot;#LDS#Employee membership&quot;)" Comment="" />
+              <ColumnLimitedValue Name="Responsibility" Display="translate(&quot;#LDS#Responsibility&quot;)" Comment="" />
+            </ColumnLimitedValues>
+          </ColumnProxy>
+          <Column Name="BaseKey" DataType="System.String" ScriptItemUID="Column32" ColumnDataSource="ForeignKeyDynamic" MinLength="" MaxLength="">
+            <ColumnDynamicFkTables ScriptItemUID="ColumnDynamicFkTables2" />
+          </Column>
+          <Column Name="BaseKeyDisplay" DataType="System.String" ScriptItemUID="Column34" Caption="translate(&quot;#LDS#Object&quot;)" DataSource="Expression" Expression="format(&quot;{0}: {1}&quot;, datacaptionsingle(GetObjectKeyTable(basekey)), displayvalue(basekey))">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree16" />
+            <ParameterFree Name="&quot;IsFilterable&quot;" Value="true" ScriptItemUID="ParameterFree17" />
+            <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="&quot;true&quot;" ScriptItemUID="ParameterFree18" />
+          </Column>
+        </DataTableObjectView>
+        <DataTableObjectView Table="Periods" ScriptItemUID="DataTableObjectView5" ElementType="QBM.CompositionApi.History.IHistoryPeriod, QBM.CompositionApi">
+          <Column Name="CssClass" DataType="System.String" ScriptItemUID="Column40" DataSource="Expression" Expression="&quot;imx-timeline-event imx-timeline-event-&quot;+periodtype" />
+        </DataTableObjectView>
+        <DataTableObjectView Table="Results" ScriptItemUID="DataTableObjectView6" ElementType="QBM.CompositionApi.UiAction.UiActionResult, QBM.CompositionApi" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SwitchToComparisonView">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <Update DataTable="LocalVars" DataColumn="CompareDate" ScriptItemUID="Update4" Value="from historyevents select current RoundUp(ChangeTime)" />
+              <ExecuteJavascript ScriptItemUID="ExecuteJavascript1" Code="-- close the popover&#xD;&#xA;&quot;$('.qui-popover-underlay').trigger('click');&quot; +&#xD;&#xA;-- switch to comparison tab&#xD;&#xA;&quot;$('[data-imx-identifier=\'StateComparisonTab\']').trigger('click');&quot;" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="HistoryEvents" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetDisplayFriendlyUserName(string username)" Expression="if(username in ( 'DBScheduler', 'QBM_DBQueueProcess'))&#xA;then&#xA;translate('#LDS#System calculation')&#xA;else&#xA;username" DataType="System.String" ScriptItemUID="Function19" />
+        <Function Name="RoundUp(DateTime d)" Expression="{{&#xD;&#xA;// Rounds up the DateTime to the nearest minute, with 0 seconds and 0 milliseconds&#xD;&#xA;d = d.AddMinutes(1);&#xD;&#xA;@return new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, 0, 0, d.Kind);&#xD;&#xA;}}" DataType="System.DateTime" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="BaseUid()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Type()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowAudit()" DataType="System.Boolean" Comment="Set the auditing mode person search control" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

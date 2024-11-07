@@ -1,0 +1,174 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl ID="VI_QERPolicy_GridPolicy" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="QERPolicyHasObject" Type="LimitedSQL" ScriptItemUID="LoadTable1" IdentLimitedSQL="&quot;Webportal.VI_QERPolicy_GridPolicy.QERPolicyHasObject&quot;" />
+      </ActionSequence>
+      <GridBand DataTable="QERPolicy" WhereClause="QERPolicyFilter()" DisplayHeader="Always" ScriptItemUID="GridBand1" RowSelection="true" DataTableForSelection="TargetTable" DataColumnForSelection="UID_SELECTED">
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef1">
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                <ControlList ScriptItemUID="ControlList2">
+                  <ColumnEditor DataColumn="Ident_QERPolicy" DataTable="QERPolicy" ScriptItemUID="ColumnEditor1" Type="IsForView" />
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                <ControlList ScriptItemUID="ControlList3" />
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                <ControlList ScriptItemUID="ControlList4">
+                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                    <Container ScriptItemUID="Container1" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;">
+                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef2">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping4">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                        </VirtualTableMapping>
+                        <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+                      </ControlReferenceContainer>
+                    </Container>
+                    <Container ScriptItemUID="Container2" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;">
+                      <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlReferenceContainer1">
+                        <VirtualTableMapping VirtualTable="Object" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping2">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                    </Container>
+                    <Container ScriptItemUID="Container3" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;">
+                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef3">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping5">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+                        </VirtualTableMapping>
+                        <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                      </ControlReferenceContainer>
+                    </Container>
+                    <Container ScriptItemUID="Container4" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;">
+                      <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlReferenceContainer2">
+                        <VirtualTableMapping VirtualTable="Object" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping3">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                    </Container>
+                    <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate1" DataTable="QERPolicy">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="CountNew" Caption="translate('#LDS#Policy violations') +' ('+ translate('#LDS#new') + ')'" DisplayValueExpression="from QERPolicy select current formatNum(CountNew)" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="CountAll" Caption="translate('#LDS#Policy violations') + ' ' + translate('#LDS#(all)')" DisplayValueExpression="from QERPolicy select current formatNum(CountAll)" />
+                        <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_QERPolicyGroup" Caption="DataCaption(QERPolicy,UID_QERPolicyGroup)" />
+                      </ColumnList>
+                      <Container ScriptItemUID="Container46" ItemUID="Title column for normal properties">
+                        <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef9">
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping19">
+                            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping11" />
+                        </ControlReferenceContainer>
+                      </Container>
+                      <Container ScriptItemUID="Container45" ItemUID="Value column for normal properties">
+                        <ColumnEditor DataTable="QERPolicy" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2" />
+                      </Container>
+                    </ContainerColumnTemplate>
+                    <Label Text="datacaption(QERPolicyInArea, UID_ComplianceArea)" ScriptItemUID="Label16" />
+                    <ContainerTemplate DataTable="QERPolicyInArea" WhereClause="UID_QERPolicy = (from QERPolicy select current UID_QERPolicy)" ScriptItemUID="ContainerTemplate2" OrderBy="&quot;__Display&quot;">
+                      <Label Text="if(0 &lt; from QERPolicyInArea select current iterationindex())then(&quot;, &quot;)else(&quot;&quot;)" ScriptItemUID="Label20" />
+                      <Label Text="from QERPolicyInArea select current displayvalue(UID_ComplianceArea)" ScriptItemUID="Label19" />
+                    </ContainerTemplate>
+                  </LayoutPanel>
+                </ControlList>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <GridColumn SortColumn="Ident_QERPolicy" AutoFilterColumn="Ident_QERPolicy" ScriptItemUID="GridColumn3" Width="&quot;180px&quot;">
+          <GridColumnHeader ScriptItemUID="wctl2">
+            <Label Text="DataCaption(&quot;qerpolicy&quot;,&quot;ident_qerpolicy&quot;)" ScriptItemUID="Label7" />
+          </GridColumnHeader>
+          <Cell RowSpan="1" ColSpan="1" ScriptItemUID="Cell2">
+            <Label Text="select current display() from qerpolicy" ScriptItemUID="Label8" />
+          </Cell>
+        </GridColumn>
+        <ControlReferenceGridColumnGroup ID="VI_Compliance_GridColumn_RuleSeverity" DataTable="QERPolicy" ScriptItemUID="wctl1">
+          <VirtualTableMapping VirtualTable="Object" DataTable="QERPolicy" ScriptItemUID="VirtualTableMapping1" />
+        </ControlReferenceGridColumnGroup>
+        <GridColumn ScriptItemUID="Column7" SortColumn="CountNew" AutoFilterColumn="CountNew" Width="&quot;200px&quot;">
+          <GridColumnHeader ScriptItemUID="wctl6">
+            <Label Text="translate('#LDS#Policy violations') + ' ' + translate('#LDS#(new)')&#xD;&#xA;" ScriptItemUID="Label11" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell7">
+            <Label Text="from QERPolicy select current formatNum(CountNew)" ScriptItemUID="Label12" />
+          </Cell>
+        </GridColumn>
+        <GridColumn ScriptItemUID="GridColumn1" SortColumn="CountAll" AutoFilterColumn="CountAll" Width="&quot;200px&quot;">
+          <GridColumnHeader ScriptItemUID="wctl5">
+            <Label Text="translate('#LDS#Policy violations') + ' ' + translate('#LDS#(all)')&#xD;&#xA;" ScriptItemUID="Label4" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell5">
+            <Label Text="from QERPolicy select current formatNum(CountAll)" ScriptItemUID="Label5" />
+          </Cell>
+        </GridColumn>
+        <GridColumn SortColumn="UID_QERPolicyGroup" AutoFilterColumn="UID_QERPolicyGroup" ScriptItemUID="GridColumn4" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-grid-expandedonly&quot;" />
+          </HtmlAttributes>
+          <GridColumnHeader ScriptItemUID="wctl3">
+            <Label Text="DataCaption(QERPolicy,UID_QERPolicyGroup)" ScriptItemUID="Label9" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell3">
+            <Label Text="select current DisplayValue(UID_QERPolicyGroup) from qerpolicy&#xD;&#xA;" ScriptItemUID="Label10" />
+          </Cell>
+        </GridColumn>
+        <GridColumn ScriptItemUID="GridColumn2" SortColumn="Framework" AutoFilterColumn="Framework" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-grid-expandedonly&quot;" />
+          </HtmlAttributes>
+          <GridColumnHeader ScriptItemUID="wctl4">
+            <Label Text="datacaption(QERPolicyInArea, UID_ComplianceArea)" ScriptItemUID="Label1" />
+          </GridColumnHeader>
+          <Cell RowSpan="1" ColSpan="1" ScriptItemUID="Cell4">
+            <ContainerTemplate DataTable="QERPolicyInArea" WhereClause="UID_QERPolicy = (from QERPolicy select current UID_QERPolicy)" ScriptItemUID="ContainerTemplate1" OrderBy="&quot;__Display&quot;">
+              <Label Text="if(0 &lt; from QERPolicyInArea select current iterationindex())then(&quot;, &quot;)else(&quot;&quot;)" ScriptItemUID="Label3" />
+              <Label Text="from QERPolicyInArea select current displayvalue(UID_ComplianceArea)" ScriptItemUID="Label2" />
+            </ContainerTemplate>
+          </Cell>
+        </GridColumn>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCRView Class="QERPolicyInArea" Table="QERPolicyInArea" CRDataColumn="UID_QERPolicy" ViewFKDataTable="QERPolicy" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </DataTableCRView>
+        <DataTableSQL Table="QERPolicyHasObject" PrimaryKeyColumn="" DisplayColumn="" ScriptItemUID="DataTableLimitedSQL1">
+          <ActionSequence ScriptItemUID="Action2" />
+          <Column Name="UID_QERPolicy" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="IsDecisionMade" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="Anzahl" DataType="System.Int32" ScriptItemUID="Column3" />
+        </DataTableSQL>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="formatNum(int i)" Expression="if(i &gt; 0)then&#xA;numformat(i, &quot;#,#&quot;)&#xA;else&#xA;(i+&quot;&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ReportParameters" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="Rule" DataType="System.String" />
+        <VirtualColumn Name="ReportName" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="QERPolicy" Class="QERPolicy" ScriptItemUID="VirtualTable2">
+        <Column Name="CountAll" Expression="from QERPolicyHasObject select sum(Anzahl) where UID_QERPolicy = (from QERPolicy select current UID_QERPolicy)" DataSource="Expression" ScriptItemUID="Column4" DataType="System.Int32" Caption="translate('#LDS#Policy violations')" />
+        <Column Name="CountNew" Expression="from QERPolicyHasObject select sum(Anzahl) where isnull(IsDecisionMade,false) = false and UID_QERPolicy = (from QERPolicy select current UID_QERPolicy)" DataSource="Expression" ScriptItemUID="Column5" DataType="System.Int32" />
+        <Column Name="Framework" Expression="isnullorempty(concat(( select displayvalue(UID_ComplianceArea) from QERPolicyInArea where UID_QERPolicy = (from QERPolicy select current UID_QERPolicy) order by __display),&quot;, &quot;),&quot;&quot;)" DataSource="Expression" DataType="System.String" ScriptItemUID="Column6" Caption="datacaption(QERPolicyInArea, UID_ComplianceArea)" />
+      </VirtualTable>
+      <VirtualControl ID="ReportRequested" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="QERPolicyFilter()" DataType="System.Boolean" FilterForTable="QERPolicy" />
+      <VirtualFunction Signature="ShowReport()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="TargetTable" ScriptItemUID="VirtualTable3" RequiresCursor="true">
+        <VirtualColumn Name="UID_SELECTED" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

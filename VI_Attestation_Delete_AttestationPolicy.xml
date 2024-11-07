@@ -1,0 +1,43 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ee72d379-b5f3-2d7f-73df-adfaea6b6f2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_Delete_AttestationPolicy" Comment="Komponente zum Löschen einer Attestierungsrichtlinie (mit Bestätigungsdialog)" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+          <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to delete {0}?&quot;, (from Items select top 1 display() where PrimaryKey() = UidOfItemToDelete()))" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="MessageBoxTitle()" Value="DataCaption(Items)" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action2">
+              <ActionSequence Condition="1 = (select count() from Items where uid_AttestationPolicy =  UidOfItemToDelete())" ItemUID="Delete the single one Attestation Policy" ScriptItemUID="Action3">
+                <CodeLiteral ScriptItemUID="CodeLiteral1">if (!string.IsNullOrEmpty(UidOfItemToDelete))
+{
+	var productEntity = Items.GetRowForPrimaryKey(UidOfItemToDelete) as IDbObjectRow;
+	if (productEntity != null &amp;&amp; !productEntity.Entity.IsInteractive)
+	{
+		// convert to interactive
+		productEntity.Entity = await productEntity.Entity.CreateInteractiveAsync(_Database, ct).ConfigureAwait(false);
+	}
+}
+</CodeLiteral>
+                <Delete DataTable="Items" SetDeletionFlag="DeleteAndSave" WhereClause="uid_AttestationPolicy =  UidOfItemToDelete()" ScriptItemUID="Delete1" />
+              </ActionSequence>
+              <Redirect Target="Context" ContextID="VI_Attestation_MyAttestations" ScriptItemUID="Redirect1" AllowReturnToThisContext="false" NoLinkBackToThisForm="true" />
+            </ActionComponent>
+          </VirtualControlMapping>
+        </CallAction>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action5" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Items" Class="AttestationPolicy" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="UidOfItemToDelete()" Comment="Uid of Item To Delete" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

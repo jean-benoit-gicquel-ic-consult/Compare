@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_ElementEdit_Default" Type="ElementEdit" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="Css" ScriptItemUID="CssDocument1">.imx-hyperview
+{
+  height: auto; 
+  overflow-x: auto; 
+  overflow-y: hidden; 
+  position: relative; 
+  width: 100%;
+}
+
+.ui-mobile .imx-hyperview
+{
+  /* 
+  TODO QUANTUM: bessere Lösung muss noch gefunden werden, 
+  damit Hyperview im MobileWeb nicht zu klein ist 
+  */
+  width: 200%;
+}
+
+
+.connector {
+fill: none; 
+stroke: %VI_Common_Color_DarkerGray%; 
+stroke-width: 2;
+stroke-linejoin: miter;
+stroke-miterlimit: 4;
+stroke-linecap: butt;
+opacity: 1.0;
+}
+
+.imx-hyperviewshape
+{
+  flex: 1 1 auto;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

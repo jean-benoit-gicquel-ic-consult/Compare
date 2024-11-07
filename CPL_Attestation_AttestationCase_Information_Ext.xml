@@ -1,0 +1,126 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Attestation_AttestationCase_Information_Ext" RequiredDbModules="CPL,ATT">
+    <Extensions>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="45">
+        <TabPage ItemUID="Rule" ScriptItemUID="CPLTabPage1" Condition="from AttestationCase select current ((getObjectKeyTable(ObjectKey1) = &quot;Person&quot; or getObjectKeyTable(ObjectKey2) = &quot;Person&quot; or getObjectKeyTable(ObjectKey3) = &quot;Person&quot;)&#xD;&#xA;and &#xD;&#xA;&#xD;&#xA;-- do not show compliance tab if person cannot see compliance violations anyway&#xD;&#xA;CanSeeNonCompliance)">
+          <ControlsHeader ScriptItemUID="CPLContainer1">
+            <Label Text="translate(&quot;#LDS#Compliance&quot;)" ScriptItemUID="CPLLabel2" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="CPLContainer2">
+            <Activator ExecuteAlways="true" ScriptItemUID="CPLActivator1">
+              <Action Condition="not((from AttestationCase select current IsNullOrEmpty(UID_Person)) or (from AttestationCase select current IsNullOrEmpty(ObjectKeyElement)))" ScriptItemUID="CPLAction1">
+                <LoadTable DataTable="ComplianceRule" WhereClause="from AttestationCase select current  &#xD;&#xA;if(getObjectKeyTable(ObjectKeyBase) in (&quot;PersonInDepartment&quot;,&quot;PersonInProfitCenter&quot;,&quot;PersonInLocality&quot;,&quot;PersonInAERole&quot;,&quot;PersonHasEset&quot;))then&#xD;&#xA;    format(&quot;uid_compliancerule in (select uid_compliancerule from CPL_VCCSPersonCheckDetail where {0} and {1})&quot;,SqlCompareUid(&quot;UID_Person&quot;,UID_Person),SqlCompareUid(&quot;ObjectKeyElement&quot;,ObjectKeyElement))&#xD;&#xA;else if(not(isnullOrEmpty(ObjectKey3)) and getObjectKeyTable(ObjectKey3) = &quot;Person&quot;)then&#xD;&#xA;   format(&quot;EXISTS(SELECT 1 FROM UNSAccountInUNSGroup where XObjectKey = '{2}') and uid_compliancerule in (select uid_compliancerule from CPL_VCCSPersonCheckDetail where {0} and {1})&quot;,&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;,UID_Person),SqlCompareUid(&quot;ObjectKeyElement&quot;,ObjectKeyElement),ObjectKeyBase)" ScriptItemUID="CPLLoadTable1">
+                  <DbObjectLoadType ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" ScriptItemUID="CPLDbObjectLoadType1" />
+                </LoadTable>
+                <LoadTable DataTable="PersonInNonCompliance" WhereClause="from AttestationCase select current&#xD;&#xA;SqlAnd(&#xD;&#xA;   SqlInWithFormat(&quot;uid_noncompliance&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;, from Compliancerule select uid_noncompliance),&#xD;&#xA;   SqlCompareUid(&quot;UID_Person&quot;,UID_Person)&#xD;&#xA;)&#xD;&#xA;" ScriptItemUID="CPLLoadTable2">
+                  <DbObjectLoadType ConvertToInteractive="false" ScriptItemUID="CPLDbObjectLoadType2" />
+                </LoadTable>
+                <SwitchAction ScriptItemUID="CPLSwitch1">
+                  <SwitchActionCase ScriptItemUID="CPLCase1" Condition="GetConfigParm(&quot;QER\CalculateRiskIndex\MitigatingControlsPerViolation&quot;)=&quot;1&quot;" ItemUID="MitigatingControlsPerViolation">
+                    <LoadTable DataTable="PersonInNCHasMControl" RemoveDeleted="false" RevertExisting="false" WhereClause="format(&quot;ObjectKeyPersonInNonCompliance in ({0})&quot;,listselect(PersonInNonCompliance,XObjectKey))" ScriptItemUID="CPLLoadTable5">
+                      <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType3" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" />
+                    </LoadTable>
+                    <LoadTable DataTable="MitigatingControl" ScriptItemUID="CPLLoadTable4" WhereClause="format(&quot;UID_MitigatingControl in (select UID_MitigatingControl from PersonInNCHasMControl where ObjectKeyPersonInNonCompliance in ({0}))&quot;,listselect(PersonInNonCompliance,XObjectKey))">
+                      <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType4" ConvertToInteractive="false" />
+                    </LoadTable>
+                  </SwitchActionCase>
+                  <SwitchActionCase ScriptItemUID="CPLCase2" ItemUID="MitigatingControlsPerRule">
+                    <LoadTable DataTable="ComplianceRuleHasMControl" RemoveDeleted="false" RevertExisting="false" WhereClause="format(&quot;UID_MitigatingControl in( select UID_MitigatingControl from ComplianceRuleHasMControl where UID_ComplianceRule in ({0}))&quot;, listselect(ComplianceRule,UID_ComplianceRule))" ScriptItemUID="CPLLoadTable3">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" />
+                    </LoadTable>
+                    <LoadTable DataTable="MitigatingControl" ScriptItemUID="CPLLoadTable6" WhereClause="format(&quot;UID_MitigatingControl in (select UID_MitigatingControl from ComplianceRuleHasMControl where UID_ComplianceRule in ({0}))&quot;,listselect(ComplianceRule,UID_ComplianceRule))">
+                      <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType5" ConvertToInteractive="false" />
+                    </LoadTable>
+                  </SwitchActionCase>
+                </SwitchAction>
+              </Action>
+            </Activator>
+            <Container Condition="0 &lt; from PersonInNonCompliance select Count()" ScriptItemUID="CPLContainer3">
+              <Container EnableCustomAttributes="true" ScriptItemUID="CPLContainer4">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" ScriptItemUID="CPLHtmlAttribute1" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#The following rule violations are caused by this assignment.&quot;)" ScriptItemUID="CPLLabel3" />
+              </Container>
+              <Container ScriptItemUID="CPLContainer5">
+                <ContainerTemplate DataTable="PersonInNonCompliance" ScriptItemUID="CPLContainerTemplate1">
+                  <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="CPLControlRef1">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="CPLVirtualFunctionMapping1">
+                      <ColumnList ScriptItemUID="CPLColumnList1">
+                        <SingleColumn DataColumn="UID_ComplianceRule" CannotEdit="true" ScriptItemUID="CPLSingleColumn1" />
+                        <SingleColumn DataColumn="UID_Person" ScriptItemUID="CPLSingleColumn2" />
+                        <SingleColumn DataColumn="RiskIndexCalculated" ScriptItemUID="CPLSingleColumn3" />
+                        <SingleColumn DataColumn="displaystatus" ScriptItemUID="CPLSingleColumn4" />
+                        <SingleColumn DataColumn="DecisionDate" ScriptItemUID="CPLSingleColumn5" />
+                        <SingleColumn DataColumn="DecisionReason" ScriptItemUID="CPLSingleColumn6" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonInNonCompliance" ScriptItemUID="CPLVirtualTableMapping1" />
+                    <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="CPLVirtualFunctionMapping2" />
+                  </ControlReferenceContainer>
+                  <Container ScriptItemUID="CPLContainer7" Condition="0 &lt; select Count() from MitigatingControl where UID_MitigatingControl in(&#xD;&#xA;   union(&#xD;&#xA;      select UID_MitigatingControl from ComplianceRuleHasMControl where UID_ComplianceRule = (from PersonInNonCompliance select current UID_ComplianceRule),&#xD;&#xA;      select UID_MitigatingControl from PersonInNCHasMControl where ObjectKeyPersonInNonCompliance = (from PersonInNonCompliance select current XObjectKey)&#xD;&#xA;   )&#xD;&#xA;)">
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="CPLControlRef2">
+                      <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-icon imx-table-MitigatingControl&quot;" ScriptItemUID="CPLVirtualFunctionMapping4" />
+                      <VirtualFunctionMapping ID="HeadLine()" Value="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="CPLVirtualFunctionMapping3" />
+                    </ControlReferenceContainer>
+                    <Grid ScriptItemUID="CPLGrid1">
+                      <GridBand DataTable="MitigatingControl" ScriptItemUID="CPLGridBand1" WhereClause="UID_MitigatingControl in(&#xD;&#xA;   union(&#xD;&#xA;      select UID_MitigatingControl from ComplianceRuleHasMControl where UID_ComplianceRule = (from PersonInNonCompliance select current UID_ComplianceRule),&#xD;&#xA;      select UID_MitigatingControl from PersonInNCHasMControl where ObjectKeyPersonInNonCompliance = (from PersonInNonCompliance select current XObjectKey)&#xD;&#xA;   )&#xD;&#xA;)">
+                        <GridBandListView ScriptItemUID="CPLGridBandListView1" EnableListView="Auto" />
+                        <GridFilters ScriptItemUID="CPLGridFilters1" />
+                        <GridRows />
+                        <GridColumnSimple ScriptItemUID="CPLColumn7" Column="Ident_MitigatingControl" Width="'200px'" />
+                        <GridColumnSimple ScriptItemUID="CPLColumn6" Column="Description" Width="'300px'" />
+                        <GridColumnSimple ScriptItemUID="CPLColumn5" Column="SignificancyReduction" Width="'140px'" />
+                      </GridBand>
+                    </Grid>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </Container>
+            <Container Condition="0 = from PersonInNonCompliance select Count()" EnableCustomAttributes="true" ScriptItemUID="CPLContainer6">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" ScriptItemUID="CPLHtmlAttribute2" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#There are currently no rule violations.&quot;)" ScriptItemUID="CPLLabel4" />
+            </Container>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="115">
+        <DataTableDbObject Table="ComplianceRule" Class="ComplianceRule" ScriptItemUID="CPLDataTableDbObject1">
+          <ActionSequence ScriptItemUID="CPLAction2" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="ComplianceRuleHasMControl" Class="ComplianceRuleHasMControl" ScriptItemUID="CPLDataTableDbObject3">
+          <ActionSequence ScriptItemUID="CPLAction4" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="CPLDataTableDbObject5" Table="PersonInNCHasMControl" Class="PersonInNCHasMControl">
+          <ActionSequence ScriptItemUID="CPLAction6" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="CPLDataTableDbObject4" Table="MitigatingControl" Class="MitigatingControl">
+          <ActionSequence ScriptItemUID="CPLAction5" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="125">
+        <DataTableDbObject Class="PersonInNonCompliance" Table="PersonInNonCompliance" ScriptItemUID="CPLDataTableDbObject2">
+          <ActionSequence ScriptItemUID="CPLAction3" />
+          <Column DataType="System.String" Name="UID_ComplianceRule" TriggerUpdates="Never" DataSource="Expression" Expression="from compliancerule select top 1 UID_Compliancerule where uid_noncompliance = (select current uid_noncompliance from personinnoncompliance)" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_Compliancerule&quot;" DBTableName="&quot;Compliancerule&quot;" FKWhereClause="" ScriptItemUID="CPLColumn2" />
+          <Column Name="displaystatus" DataType="System.String" DataSource="Expression" Expression="(if (not(IsDecisionMade)) then&#xD;&#xA;translate(&quot;#LDS#Decision pending&quot;)&#xD;&#xA;else if ( not(IsExceptionGranted)) then&#xD;&#xA;translate(&quot;#LDS#Exception denied&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#Exception granted&quot;))" Caption="translate(&quot;#LDS#Approval state&quot;)" ScriptItemUID="CPLColumn3" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable" SortOrder="65">
+        <Column DataType="System.String" Name="UID_Person" DataSource="Expression" Expression="if(getObjectKeyTable(ObjectKeyBase) in (&quot;PersonInDepartment&quot;,&quot;PersonInProfitCenter&quot;,&quot;PersonInLocality&quot;,&quot;PersonInAERole&quot;,&quot;PersonHasEset&quot;) and getObjectKeyTable(ObjectKey1) = &quot;Person&quot;)then&#xD;&#xA;   GetUIDFromObjectKey(ObjectKey1)&#xD;&#xA;else if(not(isnullOrEmpty(ObjectKey3)) and getObjectKeyTable(ObjectKey3) = &quot;Person&quot;)then&#xD;&#xA;   GetUIDFromObjectKey(ObjectKey3)" ScriptItemUID="CPLColumn1" />
+      </AddObject>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable" SortOrder="75">
+        <Column DataType="System.String" Name="ObjectKeyElement" DataSource="Expression" Expression="if(not(isnullOrEmpty(ObjectKey2)) and getObjectKeyTable(ObjectKeyBase) in (&quot;PersonInDepartment&quot;,&quot;PersonInProfitCenter&quot;,&quot;PersonInLocality&quot;,&quot;PersonInAERole&quot;,&quot;PersonHasEset&quot;))then&#xD;&#xA;   ObjectKey2&#xD;&#xA;else if(not(isnullOrEmpty(ObjectKey1)))then&#xD;&#xA;   ObjectKey1" ScriptItemUID="CPLColumn4" />
+        <Column DataType="System.Boolean" Name="CanSeeNonCompliance" ScriptItemUID="CPLColumn8" DataSource="Expression" Expression="CanSeeAllNonCompliance() or&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;IsAllManager() and&#xD;&#xA;-- check if the WhereClause for VI_4_ALLMANAGER on PersonInNonCompliance matches&#xD;&#xA;exists(&quot;Person&quot;, variable(format(&quot;exists (select top 1 1    from dbo.QER_FTHelperHeadOrgChildren('%UserUID%') c    where exists ( select top 1 1        from HelperPersonOrg h1         where h1.UID_Org = c.UID_Org        and h1.UID_Person = {0}          union all          select top 1 1        from PersonInBaseTree h1         where h1.UID_Org = c.UID_Org        and h1.UID_Person = {0}   )     )  or exists (select top 1 1     from HelperHeadPerson hhp     where hhp.UID_PersonHead ='%UserUID%'       and hhp.XOrigin &gt; 0       and hhp.UID_Person = {0}     )&quot;, SqlFormatValue(uid_person, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))))" />
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="5">
+        <Function Name="GetUIDFromObjectKey(String objectkey)" Expression="Substring(Convert(objectkey,&quot;System.String&quot;),IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7,(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/P&gt;&lt;/Key&gt;&quot;,0)-(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7)))" DataType="System.String" ScriptItemUID="CPLFunction1" />
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function ScriptItemUID="CPLFunction2" Name="CanSeeAllNonCompliance()" DataType="System.Boolean" Expression="{{&#xD;&#xA;var perm = _Database.Permissions();&#xD;&#xA;var tperm = perm.GetPermissionsAsync(&quot;PersonInNonCompliance&quot;).Result;&#xD;&#xA;@return (tperm != null &amp;&amp; tperm.CanSee &amp;&amp; tperm.SelectRightsClause == null /* meaning 1=1 */);&#xD;&#xA;}}" />
+        <Function ScriptItemUID="CPLFunction3" Name="IsAllManager()" DataType="System.Boolean" Expression="{{ _Connection.Groups.GetGroupNames().Contains(&quot;VI_4_ALLMANAGER&quot;) }}" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

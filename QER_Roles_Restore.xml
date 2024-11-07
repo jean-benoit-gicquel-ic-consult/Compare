@@ -1,0 +1,297 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_Roles_Restore" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action1">
+        <FillTable DataTable="CandidateTable" ScriptItemUID="FillTable1" Expression="split(tablenames(), &quot;,&quot;, false)" DataColumn="Name">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </FillTable>
+        <Update DataColumn="BackTo" DataTable="Vars" ScriptItemUID="Update1" Value="addmonths(getdate(),-6)" />
+        <Update DataColumn="TableName" DataTable="Vars" ScriptItemUID="Update4" Value="select top 1 name from candidatetable" WhereClause="1 = select count() from candidatetable" />
+      </ActionSequence>
+      <ActionComponent ScriptItemUID="Action2">
+        <Popup DisplayType="Controls">
+          <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+            </HtmlAttributes>
+            <Wizard ScriptItemUID="Wizard1">
+              <OnCancel ScriptItemUID="Action5">
+                <ActionOnControl />
+              </OnCancel>
+              <WizardPage ScriptItemUID="WizardPage1" Title="translate(&quot;#LDS#Select a role to restore&quot;)" AllowBackAction="false">
+                <OnNext ScriptItemUID="Action6">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <ForeachRow DataTable="DeletedObjects" ScriptItemUID="ForeachRow1" WhereClause="IsSelected">
+                    <Update DataColumn="ObjectKey" DataTable="Vars" ScriptItemUID="Update2" Value="from deletedobjects select current dbobjectkey" />
+                    <Update DataColumn="Display" DataTable="Vars" ScriptItemUID="Update3" Value="from deletedobjects select current display" />
+                    <CodeLiteral ScriptItemUID="CodeLiteral2">var translator = new SessionTranslator(_Connection);
+
+var key = Vars.GetColumn("ObjectKey").GetValue(Vars.SingleRow).String;
+var tableName = Vars.GetColumn("TableName").GetValue(Vars.SingleRow).String;
+
+var deletionInfo = DeletedObjects.ObjectList.First(o =&gt; o.DbObjectKey.Equals(key)).ChangeInfo;
+
+var date = deletionInfo.ChangeTime.Subtract(TimeSpan.FromMinutes(10));
+
+var roleRestore = new QER.CompositionApi.History.RoleRestore(_Database, tableName, translator, date, deletionInfo);
+
+var restoreActions = await roleRestore.GetRestoreActionsAsync(ct).ConfigureAwait(false);
+
+Actions.ObjectList.Clear();
+
+foreach(var a in restoreActions)
+	Actions.ObjectList.Add(a);
+</CodeLiteral>
+                  </ForeachRow>
+                </OnNext>
+                <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#Restore a deleted role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-restore-large&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute3" />
+                  </HtmlAttributes>
+                </Container>
+                <ControlList ScriptItemUID="ControlList1">
+                  <ControlReferenceControlList ID="HeaderControls" ScriptItemUID="ControlRef4" />
+                </ControlList>
+                <LayoutPanel ScriptItemUID="LayoutPanel1">
+                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef3">
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="Vars">
+                      <VirtualColumnMapping DataColumn="TableName" VirtualColumn="EditColumn" />
+                    </VirtualTableMapping>
+                  </ControlReferenceContainer>
+                  <ComboBox DataColumn="TableName" DataTable="Vars" ScriptItemUID="ComboBox1" SourceTable="CandidateTable" SourceValueColumn="Name" />
+                </LayoutPanel>
+                <Container ScriptItemUID="Container6">
+                  <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="PropertyList()" IsPropertyList="true">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="BackTo" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="EditTable" DataTable="Vars" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="DeletedObjects" ScriptItemUID="GridBand1" EnableCustomAttributes="true" OrderBy="'DeletionDate desc'" DisplayHeader="Always" NoRowsText="translate(&quot;#LDS#No objects were deleted in the selected time frame.&quot;)" EnableGridViewSetting="false" RowSelection="Multiple" DataColumnSelectState="IsSelected" RowSelectionActive="">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn ScriptItemUID="Column8" AutoFilterColumn="DisplayProxy" SortColumn="DisplayProxy">
+                      <GridColumnHeader ScriptItemUID="wctl1">
+                        <Label ScriptItemUID="Label5" Text="datacaption(deletedobjects, displayproxy)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell1">
+                        <Label ScriptItemUID="Label6" Text="from deletedobjects select current displayvalue(displayproxy)" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+(from vars select tablename)" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumnSimple ScriptItemUID="Column6" Column="DeletionDateProxy" />
+                    <GridColumnSimple ScriptItemUID="Column7" Column="DeletedByProxy" />
+                  </GridBand>
+                </Grid>
+                <Validator DisplayType="Generic" ScriptItemUID="Validator1">
+                  <ValidationModifier Condition="1 &lt;&gt; select count() from deletedobjects where isselected" ID="DeletedObjectSelected" Text="translate(&quot;#LDS#You must select an object to restore.&quot;)" />
+                </Validator>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage2" Title="translate(&quot;#LDS#Review actions&quot;)">
+                <OnNext ScriptItemUID="Action8">
+                  <CodeLiteral ScriptItemUID="CodeLiteral7">// Collect selected restore actions
+var actions = DataContext.Actions.ObjectList.Where(t =&gt; t.IsActive);
+
+DataContext.IUiActionAdapter.ObjectList.Clear();
+
+foreach (var action in actions)
+{
+	DataContext.IUiActionAdapter.ObjectList.Add(action);
+}
+
+var runner = new QBM.CompositionApi.UiAction.ActionRunner(_Connection.Session, actions);
+
+var results = await runner.RunAsync(ct).ConfigureAwait(false);
+
+DataContext.Results.ObjectList.Clear();
+
+foreach (var result in results)
+{
+	DataContext.Results.ObjectList.Add(result);
+}</CodeLiteral>
+                </OnNext>
+                <OnBack ScriptItemUID="Action9" />
+                <Label ScriptItemUID="Label4" Text="translate(&quot;#LDS#Restore a deleted role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-restore-large&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container4" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute2" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container3">
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate(&quot;#LDS#The following actions will be made to restore the role.&quot;)" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Grid ScriptItemUID="Grid2">
+                  <GridBand DataTable="Actions" ScriptItemUID="GridBand2" EnableCustomAttributes="true" OrderBy="'SortOrder'" RowSelection="Multiple" DataColumnSelectState="IsActiveProxy" RowSelectionActive="">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters2" />
+                    <GridRows />
+                    <GridColumnSimple ScriptItemUID="Column12" Column="DisplayProxy" />
+                    <GridColumn ScriptItemUID="Column5" AutoFilterColumn="ObjectDisplayProxy" SortColumn="ObjectDisplayProxy">
+                      <GridColumnHeader ScriptItemUID="wctl4">
+                        <Label ScriptItemUID="Label7" Text="datacaption(actions, objectdisplayproxy)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell3">
+                        <Label ScriptItemUID="Label8" Text="from actions select current displayvalue(objectdisplayproxy)" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+(from actions select current objecttype)" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage3" Title="translate(&quot;#LDS#Results&quot;)" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowBackAction="false" AllowCancelAction="false">
+                <OnNext ScriptItemUID="Action4">
+                  <ActionOnControl />
+                </OnNext>
+                <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Restore a deleted role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-restore-large&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container29">
+                  <ControlReferenceControlList ID="QBM_Common_ActionResultViewer" ScriptItemUID="ControlRef5">
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="Results" DataTable="Results" />
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="Actions" DataTable="IUiActionAdapter" />
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Success">
+                      <ControlList ScriptItemUID="ControlList2">
+                        <Label ScriptItemUID="Label10" Text="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="TagName" Value="div" />
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </ControlList>
+                    </VirtualControlMapping>
+                  </ControlReferenceControlList>
+                </Container>
+              </WizardPage>
+            </Wizard>
+          </Container>
+        </Popup>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableObjectView Table="DeletedObjects" ScriptItemUID="DataTableObjectView1" ElementType="QBM.CompositionApi.History.DeletedObjectInfo, QBM.CompositionApi">
+          <ColumnProxy Name="DeletedByProxy" ScriptItemUID="ColumnProxy1" DataColumn="DeletedBy" Caption="translate(&quot;#LDS#Deleted by&quot;)" />
+          <ColumnProxy Name="DeletionDateProxy" ScriptItemUID="ColumnProxy2" DataColumn="DeletionDate" Caption="translate(&quot;#LDS#Deletion date&quot;)" />
+          <ColumnProxy Name="DisplayProxy" ScriptItemUID="ColumnProxy3" DataColumn="Display" Caption="translate(&quot;#LDS#Name&quot;)" />
+          <Column DataType="System.Boolean" Name="IsSelected" ScriptItemUID="Column14" Caption="translate(&quot;#LDS#Restore&quot;)" />
+        </DataTableObjectView>
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="TableName" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBColumnName="&quot;TableName&quot;" DBTableName="&quot;DialogTable&quot;" FKWhereClause="sqlin(&quot;tablename&quot;, &quot;string&quot;, split(tablenames(), &quot;,&quot;, false))" />
+          <Column DataType="System.DateTime" Name="BackTo" ScriptItemUID="Column4" MinLength="1" Caption="translate(&quot;#LDS#Find roles deleted from&quot;)" />
+          <Column DataType="System.String" Name="ObjectKey" ScriptItemUID="Column9" />
+          <Column DataType="System.String" Name="Display" ScriptItemUID="Column10" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="CandidateTable" ScriptItemUID="DataTableCustom1" DisplayColumn="DisplayName">
+          <Column DataType="System.String" Name="Name" ScriptItemUID="Column2" />
+          <Column DataType="System.String" Name="DisplayName" ScriptItemUID="Column3" DataSource="Expression" Expression="datacaptionsingle(name+&quot;&quot;)" />
+        </DataTableCustom>
+        <DataTableObjectView Table="Actions" ScriptItemUID="DataTableObjectView2" ElementType="QBM.CompositionApi.History.IRestoreUiAction, QBM.CompositionApi">
+          <ColumnProxy ScriptItemUID="ColumnProxy5" DataColumn="IsActive" Name="IsActiveProxy" Caption="translate(&quot;#LDS#Execute&quot;)" />
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy15" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xD;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree14" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy16" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableObjectView>
+        <DataTableObjectView Table="Results" ScriptItemUID="DataTableObjectView3" ElementType="QBM.CompositionApi.UiAction.UiActionResult, QBM.CompositionApi" />
+        <DataTableObjectView Table="IUiActionAdapter" ScriptItemUID="DataTableObjectView7" ElementType="QBM.CompositionApi.UiAction.IUiAction, QBM.CompositionApi">
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy20" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree19" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy21" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableObjectView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action3" Condition="from vars select (not(isnullorempty(backto)) and not(isnullorempty(tablename)))">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var objectProvider = new QBM.CompositionApi.History.DeletedObjectProvider(_Database);
+
+var tblName = Vars.GetColumn("TableName").GetValue(Vars.SingleRow);
+var backTo = Vars.GetColumn("BackTo").GetValue(Vars.SingleRow);
+
+var objects = await objectProvider.GetDeletedObjectsAsync(tblName, backTo, ct).ConfigureAwait(false);
+
+DeletedObjects.ObjectList.Clear();
+
+foreach (var obj in objects)
+{
+	if (!DoNotRestrictToUser)
+	{
+		var uidPerson = _Connection.User.Uid;
+		var columns = new []{"UID_PersonHead", "UID_PersonHeadSecond"};
+		var wasResponsible = obj.ChangeInfo != null &amp;&amp; obj.ChangeInfo.Changes.Any(c=&gt;columns.Any(cc=&gt;string.Equals(cc, c.Columnname)) &amp;&amp; Equals(uidPerson, c.OldValue));
+		if (!wasResponsible)
+		{
+			continue;
+		}
+	}
+	
+	if(!string.IsNullOrEmpty(ParentColumnName))
+	{
+		var matchesParent = obj.ChangeInfo != null &amp;&amp; obj.ChangeInfo.Changes.Any(c=&gt;string.Equals(c.Columnname, ParentColumnName, StringComparison.OrdinalIgnoreCase) &amp;&amp; Equals(ParentColumnValue, c.OldValue));
+		if (!matchesParent)
+		{
+			continue;
+		}
+	}
+	
+	DeletedObjects.ObjectList.Add(obj);
+}</CodeLiteral>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="TableName" />
+          <DataEventHandlerColumn DataColumn="BackTo" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="DeletedObjects" ScriptItemUID="DataEventHandler2" Operation="Update">
+          <ActionSequence ScriptItemUID="Action10" Condition="-- only allow one object to be selected&#xD;&#xA;from deletedobjects select current isselected">
+            <Update DataColumn="IsSelected" DataTable="DeletedObjects" ScriptItemUID="Update5" WhereClause="primarykey()&lt;&gt;select current primarykey() from deletedobjects" Value="false" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsSelected" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="TableNames()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.Boolean" Signature="DoNotRestrictToUser()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ParentColumnName()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ParentColumnValue()" TriggerUpdates="Never" />
+      <VirtualControl ContainerType="ControlList" ID="HeaderControls" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

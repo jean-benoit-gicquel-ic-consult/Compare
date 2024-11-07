@@ -1,0 +1,28 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="EX0_Common_ObjectSheet_EX0DL">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceControlList ID="TSB_Common_ObjectSheet_CommonGroup" ScriptItemUID="ControlRef2">
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+        </ControlReferenceControlList>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="Object" ViewFKDataColumn="UID_AccProduct" ViewFKWhereClause="" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSheet">
+      <VirtualTableExtension Name="Object" Class="EX0DL" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="UID_AccProduct" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBTableName="&quot;AccProduct&quot;" DBColumnName="&quot;UID_AccProduct&quot;" FKWhereClause="" DataSource="Expression" Expression="SingleProperty(&quot;AccProduct&quot;,&quot;UID_AccProduct&quot;,format(&quot;UID_AccProduct in (select UID_AccProduct from ADSGroup where {0})&quot;, sqlcompareuid(&quot;UID_ADSGroup&quot;, UID_ADSGroup)))" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

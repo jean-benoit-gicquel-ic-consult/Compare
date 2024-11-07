@@ -1,0 +1,38 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="381c8d42-9022-7775-5b2d-1bd1ccce99d5">
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_ObjectEdit_Default">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectEdit" ScriptItemUID="ConfigSectionDefinition1" Description="" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+            <ColumnList ScriptItemUID="ColumnList1">
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_Roles_Fields_&quot; + dbtable(EditTable))" ScriptItemUID="ExpressionColumnList1" />
+              <CodeLiteral ScriptItemUID="CodeLiteral1">// special handling for M:N tables: display the two objects of the relation
+var dbObj = EditTable_Current.Row as IDbObjectRow;
+var table = dbObj != null ? _Database.MetaData().GetTable(dbObj.Entity.Tablename) : null;
+if (!ColumnList1_columns.Any() &amp;&amp; table != null &amp;&amp; table.IsMNTable)
+{
+	foreach(var pkCol in table.PrimaryKeyColumns)
+	{
+		ColumnList1_columns.Add(EditTable_Current.Row.Table.GetColumn(pkCol.Columnname, table.Tablename));
+	}
+}</CodeLiteral>
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+        </ControlReferenceContainer>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

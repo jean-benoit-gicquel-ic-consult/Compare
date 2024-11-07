@@ -1,0 +1,65 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a3aeff03-2cc1-fe06-4bf2-7979a25edaba">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_ObjectEdit_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="QBMConfigSection1" ObjectType="ConfigSection" SortOrder="5">
+        <ConfigEntry Key="VI_Roles_Fields_QERResource" ScriptItemUID="QERConfigEntry1" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn ScriptItemUID="QERSingleColumn6" DataColumn="Ident_QERResource" />
+          <SingleColumn ScriptItemUID="QERSingleColumn5" DataColumn="UID_QERResourceType" />
+          <SingleColumn ScriptItemUID="QERSingleColumn4" DataColumn="Description" />
+          <SingleColumn ScriptItemUID="QERSingleColumn3" DataColumn="IsForITShop" />
+          <SingleColumn ScriptItemUID="QERSingleColumn2" DataColumn="IsITShopOnly" />
+          <SingleColumn ScriptItemUID="QERSingleColumn1" DataColumn="UID_AccProduct" />
+          <SingleColumn ScriptItemUID="QERSingleColumn29" DataColumn="RiskIndex" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_Roles_Fields_QERReuse" ScriptItemUID="QERConfigEntry2" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn ScriptItemUID="QERSingleColumn12" DataColumn="Ident_QERReuse" />
+          <SingleColumn ScriptItemUID="QERSingleColumn11" DataColumn="UID_QERResourceType" />
+          <SingleColumn ScriptItemUID="QERSingleColumn10" DataColumn="Description" />
+          <SingleColumn ScriptItemUID="QERSingleColumn9" DataColumn="IsForITShop" />
+          <SingleColumn ScriptItemUID="QERSingleColumn8" DataColumn="IsITShopOnly" />
+          <SingleColumn ScriptItemUID="QERSingleColumn7" DataColumn="UID_AccProduct" />
+          <SingleColumn ScriptItemUID="QERSingleColumn30" DataColumn="RiskIndex" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_Roles_Fields_QERReuseUS" ScriptItemUID="QERConfigEntry3" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn ScriptItemUID="QERSingleColumn18" DataColumn="Ident_QERReuseUS" />
+          <SingleColumn ScriptItemUID="QERSingleColumn17" DataColumn="UID_QERResourceType" />
+          <SingleColumn ScriptItemUID="QERSingleColumn16" DataColumn="Description" />
+          <SingleColumn ScriptItemUID="QERSingleColumn15" DataColumn="IsForITShop" />
+          <SingleColumn ScriptItemUID="QERSingleColumn14" DataColumn="IsITShopOnly" />
+          <SingleColumn ScriptItemUID="QERSingleColumn13" DataColumn="UID_AccProduct" />
+          <SingleColumn ScriptItemUID="QERSingleColumn33" DataColumn="RiskIndex" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_Roles_Fields_QERAssign" ScriptItemUID="QERConfigEntry4" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn ScriptItemUID="QERSingleColumn24" DataColumn="Ident_QERAssign" />
+          <SingleColumn ScriptItemUID="QERSingleColumn23" DataColumn="UID_QERResourceType" />
+          <SingleColumn ScriptItemUID="QERSingleColumn22" DataColumn="Description" />
+          <SingleColumn ScriptItemUID="QERSingleColumn21" DataColumn="IsForITShop" />
+          <SingleColumn ScriptItemUID="QERSingleColumn20" DataColumn="IsITShopOnly" />
+          <SingleColumn ScriptItemUID="QERSingleColumn19" DataColumn="UID_AccProduct" />
+          <SingleColumn ScriptItemUID="QERSingleColumn36" DataColumn="RiskIndex" />
+          <SingleColumn ScriptItemUID="QERSingleColumn37" DataColumn="IsKeepAssignment" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_Roles_Fields_AERole" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="QERConfigEntry6">
+          <SingleColumn DataColumn="Ident_AERole" FKWhereClause="" ScriptItemUID="QERSingleColumn43" MinLength="1" />
+          <SingleColumn DataColumn="InternalName" FKWhereClause="" ScriptItemUID="QERSingleColumn41" />
+          <SingleColumn DataColumn="UID_ParentAERole" FKWhereClause="" ScriptItemUID="QERSingleColumn39" />
+          <SingleColumn DataColumn="UID_PersonHead" FKWhereClause="" ScriptItemUID="QERSingleColumn35" />
+          <SingleColumn DataColumn="UID_PersonHeadSecond" FKWhereClause="" ScriptItemUID="QERSingleColumn34" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="QERSingleColumn32" />
+          <SingleColumn DataColumn="Commentary" FKWhereClause="" ScriptItemUID="QERSingleColumn31" />
+          <SingleColumn ScriptItemUID="QERSingleColumn28" DataColumn="FullPath" CannotEdit="true" />
+          <SingleColumn ScriptItemUID="QERSingleColumn25" DataColumn="UID_Department" />
+          <SingleColumn ScriptItemUID="QERSingleColumn26" DataColumn="UID_Locality" />
+          <SingleColumn ScriptItemUID="QERSingleColumn27" DataColumn="UID_ProfitCenter" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="5">
+        <ConfigParam Key="VI_Roles_Fields_QERResource" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;QERResource&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="QERResource" />
+        <ConfigParam Key="VI_Roles_Fields_QERReuse" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;QERReuse&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="QERReuse" />
+        <ConfigParam Key="VI_Roles_Fields_QERReuseUS" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;QERReuseUS&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="QERReuseUS" />
+        <ConfigParam Key="VI_Roles_Fields_QERAssign" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;QERAssign&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="QERAssign" />
+        <ConfigParam Key="VI_Roles_Fields_AERole" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;AERole&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="AERole" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

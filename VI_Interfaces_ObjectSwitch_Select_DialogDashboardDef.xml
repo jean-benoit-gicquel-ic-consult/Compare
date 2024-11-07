@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Interfaces_ObjectSwitch_Select_DialogDashboardDef" MigrationNotes="DIALOGCONFIGPARM;" MultipartAction="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ComponentInterfaceObject ContainerType="ActionComponent" />
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="DialogDashboardContent" ScriptItemUID="VirtualTable1" RequiresCursor="true" IsMandatory="false">
+        <VirtualColumn Name="ElementName" DataType="System.String" />
+        <VirtualColumn Name="ElementValue" DataType="System.Double" />
+        <VirtualColumn Name="ElementObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="DialogDashboardDef" Class="DialogDashBoardDef" RequiresCursor="true" ScriptItemUID="VirtualTable2" />
+      <VirtualTable Name="DashboardInfo" ElementType="VI.WebRuntime.WebControls.ChartControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable5" RequiresCursor="true" />
+      <VirtualFunction Signature="ElementObjectKey()" DataType="System.String" />
+      <VirtualFunction Signature="ElementName()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

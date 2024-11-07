@@ -1,0 +1,46 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl ID="VI_ITShop_WebPart_OrderProducts" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="AccProductGroup" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container Layout="'VI_Styles_Container_Heading_2'" ScriptItemUID="Container2" Condition="select count() from AccProductGroup&gt;0">
+          <Label Text="translate('#LDS#Service Catalog')" ScriptItemUID="Label1" />
+        </Container>
+        <ContentSlider ScriptItemUID="ContentSlider1" MinSlides="1" SlideWidth="200" SlideMargin="15">
+          <ControlList ScriptItemUID="ControlList1">
+            <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="AccProductGroup" WithoutParentContainer="true">
+              <ControlReferenceControlList ID="VI_ITShop_AccProductGroupSingle" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="AccProductGroup" DataTable="AccProductGroup" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualControlMapping VirtualControl="AccProductGroupSelected" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action3">
+                    <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="VI_ITShop_ProductSelection" AllowReturnToThisContext="true">
+                      <RedirectParameter Name="'uid_accproductgroup'" Value="from AccProductGroup select current uid_accproductgroup" />
+                      <RedirectParameter Name="'uid_accproductgroupsecond'" Value="from AccProductGroup select current uid_accproductgroup" />
+                    </Redirect>
+                  </ActionComponent>
+                </VirtualControlMapping>
+              </ControlReferenceControlList>
+            </ContainerTemplate>
+          </ControlList>
+        </ContentSlider>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AccProductGroup" Class="AccProductGroup" WhereClauseSQL="SqlAnd(&#xD;&#xA;   SqlEmpty(&quot;UID_AccProductGroupParent&quot;,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;   variable(format(isnull(getconfig(&quot;VI_ITShop_Filter_AccProductGroup&quot;),&quot;1=1&quot;), getuser()))&#xD;&#xA;)" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+          <Column Name="IsSelected" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

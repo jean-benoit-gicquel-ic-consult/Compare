@@ -1,0 +1,66 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="960da72a-e209-ac62-0cc5-c201a8c10567">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_FormTemplate_Common">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceControlList ID="QBM_FormTemplate_Base" ScriptItemUID="ControlRef15">
+          <VirtualControlMapping VirtualControl="Content" ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList2">
+              <Container ScriptItemUID="Container2" EnableCustomAttributes="true" ItemUID="MainPage">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;data-imx-mainpage&quot;" Value="&quot;true&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="VI_UserLogon" ScriptItemUID="ControlRef3" />
+                <ControlReferenceContainer ID="QBM_UserMenu_horizontal" ScriptItemUID="ControlRef2" />
+                <Container ScriptItemUID="Container3" ItemUID="ContentPart" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute2" Value="'ContentPart imx-flex'" />
+                    <HtmlAttribute Name="'role'" ScriptItemUID="HtmlAttribute5" Value="'main'" />
+                    <Property Name="TagName" Value="main" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="'imx-pagetitlebar'" />
+                    </HtmlAttributes>
+                    <ControlReferenceControlList ID="QBM_Common_BackNavigation" ScriptItemUID="ControlRef4" />
+                    <Container EnableCustomAttributes="true" ScriptItemUID="Container1" ItemUID="Title">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="h1" Comment="" />
+                      </HtmlAttributes>
+                      <ControlReferenceControlList ID="Title" ScriptItemUID="ControlRef12" />
+                    </Container>
+                    <ControlReferenceControlList ID="TitleBar" ScriptItemUID="ControlRef5" />
+                  </Container>
+                  <Literal Expression="variable('&lt;a name=&quot;main&quot;&gt;&lt;/a&gt;')" />
+                  <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="message container">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute3" />
+                    </HtmlAttributes>
+                  </Container>
+                  <Container EnableCustomAttributes="true" ScriptItemUID="Container6" ItemUID="Main Form">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'class'" Value="'PartMain'" ScriptItemUID="HtmlAttribute4" />
+                    </HtmlAttributes>
+                    <ControlReferenceControlList ID="Main" ScriptItemUID="ControlRef8b" />
+                  </Container>
+                </Container>
+              </Container>
+            </ControlList>
+          </VirtualControlMapping>
+        </ControlReferenceControlList>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualControl ID="Title" ContainerType="ControlList" />
+      <VirtualControl ID="Main" ContainerType="ControlList" />
+      <VirtualControl ContainerType="ControlList" ID="TitleBar" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,110 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_Hierarchical" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="General settings" Description="translate(&quot;#LDS#General settings&quot;)" ScriptItemUID="ConfigSectionDefinition2">
+        <ConfigParam Key="VI_Common_Display_ObjectCollection_Hierarchical_As_List" Description="translate('#LDS#Display hierarchical structures as a flat list by default')" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <ActionSequence ScriptItemUID="Action3" Condition="getconfig(&quot;VI_Common_Display_ObjectCollection_Hierarchical_As_List&quot;)=&quot;true&quot;">
+          <Update DataTable="Vars" DataColumn="IsShowAsFlat" ScriptItemUID="Update2" Value="True" />
+        </ActionSequence>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;float: right; text-align: right;&quot;" />
+          </HtmlAttributes>
+          <Button ScriptItemUID="Button1" EnabledCondition="from vars select isshowasflat" ItemUID="TreeView" Text="translate(&quot;#LDS#Tree view&quot;)">
+            <ServerActionCall ScriptItemUID="ServerActionCall5">
+              <Update DataTable="Vars" DataColumn="IsShowAsFlat" ScriptItemUID="Update1" Value="false" />
+            </ServerActionCall>
+          </Button>
+          <Button ScriptItemUID="Button2" EnabledCondition="from vars select not(isshowasflat)" ItemUID="ListView" Text="translate(&quot;#LDS#List view&quot;)">
+            <ServerActionCall ScriptItemUID="ServerActionCall3">
+              <Update DataTable="Vars" DataColumn="IsShowAsFlat" ScriptItemUID="Update3" Value="true" />
+            </ServerActionCall>
+          </Button>
+        </Container>
+        <Container ScriptItemUID="Container2" RefreshTriggerExpression="from vars select isshowasflat" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute4" Value="&quot;clear: both;&quot;" />
+          </HtmlAttributes>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="from vars select not(isshowasflat)" ItemUID="Tree">
+              <Tree ScriptItemUID="Tree1">
+                <TreeBand DataTable="HierarchyTable" Layout="'VI_Styles_TreeBand_SelectionTreeBand'" ScriptItemUID="TreeBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  <ControlList ScriptItemUID="ControlList1">
+                    <Label Text="if(not(select current GetParentKey() from hierarchytable in (from hierarchytable select primarykey())))&#xD;&#xA;then&#xD;&#xA;-- if there is a parent key that part of this display, show it here&#xD;&#xA;select current DisplayLong() from hierarchytable&#xD;&#xA;else&#xD;&#xA;select current display() from hierarchytable" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from hierarchytable select current CssClass()" />
+                        <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute3" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                      </HtmlAttributes>
+                    </Label>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall1" DoNotAllowFocusInResponse="true">
+                    <ActionSequence ScriptItemUID="Action2" Condition="select current not(isnonselectable()) from hierarchytable">
+                      <CallAction ActionID="ElementSelected" ScriptItemUID="Call1" />
+                    </ActionSequence>
+                  </ServerActionCall>
+                </TreeBand>
+              </Tree>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2" ItemUID="Flat Grid">
+              <Grid ScriptItemUID="Grid1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;data-imx-grid-displaytype&quot;" Value="DisplayType()" />
+                </HtmlAttributes>
+                <GridBand DataTable="HierarchyTable" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()" DbOrderBy="" DisableRecursiveData="true" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Action" RowSelectionActive="select current not(isnonselectable()) from hierarchytable">
+                  <HtmlAttributes>
+                    <Property Name="RenderImmediately" Value="true" />
+                    <Property Name="ApplyFilledHeight" Value="true" />
+                  </HtmlAttributes>
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <SelectionAction ScriptItemUID="ServerActionCall4">
+                    <CallAction ActionID="ElementSelected" ScriptItemUID="Call3" />
+                  </SelectionAction>
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn ScriptItemUID="Column2" SortColumn="__LongDisplay" AutoFilterColumn="__LongDisplay">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Label ScriptItemUID="Label1" Text="datacaption(hierarchytable)" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label Text="select current displaylong() from hierarchytable" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="from hierarchytable select current CssClass()" />
+                        </HtmlAttributes>
+                      </Label>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumnColumnTemplate ScriptItemUID="GridColumnColumnTemplate1" DataTable="HierarchyTable">
+                    <ColumnList ScriptItemUID="ColumnList1">
+                      <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" ColumnList="AdditionalDisplayColumns()" />
+                    </ColumnList>
+                    <GridColumnGroup ScriptItemUID="GridColumnGroup1" DataTable="HierarchyTable">
+                      <GridColumnSimple ScriptItemUID="Column3" Column="currentcolumn" />
+                    </GridColumnGroup>
+                  </GridColumnColumnTemplate>
+                </GridBand>
+              </Grid>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="IsShowAsFlat" DataType="System.Boolean" ScriptItemUID="Column1" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

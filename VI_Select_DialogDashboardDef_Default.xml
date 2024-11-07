@@ -1,0 +1,59 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Select_DialogDashboardDef_Default" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action15" />
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence ScriptItemUID="Action17" ItemUID="default legacy links">
+          <ActionSequence Condition="ispreprop(&quot;QAM&quot;)" ItemUID="QAMDUG" ScriptItemUID="Action2">
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ('QAMMyMostActiveUsers', 'QAMMostActiveUsers', 'QAMMyMostActiveResources', 'QAMMostActiveResources')" ItemUID="Go to file resource view" ScriptItemUID="Action3">
+              <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                <RedirectParameter Name="'ObjectKey'" Value="elementobjectkey()" />
+              </Redirect>
+            </ActionSequence>
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ( 'QAMGovernedDataStatistics', 'QAMGovernedDataActivity7' )" ItemUID="Go to file resource view" ScriptItemUID="Action4">
+              <Redirect Target="MenuItem" MenuItemID="&quot;VI_QAM_ResourceBrowser&quot;" ScriptItemUID="Redirect2" />
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence ItemUID="POLICIES" Condition="ispreprop(&quot;QERPOLICY&quot;)" ScriptItemUID="Action5">
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ( 'QAMPolicyViolationsNow', 'QAMPolicyViolations12', 'QAMPolicyViolations12ByOwner', 'QAMPolicyViolations7')" ItemUID="Go to policy violations view" ScriptItemUID="Action6">
+              <Redirect Target="Context" ScriptItemUID="Redirect3" AllowReturnToThisContext="true" ContextID="VI_QERPolicy_ExceptionApproval" />
+            </ActionSequence>
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ('QAMResourcesWithAndWithoutPolicies', 'QAMPolicyViolationsNowByOwner' )" ItemUID="Go to policy violations view for business owner" ScriptItemUID="Action7">
+              <Redirect Target="MenuItem" MenuItemID="&quot;VI_BusinessOwners_FSResources&quot;" ScriptItemUID="Redirect4">
+                <RedirectParameter Name="'ShowViolations'" Value="true" />
+              </Redirect>
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence ItemUID="COMPLIANCE" Condition="ispreprop(&quot;COMPLIANCE&quot;)" ScriptItemUID="Action8">
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ('QAMRuleViolationsNow',&#xD;&#xA;'QAMRuleViolationsNowByOwner',&#xD;&#xA;'QAMRuleViolations12',&#xD;&#xA;'QAMRuleViolations12ByOwner',&#xD;&#xA;'QAMRuleViolations7'&#xD;&#xA;)" ItemUID="Go to compliance rule violations view" ScriptItemUID="Action9">
+              <Redirect Target="Context" ScriptItemUID="Redirect5" AllowReturnToThisContext="true" ContextID="VI_Compliance_Report" />
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence ItemUID="ATTESTATION" Condition="ispreprop(&quot;ATTESTATION&quot;)" ScriptItemUID="Action10">
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ('QAMAttestations',&#xA;'QAMAttestationsByOwner',&#xA;'QAMAttestationStatusByType')" ItemUID="Go to attestation view" ScriptItemUID="Action11">
+              <Redirect Target="Context" ScriptItemUID="Redirect6" AllowReturnToThisContext="true" ContextID="VI_Attestation_MyAttestations" />
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence ItemUID="ITSHOP" Condition="ispreprop(&quot;ITSHOP&quot;)" ScriptItemUID="Action12">
+            <ActionSequence Condition="from dialogdashboarddef select current ident_dialogdashboarddef in ('QAMRequestFrequency12', 'QAMRequestFrequency12ByOwner') " ItemUID="Go to request history" ScriptItemUID="Action13">
+              <Redirect Target="Context" ScriptItemUID="Redirect7" AllowReturnToThisContext="true" ContextID="VI_ITShop_OrderHistory" />
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence Condition="not(isnullorempty( elementobjectkey()))" ScriptItemUID="Action14">
+            <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect8">
+              <RedirectParameter Name="'ObjectKey'" Value="elementobjectkey()" />
+            </Redirect>
+          </ActionSequence>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Select_DialogDashboardDef" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

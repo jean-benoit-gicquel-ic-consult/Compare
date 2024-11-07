@@ -1,0 +1,9 @@
+﻿<WebDesigner TdnsHash="889e9208-6d8f-31e9-056f-bf6de0a339de">
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="CPL_ITShop_PersonWantsOrg_GridColumns_Ext">
+    <Extensions>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable">
+        <VirtualColumn Name="CheckStatus" DataType="System.Boolean" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

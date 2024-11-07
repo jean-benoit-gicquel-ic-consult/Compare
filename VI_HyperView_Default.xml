@@ -1,0 +1,29 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="332a3e2c-c5ff-424e-0c7c-8ae5bd70659a">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_HyperView_Default" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Common_HyperView_Shape_Properties" />
+        <ObjectInclude ObjectIncludeID="VI_Common_HyperView_ShapeListTable" />
+        <ObjectInclude ObjectIncludeID="VI_Common_HyperView_ShapeSimple" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <ElementEdit ScriptItemUID="ElementEdit1">
+          <CodeLiteral ScriptItemUID="CodeLiteral1">// render dynamic HyperView
+var hv = new VI.WebRuntime.WebControls.DynamicHyperView.HyperViewControl();
+hv.Row = Object_Current;
+hv.EnableNavigation = EnableNavigation;
+ElementEdit1.Controls.Add(hv);</CodeLiteral>
+          <ControlReferenceControlList ID="AdditionalShapes" ScriptItemUID="ControlRef2" />
+        </ElementEdit>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_HyperView" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

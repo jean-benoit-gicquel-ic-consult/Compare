@@ -1,0 +1,81 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Request_Actions" HelpChapterUid="&quot;687C0DD2-8CBD-48C3-A681-7FDF713E54C6&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="QER_Request_Actions_Overview" NavigationTitle="translate(&quot;#LDS#Heading My Actions&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Heading My Actions&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="Approvals">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action5">
+                  <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_Approvals" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Identifier()" Value="&quot;Approvals&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Caption()" Value="if  ( (from CountOpenDatabaseItems select OpenPWO) &gt; 0 ) then &#xD;&#xA;  (translate('#LDS#Heading Pending Requests') + ' (' + from CountOpenDatabaseItems select OpenPWO + ')' )&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Pending Requests')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="Image()" Value="&quot;PersonWantsOrg&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Value()" Value="translate(&quot;#LDS#Shows the pending requests that you can approve or deny.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Size()" Value="'Overview'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Highlight()" Value="(from CountOpenDatabaseItems select OpenPWO) &gt; 0" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container3" ItemUID="Approval History">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="Identifier()" Value="&quot;Approval History&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action4">
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_OrderHistory">
+                    <RedirectParameter Name="'Form'" Value="&quot;Approver&quot;" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Heading Approval History&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="Image()" Value="&quot;cux-icon cux-icon--history&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Value()" Value="translate(&quot;#LDS#Review your IT shop decisions.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping23" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <SwitchContainer ScriptItemUID="TileQuestions">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container4" ItemUID="Questions">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping24" ID="Identifier()" Value="&quot;Questions&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action3">
+                      <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_AnswerQuestions">
+                        <RedirectParameter Value="true" Name="'isRequest'" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Caption()" Value="if  ( (from CountOpenDatabaseItems select OpenInquiries) &gt; 0 ) then &#xD;&#xA;  (translate('#LDS#Heading Request Inquiries') + ' (' +from CountOpenDatabaseItems select OpenInquiries + ')' )&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Request Inquiries')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Image()" Value="&quot;cux-icon cux-icon--question&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Value()" Value="translate(&quot;#LDS#You may be asked to answer inquiries as part of an approval workflow.&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="ImageType()" Value="'IconFont'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping27" ID="Size()" Value="'Overview'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Highlight()" Value="(from CountOpenDatabaseItems select OpenInquiries) &gt; 0" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

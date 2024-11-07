@@ -1,0 +1,13 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_Common_UserProcessView_Ext">
+    <Extensions>
+      <AddObject ObjectID="ServerActionCall2" ObjectType="ServerActionCall" SortOrder="5">
+        <ActionSequence Condition="from userprocess select current JobChainName = &quot;QER_ShoppingCartOrder_Check&quot;" ScriptItemUID="QERAction1">
+          <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ShoppingCart" ScriptItemUID="QERRedirect1">
+            <RedirectParameter Value="singleproperty(&quot;ShoppingCartOrder&quot;, &quot;UID_ShoppingCartOrder&quot;, sqlcompareuid(&quot;XobjectKey&quot;, from userprocess select current objectkey))" Name="'UID_ShoppingCartOrderPreselected'" />
+          </Redirect>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

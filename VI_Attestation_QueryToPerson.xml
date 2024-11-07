@@ -1,0 +1,172 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <GlobalControl ID="VI_Attestation_QueryToPerson" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Delete DataTable="PersonReference" ScriptItemUID="Delete1" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Submit an inquiry about this attestation case&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <Container ScriptItemUID="Container2">
+                <Container ScriptItemUID="Container3">
+                  <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container4">
+                    <Image StockImage="Information" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Information&quot;)" />
+                      </HtmlAttributes>
+                    </Image>
+                    <Label Text="translate(&quot;#LDS#Please select the employee you wish to submit a question for.&quot;)" ScriptItemUID="Label1" />
+                  </Container>
+                  <Container Condition="0 = from PersonReference select count() where isnull(IsSelected,false) = True" ItemUID="Person Suchen und Fragen Popup" ScriptItemUID="Container5">
+                    <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container6style" Value="&quot;width:800px&quot;" />
+                      </HtmlAttributes>
+                      <Grid ScriptItemUID="Grid1">
+                        <GridBand DataTable="PersonReference" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="sqland( &#xD;&#xA;   sqlcompare(&quot;isinactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;), &#xD;&#xA;   sqlcompare(&quot;uid_person&quot;, getuser(), &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" RowSelection="Action" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="ApplyFilledHeight" Value="true" />
+                          </HtmlAttributes>
+                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                          <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                          <SelectionAction ScriptItemUID="ServerActionCall1">
+                            <ActionOnControl ActionType="PerformValidation" />
+                            <Update DataTable="PersonReference" DataColumn="IsSelected" Value="1" WhereClause="uid_person = select current uid_person from PersonReference" ScriptItemUID="Update1" />
+                            <ActionOnControl />
+                            <CallAction ActionID="QueryToPersonMessagePopup" ScriptItemUID="Call2" />
+                            <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
+                              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your question was submitted to {0}.&quot;, from PersonReference select current display())" ScriptItemUID="VirtualFunctionMapping2" />
+                              <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping3" />
+                            </CallAction>
+                          </SelectionAction>
+                          <GridFilters ScriptItemUID="GridFilters1" />
+                          <GridRows />
+                          <GridColumnColumnTemplate DataTable="PersonReference" ScriptItemUID="GridColumnColumnTemplate1">
+                            <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+                              <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_Person_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                            </ColumnList>
+                            <GridColumnGroup DataTable="PersonReference" ScriptItemUID="GridColumnGroup1">
+                              <GridColumnSimple ScriptItemUID="Column5" Column="currentcolumn" />
+                            </GridColumnGroup>
+                          </GridColumnColumnTemplate>
+                        </GridBand>
+                      </Grid>
+                    </Container>
+                  </Container>
+                </Container>
+              </Container>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUID="Buttonpanel" ScriptItemUID="Container11">
+              <Button Text="translate('#LDS#Cancel')" ItemUID="Default Button" ScriptItemUID="Button2" AssociatedWithEscapeKey="true" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute2" />
+                </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <ActionOnControl />
+                  <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update2" />
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="PersonReference" Class="Person" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="IsSelected" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Notice" DataType="System.String" ScriptItemUID="Column2" Caption="translate(&quot;#LDS#Your question&quot;)" MinLength="1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="QueryToPersonMessagePopup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container12">
+                    <Container ScriptItemUID="Container7" Condition="exists(&quot;Person&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      sqlcompareuid(&quot;UID_Person&quot;,from PersonReference select uid_person where IsSelected),	  &#xD;&#xA;	  SqlEmpty(&quot;DefaultEmailAddress&quot;,&quot;string&quot;)&#xD;&#xA;   )&#xD;&#xA;)" Layout="'VI_Styles_Container_ParagraphLargeMarging'" EnableCustomAttributes="true">
+                      <HtmlAttributes />
+                      <Container ScriptItemUID="Container8" Layout="'VI_Styles_Container_Paragraph'" EnableCustomAttributes="true">
+                        <HtmlAttributes />
+                        <Image StockImage="Information" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute4" Value="translate(&quot;#LDS#Information&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                        <Label ScriptItemUID="Label2" Text="translate('#LDS#Note that the selected recipient does not have an e-mail address.')" EnableCustomAttributes="true">
+                          <HtmlAttributes />
+                        </Label>
+                      </Container>
+                      <Container ScriptItemUID="Container9">
+                        <Label ScriptItemUID="Label4" Text="translate('#LDS#You can still submit your inquiry about this attestation case.') " />
+                      </Container>
+                    </Container>
+                    <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                      <Label Text="translate('#LDS#Recipient')" ScriptItemUID="Label5" />
+                      <Label Text="select top 1 display() from PersonReference where IsSelected" ScriptItemUID="Label3" />
+                    </LayoutPanel>
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ATTControlRef6">
+                      <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ATTVirtualFunctionMapping16">
+                        <ColumnList ScriptItemUID="ATTColumnList3">
+                          <SingleColumn DataColumn="Notice" ColumnComponentEdit="VI_Edit_TextLong" ScriptItemUID="ATTSingleColumn3" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="ATTVirtualTableMapping4" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container17">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button3">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute1" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall3">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <ActionSequence ItemUID="OK" ScriptItemUID="Action7">
+                          <Method DataTable="AttestationCase" Method="QueryToPerson" WhereClause="UID_AttestationCase = (select current UID_AttestationCase from AttestationCase)">
+                            <MethodParameter Name="'strUID_Person'" Value="from PersonReference select uid_person where IsSelected" />
+                            <MethodParameter Name="'strQuery'" Value="from Vars select Notice" />
+                          </Method>
+                          <ActionOnControl />
+                          <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update3" />
+                          <CodeLiteral ScriptItemUID="CodeLiteral1">AttestationCase.TableStore.Invalidate();</CodeLiteral>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ScriptItemUID="Button4" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall4">
+                        <ActionOnControl />
+                        <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update4" />
+                        <EndExecution />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Submit an inquiry about this attestation case&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" Class="AttestationCase" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

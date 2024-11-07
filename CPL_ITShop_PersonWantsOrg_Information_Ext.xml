@@ -1,0 +1,24 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ITShop_PersonWantsOrg_Information_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="20">
+        <TabPage ScriptItemUID="CPLTabPage3" ItemUID="Compliance" Condition="GetConfigParm(&quot;QER\ComplianceCheck&quot;) = &quot;1&quot;&#xD;&#xA;and from personwantsorg select current canseenoncompliance">
+          <ControlsHeader ScriptItemUID="CPLContainer11">
+            <Label Text="translate(&quot;#LDS#Compliance&quot;)" ScriptItemUID="CPLLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="CPLContainer9">
+            <ControlReferenceContainer ID="VI_ITShop_PWOComplianceStatus" ScriptItemUID="CPLControlRef1" />
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="VirtualTable2" ObjectType="VirtualTable">
+        <VirtualColumn Name="CheckStatus" DataType="System.Boolean" />
+        <Column DataType="System.Boolean" Name="CanSeeNonCompliance" ScriptItemUID="CPLColumn8" DataSource="Expression" Expression="CanSeeAllNonCompliance() or&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;IsAllManager() and&#xD;&#xA;-- check if the WhereClause for VI_4_ALLMANAGER on PersonInNonCompliance matches&#xD;&#xA;exists(&quot;Person&quot;, variable(format(&quot;exists (select top 1 1    from dbo.QER_FTHelperHeadOrgChildren('%UserUID%') c    where exists ( select top 1 1        from HelperPersonOrg h1         where h1.UID_Org = c.UID_Org        and h1.UID_Person = {0}          union all          select top 1 1        from PersonInBaseTree h1         where h1.UID_Org = c.UID_Org        and h1.UID_Person = {0}   )     )  or exists (select top 1 1     from HelperHeadPerson hhp     where hhp.UID_PersonHead ='%UserUID%'       and hhp.XOrigin &gt; 0       and hhp.UID_Person = {0}     )&quot;, SqlFormatValue(uid_personordered, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))))" />
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function ScriptItemUID="CPLFunction2" Name="CanSeeAllNonCompliance()" DataType="System.Boolean" Expression="{{&#xD;&#xA;var perm = _Database.Permissions();&#xD;&#xA;var tperm = perm.GetPermissionsAsync(&quot;PersonInNonCompliance&quot;).Result;&#xD;&#xA;@return (tperm != null &amp;&amp; tperm.CanSee &amp;&amp; tperm.SelectRightsClause == null /* meaning 1=1 */);&#xD;&#xA;}}" />
+        <Function ScriptItemUID="CPLFunction3" Name="IsAllManager()" DataType="System.Boolean" Expression="{{ _Connection.Groups.GetGroupNames().Contains(&quot;VI_4_ALLMANAGER&quot;) }}" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

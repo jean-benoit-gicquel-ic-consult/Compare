@@ -1,0 +1,89 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Action_DenyApproval" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <CallAction ActionID="ActionPopup" ScriptItemUID="Call1" />
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Notice" DataType="System.String" ScriptItemUID="Column1" MinLength="1" Caption="translate(&quot;#LDS#Reason&quot;)" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="PersonWantsOrg" Table="PersonWantsOrg" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ActionPopup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action5">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container1">
+                    <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef1">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="Notice" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                      <Container ScriptItemUID="Container2">
+                        <TextBox DataTable="Vars" DataColumn="Notice" TextMode="MultiLine" Rows="8" ScriptItemUID="TextBox1" />
+                        <Validator DataTable="Vars" DataColumn="Notice" ScriptItemUID="Validator1" />
+                      </Container>
+                    </LayoutPanel>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container4">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" Layout="'VI_Styles_Button_Blue'" ScriptItemUID="Button1">
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <ActionSequence ItemUID="ok" ScriptItemUID="Action8">
+                          <ActionSequence ItemUID="PersonWantsOrg" Condition="DBTable(Action) = 'PersonWantsOrg'" ScriptItemUID="Action9">
+                            <LoadTable DataTable="PersonWantsOrg" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from Action select current XObjectKey)" ScriptItemUID="LoadTable1">
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                            </LoadTable>
+                            <Method DataTable="PersonWantsOrg" WhereClause="PrimaryKey() in (select current PrimaryKey() from Action)" Method="DenyDecision">
+                              <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                              <MethodParameter Name="'strReasonText'" Value="from Vars select Notice" />
+                            </Method>
+                          </ActionSequence>
+                          <ActionOnControl />
+                          <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update1" />
+                          <CodeLiteral ScriptItemUID="CodeLiteral1">// invalidate tablestore --&gt; reload data 
+Action_Current.Row.Table.TableStore.Invalidate();</CodeLiteral>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button2" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <ActionOnControl />
+                        <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update2" />
+                        <EndExecution />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="PopupTitle()" ScriptItemUID="VirtualFunctionMapping1" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Action" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="PopupTitle()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

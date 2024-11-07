@@ -1,0 +1,101 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="cbbb3e2e-82a5-eed9-3ab6-35d9321d52df">
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Organizations_Admin" HelpChapterUid="&quot;D415A78F-6959-4210-9368-F7FE10C05BBF&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+        <Column DataType="System.String" Name="Key" ScriptItemUID="Column1" />
+        <Column DataType="System.String" Name="TableName" ScriptItemUID="Column2" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Type&quot;)">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="Department" Display="datacaption(&quot;Department&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Locality" Display="datacaption(&quot;Locality&quot;)" Comment="" />
+            <ColumnLimitedValue Name="ProfitCenter" Display="datacaption(&quot;ProfitCenter&quot;)" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+      </DataTableSingleRow>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="Org" DbObjectTypeDynamic="true" DynamicClass="from vars select tablename">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Organizations" NavigationTitle="translate(&quot;#LDS#Heading Organization&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Heading Organization&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+          <Container ScriptItemUID="Container6">
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="PropertyList()" IsPropertyList="true">
+                <ColumnList ScriptItemUID="ColumnList1">
+                  <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="TableName" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="EditTable" DataTable="Vars" />
+            </ControlReferenceContainer>
+          </Container>
+          <Container ScriptItemUID="Container1" Condition="from vars select not(isnullorempty(tablename))" RefreshTriggerExpression="from vars select tablename">
+            <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+              <HtmlAttributes />
+              <MasterPane ScriptItemUID="MasterPane1">
+                <Container ScriptItemUID="Container2">
+                  <ControlReferenceControlList ID="QBM_ObjectGridView_Default" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="HierarchyTable" DataTable="Org" />
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="TargetTable" DataTable="Vars">
+                      <VirtualColumnMapping DataColumn="Key" VirtualColumn="TargetSelectedKey" />
+                    </VirtualTableMapping>
+                  </ControlReferenceControlList>
+                </Container>
+              </MasterPane>
+              <DetailPane ScriptItemUID="DetailPane1">
+                <Container ScriptItemUID="Container3">
+                  <ContainerTemplate DataTable="Org" ScriptItemUID="ContainerTemplate1" WhereClause="primarykey() = (select key from vars)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;data-imx-layout&quot;" Value="&quot;flex-fill&quot;" />
+                    </HtmlAttributes>
+                    <ObjectSwitchContainer ObjectKey="&quot;&lt;Key&gt;&lt;T&gt;Dialogtable&lt;/T&gt;&lt;P&gt;RMB-T-Org&lt;/P&gt;&lt;/Key&gt;&quot;" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="SourceObject" DataTable="Org" />
+                    </ObjectSwitchContainer>
+                  </ContainerTemplate>
+                  <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_ButtonBar'">
+                    <Button ScriptItemUID="Button1" Text="translate(&quot;#LDS#Edit&quot;)">
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
+                          <RedirectParameter Value="getobjectkey(from vars select tablename, select key from vars, &quot;&quot;)" Name="'ObjectKey'" />
+                        </Redirect>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+                <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef4">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Value1()" Value="from org select top 1 display() where primarykey()= (from vars select key)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot;+(from vars select tablename)" />
+                    </ControlReferenceControlList>
+                  </ControlList>
+                </DetailPaneHeader>
+              </DetailPane>
+            </MasterDetailControl>
+          </Container>
+          <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_ButtonBar'">
+            <Button ScriptItemUID="Button2" Text="translate(&quot;#LDS#Restore a deleted role&quot;)">
+              <ServerActionCall ScriptItemUID="ServerActionCall2">
+                <CallAction ScriptItemUID="Call6" ActionID="QER_Roles_Restore">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="TableNames()" Value="&quot;Department,Locality,ProfitCenter&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="DoNotRestrictToUser()" Value="true" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,35 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="8391a72c-0c71-c4ec-6f6d-dd35d98eb22f">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Reporting_ParameterEdit" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <ContainerTemplate DataTable="DialogParameter" WhereClause="UID_DialogParameterSet = (select current UID_DialogParameterSet from DialogParameterSet)&#xA;and DialogParameterFilter()" OrderBy="'SortOrder'" ScriptItemUID="LayoutPanelItemTemplate1" WithoutParentContainer="true">
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="ParameterValue">
+                  <ParameterFree Name="&quot;DisplayPattern&quot;" Value="{{ DialogParameterObjectProxy.GetOrAdd((IDbObjectRow) LayoutPanelItemTemplate1_Current.Row, _Database).ParameterObject.DataDisplayPattern }}" ScriptItemUID="ParameterFree1" />
+                </SingleColumn>
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="DialogParameter" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="IsReadOnly()" Value="IsReadOnly()" />
+          </ControlReferenceContainer>
+        </ContainerTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DialogParameter" Class="DialogParameter" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="DialogParameterSet" Class="DialogParameterSet" RequiresCursor="true" ScriptItemUID="VirtualTable2" />
+      <VirtualFunction Signature="DialogParameterFilter()" DataType="System.Boolean" FilterForTable="DialogParameter" DefaultValue="true" />
+      <VirtualFunction DataType="System.Boolean" Signature="IsReadOnly()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

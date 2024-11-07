@@ -1,0 +1,33 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_PageDescription_Header">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <HoverPanel ScriptItemUID="Popover1" HoverMode="Hover">
+          <Controls ScriptItemUID="Container1">
+            <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute2" Value="variable(&quot;background-image: url('%link%stockImg=Information&amp;size=Medium&amp;state=Normal'); background-repeat: no-repeat; background-position: center center; min-height: 2rem; min-width: 24px; display: inline-block;&quot;)" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;aria-label&quot;" Value="translate(&quot;#LDS#Information&quot;)" />
+                <Property Name="TagName" Value="span" />
+              </HtmlAttributes>
+            </Container>
+          </Controls>
+          <ControlsHover ScriptItemUID="Container6">
+            <Label ScriptItemUID="Label3" Text="Text()" />
+          </ControlsHover>
+        </HoverPanel>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="Text()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

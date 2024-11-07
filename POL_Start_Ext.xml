@@ -1,0 +1,43 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Start_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container7" ObjectType="Container">
+        <SwitchContainer ScriptItemUID="TilePendingPolicyViolations">
+          <SwitchContainerCase ScriptItemUID="POLCase1" Condition="ispreprop(&quot;QERPolicy&quot;) and 0 &lt; from countopendatabaseitems select OpenQERPolicyHasObject">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="POLContainer1" ItemUID="Pending policy violations">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="POLAction2">
+                  <Redirect ScriptItemUID="POLRedirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_QERPolicy_ExceptionApproval" AbortExecution="false">
+                    <RedirectParameter Value="translate(&quot;#LDS#Pending policy violations&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Pending policy violations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping4" ID="Value()" Value="from countopendatabaseitems select OpenQERPolicyHasObject" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping2" ID="Identifier()" Value="&quot;Pending policy violations&quot;" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="35">
+        <SwitchContainer ScriptItemUID="DashboardPolicyViolations">
+          <SwitchContainerCase ScriptItemUID="POLCase2" Condition="ispreprop(&quot;QERPolicy&quot;) and exists(&quot;person&quot;, getconfig(&quot;VI_Start_Governance_Policies_Condition&quot;))" ItemUID="Access Governance - Policy Violations">
+            <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="POLControlRef1">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="POLAction1">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false" ScriptItemUID="POLRedirect2">
+                    <RedirectParameter Value="&quot;Policies&quot;" Name="'Part'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping3" ID="DisplayNameDialogDashboardDef()" Value="&quot;QAMPolicyViolations7&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping5" ID="ChartType()" Value="&quot;ChartLineGrouped&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping8" ID="Caption()" Value="translate('#LDS#Policy violations')" />
+              <VirtualFunctionMapping ScriptItemUID="POLVirtualFunctionMapping9" ID="Identifier()" Value="&quot;Dashboard_PolicyViolations&quot;" />
+            </ControlReferenceControlList>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

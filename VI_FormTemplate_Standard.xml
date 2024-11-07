@@ -1,0 +1,29 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="5c45cb31-ed63-60e0-c5b2-9ae49f2f2705">
+  <PageTypeObject ID="VI_FormTemplate_Standard" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <PageParts>
+      <PagePart ID="Title" />
+      <PagePart ID="Main" />
+      <PagePart ID="TitleBar" />
+    </PageParts>
+    <ControlReferenceControlList ID="QBM_FormTemplate_Common" ScriptItemUID="ControlRef8">
+      <VirtualControlMapping VirtualControl="Title" ContainerType="ControlList">
+        <ControlList ScriptItemUID="ControlList10">
+          <PageRenderContent PagePart="Title" />
+        </ControlList>
+      </VirtualControlMapping>
+      <VirtualControlMapping VirtualControl="Main" ContainerType="ControlList">
+        <ControlList ScriptItemUID="ControlList11">
+          <PageRenderContent PagePart="Main" />
+        </ControlList>
+      </VirtualControlMapping>
+      <VirtualControlMapping ContainerType="ControlList" VirtualControl="TitleBar">
+        <ControlList ScriptItemUID="ControlList1">
+          <PageRenderContent PagePart="TitleBar" />
+        </ControlList>
+      </VirtualControlMapping>
+    </ControlReferenceControlList>
+  </PageTypeObject>
+</WebDesigner>

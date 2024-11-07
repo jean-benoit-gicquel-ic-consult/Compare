@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Table_Default" Type="Table" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassNameTableRow" Value="" Comment="" />
+    <Property Name="CssClassName" Value="" Comment="" />
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_Responsibilities_Ownership_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="5">
+        <SwitchContainer ScriptItemUID="TileClaimOwnership">
+          <SwitchContainerCase ScriptItemUID="ADSCase1" Condition="not(IsPreProp(&quot;ATTESTATION&quot;)) and ispreprop(&quot;ADS&quot;) and&#xD;&#xA;exists(&quot;person&quot;, variable(sqland(&quot;uid_person = '%useruid%'&quot;, getconfig(&quot;VI_BusinessOwnership_ClaimOwnership_FilterPerson&quot;))))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ADSContainer1" ItemUID="ClaimOwnership">
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping9" ID="Identifier()" Value="&quot;ClaimOwnership&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="ADSAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_BusinessOwnership_ClaimOwnership" AbortExecution="false" ScriptItemUID="ADSRedirect2" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping4" ID="Caption()" Value="translate(&quot;#LDS#Claim Ownership&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping10" ID="Image()" Value="&quot;cux-icon cux-icon--hand-paper-o&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Claim ownership of an existing group which currently has no assigned owner. An approval might follow this process.')" />
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping8" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="ADSVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

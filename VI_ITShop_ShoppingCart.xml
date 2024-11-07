@@ -1,0 +1,1270 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <Context ID="VI_ITShop_ShoppingCart" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;E52C2FD6-26F9-46B5-AAFA-76A9E9ECBBDE&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember ItemUID="SetProlongationDateFromMethodParameters">// Set the prolongation date according to the date defined in the MethodParameters field
+private void SetProlongationDateFromMethodParameters(System.Collections.Generic.IEnumerable&lt;IDataRow&gt; rows)
+{
+	/*
+	 Old Syntax only provides &lt;DATE&gt;|&lt;REASON&gt;,
+	 New Syntax provides &lt;UID_PERSON&gt;|&lt;DATE&gt;|&lt;REASON&gt;
+	*/
+	foreach (var row in rows.Where(r =&gt; TableStore.GetLocalColumn(r.Table, "OrderType").GetValue(r).String.Equals("Prolongate")))
+	{
+		var paramString = row.GetValue("MethodParameters").String;
+		if (string.IsNullOrEmpty(paramString))
+			 continue;
+		
+		var paramValues = paramString.Split((char)7);
+
+		var prolongationDate = TableStore.GetLocalColumn(row.Table, "ProlongationDate");
+		
+		if (paramValues.Length &lt; 2 || paramValues.Length &gt; 3)
+			continue;
+		
+		int dateIndex = paramValues.Length == 2 ? 0 : 1;
+		
+		var resultDate = System.DateTime.Parse(paramValues[dateIndex]);
+
+		prolongationDate.SetValue(row, resultDate);
+	}
+}</TypeMember>
+        <TypeMember ItemUID="SetValidUntilUnsubscribeDateFromMethodParameters">private void SetValidUntilUnsubscribeDateFromMethodParameters(System.Collections.Generic.IEnumerable&lt;IDataRow&gt; rows)
+{
+	foreach (var row in rows.Where(r =&gt; TableStore.GetLocalColumn(r.Table, "OrderType").GetValue(r).String.Equals("RejectDateTime")))
+	{
+		var paramString = row.GetValue("MethodParameters").String;
+		if (string.IsNullOrEmpty(paramString))
+			 continue;
+		
+		var paramValues = paramString.Split((char)7);
+
+		var r = TableStore.GetLocalColumn(row.Table, "ValidUntilUnsubscribe");
+		
+		var resultDate = System.DateTime.Parse(paramValues[paramValues.Length -1]);
+
+		r.SetValue(row, resultDate);
+	}
+}</TypeMember>
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <TypeMember>public static void ApplyCheckResult(QER.CompositionApi.ITShop.CartItemCheckResult item, IRuntimeTable cartItems, IRuntimeTable excludedPermissions, IDataColumn checkStatus)
+{
+
+// non-critical status values first
+
+	var sci = cartItems.GetRowForPrimaryKey(item.UidShoppingCartItem);
+	var qerResult = item.Results.OfType&lt;QerCartItemCheckResult&gt;().FirstOrDefault();
+	
+	if (qerResult != null)
+	{
+	if (qerResult.IsForeignOrg)
+	{
+		checkStatus.SetValue(sci, "OrgForeign");
+	}
+
+	if (qerResult.IsForeignFunctionalArea)
+	{
+		checkStatus.SetValue(sci, "FuncForeign");
+	}
+	
+	if (qerResult.MissingMandatory.Any())
+	{
+		checkStatus.SetValue(sci, "Inclusion");
+	}
+	}
+
+
+// ... then critical status values
+
+	var submitExc = item.Results.OfType&lt;SubmitException&gt;().FirstOrDefault();
+	
+	if (submitExc != null)
+	{
+		if (submitExc.Exception.ErrorNumber == 2133266)
+		{
+			checkStatus.SetValue(sci, "Right");
+			return;
+		}
+		else
+		{
+			checkStatus.SetValue(sci, submitExc.HasErrors ? "Error" : "Warning");
+			var e = QER.Customizer.ExceptionInfo.ToException(submitExc.Exception);
+			using (var eBrowser = new ExceptionBrowser())
+			{
+				eBrowser.UseException(e);
+				var formattedErrorText = string.Join(" ", eBrowser.GetExceptions().Select(m =&gt; m.Message));
+			    sci.Table.TableStore.GetLocalColumn(sci.Table, "ErrorText").SetValue(sci, formattedErrorText);
+			}
+			return;
+		}
+	}
+	
+	if (qerResult != null)
+	{
+	if (qerResult.IsExistingAssignment)
+	{
+		checkStatus.SetValue(sci, "ExistingAssignment");
+	}
+	
+	if (qerResult.IsDuplicate)
+	{
+		checkStatus.SetValue(sci, "Forbidden_Doublettes");
+	}
+	
+    if (qerResult.IsTimeConflict)
+	{
+		checkStatus.SetValue(sci, "Time");
+	}
+	
+	if (qerResult.HasExistingPwo)
+	{
+		checkStatus.SetValue(sci, "Right");
+	}
+	foreach (var exclusion in qerResult.Exclusions)
+	{
+		checkStatus.SetValue(sci, "PermissionExclusion");
+		var values = new ColumnInsertValues(excludedPermissions);
+		values["ObjectDisplayExcluded"] = exclusion.ObjectDisplayExcluded;
+		values["ObjectKeyExcluded"] = exclusion.ObjectKeyExcluded;
+		values["UID_ShoppingCartItem"] = exclusion.UidShoppingCartItem;
+		excludedPermissions.Insert(values);
+	}
+	}
+
+
+	if (string.IsNullOrEmpty(checkStatus.GetValue(sci)))
+	{
+		checkStatus.SetValue(sci, "OK");
+	}
+}
+</TypeMember>
+        <NamespaceImport Namespace="QER.CompositionApi.ITShop" />
+        <AssemblyReference Assembly="QER.Customizer.dll" />
+        <NamespaceImport Namespace="QER.Customizer" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="UID_ShoppingCartOrderPreselected" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="IT Shop - Cart" Description="translate(&quot;#LDS#Shopping Cart&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_CanCloneCartItemsByPerson" Description="translate(&quot;#LDS#Requests from shopping cart can be duplicated per person.&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_CanCloneCartItemsByProduct" Description="translate(&quot;#LDS#Requests from shopping cart can be duplicated per product.&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_AsyncThreshold" Type="Text" Description="translate(&quot;#LDS#Threshold for asynchronous handling of shopping carts&quot;)" LongDescription="translate(&quot;#LDS#Specifies the number of products in the shopping cart from which on the shopping cart is processed asynchronously.&quot;)" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="IT Shop" Description="translate(&quot;#LDS#IT Shop&quot;)" ScriptItemUID="ConfigSectionDefinition2">
+        <ConfigParam Key="VI_ITShop_Filter_PersonOrderFor" Type="SQL" Description="translate('#LDS#Employees for whom a request can be placed')" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_DisablePWOPriorityChange" Description="translate(&quot;#LDS#Disable priority change by recipient&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_DisableHideValidUntilQERReuse" Description="translate(&quot;#LDS#Enable ValidUntil for multi-request resources&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_SubmitOrderImmediately" Description="translate(&quot;#LDS#Skip confirmation to submit shopping cart when there are no warnings&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="AccProduct" Class="AccProduct" WhereClauseSQL="&quot;uid_accproduct in ( select uid_accproduct from shoppingcartitem where &quot;+whereclause(shoppingcartitem)+&quot;)&quot;" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+        <Column Name="TableName" DataType="System.String" ScriptItemUID="Column11" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName }}+&quot;&quot;" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="OrderReason" ScriptItemUID="Column2" DataType="System.String" />
+        <Column Name="UID_ShoppingCartOrder" ScriptItemUID="Column4" DataType="System.String" />
+        <Column Name="UID_ShoppingCartOrder2" ScriptItemUID="Column5" DataType="System.String" />
+        <Column Name="ValidFrom" DataType="System.DateTime" ScriptItemUID="Column19">
+          <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;DateTime&quot;" ScriptItemUID="ParameterFree4" />
+          <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;00:00:00.000&quot;" ScriptItemUID="ParameterFree9" />
+        </Column>
+        <Column Name="ValidUntil" DataType="System.DateTime" ScriptItemUID="Column20">
+          <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;DateTime&quot;" ScriptItemUID="ParameterFree6" />
+          <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;23:59:59.999&quot;" ScriptItemUID="ParameterFree7" />
+        </Column>
+        <Column Name="UID_ShoppingCartItemSelected" DataType="System.String" ScriptItemUID="Column21" />
+        <Column Name="CountItems" DataType="System.Int32" ScriptItemUID="Column6" />
+        <Column Name="UID_ShoppingCartItemTemp" DataType="System.String" ScriptItemUID="Column29" />
+        <Column Name="PWOPriority" DataType="System.Int32" ScriptItemUID="Column14" ColumnDataSource="LimitedValues">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues3">
+            <ColumnLimitedValueImport DBTableName="&quot;PersonWantsOrg&quot;" DBColumnName="&quot;PWOPriority&quot;" />
+          </ColumnLimitedValues>
+        </Column>
+        <Column Name="ApplyPWOPriorityForAll" DataType="System.Boolean" ScriptItemUID="Column35" TriggerUpdates="Updates" />
+        <Column DataType="System.Boolean" Name="Submitted" ScriptItemUID="Column32" />
+        <Column Name="ApplyValidFromForAll" DataType="System.Boolean" ScriptItemUID="Column18" TriggerUpdates="Updates" />
+        <Column Name="ApplyValidUntilForAll" DataType="System.Boolean" ScriptItemUID="Column45" TriggerUpdates="Updates" />
+      </DataTableSingleRow>
+      <DataTableCustom Table="ComplianceCheckSimple" ScriptItemUID="DataTableCustom1">
+        <Column Name="DBObjectKey" ScriptItemUID="Column7" DataType="System.String" />
+        <Column Name="UID_ComplianceRule" ScriptItemUID="Column9" DataType="System.String" Caption="datacaptionsingle(&quot;ComplianceRule&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;ComplianceRule&quot;" DBColumnName="&quot;UID_ComplianceRule&quot;" FKWhereClause="" />
+        <Column Name="UID_ComplianceSubRule" ScriptItemUID="Column10" DataType="System.String" />
+        <Column Name="UID_ShoppingCartItem" ScriptItemUID="Column3" DataType="System.String" />
+        <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column12" Caption="datacaptionsingle(&quot;Person&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+        <Column Name="ViolationType" DataType="System.String" ScriptItemUID="Column13" ColumnDataSource="LimitedValues">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues2">
+            <ColumnLimitedValue Name="Person" Display="" Comment="" />
+            <ColumnLimitedValue Name="Org" Display="" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+        <Column DataType="System.Boolean" Name="IsNoEffectivePerson" ScriptItemUID="CPLColumn10" TriggerUpdates="Never" />
+      </DataTableCustom>
+      <DataTableGeneric Table="ComplianceCheckSimpleObjects" ScriptItemUID="DataTableGeneric1">
+        <Column Name="sourcekey" ScriptItemUID="Column15" DataType="System.String" />
+      </DataTableGeneric>
+      <DataTableDbObject Table="ShoppingCartOrder" Class="ShoppingCartOrder" WhereClauseSQL="format(&quot;uid_shoppingcartorder = '{0}'&quot;, from container select uid_shoppingcartorder)" ScriptItemUID="DataTableDbObject2">
+        <ActionSequence ScriptItemUID="Action2" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartItem" Class="ShoppingCartItem" WhereClauseSQL="sqland(&#xD;&#xA;format( &quot;uid_personinserted = '{0}'&quot;, from user select uid_person),&#xD;&#xA;&quot;not &quot; + SqlEmpty(&quot;uid_shoppingcartorder&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_shoppingcartorder&quot;, from container select uid_shoppingcartorder)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="DataTableDbObject3">
+        <ActionSequence ScriptItemUID="Action3">
+          <LoadTable DataTable="AccProduct" RevertExisting="false" ScriptItemUID="LoadTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+          <Update DataTable="ShoppingCartItem" DataColumn="IsActivated" Value="true" WhereClause="not(isactivated)" ScriptItemUID="Update1" />
+          <CodeLiteral ScriptItemUID="CodeLiteral2">SetProlongationDateFromMethodParameters(ShoppingCartItem);</CodeLiteral>
+          <CodeLiteral ScriptItemUID="CodeLiteral5">SetValidUntilUnsubscribeDateFromMethodParameters(ShoppingCartItem); </CodeLiteral>
+        </ActionSequence>
+        <Column Name="CanOrder" DataType="System.Boolean" ScriptItemUID="Column22" />
+        <Column Name="CheckStatus" ScriptItemUID="Column23" DataType="System.String" ColumnDataSource="LimitedValues">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="OK" Display="translate(&quot;#LDS#OK&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Right" Display="translate(&quot;#LDS#Missing permission&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Time" Display="translate(&quot;#LDS#Not requestable in this time frame&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Existing" Display="translate(&quot;#LDS#Product is already assigned&quot;)" Comment="" />
+            <ColumnLimitedValue Name="ExistingAssignment" Display="translate(&quot;#LDS#Assignment already exists&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Invalid" Display="translate(&quot;#LDS#Missing information&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Exclusion" Display="translate(&quot;#LDS#Invalid product combination&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Inclusion" Display="translate(&quot;#LDS#Missing required product&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Forbidden_Doublettes" Display="translate(&quot;#LDS#Duplicate request&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Error" Display="translate(&quot;#LDS#Error&quot;)" Comment="" />
+            <ColumnLimitedValue Name="FuncForeign" Display="translate(&quot;#LDS#Functional area&quot;)" Comment="" />
+            <ColumnLimitedValue Name="OrgForeign" Display="translate(&quot;#LDS#Organizational unit&quot;)" Comment="" />
+            <ColumnLimitedValue Name="PermissionExclusion" Display="translate(&quot;#LDS#Conflicting assignments&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Warning" Display="translate(&quot;#LDS#Warning&quot;)" />
+          </ColumnLimitedValues>
+        </Column>
+        <Column Name="CanHaveOptionalProducts" Expression="isnull(methodname,'')=''&#xD;&#xA;and&#xD;&#xA;exists(&quot;accproductdependencies&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_accproduct&quot;, uid_accproduct),&#xD;&#xA;sqlcompare(&quot;isoptional&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)" DataSource="Expression" ScriptItemUID="Column24" DataType="System.Boolean" />
+        <Column Name="IsValidOptionalFields" DataType="System.Boolean" ScriptItemUID="Column25" />
+        <Column Name="OrderType" Expression="if(Methodname = 'Unsubscribe(string, string)') then&#xD;&#xA;'Reject'&#xD;&#xA;else if(Methodname = 'Unsubscribe(string, string, string, DateTime)') then&#xD;&#xA;'RejectDateTime'&#xD;&#xA;else if(Methodname = 'Prolongate(DateTime)') then&#xD;&#xA;'Prolongate'&#xD;&#xA;else if(Methodname = 'Prolongate(string, DateTime, string)') then&#xD;&#xA;'Prolongate'" DataSource="Expression" ScriptItemUID="Column26" DataType="System.String" />
+        <Column Name="ProlongationDate" DataType="System.DateTime" ScriptItemUID="Column27">
+          <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;DateTime&quot;" ScriptItemUID="ParameterFree5" />
+        </Column>
+        <Column Name="HasMandatoryParameters" DataType="System.Boolean" ScriptItemUID="Column31" />
+        <Column Name="ErrorText" DataType="System.String" ScriptItemUID="Column8" />
+        <Column Name="ValidUntilUnsubscribe" DataType="System.DateTime" ScriptItemUID="Column36">
+          <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;23:59:59.999&quot;" ScriptItemUID="ParameterFree3" />
+          <ParameterFree Name="&quot;DateControlType&quot;" Value="&quot;DateTime&quot;" ScriptItemUID="ParameterFree2" />
+        </Column>
+        <Column DataType="System.Boolean" Name="Selected" ScriptItemUID="Column17" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartOrderCandidate" Class="ShoppingCartOrder" WhereClauseSQL="sqlor(&#xD;&#xA;format(&quot;uid_shoppingcartorder in ( select uid_shoppingcartorder from shoppingcartitem where uid_personinserted = '{0}')&quot;, from user select uid_person),&#xD;&#xA;format(&quot;uid_shoppingcartorder = '{0}'&quot;, from container select uid_shoppingcartorder)&#xD;&#xA;)" ScriptItemUID="DataTableDbObject4">
+        <ActionSequence ScriptItemUID="Action4" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartItemForLater" Class="ShoppingCartItem" WhereClauseSQL="SqlAnd(&#xD;&#xA;sqlcompareuid(&quot;UID_PersonInserted&quot;,GetUser()),&#xD;&#xA;SqlEmpty(&quot;UID_ShoppingCartOrder&quot;,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" ScriptItemUID="DataTableDbObject6">
+        <ActionSequence Condition="0 &lt; from ShoppingCartItemForLater select count()" ScriptItemUID="Action6">
+          <CodeLiteral ScriptItemUID="CodeLiteral1">SetProlongationDateFromMethodParameters(ShoppingCartItemForLater);</CodeLiteral>
+          <CodeLiteral ScriptItemUID="CodeLiteral7">SetValidUntilUnsubscribeDateFromMethodParameters(ShoppingCartItemForLater); </CodeLiteral>
+        </ActionSequence>
+        <Column Name="OrderType" Expression="if(Methodname = 'Unsubscribe(string, string)') then&#xD;&#xA;'Reject'&#xD;&#xA;else if(Methodname = 'Unsubscribe(string, string, string, DateTime)') then&#xD;&#xA;'RejectDateTime'&#xD;&#xA;else if(Methodname = 'Prolongate(DateTime)') then&#xD;&#xA;'Prolongate'&#xD;&#xA;else if(Methodname = 'Prolongate(string, DateTime, string)') then&#xD;&#xA;'Prolongate'" DataSource="Expression" ScriptItemUID="Column38" DataType="System.String" />
+        <Column Name="ProlongationDate" DataType="System.DateTime" ScriptItemUID="Column41" />
+        <Column Name="CanHaveOptionalProducts" Expression="isnull(methodname,'')=''&#xD;&#xA;and&#xD;&#xA;exists(&quot;accproductdependencies&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_accproduct&quot;, uid_accproduct),&#xD;&#xA;sqlcompare(&quot;isoptional&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)" DataSource="Expression" ScriptItemUID="Column43" DataType="System.Boolean" />
+        <Column Name="CheckStatus" ScriptItemUID="Column44" DataType="System.String" />
+        <Column Name="ErrorText" DataType="System.String" ScriptItemUID="Column30" />
+        <Column Name="ValidUntilUnsubscribe" DataType="System.DateTime" ScriptItemUID="Column37">
+          <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;23:59:59.999&quot;" ScriptItemUID="ParameterFree1" />
+        </Column>
+        <Column DataType="System.Boolean" Name="Selected" ScriptItemUID="Column16" />
+      </DataTableDbObject>
+      <DataTableView Table="CloneableAccProductsOfPerson" ViewExpression="select distinct (UID_PersonOrdered,UID_AccProduct) from ShoppingCartItem where isactivated and isnull(uid_shoppingcartitemparent, '')='' and isnull(ObjectKeyAssignment,'') = '' and isnull(uid_personwantsorg,'') = ''" PrimaryKeyColumn="PK" ScriptItemUID="DataTableView3">
+        <Column Name="UID_PersonOrdered" DataType="System.String" ScriptItemUID="Column47" />
+        <Column Name="UID_AccProduct" DataType="System.String" ScriptItemUID="Column48" />
+        <Column Name="PK" MaxLength="" DataType="System.String" ScriptItemUID="Column49" />
+      </DataTableView>
+      <DataTableCustom Table="ExcludedPermissions" ScriptItemUID="DataTableCustom2">
+        <Column DataType="System.String" Name="UID_ShoppingCartItem" ScriptItemUID="Column33" />
+        <Column DataType="System.String" Name="ObjectDisplayExcluded" ScriptItemUID="Column34" />
+        <Column DataType="System.String" Name="ObjectKeyExcluded" ScriptItemUID="Column39" />
+      </DataTableCustom>
+      <DataTableFKView ScriptItemUID="DataTableFKView1" Table="ITShopOrg" ViewFKDataTable="ShoppingCartItem" ViewFKDataColumn="UID_ITShopOrg">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType14" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" LoadTypeSlim="true" />
+        <Column Name="NeedsUIDDepartment" Expression="-- does this item need a UID_Department value to be orderable?&#xD;&#xA;hasdecisionrule(uid_itshoporg, &quot;'DI', 'DP', 'DR'&quot;)" DataSource="Expression" ScriptItemUID="Column40" DataType="System.Boolean" />
+        <Column Name="NeedsUIDProfitCenter" Expression="-- does this item need a UID_ProfitCenter value to be orderable?&#xD;&#xA;hasdecisionrule(uid_itshoporg, &quot;'PI', 'PP', 'PR'&quot;)" DataSource="Expression" ScriptItemUID="Column42" DataType="System.Boolean" />
+      </DataTableFKView>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="SavedForLater">
+        <LocalControlContext ContainerType="Container">
+          <Container ScriptItemUID="Container1">
+            <Container ScriptItemUID="Container2">
+              <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                <HtmlAttributes />
+                <MasterPane ScriptItemUID="MasterPane1">
+                  <Container ScriptItemUID="Container38">
+                    <Grid ScriptItemUID="Grid6">
+                      <ControlReferenceGridBand ID="VI_ITShop_CartOverview" ScriptItemUID="ControlRef12" DataTable="ShoppingCartItemForLater">
+                        <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItemForLater" ScriptItemUID="VirtualTableMapping1" />
+                      </ControlReferenceGridBand>
+                    </Grid>
+                  </Container>
+                </MasterPane>
+                <DetailPane ScriptItemUID="DetailPane1">
+                  <Container ScriptItemUID="Container39">
+                    <ContainerTemplate ScriptItemUID="ContainerTemplate7" DataTable="ShoppingCartItemForLater" WhereClause="uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)">
+                      <Container ScriptItemUID="Container40">
+                        <ObjectSwitchContainer ObjectKey="from shoppingcartitemforlater select current getobjectkey(&quot;AccProduct&quot;, uid_accproduct, &quot;&quot;)" ActionType="Edit_ShoppingCartItem" ScriptItemUID="ObjectSwitchContainer1">
+                          <VirtualControlMapping VirtualControl="MoveToOrder" ContainerType="ActionComponent">
+                            <ActionComponent ScriptItemUID="Action16">
+                              <CallAction ActionID="MoveToOrder" ScriptItemUID="Call4" />
+                            </ActionComponent>
+                          </VirtualControlMapping>
+                          <VirtualFunctionMapping ID="ShowToForLater()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                          <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItemForLater" ScriptItemUID="VirtualTableMapping2" />
+                        </ObjectSwitchContainer>
+                      </Container>
+                    </ContainerTemplate>
+                  </Container>
+                  <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                    <ControlList ScriptItemUID="ControlList2">
+                      <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef4">
+                        <VirtualFunctionMapping ID="Caption1()" Value="translate('#LDS#Request')" ScriptItemUID="VirtualFunctionMapping3" />
+                        <VirtualFunctionMapping ID="Caption2()" Value="datacaption(shoppingcartitem ,UID_PersonOrdered)" ScriptItemUID="VirtualFunctionMapping4" />
+                        <VirtualFunctionMapping ID="Value1()" Value="from shoppingcartitemForLater select displayvalue(Uid_accproduct) where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)" ScriptItemUID="VirtualFunctionMapping5" />
+                        <VirtualFunctionMapping ID="Value2()" Value="from shoppingcartitemForLater select displayvalue(Uid_PersonOrdered) where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)" ScriptItemUID="VirtualFunctionMapping6" />
+                        <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot; + getTableName(select uid_accproduct from ShoppingCartItemForLater where uid_shoppingcartitem = (from container select uid_shoppingcartitemselected))" ScriptItemUID="VirtualFunctionMapping7" />
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </DetailPaneHeader>
+                </DetailPane>
+              </MasterDetailControl>
+              <Container ScriptItemUID="Container5" ItemUID="Buttonbar" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute18" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                </HtmlAttributes>
+                <Button Text="translate(&quot;#LDS#Delete Saved for Later list&quot;)" ScriptItemUID="Button6" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true" EnabledCondition="0 &lt; from ShoppingCartItemForLater select count()">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute22" Value="translate(&quot;#LDS#Deletes all requests from your Saved for Later list&quot;)&#xD;&#xA;&#xD;&#xA;" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall20">
+                    <ActionSequence ScriptItemUID="Action55">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call17">
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure you want to delete all requests from your Saved for Later list?&quot;)" ScriptItemUID="VirtualFunctionMapping49" />
+                        <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping48" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Saved for later&quot;)" ScriptItemUID="VirtualFunctionMapping47" />
+                        <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action56">
+                            <Delete DataTable="ShoppingCartItemForLater" ScriptItemUID="Delete4" SetDeletionFlag="DeleteAndSave" />
+                            <ActionOnControl />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                      </CallAction>
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Delete selected&quot;)" ScriptItemUID="Button7" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true" EnabledCondition="0 &lt; from ShoppingCartItemForLater select count() where Selected">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute23" Value="translate(&quot;#LDS#Deletes the selected requests from your Saved for Later list&quot;)&#xD;&#xA;&#xD;&#xA;" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall19">
+                    <ActionSequence ScriptItemUID="Action59">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call16">
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure you want to delete the selected requests from your Saved for Later list?&quot;)" ScriptItemUID="VirtualFunctionMapping44" />
+                        <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping43" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Saved for later&quot;)" ScriptItemUID="VirtualFunctionMapping42" />
+                        <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action54">
+                            <Delete DataTable="ShoppingCartItemForLater" ScriptItemUID="Delete3" SetDeletionFlag="DeleteAndSave" WhereClause="Selected" />
+                            <ActionOnControl />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                      </CallAction>
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+                <Button Text="translate(&quot;#LDS#Move to shopping cart&quot;)" ScriptItemUID="Button8" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true" EnabledCondition="0 &lt; from ShoppingCartItemForLater select count() where Selected">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute21" Value="translate(&quot;#LDS#Moves the selected requests to the shopping cart&quot;)&#xD;&#xA;&#xD;&#xA;" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall21">
+                    <ActionSequence ScriptItemUID="Action58">
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call24">
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure you want to move the selected requests to the shopping cart?&quot;)&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping52" />
+                        <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping51" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Saved for later&quot;)" ScriptItemUID="VirtualFunctionMapping50" />
+                        <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action60">
+                            <ActionOnControl />
+                            <CallAction ScriptItemUID="Call28" ActionID="MoveToOrderBulk" />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                      </CallAction>
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </Container>
+          </Container>
+        </LocalControlContext>
+      </Control>
+      <Control ID="Reload">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action18">
+            <LoadTable DataTable="ShoppingCartItem" ScriptItemUID="LoadTable12">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType9" />
+            </LoadTable>
+            <LoadTable DataTable="ShoppingCartItemForLater" ScriptItemUID="LoadTable13">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType10" />
+            </LoadTable>
+            <LoadTable DataTable="ShoppingCartOrderCandidate" ScriptItemUID="LoadTable14">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType11" />
+            </LoadTable>
+            <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call2" />
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+      <Control ID="MoveToOrder">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action19">
+            <ActionSequence ItemUID="No shopping cart order found" Condition="0 = from ShoppingCartOrder select count()" ScriptItemUID="Action20">
+              <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="ctl1w">
+                <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping3" />
+              </CallAction>
+              <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder" Value="from ShoppingCartOrder select UID_ShoppingCartOrder" ScriptItemUID="Update8" />
+              <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder2" Value="from ShoppingCartOrder select UID_ShoppingCartOrder" ScriptItemUID="Update9" />
+            </ActionSequence>
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="UID_ShoppingCartOrder" Value="from Container select UID_ShoppingCartOrder" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItemForLater select current UID_ShoppingCartItem)&#xD;&#xA;or(&#xD;&#xA;UID_ShoppingCartItemParent in(&#xD;&#xA;from ShoppingCartItemForLater select current UID_ShoppingCartItem&#xD;&#xA;))" ScriptItemUID="Update10" />
+            <Save DataTable="ShoppingCartItemForLater" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItemForLater select current UID_ShoppingCartItem)&#xD;&#xA;or(&#xD;&#xA;UID_ShoppingCartItemParent in(&#xD;&#xA;from ShoppingCartItemForLater select current UID_ShoppingCartItem&#xD;&#xA;))" ScriptItemUID="Save1" />
+            <CallAction ActionID="Reload" ScriptItemUID="ctl11w" />
+            <ActionSequence ScriptItemUID="Action53" ItemUID="GoToShoppingCart" Condition="0 = from ShoppingCartItemForLater select Count() where IsNullOrEmpty(UID_ShoppingCartOrder)">
+              <Redirect ScriptItemUID="Redirect9" FormID="Form" />
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+        <DataTableCursor DataTable="ShoppingCartItemForLater" ScriptItemUID="DataTableCursor1" />
+      </Control>
+      <Control ID="MoveToForLater">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action21">
+            <Update DataTable="ShoppingCartItem" DataColumn="UID_ShoppingCartOrder" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItem select current UID_ShoppingCartItem)&#xD;&#xA;or(&#xD;&#xA;UID_ShoppingCartItemParent in(&#xD;&#xA;from ShoppingCartItem select current UID_ShoppingCartItem&#xD;&#xA;))" ScriptItemUID="Update11" />
+            <Save DataTable="ShoppingCartItem" WhereClause="UID_ShoppingCartItem = (from ShoppingCartItem select current UID_ShoppingCartItem)&#xD;&#xA;or(&#xD;&#xA;UID_ShoppingCartItemParent in(&#xD;&#xA;from ShoppingCartItem select current UID_ShoppingCartItem&#xD;&#xA;))" ScriptItemUID="Save2" />
+            <CallAction ActionID="Reload" ScriptItemUID="Call3" />
+            <ActionSequence ScriptItemUID="Action50" ItemUID="GotoForLater" Condition="0 = from ShoppingCartItem select Count() where not(IsNullOrEmpty(UID_ShoppingCartOrder))">
+              <Redirect ScriptItemUID="Redirect2" FormID="ForLater" />
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+        <DataTableCursor DataTable="ShoppingCartItem" ScriptItemUID="DataTableCursor2" />
+      </Control>
+      <Control ID="COL_Details">
+        <LocalControlContext ContainerType="ControlList">
+          <ControlList ScriptItemUID="ControlList5">
+            <LayoutPanel ScriptItemUID="LayoutPanel7" Columns="3">
+              <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate2" DataTable="ShoppingCartItem">
+                <ColumnList ScriptItemUID="ColumnList2">
+                  <SingleColumn ScriptItemUID="SingleColumn10" DataColumn="UID_PersonOrdered" CannotEdit="true" />
+                  <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="OrderReason" />
+                  <SingleColumn ScriptItemUID="SingleColumn8" DataColumn="ValidFrom" Condition="IsNullOrEmpty(MethodName)">
+                    <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;00:00:00.000&quot;" ScriptItemUID="ParameterFree12" />
+                  </SingleColumn>
+                  <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="ValidUntil" Condition="IsNullOrEmpty(MethodName)&#xD;&#xA;and&#xD;&#xA;(&#xD;&#xA;(isnull(getconfig(&quot;VI_ITShop_DisableHideValidUntilQERReuse&quot;),&quot;false&quot;)=&quot;true&quot;)&#xD;&#xA;or&#xD;&#xA;(isnull(getconfig(&quot;VI_ITShop_DisableHideValidUntilQERReuse&quot;),&quot;false&quot;)=&quot;false&quot; and &quot;QERReuse&quot; &lt;&gt; from AccProduct select current TableName)&#xD;&#xA;)&#xD;&#xA;">
+                    <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;23:59:59.999&quot;" ScriptItemUID="ParameterFree11" />
+                  </SingleColumn>
+                  <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="PWOPriority" CannotEdit="isnull(getconfig(&quot;VI_ITShop_DisablePWOPriorityChange&quot;),&quot;false&quot;)=&quot;true&quot;" />
+                  <ExpressionColumnList ColumnList="GetAccProductParams(from accproduct select current uid_accproduct)" ScriptItemUID="ExpressionColumnList2" />
+                </ColumnList>
+                <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef5">
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping7">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <ColumnEditor DataTable="ShoppingCartItem" DataColumn="currentcolumn" ScriptItemUID="ColumnEditor3" />
+                <Container ScriptItemUID="Container28" Condition="(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;,&quot;ValidUntil&quot;,&quot;OrderReason&quot;)&#xD;&#xA;or&#xD;&#xA;(not(from AccProduct select current IsNoCopyParametersPerson)))&#xD;&#xA;and 1 &lt; (&#xD;&#xA;   from ShoppingCartItem select count() where&#xD;&#xA;   (((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;   or&#xD;&#xA;   ((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;, &quot;UID_PersonOrdered&quot;))))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+                  <Button Text="translate(&quot;#LDS#Apply to all&quot;)" ScriptItemUID="Button3" Layout="'VI_Styles_Button_Pill'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall10">
+                      <Update DataTable="Container" DataColumn="UID_ShoppingCartItemTemp" Value="from shoppingcartitem select current UID_ShoppingCartItem" ScriptItemUID="Update36" />
+                      <Update DataTable="ShoppingCartItem" DataColumn="currentcolumn" Value="from shoppingcartitem select currentcolumn where UID_ShoppingCartItem = (from Container select top 1 UID_ShoppingCartItemTemp)" WhereClause="((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;or&#xD;&#xA;((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;)))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Update31" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </ContainerColumnTemplate>
+            </LayoutPanel>
+          </ControlList>
+        </LocalControlContext>
+        <DataTableCursor DataTable="AccProduct" ScriptItemUID="DataTableCursor4" />
+        <DataTableCursor DataTable="ShoppingCartItem" ScriptItemUID="DataTableCursor3" />
+      </Control>
+      <Control ID="SetValidFromAndTo">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action51">
+            <Update DataTable="ShoppingCartItem" DataColumn="ValidFrom" WhereClause="isactivated&#xD;&#xA;and&#xD;&#xA;(isnull(OrderType,'') = '')&#xD;&#xA;and &#xD;&#xA;(IsNull(ValidFrom,#1899-12-30#) &lt; #1900-01-01#)&#xD;&#xA;and&#xD;&#xA;((from container select IsNull(ValidFrom,#1899-12-30#)) &gt; #1900-01-01#)&#xD;&#xA;&#xD;&#xA;-- assign ValidFrom for all items that do not have a ValidFrom date set&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Value="from container select ValidFrom" ScriptItemUID="Update26" />
+            <Update DataTable="ShoppingCartItem" DataColumn="ValidUntil" WhereClause="isactivated&#xA;and&#xA;(isnull(OrderType,'') = '')&#xA;and &#xA;(IsNull(ValidUntil,#1899-12-30#) &lt; #1900-01-01#)&#xA;and&#xA;((from container select IsNull(ValidUntil,#1899-12-30#)) &gt; #1900-01-01#)&#xA;&#xA;-- assign ValidUntil for all items that do not have a ValidUntil date set&#xA;" Value="from container select ValidUntil" ScriptItemUID="Update27" />
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+      <Control ID="MoveToOrderBulk">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action61">
+            <ActionSequence ItemUID="No shopping cart order found" Condition="0 = from ShoppingCartOrder select count()" ScriptItemUID="Action63">
+              <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="Call27">
+                <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping9" />
+              </CallAction>
+              <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder" Value="from ShoppingCartOrder select UID_ShoppingCartOrder" ScriptItemUID="Update40" />
+              <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder2" Value="from ShoppingCartOrder select UID_ShoppingCartOrder" ScriptItemUID="Update39" />
+            </ActionSequence>
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="UID_ShoppingCartOrder" Value="from Container select UID_ShoppingCartOrder" WhereClause="Selected" ScriptItemUID="Update38" />
+            <Save DataTable="ShoppingCartItemForLater" WhereClause="Selected" ScriptItemUID="Save9" />
+            <CallAction ActionID="Reload" ScriptItemUID="Call25" />
+            <ActionSequence ScriptItemUID="Action62" ItemUID="GoToShoppingCart" Condition="0 = from ShoppingCartItemForLater select Count() where IsNullOrEmpty(UID_ShoppingCartOrder)">
+              <Redirect ScriptItemUID="Redirect10" FormID="Form" AbortExecution="false" />
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="getTitleAndHeadline()" Expression="translate(&quot;#LDS#My Shopping Cart&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="isForLater()" Expression="0 &lt; (from Container select count() where UID_ShoppingCartOrder = UID_ShoppingCartOrder2)" DataType="System.Boolean" ScriptItemUID="Function2" />
+      <Function Name="isShoppingCartEmpty()" Expression="(0 = select count() from ShoppingCartOrder) and (0 = select count() from ShoppingCartOrderCandidate) and (0 = select count() from shoppingcartitem)" DataType="System.Boolean" ScriptItemUID="Function3" />
+      <Function Name="getUidAccproductFromCurrentShoppingCartItem()" Expression="select uid_accproduct from ShoppingCartItem  where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)" DataType="System.String" ScriptItemUID="Function4" />
+      <Function Name="getUidAccproductFromCurrentShoppingCartItemForLater()" Expression="select uid_accproduct from ShoppingCartItemForLater  where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)" DataType="System.String" ScriptItemUID="Function7" />
+      <Function Name="getCurrentCheckStatus()" Expression="from shoppingcartitem &#xD;&#xA;select checkstatus &#xD;&#xA;where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected) &#xD;&#xA;&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function6" />
+      <Function Name="getCurrentCheckStatusDisplayValue()" Expression="from shoppingcartitem &#xD;&#xA;select displayValue(checkstatus)&#xD;&#xA;where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected) &#xD;&#xA;&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function5" />
+      <Function Name="isNullDate(DateTime D)" Expression="not(IsNull(D,#1899-12-30#) &gt; #1900-01-01#)" DataType="System.Boolean" ScriptItemUID="Function8" />
+      <Function Name="HasDecisionRule(string itshoporg, string decisionrules)" Expression="isnull(itshoporg,'')&lt;&gt;''&#xD;&#xA;and&#xD;&#xA;exists(&quot;pwodecisionstep&quot;, format(&quot;uid_pwodecisionstep in (select s.uid_pwodecisionstep from pwodecisionstep s join pwodecisionsubmethod sub on sub.UID_PWODecisionSubMethod = s.UID_PWODecisionSubMethod join PWODecisionMethod m on (m.UID_SubMethodOrderProduct = sub.UID_PWODecisionSubMethod or m.UID_SubMethodOrderProlongate = sub.UID_PWODecisionSubMethod or m.UID_SubMethodOrderUnsubscribe = sub.UID_PWODecisionSubMethod) join qer_vpwoproductnodeandrule vipwo on {0} and vipwo.uid_PWODecisionMethod = m.UID_PWODecisionMethod join pwodecisionrule r on r.uid_pwodecisionrule = s.uid_pwodecisionrule and r.decisionrule in ( {1} ))&quot;, sqlcompareuid(&quot;vipwo.uid_orgpr&quot;, itshoporg), decisionrules))" DataType="System.Boolean" ScriptItemUID="Function9" />
+      <Function ScriptItemUID="Function10" Name="getTableName(String UID_AccProduct)" DataType="System.String" Expression="if(IsNullOrEmpty(UID_AccProduct))then&#xD;&#xA;   &quot;&quot;&#xD;&#xA;else&#xD;&#xA;   {{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, UID_AccProduct).Result.TableName }}+&quot;&quot;" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItem" ScriptItemUID="DataEventHandler1">
+        <ActionSequence ScriptItemUID="Action22">
+          <Update DataTable="ShoppingCartItem" DataColumn="IsActivated" Value="select current isactivated from ShoppingCartItem" WhereClause="canedit(isactivated) and uid_shoppingcartitemparent = ( from ShoppingCartItem select current UID_ShoppingCartItem)" ScriptItemUID="Update12" />
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="IsActivated" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="Container" ScriptItemUID="DataEventHandler4">
+        <ActionSequence ScriptItemUID="Action26">
+          <LoadTable DataTable="ShoppingCartItem" ScriptItemUID="LoadTable15">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType12" />
+          </LoadTable>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="UID_ShoppingCartOrder" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItem" ScriptItemUID="DataEventHandler5" ItemUID="OrderReason">
+        <ActionSequence ScriptItemUID="Action27">
+          <ActionSequence Condition="from shoppingcartitem select current ordertype in ('Reject',&quot;RejectDateTime&quot;)" ItemUID="for rejects" ScriptItemUID="Action28">
+            <Update DataTable="ShoppingCartItem" DataColumn="MethodParameters" WhereClause="uid_shoppingcartitem in (select current uid_shoppingcartitem from shoppingcartitem) and ordertype in ('Reject',&quot;RejectDateTime&quot;)" Value="if(from ShoppingCartItem select current IsNullOrEmpty(ValidUntilUnsubscribe))then&#xD;&#xA;   format(&quot;{0}{1}{2}&quot;,GetUser(),Char(7),select current orderreason from shoppingcartitem)&#xD;&#xA;else&#xD;&#xA;   format(&quot;{0}{1}{2}{3}{4}{5}{6}&quot;,getuser(), Char(7),select current orderreason from shoppingcartitem,Char(7),'',Char(7),select current FormatDate(ValidUntilUnsubscribe, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItem)" ScriptItemUID="Update13" />
+          </ActionSequence>
+          <ActionSequence Condition="'Prolongate' = (select current ordertype from shoppingcartitem)" ItemUID="for prolongation" ScriptItemUID="Action29">
+            <Update DataTable="ShoppingCartItem" DataColumn="MethodParameters" WhereClause="uid_shoppingcartitem in (select current uid_shoppingcartitem from shoppingcartitem)&#xA;and&#xA;ordertype = 'Prolongate'" Value="format(&quot;{1}{0}{2}{0}{3}&quot;,&#xA;  Char(7),&#xA;  GetUser(),&#xA;  select current FormatDate(ProlongationDate, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItem,&#xA;  select current OrderReason from ShoppingCartItem)" ScriptItemUID="Update14" />
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="OrderReason" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItem" ScriptItemUID="DataEventHandler6" ItemUID="ProlongationDate">
+        <ActionSequence Condition="(from ShoppingCartItem select current MethodParameters)&#xD;&#xA;&lt;&gt;&#xD;&#xA;(format(&quot;{1}{0}{2}{0}{3}&quot;,&#xD;&#xA;  Char(7),&#xD;&#xA;  GetUser(),&#xD;&#xA;  select current FormatDate(ProlongationDate, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItem,&#xD;&#xA;  select current OrderReason from ShoppingCartItem))&#xD;&#xA;&#xD;&#xA;and ((from ShoppingCartItem select current ordertype) = 'Prolongate')&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Action30">
+          <ActionSequence Condition="AddDays(getDate(),-1) &lt; select current isnull(ProlongationDate, GetDate()) from ShoppingCartItem " ScriptItemUID="Action31">
+            <Update DataTable="ShoppingCartItem" DataColumn="MethodName" Value="'Prolongate(string, DateTime, string)'" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItem" ScriptItemUID="Update15" />
+            <Update DataTable="ShoppingCartItem" DataColumn="MethodParameters" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItem" Value="format(&quot;{1}{0}{2}{0}{3}&quot;,&#xA;  Char(7),&#xA;  GetUser(),&#xA;  select current FormatDate(ProlongationDate, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItem,&#xA;  select current OrderReason from ShoppingCartItem)&#xA;&#xA;&#xA;&#xA;" ScriptItemUID="Update16" />
+          </ActionSequence>
+          <ActionSequence Condition="AddDays(getDate(),-1) &gt;= select current isnull(ProlongationDate, GetDate()) from ShoppingCartItem" ScriptItemUID="Action32">
+            <CodeLiteral ScriptItemUID="CodeLiteral3">SetProlongationDateFromMethodParameters(WebSql.Yield(_updateInfo.Row));</CodeLiteral>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="ProlongationDate" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItem" ScriptItemUID="DataEventHandler2" ItemUID="ValidUntilUnsubscribe">
+        <ActionSequence Condition="(from ShoppingCartItem select current MethodParameters)&#xD;&#xA;&lt;&gt;&#xD;&#xA;(format(&quot;{0}{1}{2}{3}{4}{5}{6}&quot;,getuser(), Char(7),select current orderreason from shoppingcartitem,Char(7),'',Char(7),select current FormatDate(ValidUntilUnsubscribe, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItem))&#xD;&#xA;and ((from ShoppingCartItem select current ordertype) in ('Reject','RejectDateTime'))" ScriptItemUID="Action43">
+          <ActionSequence Condition="AddDays(getDate(),-1) &lt; select current isnull(ValidUntilUnsubscribe, GetDate()) from ShoppingCartItem " ScriptItemUID="Action45">
+            <Update DataTable="ShoppingCartItem" DataColumn="MethodName" Value="if(from ShoppingCartItem select current isNullDate(ValidUntilUnsubscribe))then&#xD;&#xA;   'Unsubscribe(string, string)'&#xD;&#xA;else&#xD;&#xA;   'Unsubscribe(string, string, string, DateTime)'" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItem" ScriptItemUID="Update33" />
+            <Update DataTable="ShoppingCartItem" DataColumn="MethodParameters" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItem" Value="if(from ShoppingCartItem select current isNullDate(ValidUntilUnsubscribe))then&#xD;&#xA;   format(&quot;{0}{1}{2}&quot;,GetUser(),Char(7),select current orderreason from shoppingcartitem)&#xD;&#xA;else&#xD;&#xA;   format(&quot;{0}{1}{2}{3}{4}{5}{6}&quot;,getuser(), Char(7),select current orderreason from shoppingcartitem,Char(7),'',Char(7),select current FormatDate(ValidUntilUnsubscribe, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItem)" ScriptItemUID="Update32" />
+          </ActionSequence>
+          <ActionSequence Condition="AddDays(getDate(),-1) &gt;= select current isnull(ValidUntilUnsubscribe, GetDate()) from ShoppingCartItem" ScriptItemUID="Action44">
+            <CodeLiteral ScriptItemUID="CodeLiteral6">SetValidUntilUnsubscribeDateFromMethodParameters(WebSql.Yield(_updateInfo.Row));</CodeLiteral>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="ValidUntilUnsubscribe" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItemForLater" ScriptItemUID="DataEventHandler7" ItemUID="OrderReason">
+        <ActionSequence ScriptItemUID="Action33">
+          <ActionSequence Condition="'Reject' = (select current ordertype from ShoppingCartItemForLater)" ItemUID="for rejects" ScriptItemUID="Action34">
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="MethodParameters" WhereClause="uid_shoppingcartitem in (select current uid_shoppingcartitem from ShoppingCartItemForLater)&#xD;&#xA;and&#xD;&#xA;ordertype = 'Reject'" Value="format(&quot;{0}{1}{2}&quot;,GetUser(),Char(7),select current orderreason from ShoppingCartItemForLater)" ScriptItemUID="Update18" />
+          </ActionSequence>
+          <ActionSequence Condition="'Prolongate' = (select current ordertype from ShoppingCartItemForLater)" ItemUID="for prolongation" ScriptItemUID="Action35">
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="MethodParameters" WhereClause="uid_shoppingcartitem in (select current uid_shoppingcartitem from ShoppingCartItemForLater)&#xD;&#xA;and&#xD;&#xA;ordertype = 'Prolongate'" Value="format(&quot;{1}{0}{2}{0}{3}&quot;,&#xD;&#xA;  Char(7),&#xD;&#xA;  GetUser(),&#xD;&#xA;  select current FormatDate(ProlongationDate, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItemForLater,&#xD;&#xA;  select current OrderReason from ShoppingCartItemForLater)" ScriptItemUID="Update19" />
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="OrderReason" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItemForLater" ScriptItemUID="DataEventHandler8" ItemUID="ProlongationDate">
+        <ActionSequence Condition="(from ShoppingCartItemForLater select current MethodParameters)&#xD;&#xA;&lt;&gt;&#xD;&#xA;(format(&quot;{1}{0}{2}{0}{3}&quot;,&#xD;&#xA;  Char(7),&#xD;&#xA;  GetUser(),&#xD;&#xA;  select current FormatDate(ProlongationDate, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItemForLater,&#xD;&#xA;  select current OrderReason from ShoppingCartItemForLater))&#xD;&#xA;&#xD;&#xA;and ((from ShoppingCartItemForLater select current ordertype) = 'Prolongate')&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Action36">
+          <ActionSequence Condition="AddDays(getDate(),-1) &lt; select current isnull(ProlongationDate, GetDate()) from ShoppingCartItemForLater" ScriptItemUID="Action37">
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="MethodName" Value="'Prolongate(string, DateTime, string)'" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItemForLater" ScriptItemUID="Update20" />
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="MethodParameters" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItemForLater" Value="format(&quot;{1}{0}{2}{0}{3}&quot;,&#xD;&#xA;  Char(7),&#xD;&#xA;  GetUser(),&#xD;&#xA;  select current FormatDate(ProlongationDate, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItemForLater,&#xD;&#xA;  select current OrderReason from ShoppingCartItemForLater)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Update21" />
+          </ActionSequence>
+          <ActionSequence Condition="AddDays(getDate(),-1) &gt;= select current isnull(ProlongationDate, GetDate()) from ShoppingCartItemForLater" ScriptItemUID="Action38">
+            <CodeLiteral ScriptItemUID="CodeLiteral4">SetProlongationDateFromMethodParameters(WebSql.Yield(_updateInfo.Row));</CodeLiteral>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="ProlongationDate" />
+      </DataEventHandler>
+      <DataEventHandler Operation="Update" DataTable="ShoppingCartItemForLater" ScriptItemUID="DataEventHandler3" ItemUID="ValidUntilUnsubscribe">
+        <ActionSequence Condition="(from ShoppingCartItemForLater select current MethodParameters)&#xD;&#xA;&lt;&gt;&#xD;&#xA;(format(&quot;{0}{1}{2}{3}{4}{5}{6}&quot;,getuser(), Char(7),select current orderreason from ShoppingCartItemForLater,Char(7),'',Char(7),select current FormatDate(ValidUntilUnsubscribe, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItemForLater))&#xD;&#xA;and ((from ShoppingCartItemForLater select current ordertype) in ('Reject','RejectDateTime'))" ScriptItemUID="Action46">
+          <ActionSequence Condition="AddDays(getDate(),-1) &lt; select current isnull(ValidUntilUnsubscribe, GetDate()) from ShoppingCartItemForLater " ScriptItemUID="Action48">
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="MethodName" Value="if(from ShoppingCartItemForLater select current isNullDate(ValidUntilUnsubscribe))then&#xD;&#xA;   'Unsubscribe(string, string)'&#xD;&#xA;else&#xD;&#xA;   'Unsubscribe(string, string, string, DateTime)'" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItemForLater" ScriptItemUID="Update35" />
+            <Update DataTable="ShoppingCartItemForLater" DataColumn="MethodParameters" WhereClause="Uid_ShoppingCartItem = select current Uid_ShoppingCartItem from ShoppingCartItemForLater" Value="if(from ShoppingCartItemForLater select current isNullDate(ValidUntilUnsubscribe))then&#xD;&#xA;   format(&quot;{0}{1}{2}&quot;,GetUser(),Char(7),select current orderreason from ShoppingCartItemForLater)&#xD;&#xA;else&#xD;&#xA;   format(&quot;{0}{1}{2}{3}{4}{5}{6}&quot;,getuser(), Char(7),select current orderreason from ShoppingCartItemForLater,Char(7),'',Char(7),select current FormatDate(ValidUntilUnsubscribe, 'yyyy-MM-dd HH:mm:ss.fff') from ShoppingCartItemForLater)" ScriptItemUID="Update34" />
+          </ActionSequence>
+          <ActionSequence Condition="AddDays(getDate(),-1) &gt;= select current isnull(ValidUntilUnsubscribe, GetDate()) from ShoppingCartItemForLater" ScriptItemUID="Action47">
+            <CodeLiteral ScriptItemUID="CodeLiteral8">SetValidUntilUnsubscribeDateFromMethodParameters(WebSql.Yield(_updateInfo.Row));</CodeLiteral>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="ValidUntilUnsubscribe" />
+      </DataEventHandler>
+      <DataEventHandler DataTable="ShoppingCartItem" Operation="Update" ScriptItemUID="DataEventHandler9">
+        <ActionSequence ScriptItemUID="Action14">
+          <ActionSequence Condition="0 = from AccProduct select count() where uid_accproduct = (from ShoppingCartItem select current UID_AccProduct)" ItemUID="If UID_ACCProduct not in AccProduct" ScriptItemUID="Action15">
+            <LoadTable DataTable="AccProduct" RevertExisting="false" RemoveDeleted="false" WhereClause="sqlcompareuid(&quot;uid_accproduct&quot;, from ShoppingCartItem select current UID_AccProduct)" ScriptItemUID="LoadTable16">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType13" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="UID_AccProduct" />
+      </DataEventHandler>
+      <DataEventHandler DataTable="ShoppingCartItem" ScriptItemUID="DataEventHandler10">
+        <ActionSequence ScriptItemUID="Action57" Condition="from shoppingcartitem select current not(isnullorempty(checkresultdetail))">
+          <CodeLiteral ScriptItemUID="CodeLiteral13">var checkResult = QER.CompositionApi.ITShop.CartItemCheckResult.FromJson(_CheckResultDetail.GetValue(_rowArgs).String);
+var checkStatus = TableStore.GetLocalColumn(ShoppingCartItem, "CheckStatus");
+var canOrder = TableStore.GetLocalColumn(ShoppingCartItem, "CanOrder");
+try {
+ApplyCheckResult(checkResult, ShoppingCartItem, ExcludedPermissions, checkStatus);
+}
+catch(Exception exc){
+	Logger.WarnException("Could not deserialize check result for"+_rowArgs.GetPrimaryKey(), exc);
+}</CodeLiteral>
+          <Update DataTable="ShoppingCartItem" DataColumn="CanOrder" Value="true" WhereClause="uid_shoppingcartitem = ( select current uid_shoppingcartitem from shoppingcartitem)&#xD;&#xA;and&#xD;&#xA;checkstatus in ('OK', 'OrgForeign', 'FuncForeign')" ScriptItemUID="Update11a" />
+        </ActionSequence>
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action9">
+      <LoadTable DataTable="ShoppingCartOrderCandidate" ScriptItemUID="LoadTable5">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+      </LoadTable>
+      <ActionSequence Condition="not(isNull(request(&quot;UID_ShoppingCartOrderPreselected&quot;), &quot;&quot;) = &quot;&quot;)" ItemUID="ShoppingCartOrder Preselected" ScriptItemUID="Action10">
+        <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder" Value="IsNull(request(&quot;UID_ShoppingCartOrderPreselected&quot;), &quot;&quot;)" ScriptItemUID="Update4" />
+        <LoadTable DataTable="ShoppingCartOrder" ScriptItemUID="LoadTable6">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+        </LoadTable>
+      </ActionSequence>
+      <ActionSequence Condition="isNull(request(&quot;UID_ShoppingCartOrderPreselected&quot;), &quot;&quot;) = &quot;&quot;&#xD;&#xA;" ItemUID="Choose latest ShoppingCartOrder" ScriptItemUID="Action11">
+        <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder" Value="select top 1 uid_shoppingcartorder from shoppingcartordercandidate  where uid_person = GetUser() order by xdateinserted" ScriptItemUID="Update5" />
+        <LoadTable DataTable="ShoppingCartOrder" ScriptItemUID="LoadTable7">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" />
+        </LoadTable>
+      </ActionSequence>
+      <ActionSequence Condition="0 = select count() from ShoppingCartOrder &#xA;AND&#xA;0 &lt; select count() from ShoppingCartOrderCandidate" ItemUID="Choose latest ShoppingCartOrder" ScriptItemUID="Action12">
+        <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder" Value="select top 1 uid_shoppingcartorder from shoppingcartordercandidate  order by xdateinserted" ScriptItemUID="Update6" />
+        <LoadTable DataTable="ShoppingCartOrder" ScriptItemUID="LoadTable8">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" />
+        </LoadTable>
+      </ActionSequence>
+      <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder2" Value="from shoppingcartorder select top 1 UID_ShoppingCartOrder where (uid_person = getuser())" ScriptItemUID="Update7" />
+      <LoadTable DataTable="ShoppingCartOrder" ScriptItemUID="LoadTable10">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" />
+      </LoadTable>
+      <LoadTable DataTable="ShoppingCartItemForLater" ScriptItemUID="LoadTable11">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" />
+      </LoadTable>
+      <ReadOnlyTableModifier DataTable="Container" ScriptItemUID="ReadOnlyTableModifier2" WhereClause="not(ApplyPWOPriorityForAll)">
+        <ColumnList ScriptItemUID="ColumnList3">
+          <SingleColumn DataColumn="PWOPriority" ScriptItemUID="SingleColumn5" />
+        </ColumnList>
+      </ReadOnlyTableModifier>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#My Shopping Cart&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action39">
+          <ForeachRow DataTable="ShoppingCartItem" WhereClause="isnull(methodname,'')='' and isactivated" ScriptItemUID="ForeachRow3">
+            <AccProductSwitchCallAction ActionType="Verify_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="select current UID_AccProduct from shoppingcartitem" ScriptItemUID="ControlRef1" ItemUID="Product-dependent verification steps">
+              <VirtualFunctionMapping ID="hideMessages()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+            </AccProductSwitchCallAction>
+          </ForeachRow>
+          <ActionSequence ScriptItemUID="Action24" Condition="0 &lt; from ShoppingCartItem select count() where CheckStatus = 'Invalid'">
+            <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction1">
+              <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping9" />
+              <VirtualFunctionMapping ID="MessageText()" Value="format(&quot;{0}&lt;br&gt;{1}&quot;,&#xD;&#xA;translate(&quot;#LDS#Incomplete request information&quot;),&#xD;&#xA;translate('#LDS#At least one request cannot be submitted.')&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping10" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping45" ID="DoNotHtmlEncode()" Value="true" />
+            </CallAction>
+          </ActionSequence>
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#My Shopping Cart&quot;)" ScriptItemUID="Label26" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container6" RefreshTriggerExpression="isShoppingCartEmpty()">
+            <SwitchContainer ScriptItemUID="Switch2">
+              <SwitchContainerCase ScriptItemUID="Case3" Condition="isShoppingCartEmpty()" ItemUID="Empty">
+                <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef10">
+                  <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Your shopping cart is currently empty.')" ScriptItemUID="VirtualFunctionMapping1" />
+                </ControlReferenceContainer>
+                <Container Layout="'VI_Styles_Container_Heading_Underline'" EnableCustomAttributes="true" ScriptItemUID="Container8">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" Value="variable(&quot;width: %WebPartWidth%px;&quot;)" ScriptItemUID="HtmlAttribute7" />
+                  </HtmlAttributes>
+                  <Label Text="translate('#LDS#What would you like to do?')" Layout="'VI_Styles_Label_TableHeader'" ScriptItemUID="Label2" />
+                </Container>
+                <Table CustomStyle="variable('width: %WebPartWidth%px; table-layout: auto; ')" ScriptItemUID="Table1">
+                  <Row ScriptItemUID="Row1">
+                    <Cell EnableCustomAttributes="true" ScriptItemUID="Cell1">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" Value="&quot;padding-right: 18px;&quot;" ScriptItemUID="HtmlAttribute8" />
+                      </HtmlAttributes>
+                      <Image Source="File" FileName="variable(format(&quot;%link%img={0}&quot;,&quot;ico_shopping-cart.png&quot; ))" Layout="'VI_Styles_Image_NoLayout'" ScriptItemUID="Image1" />
+                    </Cell>
+                    <Cell EnableCustomAttributes="true" ScriptItemUID="Cell2">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" Value="'vertical-align:top;'" ScriptItemUID="HtmlAttribute9" />
+                      </HtmlAttributes>
+                      <Table ScriptItemUID="Table2">
+                        <Row ScriptItemUID="Row2">
+                          <Cell EnableCustomAttributes="true" ScriptItemUID="Cell4">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" Value="'width: 16px; vertical-align:top; padding-top: 12px;'" ScriptItemUID="HtmlAttribute10" />
+                            </HtmlAttributes>
+                            <Image Source="Template" ImageReference="bluearrow.gif" Layout="'VI_Styles_Image_NoLayout'" ScriptItemUID="Image2" />
+                          </Cell>
+                          <Cell EnableCustomAttributes="true" ScriptItemUID="Cell5">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" Value="'padding-top: 7px;'" ScriptItemUID="HtmlAttribute11" />
+                            </HtmlAttributes>
+                            <Label Text="translate(&quot;#LDS#Click here to find products for your shopping cart.&quot;)" Action="Redirect" Layout="'VI_Styles_Label_BlueTop'" ScriptItemUID="Label9">
+                              <ServerActionCall ScriptItemUID="ServerActionCall12">
+                                <Redirect Target="Context" ContextID="VI_ITShop_ProductSelection" AllowReturnToThisContext="true" ScriptItemUID="Redirect5" />
+                              </ServerActionCall>
+                            </Label>
+                          </Cell>
+                        </Row>
+                        <Row ScriptItemUID="Row3">
+                          <Cell EnableCustomAttributes="true" ScriptItemUID="Cell6">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" Value="'width: 16px; vertical-align:top; padding-top: 12px;'" ScriptItemUID="HtmlAttribute12" />
+                            </HtmlAttributes>
+                            <Image Source="Template" ImageReference="bluearrow.gif" Layout="'VI_Styles_Image_NoLayout'" ScriptItemUID="Image3" />
+                          </Cell>
+                          <Cell EnableCustomAttributes="true" ScriptItemUID="Cell7">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" Value="'padding-top: 7px;'" ScriptItemUID="HtmlAttribute13" />
+                            </HtmlAttributes>
+                            <Label Text="translate(&quot;#LDS#View the request history&quot;)" Action="Redirect" Layout="'VI_Styles_Label_BlueTop'" ScriptItemUID="Label14">
+                              <ServerActionCall ScriptItemUID="ServerActionCall13">
+                                <Redirect Target="Context" ContextID="VI_ITShop_OrderHistory" AllowReturnToThisContext="true" ScriptItemUID="Redirect6" />
+                              </ServerActionCall>
+                            </Label>
+                            <Container EnableCustomAttributes="true" ScriptItemUID="Container10">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" Value="'padding-top: 3px; padding-bottom: 6px;'" ScriptItemUID="HtmlAttribute14" />
+                              </HtmlAttributes>
+                              <Label Text="translate(&quot;#LDS#Track the current status of your requests.&quot;)" ScriptItemUID="Label15" />
+                            </Container>
+                          </Cell>
+                        </Row>
+                        <Row ScriptItemUID="Row4">
+                          <Cell EnableCustomAttributes="true" ScriptItemUID="Cell9">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" Value="'width: 16px; vertical-align:top; padding-top: 12px;'" ScriptItemUID="HtmlAttribute16" />
+                            </HtmlAttributes>
+                            <Image Source="Template" ImageReference="bluearrow.gif" Layout="'VI_Styles_Image_NoLayout'" ScriptItemUID="Image4" />
+                          </Cell>
+                          <Cell EnableCustomAttributes="true" ScriptItemUID="Cell8">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'style'" Value="'padding-top: 7px;'" ScriptItemUID="HtmlAttribute15" />
+                            </HtmlAttributes>
+                            <Label Text="translate(&quot;#LDS#Saved for later&quot;)" Action="Redirect" Layout="'VI_Styles_Label_BlueTop'" ScriptItemUID="Label1">
+                              <ServerActionCall ScriptItemUID="ServerActionCall16">
+                                <Redirect ScriptItemUID="Redirect8" FormID="ForLater" />
+                              </ServerActionCall>
+                            </Label>
+                            <Container EnableCustomAttributes="true" ScriptItemUID="Container4">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" Value="'padding-top: 3px; padding-bottom: 6px;'" ScriptItemUID="HtmlAttribute17" />
+                              </HtmlAttributes>
+                              <Label Text="translate('#LDS#Show the requests in your saved for later list.')" ScriptItemUID="Label16" />
+                            </Container>
+                          </Cell>
+                        </Row>
+                      </Table>
+                    </Cell>
+                  </Row>
+                </Table>
+              </SwitchContainerCase>
+              <SwitchContainerCase ScriptItemUID="Case4">
+                <Container Condition="1 &lt; select count() from ShoppingCartOrderCandidate" Layout="'VI_Styles_Container_Paragraph'" ItemUID="multiple shopping carts" ScriptItemUID="Container48">
+                  <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container51">
+                    <Label Text="translate(&quot;#LDS#You currently have more than one shopping cart. Please first choose the shopping cart you wish to use.&quot;)" ScriptItemUID="Label43" />
+                  </Container>
+                  <LayoutPanel Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel6">
+                    <Label Text="translate(&quot;#LDS#Shopping cart&quot;)+ &quot;:&quot;" ScriptItemUID="Label42" />
+                    <ControlList ScriptItemUID="ControlList1">
+                      <Container Condition="from Container select isnull(UID_ShoppingCartOrder2,'') &lt;&gt; ''" ScriptItemUID="Container50">
+                        <RadioButton DataTable="Container" DataColumn="UID_ShoppingCartOrder" Text="translate('#LDS#My requests')" DataValue="from Container select UID_ShoppingCartOrder2" ScriptItemUID="RadioButton2" />
+                      </Container>
+                      <ContainerTemplate DataTable="ShoppingCartOrderCandidate" WhereClause="-- uid_person &lt;&gt; GetUser()&#xA;not(UID_ShoppingCartOrder in (from Container select UID_ShoppingCartOrder2))" ScriptItemUID="ContainerTemplate6">
+                        <Container ScriptItemUID="Container49">
+                          <RadioButton DataTable="Container" DataColumn="UID_ShoppingCartOrder" Text="translate(&quot;#LDS#Requests added to shopping cart&quot;)+&quot;: &quot;+(from shoppingcartordercandidate select current display())" DataValue="from shoppingcartordercandidate select current uid_shoppingcartorder" ScriptItemUID="RadioButton1" />
+                        </Container>
+                      </ContainerTemplate>
+                    </ControlList>
+                  </LayoutPanel>
+                </Container>
+                <Container Condition="1 = select count() from ShoppingCartOrderCandidate&#xD;&#xA;AND&#xD;&#xA;(from ShoppingCartOrderCandidate select top 1 (not(isnullorempty(UID_ShoppingCartOrder)) and uid_Person &lt;&gt; getUser() and not(isnullorempty(DocumentNumber))))" Layout="'VI_Styles_Container_Paragraph'" ItemUID="one request for someone else" ScriptItemUID="Container46">
+                  <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container47">
+                    <Label Text="translate(&quot;#LDS#You currently have one pending request for {0}.&quot;, from shoppingcartordercandidate select top 1  display())" ScriptItemUID="Label41" />
+                  </Container>
+                  <LayoutPanel Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel3">
+                    <Label Text="translate(&quot;#LDS#Request&quot;)+ &quot;:&quot;" ScriptItemUID="Label40" />
+                    <Label Text="translate(&quot;#LDS#Items added to request&quot;)+&quot;: &quot;+(from shoppingcartordercandidate select top 1 display())" ScriptItemUID="Label39" />
+                  </LayoutPanel>
+                </Container>
+                <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_Paragraph'" Condition="-- shopping cart processing?&#xD;&#xA;from shoppingcartordercandidate select top 1 (CheckStatus &lt;&gt; 1) where uid_shoppingcartorder = (from container select UID_ShoppingCartOrder)">
+                  <MasterDetailControl ScriptItemUID="MasterDetailControl2">
+                    <HtmlAttributes />
+                    <MasterPane ScriptItemUID="MasterPane2">
+                      <Container ScriptItemUID="Container37" RefreshTriggerExpression="from ShoppingCartItem select count()">
+                        <Grid ScriptItemUID="Grid5">
+                          <ControlReferenceGridBand ID="VI_ITShop_CartOverview" ScriptItemUID="ControlRef11" DataTable="ShoppingCartItem">
+                            <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping4" />
+                          </ControlReferenceGridBand>
+                        </Grid>
+                      </Container>
+                    </MasterPane>
+                    <DetailPane ScriptItemUID="DetailPane2">
+                      <Container ScriptItemUID="Container34">
+                        <ContainerTemplate ScriptItemUID="ContainerTemplate5" DataTable="ShoppingCartItem" WhereClause="uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)">
+                          <ObjectSwitchContainer ObjectKey="getobjectkey(&quot;AccProduct&quot;, from shoppingcartitem select current uid_accproduct, &quot;&quot;)" ActionType="Edit_ShoppingCartItem" ScriptItemUID="ObjectSwitchContainer2">
+                            <VirtualControlMapping VirtualControl="MoveToForLater" ContainerType="ActionComponent">
+                              <ActionComponent ScriptItemUID="Action25">
+                                <CallAction ActionID="MoveToForLater" ScriptItemUID="Call26" />
+                              </ActionComponent>
+                            </VirtualControlMapping>
+                            <VirtualFunctionMapping ID="ShowToForLater()" Value="0 &lt; (from Container select count() where UID_ShoppingCartOrder = UID_ShoppingCartOrder2)" ScriptItemUID="VirtualFunctionMapping12" />
+                          </ObjectSwitchContainer>
+                        </ContainerTemplate>
+                      </Container>
+                      <DetailPaneHeader ScriptItemUID="DetailPaneHeader2">
+                        <ControlList ScriptItemUID="ControlList3">
+                          <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef2">
+                            <VirtualFunctionMapping ID="Value1()" Value="from shoppingcartitem select displayvalue(Uid_accproduct) where uid_shoppingcartitem = ( from container select uid_shoppingcartitemselected)" ScriptItemUID="VirtualFunctionMapping13" />
+                            <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot;+from accproduct select tablename where uid_accproduct = (getUidAccproductFromCurrentShoppingCartItem())" ScriptItemUID="VirtualFunctionMapping14" />
+                          </ControlReferenceControlList>
+                        </ControlList>
+                      </DetailPaneHeader>
+                    </DetailPane>
+                  </MasterDetailControl>
+                  <Container ScriptItemUID="Container23" ItemUID="Buttonbar" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;dropup&quot;" />
+                      </HtmlAttributes>
+                      <ToolbarButton Text="translate(&quot;#LDS#Actions&quot;)" ScriptItemUID="ToolbarButton1" Tooltip="translate(&quot;#LDS#Actions&quot;)" Layout="'VI_Styles_ToolbarButton_Dropup'">
+                        <Menu ScriptItemUID="Menu1">
+                          <MenuElement ScriptItemUID="MenuElement2" Text="translate(&quot;#LDS#Check shopping cart&quot;)" Tooltip="translate(&quot;#LDS#Check your request for possible errors&quot;)" Condition="0 &lt; select count() from shoppingcartitem where isactivated">
+                            <ServerActionCall ScriptItemUID="ServerActionCall7">
+                              <ActionOnControl ActionType="PerformValidation" />
+                              <CallAction ScriptItemUID="Call12" ActionID="SetValidFromAndTo" />
+                              <CallAction ActionID="VI_ITShop_CartCalculateCheckStatus" ScriptItemUID="Call5">
+                                <VirtualFunctionMapping ID="uidshoppingcartorder()" Value="from container select uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping15" />
+                              </CallAction>
+                              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call6">
+                                <VirtualFunctionMapping ID="MessageText()" Value="if(0 = select count() from ShoppingCartItem where (isactivated and not(CanOrder)))&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#Your shopping cart may be submitted.&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#At least one request cannot be submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping16" />
+                                <VirtualFunctionMapping ID="MessageType()" Value="IF (0 = select count() from ShoppingCartItem where (isactivated and not(CanOrder)))&#xD;&#xA;THEN 'Information'&#xD;&#xA;ELSE 'Error'" ScriptItemUID="VirtualFunctionMapping17" />
+                              </CallAction>
+                            </ServerActionCall>
+                          </MenuElement>
+                          <MenuElement Text="translate(&quot;#LDS#Create template from shopping cart&quot;)" ScriptItemUID="MenuElement1" Condition="isnull(getconfig(&quot;VI_ITShop_ProductSelectionFromTemplate&quot;),&quot;true&quot;)=&quot;true&quot;&#xD;&#xA;and&#xD;&#xA;not(from Container select IsNullOrEmpty(UID_ShoppingCartOrder))" Tooltip="translate('#LDS#Creates a new template containing the products in your shopping cart.')">
+                            <ServerActionCall ScriptItemUID="ServerActionCall5">
+                              <ActionOnControl ActionType="PerformValidation" />
+                              <Save DataTable="ShoppingCartItem" ScriptItemUID="Save3" />
+                              <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCartPatternAddOrMerge" AllowReturnToThisContext="true" ScriptItemUID="Redirect4">
+                                <RedirectParameter Name="'UID_ShoppingCartOrder'" Value="from Container select UID_ShoppingCartOrder" />
+                              </Redirect>
+                            </ServerActionCall>
+                          </MenuElement>
+                          <MenuElement ScriptItemUID="MenuElement4" Text="translate(&quot;#LDS#Delete invalid requests&quot;)" Tooltip="translate(&quot;#LDS#Deletes requests that cannot be submitted&quot;)" Condition="0 &lt; select count() from shoppingcartitem where isactivated">
+                            <ServerActionCall ScriptItemUID="ServerActionCall9">
+                              <ActionOnControl ActionType="PerformValidation" />
+                              <CallAction ActionID="VI_ITShop_CartCalculateCheckStatus" ScriptItemUID="Call9">
+                                <VirtualFunctionMapping ID="uidshoppingcartorder()" Value="from container select uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping18" />
+                                <VirtualFunctionMapping ID="hidePopUps()" Value="true" ScriptItemUID="VirtualFunctionMapping19" />
+                              </CallAction>
+                              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call10">
+                                <VirtualFunctionMapping ID="MessageText()" Value="if(0 &lt; (select count() from ShoppingCartItem where not(isnull(checkstatus,'OK') in ('OK', 'Rule', 'FuncForeign', 'OrgForeign'))))then&#xD;&#xA;translate(&quot;#LDS#Are you sure that you wish to proceed? Clicking OK will delete all requests that cannot be submitted.&quot;)&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#Your shopping cart may be submitted.&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping20" />
+                                <VirtualFunctionMapping ID="ShowYesNo()" Value="0 &lt; (select count() from ShoppingCartItem where not(isnull(checkstatus,'OK') in ('OK', 'Rule', 'FuncForeign', 'OrgForeign')))" ScriptItemUID="VirtualFunctionMapping21" />
+                                <VirtualFunctionMapping ID="ShowOK()" Value="0 = (select count() from ShoppingCartItem where not(isnull(checkstatus,'OK') in ('OK', 'Rule', 'FuncForeign', 'OrgForeign')))" ScriptItemUID="VirtualFunctionMapping22" />
+                                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Delete invalid requests&quot;)" ScriptItemUID="VirtualFunctionMapping23" />
+                                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                                  <ActionComponent ScriptItemUID="Action5">
+                                    <Update DataTable="Container" DataColumn="CountItems" Value="from ShoppingCartItem select count()" ScriptItemUID="Update23" />
+                                    <Delete DataTable="ShoppingCartItem" ScriptItemUID="Delete5" WhereClause="not(isnull(checkstatus,'OK') in ('OK', 'Rule', 'FuncForeign', 'OrgForeign'))" SetDeletionFlag="DeleteAndSave" />
+                                    <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call11" />
+                                    <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call8">
+                                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#{0} requests have been deleted.&quot;,(from Container select CountItems) - (from ShoppingCartItem select count()))" ScriptItemUID="VirtualFunctionMapping24" />
+                                      <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping25" />
+                                    </CallAction>
+                                  </ActionComponent>
+                                </VirtualControlMapping>
+                              </CallAction>
+                            </ServerActionCall>
+                          </MenuElement>
+                          <MenuElement ScriptItemUID="MenuElement3" Text="translate(&quot;#LDS#Delete shopping cart&quot;)" Tooltip="translate(&quot;#LDS#Removes all requests from the shopping cart.&quot;)" Condition="not(from Container select IsNullOrEmpty(UID_ShoppingCartOrder))">
+                            <ServerActionCall ScriptItemUID="ServerActionCall8">
+                              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+                                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you would like to delete all requests in the shopping cart {0}?&quot;, from shoppingcartorderCandidate select documentnumber where uid_shoppingcartorder = (from Container select UID_ShoppingCartOrder))" ScriptItemUID="VirtualFunctionMapping26" />
+                                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping27" />
+                                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Request&quot;)+&quot; &quot;+(from shoppingcartorderCandidate select  documentnumber where uid_shoppingcartorder = (from Container select UID_ShoppingCartOrder))" ScriptItemUID="VirtualFunctionMapping28" />
+                                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                                  <ActionComponent ScriptItemUID="Action40">
+                                    <Delete DataTable="ShoppingCartItem" SetDeletionFlag="DeleteAndSave" WhereClause="uid_shoppingcartorder = ( from Container select UID_ShoppingCartOrder)" ScriptItemUID="Delete7" />
+                                    <SwitchAction ScriptItemUID="Switch4">
+                                      <SwitchActionCase ScriptItemUID="Case6" Condition="0 &lt; select Count() from ShoppingCartOrder where uid_shoppingcartorder = (from Container select UID_ShoppingCartOrder) and CheckStatus = 0 and UID_Person = GetUser()">
+                                        <Delete DataTable="ShoppingCartOrder" ScriptItemUID="Delete6" SetDeletionFlag="DeleteAndSave" WhereClause="uid_shoppingcartorder = (from Container select UID_ShoppingCartOrder) and CheckStatus = 0 and UID_Person = GetUser()" />
+                                      </SwitchActionCase>
+                                      <SwitchActionCase ScriptItemUID="Case7">
+                                        <Delete DataTable="ShoppingCartOrder" ScriptItemUID="Delete1" />
+                                      </SwitchActionCase>
+                                    </SwitchAction>
+                                    <Delete DataTable="ShoppingCartOrderCandidate" ScriptItemUID="Delete2" />
+                                    <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call7" />
+                                    <ActionOnControl />
+                                  </ActionComponent>
+                                </VirtualControlMapping>
+                              </CallAction>
+                            </ServerActionCall>
+                          </MenuElement>
+                          <MenuElement ScriptItemUID="MenuElement5" Text="translate(&quot;#LDS#View saved for later list&quot;)" Tooltip="translate(&quot;#LDS#Show the requests in your saved for later list.&quot;)">
+                            <ServerActionCall ScriptItemUID="ServerActionCall3">
+                              <Redirect ScriptItemUID="Redirect1" FormID="ForLater" />
+                            </ServerActionCall>
+                          </MenuElement>
+                          <MenuElement ScriptItemUID="MenuElement6" Text="translate(&quot;#LDS#Edit details&quot;)" Condition="0 &lt; select count() from shoppingcartitem where isactivated">
+                            <ServerActionCall ScriptItemUID="ServerActionCall6">
+                              <Redirect ScriptItemUID="Redirect3" FormID="Details" />
+                            </ServerActionCall>
+                          </MenuElement>
+                        </Menu>
+                        <ServerActionCall ScriptItemUID="ServerActionCall4" />
+                      </ToolbarButton>
+                    </Container>
+                    <Button Text="translate(&quot;#LDS#Edit&quot;)" ScriptItemUID="Button10" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true" EnabledCondition="0 &lt; from ShoppingCartOrderCandidate select count()">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'title'" ScriptItemUID="Button10title" Value="translate(&quot;#LDS#Edit additional information about your shopping cart.&quot;)" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall14">
+                        <ActionSequence ScriptItemUID="Action23">
+                          <Checkpoint ActionType="SetCheckpoint" DataTable="ShoppingCartOrderCandidate" WhereClause="uid_shoppingcartorder = (select uid_shoppingcartorder from container)" />
+                          <Checkpoint ActionType="SetCheckpoint" DataTable="Container" />
+                          <CallAction ActionID="VI_Popup" ScriptItemUID="Call23">
+                            <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                              <Container ScriptItemUID="Container27">
+                                <ContainerTemplate DataTable="ShoppingCartOrderCandidate" WhereClause="uid_shoppingcartorder = (select uid_shoppingcartorder from container)" ScriptItemUID="ContainerTemplate4">
+                                  <LayoutPanel ScriptItemUID="LayoutPanel2">
+                                    <FormItemLabel DataTable="ShoppingCartOrderCandidate" DataColumn="Description" ScriptItemUID="FormItemLabel4">
+                                      <Label Text="translate(&quot;#LDS#Notes about the shopping cart&quot;)" ScriptItemUID="Label27" />
+                                    </FormItemLabel>
+                                    <TextBox DataTable="ShoppingCartOrderCandidate" DataColumn="Description" TextMode="MultiLine" Rows="2" ScriptItemUID="TextBox2" />
+                                  </LayoutPanel>
+                                  <Container ScriptItemUID="Container29" EnableCustomAttributes="true">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute Name="'style'" ScriptItemUID="Container29style" Value="'padding-top: 9px; padding-bottom: 9px;'" />
+                                    </HtmlAttributes>
+                                    <Label Text="translate('#LDS#The following information applies to all requests in your cart. (Information on individual requests will not be changed if you have already entered it.)')" ScriptItemUID="Label8" />
+                                    <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container20">
+                                      <Label Text="translate('#LDS#Note that this information only applies to requests currently in your shopping cart.')" ScriptItemUID="Label11" />
+                                    </Container>
+                                  </Container>
+                                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                                    <FormItemLabel DataTable="Container" DataColumn="OrderReason" ScriptItemUID="FormItemLabel3">
+                                      <Label Text="datacaption(shoppingcartitem, orderreason)" ScriptItemUID="Label7" />
+                                    </FormItemLabel>
+                                    <TextBox DataTable="Container" DataColumn="OrderReason" TextMode="MultiLine" Rows="3" ScriptItemUID="TextBox1" />
+                                  </LayoutPanel>
+                                  <Container ScriptItemUID="Container13" ItemUID="ValidFrom">
+                                    <LayoutPanel ScriptItemUID="LayoutPanel8">
+                                      <FormItemLabel DataTable="Container" DataColumn="PWOPriority" ScriptItemUID="FormItemLabel2">
+                                        <Label Text="translate('#LDS#Valid from')" ScriptItemUID="Label6" />
+                                      </FormItemLabel>
+                                      <Container ScriptItemUID="Container16" RefreshTriggerExpression="from Container select getdataversion(ApplyPWOPriorityForAll)">
+                                        <Container ScriptItemUID="Container17" Layout="'VI_Styles_Container_Paragraph'">
+                                          <DateControl DataTable="Container" DataColumn="ValidFrom" ScriptItemUID="DateControl2" DefaultTime="" Type="FromColumn" />
+                                        </Container>
+                                        <Container ScriptItemUID="Container19">
+                                          <CheckBox DataTable="Container" DataColumn="ApplyValidFromForAll" ScriptItemUID="CheckBox2" Text="translate('#LDS#Replace already specified dates') " />
+                                        </Container>
+                                      </Container>
+                                    </LayoutPanel>
+                                  </Container>
+                                  <Container ScriptItemUID="Container30" ItemUID="ValidUntil">
+                                    <LayoutPanel ScriptItemUID="LayoutPanel9">
+                                      <FormItemLabel DataTable="Container" DataColumn="PWOPriority" ScriptItemUID="FormItemLabel1">
+                                        <Label Text="translate('#LDS#Valid until')" ScriptItemUID="Label3" />
+                                      </FormItemLabel>
+                                      <Container ScriptItemUID="Container31" RefreshTriggerExpression="from Container select getdataversion(ApplyPWOPriorityForAll)">
+                                        <Container ScriptItemUID="Container32" Layout="'VI_Styles_Container_Paragraph'">
+                                          <DateControl DataTable="Container" DataColumn="ValidUntil" ScriptItemUID="DateControl3" DefaultTime="" Type="FromColumn" />
+                                        </Container>
+                                        <Container ScriptItemUID="Container33">
+                                          <CheckBox DataTable="Container" DataColumn="ApplyValidUntilForAll" ScriptItemUID="CheckBox3" Text="translate('#LDS#Replace already specified dates')" />
+                                        </Container>
+                                      </Container>
+                                    </LayoutPanel>
+                                  </Container>
+                                  <Container ScriptItemUID="Container26" Condition="isnull(getconfig(&quot;VI_ITShop_DisablePWOPriorityChange&quot;),&quot;false&quot;)=&quot;false&quot;">
+                                    <LayoutPanel ScriptItemUID="LayoutPanel5">
+                                      <FormItemLabel DataTable="Container" DataColumn="PWOPriority" ScriptItemUID="FormItemLabel5">
+                                        <Label Text="datacaption(shoppingcartitem, pwopriority)" ScriptItemUID="Label12" />
+                                      </FormItemLabel>
+                                      <Container ScriptItemUID="Container21" RefreshTriggerExpression="from Container select getdataversion(ApplyPWOPriorityForAll)">
+                                        <Container ScriptItemUID="Container25" Layout="'VI_Styles_Container_Paragraph'">
+                                          <CheckBox DataTable="Container" DataColumn="ApplyPWOPriorityForAll" ScriptItemUID="CheckBox1" Text="translate('#LDS#Apply the following priority for all products in the shopping cart')" />
+                                        </Container>
+                                        <Container ScriptItemUID="Container22">
+                                          <ColumnEditor DataTable="Container" DataColumn="PWOPriority" ScriptItemUID="ColumnEditor2" />
+                                        </Container>
+                                      </Container>
+                                    </LayoutPanel>
+                                  </Container>
+                                </ContainerTemplate>
+                              </Container>
+                            </VirtualControlMapping>
+                            <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                              <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container24">
+                                <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button12">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute6" />
+                                  </HtmlAttributes>
+                                  <ServerActionCall ScriptItemUID="ServerActionCall18">
+                                    <ActionOnControl />
+                                    <Checkpoint ActionType="CheckpointCommit" />
+                                    <Save DataTable="ShoppingCartOrderCandidate" WhereClause="uid_shoppingcartorder = (select uid_shoppingcartorder from container)" ScriptItemUID="Save4" />
+                                    <ActionSequence ItemUID="Deploy ShoppingCartOrder settings" Condition="('' &lt;&gt; from Container select OrderReason)&#xD;&#xA;or&#xD;&#xA;((from container select IsNull(ValidFrom,#1899-12-30#)) &gt; #1900-01-01#)&#xD;&#xA;or &#xD;&#xA;((from container select IsNull(ValidUntil,#1899-12-30#)) &gt; #1900-01-01#)&#xD;&#xA;or&#xD;&#xA;from container select IsNullOrEmpty(ApplyPWOPriorityForAll,false) = true&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Action41">
+                                      <Update DataTable="ShoppingCartItem" DataColumn="OrderReason" WhereClause="isnull(orderreason,'')='' and ('' &lt;&gt; from Container select OrderReason)" Value="from container select orderreason" ScriptItemUID="Update2" />
+                                      <Update DataTable="ShoppingCartItem" DataColumn="PWOPriority" Value="from container select PWOPriority" ScriptItemUID="Update22" WhereClause="from container select IsNullOrEmpty(ApplyPWOPriorityForAll,false) = true" />
+                                      <Update DataTable="ShoppingCartItem" DataColumn="ValidFrom" WhereClause="(isnull(OrderType,'') = '')&#xD;&#xA;And  &#xD;&#xA;((IsNull(ValidFrom,#1899-12-30#) &lt; #1900-01-01#) Or (from container select IsNullOrEmpty(ApplyValidFromForAll,False) = True))&#xD;&#xA;and&#xD;&#xA;((from container select IsNull(ValidFrom,#1899-12-30#)) &gt; #1900-01-01#)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Value="from container select ValidFrom" ScriptItemUID="Update3" />
+                                      <Update DataTable="ShoppingCartItem" DataColumn="ValidUntil" WhereClause="(isnull(OrderType,'') = '')&#xD;&#xA;And &#xD;&#xA;((IsNull(ValidUntil,#1899-12-30#) &lt; #1900-01-01#) Or (from container select IsNullOrEmpty(ApplyValidUntilForAll,False) = True))&#xD;&#xA;and&#xD;&#xA;((from container select IsNull(ValidUntil,#1899-12-30#)) &gt; #1900-01-01#)&#xD;&#xA;" Value="from container select ValidUntil" ScriptItemUID="Update17" />
+                                      <Save DataTable="ShoppingCartItem" ScriptItemUID="Save8" />
+                                    </ActionSequence>
+                                  </ServerActionCall>
+                                </Button>
+                                <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button11" AssociatedWithEscapeKey="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute5" />
+                                  </HtmlAttributes>
+                                  <ServerActionCall ScriptItemUID="ServerActionCall15">
+                                    <ActionOnControl />
+                                    <Checkpoint ActionType="Rollback" />
+                                  </ServerActionCall>
+                                </Button>
+                              </Container>
+                            </VirtualControlMapping>
+                            <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Shopping cart&quot;)+&quot; &quot;+from ShoppingCartOrder select top 1 DocumentNumber" ScriptItemUID="VirtualFunctionMapping29" />
+                          </CallAction>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate('#LDS#Submit')" EnabledCondition="0 &lt; select count() from shoppingcartitem where isactivated" ScriptItemUID="Button4">
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <CallAction ScriptItemUID="Call18" ActionID="SetValidFromAndTo" />
+                        <ActionSequence ScriptItemUID="Action52" Condition="getconfig(&quot;VI_ITShop_SubmitOrderImmediately&quot;) = &quot;true&quot;" ItemUID="Set Orderreason from ShoppingCartOrder">
+                          <Update DataTable="ShoppingCartItem" DataColumn="OrderReason" WhereClause="isactivated and isnull(orderreason,'')='' and ('' &lt;&gt; from Container select OrderReason)&#xD;&#xA;&#xD;&#xA;-- apply the global OrderReason for all requests that do not have OrderReason" Value="from container select orderreason" ScriptItemUID="Update28" />
+                        </ActionSequence>
+                        <CallAction ActionID="VI_ITShop_CartCalculateCheckStatus" ScriptItemUID="Call22">
+                          <VirtualFunctionMapping ID="uidshoppingcartorder()" Value="from container select uid_shoppingcartorder" ScriptItemUID="VirtualFunctionMapping30" />
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping39" ID="SubmitSilentlyIfPossible()" Value="getconfig(&quot;VI_ITShop_SubmitOrderImmediately&quot;) = &quot;true&quot;" />
+                        </CallAction>
+                        <SwitchAction ScriptItemUID="Switch3">
+                          <SwitchActionCase ScriptItemUID="Case5" Condition="from container select submitted">
+                            <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call13">
+                              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The request was successfully submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping41" />
+                              <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping40" />
+                            </CallAction>
+                            <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call14" />
+                            <Redirect Target="Context" NoLinkBackToThisForm="true" ContextID="VI_ITShop_ShoppingCart" ScriptItemUID="Redirect7" AllowReturnToThisContext="false" />
+                          </SwitchActionCase>
+                        </SwitchAction>
+                        <ActionSequence Condition="0 &lt; select count() from shoppingcartitem where (IsActivated and not(CanOrder))" ItemUID="Stop on error here" ScriptItemUID="Action17">
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call21">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#At least one request cannot be submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping31" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping32" />
+                          </CallAction>
+                          <EndExecution />
+                        </ActionSequence>
+                        <Comment Comment="Create the ShoppingCartOrder (if none was created) and assign ShoppingCartItems" />
+                        <ActionSequence Condition="0 = select count() from shoppingcartorder" ScriptItemUID="Action8">
+                          <Insert DataTable="ShoppingCartOrder" ScriptItemUID="Insert2">
+                            <ActionSequence ScriptItemUID="Action13" />
+                            <InsertValue DataColumn="UID_Person" Value="from user select uid_person" />
+                          </Insert>
+                          <Save DataTable="ShoppingCartOrder" ScriptItemUID="Save5" />
+                        </ActionSequence>
+                        <Update DataTable="Container" DataColumn="UID_ShoppingCartOrder" WhereClause="isnull( uid_shoppingcartorder,'')=''" Value="from ShoppingCartOrder select top 1 UID_ShoppingCartOrder" ScriptItemUID="Update24" />
+                        <Update DataTable="ShoppingCartItem" DataColumn="UID_ShoppingCartOrder" Value="from container select uid_shoppingcartorder" WhereClause="isactivated" ScriptItemUID="Update25" />
+                        <Save DataTable="ShoppingCartItem" WhereClause="isactivated" ScriptItemUID="Save6" />
+                        <SwitchAction ScriptItemUID="Switch1">
+                          <SwitchActionCase ScriptItemUID="Case2" ItemUID="With question" Condition="getconfig(&quot;VI_ITShop_SubmitOrderImmediately&quot;) &lt;&gt; &quot;true&quot;">
+                            <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call19">
+                              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your shopping cart may now be submitted.&quot;)&#xD;&#xA;+ '&#xD;&#xA;&#xD;&#xA;'+&#xD;&#xA;translate('#LDS#Please confirm your request by clicking &quot;Yes&quot;.')" ScriptItemUID="VirtualFunctionMapping33" />
+                              <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping34" />
+                              <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Submit shopping cart&quot;)" ScriptItemUID="VirtualFunctionMapping35" />
+                              <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                                <ActionComponent ScriptItemUID="Action7">
+                                  <Update DataTable="ShoppingCartItem" DataColumn="OrderReason" WhereClause="isactivated and isnull(orderreason,'')='' and ('' &lt;&gt; from Container select OrderReason)&#xD;&#xA;&#xD;&#xA;-- apply the global OrderReason for all requests that do not have OrderReason" Value="from container select orderreason" ScriptItemUID="Update37" />
+                                  <CallAction ActionID="VI_ITShop_CartSubmit" ScriptItemUID="Call20">
+                                    <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping5" />
+                                    <VirtualFunctionMapping ID="uid_ShoppingCartOrder()" Value="from Container select UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping36" />
+                                  </CallAction>
+                                </ActionComponent>
+                              </VirtualControlMapping>
+                            </CallAction>
+                          </SwitchActionCase>
+                          <SwitchActionCase ScriptItemUID="Case1" Condition="from container select not(submitted) -- e.g. terms of use request">
+                            <CallAction ActionID="VI_ITShop_CartSubmit" ScriptItemUID="Call15">
+                              <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping8" />
+                              <VirtualFunctionMapping ID="uid_ShoppingCartOrder()" Value="from Container select UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping38" />
+                            </CallAction>
+                          </SwitchActionCase>
+                        </SwitchAction>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="Container11" Condition="-- shopping cart processing?&#xD;&#xA;from shoppingcartordercandidate select top 1 (CheckStatus = 1) where uid_shoppingcartorder = (from container select UID_ShoppingCartOrder)" ItemUID="Processing">
+                  <Label ScriptItemUID="Label17" Text="translate(&quot;#LDS#The shopping cart is currently being processed.&quot;)" Layout="'VI_Styles_Label_Block'" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute19" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-info&quot;" />
+                      <Property Name="TagName" Value="div" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Container ScriptItemUID="Container12">
+                    <Button ScriptItemUID="Button5" Text="translate(&quot;#LDS#Reload&quot;)">
+                      <ServerActionCall ScriptItemUID="ServerActionCall17">
+                        <LoadTable DataTable="ShoppingCartOrderCandidate" ScriptItemUID="LoadTable2" RemoveDeleted="false" WhereClause="sqlcompareuid(&quot;UID_ShoppingCartOrder&quot;, from container select UID_ShoppingCartOrder)">
+                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType15" />
+                        </LoadTable>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer7" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList7">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef6">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="Text()" Value="translate('#LDS#The following requests are currently in your shopping cart.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+      <Form ScriptItemUID="Form2" ID="Details">
+        <ActionSequence ScriptItemUID="Action42" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+          <Label Text="translate(&quot;#LDS#Details&quot;)" ScriptItemUID="Label4" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer4" ID="Main">
+          <Tab ScriptItemUID="Tab2" Layout="'VI_Styles_Tab_Accordeon'">
+            <TabPageTemplate ScriptItemUID="TabPageTemplate1" DataTable="AccProduct">
+              <TabPage ScriptItemUID="TabPage5">
+                <ControlsHeader ScriptItemUID="Container14">
+                  <Label Text="from accproduct select current display()" ScriptItemUID="Label10" />
+                </ControlsHeader>
+                <ControlsBody ScriptItemUID="Container9">
+                  <Grid ScriptItemUID="Grid1">
+                    <GridBand DataTable="ShoppingCartItem" ScriptItemUID="GridBand1" WhereClause="uid_accproduct = ( from accproduct select current uid_accproduct)">
+                      <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                        <ControlList ScriptItemUID="ControlList4">
+                          <ControlReferenceControlList ID="COL_Details" ScriptItemUID="ControlRef7" />
+                        </ControlList>
+                      </GridBandListView>
+                      <GridFilters ScriptItemUID="GridFilters1" />
+                      <GridRows />
+                      <GridColumnSimple ScriptItemUID="Column1" Column="UID_PersonOrdered" Width="&quot;150px&quot;" />
+                      <GridColumn ScriptItemUID="Column28">
+                        <GridColumnHeader ScriptItemUID="wctl3">
+                          <Label Text="translate(&quot;#LDS#Settings&quot;)" ScriptItemUID="Label13" />
+                        </GridColumnHeader>
+                        <Cell ScriptItemUID="Cell3">
+                          <LayoutPanel ScriptItemUID="LayoutPanel4" Columns="3">
+                            <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate1" DataTable="ShoppingCartItem">
+                              <ColumnList ScriptItemUID="ColumnList1">
+                                <CodeLiteral ScriptItemUID="CodeLiteral10">AE.WebRuntime.AccProductParameterService _pparameters = _UserSession.Services.Get&lt;AE.WebRuntime.AccProductParameterService&gt;();
+VI.WebRuntime.IDataColumn _UID_ = this.DataContext.AccProduct.GetColumn("UID_AccProduct");
+string[] productparametersstring = _pparameters.GetParameterString(_Connection,_UID_.GetValue(AccProduct_Current.Row).String,null).Split(',');</CodeLiteral>
+                                <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="OrderReason" Condition="{{!productparametersstring.Contains(&quot;OrderReason&quot;)}}" />
+                                <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ValidFrom" Condition="{{!productparametersstring.Contains(&quot;ValidFrom&quot;)}} and&#xD;&#xA;IsNullOrEmpty(MethodName)">
+                                  <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;00:00:00.000&quot;" ScriptItemUID="ParameterFree8" />
+                                </SingleColumn>
+                                <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="ValidUntil" Condition="{{!productparametersstring.Contains(&quot;ValidUntil&quot;)}} and&#xD;&#xA;IsNullOrEmpty(MethodName)&#xD;&#xA;and&#xD;&#xA;(&#xD;&#xA;(isnull(getconfig(&quot;VI_ITShop_DisableHideValidUntilQERReuse&quot;),&quot;false&quot;)=&quot;true&quot;)&#xD;&#xA;or&#xD;&#xA;(isnull(getconfig(&quot;VI_ITShop_DisableHideValidUntilQERReuse&quot;),&quot;false&quot;)=&quot;false&quot; and &quot;QERReuse&quot; &lt;&gt; from AccProduct select current TableName)&#xD;&#xA;)&#xD;&#xA;">
+                                  <ParameterFree Name="&quot;DefaultTime&quot;" Value="&quot;23:59:59.999&quot;" ScriptItemUID="ParameterFree10" />
+                                </SingleColumn>
+                                <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="PWOPriority" CannotEdit="isnull(getconfig(&quot;VI_ITShop_DisablePWOPriorityChange&quot;),&quot;false&quot;)=&quot;true&quot;" />
+                                <ExpressionColumnList ColumnList="GetAccProductParams(from accproduct select current uid_accproduct)" ScriptItemUID="ExpressionColumnList1" />
+                                <SingleColumn ScriptItemUID="SingleColumn11" DataColumn="UID_Department" Condition="{{!productparametersstring.Contains(&quot;UID_Department&quot;)}}and IsNullOrEmpty(MethodName) and&#xD;&#xA;from ITShopOrg select NeedsUIDDepartment where UID_ITShopOrg = (from ShoppingCartItem select current UID_ITShopOrg)" MinLength="1" />
+                                <SingleColumn ScriptItemUID="SingleColumn12" DataColumn="UID_ProfitCenter" Condition="{{!productparametersstring.Contains(&quot;UID_ProfitCenter&quot;)}} and IsNullOrEmpty(MethodName) and&#xD;&#xA;from ITShopOrg select NeedsUIDProfitCenter where UID_ITShopOrg = (from ShoppingCartItem select current UID_ITShopOrg)" MinLength="1" />
+                              </ColumnList>
+                              <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef3">
+                                <VirtualTableMapping VirtualTable="EditTable" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping6">
+                                  <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                </VirtualTableMapping>
+                              </ControlReferenceContainer>
+                              <ColumnEditor DataTable="ShoppingCartItem" DataColumn="currentcolumn" ScriptItemUID="ColumnEditor1" />
+                              <Container ScriptItemUID="Container18" Condition="(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;,&quot;ValidUntil&quot;,&quot;OrderReason&quot;)&#xD;&#xA;or&#xD;&#xA;(not(from AccProduct select current IsNoCopyParametersPerson)))&#xD;&#xA;and 1 &lt; (&#xD;&#xA;   from ShoppingCartItem select count() where&#xD;&#xA;   (((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;   or&#xD;&#xA;   ((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;))))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+                                <Button Text="translate(&quot;#LDS#Apply to all&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Pill'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                                    <Update DataTable="Container" DataColumn="UID_ShoppingCartItemTemp" Value="from shoppingcartitem select current UID_ShoppingCartItem" ScriptItemUID="Update29" />
+                                    <CodeLiteral ScriptItemUID="CodeLiteral9">AE.WebRuntime.AccProductParameterService _productparameters = _UserSession.Services.Get&lt;AE.WebRuntime.AccProductParameterService&gt;();
+VI.WebRuntime.IDataColumn _UID_AccProduct = this.DataContext.AccProduct.GetColumn("UID_AccProduct");
+string[] productparametersstring = _productparameters.GetParameterString(_Connection,_UID_AccProduct.GetValue(AccProduct_Current.Row).String,null).Split(',');</CodeLiteral>
+                                    <Update DataTable="ShoppingCartItem" DataColumn="currentcolumn" Value="from shoppingcartitem select currentcolumn where UID_ShoppingCartItem = (from Container select top 1 UID_ShoppingCartItemTemp)" WhereClause="if(DataColumnName(ShoppingCartItem,currentcolumn) = &quot;UID_Department&quot; and {{!productparametersstring.Contains(&quot;UID_Department&quot;)}}) then(&#xD;&#xA;   ((UID_ITShopOrg = (from ShoppingCartItem select current UID_ITShopOrg)) and IsNullOrEmpty(Methodname))&#xD;&#xA;)&#xD;&#xA;else if(DataColumnName(ShoppingCartItem,currentcolumn) = &quot;UID_ProfitCenter&quot; and {{!productparametersstring.Contains(&quot;UID_ProfitCenter&quot;)}}) then(&#xD;&#xA;   ((UID_ITShopOrg = (from ShoppingCartItem select current UID_ITShopOrg)) and IsNullOrEmpty(Methodname))&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   ((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;)&#xD;&#xA;or&#xD;&#xA;((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;)))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;--((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;--or&#xD;&#xA;--((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;)))&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Update30" />
+                                  </ServerActionCall>
+                                </Button>
+                              </Container>
+                            </ContainerColumnTemplate>
+                          </LayoutPanel>
+                        </Cell>
+                      </GridColumn>
+                    </GridBand>
+                  </Grid>
+                </ControlsBody>
+              </TabPage>
+            </TabPageTemplate>
+          </Tab>
+          <Container ScriptItemUID="Container15" ItemUID="Buttonbar" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+            </HtmlAttributes>
+            <Button Text="translate('#LDS#Save')" EnabledCondition="0 &lt; select count() from shoppingcartitem where ischanged()" ScriptItemUID="Button2">
+              <ServerActionCall ScriptItemUID="ServerActionCall11">
+                <ActionOnControl ActionType="PerformValidation" />
+                <Save DataTable="ShoppingCartItem" WhereClause="ischanged()" HandleDeleteDeferred="false" ScriptItemUID="Save7" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ScriptItemUID="Form3" ID="ForLater" NavigationTitle="translate(&quot;#LDS#Saved for later&quot;)">
+        <ActionSequence ScriptItemUID="Action49" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer5">
+          <Label Text="translate(&quot;#LDS#Saved for later&quot;)" ScriptItemUID="Label5" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="&quot;text-transform: capitalize;&quot;" />
+            </HtmlAttributes>
+          </Label>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer6" ID="Main">
+          <ControlList ScriptItemUID="ControlList6">
+            <ControlReferenceContainer ID="SavedForLater" ScriptItemUID="ControlRef8" />
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer8" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList8">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef9">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="Text()" Value="translate('#LDS#The following requests are currently in your saved for later list. Please use the actions menu to move the requests to the shopping cart.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

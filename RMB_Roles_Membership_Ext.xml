@@ -1,0 +1,9 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Roles_Membership_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="-- returns true if it is an Org and person assignments are allowed&#xD;&#xA;&#xD;&#xA;from allobjects select current &#xD;&#xA;((&quot;Org&quot;=tablename)&#xD;&#xA;and exists(&quot;orgroot&quot;, format(&quot;uid_orgroot in ( select uid_orgroot from org where uid_org = {0}) and uid_orgroot in ( select uid_orgroot from OrgRootAssign where UID_BaseTreeAssign = 'QER-AsgnBT-Person' and isassignmentallowed=1)&quot;, sqlformatvalue(pk, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))))" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

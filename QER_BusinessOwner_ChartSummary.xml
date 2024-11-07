@@ -1,0 +1,183 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="45b62960-7341-e5fb-1556-59804451fb98">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_BusinessOwner_ChartSummary">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition ScriptItemUID="ConfigSectionDefinition1" Name="Start page" Description="translate(&quot;#LDS#Home&quot;)">
+        <ConfigParam Key="VI_Start_ValueAndTrend_Charts_Department" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" LongDescription="" Description="translate(&quot;#LDS#Department dashboard&quot;)" />
+        <ConfigParam Key="VI_Start_ValueAndTrend_Charts_Locality" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" LongDescription="" Description="translate(&quot;#LDS#Location dashboard&quot;)" />
+        <ConfigParam Key="VI_Start_ValueAndTrend_Charts_ProfitCenter" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" LongDescription="" Description="translate(&quot;#LDS#Cost center dashboard&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action6">
+            <Delete DataTable="Ownerships" ScriptItemUID="Delete1" />
+            <Insert ScriptItemUID="Insert1" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action1" />
+              <InsertValue Value="&quot;Department&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;Department&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_Department&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=Organization&amp;TableName=Department&amp;Title={0}&amp;HideObjectTypSelect=true&quot;,datacaption(&quot;Department&quot;))" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert2" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action3" />
+              <InsertValue Value="&quot;ProfitCenter&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;ProfitCenter&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_ProfitCenter&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=Organization&amp;TableName=ProfitCenter&amp;Title={0}&amp;HideObjectTypSelect=true&quot;,datacaption(&quot;ProfitCenter&quot;))" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert3" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action4" />
+              <InsertValue Value="&quot;Locality&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;Locality&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_Locality&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=Organization&amp;TableName=Locality&amp;Title={0}&amp;HideObjectTypSelect=true&quot;,datacaption(&quot;Locality&quot;))" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert5" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action7" />
+              <InsertValue Value="&quot;AERole&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;AERole&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_AERole&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=AERole&amp;TableName=AERole&amp;Title={0}&amp;HideObjectTypSelect=false&quot;,datacaption(&quot;AERole&quot;))" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert4" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action5" />
+              <InsertValue Value="&quot;Hardware&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;Hardware&quot;, variable(getconfig(&quot;VI_Hardware_Person_Filter&quot;)))" DataColumn="Count" />
+              <InsertValue Value="&quot;page.axd?ContextID=VI_Hardware_Overview&quot;" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert6" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action11" />
+              <InsertValue Value="&quot;QerReuse&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;qerreuse&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=OtherServices&amp;TableName=QERReuse&quot;)" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert7" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action12" />
+              <InsertValue Value="&quot;QerReuseUS&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;qerreuseus&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=OtherServices&amp;TableName=QERReuseUS&quot;)" DataColumn="URL" />
+            </Insert>
+            <Insert ScriptItemUID="Insert8" DataTable="Ownerships">
+              <ActionSequence ScriptItemUID="Action13" />
+              <InsertValue Value="&quot;QerAssign&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;qerassign&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=OtherServices&amp;TableName=QERAssign&quot;)" DataColumn="URL" />
+            </Insert>
+            <Insert DataTable="Ownerships" ScriptItemUID="Insert9">
+              <ActionSequence ScriptItemUID="Action14" />
+              <InsertValue Value="&quot;QERResource&quot;" DataColumn="TableName" />
+              <InsertValue Value="dbcount(&quot;QERResource&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))" DataColumn="Count" />
+              <InsertValue Value="format(&quot;page.axd?ContextID=VI_ITShop_MyRoles&amp;Area=OtherServices&amp;TableName=QERResource&quot;)" DataColumn="URL" />
+            </Insert>
+            <LoadTable DataTable="Person" ScriptItemUID="LoadTable1" WhereClause="format(&quot;uid_person in (select uid_person from QER_VEditEmployee where uid_personhead = '{0}' and UID_OrgRoot = 'Person')&quot;,GetUser())">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </Action>
+        </Activator>
+        <SwitchContainer ScriptItemUID="TileMyResponsibilities">
+          <SwitchContainerCase ScriptItemUID="Case1" Condition="0 &lt; (select count() from ownerships where count&gt; 0)" ItemUID="My Responsibilities">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef2" ItemUID="Tile My Responsibilities">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action8">
+                  <Redirect ScriptItemUID="Redirect6" Target="Context" AllowReturnToThisContext="true" ContextID="QER_Responsibilities_MyResponsibilities" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="Container" VirtualControl="Container">
+                <Container ScriptItemUID="Container3">
+                  <ContainerTemplate DataTable="Ownerships" ScriptItemUID="ContainerTemplate2" WhereClause="count&gt;0" OrderBy="'Count desc, datacaption(tablename+&quot;&quot;)'" Layout="" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="ul" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;class&quot;" Value="&quot;imx-valuelist&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="li" />
+                      </HtmlAttributes>
+                      <LinkContainer ScriptItemUID="LinkContainer2">
+                        <ControlList ScriptItemUID="ControlList3">
+                          <Label ScriptItemUID="Label5" Text="from ownerships select current datacaption(tablename+&quot;&quot;)" EnableCustomAttributes="true" UseForeignWordsTagger="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-col imx-col80&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                          <Label ScriptItemUID="Label3" Text="from ownerships select current count" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-col imx-col20 imx-colright&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2" EnableRedirectByUrl="true">
+                          <RedirectByUrl>
+                            <Redirect ScriptItemUID="Redirect7" Target="Link" HREF="from ownerships select current url" AbortExecution="false" />
+                          </RedirectByUrl>
+                          <Redirect ScriptItemUID="Redirect8" Target="Link" HREF="from ownerships select current url" AbortExecution="false" />
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </ContainerTemplate>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#My Responsibilities')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Identifier()" Value="&quot;Tile_MyResponsibilities&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Size()" Value="'Dashboard'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ContentType()" Value="'Container'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+        <SwitchContainer ScriptItemUID="TileMyDirectReports">
+          <SwitchContainerCase ScriptItemUID="Case2" ItemUID="My Direct Reports" Condition="0 &lt; (select count() from person)">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef3" ItemUID="Tile My Direct Reports">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action9">
+                  <Redirect ScriptItemUID="Redirect11" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Employee_Overview" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="Container" VirtualControl="Container">
+                <Container ScriptItemUID="Container7">
+                  <ContainerTemplate DataTable="Person" ScriptItemUID="ContainerTemplate4" Layout="" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="ul" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-valuelist&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container8" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="li" />
+                      </HtmlAttributes>
+                      <LinkContainer ScriptItemUID="LinkContainer4">
+                        <ControlList ScriptItemUID="ControlList4">
+                          <Label ScriptItemUID="Label6" Text="from person select current display()" />
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                          <Redirect ScriptItemUID="Redirect9" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
+                            <RedirectParameter Value="from person select current getobjectkey()" Name="'ObjectKey'" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </ContainerTemplate>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Caption()" Value="format(&quot;{0} ({1})&quot;, translate('#LDS#My Direct Reports'), from person select count())" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Identifier()" Value="&quot;Tile_MyDirectReports&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Size()" Value="'Dashboard'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="ContentType()" Value="'Container'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="Ownerships" ScriptItemUID="DataTableCustom1">
+          <Column DataType="System.String" Name="TableName" ScriptItemUID="Column1" />
+          <Column DataType="System.Int32" Name="Count" ScriptItemUID="Column2" />
+          <Column DataType="System.String" Name="URL" ScriptItemUID="Column6" />
+        </DataTableCustom>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="Person" Class="Person">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

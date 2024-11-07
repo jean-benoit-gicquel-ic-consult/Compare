@@ -1,0 +1,36 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_UserMessageAdd" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="Microsoft.Practices.Unity" />
+        <NamespaceImport Namespace="VI.WebRuntime.Communication" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
+      <ActionComponent ScriptItemUID="Action1">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">     var userMessageService = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.Services.IUserMessageService&gt;();
+	 var text = DoNotHtmlEncode ? MessageText : System.Web.HttpUtility.HtmlEncode(MessageText);
+	 userMessageService.AddMessage( MessageType, text);
+</CodeLiteral>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="MessageType()" DataType="System.String" TriggerUpdates="Never" VirtualFunctionHasLimitedValues="true" DefaultValue="'Information'" Comment="message type, default is a blue information box">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Information" Comment="default value - blue box" />
+          <VirtualFunctionLimitedValue Name="Success" Comment="green box" />
+          <VirtualFunctionLimitedValue Name="Warning" Comment="yellow box" />
+          <VirtualFunctionLimitedValue Name="Error" Comment="red box" />
+          <VirtualFunctionLimitedValue Name="Unspecified" Comment="gray box" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction Signature="MessageText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.Boolean" Signature="DoNotHtmlEncode()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

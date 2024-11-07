@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Paragraph" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="paragraph" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.paragraph { margin-bottom: 12px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

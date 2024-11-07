@@ -1,0 +1,19 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_LayoutPanel_WidePropertyList" Type="LayoutPanel" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HasRelatedObject="true" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_LayoutPanel_Default" />
+    <Property Name="CssClassName" Value="LayoutpPropItems LayoutpPropItemsWide" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.LayoutpPropItemsWide .LayoutpPropCol0
+{
+   width: %propertylabelwidth%px;
+   min-width: %propertylabelwidth%px;
+}
+
+.LayoutpPropItemsWide .LayoutpPropCol1
+{
+   width: 100%;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

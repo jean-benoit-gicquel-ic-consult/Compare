@@ -1,0 +1,46 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_AccessControl_Webauthn">
+    <Extensions>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence">
+        <ActionSequence ScriptItemUID="QERAction3" Condition="&quot;true&quot; = getconfig(&quot;VI_Common_AccessControl_Webauthn_2FA&quot;)">
+          <CodeLiteral ScriptItemUID="QERCodeLiteral2">var config = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.Web.ConfigBase.IWebAppDbConfig&gt;();</CodeLiteral>
+          <SwitchAction ScriptItemUID="QERSwitch1">
+            <SwitchActionCase ScriptItemUID="QERCase1" Condition="--  check if the person has at least one key for the current identity provider?&#xD;&#xA;exists(&quot;QERWebauthnKey&quot;, sqland(&#xD;&#xA;format(&quot;UID_QBMIdentityProvider in (select UID_QBMIdentityProvider from QBMIdentityClient where UID_QBMIdentityClient in ( select UID_QBMIdentityClient from QBMWebApplication where {0}))&quot;,&#xD;&#xA;sqlcompare(&quot;BaseURL&quot;, {{ config.BaseUrl }}, &quot;string&quot;, &quot;equal&quot;)),&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser())))&#xD;&#xA;">
+              <CodeLiteral ScriptItemUID="QERCodeLiteral1">var rsts2fa = await Rsts2Fa.BuildAsync(_Database, config.BaseUrl).ConfigureAwait(false);
+var http = VI.WebRuntime.HttpContextFactory.Current;
+var code = http.Request.Unvalidated["code"];
+var secondaryProviderId = _UserSession.ApplicationInfo.ConfigSettings.GetValueOrDefault("VI_Common_AccessControl_Webauthn_2FAID");
+
+if (!string.IsNullOrEmpty(code) &amp;&amp; await rsts2fa.VerifyCodeAsync(_Database, code, secondaryProviderId).ConfigureAwait(false))
+{
+	await DataContext.Passed().ConfigureAwait(false);
+}
+else if (rsts2fa.IsUserAuthenticatedByTwoFactors(_Database, secondaryProviderId))
+{
+	await DataContext.Passed().ConfigureAwait(false);
+}
+else
+{
+	var baseUri = config.BaseUrl;
+	if (!baseUri.EndsWith("/"))
+		baseUri += "/";
+	
+	var returnUrl = new Uri(new Uri(baseUri), _Form.GetUrl()).ToString();
+	var secondFactorRedirectUrl = rsts2fa.BuildSecondaryAuthUrl(returnUrl, secondaryProviderId);
+	http.Response.Redirect(secondFactorRedirectUrl, false);
+	return;
+}</CodeLiteral>
+            </SwitchActionCase>
+            <SwitchActionCase ScriptItemUID="QERCase2">
+              <CallAction ScriptItemUID="QERCall3" ActionID="Passed" />
+            </SwitchActionCase>
+          </SwitchAction>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="CompilationSettings1" ObjectType="CompilationSettings">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <NamespaceImport Namespace="QER.CompositionApi.Auth" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

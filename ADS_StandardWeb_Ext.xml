@@ -1,0 +1,11 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="40">
+        <ConfigEntry Key="FilterByObject.ADSContainer" Value="true" ScriptItemUID="ADSConfigEntry1" />
+        <ConfigEntry Key="ColumnEditor_ADSGroup.RiskIndex" Value="VI_Edit_Special_RiskIndexEditor" ScriptItemUID="ADSConfigEntry2" />
+        <ConfigEntry Key="ColumnEditor_ADSGroup.UID_AccProduct" ScriptItemUID="ADSConfigEntry3" Value="VI_Edit_FKWithNewAccProduct" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,54 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="da4331c1-174d-40e3-5d70-346ff6c6c74c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_ATT_Common_ObjectSheet_ESet_Ext" RequiredDbModules="RMS,ATT">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableDbObject Table="AttestationCase" Class="AttestationCase" ScriptItemUID="RMSDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ATTAction1" />
+          <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="RMSColumn1" />
+          <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="RMSColumn2" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="45">
+        <Control ID="FormAttestation">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="RMSFormGroup1">
+              <Form ScriptItemUID="RMSForm1" ID="Attestation">
+                <ActionSequence ScriptItemUID="RMSAction1" />
+                <PagePartContainer ID="Title" ScriptItemUID="RMSPagePartContainer1">
+                  <Label ScriptItemUID="RMSLabel2" Text="GetObjectDisplay(translate(&quot;#LDS#Attestation&quot;))" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="RMSPagePartContainer2">
+                  <Container ScriptItemUID="RMSContainer3">
+                    <ControlReferenceContainer ID="VI_Roles_AttestationCasesForObject" ScriptItemUID="RMSControlRef1">
+                      <VirtualTableMapping VirtualTable="BaseObject" DataTable="Object" ScriptItemUID="RMSVirtualTableMapping1" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="RMSVirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="RMSVirtualFunctionMapping2" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container6" ObjectType="Container" SortOrder="45">
+        <Container ScriptItemUID="RMSContainer4" ItemUID="Attestation" Condition="getconfigparm(&quot;QER\Attestation&quot;)=&quot;1&quot; and from object select current IsOwnerOrAdmin" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="RMSHtmlAttribute1" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="RMSControlRef2">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="RMSAction2">
+                <Redirect Target="FormModule" ScriptItemUID="RMSRedirect1">
+                  <RedirectFormModule ID="FormAttestation" ScriptItemUID="RMSRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Attestation&quot;)" ScriptItemUID="RMSVirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="Description()" Value="translate('#LDS#Shows all attestation cases for memberships, entitlements and the selected system role.')" ScriptItemUID="RMSVirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

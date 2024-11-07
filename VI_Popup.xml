@@ -1,0 +1,54 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl ID="VI_Popup" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Popup DisplayType="Controls">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="CssClass()" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="'data-imx-layout'" Value="'stop'" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;data-imx-onenterkey&quot;" Value="EnterKeyIdentifier()" />
+            </HtmlAttributes>
+            <Label Text="PopupTitle()" ScriptItemUID="Label1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;modal-header &quot;+&#xD;&#xA;if(not( isnullorempty(tablename()))) then &quot;imx-icon-large imx-table-&quot;+tablename()+&quot;-large&quot;" />
+                <Property Name="TagName" Value="h2" />
+                <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="PopupTitle()" />
+              </HtmlAttributes>
+            </Label>
+            <Container Layout="'VI_Styles_Container_Popup_Content'" ScriptItemUID="Container5" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="&quot;min-height:0%; &quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;data-imx-messagecontainer&quot;" Value="&quot;true&quot;" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
+              </Container>
+              <ControlReferenceContainer ID="PopupContent" ScriptItemUID="ControlRef1" />
+            </Container>
+            <Container Layout="'VI_Styles_Container_Popup_Buttons'" ScriptItemUID="Container6">
+              <ControlReferenceContainer ID="PopupBottom" ScriptItemUID="ControlRef2" />
+            </Container>
+          </Container>
+        </Popup>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="PopupTitle()" Comment="Popup title" DataType="System.String" DefaultValue="''" TriggerUpdates="Never" />
+      <VirtualFunction Signature="TableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualControl ID="PopupContent" ContainerType="Container" />
+      <VirtualControl ID="PopupBottom" ContainerType="Container" />
+      <VirtualFunction Signature="CssClass()" DataType="System.String" TriggerUpdates="Never" DefaultValue="&quot;imx-popup&quot;" />
+      <VirtualFunction DataType="System.String" Signature="EnterKeyIdentifier()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

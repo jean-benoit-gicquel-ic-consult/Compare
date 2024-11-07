@@ -1,0 +1,44 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="QBM_Styles_Container_SquareLink" Type="Container">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="squareLink" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.squareLink{
+   display: inline-flex;
+   width: 220px;
+   height: 7.5em;
+   vertical-align: top;
+   margin-right:16px;
+   margin-bottom: 16px;
+   color: %VI_Common_Color_ColoredLink%;
+   border: 1px solid %VI_Common_Color_LighterGray%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   text-decoration: none;
+   float: left; 
+  }
+.squareLink:hover,
+.squareLink:focus {
+    border: solid 1px %VI_Common_Color_Gray%;
+    outline: none;
+    text-decoration: none;
+}
+
+.squareLink a {
+   padding: 10px 10px 0px 10px;
+   color: %VI_Common_Color_ColorBase3%;
+   font-size: 1.4em;
+   text-align: center;
+   line-height: 1.4em;
+   width: 100%;
+}  
+
+.squareLink a:hover,
+.squareLink a:focus {
+    border: none;
+    outline: none;
+    text-decoration: none;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

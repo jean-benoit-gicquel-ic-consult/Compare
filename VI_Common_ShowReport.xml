@@ -1,0 +1,64 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <Context ID="VI_Common_ShowReport" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="Stimulsoft.Report.Web.dll" />
+        <NamespaceImport Namespace="Stimulsoft.Report" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="uid_compiledreport" IsMandatory="false" />
+        <Parameter Name="PageTitle" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="Reports" Description="translate(&quot;#LDS#Reports&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_UseReportViewer" Description="translate(&quot;#LDS#Use built-in report viewer instead of PDF viewer&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="IsDisplayPDF()" Expression="getconfig(&quot;VI_Common_UseReportViewer&quot;)&lt;&gt;&quot;true&quot;" DataType="System.Boolean" ScriptItemUID="Function1" />
+      <Function Name="GetReportTitle()" Expression="{{&#xD;&#xA;string title = this.GetRequestParameter(&quot;PageTitle&quot;);&#xD;&#xA;try&#xD;&#xA;{&#xD;&#xA;StiReport report = (StiReport)(_UserSession.SessionObjects[this.GetRequestParameter(&quot;uid_compiledreport&quot;)]);&#xD;&#xA;title = report.ReportAlias;&#xD;&#xA;if(string.IsNullOrEmpty(title))&#xD;&#xA;title = report.ReportName;&#xD;&#xA;}&#xD;&#xA;catch&#xD;&#xA;{&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return title;&#xD;&#xA;}}+&quot;&quot;" DataType="System.String" ScriptItemUID="Function2" />
+      <Function Name="IsReportPreparedAsPdf()" Expression="{{&#xD;&#xA;_UserSession.SessionObjects[_Module.GetRequestParameter(&quot;uid_compiledreport&quot;)] is byte[]&#xD;&#xA;}}" DataType="System.Boolean" ScriptItemUID="Function3" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Report" SkipNavigation="true" ScriptItemUID="Form1" NavigationTitle="isnullorempty( request(&quot;PageTitle&quot;), GetReportTitle())">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <SwitchContainer ScriptItemUID="Switch1">
+              <SwitchContainerCase ScriptItemUID="Case3" Condition="IsReportPreparedAsPdf()">
+                <CodeLiteral ScriptItemUID="CodeLiteral2">                var uidCompiledReport = _Module.GetRequestParameter("uid_compiledreport");
+				var fileName = DataContext.GetReportTitle() + ".pdf";
+				fileName = System.IO.Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) =&gt; current.Replace(c, '_'));
+				_UserSession.SessionObjects[fileName] = _UserSession.SessionObjects[uidCompiledReport];
+				var url = string.Format("{0}imx/sessionobjtemp/{1}?Disp=inline",
+                    VI.WebRuntime.WebApplication.Instance.VirtualApplicationPath,
+                    System.Web.HttpUtility.UrlPathEncode(fileName));
+                System.Web.HttpContext.Current.Response.Redirect( url, false);
+</CodeLiteral>
+              </SwitchContainerCase>
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="isdisplaypdf()">
+                <CodeLiteral ScriptItemUID="CodeLiteral1">
+var settings = new Stimulsoft.Report.Export.StiPdfExportSettings();
+settings.ImageResolution = 300; // dpi
+settings.ImageCompressionMethod = Stimulsoft.Report.Export.StiPdfImageCompressionMethod.Jpeg;
+
+
+var exportMethod = new FormMethods.ReportExportPdfMethod();
+exportMethod.ReportSessionKey = DataContext.GetRequestParameter("uid_compiledreport");
+exportMethod.ExportSettings = settings;
+exportMethod.Report = ((Stimulsoft.Report.StiReport)(_UserSession.SessionObjects[_Module.GetRequestParameter("uid_compiledreport")]));
+exportMethod.Execute(new System.Web.HttpContextWrapper(System.Web.HttpContext.Current), null);</CodeLiteral>
+              </SwitchContainerCase>
+              <SwitchContainerCase ScriptItemUID="Case2">
+                <ReportViewer CompiledReportUID="request('uid_compiledreport')" ScriptItemUID="ReportViewer2" />
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

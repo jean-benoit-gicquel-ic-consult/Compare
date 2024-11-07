@@ -1,0 +1,11 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_SingleLine" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="singleline" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">/* for IE7-Compatiblity we need "important". Without the tree clips its items */
+.singleline { white-space: nowrap; display: block !important;}
+.singleline &gt;div { display: inline; white-space: nowrap; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

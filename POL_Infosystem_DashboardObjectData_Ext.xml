@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="POL_Infosystem_DashboardObjectData_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="30">
+        <Container Condition="from option  select selected = &quot;PolicyViolations&quot;" ScriptItemUID="POLContainer1">
+          <Container CustomStyle="'padding-bottom: 7px; padding-top: 7px;'" ScriptItemUID="POLContainer2">
+            <Label Text="translate('#LDS#This view shows all current policy violations detected for {0}.', select current displaylong() from object)" ScriptItemUID="POLLabel1" />
+          </Container>
+          <ControlReferenceControlList ID="POL_Policy_MasterDetail" ScriptItemUID="POLControlRef2">
+            <VirtualFunctionMapping ID="QERPolicyWhereClause()" Value="format(&quot;ObjectKey ='{0}'&quot;,from Object select XObjectKey)" />
+            <VirtualFunctionMapping ID="IsReadOnly()" Value="true" />
+          </ControlReferenceControlList>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="30" />
+      <AddObject ObjectID="Action8" ObjectType="ActionSequence" SortOrder="10">
+        <Insert DataTable="AvailableQueries" ScriptItemUID="POLInsert1">
+          <ActionSequence ScriptItemUID="POLAction3" />
+          <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#Policy violations&quot;)" />
+          <InsertValue DataColumn="Key" Value="&quot;PolicyViolations&quot;" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

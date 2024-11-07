@@ -1,0 +1,34 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl ID="VI_Edit_ComboBox" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Container Condition="from edittable select current not(AllowClearSelection())" ScriptItemUID="Container2">
+          <ComboBox SourceTable="SourceTable" DataTable="EditTable" DataColumn="EditColumn" WhereClause="sourcetablefilter()" SourceDisplay="DisplayValue(sourcedisplay)" SourceValueColumn="SourceColumn" OrderBy="'SourceDisplay'" Layout="'VI_Styles_DropDownList_Default'" ScriptItemUID="ComboBox1" />
+        </Container>
+        <Container Condition="from edittable select current AllowClearSelection()" ScriptItemUID="Container4">
+          <ComboBox SourceTable="SourceTable" DataTable="EditTable" DataColumn="EditColumn" WhereClause="sourcetablefilter()" SourceDisplay="DisplayValue(sourcedisplay)" SourceValueColumn="SourceColumn" OrderBy="'SourceDisplay'" Layout="'VI_Styles_DropDownList_Default'" AllowNull="true" ScriptItemUID="ComboBox2" />
+        </Container>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="EditColumn" IsMultiType="true" />
+      </VirtualTable>
+      <VirtualTable Name="SourceTable" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="SourceColumn" IsMultiType="true" />
+        <VirtualColumn Name="SourceDisplay" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="SourceTableFilter()" DataType="System.Boolean" FilterForTable="SourceTable" DefaultValue="true" />
+      <VirtualFunction Signature="SelectedDisplay()" DataType="System.String" />
+      <VirtualFunction Signature="AllowClearSelection()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

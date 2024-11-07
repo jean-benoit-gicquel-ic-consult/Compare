@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Label_BlueLinkUnderscore" Type="Label" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="BlueLinkUnderscore" Comment="" />
+    <CssDocument CssName="CSS">.BlueLinkUnderscore{
+color: %VI_Common_Color_ColoredLink%;
+}
+a.BlueLinkUnderscore { color: %VI_Common_Color_ColoredLink%; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

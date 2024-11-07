@@ -1,0 +1,18 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2013-01-09" ID="VI_Edit_NumericRange" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <ContextParameters />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <NumericRangeEditor DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="cctl1" />
+      </Container>
+      <ActionSequence ScriptItemUID="wctl1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="wctl2" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+  </GlobalControl>
+</WebDesigner>

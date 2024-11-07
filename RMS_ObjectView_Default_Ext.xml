@@ -1,0 +1,28 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMS_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="290">
+        <ConfigParam Key="VI_ObjectView_ESet_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ESet&quot;))" DatabaseTable="ESet" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+        <ConfigParam Key="VI_ObjectView_ESetHasEntitlement_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ESetHasEntitlement&quot;))" DatabaseTable="ESetHasEntitlement" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="240">
+        <ConfigEntry Key="VI_ObjectView_ESet_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="RMSConfigEntry1">
+          <SingleColumn DataColumn="Ident_ESet" FKWhereClause="" ScriptItemUID="RMSSingleColumn1" />
+          <SingleColumn DataColumn="DisplayName" FKWhereClause="" ScriptItemUID="RMSSingleColumn2" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="RMSSingleColumn3" />
+          <SingleColumn DataColumn="IsForITShop" FKWhereClause="" ScriptItemUID="RMSSingleColumn4" />
+          <SingleColumn DataColumn="ReleaseDate" FKWhereClause="" ScriptItemUID="RMSSingleColumn5" />
+          <SingleColumn DataColumn="Remarks" FKWhereClause="" ScriptItemUID="RMSSingleColumn6" />
+          <SingleColumn DataColumn="RiskIndexCalculated" FKWhereClause="" ScriptItemUID="RMSSingleColumn7" />
+          <SingleColumn DataColumn="UID_AccProduct" FKWhereClause="" ScriptItemUID="RMSSingleColumn8" />
+          <SingleColumn DataColumn="UID_PersonResponsible" FKWhereClause="" ScriptItemUID="RMSSingleColumn9" />
+          <SingleColumn DataColumn="UID_ESetType" FKWhereClause="" ScriptItemUID="RMSSingleColumn10" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_ObjectView_ESetHasEntitlement_Fields" ScriptItemUID="RMSConfigEntry2" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn ScriptItemUID="RMSSingleColumn11" DataColumn="UID_ESet" />
+          <SingleColumn ScriptItemUID="RMSSingleColumn12" DataColumn="Entitlement" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

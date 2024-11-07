@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Responsibilities_Administration_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="25">
+        <SwitchContainer ScriptItemUID="TileSystemEntitlements">
+          <SwitchContainerCase ScriptItemUID="TSBCase1" Condition="exists(&quot;Person&quot;, variable(&quot;uid_person in (select piae.uid_person from personinaerole piae join aerolecollection aec on aec.uid_aerole = piae.uid_aerole where piae.uid_person = '%useruid%' and aec.UID_ParentAERole = 'TSB-AEROLE-NAMESPACEADMIN')&quot;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="TSBContainer1" ItemUID="System Entitlements">
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping9" ID="Identifier()" Value="&quot;System Entitlements&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="TSBAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="TSB_TargetSystem_Admin" ScriptItemUID="TSBRedirect2" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping4" ID="Caption()" Value="translate(&quot;#LDS#Heading System Entitlements&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping10" ID="Image()" Value="&quot;UNSGroup&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows your system entitlements and their members.')" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

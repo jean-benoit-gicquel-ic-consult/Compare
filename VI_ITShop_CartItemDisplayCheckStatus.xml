@@ -1,0 +1,357 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_CartItemDisplayCheckStatus" MigrationNotes="DMLREPLACE;" RequiredDbModules="">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action8" />
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <Container ScriptItemUID="Container141" ItemUID="not checked yet" Condition="from ShoppingCartItem select current isnullorempty(CheckStatus)" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message&quot;" ScriptItemUID="HtmlAttribute1" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#This request has not been checked yet.&quot;)" ScriptItemUID="Label91" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Right'" ItemUID="Checkstatus = Right" ScriptItemUID="Container3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute2" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The employee {0} is currently not authorized to request the product {1}.&quot;, ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))" ScriptItemUID="Label1" />
+            <Container Condition="from accproductforshoppingcartitem select top 1 hasblockingpersonwantsorg where uid_accproduct = (select current uid_accproduct from shoppingcartitem)" ItemUID="ErrorMsg - already ordered or assigned" ScriptItemUID="Container7">
+              <Label Text="translate('#LDS#Either the product is a already assigned or currently requested.')" ScriptItemUID="Label2" />
+            </Container>
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Existing'" ItemUID="Checkstatus = Existing" ScriptItemUID="Container8" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute3" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The product {1} is already assigned to employee {0}.&quot;, ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))  " ScriptItemUID="Label3" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Time'" ItemUID="Checkstatus = Time" ScriptItemUID="Container4">
+            <Container ScriptItemUID="Container10" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute12" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#The product {1} cannot be requested for {0} for this time period.&quot;, ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))" ScriptItemUID="Label4" />
+            </Container>
+            <Container ScriptItemUID="Container9" Condition="Exists(&quot;PersonWantsOrg&quot;,format(&quot;{0} and uid_org in(select O.uid_itshoporg from itshoporg O join shoppingcartitem I on I.UID_AccProduct = O.UID_AccProduct&#xD;&#xA;where {1}) and OrderState in (select orderstate from qer_vpwoorderstate where isAssigned=1 or isOrder = 1 or isGranted = 1)&quot;,&#xD;&#xA;SqlCompareUid(&quot;UID_PersonOrdered&quot;,from ShoppingCartItem select current UID_PersonOrdered),&#xD;&#xA;SqlCompareUid(&quot;I.UID_ITShopOrg&quot;,from ShoppingCartItem select current UID_ITShopOrg)))">
+              <Label Text="translate(&quot;#LDS#Requests already exist for the following time periods.&quot;)" ScriptItemUID="Label11" />
+              <Grid ScriptItemUID="Grid2">
+                <GridBand DataTable="ExistingPWO" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="format(&quot;{0} and uid_org in(select O.uid_itshoporg from itshoporg O join shoppingcartitem I on I.UID_AccProduct = O.UID_AccProduct&#xD;&#xA;where {1}) and OrderState in (select orderstate from qer_vpwoorderstate where isAssigned=1 or isOrder = 1 or isGranted = 1)&quot;,&#xD;&#xA;SqlCompareUid(&quot;UID_PersonOrdered&quot;,from ShoppingCartItem select current UID_PersonOrdered),&#xD;&#xA;SqlCompareUid(&quot;I.UID_ITShopOrg&quot;,from ShoppingCartItem select current UID_ITShopOrg))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" EnableGridViewSetting="false">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  <GridBandListView ScriptItemUID="GridBandListView1" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <ControlReferenceGridColumnGroup ID="VI_ITShop_PersonWantsOrg_GridColumns" DataTable="ExistingPWO" ScriptItemUID="ControlRef2">
+                    <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="ExistingPWO" ScriptItemUID="VirtualTableMapping1">
+                      <VirtualColumnMapping VirtualColumn="DoNotAllowApprove" DataColumn="DoNotAllowApprove" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="DisplayOrderState()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualFunctionMapping ID="DisplayPersonOrdered()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                    <VirtualFunctionMapping ID="DisplayProduct()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="ShowCheckStatus()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="ShowDocumentNumber()" Value="false" ScriptItemUID="VirtualFunctionMapping5" />
+                    <VirtualFunctionMapping ID="DisplayOrderDate()" Value="false" ScriptItemUID="VirtualFunctionMapping6" />
+                  </ControlReferenceGridColumnGroup>
+                  <GridColumnSimple ScriptItemUID="Column6" Column="ValidFrom" />
+                  <GridColumnSimple ScriptItemUID="Column7" Column="ValidUntil" />
+                </GridBand>
+              </Grid>
+            </Container>
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Forbidden_Doublettes'" ItemUID="Checkstatus = Forbidden_Doublettes" ScriptItemUID="Container12" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute4" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The product can only be requested once per employee, but it is placed in the shopping cart several times.&quot;)" ScriptItemUID="Label13" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='OK'" ItemUID="Checkstatus = OK" ScriptItemUID="Container13" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" ScriptItemUID="HtmlAttribute5" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#This request can be submitted.&quot;)" ScriptItemUID="Label4121" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='FuncForeign'" ItemUID="Checkstatus = FuncForeign" ScriptItemUID="Container18" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" ScriptItemUID="HtmlAttribute6" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The product {0} does not belong to the same functional area as the employee {1}.&quot;,&#xD;&#xA;( from shoppingcartitem select current displayvalue(uid_accproduct)),&#xD;&#xA; ( from ShoppingCartItem select current displayvalue(uid_personordered)))" ScriptItemUID="Label5" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='OrgForeign'" ItemUID="Checkstatus = OrgForeign" ScriptItemUID="Container21" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" ScriptItemUID="HtmlAttribute7" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The product {0} does not belong to the same organizational unit as the employee {1}.&quot;,&#xD;&#xA;( from shoppingcartitem select current displayvalue(uid_accproduct)),&#xD;&#xA; ( from ShoppingCartItem select current displayvalue(uid_personordered)))" ScriptItemUID="Label6" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='ExistingAssignment'" ItemUID="Checkstatus = ExistingAssignment" ScriptItemUID="Container25" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute8" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#The assignment cannot be requested because it already exists.&quot;)" ScriptItemUID="Label8" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Invalid'" ItemUID="Checkstatus = Invalid" ScriptItemUID="Container26" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute9" />
+            </HtmlAttributes>
+            <Label Text="translate(&quot;#LDS#Incomplete request information&quot;)" ScriptItemUID="Label9" />
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Exclusion'" ItemUID="Checkstatus = Exclusion" ScriptItemUID="Container27" EnableCustomAttributes="true">
+            <HtmlAttributes />
+            <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+              <Action ScriptItemUID="Action1">
+                <LoadTable DataTable="AccProductExcluded" WhereClause="from shoppingcartitem select current format(&quot;uid_accproduct in ( select uid_accproduct from shoppingcartitem where uid_shoppingcartorder = '{3}' and uid_shoppingcartitem &lt;&gt; '{2}' and uid_personordered = '{1}' and uid_accproduct in ( select uid_accproduct from accproductdependencies where uid_accproductrelated = '{0}' and isexcluded=1))&quot;,&#xD;&#xA;    uid_accproduct, uid_personordered, uid_shoppingcartitem, uid_shoppingcartorder)" ScriptItemUID="LoadTable3">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                </LoadTable>
+              </Action>
+            </Activator>
+            <Container ScriptItemUID="Container30" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute10" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#The product {0} may not be requested for {1} together with the following products.&quot;, from shoppingcartitem select current displayvalue(uid_accproduct),&#xD;&#xA;from ShoppingCartItem select current displayvalue(uid_personordered))  " ScriptItemUID="Label7" />
+            </Container>
+            <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AccProductExcluded">
+              <Label Text="from accproductexcluded select current display()" ScriptItemUID="Label10" />
+            </ContainerTemplate>
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Inclusion'" ItemUID="Checkstatus = Inclusion" ScriptItemUID="Container31" EnableCustomAttributes="true">
+            <HtmlAttributes />
+            <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+              <Action ScriptItemUID="Action3">
+                <LoadTable DataTable="AccProductIncluded" WhereClause="from shoppingcartitem select current format(&quot;uid_accproduct in (select uid_accproductrelated from AccProductDependencies where uid_accproduct = '{0}' and IsMandatory=1)&quot;,uid_accproduct)" ScriptItemUID="LoadTable4">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+                </LoadTable>
+              </Action>
+            </Activator>
+            <Container ScriptItemUID="Container34" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute11" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#The product {0} requested for {1} has to be requested together with the following products.&quot;, from shoppingcartitem select current displayvalue(uid_accproduct),&#xD;&#xA;from ShoppingCartItem select current displayvalue(uid_personordered))  " ScriptItemUID="Label19" />
+            </Container>
+            <Grid ScriptItemUID="Grid1">
+              <GridBand DataTable="AccProductIncluded" ScriptItemUID="GridBand13">
+                <GridBandListView ScriptItemUID="GridBandListView2" />
+                <GridFilters ScriptItemUID="GridFilters2" />
+                <GridRows />
+                <ControlReferenceGridColumnGroup ID="VI_ITShop_AccProduct_GridColumns" ScriptItemUID="wctl2" DataTable="AccProductIncluded">
+                  <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProductIncluded" ScriptItemUID="VirtualTableMapping2" />
+                </ControlReferenceGridColumnGroup>
+                <GridColumn ScriptItemUID="GridColumn1" Layout="'VI_Styles_GridColumn_Centered'">
+                  <GridColumnHeader ScriptItemUID="wctl1">
+                    <Label Text="translate(&quot;#LDS#Actions&quot;)" ScriptItemUID="ctl7w" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell1">
+                    <SwitchContainer ScriptItemUID="Switch1">
+                      <SwitchContainerCase ScriptItemUID="Case5" Condition="0 &lt; from ShoppingCartItem select count() where UID_PersonOrdered = (from ShoppingCartItem select current UID_PersonOrdered) and CheckStatus = 'OK' and UID_AccProduct = (from AccProductIncluded select current uid_accproduct)" ItemUID="Ok">
+                        <Label ScriptItemUID="Label16" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute20" Value="&quot;imx-icon imx-icon-ok&quot;" />
+                            <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute19" Value="translate('#LDS#Ok')" />
+                          </HtmlAttributes>
+                        </Label>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case1" Condition="convert(isnull(getconfig(&quot;VI_ITShop_AllowRequestWithMissingDependencies&quot;),'true'), 'Boolean')&#xD;&#xA;and&#xD;&#xA;0 &lt; DbCount(&quot;AccProduct&quot;,format(&quot;UID_AccProduct in(select Q.UID_AccProduct from QER_VPWOProductNodes Q join PersonHasObject P on P.ObjectKey = Q.ObjectKeyOrdered where P.UID_Person = '{0}' and Q.UID_AccProduct = '{1}')&quot;,from ShoppingCartItem select current UID_PersonOrdered,from AccProductIncluded select current UID_AccProduct))" ItemUID="Ok with VI_ITShop_AllowRequestWithMissingDependencies">
+                        <Label ScriptItemUID="Label15" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute16" Value="&quot;imx-icon imx-icon-ok&quot;" />
+                            <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute15" Value="translate('#LDS#Assigned')" />
+                          </HtmlAttributes>
+                        </Label>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case2" Condition="convert(isnull(getconfig(&quot;VI_ITShop_AllowRequestWithMissingDependencies&quot;),'true'), 'Boolean')&#xD;&#xA;and &#xD;&#xA;(&#xD;&#xA;from AccProductIncluded select current not(IsOrdable)&#xD;&#xA;and &#xD;&#xA;not(uid_accproduct in (from ShoppingCartItem select UID_AccProduct where UID_PersonOrdered = (from ShoppingCartItem select current UID_PersonOrdered)))&#xD;&#xA;)&#xD;&#xA;and&#xD;&#xA;exists(&quot;PersonWantsOrg&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_PersonOrdered&quot;,from ShoppingCartItem select current UID_PersonOrdered),&#xD;&#xA;      format(&quot;orderstate in (select orderstate from qer_vpwoorderstate where isclosed = 0 and isassigned = 0) and uid_org in (select uid_itshoporg from itshoporg where {0})&quot;,SqlCompareUid(&quot;UID_AccProduct&quot;,from AccProductIncluded select current UID_AccProduct))&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;" ItemUID="Open order with VI_ITShop_AllowRequestWithMissingDependencies">
+                        <Label ScriptItemUID="Label14" Text="translate('#LDS#Info')" EnableCustomAttributes="true" Action="Redirect">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute14" Value="&quot;imx-icon imx-icon-Information&quot;" />
+                            <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="translate('#LDS#The product is currently requested but not already assigned.')" />
+                          </HtmlAttributes>
+                          <ServerActionCall ScriptItemUID="ServerActionCall1">
+                            <LoadTable DataTable="PersonWantsOrg" ScriptItemUID="LoadTable2" WhereClause="SqlCompareUid(&quot;UID_PersonWantsOrg&quot;,&#xD;&#xA;   SingleProperty(&quot;PersonWantsOrg&quot;,&quot;UID_PersonWantsOrg&quot;,&#xD;&#xA;      SqlAnd(&#xD;&#xA;         SqlCompareUid(&quot;UID_PersonOrdered&quot;,from ShoppingCartItem select current UID_PersonOrdered),&#xD;&#xA;         format(&quot;orderstate in (select orderstate from qer_vpwoorderstate where isclosed = 0 and isassigned = 0) and uid_org in (select uid_itshoporg from itshoporg where {0})&quot;,SqlCompareUid(&quot;UID_AccProduct&quot;,from AccProductIncluded select current UID_AccProduct))&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" ConvertToInteractive="false" />
+                            </LoadTable>
+                            <ForeachRow DataTable="PersonWantsOrg" ScriptItemUID="ForeachRow1">
+                              <CallAction ActionID="VI_Popup" ScriptItemUID="Call2c">
+                                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                  <Container ScriptItemUID="Container17">
+                                    <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlRef3" />
+                                  </Container>
+                                </VirtualControlMapping>
+                                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                  <Container ScriptItemUID="Container16" Layout="'VI_Styles_Container_ButtonPanel'">
+                                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef4" />
+                                  </Container>
+                                </VirtualControlMapping>
+                                <VirtualFunctionMapping ID="PopupTitle()" Value="from personwantsorg select current Display()" ScriptItemUID="VirtualFunctionMapping14" />
+                              </CallAction>
+                            </ForeachRow>
+                          </ServerActionCall>
+                        </Label>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case3" Condition="from AccProductIncluded select current not(IsOrdable)" ItemUID="Impossible">
+                        <LinkContainer ScriptItemUID="LinkContainer3" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute17" Value="&quot;imx-icon imx-icon-Error&quot;" />
+                            <HtmlAttribute Name="'title'" ScriptItemUID="LinkContainer3title" Value="translate('#LDS#This product cannot currently be requested.')" />
+                          </HtmlAttributes>
+                          <ControlList ScriptItemUID="ControlList5" />
+                          <ServerActionCall ScriptItemUID="ServerActionCall13">
+                            <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+                              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#This product cannot be requested at the moment.&quot;)" ScriptItemUID="VirtualFunctionMapping35" />
+                              <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping36" />
+                              <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from AccProductIncluded select current display()" ScriptItemUID="VirtualFunctionMapping37" />
+                              <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping38" />
+                            </CallAction>
+                          </ServerActionCall>
+                        </LinkContainer>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case4" ItemUID="Order">
+                        <Button Text="translate('#LDS#Request now')" ScriptItemUID="Button2a" Layout="'VI_Styles_Button_Pill'" EnabledCondition="from AccProductIncluded select current IsOrdable&#xD;&#xA;and &#xD;&#xA;not(uid_accproduct in (from ShoppingCartItem select UID_AccProduct where UID_PersonOrdered = (from ShoppingCartItem select current UID_PersonOrdered)))&#xD;&#xA;" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute18" Value="translate('#LDS#Request now')" />
+                          </HtmlAttributes>
+                          <ServerActionCall ScriptItemUID="wctl4">
+                            <LoadTable DataTable="Person" ScriptItemUID="LoadTable1" WhereClause="SqlCompareUid(&quot;UID_Person&quot;,from ShoppingCartItem select current UID_PersonOrdered)">
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+                            </LoadTable>
+                            <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ScriptItemUID="wctl5" ReferenceType="AccProduct" UIDAccProduct="from AccProductIncluded select current uid_accproduct">
+                              <VirtualControlMapping VirtualControl="OnAfterInsert" ContainerType="ActionComponent">
+                                <ActionComponent ScriptItemUID="Action15">
+                                  <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction21">
+                                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The product {0} has been added to the shopping cart.&quot;,from AccProductIncluded select current display())" ScriptItemUID="VirtualFunctionMapping7" />
+                                    <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Add to shopping cart&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                                    <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping9" />
+                                  </CallAction>
+                                  <CallAction ActionID="UpdateOpenItems" ScriptItemUID="ctl58" />
+                                  <LoadTable DataTable="AccProductIncluded" WhereClause="from shoppingcartitem select current format(&quot;uid_accproduct in (select uid_accproductrelated from AccProductDependencies where uid_accproduct = '{0}' and IsMandatory=1)&quot;,uid_accproduct)" ScriptItemUID="LoadTable5">
+                                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+                                  </LoadTable>
+                                </ActionComponent>
+                              </VirtualControlMapping>
+                              <VirtualFunctionMapping ID="uidaccproduct()" Value="from AccProductIncluded select current uid_accproduct" ScriptItemUID="VirtualFunctionMapping10" />
+                              <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from ShoppingCartItem select top 1 UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping11" />
+                              <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping3" />
+                              <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="Person" ScriptItemUID="VirtualTableMapping4" />
+                              <VirtualFunctionMapping ID="UID_ShoppingCartItemParent()" Value="from ShoppingCartItem select current UID_ShoppingCartItem" ScriptItemUID="VirtualFunctionMapping12" />
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping61" ID="IsNoCopyParametersPerson()" Value="from AccProductIncluded select current IsNoCopyParametersPerson" />
+                            </AccProductSwitchCallAction>
+                          </ServerActionCall>
+                        </Button>
+                      </SwitchContainerCase>
+                    </SwitchContainer>
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+            </Grid>
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='PermissionExclusion'" ItemUID="Checkstatus = PermissionExclusion" ScriptItemUID="Container11">
+            <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute22" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#Assignment cannot be made because assignments exclude themselves.&quot;, from shoppingcartitem select current displayvalue(uid_accproduct),&#xD;&#xA;from ShoppingCartItem select current displayvalue(uid_personordered))  " ScriptItemUID="Label20" />
+            </Container>
+            <Grid ScriptItemUID="Grid3">
+              <GridBand DataTable="ExcludedPermissions" ScriptItemUID="GridBand2" OrderBy="" WhereClause="UID_ShoppingCartItem = ( select current UID_ShoppingCartItem from ShoppingCartItem)" DisplayHeader="Always" EnableGridViewSetting="false">
+                <GridBandListView ScriptItemUID="GridBandListView3" />
+                <GridFilters ScriptItemUID="GridFilters3" />
+                <GridRows />
+                <GridColumn ScriptItemUID="Column10">
+                  <GridColumnHeader ScriptItemUID="wctl3">
+                    <Label ScriptItemUID="Label17" Text="translate('#LDS#Conflicting assignments')" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell2">
+                    <Label ScriptItemUID="Label18" Text="from ExcludedPermissions select current ObjectDisplayExcluded" />
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+            </Grid>
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Error'" ItemUID="Checkstatus = Error" ScriptItemUID="Container5" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute13" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container6">
+              <Label Text="from ShoppingCartItem select current ErrorText" ScriptItemUID="Label12" />
+            </Container>
+          </Container>
+          <Container Condition="from ShoppingCartItem select current CheckStatus='Warning'" ItemUID="Checkstatus = Warning" ScriptItemUID="Container15" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" ScriptItemUID="HtmlAttribute21" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container19">
+              <Label Text="from ShoppingCartItem select current ErrorText" ScriptItemUID="Label21" />
+            </Container>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="ExistingPWO" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action9" />
+          <Column Name="UID_AccProduct" Expression="from itshoporgo select top 1 uid_accproduct where uid_itshoporg = ( select current uid_org from existingpwo)" DataSource="Expression" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column1" />
+          <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column5" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="AccProductExcluded" Class="AccProduct" ScriptItemUID="DataTableDbObject5">
+          <ActionSequence ScriptItemUID="Action13" />
+        </DataTableDbObject>
+        <DataTableFKView Table="ITShopOrgO" ViewFKDataTable="ExistingPWO" ViewFKDataColumn="UID_Org" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+        </DataTableFKView>
+        <DataTableDbObject Table="AccProductIncluded" Class="AccProduct" ScriptItemUID="DataTableDbObject6">
+          <ActionSequence ScriptItemUID="Action18" />
+          <Column Name="IsOrdable" DataType="System.Boolean" ScriptItemUID="Column9" DataSource="Expression" Expression="IsOrderable(UID_AccProduct,from shoppingcartitem select current uid_personordered)" />
+        </DataTableDbObject>
+        <DataTableFKView Table="AccProductForShoppingCartItem" ViewFKDataTable="ShoppingCartItem" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+          <Column Name="IsReusable" DataType="System.Boolean" ScriptItemUID="Column4" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossible : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+          <Column Name="HasBlockingPersonWantsOrg" DataType="System.Boolean" ScriptItemUID="Column3" DataSource="Expression" Expression="not(isreusable)&#xD;&#xA;and&#xD;&#xA;Exists(&quot;personwantsorg&quot;,&#xD;&#xA;format(&quot;uid_org in (select uid_itshoporg from itshoporg where uid_accproduct in ('{0}'))&#xD;&#xA;   and OrderState not in ('Dismissed','Aborted','Unsubscribed')&#xD;&#xA;   and Uid_PersonOrdered = '{1}'&quot;,uid_accproduct,from shoppingcartitem select current uid_personordered))" />
+        </DataTableFKView>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action2" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonWantsOrg" Table="PersonWantsOrg" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column8" />
+        </DataTableDbObject>
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="ITShopOrgO" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType9" ConvertToInteractive="false" />
+          <Column Name="HelperIsReusable" DataType="System.Boolean" ScriptItemUID="Column12" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossible : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+          <Column Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" ScriptItemUID="Column11" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossibleUnsubscribe : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsOrderable(string uidAccProduct, string uidPerson)" Expression="{{&#xD;&#xA;var p = new System.Collections.Generic.List&lt;VI.DB.Entities.QueryParameter&gt;();&#xD;&#xA;p.Add(VI.DB.Entities.QueryParameter.Create&lt;string&gt;(&quot;uidaccproduct&quot;, uidAccProduct));&#xD;&#xA;p.Add(VI.DB.Entities.QueryParameter.Create&lt;string&gt;(&quot;uidperson&quot;, uidPerson));&#xD;&#xA;bool result;&#xD;&#xA;using(var r = _Database.GetLimitedSqlDataReader(&quot;QER_FGIPWOOrderPerson&quot;, p))&#xD;&#xA;{&#xD;&#xA;   r.Read();&#xD;&#xA;   if( r.GetValue(0) is bool)&#xD;&#xA;   {&#xD;&#xA;      result = (bool)r.GetValue(0);&#xD;&#xA;   }&#xD;&#xA;   else&#xD;&#xA;   {&#xD;&#xA;       result = r.GetValue(0).ToString().Equals(&quot;1&quot;);&#xD;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return result;&#xD;&#xA;}}" DataType="System.Boolean" ScriptItemUID="Function4" />
+        <Function Name="GetOrgFromAssignmentKey(string key)" Expression="{{&#xD;&#xA;if(string.IsNullOrEmpty(key))&#xD;&#xA;return null;&#xD;&#xA;&#xD;&#xA;var k = new DbObjectKey(key);&#xD;&#xA;var vals = k.Keys;&#xD;&#xA;string result = null;&#xD;&#xA;&#xD;&#xA;// one of the foreign-keys must point to Person, as we want to show entitlements that&#xD;&#xA;// will be inherited to the employee&#xD;&#xA;var isAssignToPerson = false;&#xD;&#xA;&#xD;&#xA;for (var i = 0; i &lt; vals.Length; i++)&#xD;&#xA;{&#xD;&#xA;   var fkRel = k.GetTable(_Connection).PrimaryKeyColumns[i].FKRelation;&#xD;&#xA;   &#xD;&#xA;   if (fkRel == null)&#xD;&#xA;      continue;&#xD;&#xA;   &#xD;&#xA;   var parentTable = fkRel.ParentColumn.TableDef;&#xD;&#xA;   if (parentTable.Tablename.Equals(&quot;Person&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;      isAssignToPerson = true;&#xD;&#xA;   &#xD;&#xA;   var b = parentTable.BaseTable;&#xD;&#xA;   &#xD;&#xA;   // is the foreign key pointing to a basetree deriving table?&#xD;&#xA;   &#xD;&#xA;   if (b != null &amp;&amp; b.Tablename.Equals(&quot;Basetree&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;   {&#xD;&#xA;      result = vals[i];&#xD;&#xA;      continue;&#xD;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return isAssignToPerson ? result : null;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="QERFunction1" />
+        <Function ScriptItemUID="Function6" Name="GetTablenameFromAssignmentKey(string key)" DataType="System.String" Expression="{{&#xD;&#xA;if(string.IsNullOrEmpty(key))&#xD;&#xA;return null;&#xD;&#xA;&#xD;&#xA;var db = new DbObjectKey(key);&#xD;&#xA;string columnName = null;&#xD;&#xA;				&#xD;&#xA;if (db.Tablename.Equals(&quot;PersonInProfitcenter&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;columnName = &quot;Profitcenter&quot;;&#xD;&#xA;else if (db.Tablename.Equals(&quot;PersonInLocality&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;columnName = &quot;Locality&quot;;&#xD;&#xA;else if (db.Tablename.Equals(&quot;PersonInDepartment&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;columnName = &quot;Department&quot;;&#xD;&#xA;else if (db.Tablename.Equals(&quot;PersonInOrg&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;columnName = &quot;Org&quot;;&#xD;&#xA;&#xD;&#xA;@return columnName;&#xD;&#xA;}}" />
+        <Function ScriptItemUID="Function7" Name="OtherBaseTreeSQLExcludes(string _UID_Person, string _TableName, string _ObjectKeyAssignment)" DataType="System.String" Expression=" if( &#xD;&#xA; 0 &lt; select count() from ShoppingCartItem where (not(IsNullOrEmpty(ObjectKeyAssignment)) and isnull(methodname,'') = '' and UID_PersonOrdered = _UID_Person and ObjectKeyAssignment &lt;&gt; _ObjectKeyAssignment))then &#xD;&#xA;    SqlInWithFormat(Format(&quot;UID_{0}&quot;,_TableName),&quot;string&quot;,&quot;NonUnicodeLiterals&quot;,select GetOrgFromAssignmentKey(ObjectKeyAssignment) from ShoppingCartItem where (not(IsNullOrEmpty(ObjectKeyAssignment)) and isnull(methodname,'') = '' and UID_PersonOrdered = _UID_Person and ObjectKeyAssignment &lt;&gt; _ObjectKeyAssignment))" FilterForTable="" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="CheckStatus" DataType="System.String" />
+        <VirtualColumn Name="ErrorText" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceCheckSimpleObjects" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="SourceKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceCheckSimple" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="UID_ShoppingCartItem" DataType="System.String" />
+        <VirtualColumn Name="UID_ComplianceRule" DataType="System.String" />
+        <VirtualColumn Name="UID_Person" DataType="System.String" />
+        <VirtualColumn Name="DBObjectKey" DataType="System.String" />
+        <VirtualColumn Name="ViolationType" DataType="System.String" />
+        <VirtualColumn Name="IsNoEffectivePerson" DataType="System.Boolean" TriggerUpdates="Never" />
+      </VirtualTable>
+      <VirtualTable Name="ExcludedPermissions" ScriptItemUID="VirtualTable5" TriggerUpdates="Never">
+        <VirtualColumn Name="UID_ShoppingCartItem" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="ObjectDisplayExcluded" DataType="System.String" TriggerUpdates="Never" />
+        <VirtualColumn Name="ObjectKeyExcluded" DataType="System.String" TriggerUpdates="Never" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

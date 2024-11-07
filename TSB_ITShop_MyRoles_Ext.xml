@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="TSB_ITShop_MyRoles_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select (&quot;SystemEntitlements&quot; as area, translate(&quot;#LDS#Heading System Entitlements&quot;) as caption)" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList2" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select (&quot;SystemEntitlements&quot; as area, translate('#LDS#You are responsible for the following system entitlements.') as caption)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

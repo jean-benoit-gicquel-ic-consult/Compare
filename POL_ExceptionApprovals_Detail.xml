@@ -1,0 +1,318 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="POL_ExceptionApprovals_Detail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action2" />
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="ExceptionApprovals_Detail" ScriptItemUID="Form2" NavigationTitle="translate('#LDS#Exception Approvals')">
+          <ActionSequence ScriptItemUID="Action3" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+            <Container ScriptItemUID="Container12">
+              <Label Text="translate('#LDS#Exception Approvals')" ScriptItemUID="Label4" />
+            </Container>
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+            <Container ScriptItemUID="Container1">
+              <Container ScriptItemUID="Container14">
+                <ControlReferenceContainer ID="VI_Common_PageDescription" ItemUID="Head" ScriptItemUID="ControlRef5">
+                  <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Please supply a reason for your decisions. You may enter one reason for all decisions as well as specific reasons for every decision.')" ScriptItemUID="VirtualFunctionMapping1" />
+                </ControlReferenceContainer>
+                <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15">
+                  <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef6">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="ReasonApprove" Condition="0 &lt; select count() from QERPolicyHasObject where doapprove" ColumnComponentEdit="VI_Edit_TextLong" />
+                        <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_QERJustificationApprove" Condition="(0 &lt; select count() from QERPolicyHasObject where doapprove) and HasApproveJustifications()" ColumnComponentEdit="VI_Edit_FKByComboBox" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ReasonDeny" Condition="0 &lt; select count() from QERPolicyHasObject where doreject" ColumnComponentEdit="VI_Edit_TextLong" />
+                        <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_QERJustificationDeny" Condition="(0 &lt; select count() from QERPolicyHasObject where doreject) and HasDenyJustifications()" ColumnComponentEdit="VI_Edit_FKByComboBox" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Grid ScriptItemUID="Grid2" AllowExport="true" ExportFileName="" ExportTitle="">
+                  <GridBand DataTable="QERPolicyHasObject" DisplayHeader="Always" WhereClause="doapprove or doreject" ScriptItemUID="GridBand1">
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef1">
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                            <ControlList ScriptItemUID="ControlList2">
+                              <Container Condition="select current doapprove from QERPolicyHasObject" ScriptItemUID="Container2" Layout="'VI_Styles_Container_Inline'">
+                                <Image ScriptItemUID="Image5" Source="File" FileName="variable('%permanentlink%img=24_approve_selected.png')" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute2" Value="translate(&quot;#LDS#Approve&quot;)" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </Container>
+                              <Container Condition="select current doreject from QERPolicyHasObject" ScriptItemUID="Container3" Layout="'VI_Styles_Container_Inline'">
+                                <Image ScriptItemUID="Image6" Source="File" FileName="variable('%permanentlink%img=24_deny_selected.png')" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute3" Value="translate('#LDS#Deny')" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </Container>
+                              <Container ScriptItemUID="Container4">
+                                <Label Text="from QERPolicyHasObject select current displayobjectkey" ScriptItemUID="Label7" />
+                              </Container>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                            <ControlList ScriptItemUID="ControlList3" />
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                            <ControlList ScriptItemUID="ControlList4">
+                              <LayoutPanel ScriptItemUID="LayoutPanel1">
+                                <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate1" DataTable="QERPolicyHasObject">
+                                  <ColumnList ScriptItemUID="ColumnList4">
+                                    <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="DisplayObjectKey" Caption="Translate(&quot;#LDS#Violating object&quot;)" />
+                                    <SingleColumn ScriptItemUID="SingleColumn10" DataColumn="UID_QERPolicy" Caption="datacaption(&quot;qerpolicy&quot;, &quot;uid_qerpolicy&quot;)" />
+                                  </ColumnList>
+                                  <Container ScriptItemUID="Container8" ItemUID="Title column for normal properties">
+                                    <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef3">
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicyHasObject" ScriptItemUID="VirtualTableMapping4">
+                                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                      </VirtualTableMapping>
+                                      <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping15" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                  <Container ScriptItemUID="Container7" ItemUID="Value column for normal properties">
+                                    <ColumnEditor DataTable="QERPolicyHasObject" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1" />
+                                  </Container>
+                                </ContainerColumnTemplate>
+                              </LayoutPanel>
+                              <Container ScriptItemUID="Container5">
+                                <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container6">
+                                  <Label Text="translate(&quot;#LDS#Please enter a reason for your decision.&quot;)" ScriptItemUID="Label8" />
+                                </Container>
+                                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping14">
+                                    <ColumnList ScriptItemUID="ColumnList2">
+                                      <SingleColumn ScriptItemUID="SingleColumn8" ColumnComponentEdit="VI_Edit_TextLong" DataColumn="ReasonForDecision" />
+                                      <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="UID_QERJustificationSelected" Condition="if(doapprove) then HasApproveJustifications() else HasDenyJustifications()" />
+                                    </ColumnList>
+                                  </VirtualFunctionMapping>
+                                  <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicyHasObject" ScriptItemUID="VirtualTableMapping3" />
+                                </ControlReferenceContainer>
+                              </Container>
+                            </ControlList>
+                          </VirtualControlMapping>
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </GridBandListView>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn HasHeaderCell="false" Width="&quot;50px&quot;" ScriptItemUID="Column41">
+                      <Cell ScriptItemUID="Cell1" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Cell1style" Value="'vertical-align: middle;'" />
+                        </HtmlAttributes>
+                        <Container ScriptItemUID="Container20">
+                          <Container Condition="select current doapprove from QERPolicyHasObject" ScriptItemUID="Container21">
+                            <Image ScriptItemUID="Image3" Source="File" FileName="variable('%permanentlink%img=24_approve_selected.png')" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="translate(&quot;#LDS#Approve&quot;)" />
+                              </HtmlAttributes>
+                            </Image>
+                          </Container>
+                          <Container Condition="select current doreject from QERPolicyHasObject" ScriptItemUID="Container22">
+                            <Image ScriptItemUID="Image4" Source="File" FileName="variable('%permanentlink%img=24_deny_selected.png')" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="translate('#LDS#Deny')" />
+                              </HtmlAttributes>
+                            </Image>
+                          </Container>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'33%'" SortColumn="DisplayObjectKey" AutoFilterColumn="DisplayObjectKey" ScriptItemUID="Column2">
+                      <GridColumnHeader ScriptItemUID="wctl1">
+                        <Label Text="Translate(&quot;#LDS#Violating object&quot;)" ScriptItemUID="Label1" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell3">
+                        <Image Source="File" FileName="variable(format(&quot;%permanentlink%dialogimgTbl={0}&amp;size=Small&quot;, ((from QERPolicyHasObject select current getObjectKeytable(objectkey)))+&quot;&quot;))" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="datacaptionsingle((from QERPolicyHasObject select current getobjectkeytable(objectkey))+&quot;&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                        <Label Text="from QERPolicyHasObject select current displayobjectkey" ScriptItemUID="Label2" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'33%'" SortColumn="UID_QERPolicy" AutoFilterColumn="UID_QERPolicy" ScriptItemUID="Column3">
+                      <GridColumnHeader ScriptItemUID="wctl2">
+                        <Label Text="datacaption(&quot;qerpolicy&quot;, &quot;uid_qerpolicy&quot;)" ScriptItemUID="Label6" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell4">
+                        <Image Source="File" FileName="variable(format(&quot;%permanentlink%dialogimgTbl={0}&amp;size=Small&quot;,&quot;QERPolicy&quot;))" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="datacaptionsingle(&quot;qerpolicy&quot;)" />
+                          </HtmlAttributes>
+                        </Image>
+                        <Label Text="select current displayvalue(uid_qerpolicy) from QERPolicyHasObject" ScriptItemUID="Label3" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'200px'" ScriptItemUID="Column46">
+                      <GridColumnHeader ScriptItemUID="wctl5">
+                        <Label Text="translate(&quot;#LDS#Reason&quot;)" ScriptItemUID="Label17" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell6">
+                        <Label Text="from QERPolicyHasObject  select current IsNullOrEmpty(DisplayValue(UID_QERJustificationSelected),IsNullOrEmpty(ReasonForDecision,translate(&quot;#LDS#Enter a reason&quot;)))" Action="Redirect" ScriptItemUID="Label5">
+                          <ServerActionCall ScriptItemUID="ServerActionCall17">
+                            <ActionSequence ScriptItemUID="Action1">
+                              <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                  <Container ScriptItemUID="Container19">
+                                    <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container23">
+                                      <Label Text="translate(&quot;#LDS#Please enter a reason for your decision.&quot;)" ScriptItemUID="Label9" />
+                                    </Container>
+                                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef8">
+                                      <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping3">
+                                        <ColumnList ScriptItemUID="ColumnList3">
+                                          <SingleColumn ScriptItemUID="SingleColumn5" ColumnComponentEdit="VI_Edit_TextLong" DataColumn="ReasonForDecision" />
+                                          <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="UID_QERJustificationSelected" Condition="if(doapprove) then HasApproveJustifications() else HasDenyJustifications()" />
+                                        </ColumnList>
+                                      </VirtualFunctionMapping>
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="QERPolicyHasObject" ScriptItemUID="VirtualTableMapping2" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                </VirtualControlMapping>
+                                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container18">
+                                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef4" />
+                                  </Container>
+                                </VirtualControlMapping>
+                                <VirtualFunctionMapping ID="PopupTitle()" Value="Format(&#xD;&#xA;   &quot;{0} - {1}&quot;,&#xD;&#xA;   from QERPolicyHasObject select current DisplayValue(UID_QERPolicy),&#xD;&#xA;   from QERPolicyHasObject select current DisplayObjectKey&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping4" />
+                              </CallAction>
+                            </ActionSequence>
+                          </ServerActionCall>
+                        </Label>
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+                <Container Layout="'VI_Styles_Container_ButtonBar'" Condition="0 &lt; select count() from QERPolicyHasObject" ItemUID="Buttonpanel" ScriptItemUID="Container43">
+                  <Button Text="translate('#LDS#Save')" ScriptItemUID="Button3">
+                    <ServerActionCall ScriptItemUID="ServerActionCall5">
+                      <ActionOnControl ActionType="PerformValidation" />
+                      <ActionSequence Condition="0 = select count() from QERPolicyHasObject where (doapprove or doreject)" ItemUID="No decisions made" ScriptItemUID="Action25">
+                        <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call6">
+                          <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+                          <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#You have not made any decisions.')" ScriptItemUID="VirtualFunctionMapping6" />
+                          <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#No decisions were made')" ScriptItemUID="VirtualFunctionMapping7" />
+                          <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping8" />
+                        </CallAction>
+                        <EndExecution AlsoAbortWaitingThreads="false" />
+                      </ActionSequence>
+                      <ActionSequence Condition="(0 &lt; select count() from QERPolicyHasObject where (doreject and isnull(ReasonForDecision,'')='' and IsNull(UID_QERJustificationSelected,'')=''))&#xD;&#xA;and&#xD;&#xA;(from vars select isnull(ReasonDeny,'')='')&#xD;&#xA;and&#xD;&#xA;(from vars select isnull(UID_QERJustificationDeny,'')='')&#xD;&#xA;and&#xD;&#xA;(&quot;true&quot;=getconfig(&quot;POL_QERPolicyHasObject_ApproverReasonMandatoryOnDeny&quot;))" ItemUID="Enter mandatory reason" ScriptItemUID="Action27">
+                        <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call7">
+                          <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping9" />
+                          <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Please supply a reason when denying a request.')" ScriptItemUID="VirtualFunctionMapping10" />
+                          <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Reason missing')" ScriptItemUID="VirtualFunctionMapping11" />
+                        </CallAction>
+                        <EndExecution AlsoAbortWaitingThreads="false" />
+                      </ActionSequence>
+                      <ActionSequence Condition="0 &lt; select count() from QERPolicyHasObject where (isnull(doapprove,false) or isnull(doreject,false))" ItemUID="Make Decision" ScriptItemUID="Action30">
+                        <ActionSequence ScriptItemUID="Action4" ItemUID="approve">
+                          <ForeachRow DataTable="QERPolicyHasObject" ScriptItemUID="ForeachRow1" WhereClause="doapprove">
+                            <ConvertInteractiveEntity DataTable="QERPolicyHasObject" />
+                            <SwitchAction ScriptItemUID="Switch1">
+                              <SwitchActionCase ScriptItemUID="Case1" Condition="from QERPolicyHasObject select current IsDecisionMade">
+                                <Method DataTable="QERPolicyHasObject" Method="UpdateDecision" WhereClause="UID_QERPolicyHasObject = (from QERPolicyHasObject select current UID_QERPolicyHasObject)" SaveAfterAction="false">
+                                  <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                                  <MethodParameter Name="'bExceptionGranted'" Value="true" />
+                                  <MethodParameter Name="'strReasonText'" Value="select current (if( isnull(reasonfordecision,'')&lt;&gt;'') then&#xD;&#xA;reasonfordecision else&#xD;&#xA;&#xD;&#xA;-- Generellen Begründungstext übernehmen&#xD;&#xA;if( doapprove ) then&#xD;&#xA;(from vars select isnull(reasonapprove,''))&#xD;&#xA;else&#xD;&#xA;(from vars select isnull(reasondeny,''))&#xD;&#xA;&#xD;&#xA;) from QERPolicyHasObject" />
+                                  <MethodParameter Name="&quot;uidJustification&quot;" Value="if not(from QERPolicyHasObject select current IsNullOrEmpty(UID_QERJustificationSelected))then(&#xD;&#xA;   from QERPolicyHasObject select current UID_QERJustificationSelected&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;if(from QERPolicyHasObject select current DoApprove)then&#xD;&#xA;(from vars select isnull(UID_QERJustificationApprove,''))&#xD;&#xA;else&#xD;&#xA;(from vars select isnull(UID_QERJustificationDeny,''))&#xD;&#xA;)" />
+                                </Method>
+                              </SwitchActionCase>
+                              <SwitchActionCase ScriptItemUID="Case2">
+                                <Method DataTable="QERPolicyHasObject" Method="MakeDecision" WhereClause="UID_QERPolicyHasObject = (from QERPolicyHasObject select current UID_QERPolicyHasObject)" SaveAfterAction="false">
+                                  <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                                  <MethodParameter Name="'bExceptionGranted'" Value="true" />
+                                  <MethodParameter Name="'strReasonText'" Value="select current (if( isnull(reasonfordecision,'')&lt;&gt;'') then&#xA;reasonfordecision else&#xA;&#xA;-- Generellen Begründungstext übernehmen&#xA;if( doapprove ) then&#xA;(from vars select isnull(reasonapprove,''))&#xA;else&#xA;(from vars select isnull(reasondeny,''))&#xA;&#xA;) from QERPolicyHasObject" />
+                                  <MethodParameter Name="&quot;uidJustification&quot;" Value="if not(from QERPolicyHasObject select current IsNullOrEmpty(UID_QERJustificationSelected))then(&#xA;   from QERPolicyHasObject select current UID_QERJustificationSelected&#xA;)&#xA;else(&#xA;if(from QERPolicyHasObject select current DoApprove)then&#xA;(from vars select isnull(UID_QERJustificationApprove,''))&#xA;else&#xA;(from vars select isnull(UID_QERJustificationDeny,''))&#xA;)" />
+                                </Method>
+                              </SwitchActionCase>
+                            </SwitchAction>
+                            <Save DataTable="QERPolicyHasObject" ScriptItemUID="Save1" WhereClause="UID_QERPolicyHasObject = (from QERPolicyHasObject select current UID_QERPolicyHasObject)" ReloadAfterSave="NoReload" />
+                          </ForeachRow>
+                        </ActionSequence>
+                        <ActionSequence ScriptItemUID="Action5" ItemUID="deny">
+                          <ForeachRow DataTable="QERPolicyHasObject" ScriptItemUID="ForeachRow2" WhereClause="doreject">
+                            <ConvertInteractiveEntity DataTable="QERPolicyHasObject" />
+                            <SwitchAction ScriptItemUID="Switch2">
+                              <SwitchActionCase ScriptItemUID="Case3" Condition="from QERPolicyHasObject select current IsDecisionMade">
+                                <Method DataTable="QERPolicyHasObject" Method="UpdateDecision" WhereClause="UID_QERPolicyHasObject = (from QERPolicyHasObject select current UID_QERPolicyHasObject)" SaveAfterAction="false">
+                                  <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                                  <MethodParameter Name="'bExceptionGranted'" Value="false" />
+                                  <MethodParameter Name="'strReasonText'" Value="select current (if( isnull(reasonfordecision,'')&lt;&gt;'') then&#xA;reasonfordecision else&#xA;&#xA;-- Generellen Begründungstext übernehmen&#xA;if( doapprove ) then&#xA;(from vars select isnull(reasonapprove,''))&#xA;else&#xA;(from vars select isnull(reasondeny,''))&#xA;&#xA;) from QERPolicyHasObject" />
+                                  <MethodParameter Name="&quot;uidJustification&quot;" Value="if not(from QERPolicyHasObject select current IsNullOrEmpty(UID_QERJustificationSelected))then(&#xA;   from QERPolicyHasObject select current UID_QERJustificationSelected&#xA;)&#xA;else(&#xA;if(from QERPolicyHasObject select current DoApprove)then&#xA;(from vars select isnull(UID_QERJustificationApprove,''))&#xA;else&#xA;(from vars select isnull(UID_QERJustificationDeny,''))&#xA;)" />
+                                </Method>
+                              </SwitchActionCase>
+                              <SwitchActionCase ScriptItemUID="Case4">
+                                <Method DataTable="QERPolicyHasObject" Method="MakeDecision" WhereClause="UID_QERPolicyHasObject = (from QERPolicyHasObject select current UID_QERPolicyHasObject)" SaveAfterAction="false">
+                                  <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
+                                  <MethodParameter Name="'bExceptionGranted'" Value="false" />
+                                  <MethodParameter Name="'strReasonText'" Value="select current (if( isnull(reasonfordecision,'')&lt;&gt;'') then&#xA;reasonfordecision else&#xA;&#xA;-- Generellen Begründungstext übernehmen&#xA;if( doapprove ) then&#xA;(from vars select isnull(reasonapprove,''))&#xA;else&#xA;(from vars select isnull(reasondeny,''))&#xA;&#xA;) from QERPolicyHasObject" />
+                                  <MethodParameter Name="&quot;uidJustification&quot;" Value="if not(from QERPolicyHasObject select current IsNullOrEmpty(UID_QERJustificationSelected))then(&#xA;   from QERPolicyHasObject select current UID_QERJustificationSelected&#xA;)&#xA;else(&#xA;if(from QERPolicyHasObject select current DoApprove)then&#xA;(from vars select isnull(UID_QERJustificationApprove,''))&#xA;else&#xA;(from vars select isnull(UID_QERJustificationDeny,''))&#xA;)" />
+                                </Method>
+                              </SwitchActionCase>
+                            </SwitchAction>
+                            <Save DataTable="QERPolicyHasObject" ScriptItemUID="Save2" WhereClause="UID_QERPolicyHasObject = (from QERPolicyHasObject select current UID_QERPolicyHasObject)" ReloadAfterSave="NoReload" />
+                          </ForeachRow>
+                        </ActionSequence>
+                        <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call8">
+                          <VirtualFunctionMapping ID="MessageText()" Value="if(&#xD;&#xA;1 = from QERPolicyHasObject select count() where (DoApprove or DoReject)&#xD;&#xA;)&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Your decision has been saved.')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#{0} decisions have been saved.', from QERPolicyHasObject select count() where (doapprove or doreject))" ScriptItemUID="VirtualFunctionMapping12" />
+                          <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping13" />
+                        </CallAction>
+                        <ActionSequence ScriptItemUID="Action33">
+                          <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call9" />
+                          <CodeLiteral ScriptItemUID="CodeLiteral1">
+DataContext.QERPolicyHasObject .Delete();
+
+// invalidate the table store --&gt; reload all data
+TableStore.Invalidate();</CodeLiteral>
+                        </ActionSequence>
+                        <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect6" NoLinkBackToThisForm="true" NoLinkObjectID="true" />
+                      </ActionSequence>
+                    </ServerActionCall>
+                  </Button>
+                  <Button Text="translate(&quot;#LDS#Back&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ScriptItemUID="Button4">
+                    <ServerActionCall ScriptItemUID="ServerActionCall6">
+                      <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect2" />
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </Container>
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ReasonApprove" ScriptItemUID="Column37" DataType="System.String" Caption="translate(&quot;#LDS#Reason for approvals&quot;)" />
+          <Column Name="ReasonDeny" ScriptItemUID="Column38" DataType="System.String" Caption="translate(&quot;#LDS#Reason for denials&quot;)" />
+          <Column Name="UID_QERJustificationApprove" DataType="System.String" ScriptItemUID="Column5" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 256, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)&#xD;&#xA;)" />
+          <Column Name="UID_QERJustificationDeny" DataType="System.String" ScriptItemUID="Column7" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 512, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)&#xD;&#xA;)" />
+          <Column Name="HasApproveJustifications" DataType="System.Boolean" ScriptItemUID="Column33" DataSource="Expression" Expression="0 &lt; DbCount(&quot;QERJustification&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 256, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;))&#xD;&#xA;)" />
+          <Column Name="HasDenyJustifications" DataType="System.Boolean" ScriptItemUID="Column1" DataSource="Expression" Expression="0 &lt; DbCount(&quot;QERJustification&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;JustificationType&quot;, 512, &quot;int&quot;, &quot;bitsset&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;))&#xD;&#xA;)" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="HasApproveJustifications()" Expression="from Vars select HasApproveJustifications" DataType="System.Boolean" ScriptItemUID="Function8" />
+        <Function Name="HasDenyJustifications()" Expression="from Vars select HasDenyJustifications" DataType="System.Boolean" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="QERPolicyHasObject" ScriptItemUID="VirtualTable1" Class="QERPolicyHasObject">
+        <VirtualColumn Name="doapprove" DataType="System.Boolean" />
+        <VirtualColumn Name="doreject" DataType="System.Boolean" />
+        <VirtualColumn Name="ReasonForDecision" DataType="System.String" />
+        <VirtualColumn Name="DisplayObjectKey" DataType="System.String" />
+        <VirtualColumn Name="UID_QERJustificationSelected" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

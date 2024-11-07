@@ -1,0 +1,179 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_FavoritesView">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="QBM.CompositionApi.UserConfig" />
+        <AssemblyReference Assembly="QBM.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IBookmarkProvider&gt;();
+Bookmarks.Delete();
+
+// check if UserConfiguration is enabled
+var bookmarkProvider = provider as BookmarkProvider;
+if (bookmarkProvider == null || !bookmarkProvider.IsEnabled()) return;
+
+foreach (var bookmark in provider.Get())
+{
+	Bookmarks.ObjectList.Add(bookmark);
+}</CodeLiteral>
+        <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef1">
+          <VirtualControlMapping ContainerType="Container" VirtualControl="Container">
+            <Container ScriptItemUID="Container2">
+              <SwitchContainer ScriptItemUID="Switch2">
+                <SwitchContainerCase ScriptItemUID="Case4" Condition="0 &lt; select count() from bookmarks">
+                  <ContainerTemplate DataTable="Bookmarks" ScriptItemUID="ContainerTemplate1" Layout="" EnableCustomAttributes="true" OrderBy="'Display'">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="ul" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-valuelist&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="li" />
+                      </HtmlAttributes>
+                      <LinkContainer ScriptItemUID="LinkContainer1">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <Label ScriptItemUID="Label5" Text="from bookmarks select current display" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-col imx-icon &quot;+from bookmarks select current cssclass" />
+                            </HtmlAttributes>
+                          </Label>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall1" EnableRedirectByUrl="true">
+                          <RedirectByUrl>
+                            <Redirect ScriptItemUID="Redirect3" Target="Link" HREF="from bookmarks select current url" />
+                          </RedirectByUrl>
+                          <Redirect ScriptItemUID="Redirect4" Target="Link" HREF="from bookmarks select current url" />
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </ContainerTemplate>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case3">
+                  <Label Text="translate(&quot;#LDS#You have not added any bookmarks.&quot;)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-valuelist imx-insetpane-content&quot;" />
+                      <Property Name="TagName" Value="div" />
+                    </HtmlAttributes>
+                  </Label>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Bookmarks')" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Identifier()" Value="&quot;Tile_Bookmarks&quot;" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Size()" Value="'Dashboard'" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ContentType()" Value="'Container'" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="ActionDisabled()" Value="false" />
+          <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+            <ActionComponent ScriptItemUID="Action1">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call3">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container6">
+                    <SwitchContainer ScriptItemUID="Switch1">
+                      <SwitchContainerCase ScriptItemUID="Case2" Condition="0 &lt; select count() from bookmarks">
+                        <Grid ScriptItemUID="Grid1" HideMenu="true" EnableCustomAttributes="true">
+                          <HtmlAttributes />
+                          <GridBand DataTable="Bookmarks" DisplayHeader="Always" ScriptItemUID="GridBand1" EnableGridViewSetting="false" EntriesPerPage="6" OrderBy="'Display'" Layout="'VI_Styles_GridBand_Borderless'">
+                            <GridBandListView ScriptItemUID="GridBandListView4" />
+                            <GridFilters ScriptItemUID="GridFilters4" />
+                            <GridRows />
+                            <GridColumn ScriptItemUID="Column1" AutoFilterColumn="Display" SortColumn="Display">
+                              <GridColumnHeader ScriptItemUID="wctl1">
+                                <Label ScriptItemUID="Label4" Text="translate('#LDS#Bookmarks')" />
+                              </GridColumnHeader>
+                              <Cell ScriptItemUID="Cell1">
+                                <Label ScriptItemUID="Label3" Text="from bookmarks select current display" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-col imx-icon &quot;+from bookmarks select current cssclass" />
+                                  </HtmlAttributes>
+                                </Label>
+                              </Cell>
+                            </GridColumn>
+                            <GridColumn ScriptItemUID="Column2" Layout="'VI_Styles_GridColumn_Right'">
+                              <GridColumnHeader ScriptItemUID="wctl2" />
+                              <Cell ScriptItemUID="Cell2">
+                                <Button ScriptItemUID="Button4" Text="translate('#LDS#Delete')" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute6" Value="translate(&quot;#LDS#Delete bookmark&quot;)" />
+                                    <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute5" Value="translate(&quot;#LDS#Delete bookmark&quot;)" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;data-imx-identifier&quot;" Value="format(&quot;BOOKMARKDELETE_{0}&quot;,select current (iterationindex() + 1) from Bookmarks)" />
+                                  </HtmlAttributes>
+                                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                                    <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call8">
+                                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure you want to delete the bookmark?&quot;) " ScriptItemUID="VirtualFunctionMapping20" />
+                                      <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping19" />
+                                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Delete bookmark&quot;)" ScriptItemUID="VirtualFunctionMapping18" />
+                                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="MessageBoxType()" Value="'Default'" />
+                                      <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                                        <ActionComponent ScriptItemUID="Action10">
+                                          <CallAction ScriptItemUID="Call1" ActionID="DeleteBookmark" />
+                                        </ActionComponent>
+                                      </VirtualControlMapping>
+                                    </CallAction>
+                                  </ServerActionCall>
+                                </Button>
+                              </Cell>
+                            </GridColumn>
+                          </GridBand>
+                        </Grid>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case1">
+                        <Label Text="translate(&quot;#LDS#You have not added any bookmarks.&quot;)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;imx-valuelist imx-insetpane-content&quot;" />
+                            <Property Name="TagName" Value="div" />
+                          </HtmlAttributes>
+                        </Label>
+                      </SwitchContainerCase>
+                    </SwitchContainer>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping ContainerType="Container" VirtualControl="PopupBottom">
+                  <Container ScriptItemUID="Container1" EnableCustomAttributes="true" Layout="'VI_Styles_Container_ButtonPanel'">
+                    <HtmlAttributes />
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef2" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Bookmarks')" ScriptItemUID="VirtualFunctionMapping13" />
+              </CallAction>
+            </ActionComponent>
+          </VirtualControlMapping>
+        </ControlReferenceContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableObjectView Table="Bookmarks" ElementType="QBM.CompositionApi.UserConfig.IBookmark, QBM.CompositionApi" ScriptItemUID="DataTableObjectView1" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="DeleteBookmark">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action3">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IBookmarkProvider&gt;();
+
+// check if UserConfiguration is enabled
+var bookmarkProvider = provider as BookmarkProvider;
+if (bookmarkProvider == null || !bookmarkProvider.IsEnabled()) return;
+
+var uidBookmark = (((VI.WebRuntime.ObjectViewRow&lt;QBM.CompositionApi.UserConfig.IBookmark&gt;)(_Bookmarks_Current.Row)).TargetObject.Uid);
+provider.Delete(uidBookmark);
+
+// reload bookmarks
+Bookmarks.Delete();
+foreach (var bookmark in provider.Get())
+{
+	Bookmarks.ObjectList.Add(bookmark);
+}</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="Bookmarks" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

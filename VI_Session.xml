@@ -1,0 +1,101 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="1nnopH3KfyJBP+g9B3eBiw==">
+  <Context ID="VI_Session" Comment="Session module" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="" ContextType="SessionContext" AllowUrlNavigation="true" ScriptItemUID="Context1" AllowPreLoginAccess="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Common_AccessControl" />
+        <NamespaceImport Namespace="QBM.CompositionApi.UserConfig" />
+        <AssemblyReference Assembly="QBM.CompositionApi.dll" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="General settings" Description="translate(&quot;#LDS#General settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_DisplayOpenItems" Description="translate('#LDS#Show number of pending objects in menu')" LongDescription="" />
+        <ConfigParam Key="VI_Common_DisplayOpenItemsUpdateInterval" Description="translate(&quot;#LDS#Update interval for notification icons (millseconds)&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_NotificationPollingInterval" Description="translate(&quot;#LDS#Polling interval for notification (millseconds)&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_DisplayEntriesPerPage" Description="translate(&quot;#LDS#Entries per page&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_DisplayEmptyProperties" Description="translate('#LDS#Display properties with empty values in overview pages')" LongDescription="" />
+        <ConfigParam Key="VI_Common_SqlSearch_PrefixLike" Description="translate(&quot;#LDS#Object search for partial strings contained within the data&quot;)" LongDescription="translate(&quot;#LDS#Use this property to select whether the SqlSearch function will return matches where the search string is found at any index in the data string.&quot;)" />
+        <ConfigParam Key="VI_Common_MenuAlwaysExpanded" Description="translate('#LDS#Always show expanded navigation menu')" LongDescription="" />
+        <ConfigParam Key="VI_Common_OnlyOneExpandedMenu" Description="translate('#LDS#Only one menu can be expanded at the same time.')" />
+        <ConfigParam Key="VI_Common_GridListViewDisabled" Description="translate(&quot;#LDS#Globally disable all grid list views&quot;)" />
+        <ConfigParam Key="VI_Common_InputFormat_Date" Type="Text" Description="translate(&quot;#LDS#Input format for date specifications&quot;)" LongDescription="translate(&quot;#LDS#Specify the format in which dates must be entered. You can use predefined values or specify custom formats. For more information see https://docs.telerik.com/kendo-ui/framework/globalization/dateformatting.&quot;)" />
+        <ConfigParam Key="VI_Common_InputFormat_Time" Type="Text" Description="translate(&quot;#LDS#Input format for time specifications&quot;)" LongDescription="translate(&quot;#LDS#Specify the format in which times must be entered. You can use predefined values or specify custom formats. For more information see https://docs.telerik.com/kendo-ui/framework/globalization/dateformatting.&quot;)" />
+        <ConfigParam Key="VI_Common_InputFormat_DateTime" Type="Text" Description="translate(&quot;#LDS#Input format for date/time specifications&quot;)" LongDescription="translate(&quot;#LDS#Specify the format in which dates and times must be entered. You can use predefined values or specify custom formats. For more information see https://docs.telerik.com/kendo-ui/framework/globalization/dateformatting.&quot;)" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="Authentication" ScriptItemUID="ConfigSectionDefinition2" Description="translate(&quot;#LDS#Authentication&quot;)">
+        <ConfigParam Key="VI_Common_RequiresAccessControl" Description="translate(&quot;#LDS#Multi-factor authentication is required after login&quot;)" LongDescription="translate(&quot;#LDS#Specify whether you want to generally enable multi-factor authentication. Before you can use certain multi-factor authentication methods, you must activate this parameter.&quot;)" />
+        <ConfigParam Key="VI_Common_AccessControl_Filter" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Filter condition for employees requiring multi-factor authentication&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableObjectView Table="UserRuntimeModule" ElementType="VI.WebRuntime.IUserModuleInfo, VI.WebRuntime" ScriptItemUID="DataTableObjectView1" TriggerUpdates="Never" />
+      <DataTableObjectView Table="UserMenu" ElementType="VI.WebRuntime.IMenuItem, VI.WebRuntime" ScriptItemUID="DataTableObjectView3" PrimaryKeyColumn="ID" TriggerUpdates="Never">
+        <ColumnProxy DataColumn="IsExpanded" Name="IsExpandedProxy" ScriptItemUID="ColumnProxy1" TriggerUpdates="Updates" />
+      </DataTableObjectView>
+      <DataTableObjectView Table="UserNavigation" ElementType="VI.WebRuntime.IUserNavigationInfo, VI.WebRuntime" ScriptItemUID="DataTableObjectView2" TriggerUpdates="Never" />
+      <DataTableCustom Table="PendingItems" ScriptItemUID="DataTableCustom1">
+        <Column DataType="System.String" Name="Id" ScriptItemUID="Column1" TriggerUpdates="Never" />
+        <Column DataType="System.Int32" Name="Count" ScriptItemUID="Column2" TriggerUpdates="Updates" />
+        <Column DataType="System.String" Name="NewItemsText" ScriptItemUID="Column3" TriggerUpdates="Never" />
+        <Column DataType="System.Boolean" Name="IsCountAsDecision" ScriptItemUID="Column4" />
+        <Column DataType="System.String" Name="URL" ScriptItemUID="Column5" TriggerUpdates="Never" />
+      </DataTableCustom>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="listselect(object tablename, bound(tablename) string columnname)" Expression="isnullorempty( concat( select distinct &quot;'&quot;+columnname+&quot;'&quot; from tablename, ', ' ), &quot;''&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+      <Function Name="listselect(object tablename, bound(tablename) string columnname, bound(tablename) bool whereclause)" Expression="isnullorempty( concat( select distinct &quot;'&quot;+columnname+&quot;'&quot; from tablename where whereclause, ', ' ), &quot;''&quot;)" DataType="System.String" ScriptItemUID="Function2" />
+      <Function Name="listselect(object tablename, bound(tablename) string columnname, bound(tablename) bool whereclause, string delimiter)" Expression="isnullorempty( concat( select distinct delimiter+columnname+delimiter from tablename where whereclause, ', ' ), (delimiter+delimiter))" DataType="System.String" ScriptItemUID="Function3" />
+      <Function Name="listselect(object tablename, bound(tablename) string columnname, bound(tablename) bool whereclause, string delimiter, string seperator)" Expression="isnullorempty( concat( select distinct delimiter+columnname+delimiter from tablename where whereclause, seperator ), (delimiter+delimiter) )" DataType="System.String" ScriptItemUID="Function4" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <LoginAction ScriptItemUID="Action4">
+      <Update DataTable="UserMenu" DataColumn="IsExpanded" Value="True" ScriptItemUID="Update1" />
+      <ActionSequence ScriptItemUID="Action5">
+        <ActionSequence ScriptItemUID="Action3" ItemUID="configure PendingItems">
+          <Insert ScriptItemUID="Insert4" DataTable="PendingItems">
+            <ActionSequence ScriptItemUID="Action6" />
+            <InsertValue Value="&quot;NewProcesses&quot;" DataColumn="Id" />
+            <InsertValue Value="translate(&quot;#LDS#Processes have finished. Click to see the results.&quot;)" DataColumn="NewItemsText" />
+            <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+            <InsertValue Value="&quot;page.axd?ContextID=QBM_MyProcesses&quot;" DataColumn="URL" />
+          </Insert>
+        </ActionSequence>
+        <Update DataTable="PendingItems" ScriptItemUID="Update2" DataColumn="Count" Value="0" />
+        <ActionSequence ScriptItemUID="Action2" ItemUID="register PendingItems event for notification" Condition="getconfig(&quot;VI_Common_EnableNotifications&quot;)=&quot;true&quot;">
+          <CodeLiteral ScriptItemUID="CodeLiteral1">PendingItems.GetColumn("Count").RowUpdated.Subscribe(new GenericAsyncObserver&lt;RowUpdateInfo&gt;(info =&gt; {
+	var newValue = (int) info.NewValue;
+	var oldValue = (int) info.OldValue;
+
+	if (oldValue == null || oldValue &gt;= newValue)
+		return;
+
+	var text = PendingItems.GetColumn("NewItemsText").GetValue(info.Row).String;
+	if (string.IsNullOrEmpty(text))
+		return;
+	var url = PendingItems.GetColumn("URL").GetValue(info.Row).String;
+	var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+	var id = PendingItems.GetColumn("Id").GetValue(info.Row).String;
+	Logger.Info("Notification: {0} changed from {1} to {2}", id, oldValue, newValue);
+	var cmd = new AjaxScriptCommand(string.Format("imx.comm.showNotification({0}, {{ tag: {1}, url: {2} }} );",
+		serializer.Serialize(string.Format(text, newValue)),
+		serializer.Serialize(id),
+		serializer.Serialize(url)));
+	VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.Communication.IAjaxResponse&gt;().AddCommand(cmd);
+		
+}));</CodeLiteral>
+        </ActionSequence>
+      </ActionSequence>
+    </LoginAction>
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Start" PageFileName="VI_FormTemplate_FullScreen" NavigationTitle="translate(&quot;#LDS#Log in&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action14" />
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <ControlReferenceContainer ID="VI_Common_Login" ScriptItemUID="ControlRef1" />
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

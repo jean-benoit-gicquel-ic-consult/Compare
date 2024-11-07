@@ -1,0 +1,32 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectEdit_UNSGroup" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectEdit" Description="translate(&quot;#LDS#Object editing&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Roles_Fields_UNSGroup" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;UNSGroup&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="UNSGroup" />
+        <ConfigParam Key="VI_Roles_Fields_UNSGroupB" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;UNSGroupB&quot;)" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="UNSGroupB" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+            <ColumnList ScriptItemUID="ColumnList1">
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_Roles_Fields_UNSGroup&quot;)" ScriptItemUID="ExpressionColumnList1" />
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+        </ControlReferenceContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" Class="UNSGroup" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

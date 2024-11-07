@@ -1,0 +1,36 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a3aeff03-2cc1-fe06-4bf2-7979a25edaba">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Roles_Membership_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action9" ObjectType="ActionSequence" SortOrder="15">
+        <ActionSequence ItemUID="UNSGroup" ScriptItemUID="TSBAction1">
+          <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="TSBLoadTable1" IdentLimitedSQL="&quot;Webportal.TSB_Roles_Membership_Ext.PersonToUNSGroup&quot;">
+            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="TSBParameterFree1" />
+            <InsertValue Value="XOrigin = 0 and IsNullOrEmpty(ObjectKeyAssignment) and not(IsPending)" DataColumn="IsNested" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="20">
+        <ActionSequence ItemUID="UNSGroup" Condition="(select current TableName from allobjects in ('UNSGroup'))&#xD;&#xA;or&#xD;&#xA;(IsUnsGroupBasedObject(from allobjects select current tablename))" ScriptItemUID="TSBAction2">
+          <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="TSBLoadTable2" IdentLimitedSQL="&quot;Webportal.TSB_Roles_Membership_Ext.UNSGroupToPerson&quot;">
+            <ParameterFree Name="&quot;uidunsgroup&quot;" Value="select current pk from AllObjects" ScriptItemUID="TSBParameterFree2" />
+            <InsertValue Value="XOrigin = 0 and IsNullOrEmpty(ObjectKeyAssignment) and not(IsPending)" DataColumn="IsNested" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function Name="IsUnsGroupBasedObject(string tableName)" Expression="{{&#xD;&#xA;var tbl = _Connection.Tables[tableName];&#xD;&#xA;@return tbl.ProxyTable != null &amp;&amp; tbl.ProxyTable.Uid == &quot;TSB-T-UNSGroup&quot;;&#xD;&#xA;}}" DataType="System.Boolean" ScriptItemUID="TSBFunction1" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select current IsUnsGroupBasedObject(dbtable()) from AllObjects" />
+        <FunctionValue Expression="select current (dbtable()=&quot;UNSGroup&quot;) from AllObjects" />
+      </AddObject>
+      <AddObject ObjectID="Action9" ObjectType="ActionSequence" SortOrder="19">
+        <ActionSequence ScriptItemUID="TSBAction3" ItemUID="TSBAccountDef">
+          <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToTSBAccountDef&quot;" ScriptItemUID="TSBLoadTable3">
+            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="TSBParameterFree3" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

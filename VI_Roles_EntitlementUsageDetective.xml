@@ -1,0 +1,456 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_EntitlementUsageDetective" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2">
+        <LoadTable DataTable="OrgRoot" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+        <Delete DataTable="PersonInConflict" ScriptItemUID="Delete1" />
+        <Delete DataTable="StructureData" ScriptItemUID="Delete2" />
+        <Update DataTable="Container" DataColumn="UID_OrgRoot" ScriptItemUID="Update3" />
+        <Update DataTable="Container" DataColumn="UID_Org" ScriptItemUID="Update4" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <Container Condition="not(hidedescription())" ScriptItemUID="Container3">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="Text()" Value="(if (TableName() like '%group%') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected system entitlement belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Locality') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Department') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'ProfitCenter') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Org') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected business role belongs to.&quot;) &#xD;&#xA;else if (TableName() = 'QERResource') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected service belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Application') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected service belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'ESet') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected system role belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'AERole') then translate(&quot;#LDS#This page shows you whether employees of the selected application role are members in roles.&quot;) &#xD;&#xA;else translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected business role belongs to.&quot;) ) &#xD;&#xA;+ &quot; &quot; + &#xD;&#xA;translate(&quot;#LDS#Please select the role class for the employee assignments you want to display.&quot;)&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+          <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+            <Label Text="datacaption(&quot;OrgRoot&quot;)" ScriptItemUID="Label2" />
+            <ComboBox SourceTable="OrgRoot" DataTable="Container" DataColumn="UID_OrgRoot" ScriptItemUID="ComboBox1" />
+          </LayoutPanel>
+        </Container>
+        <Container ScriptItemUID="Container8" RefreshTriggerExpression="from container select uid_orgroot" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container8style" Value="&quot;margin-top: 24px;&quot;" />
+          </HtmlAttributes>
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action7" Condition="from container select not(isnullorempty(uid_orgroot))">
+              <Update DataTable="Container" DataColumn="UID_Org" Value="from container select uid_orgroot" ScriptItemUID="Update6" />
+              <CallAction ActionID="LoadData" ScriptItemUID="CallAction1" />
+            </Action>
+          </Activator>
+          <ContainerTemplate DataTable="StructureData" WhereClause="uid_org = ( from container select uid_org)" ScriptItemUID="ContainerTemplate2">
+            <ElementEdit Layout="'VI_Styles_ElementEdit_Vertical'" ScriptItemUID="ElementEdit1">
+              <ContainerTemplate DataTable="StructureData" WhereClause="uid_org = (select top 1 uid_parentorg from structuredata where uid_org = ( select uid_org from container))" ScriptItemUID="ElementTemplate1" WithoutParentContainer="true">
+                <Container ScriptItemUID="Element1">
+                  <LinkContainer ScriptItemUID="LinkContainer1">
+                    <ControlList ScriptItemUID="ControlList5">
+                      <Container ScriptItemUID="Container11" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Container11style" Value="variable(&quot;border: 1px solid %QBM_Primary_Blue%;&quot;)" />
+                        </HtmlAttributes>
+                        <RoundedCorners Width="250" ScriptItemUID="RoundedCorners1" ColorStart="variable(&quot;%VI_Common_Color_ColorBase1%&quot;)" AlphaStart="255" ColorEnd="variable(&quot;%VI_Common_Color_ColorBase1%&quot;)" AlphaEnd="255">
+                          <Container ScriptItemUID="Container12">
+                            <Container ScriptItemUID="Container13">
+                              <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="Container14style" Value="variable(&quot;text-align: center; margin: auto; color: %VI_Common_Color_Font%;&quot;)" />
+                                </HtmlAttributes>
+                                <Image ScriptItemUID="Image3" Source="File" FileName="variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionReturn_normal_16.png&quot;)" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="translate(&quot;#LDS#Back&quot;)" />
+                                  </HtmlAttributes>
+                                </Image>
+                                <Label Text="select current displayname from structuredata" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'style'" ScriptItemUID="Label5style" Value="&quot;font-size: 1.2em; font-weight: bold; text-decoration: none;&quot;" />
+                                  </HtmlAttributes>
+                                </Label>
+                              </Container>
+                            </Container>
+                          </Container>
+                        </RoundedCorners>
+                      </Container>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall2">
+                      <Update DataTable="Container" DataColumn="UID_Org" Value="from structuredata select current uid_org" ScriptItemUID="Update1" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                </Container>
+              </ContainerTemplate>
+              <Container ScriptItemUID="Element2">
+                <RoundedCorners Width="250" ColorStart="variable(&quot;%QBM_Primary_Blue%&quot;)" AlphaStart="255" ColorEnd="variable(&quot;%QBM_Primary_Blue%&quot;)" AlphaEnd="255" ScriptItemUID="RoundedCorners2">
+                  <Container ScriptItemUID="Container16">
+                    <Container ScriptItemUID="Container17" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container17style" Value="&quot;text-align: center; margin: auto;&quot;" />
+                      </HtmlAttributes>
+                      <Label Text="select current displayname from structuredata" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Label6style" Value="&quot;font-size: 1.2em; font-weight: bold; text-decoration: none;&quot;" />
+                        </HtmlAttributes>
+                      </Label>
+                    </Container>
+                  </Container>
+                </RoundedCorners>
+              </Container>
+              <Container ScriptItemUID="Element3">
+                <RoundedCorners Width="" ColorStart="variable(&quot;%VI_Common_Color_LightGray%&quot;)" AlphaStart="255" ColorEnd="variable(&quot;%VI_Common_Color_LightGray%&quot;)" AlphaEnd="255" ScriptItemUID="RoundedCorners3">
+                  <Container ScriptItemUID="Container19" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container19style" Value="&quot;padding: 16px 32px 16px 32px;&quot;" />
+                    </HtmlAttributes>
+                    <ContainerTemplate DataTable="StructureData" WhereClause="uid_parentorg = ( select current uid_org from structuredata)" OrderBy="'DisplayName'" ScriptItemUID="ContainerTemplate3">
+                      <Container ScriptItemUID="Container20" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Container20style" Value="&quot;float: left; padding: 0 16px 16px 16px;&quot;" />
+                        </HtmlAttributes>
+                        <RoundedCorners Width="250" ColorStart="from structuredata select current (if(assigntype=&quot;0&quot;) then Variable(&quot;%VI_Common_Color_LighterGray%&quot;) else Variable(&quot;%QBM_Primary_Orange%&quot;))&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // there is a person assigned to this org&#xD;&#xA;-- PersonAssignedSub = 2, // there is a person assigned in a ChildOrgs of this org&#xD;&#xA;-- PersonAssignedAndSub = 3 // there is a person assigned in this org and in it's childOrg" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners4">
+                          <Container ScriptItemUID="Container21">
+                            <Container ScriptItemUID="Container22" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'title'" ScriptItemUID="Container22title" Value="from structuredata select current (if(assigntype=&quot;0&quot;) then translate(&quot;#LDS#No assignments&quot;))" />
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Container22style" Value="&quot;position: relative;&quot;" />
+                              </HtmlAttributes>
+                              <Container ScriptItemUID="Container23" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="Container23style" Value="if( from structuredata select current assigntype in (&quot;1&quot;) )&#xA;then&#xA;&quot;text-align: center; margin: auto; padding-right: 22px;&quot;&#xA;else if( from structuredata select current assigntype in (&quot;3&quot;) )&#xA;then&#xA;&quot;text-align: center; margin: auto; padding-left: 22px; padding-right: 22px;&quot;&#xA;else if ( from structuredata select current assigntype in (&quot;2&quot;) )&#xA;then&#xA;&quot;text-align: center; margin: auto; padding-left: 22px;&quot;&#xA;else&#xA;&quot;text-align: center; margin: auto;&quot;" />
+                                </HtmlAttributes>
+                                <Container ItemUID="no SubControls" Condition="0 = select count() from structuredata where uid_parentorg = ( select current uid_org from structuredata)" ScriptItemUID="Container24">
+                                  <Label Text="select current displayname from structuredata" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute Name="'style'" ScriptItemUID="Label7style" Value="variable(&quot;font-size: 1.2em; font-weight: bold; text-decoration: none; color: %VI_Common_Color_Font%&quot;)" />
+                                    </HtmlAttributes>
+                                  </Label>
+                                </Container>
+                                <Container ItemUID="has Subcontrols" Condition="0 &lt; select count() from structuredata where uid_parentorg = ( select current uid_org from structuredata)" ScriptItemUID="Container25">
+                                  <LinkContainer ScriptItemUID="LinkContainer2">
+                                    <ControlList ScriptItemUID="ControlList6">
+                                      <Label Text="select current displayname from structuredata" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                                        <HtmlAttributes>
+                                          <HtmlAttribute Name="'style'" ScriptItemUID="Label8style" Value="variable(&quot;font-size: 1.2em; font-weight: bold; text-decoration: none; color: %VI_Common_Color_Font%&quot;)" />
+                                        </HtmlAttributes>
+                                      </Label>
+                                    </ControlList>
+                                    <ServerActionCall ScriptItemUID="ServerActionCall3">
+                                      <ActionSequence Condition="0 &lt; select count() from structuredata where uid_parentorg = ( select current uid_org from structuredata)" ScriptItemUID="Action1">
+                                        <Update DataTable="Container" DataColumn="UID_Org" Value="from structuredata select current uid_org" ScriptItemUID="Update2" />
+                                      </ActionSequence>
+                                    </ServerActionCall>
+                                  </LinkContainer>
+                                </Container>
+                              </Container>
+                              <Container Condition="from structuredata select current assigntype in (&quot;1&quot;,&quot;3&quot;) -- Person assigned" ScriptItemUID="Container27" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="Container27style" Value="&quot;position: absolute; right: 0; top:0;&quot;" />
+                                </HtmlAttributes>
+                                <LinkContainer ScriptItemUID="Image4Link">
+                                  <ControlList ScriptItemUID="Image4Ctl">
+                                    <Image StockImage="Information" ScriptItemUID="Image4" EnableCustomAttributes="true">
+                                      <HtmlAttributes>
+                                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" />
+                                      </HtmlAttributes>
+                                    </Image>
+                                  </ControlList>
+                                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                                    <LoadTable DataTable="PersonInConflict" WhereClause="format(&#xD;&#xA;if(getsystem()=&quot;MSSQL&quot;) then&#xD;&#xA;&quot;UID_Person in &#xD;&#xA;		(&#xD;&#xA;			select p.UID_Person &#xD;&#xA;			from Person p&#xD;&#xA;        		join &#xD;&#xA;				(&#xD;&#xA;					select UID_Person&#xD;&#xA;					from Person&#xD;&#xA;					where {2}&#xD;&#xA;					union all&#xD;&#xA;&#xD;&#xA;					select UID_Person&#xD;&#xA;					from PersonInBaseTree&#xD;&#xA;					where UID_Org = '{0}'&#xD;&#xA;					&#xD;&#xA;				) as x on p.UID_Person = x.UID_Person&#xD;&#xA;				join {1} f on f.UID_Person = p.UID_Person	&#xD;&#xA;		)&quot;&#xD;&#xA;else&#xD;&#xA;&quot;UID_Person in &#xD;&#xA;		(&#xD;&#xA;			select p.UID_Person &#xD;&#xA;			from Person p&#xD;&#xA;        		join &#xD;&#xA;				(&#xD;&#xA;					select UID_Person&#xD;&#xA;					from Person&#xD;&#xA;					where {2}&#xD;&#xA;					union all&#xD;&#xA;&#xD;&#xA;					select UID_Person&#xD;&#xA;					from PersonInBaseTree&#xD;&#xA;					where UID_Org = '{0}'&#xD;&#xA;					&#xD;&#xA;				)  x on p.UID_Person = x.UID_Person&#xD;&#xA;				join {1} f on f.UID_Person = p.UID_Person	&#xD;&#xA;		)&quot;,&#xD;&#xA;		from structuredata select current uid_org,&#xD;&#xA;		sqlfunctioncalltable(&quot;QER&quot;,&quot;GEntitlementSource&quot;, &quot;FTEntitlementSourceWho&quot;,sqlformatvalue(BaseObjectKey(),&quot;string&quot;)),&#xD;&#xA;		PrimaryMembershipCompare(from structuredata select current uid_org)&#xD;&#xA;		)" ScriptItemUID="LoadTable1">
+                                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                                    </LoadTable>
+                                    <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                                      <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                                        <Container ScriptItemUID="Container28">
+                                          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container29" EnableCustomAttributes="true">
+                                            <HtmlAttributes>
+                                              <Property Name="TagName" Value="p" />
+                                            </HtmlAttributes>
+                                            <Label Text="format(isnullorempty( PersonInfoText(), translate(&quot;#LDS#The following employees were found.&quot;)),&#xD;&#xA;select current displayname from structuredata)" ScriptItemUID="Label1" />
+                                          </Container>
+                                          <Grid ScriptItemUID="Grid1">
+                                            <GridBand DataTable="PersonInConflict" ScriptItemUID="GridBand1" DisplayHeader="Always" EnableGridViewSetting="false" EnableCustomAttributes="true">
+                                              <HtmlAttributes>
+                                                <Property Name="ApplyFilledHeight" Value="true" />
+                                              </HtmlAttributes>
+                                              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                                              <GridFilters ScriptItemUID="GridFilters1" />
+                                              <GridRows />
+                                              <GridColumnSimple ScriptItemUID="Column3" Column="__Display" />
+                                              <GridColumnSimple ScriptItemUID="Column14" Column="UID_Department" />
+                                            </GridBand>
+                                          </Grid>
+                                        </Container>
+                                      </VirtualControlMapping>
+                                      <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                                        <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container36">
+                                          <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef3" />
+                                        </Container>
+                                      </VirtualControlMapping>
+                                      <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Assigned employees&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                                      <VirtualFunctionMapping ID="TableName()" Value="&quot;Person&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+                                      <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping4" />
+                                    </CallAction>
+                                  </ServerActionCall>
+                                </LinkContainer>
+                              </Container>
+                              <Container Condition="from structuredata select current assigntype in (&quot;2&quot;,&quot;3&quot;) -- Person assigned" ScriptItemUID="Container37" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="Container37style" Value="&quot;position: absolute; left: 0; top:0;&quot;" />
+                                </HtmlAttributes>
+                                <Image Source="DialogImage" DialogImage="Tree Root Node" ScriptItemUID="Image5" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="Image5alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </Container>
+                            </Container>
+                          </Container>
+                        </RoundedCorners>
+                      </Container>
+                    </ContainerTemplate>
+                  </Container>
+                </RoundedCorners>
+              </Container>
+            </ElementEdit>
+          </ContainerTemplate>
+        </Container>
+        <Container ScriptItemUID="Container38" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute1" Value="&quot;ButtonBar&quot;" />
+          </HtmlAttributes>
+          <Button Text="translate(&quot;#LDS#More information&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Click here for help about this view.&quot;)" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="ServerActionCall7">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container39">
+                    <ControlReferenceContainer ID="InfoPopup" ScriptItemUID="ControlRef2" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container40">
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef4" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Legend&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+              </CallAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="OrgRoot" Table="OrgRoot" WhereClauseSQL="&quot;UID_OrgRoot not in ('QER-V-AERole', 'QER-V-ITShopSrc', 'CPL-V-NonCompliance') and uid_orgroot in (select uid_orgroot from orgrootassign where uid_basetreeassign in (select uid_basetreeassign from basetreeassign where uid_dialogtableelement = 'QER-T-Person'))&quot;" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="TableName" DataSource="Expression" DataType="System.String" Expression="from OrgRoot select current&#xD;&#xA;(if(uid_orgroot= 'QER-V-Department') then &quot;Department&quot;&#xD;&#xA;else if ( uid_orgroot = 'QER-V-ITShopOrg') then &quot;ITShopOrg&quot;&#xD;&#xA;else if ( uid_orgroot = 'QER-V-Locality') then &quot;Locality&quot;&#xD;&#xA;else if ( uid_orgroot = 'QER-V-ProfitCenter') then &quot;ProfitCenter&quot;&#xD;&#xA;else &quot;org&quot;)" ScriptItemUID="Column4" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_OrgRoot" DataType="System.String" ScriptItemUID="Column5" MinLength="" MaxLength="" Caption="translate(&quot;#LDS#Structure type&quot;)" />
+          <Column Name="UID_Org" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="OrgDisplay" DataType="System.String" ScriptItemUID="Column7" DataSource="Expression" Expression="from orgroot select top 1 display() where uid_orgroot = ( select uid_orgroot from container)" />
+        </DataTableSingleRow>
+        <DataTableSQL Table="StructureData" ScriptItemUID="DataTableSQL1">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="UID_Org" DataType="System.String" ScriptItemUID="Column9" />
+          <Column Name="UID_ParentOrg" DataType="System.String" ScriptItemUID="Column10" />
+          <Column Name="Ident_Org" DataType="System.String" ScriptItemUID="Column11" />
+          <Column Name="Assigntype" DataType="System.String" ScriptItemUID="Column12" />
+          <Column Name="ObjectKeyOrg" DataType="System.String" ScriptItemUID="Column13" />
+          <Column DataType="System.String" Name="DisplayName" ScriptItemUID="Column1" DataSource="Expression" Expression="if (getobjectkeytable(objectkeyorg)=&quot;orgroot&quot;)&#xD;&#xA;then&#xD;&#xA;translatecolumn(ident_org, &quot;OrgRoot&quot;, &quot;Ident_OrgRoot&quot;)&#xD;&#xA;else&#xD;&#xA;translatecolumn(ident_org, &quot;Basetree&quot;, &quot;Ident_Org&quot;)" />
+        </DataTableSQL>
+        <DataTableDbObject Class="Person" Table="PersonInConflict" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="InfoPopup">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container41" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container41style" Value="variable(&quot;width: 350px; height: 350px; text-align: center; margin: 0 auto; background-color: %VI_Common_Color_LightGray%; padding: 10px;&quot;)" />
+              </HtmlAttributes>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container42" ItemUID="none">
+                <Label Text="translate(&quot;#LDS#None of the employees assigned to this root object are a member of this role or any of its child roles.&quot;)" ScriptItemUID="Label15" />
+              </Container>
+              <RoundedCorners Width="250" ColorStart="variable(&quot;%VI_Common_Color_LighterGray%&quot;)" AlphaStart="255" ColorEnd="variable(&quot;%VI_Common_Color_LighterGray%&quot;)" AlphaEnd="255" ScriptItemUID="RoundedCorners5" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute2" Value="&quot;margin: 0 auto; display: inline-block;&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container43">
+                  <Container ScriptItemUID="Container44" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container44style" Value="&quot;text-align: center; margin: 0 auto;&quot;" />
+                    </HtmlAttributes>
+                    <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label16" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Label16style" Value="variable(&quot;font-size: 1.2em; font-weight: bold; text-decoration: none; color: %VI_Common_Color_Font%&quot;)" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                </Container>
+              </RoundedCorners>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container45" EnableCustomAttributes="true" ItemUID="child role">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container45style" Value="&quot;margin-top: 16px;&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" ScriptItemUID="Label17" />
+              </Container>
+              <RoundedCorners Width="250" ColorStart="Variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // der Org ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedSub = 2, // einer der ChildOrgs ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedAndSub = 3 // In der Org und in den ChildOrgs sind Personen zugewiesen" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners6" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="&quot;margin: 0 auto; display: inline-block;&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container46">
+                  <Container ScriptItemUID="Container47" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container47style" Value="&quot;position: relative;&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container48" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container48style" Value="&quot;text-align: center; margin: auto;&quot;" />
+                      </HtmlAttributes>
+                      <Container ItemUID="no SubControls" ScriptItemUID="Container49">
+                        <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label18" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label18style" Value="variable(&quot;font-size: 1.2em; font-weight: bold; text-decoration: none; color: %VI_Common_Color_Font%&quot;)" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Container>
+                    </Container>
+                    <Container Condition="--from structuredata select current assigntype in (&quot;2&quot;,&quot;3&quot;) -- Person assigned" ScriptItemUID="Container50" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container50style" Value="&quot;position: absolute; left: 0; top:0;&quot;" />
+                      </HtmlAttributes>
+                      <Image Source="DialogImage" DialogImage="Tree Root Node" ScriptItemUID="Image6" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image6alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" />
+                        </HtmlAttributes>
+                      </Image>
+                    </Container>
+                  </Container>
+                </Container>
+              </RoundedCorners>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container51" EnableCustomAttributes="true" ItemUID="members">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container51style" Value="&quot;margin-top: 16px;&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" ScriptItemUID="Label19" />
+              </Container>
+              <RoundedCorners Width="250" ColorStart="Variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // der Org ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedSub = 2, // einer der ChildOrgs ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedAndSub = 3 // In der Org und in den ChildOrgs sind Personen zugewiesen" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners7" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute4" Value="&quot;margin: 0 auto; display: inline-block;&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container52">
+                  <Container ScriptItemUID="Container53" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container53style" Value="&quot;position: relative;&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container54" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container54style" Value="&quot;text-align: center; margin: auto;&quot;" />
+                      </HtmlAttributes>
+                      <Container ItemUID="no SubControls" ScriptItemUID="Container55">
+                        <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label20" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label20style" Value="variable(&quot;font-size: 1.2em; font-weight: bold; text-decoration: none; color: %VI_Common_Color_Font%&quot;)" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Container>
+                    </Container>
+                    <Container Condition="--from structuredata select current assigntype in (&quot;1&quot;,&quot;3&quot;) -- Person assigned" ScriptItemUID="Container56" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container56style" Value="&quot;position: absolute; right: 0; top:0;&quot;" />
+                      </HtmlAttributes>
+                      <LinkContainer ScriptItemUID="Image7Link">
+                        <ControlList ScriptItemUID="Image7Ctl">
+                          <Image StockImage="Information" ScriptItemUID="Image7" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'alt'" ScriptItemUID="Image7alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall9" />
+                      </LinkContainer>
+                    </Container>
+                  </Container>
+                </Container>
+              </RoundedCorners>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container57" EnableCustomAttributes="true" ItemUID="members + child role">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container57style" Value="&quot;margin-top: 16px;&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#Employees assigned to this root object are members of this role and at least one child role.&quot;)" ScriptItemUID="Label21" />
+              </Container>
+              <RoundedCorners Width="250" ColorStart="Variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // der Org ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedSub = 2, // einer der ChildOrgs ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedAndSub = 3 // In der Org und in den ChildOrgs sind Personen zugewiesen" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="RoundedCorners8style" Value="&quot;margin: 0 auto; display: inline-block;&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container58">
+                  <Container ScriptItemUID="Container59" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container59style" Value="&quot;position: relative;&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container60" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container60style" Value="&quot;text-align: center; margin: auto;&quot;" />
+                      </HtmlAttributes>
+                      <Container ItemUID="no SubControls" ScriptItemUID="Container61">
+                        <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label22" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label22style" Value="variable(&quot;font-size: 1.2em; font-weight: bold; text-decoration: none; color: %VI_Common_Color_Font%&quot;)" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Container>
+                    </Container>
+                    <Container Condition="--from structuredata select current assigntype in (&quot;1&quot;,&quot;3&quot;) -- Person assigned" ScriptItemUID="Container62" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container62style" Value="&quot;position: absolute; right: 0; top:0;&quot;" />
+                      </HtmlAttributes>
+                      <LinkContainer ScriptItemUID="Image8Link">
+                        <ControlList ScriptItemUID="Image8Ctl">
+                          <Image StockImage="Information" ScriptItemUID="Image8" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'alt'" ScriptItemUID="Image8alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall10" />
+                      </LinkContainer>
+                    </Container>
+                    <Container Condition="--from structuredata select current assigntype in (&quot;2&quot;,&quot;3&quot;) -- Person assigned" ScriptItemUID="Container63" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container63style" Value="&quot;position: absolute; left: 0; top:0;&quot;" />
+                      </HtmlAttributes>
+                      <Image Source="DialogImage" DialogImage="Tree Root Node" ScriptItemUID="Image9" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image9alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" />
+                        </HtmlAttributes>
+                      </Image>
+                    </Container>
+                  </Container>
+                </Container>
+              </RoundedCorners>
+            </Container>
+          </LocalControlContext>
+        </Control>
+        <Control ID="LoadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent Condition="from container select not(isnullorempty(uid_orgroot))" ScriptItemUID="Action6">
+              <LoadTable DataTable="StructureData" ScriptItemUID="LoadTable4" Type="LimitedSQL" IdentLimitedSQL="QBMLimitedSQLName()">
+                <ParameterFree Name="&quot;BaseObjectKey&quot;" Value="baseobjectkey()" ScriptItemUID="ParameterFree1" />
+                <ParameterFree Name="&quot;uidorg&quot;" Value="from container select current UID_Org" ScriptItemUID="ParameterFree2" />
+              </LoadTable>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="BaseObjectKey()" Expression="getobjectkey(tablename(), pk(),&quot;&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="PrimaryMembershipCompare(string uidObject)" Expression="-- check if the Person table contains a primary UID membership column&#xD;&#xA;&#xD;&#xA;if( {{ _Connection.Tables[&quot;Person&quot;].Columns.Contains(&quot;UID_&quot;+GetSelectedTableName()) }} )&#xD;&#xA;then&#xD;&#xA;sqlcompareuid(format(&quot;uid_{0}&quot;, GetSelectedTableName()), uidObject)&#xD;&#xA;else&#xD;&#xA;&quot;1=0&quot;" DataType="System.String" ScriptItemUID="Function2" TriggerUpdates="Never" />
+        <Function Name="GetSelectedTableName()" Expression="from orgroot select top 1 tablename where uid_orgroot = (from container select uid_orgroot)" DataType="System.String" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="TableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="PK()" DataType="System.String" />
+      <VirtualFunction Signature="HideDescription()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="PersonInfoText()" DataType="System.String" />
+      <VirtualFunction Signature="QBMLimitedSQLName()" DataType="System.String" DefaultValue="&quot;Webportal.VI_Roles_EntitlementUsageDetective&quot;" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

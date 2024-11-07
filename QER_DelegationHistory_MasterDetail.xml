@@ -1,0 +1,112 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_DelegationHistory_MasterDetail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container1">
+              <Grid AllowExport="true" ScriptItemUID="Grid1" ExportFileName="" ExportTitle="">
+                <ControlReferenceGridBand ID="VI_Delegation_HistoryGrid" DataTable="" ScriptItemUID="ControlRef3">
+                  <VirtualFunctionMapping ID="DbWhereClause()" Value="sqland(&#xD;&#xA;DbWhereClause(),&#xD;&#xA;sqlcompareuid( if(showreceiver()) then &quot;UID_PersonSender&quot; else &quot;UID_PersonReceiver&quot;, GetUser()))" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="showreceiver()" Value="ShowReceiver()" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualFunctionMapping ID="getUIDPerson()" Value="getuser()" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualTableMapping VirtualTable="DELEGATION_D" DataTable="Delegation" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualTableMapping VirtualTable="DELEGATIONOBJECTS_D" DataTable="DELEGATIONOBJECTS_D" ScriptItemUID="VirtualTableMapping2" />
+                </ControlReferenceGridBand>
+              </Grid>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container2">
+              <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="PersonWantsOrg" WhereClause="uid_personwantsorg = ( from delegation select top 1 uid_personwantsorg where uid_delegation = (from vars select uid_delegation))">
+                <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlReferenceContainer2">
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping3" />
+                  <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="VirtualFunctionMapping5" />
+                  <VirtualControlMapping VirtualControl="AdditionalTabs" ContainerType="TabPageGroup">
+                    <TabPageGroup ScriptItemUID="TabPageGroup1">
+                      <TabPage ScriptItemUID="TabPage1">
+                        <ControlsHeader ScriptItemUID="Container3">
+                          <Label ScriptItemUID="Label1" Text="datacaptionsingle(&quot;Delegation&quot;)" />
+                        </ControlsHeader>
+                        <ControlsBody ScriptItemUID="Container4">
+                          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="Delegation" WhereClause="uid_delegation = ( from vars select uid_delegation)">
+                            <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+                              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping6">
+                                <ColumnList ScriptItemUID="ColumnList1">
+                                  <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="KeepMeInformed" />
+                                  <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsDelegable" />
+                                </ColumnList>
+                              </VirtualFunctionMapping>
+                              <VirtualTableMapping VirtualTable="EditTable" DataTable="Delegation" ScriptItemUID="VirtualTableMapping4" />
+                            </ControlReferenceContainer>
+                          </ContainerTemplate>
+                        </ControlsBody>
+                      </TabPage>
+                    </TabPageGroup>
+                  </VirtualControlMapping>
+                </ControlReferenceContainer>
+              </ContainerTemplate>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label ScriptItemUID="Label2" Text="from delegation select top 1 display() where uid_delegation = (from vars select uid_delegation)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Delegation" Class="Delegation" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action1">
+            <Delete DataTable="DELEGATIONOBJECTS_D" ScriptItemUID="Delete1" />
+            <FillTable Source="XObjectKey" DataTable="DELEGATIONOBJECTS_D" DataTableSource="Delegation" DataColumnSource="ObjectKeyDelegated" DataColumnTableName="TableName" ResolveMNObjects="ResolveAlways" DataColumnXObjectKey="XObjectKey" ScriptItemUID="FillTable1" DataColumnSourceKey="sourcekey">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </FillTable>
+          </ActionSequence>
+          <Column Name="TableName" ScriptItemUID="Column1" DataType="System.String" DataSource="Expression" Expression="getobjectkeytable(objectkeydelegated)" />
+          <Column Name="ValidFrom" Expression="from PersonWantsOrg select top 1 ValidFrom where UID_PersonWantsOrg = select current UID_PersonWantsOrg from Delegation" DataSource="Expression" ScriptItemUID="Column3" DataType="System.DateTime" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;ValidFrom&quot;)" />
+          <Column Name="ValidUntil" Expression="from PersonWantsOrg select top 1 ValidUntil where UID_PersonWantsOrg = select current UID_PersonWantsOrg from Delegation" DataSource="Expression" ScriptItemUID="Column4" DataType="System.DateTime" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;ValidUntil&quot;)" />
+          <Column Name="TargetDisplay" ScriptItemUID="Column5" DataType="System.String" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;&#xD;&#xA;select top 1 displaylong() from DelegationObjects_D where (sourcekey = (select current objectkeydelegated from delegation) and primarykey() &lt;&gt; getuser() and primarykey() &lt;&gt; (select current uid_personreceiver from delegation)),&#xD;&#xA;&#xD;&#xA;from PersonWantsOrg select top 1 DisplayObjectKeyAssignment where UID_PersonWantsOrg = (from Delegation select current UID_PersonWantsOrg))" Caption="translate(&quot;#LDS#Name&quot;)" />
+          <Column Name="OrderThis" DataType="System.Boolean" ScriptItemUID="Column6" />
+          <Column Name="DateActivated" Expression="from PersonWantsOrg select top 1 DateActivated where UID_PersonWantsOrg = select current UID_PersonWantsOrg from Delegation" DataSource="Expression" ScriptItemUID="Column7" DataType="System.DateTime" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;DateActivated&quot;)">
+            <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="true" ScriptItemUID="ParameterFree1" />
+          </Column>
+          <Column Name="DateDeActivated" Expression="from PersonWantsOrg select top 1 DateDeActivated where UID_PersonWantsOrg = select current UID_PersonWantsOrg from Delegation" DataSource="Expression" ScriptItemUID="Column8" DataType="System.DateTime" Caption="datacaption(&quot;PersonWantsOrg&quot;, &quot;DateDeactivated&quot;)">
+            <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="true" ScriptItemUID="ParameterFree2" />
+          </Column>
+          <RedefineColumn DataColumn="XDateInserted" ScriptItemUID="RedefineColumn1">
+            <ParameterFree Name="&quot;IsAdditionalColumn&quot;" Value="true" ScriptItemUID="ParameterFree3" />
+          </RedefineColumn>
+        </DataTableDbObject>
+        <DataTableFKView Table="PersonWantsOrg" ViewFKDataTable="Delegation" ViewFKDataColumn="UID_PersonWantsOrg" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column12" DataSource="Expression" Expression="true" />
+        </DataTableFKView>
+        <DataTableGeneric Table="DELEGATIONOBJECTS_D" ScriptItemUID="DataTableGeneric1">
+          <Column Name="TableName" ScriptItemUID="Column10" DataType="System.String" />
+          <Column Name="XObjectKey" ScriptItemUID="Column14" DataType="System.String" />
+          <Column Name="sourcekey" DataType="System.String" ScriptItemUID="Column9" />
+        </DataTableGeneric>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_Delegation" DataType="System.String" ScriptItemUID="Column11" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ShowReceiver()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

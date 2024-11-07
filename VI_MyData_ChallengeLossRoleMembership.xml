@@ -1,0 +1,165 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b1431d0d-bd9a-6303-48f4-a04b89e75876">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_MyData_ChallengeLossRoleMembership" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="My profile" Description="translate(&quot;#LDS#My profile&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_MyData_ChallengeLossRoleMembership_MaxDays" Description="translate(&quot;#LDS#Maximum number of days for possible renewal on role loss&quot;)" LongDescription="translate(&quot;#LDS#In the event of loss of a primary role membership, the employee is allowed to request an extension for a maximum of &lt;n&gt; days.&quot;)" Type="Text" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <ActionSequence Condition="getconfigparm(&quot;QER\ITShop\ChallengeRoleRemoval&quot;)=&quot;1&quot;" ScriptItemUID="Action2">
+          <Update DataTable="Vars" DataColumn="DateProlongation" Value="NullTime(adddays(getdate(),7))" ScriptItemUID="Update2" />
+          <CodeLiteral ScriptItemUID="CodeLiteral1">var col = (ExpressionColumn)TableStore.GetLocalColumn(this.PWOChallengeLoss, "UID_AccProduct");
+var parentMetadataProvider = col.MetadataProvider;
+col.MetadataProvider = (m, c, r) =&gt; {
+
+	var vmParent = parentMetadataProvider != null ? parentMetadataProvider(m, c, r) : m;
+	var newMetadata = new ValueMetadata(c, vmParent);
+	// Customize filtering on the UID_AccProduct property
+    var filterProvider = new Data.ColumnFilterProvider(_Connection.Tables["AccProduct"].Columns["Ident_AccProduct"]);
+    filterProvider.WhereClauseFormatter = whereClause =&gt; string.Format("uid_org in (select uid_itshoporg from itshoporg where uid_accproduct in ( select uid_accproduct from accproduct where {0}))", whereClause);
+	filterProvider.WhereClauseFormatterInverted = whereClause =&gt; string.Format("uid_accproduct in ( select uid_accproduct from itshoporg where uid_itshoporg in ( select uid_org from personwantsorg where {0}))", whereClause);
+    newMetadata.FilterProvider = filterProvider;
+	return newMetadata;
+};</CodeLiteral>
+        </ActionSequence>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer1">
+            <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Some of your memberships are about to expire. You can renew them if you need them for a longer time.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-icon imx-message-warning&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+          </ControlReferenceContainer>
+          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+            <Grid ScriptItemUID="Grid1">
+              <GridBand DataTable="PWOChallengeLoss" ScriptItemUID="GridBand1" RowSelection="Action" RowSelectionActive="">
+                <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <ControlReferenceControlList ID="VI_ITShop_PersonWantsOrg_ListViewItem" ScriptItemUID="ControlRef2">
+                      <VirtualFunctionMapping ID="DisplayProduct()" Value="true" ScriptItemUID="VirtualFunctionMapping12" />
+                      <VirtualFunctionMapping ID="DisplayPersonOrdered()" Value="false" ScriptItemUID="VirtualFunctionMapping13" />
+                      <VirtualFunctionMapping ID="ShowCheckStatus()" Value="false" ScriptItemUID="VirtualFunctionMapping14" />
+                      <VirtualFunctionMapping ID="ShowDocumentNumber()" Value="false" ScriptItemUID="VirtualFunctionMapping15" />
+                      <VirtualFunctionMapping ID="DisplayOrderState()" Value="false" ScriptItemUID="VirtualFunctionMapping16" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping17" />
+                      <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOChallengeLoss" ScriptItemUID="VirtualTableMapping3" />
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef1">
+                            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="IsReadOnly()" Value="not(from pwochallengeloss select current (orderstate='Assigned'))" />
+                            <VirtualTableMapping ScriptItemUID="VirtualTableMapping6" VirtualTable="EditTable" DataTable="PWOChallengeLoss">
+                              <VirtualColumnMapping DataColumn="DoProlongate" VirtualColumn="DoSelect" />
+                            </VirtualTableMapping>
+                          </ControlReferenceControlList>
+                        </ControlList>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="AdditionalContent">
+                        <ControlList ScriptItemUID="ControlList3">
+                          <Container Condition="from pwochallengeloss select current (orderstate&lt;&gt;'Assigned')" ScriptItemUID="Container6">
+                            <Label Text="&quot;(&quot;+translate(&quot;#LDS#Request is being processed&quot;)+&quot;)&quot;" ScriptItemUID="Label3" />
+                          </Container>
+                        </ControlList>
+                      </VirtualControlMapping>
+                    </ControlReferenceControlList>
+                  </ControlList>
+                </GridBandListView>
+                <SelectionAction ScriptItemUID="ServerActionCall2">
+                  <ActionSequence ScriptItemUID="Action3" Condition="from pwochallengeloss select current (orderstate='Assigned')">
+                    <Update DataColumn="DoProlongate" DataTable="PWOChallengeLoss" ScriptItemUID="Update6" WhereClause="PrimaryKey() = (from PWOChallengeLoss select current PrimaryKey())" Value="not(from PWOChallengeLoss select current DoProlongate)" />
+                  </ActionSequence>
+                </SelectionAction>
+                <GridFilters ScriptItemUID="GridFilters1" />
+                <GridRows />
+                <GridColumn Width="&quot;190px&quot;" ScriptItemUID="GridColumn1">
+                  <GridColumnHeader ScriptItemUID="wctl2">
+                    <Label Text="translate(&quot;#LDS#Renew&quot;)" ScriptItemUID="Label1" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell1">
+                    <Container Condition="from pwochallengeloss select current (orderstate='Assigned')" ScriptItemUID="Container4">
+                      <CheckBox DataTable="PWOChallengeLoss" DataColumn="DoProlongate" Text="translate(&quot;#LDS#Renew&quot;)" ScriptItemUID="CheckBox1" />
+                    </Container>
+                    <Container Condition="from pwochallengeloss select current (orderstate&lt;&gt;'Assigned')" ScriptItemUID="Container5">
+                      <Label Text="&quot;(&quot;+translate(&quot;#LDS#Request is being processed&quot;)+&quot;)&quot;" ScriptItemUID="Label2" />
+                    </Container>
+                  </Cell>
+                </GridColumn>
+                <ControlReferenceGridColumnGroup ID="VI_ITShop_PersonWantsOrg_GridColumns" DataTable="PWOChallengeLoss" ScriptItemUID="wctl1">
+                  <VirtualFunctionMapping ID="DisplayProduct()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="DisplayPersonOrdered()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+                  <VirtualFunctionMapping ID="ShowCheckStatus()" Value="false" ScriptItemUID="VirtualFunctionMapping5" />
+                  <VirtualFunctionMapping ID="ShowDocumentNumber()" Value="false" ScriptItemUID="VirtualFunctionMapping6" />
+                  <VirtualFunctionMapping ID="DisplayOrderState()" Value="false" ScriptItemUID="VirtualFunctionMapping7" />
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOChallengeLoss" ScriptItemUID="VirtualTableMapping1" />
+                </ControlReferenceGridColumnGroup>
+              </GridBand>
+            </Grid>
+          </Container>
+          <ContainerTemplate DataTable="Vars" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlReferenceContainer2">
+              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping9">
+                <ColumnList ScriptItemUID="ColumnList1">
+                  <SingleColumn DataColumn="DateProlongation" ScriptItemUID="SingleColumn1" />
+                  <SingleColumn DataColumn="Reason" ScriptItemUID="SingleColumn2" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping2" />
+            </ControlReferenceContainer>
+          </ContainerTemplate>
+          <Container ScriptItemUID="Container8" Layout="'VI_Styles_Container_ButtonBar'">
+            <Button Text="translate(&quot;#LDS#Submit&quot;)" EnabledCondition="0 &lt; select count() from pwochallengeloss where doprolongate" ScriptItemUID="Button1">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <ActionOnControl ActionType="PerformValidation" />
+                <Method DataTable="PWOChallengeLoss" Method="Prolongate" WhereClause="DoProlongate">
+                  <MethodParameter Name="&quot;User&quot;" Value="getuser()" />
+                  <MethodParameter Name="&quot;Date&quot;" Value="from vars  select top 1 dateprolongation" />
+                  <MethodParameter Name="&quot;Reason&quot;" Value="from vars select isnull(reason,&quot;&quot;)" />
+                </Method>
+                <LoadTable DataTable="PWOChallengeLoss" ScriptItemUID="LoadTable1" WhereClause="whereclause(PWOChallengeLoss)">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                </LoadTable>
+                <Update DataTable="PWOChallengeLoss" DataColumn="DoProlongate" Value="false" ScriptItemUID="Update1" />
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction1">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping10" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping11" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="DateProlongation" DataType="System.DateTime" Caption="translate(&quot;#LDS#Renew until&quot;)" ScriptItemUID="Column1">
+            <ValidationModifier ID="MaxDate" Text="translate(&quot;#LDS#You entered an invalid date. You can only renew until {0}.&quot;, formatdate(maxdateprolongation(),&quot;d&quot;))" Condition="from vars select current (DateProlongation &gt; maxdateprolongation() or dateprolongation &lt; getdate())" />
+          </Column>
+          <Column Name="Reason" Caption="translate(&quot;#LDS#Reason for renewal&quot;)" ScriptItemUID="Column2" DataType="System.String" />
+        </DataTableSingleRow>
+        <DataTableFKView Table="ITShopOrg" ViewFKDataTable="PWOChallengeLoss" ViewFKDataColumn="UID_Org" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" />
+        </DataTableFKView>
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="ITShopOrg" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView3" Class="AccProduct">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+          <Column Name="HelperIsReusable" DataType="System.Boolean" ScriptItemUID="Column9" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossible : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+          <Column Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" ScriptItemUID="Column10" DataSource="Expression" Expression="convert({{&#xD;&#xA;var tableName = QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName;&#xD;&#xA;var btasgn = QER.CompositionApi.ITShop.BaseTreeAssignCache.Instance.GetAsync(_Database, tableName).Result;&#xD;&#xA;@return btasgn != null ? btasgn.IsReusePossibleUnsubscribe : false;&#xD;&#xA;}}, &quot;System.Boolean&quot;)" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="maxdateprolongation()" Expression="nulltime(adddays(getdate(), convert( getconfig(&quot;VI_MyData_ChallengeLossRoleMembership_MaxDays&quot;), &quot;System.Int32&quot; )))" DataType="System.DateTime" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PWOChallengeLoss" Class="PersonWantsOrg" ScriptItemUID="VirtualTable1">
+        <Column Name="DoProlongate" DataType="System.Boolean" ScriptItemUID="Column3" />
+        <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column4" DataSource="Expression" Expression="true" />
+        <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column5" MinLength="" MaxLength="" Comment="dummy property, required for interface compatibility" />
+        <Column Name="UID_AccProduct" DataType="System.String" ScriptItemUID="Column16" DataSource="Expression" Expression="from ITShopOrg select top 1 UID_AccProduct where UID_ITShopOrg = (select current UID_Org from PWOChallengeLoss)" ColumnDataSource="ForeignKey" DBTableName="&quot;AccProduct&quot;" DBColumnName="&quot;UID_AccProduct&quot;" FKWhereClause="" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

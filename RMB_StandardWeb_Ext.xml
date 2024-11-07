@@ -1,0 +1,16 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a3aeff03-2cc1-fe06-4bf2-7979a25edaba">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="360">
+        <ConfigEntry Key="Filter_ColumnEditor_Org.UID_OrgRoot" Value="sqlcompare(&quot;uid_orgroot&quot;, &quot;*-V-*&quot;, &quot;string&quot;, &quot;notlike&quot;,&quot;NonUnicodeLiterals&quot;)" ScriptItemUID="RMBConfigEntry1" />
+        <ConfigEntry Key="Filter_ColumnEditor_Org.UID_RulerContainerIT" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;RMB-AEROLE-ROLEADMIN-RULERIT&quot;))" ScriptItemUID="RMBConfigEntry2" />
+        <ConfigEntry Key="Filter_ColumnEditor_Org.UID_RulerContainer" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;RMB-AEROLE-ROLEADMIN-RULER&quot;))" ScriptItemUID="RMBConfigEntry3" />
+        <ConfigEntry Key="Filter_ColumnEditor_Org.UID_OrgAttestator" Value="format( &quot;UID_AERole in (select UID_Org from BaseTreeCollection where {0})&quot;, sqlcompareuid(&quot;uid_parentorg&quot;, &quot;CPL-AEROLE-RULEADMIN-ATTESTATOR&quot;))" ScriptItemUID="RMBConfigEntry4" />
+        <ConfigEntry Key="FilterByObject.Org" Value="true" ScriptItemUID="RMBConfigEntry5" />
+        <ConfigEntry Key="ColumnEditor_Org.UID_OrgRoot" ScriptItemUID="RMBConfigEntry6" Value="VI_Edit_FKByComboBox" />
+        <ConfigEntry Key="ColumnEditor_Org.UID_OrgType" ScriptItemUID="RMBConfigEntry7" Value="VI_Edit_FKByComboBox" />
+        <ConfigEntry Key="Filter_ColumnEditor_Org.UID_OrgType" Value="format(&quot;UID_OrgType in (&#xD;&#xA;select ht.UID_OrgType from QEROrgRootHasOrgType ht where {0}&#xD;&#xA;    union &#xD;&#xA;select t.UID_OrgType&#xD;&#xA;    from OrgType t left outer join QEROrgRootHasOrgType h on t.UID_OrgType = h.UID_OrgType and {1}&#xD;&#xA;        where   not exists (select top 1 1 from QEROrgRootHasOrgType ht where {0}) and &#xD;&#xA;                h.UID_OrgRoot is null)&quot;,&#xD;&#xA;sqlcompareuid(&quot;ht.UID_OrgRoot&quot;, uid_orgroot),&#xD;&#xA;sqlcompareuid(&quot;h.UID_OrgRoot&quot;, uid_orgroot, &quot;notequal&quot;))" ScriptItemUID="RMBConfigEntry8" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

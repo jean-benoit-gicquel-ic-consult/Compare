@@ -1,0 +1,50 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_RoundedCorners_Default" Type="RoundedCorners" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="hyperviewelement hyperviewelementnew" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.hyperviewelementnew { 
+padding: 7px;
+background-color: %VI_Common_Color_ColorBase1%;
+color: %VI_Common_Color_Font_Secondary2%;
+}
+
+.hyperviewelement&gt;div { overflow: hidden; }
+
+.hyperviewelement .LayoutpPropCol a
+{
+   display: block;
+}
+
+.hyperviewelement .LayoutpPropCol a:focus, .hyperviewelement .LayoutpPropCol a:hover
+{
+   background-color: rgba(255,255,255,.2);
+   text-decoration: none;
+   transition: all .25s ease-in-out;
+}
+
+.hyperviewelement a, .hyperviewelement a:link, .hyperviewelement a:focus, .hyperviewelement a:active, .hyperviewelement a:hover,  .hyperviewelement a:visited
+{
+   color: %VI_Common_Color_ColoredLink_Secondary%;
+}
+
+.hyperviewcaption
+{
+width: auto; overflow: hidden; white-space: nowrap; color: %VI_Common_Color_Font_Secondary2%;
+    font-weight: lighter;
+}
+
+.hyperviewheader
+{
+text-overflow: ellipsis; overflow: hidden; white-space: nowrap; color: %VI_Common_Color_Font_Secondary2%; font-style: italic; font-size: 1.2em;
+   flex: 1;
+   cursor:move;
+}
+
+.hyperviewelementnew td, .hyperviewelement th
+{
+   color: %VI_Common_Color_Font_Secondary2%;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

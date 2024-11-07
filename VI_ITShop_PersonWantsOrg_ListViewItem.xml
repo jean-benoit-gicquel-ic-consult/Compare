@@ -1,0 +1,140 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="41fb4bbd-bf3c-aa4e-8c97-97604ad5e5aa">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PersonWantsOrg_ListViewItem" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action3" />
+      <ControlList ScriptItemUID="ControlList1">
+        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef1">
+          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+            <ControlList ScriptItemUID="ControlList3">
+              <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = ( select current uid_accproduct from personwantsorg)" ScriptItemUID="ContainerTemplate1">
+                <AccProductSwitchContainer ActionType="Details_PersonWantsOrg" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from accproduct" ScriptItemUID="AccProductSwitchContainer1">
+                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping1">
+                    <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DummyColumn" />
+                  </VirtualTableMapping>
+                  <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualControlMapping VirtualControl="TriggerRecalculateCompliance" ContainerType="ActionComponent">
+                    <ActionComponent ScriptItemUID="Action1">
+                      <CallAction ActionID="TriggerRecalculateCompliance" ScriptItemUID="CallAction2" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                </AccProductSwitchContainer>
+                <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlReferenceContainer1" />
+              </ContainerTemplate>
+              <SwitchContainer ScriptItemUID="Switch1">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="select current isnullorempty(uid_accproduct) from personwantsorg&#xA;&#xA;-- the product may have been deleted">
+                  <Label ScriptItemUID="Label4" Text="from personwantsorg select current displayvalue(displayorg)" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </ControlList>
+          </VirtualControlMapping>
+          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+            <ControlList ScriptItemUID="ControlList4">
+              <ControlReferenceContainer ID="Actions" ScriptItemUID="ControlRef2" />
+            </ControlList>
+          </VirtualControlMapping>
+          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+            <ControlList ScriptItemUID="ControlList5">
+              <LayoutPanel ScriptItemUID="LayoutPanel1">
+                <ContainerColumnTemplate DataTable="PersonWantsOrg" ScriptItemUID="ContainerColumnTemplate2">
+                  <ColumnList ScriptItemUID="ColumnList3">
+                    <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                    <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="OrderDate" Condition="DisplayOrderDate()" />
+                    <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="UID_ShoppingCartOrder" Condition="showdocumentnumber()" />
+                    <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="PWOPriority" Condition="ShowUIDPriority()" />
+                    <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="ValidUntil" Condition="DisplayValidUntil()" DisplayValueExpression="from personwantsorg select current&#xD;&#xA;(if(isnull(validuntil)) then translate(&quot;#LDS#unlimited&quot;) else&#xD;&#xA;formatdate(validuntil,&quot;d&quot;))" ColumnComponentView="VI_Edit_View_Default" />
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DisplayPersonOrdered" Condition="DisplayPersonOrdered()" />
+                    <SingleColumn ScriptItemUID="SingleColumn12" DataColumn="DisplayOrderState" Condition="DisplayOrderState()" />
+                  </ColumnList>
+                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping3">
+                      <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                  </ControlReferenceContainer>
+                  <SwitchContainer ScriptItemUID="Switch3">
+                    <SwitchContainerCase ScriptItemUID="Case2" Condition="{{_currentColumn.ColumnName == &quot;PWOPriority&quot;}}">
+                      <Label Text="from personwantsorg select current displayvalue(PWOPriority)" EnableCustomAttributes="true" ScriptItemUID="Label6">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="&quot;class&quot;" Value="format(&quot;imx-prio-{0}&quot;,from PersonWantsOrg select current PWOPriority)" ScriptItemUID="HtmlAttribute4" />
+                        </HtmlAttributes>
+                      </Label>
+                    </SwitchContainerCase>
+                    <SwitchContainerCase ScriptItemUID="Case5" Condition="{{_currentColumn.ColumnName == &quot;DisplayOrderState&quot;}}">
+                      <Label Text="from personwantsorg select current displayvalue(displayorderstate) + GetProlongationSuffix()&#xA;" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon &quot;+&#xD;&#xA;from personwantsorg select current&#xD;&#xA;(&#xD;&#xA;if(IsLogicallyAssigned)&#xD;&#xA;then &quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else if (orderstate in ('New', 'OrderProduct', 'Waiting', 'OrderProlongate', 'OrderUnsubscribe'))&#xD;&#xA;then &quot;imx-icon-Workflow&quot;&#xD;&#xA;else if (orderstate in ('Dismissed', 'Aborted'))&#xD;&#xA;then &quot;imx-icon-Error&quot;&#xD;&#xA;else if (orderstate = 'Granted')&#xD;&#xA;then &quot;imx-icon-BlueCheckmark&quot;&#xD;&#xA;else if(orderstate='Unsubscribed' and uid_accproduct in (select uid_accproduct from accproduct where (helperisreusable and not(helperisreusablewithunsubscribe))))&#xD;&#xA;then &quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else if (orderstate in ('Unsubscribed'))&#xD;&#xA;then &quot;imx-icon-AssignedNone&quot;&#xD;&#xA;else &quot;&quot;)" />
+                        </HtmlAttributes>
+                      </Label>
+                    </SwitchContainerCase>
+                    <SwitchContainerCase ScriptItemUID="Case4">
+                      <ColumnEditor DataTable="PersonWantsOrg" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1">
+                        <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping3" />
+                      </ColumnEditor>
+                    </SwitchContainerCase>
+                  </SwitchContainer>
+                </ContainerColumnTemplate>
+              </LayoutPanel>
+              <ControlReferenceControlList ID="AdditionalContent" ScriptItemUID="ControlRef3" />
+            </ControlList>
+          </VirtualControlMapping>
+        </ControlReferenceControlList>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetProlongationSuffix()" Expression="select current&#xA;(if(orderstate=&quot;OrderProlongate&quot;) then (&quot; &quot;+translate(&quot;#LDS#until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)))&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor1" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <Column Name="DummyColumn" DataType="System.Boolean" ScriptItemUID="Column7" />
+        <Column Name="IsLogicallyAssigned" DataType="System.Boolean" ScriptItemUID="Column4" DataSource="Expression" Expression="-- the orderstate is &quot;Unsubscribed&quot; but the request should be displayed as being &quot;assigned&quot;&#xD;&#xA;&#xD;&#xA;orderstate=&quot;Assigned&quot; or (orderstate='Unsubscribed' and uid_accproduct in (select uid_accproduct from accproduct where (helperisreusable and not(helperisreusablewithunsubscribe))))" />
+        <Column Name="DisplayOrderState" DataType="System.String" Expression="-- #14518 special handling for cases where orderstate is user-unfriendly&#xD;&#xA;select current &#xD;&#xA;(&#xD;&#xA;if(IsLogicallyAssigned) then&#xD;&#xA;&quot;Assigned&quot;&#xD;&#xA;else&#xD;&#xA;(&#xD;&#xA; orderstate&#xD;&#xA;))&#xD;&#xA;from PersonWantsOrg" DataSource="Expression" ScriptItemUID="Column8" Caption="translate(&quot;#LDS#Status&quot;)" ColumnDataSource="LimitedValues">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="Aborted" Comment="Aborted" Display="translatecolumn(&quot;Aborted&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'Aborted', 'string',  'equal')" />
+            <ColumnLimitedValue Name="Dismissed" Comment="Denied" Display="translatecolumn(&quot;Denied&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'Dismissed', 'string',  'equal')" />
+            <ColumnLimitedValue Name="Assigned" Comment="Assigned" Display="translatecolumn(&quot;Assigned&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="&quot;orderstate='Assigned' or (orderstate='Unsubscribed' and uid_org in ( select its.uid_itshoporg from itshoporg its join qeraccproductusage u on u.UID_AccProduct = its.uid_accproduct join dialogtable dt on dt.TableName = u.TableName join basetreeassign a on a.UID_DialogTableElement = dt.UID_DialogTable where a.IsReusePossible=1 and a.IsReusePossibleUS=0))&quot;" />
+            <ColumnLimitedValue Name="OrderProduct" Comment="Request" Display="translatecolumn(&quot;Request&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'OrderProduct', 'string',  'equal')" />
+            <ColumnLimitedValue Name="Unsubscribed" Comment="Unsubscribed" WhereClause="&quot;orderstate='Unsubscribed' and uid_org not in (select its.uid_itshoporg from itshoporg its join qeraccproductusage u on u.UID_AccProduct = its.uid_accproduct join dialogtable dt on dt.TableName = u.TableName join basetreeassign a on a.UID_DialogTableElement = dt.UID_DialogTable where a.IsReusePossible=1 and a.IsReusePossibleUS=0)&quot;" Display="translatecolumn(&quot;Unsubscribed&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" />
+            <ColumnLimitedValue Name="OrderProlongate" Comment="OrderProlongate" Display="translatecolumn(&quot;Renewal&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'OrderProlongate', 'string',  'equal')" />
+            <ColumnLimitedValue Name="OrderUnsubscribe" Comment="OrderUnsubscribe" Display="translatecolumn(&quot;Cancellation&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'OrderUnsubscribe', 'string',  'equal')" />
+            <ColumnLimitedValue Name="New" Comment="New" Display="translatecolumn(&quot;New&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'New', 'string',  'equal')" />
+            <ColumnLimitedValue Name="Waiting" Comment="Waiting" Display="translatecolumn(&quot;Pending&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'Waiting', 'string',  'equal')" />
+            <ColumnLimitedValue Name="Granted" Comment="Granted" Display="translatecolumn(&quot;Approved&quot;, &quot;personwantsorg&quot;, &quot;orderstate&quot;)" WhereClause="SqlCompare('orderstate', 'Granted', 'string',  'equal')" />
+          </ColumnLimitedValues>
+        </Column>
+        <VirtualColumn Name="DoNotAllowApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="DisplayProduct()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DisplayPersonOrdered()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowCheckStatus()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowDocumentNumber()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DisplayOrderState()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DisplayOrderDate()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalControlsColumn1" ContainerType="Container">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualControl ID="TriggerRecalculateCompliance" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualFunction Signature="ShowUIDPriority()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DisplayValidUntil()" DataType="System.Boolean" DefaultValue="false" TriggerUpdates="Never" />
+      <VirtualControl ContainerType="ControlList" ID="Actions" />
+      <VirtualControl ID="AdditionalContent" ContainerType="ControlList">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualTable Name="AccProduct" ScriptItemUID="VirtualTable2" Class="AccProduct">
+        <VirtualColumn Name="HelperIsReusable" DataType="System.Boolean" />
+        <VirtualColumn Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

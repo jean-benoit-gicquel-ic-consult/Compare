@@ -1,0 +1,55 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="QBM_Styles_Container_TileOverview_AddOn" Type="Container" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="tile-overview-addon" />
+    <CssDocument ScriptItemUID="CssDocument1" CssName="CSS">.tile-overview-addon{
+    display: inline-flex;
+	width: 300px;
+	height: 120px;
+	margin-right: 20px;
+    vertical-align: top;
+    margin-bottom: 25px;
+    border: solid 1px %VI_Common_Color_LighterGray%; 
+  }
+.tile-overview-addon:hover,
+.tile-overview-addon:focus {
+    border: solid 1px %VI_Common_Color_Gray%;
+    outline: none;
+    text-decoration: none;
+}
+.tile-overview-addon a:hover,
+.tile-overview-addon a:focus {
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+.tile-overview-addon .heading {
+   padding: 10px 10px 0px 10px;
+   color: %VI_Common_Color_ColorBase3%;
+   font-size: 1.4em;
+   line-height: 1.4em;
+   width: 280px;
+}
+.tile-overview-addon .description {
+    padding: 10px 10px 0px 10px;
+	font-size: 1.2em;
+	color: %VI_Common_Color_Font%;
+    width: 280px;
+}
+
+/* responsive layout*/
+@media %IMX_Mediaquery_Smartphone%
+{
+  .tile-overview-addon 
+  {
+    max-width: 300px;
+    min-height: 175px;
+    width: initial;
+  }
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

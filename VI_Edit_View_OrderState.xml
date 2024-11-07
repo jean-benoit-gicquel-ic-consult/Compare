@@ -1,0 +1,22 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_OrderState" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="Container1">
+        <Label Text="from EditTable select current displayvalue(EditColumn)" ScriptItemUID="Label7" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon &quot;+&#xD;&#xA;from EditTable select current&#xD;&#xA;(&#xD;&#xA;if (EditColumn = 'Assigned') then &quot;imx-icon-AssignedDirect&quot;&#xD;&#xA;else if(EditColumn in ('New', 'OrderProduct', 'Waiting', 'OrderProlongate', 'OrderUnsubscribe')) then &quot;imx-icon-Workflow&quot;&#xD;&#xA;else if(EditColumn in ('Dismissed', 'Aborted')) then &quot;imx-icon-Error&quot;&#xD;&#xA;else if(EditColumn = 'Granted') then &quot;imx-icon-BlueCheckmark&quot;&#xD;&#xA;else if(EditColumn in ('Unsubscribed')) then &quot;imx-icon-AssignedNone&quot;&#xD;&#xA;else &quot;&quot;&#xD;&#xA;)" />
+          </HtmlAttributes>
+        </Label>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

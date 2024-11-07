@@ -1,0 +1,47 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Common_WebPart_TaskTile">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ActionID="Clicked" ScriptItemUID="Call1" />
+          </ServerActionCall>
+          <ControlList ScriptItemUID="ControlList2">
+            <Label Text="HeadText()" ScriptItemUID="Label1" />
+            <Label Text="SecondaryText()" ScriptItemUID="Label2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;infoLeft&quot;" ScriptItemUID="HtmlAttribute1" />
+              </HtmlAttributes>
+            </Label>
+            <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" Value="&quot;Inline infoRight&quot;" ScriptItemUID="HtmlAttribute2" />
+              </HtmlAttributes>
+              <Code ClassName="VI.WebRuntime.WebControls.TimeagoControl, VI.WebRuntime" ScriptItemUID="Control1">
+                <ControlList ScriptItemUID="ControlList3" />
+                <CodeParameter Name="Date" Value="timestamp()" ScriptItemUID="CodeParameter1" />
+              </Code>
+            </Container>
+          </ControlList>
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" Value="&quot;sidebarItem withInfo&quot;" ScriptItemUID="HtmlAttribute3" />
+          </HtmlAttributes>
+        </LinkContainer>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualControl ID="Clicked" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="TimeStamp()" DataType="System.DateTime" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HeadText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="SecondaryText()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

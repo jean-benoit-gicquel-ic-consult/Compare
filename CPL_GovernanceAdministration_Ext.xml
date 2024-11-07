@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_GovernanceAdministration_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="25">
+        <SwitchContainer ScriptItemUID="TileRuleViolations">
+          <SwitchContainerCase ScriptItemUID="CPLCase1" Condition="IsPreProp('COMPLIANCE') and (&#xD;&#xA;-- visible for Compliance &amp; Security Officer&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for Auditor&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- Whereclause for: ComplianceArea.UID_OrgResponsible, ComplianceRule.UID_OrgResponsible, ComplianceRule.UID_OrgRuler, Department-Responsible&#xD;&#xA;exists(&quot;person&quot;, format(&quot;uid_person = {1} and (uid_person in ( select piae.UID_Person from PersonInAERole piae join AERoleCollection aec on aec.UID_ParentAERole = piae.UID_AERole&#xD;&#xA;where piae.UID_AERole in ( select cr.uid_orgruler from ComplianceRule cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select cr.uid_orgresponsible from ComplianceRule cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select ca.uid_orgresponsible from compliancearea ca ))&#xD;&#xA;or UID_Person in ( select hho.UID_PersonHead from HelperHeadOrg hho join Department dep on dep.UID_Department = hho.UID_Org))&quot;&#xD;&#xA;, sqlor(sqlcompare(&quot;cr.isinactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),sqlcompare(&quot;cr.isworkingcopy&quot;,false,&quot;bool&quot;,&quot;equal&quot;)), sqlformatvalue(getuser(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;))&#xD;&#xA;)">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="CPLContainer1" ItemUID="Rule Violations">
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping9" ID="Identifier()" Value="&quot;Rule Violations&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CPLAction1">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_Report" ScriptItemUID="CPLRedirect1" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Rule Violations')" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping10" ID="Image()" Value="&quot;ComplianceRule&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#See an overview of all rules and their violations.')" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

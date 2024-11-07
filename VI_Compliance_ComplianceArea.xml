@@ -1,0 +1,75 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Compliance_ComplianceArea" MigrationNotes="DIALOGCONFIGPARM;" HelpChapterUid="&quot;6977985F-8076-49BA-A944-9AD266D5FFBF&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="ComplianceArea" Table="ComplianceAreaColl" WhereClauseSQL="format(&quot;uid_orgresponsible in ( select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = '{0}' ))&quot;, from user select uid_person)" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2">
+      <LoadTable DataTable="ComplianceAreaColl" ScriptItemUID="LoadTable1">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+      </LoadTable>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Compliance Frameworks&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action3" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#Compliance Frameworks&quot;)" ScriptItemUID="Label2" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1">
+            <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#The following compliance frameworks are defined in the system. Please select one to view details.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+            </ControlReferenceContainer>
+            <Grid AllowExport="true" ExportFileName="" ExportTitle="" ScriptItemUID="Grid1">
+              <GridBand DataTable="ComplianceAreaColl" EntriesPerPage="10" WhereClause="IsTopOfHierarchy(uid_complianceareaparent,true)" IsRecursive="true" RecursiveWhereClause="uid_complianceareaparent = (select current uid_compliancearea from complianceareacoll)" ScriptItemUID="GridBand1">
+                <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                <GridFilters ScriptItemUID="GridFilters1" />
+                <GridRows />
+                <GridColumn SortColumn="Ident_ComplianceArea" ScriptItemUID="Column1">
+                  <GridColumnHeader ScriptItemUID="wctl1">
+                    <Container ScriptItemUID="Container2">
+                      <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label3" />
+                    </Container>
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell1">
+                    <Label Text="from complianceareacoll select current display()" ScriptItemUID="Label1" Action="Redirect">
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" AbortExecution="false" ScriptItemUID="Redirect1">
+                          <RedirectParameter Name="'ObjectKey'" Value="from complianceareacoll select current XObjectKey" />
+                        </Redirect>
+                      </ServerActionCall>
+                    </Label>
+                  </Cell>
+                </GridColumn>
+                <GridColumn Width="&quot;280px&quot;" SortColumn="Description" ScriptItemUID="Column2">
+                  <GridColumnHeader ScriptItemUID="wctl2">
+                    <Label Text="Datacaption(&quot;ComplianceArea&quot;,&quot;Description&quot;)" ScriptItemUID="Label4" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell2">
+                    <Label Text="from complianceareacoll select current displayvalue(Description)" ScriptItemUID="Label5" />
+                  </Cell>
+                </GridColumn>
+                <GridColumn Width="&quot;280px&quot;" ScriptItemUID="Column3">
+                  <GridColumnHeader ScriptItemUID="wctl3">
+                    <Label Text="Datacaption(&quot;ComplianceArea&quot;,&quot;UID_OrgResponsible&quot;)" ScriptItemUID="Label6" />
+                  </GridColumnHeader>
+                  <Cell ScriptItemUID="Cell3">
+                    <Label Text="from complianceareacoll select current displayvalue(uid_orgresponsible)" ScriptItemUID="Label7" />
+                  </Cell>
+                </GridColumn>
+              </GridBand>
+            </Grid>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

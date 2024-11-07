@@ -1,0 +1,24 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2013-01-13" ID="VI_Edit_View_Picture" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Container Condition="not(from edittable select current IsNullOrEmpty(editcolumn))" ScriptItemUID="Container2">
+          <Image Source="DataSet" DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="Image1" />
+        </Container>
+        <Container Condition="from edittable select current IsNullOrEmpty(editcolumn)" ScriptItemUID="Container3">
+          <Label Text="NullText()" Tooltip="NullText()" ScriptItemUID="Label1" />
+        </Container>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" />
+  </GlobalControl>
+</WebDesigner>

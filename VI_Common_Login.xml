@@ -1,0 +1,458 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_Login" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="QBM_Common_Redirector" />
+        <AssemblyReference Assembly="VI.Web.ConfigBase.dll" />
+        <ObjectInclude ObjectIncludeID="VI_Styles_Container_PaddedTop" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="General settings" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_Common_Login_PasswordLink" Description="translate(&quot;#LDS#Link to password reset page&quot;)" LongDescription="translate(&quot;#LDS#Enter URL here to show a password reset link on the login page.&quot;)" Type="Text" />
+        <ConfigParam Key="VI_Common_Login_PrefillLoginData" Description="translate(&quot;#LDS#Allow prefill of login data&quot;)" LongDescription="translate(&quot;#LDS#Allow prefilling of the login data for demo or test cases. Disallow in production environments.&quot;)" />
+        <ConfigParam Key="VI_Common_SignInLogo" Description="translate(&quot;#LDS#Sign in logo&quot;)" Type="Image" LongDescription="translate(&quot;#LDS#Important: A customized logo must be declared using a URL to an external resource. Project resources are not supported for this configuration setting.&quot;)" />
+        <ConfigParam Key="VI_Common_SignInProductName" Description="translate(&quot;#LDS#Sign in product symbol&quot;)" Type="Image" LongDescription="" />
+        <ConfigParam Key="VI_RSTS_UseRedirect" Description="translate('#LDS#Use redirection to RSTS web site for logging in.')" LongDescription="translate(&quot;#LDS#If you want to enable user self-registration, uncheck this setting and customize the RSTS style sheet to see the RSTS login in an internal frame.&quot;)" />
+        <ConfigParam Key="VI_Common_PasswordWebLink" Description="translate(&quot;#LDS#Link to password reset web&quot;)" LongDescription="translate(&quot;#LDS#Enter URL here to show a password reset link (QER_PasswordWeb).&quot;)" Type="Text" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">var container = new LoginDataContainer();
+container.UserName = UserName;
+LoginData.ObjectList.Add(container);</CodeLiteral>
+      </ActionSequence>
+      <Container ItemUIDReference="LoginButton" ScriptItemUID="Container1">
+        <CodeLiteral ScriptItemUID="CodeLiteral3">// skip the login page if the user is already authenticated
+if (_UserSession.IsAuthenticated) {
+	System.Web.HttpContext.Current.Response.Redirect(_UserSession.StartUrl, false); }</CodeLiteral>
+        <CodeLiteral ScriptItemUID="CodeLiteral4">        var config = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.Web.ConfigBase.IWebAppDbConfig&gt;();
+		var isOAuth = (VI.WebRuntime.IoC.UnitySingleton.GetCredentialsMode(config) == VI.WebRuntime.CredentialsMode.ExternalSingleSignOn);
+		this.LoginMethod.GetColumn("ExternalSSO").SetValue(LoginMethod.SingleRow, isOAuth);				
+		</CodeLiteral>
+        <CodeLiteral ScriptItemUID="CodeLiteral7">		var exceptionOccured = false;
+		VI.WebRuntime.Communication.OAuth2Client client = null;
+		Exception ex = null;
+		string oauthRedirectUrl = null;
+		
+		if (isOAuth &amp;&amp; !_UserSession.IsAuthenticated)
+		{
+			var hasOAuth = _UserSession.SessionObjects.ContainsKey("OAuth");
+			var useRedirect = string.Equals(VI.WebRuntime.WebSql.GetConfigValueReplaced(_UserSession, "VI_RSTS_UseRedirect"), true.ToString(), System.StringComparison.OrdinalIgnoreCase);
+			if (hasOAuth)
+			{
+				client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
+				var code = System.Web.HttpContext.Current.Request["code"];
+				if (!string.IsNullOrEmpty(code))
+				{				
+					try
+					{
+						var postLoginUrl = _UserSession.Authenticate(client.BuildAuthProps(code));
+						
+						if (!string.IsNullOrEmpty(postLoginUrl))
+						{
+							System.Web.HttpContext.Current.Response.Redirect(postLoginUrl, false);
+							return;
+						}
+					}
+					catch (Exception exc)
+					{
+						// STS session is authenticated, but Identity Manager session is not					
+						ex = exc;
+						exceptionOccured = true;
+						Logger.WarnException(exc.Message, exc);
+					}
+				}
+				
+				var errorFromOAuth = System.Web.HttpContext.Current.Request.QueryString["error"];
+				if (!string.IsNullOrEmpty(errorFromOAuth))
+				{
+				    var errorDescription = System.Web.HttpContext.Current.Request.QueryString["error_description"] ?? "";
+					ex = new Exception(System.Web.HttpUtility.UrlDecode(errorDescription));
+					Logger.Warn("Exception from OAuth: {0} {1}", errorFromOAuth, errorDescription);
+					exceptionOccured = true;
+				}
+			}
+			else
+			{
+				string redirectUrl = null;
+
+				if (!useRedirect)
+				{
+					var moduleNameIn = "QBM_Common_Redirector";
+					string moduleName;
+					if (!_UserSession.ApplicationInfo.ObjectOverrides.TryGetValue(moduleNameIn, out moduleName))
+						moduleName = moduleNameIn;
+					
+					redirectUrl = _UserSession.ApplicationInfo.Modules[moduleName].GetUrl(null);
+				}
+
+				client = new VI.WebRuntime.Communication.OAuth2Client(redirectUrl, true);
+				_UserSession.SessionObjects["OAuth"] = client;
+			}
+			
+			oauthRedirectUrl = client.BuildUrl();
+			if (!exceptionOccured &amp;&amp; useRedirect)
+			{
+				System.Web.HttpContext.Current.Response.Redirect(oauthRedirectUrl, false);
+				return;
+			}
+		}
+		
+		
+		
+</CodeLiteral>
+        <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+          <Container ScriptItemUID="Container10" ItemUID="loginpage" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute25" Name="if(not(IsEmbedded())) then &quot;class&quot; else &quot;&quot;" Value="&quot;imx-loginPage&quot;" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container9" ItemUID="formcontainer" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="if(not(IsEmbedded())) then &quot;class&quot; else &quot;&quot;" Value="&quot;imx-loginFormcontainer&quot;" />
+              </HtmlAttributes>
+              <Container ScriptItemUID="Container6" ItemUID="Company Logo with Link" Condition="not(IsEmbedded())">
+                <Container ScriptItemUID="Container23" ItemUID="Logo as picture" Condition="NOT isnull(getconfig(&quot;VI_Common_SignInLogo&quot;))">
+                  <LinkContainer ScriptItemUID="Image2Link">
+                    <ControlList ScriptItemUID="Image2Ctl">
+                      <Image ScriptItemUID="Image2" Source="File" FileName="getconfig(&quot;VI_Common_SignInLogo&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute22" Name="&quot;aria-hidden&quot;" Value="&quot;true&quot;" />
+                        </HtmlAttributes>
+                      </Image>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall5">
+                      <Redirect Target="Link" NoLinkObjectID="true" HREF="getconfig(&quot;VI_Common_CompanyLink&quot;)" ScriptItemUID="Redirect1" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                </Container>
+                <Container ScriptItemUID="Container24" ItemUID="logo as icon font" Condition="isnull(getconfig(&quot;VI_Common_SignInLogo&quot;))" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute50" Name="&quot;class&quot;" Value="&quot;imx-logoContainer&quot;" />
+                  </HtmlAttributes>
+                  <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;style&quot;" Value="&quot;outline: none !important; text-decoration: none !important;&quot;" />
+                    </HtmlAttributes>
+                    <ControlList ScriptItemUID="ControlList2">
+                      <Label ScriptItemUID="Label6" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute31" Name="&quot;class&quot;" Value="&quot;iconFont iconFont-logoWithProduct&quot;" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%;&quot;)" />
+                          <Property Name="TagName" Value="i" />
+                        </HtmlAttributes>
+                      </Label>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall4">
+                      <Redirect Target="Link" NoLinkObjectID="true" HREF="getconfig(&quot;VI_Common_CompanyLink&quot;)" ScriptItemUID="Redirect3" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                </Container>
+              </Container>
+              <Container ItemUID="ProductName" ScriptItemUID="Container2" Layout="'VI_Styles_Container_PaddedTop'" Condition="not(IsEmbedded())">
+                <Container ScriptItemUID="Container25" ItemUID="product name as picture" Condition="NOT isnull(getconfig(&quot;VI_Common_SignInProductName&quot;))">
+                  <Image Source="File" FileName="getconfig(&quot;VI_Common_SignInProductName&quot;)" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="variable(&quot;%PRODUCTNAME%&quot;)" />
+                    </HtmlAttributes>
+                  </Image>
+                </Container>
+                <Container ScriptItemUID="Container26" ItemUID="Product name as text" EnableCustomAttributes="true" Condition="isnull(getconfig(&quot;VI_Common_SignInProductName&quot;))">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute35" Name="&quot;style&quot;" Value="&quot;outline: none !important; text-decoration: none !important;&quot;" />
+                  </HtmlAttributes>
+                  <LinkContainer ScriptItemUID="LinkContainer2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute34" Name="&quot;style&quot;" Value="&quot;outline: none !important; text-decoration: none !important;&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute39" Name="&quot;lang&quot;" Value="&quot;en&quot;" />
+                    </HtmlAttributes>
+                    <ControlList ScriptItemUID="ControlList3">
+                      <Label ScriptItemUID="Label5" Text="variable(&quot;%PRODUCTNAMESHORT%&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h2" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute30" Name="&quot;style&quot;" Value="variable(&quot;color: %VI_Common_Color_ColorBase1%;&quot;)" />
+                        </HtmlAttributes>
+                      </Label>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="ServerActionCall6">
+                      <Redirect Target="Link" NoLinkObjectID="true" HREF="getconfig(&quot;VI_Common_CompanyLink&quot;)" ScriptItemUID="Redirect4" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                </Container>
+                <SwitchContainer ScriptItemUID="Switch1">
+                  <SwitchContainerCase ScriptItemUID="Case1" Condition="not(isnullorempty(SecondaryTitle()))">
+                    <Label ScriptItemUID="Label7" Text="SecondaryTitle()" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="h2" />
+                      </HtmlAttributes>
+                    </Label>
+                  </SwitchContainerCase>
+                </SwitchContainer>
+              </Container>
+              <Container ScriptItemUID="Container5" ItemUID="error / message container" Layout="'VI_Styles_Container_PaddedTop'" EnableCustomAttributes="true" Condition="not(IsEmbedded())">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;class&quot;" Value="&quot;imx-loginMessageContainer&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="error container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;data-imx-messagecontainer&quot;" Value="&quot;true&quot;" ScriptItemUID="HtmlAttribute1" />
+                  </HtmlAttributes>
+                </Container>
+                <CodeLiteral ScriptItemUID="CodeLiteral8">if (string.Equals(HttpContextFactory.Current.Items["IsRedirectedPreLogin"], "true")
+	|| string.Equals(HttpContextFactory.Current.Request.QueryString["imx-isRedirectedPreLogin"], "true"))
+{
+	IScriptContainer p = ((IScriptContainerProvider) _targetContainer2.Page).ScriptContainer;
+	p.AddScript("imx.errors.displayErrorMessage(imx.strings.STD_SessionWasEnded);");
+}</CodeLiteral>
+              </Container>
+              <Container ScriptItemUID="Container4" ItemUID="Log in mask" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute29" Name="&quot;class&quot;" Value="&quot;imx-loginMask&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container13" ItemUID="normal SignIn" Condition=" from LoginMethod select not ExternalSSO and Request(&quot;IsFromSingleSignOn&quot;) &lt;&gt; &quot;1&quot;">
+                  <ContainerTemplate DataTable="LoginData" ScriptItemUID="ContainerTemplate1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-loginData&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container21" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute28" Name="&quot;class&quot;" Value="&quot;imx-loginInput&quot;" />
+                      </HtmlAttributes>
+                      <TextBox DataTable="LoginData" DataColumn="UserName" EmptyText="translate(&quot;#LDS#Login name&quot;)" ScriptItemUID="TextBox2" EnableCustomAttributes="true" ItemUID="TextBoxLoginUserName">
+                        <HtmlAttributes>
+                          <HtmlAttribute Value="if (getconfig(&quot;VI_Common_Login_PrefillLoginData&quot;)=True) then 'on'&#xD;&#xA;else 'off'" Name="'autocomplete'" ScriptItemUID="HtmlAttribute21" />
+                          <HtmlAttribute Name="&quot;aria-label&quot;" ScriptItemUID="HtmlAttribute20" Value="translate(&quot;#LDS#Login name&quot;)" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute19" Name="&quot;autofocus&quot;" Value="&quot;autofocus&quot;" />
+                          <Property Name="CssClass" Value="TextBoxLogin" Comment="" />
+                        </HtmlAttributes>
+                      </TextBox>
+                    </Container>
+                    <Container ScriptItemUID="Container22" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute27" Name="&quot;class&quot;" Value="&quot;imx-loginInput&quot;" />
+                      </HtmlAttributes>
+                      <TextBox DataTable="LoginData" DataColumn="Password" TextMode="Password" EmptyText="translate(&quot;#LDS#Password&quot;)" ScriptItemUID="TextBox3" EnableCustomAttributes="true" ItemUID="TextBoxLoginPassword">
+                        <HtmlAttributes>
+                          <HtmlAttribute Value="if (getconfig(&quot;VI_Common_Login_PrefillLoginData&quot;)=True) then 'on'&#xA;else 'off'" Name="'autocomplete'" ScriptItemUID="HtmlAttribute24" />
+                          <HtmlAttribute Name="&quot;aria-label&quot;" ScriptItemUID="HtmlAttribute23" Value="translate(&quot;#LDS#Password&quot;)" />
+                          <Property Name="CssClass" Value="TextBoxLogin" Comment="" />
+                        </HtmlAttributes>
+                      </TextBox>
+                    </Container>
+                    <Container ScriptItemUID="Container20" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container5style" Value="'clear: both;'" />
+                      </HtmlAttributes>
+                    </Container>
+                  </ContainerTemplate>
+                  <ControlReferenceControlList ID="AdditionalControls" ScriptItemUID="ControlRef2" />
+                  <Container ScriptItemUID="Container11" ItemUID="login button" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-loginButtonpanel&quot;" />
+                    </HtmlAttributes>
+                    <Button Text="translate(&quot;#LDS#Log in&quot;)" ItemUID="LoginButton" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute7" Value="&quot;imx-button imx-document-redirect-hide&quot;" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <CodeLiteral ScriptItemUID="CodeLiteral2">// Get auth props from secure login data container
+
+var loginData = this.LoginData.ObjectList.First();
+var authProps = loginData.GetAuthProps().ToArray();
+string _targetHref = _UserSession.Authenticate(authProps);
+
+// login was successful
+
+// remove password from memory after successful login
+loginData.DeletePassword();
+
+// navigate to next page
+System.Web.HttpContext.Current.Response.Redirect(_targetHref, false);</CodeLiteral>
+                      </ServerActionCall>
+                    </Button>
+                    <Label Text="translate(&quot;#LDS#Logging in&quot;)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;class&quot;" Value="&quot;imx-document-redirect-display&quot;" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                  <Container ScriptItemUID="Container8" ItemUID="login progress indicator" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-documentloadingindicator-inplace imx-loginProgress cux-spinner&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;role&quot;" Value="&quot;progressbar&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute15" Name="&quot;aria-valuemin&quot;" Value="&quot;0&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;aria-valuemax&quot;" Value="&quot;100&quot;" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute17" Name="&quot;aria-valuetext&quot;" Value="translate(&quot;#LDS#Loading content&quot;)" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute18" Name="&quot;aria-live&quot;" Value="&quot;assertive&quot;" />
+                    </HtmlAttributes>
+                  </Container>
+                </Container>
+                <Container Condition="Request(&quot;IsFromSingleSignOn&quot;) = &quot;1&quot; and from LoginMethod select not ExternalSSO" ItemUID="SSO Relogin" ScriptItemUID="Container28">
+                  <Container EnableCustomAttributes="true" ScriptItemUID="Container30">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-loginData&quot;" ScriptItemUID="HtmlAttribute390" />
+                    </HtmlAttributes>
+                    <Label Text="translate('#LDS#You have successfully logged out.') " ScriptItemUID="Label9" />
+                  </Container>
+                  <Container ItemUID="login button SSO" EnableCustomAttributes="true" ScriptItemUID="Container31">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-loginButtonpanel&quot; " ScriptItemUID="HtmlAttribute391" />
+                    </HtmlAttributes>
+                    <Button Text="translate(&quot;#LDS#Log in again&quot;)" ItemUID="LoginButtonSSO" EnableCustomAttributes="true" ScriptItemUID="Button3">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-button imx-document-redirect-hide&quot;" ScriptItemUID="HtmlAttribute40" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall8">
+                        <CodeLiteral ScriptItemUID="CodeLiteral9">System.Web.HttpContext.Current.Session[VI.WebRuntime.Communication.RequestAuthenticationModule.DO_NOT_SINGLE_SIGN_ON_MARKER] = null;
+System.Web.HttpContext.Current.Response.Redirect("", false);</CodeLiteral>
+                      </ServerActionCall>
+                    </Button>
+                    <Label Text="translate(&quot;#LDS#Logging in&quot;)" EnableCustomAttributes="true" ScriptItemUID="Label10">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-document-redirect-display&quot;" ScriptItemUID="HtmlAttribute41" />
+                      </HtmlAttributes>
+                    </Label>
+                  </Container>
+                  <Container ItemUID="login progress indicator SSO" EnableCustomAttributes="true" ScriptItemUID="Container32">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-documentloadingindicator-inplace imx-loginProgress cux-spinner&quot;" ScriptItemUID="HtmlAttribute42" />
+                      <HtmlAttribute Name="&quot;role&quot;" Value="&quot;progressbar&quot;" ScriptItemUID="HtmlAttribute43" />
+                      <HtmlAttribute Name="&quot;aria-valuemin&quot;" Value="&quot;0&quot;" ScriptItemUID="HtmlAttribute44" />
+                      <HtmlAttribute Name="&quot;aria-valuemax&quot;" Value="&quot;100&quot;" ScriptItemUID="HtmlAttribute45" />
+                      <HtmlAttribute Name="&quot;aria-valuetext&quot;" Value="translate(&quot;#LDS#Loading content&quot;)" ScriptItemUID="HtmlAttribute46" />
+                      <HtmlAttribute Name="&quot;aria-live&quot;" Value="&quot;assertive&quot;" ScriptItemUID="HtmlAttribute47" />
+                    </HtmlAttributes>
+                  </Container>
+                  <Container EnableCustomAttributes="true" ItemUID="Log in as other user" ScriptItemUID="Container33">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-loginData&quot;" ScriptItemUID="HtmlAttribute48" />
+                    </HtmlAttributes>
+                    <Label Text="translate(&quot;#LDS#Log in as different user&quot;)" Action="Redirect" EnableCustomAttributes="true" ScriptItemUID="Label11">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-loginLink imx-document-redirect-hide&quot; " ScriptItemUID="HtmlAttribute49" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall9">
+                        <CodeLiteral ScriptItemUID="CodeLiteral10">System.Web.HttpContext.Current.Response.Redirect("", false);</CodeLiteral>
+                      </ServerActionCall>
+                    </Label>
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="Container15" ItemUID="OAuth" Condition="from LoginMethod select ExternalSSO">
+                  <Container ScriptItemUID="Container17" ItemUID="Iframe for OAuth">
+                    <IFrame URL="&quot;&quot;" ScriptItemUID="IFrame1" Height="250px" Width="340px" />
+                  </Container>
+                  <CodeLiteral ScriptItemUID="CodeLiteral5">				if(exceptionOccured) {
+					// STS session is authenticated, but Identity Manager session is not						
+					IFrame1.Visible = false;
+					ErrorInfo(Container17);
+					var excBrowser = new ExceptionBrowser();
+					excBrowser.UseException(ex);
+					Container17.Controls.Add(excBrowser);
+					// add button to end STS session
+					LogoutOAuth(Container17);
+				}
+				IFrame1.URL = oauthRedirectUrl ?? client.BuildUrl();</CodeLiteral>
+                </Container>
+              </Container>
+              <ControlReferenceControlList ID="LoginForm" ScriptItemUID="ControlRef1" />
+              <Container Condition="not(IsEmbedded()) and not(isnullorempty(getconfig(&quot;VI_Common_Login_PasswordLink&quot;)))" ScriptItemUID="Container27" ItemUID="Forgotten password" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute33" Name="&quot;class&quot;" Value="&quot;paddedTop imx-forgottenPassword imx-documentloading-hide imx-document-redirect-hide&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#Forgot your password? Click here.&quot;)" Action="Redirect" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute36" Name="&quot;class&quot;" Value="&quot;imx-loginLink&quot;" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall7">
+                    <Redirect Target="Link" HREF="getconfig(&quot;VI_Common_Login_PasswordLink&quot;)" ScriptItemUID="Redirect5" />
+                  </ServerActionCall>
+                </Label>
+              </Container>
+              <Container Condition="not(IsEmbedded()) and not(isnullorempty(getconfig(&quot;VI_Common_PasswordWebLink&quot;)))" ScriptItemUID="Container12" ItemUID="Reset password web link" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute26" Name="&quot;class&quot;" Value="&quot;paddedTop imx-forgottenPassword imx-documentloading-hide imx-document-redirect-hide&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#Manage your passwords&quot;)" Action="Redirect" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;imx-loginLink&quot;" />
+                  </HtmlAttributes>
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <Redirect Target="Link" HREF="getconfig(&quot;VI_Common_PasswordWebLink&quot;)" ScriptItemUID="Redirect2" />
+                  </ServerActionCall>
+                </Label>
+              </Container>
+              <Container ScriptItemUID="Container29" ItemUID="Change language" Condition="not(IsEmbedded())" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute37" Name="&quot;class&quot;" Value="&quot;paddedTop imx-documentloading-hide imx-document-redirect-hide&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="VI_Common_LanguageInfo" ScriptItemUID="ControlRef5">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Style()" Value="&quot;imx-loginLink&quot;" />
+                </ControlReferenceContainer>
+              </Container>
+            </Container>
+          </Container>
+          <Container ScriptItemUID="Container14" ItemUID="Footer" EnableCustomAttributes="true" Condition="not(IsEmbedded())">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-loginFooter&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute38" Name="&quot;lang&quot;" Value="&quot;en&quot;" />
+            </HtmlAttributes>
+            <Literal Expression="variable('%PRODUCTNAME% &lt;br  /&gt;%COPYRIGHT%')" />
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableObjectView Table="LoginData" ElementType="VI.WebRuntime.LoginDataContainer, VI.WebRuntime" ScriptItemUID="DataTableObjectView1" />
+        <DataTableSingleRow Table="LoginMethod" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ExternalSSO" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="LogoutOAuth">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList1">
+              <Container ScriptItemUID="Container18" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-logoutOAuthInfo&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#Click the button below to log in as a different user.&quot;)" ScriptItemUID="Label2" />
+              </Container>
+              <Container ScriptItemUID="Container16" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="&quot;imx-loginButtonpanel&quot;" />
+                </HtmlAttributes>
+                <Button Text="translate(&quot;#LDS#Heading Log Off&quot;)" ItemUID="LoginButton" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Default'">
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <CodeLiteral ScriptItemUID="CodeLiteral6">	var client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
+		var url = client.GetLogoutUrl(_Database);
+	_UserSession.Dispose();
+	if (!string.IsNullOrEmpty(url))
+	{
+	    System.Web.HttpContext.Current.Response.Redirect(url, false);
+	}
+</CodeLiteral>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ErrorInfo">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container19" Layout="'VI_Styles_Container_Paragraph'">
+              <Label Text="translate(&quot;#LDS#The authentication process could not be completed. Please contact your system administrator if the problem persists.&quot;)" ScriptItemUID="Label4" />
+            </Container>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualControl ContainerType="ControlList" ID="LoginForm" />
+      <VirtualFunction DataType="System.String" Signature="SecondaryTitle()" />
+      <VirtualFunction DataType="System.Boolean" Signature="IsEmbedded()" />
+      <VirtualFunction DataType="System.String" Signature="UserName()" TriggerUpdates="Never" />
+      <VirtualControl ContainerType="ControlList" ID="AdditionalControls" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

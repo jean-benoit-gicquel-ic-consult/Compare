@@ -1,0 +1,28 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1" ID="QBM_Styles_Container_InlineFlex" Type="Container">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="imx-inlineFlex" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-inlineFlex div{ 
+   display: inline-flex; 
+}
+
+.imx-inlineFlex{ 
+   display: inline-flex; 
+   flex-direction: row;
+   justify-content: flex-end;
+   width: 100%;   
+}
+
+.imx-inlineFlex div.imx-menudropdown
+{
+   display: none;
+}
+
+.imx-inlineFlex div.imx-menudropdown.open
+{
+   display: inherit;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

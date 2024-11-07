@@ -1,0 +1,126 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="915deccf-028f-f40d-f1d7-da1b1064f373">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RMB_ObjectCollection_Org">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="&quot;float: right;&quot;" />
+          </HtmlAttributes>
+          <Button ScriptItemUID="Button1" DisplayType="Controls" EnabledCondition="from vars select isshowasflat">
+            <ControlList ScriptItemUID="ControlList2">
+              <Image ScriptItemUID="Image1" Source="File" FileName="variable(&quot;%link%stockImg=Workflow&amp;size=Normal&amp;effect=Whiten&quot;)" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Tree view&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                </HtmlAttributes>
+              </Image>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall5">
+              <Update DataTable="Vars" DataColumn="IsShowAsFlat" ScriptItemUID="Update1" Value="false" />
+            </ServerActionCall>
+          </Button>
+          <Button ScriptItemUID="Button2" DisplayType="Controls" EnabledCondition="from vars select not(isshowasflat)">
+            <ControlList ScriptItemUID="ControlList3">
+              <Image ScriptItemUID="Image3" Source="File" FileName="variable(&quot;%link%stockImg=ViewDetails&amp;size=Normal&amp;effect=Whiten&quot;)" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Image3alt" Value="translate(&quot;#LDS#List view&quot;)" />
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                </HtmlAttributes>
+              </Image>
+            </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall3">
+              <Update DataTable="Vars" DataColumn="IsShowAsFlat" ScriptItemUID="Update3" Value="true" />
+            </ServerActionCall>
+          </Button>
+        </Container>
+        <Container ScriptItemUID="Container2" RefreshTriggerExpression="from vars select isshowasflat" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute4" Value="&quot;clear: both;&quot;" />
+          </HtmlAttributes>
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="from vars select not(isshowasflat)" ItemUID="Tree">
+              <Tree ScriptItemUID="Tree1">
+                <TreeBand DataTable="OrgRoot" ScriptItemUID="TreeBand2" DataSourceType="Database" DBWhereClause="sqlcompare(&quot;uid_orgroot&quot;, &quot;*-V-*&quot;, &quot;string&quot;, &quot;notlike&quot;,&quot;NonUnicodeLiterals&quot;)">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+                  <ControlList ScriptItemUID="ControlList5">
+                    <Label Text="select current display() from orgroot" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-OrgRoot&quot;" />
+                      </HtmlAttributes>
+                    </Label>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall4" />
+                </TreeBand>
+                <TreeBand DataTable="HierarchyTable" Layout="'VI_Styles_TreeBand_SelectionTreeBand'" ScriptItemUID="TreeBand1" DataSourceType="Database" DBWhereClause="sqland(sqlcompareuid(&quot;UID_OrgRoot&quot;, from orgroot select current uid_orgroot), DbWhereClause())">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  <ControlList ScriptItemUID="ControlList4">
+                    <Label Text="select current display() from hierarchytable" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from hierarchytable select current CssClass()" />
+                        <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute3" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                      </HtmlAttributes>
+                    </Label>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall1" DoNotAllowFocusInResponse="true">
+                    <ActionSequence ScriptItemUID="Action2" Condition="select current not(isnonselectable()) from hierarchytable">
+                      <CallAction ActionID="ElementSelected" ScriptItemUID="Call1" />
+                    </ActionSequence>
+                  </ServerActionCall>
+                </TreeBand>
+              </Tree>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2" ItemUID="Flat Grid">
+              <Grid ScriptItemUID="Grid1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;data-imx-grid-displaytype&quot;" Value="DisplayType()" />
+                </HtmlAttributes>
+                <GridBand DataTable="HierarchyTable" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()" DbOrderBy="" DisableRecursiveData="true" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Action" RowSelectionActive="select current not(isnonselectable()) from hierarchytable">
+                  <HtmlAttributes>
+                    <Property Name="RenderImmediately" Value="true" />
+                  </HtmlAttributes>
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <SelectionAction ScriptItemUID="ServerActionCall6">
+                    <CallAction ActionID="ElementSelected" ScriptItemUID="Call3" />
+                  </SelectionAction>
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn ScriptItemUID="Column2" SortColumn="__LongDisplay" AutoFilterColumn="__LongDisplay">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Label ScriptItemUID="Label1" Text="datacaption(hierarchytable)" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label Text="select current displaylong() from hierarchytable" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="from hierarchytable select current CssClass()" />
+                        </HtmlAttributes>
+                      </Label>
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="IsShowAsFlat" DataType="System.Boolean" ScriptItemUID="Column1" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="OrgRoot" Class="OrgRoot">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection">
+      <VirtualTableExtension ScriptItemUID="VirtualTableExtension1" Name="HierarchyTable" Class="Org" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

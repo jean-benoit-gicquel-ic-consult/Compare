@@ -1,0 +1,541 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <GlobalControl ID="VI_ITShop_CartPatternEdit" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action8" />
+      <Container ScriptItemUID="Container1">
+        <Container ItemUID="Show List of available Templates" ScriptItemUID="Container2">
+          <Tab Layout="'VI_Styles_Tab_AccordeonMultiselect'" ScriptItemUID="Tab1">
+            <TabPage ExpandedCondition="isExpanded()" ScriptItemUID="TabPage1">
+              <ControlsHeader ScriptItemUID="Container3">
+                <Label Text="(if(IsShowPersonalTemplates())&#xD;&#xA;then translate(&quot;#LDS#Personal templates&quot;)&#xD;&#xA;else translate(&quot;#LDS#System-wide templates&quot;))&#xD;&#xA;&#xD;&#xA;+&quot; (&quot;+(from ShoppingCartPattern select count())+&quot;)&quot;" ScriptItemUID="Label1" />
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container4" RefreshTriggerExpression="from ShoppingCartPatternItem select count()">
+                <Label Text="isnull(heading(),&#xD;&#xA;if(IsShowPersonalTemplates()) then&#xD;&#xA;translate('#LDS#You created the following templates.')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#The following templates are available.'))" ScriptItemUID="Label2" />
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="ShoppingCartPattern" DisplayHeader="Always" OrderBy="'Ident_ShoppingCartPattern'" ScriptItemUID="GridBand1" ConsolidateTables="true">
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                      <ControlList ScriptItemUID="ControlList7">
+                        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef4">
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                            <ControlList ScriptItemUID="ControlList10">
+                              <ControlReferenceControlList ID="COL_SHOPPINGCARTPATTENIDENT" ScriptItemUID="ControlRef10" />
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                            <ControlList ScriptItemUID="ControlList9">
+                              <ControlReferenceControlList ID="COL_SHOPPINGCARTPATTERNACTIONS" ScriptItemUID="ControlRef7" />
+                              <ControlReferenceControlList ID="COL_SHOPPINGCARTPATTERNSELECT" ScriptItemUID="ControlRef12" />
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                            <ControlList ScriptItemUID="ControlList8">
+                              <LayoutPanel ScriptItemUID="LayoutPanel3">
+                                <ContainerColumnTemplate DataTable="ShoppingCartPattern" ScriptItemUID="ContainerColumnTemplate2">
+                                  <ColumnList ScriptItemUID="ColumnList2">
+                                    <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                                    <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="UID_Person" Caption="translate('#LDS#Inserted by')" />
+                                    <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="Description" />
+                                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsPublicPattern" Caption="translate('#LDS#Template is available to other employees')" />
+                                    <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="IsQualified" Caption="translate('#LDS#Template has been approved')" />
+                                  </ColumnList>
+                                  <Container ScriptItemUID="Container23">
+                                    <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="ShoppingCartPattern" ScriptItemUID="VirtualTableMapping1">
+                                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                      </VirtualTableMapping>
+                                      <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping10" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                  <Container ScriptItemUID="Container22">
+                                    <ColumnEditor DataTable="ShoppingCartPattern" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2">
+                                      <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping9" />
+                                    </ColumnEditor>
+                                  </Container>
+                                </ContainerColumnTemplate>
+                              </LayoutPanel>
+                            </ControlList>
+                          </VirtualControlMapping>
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </GridBandListView>
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn Width="'200px'" SortColumn="Ident_ShoppingCartPattern" ScriptItemUID="Column5">
+                      <GridColumnHeader ScriptItemUID="wctl1">
+                        <Container ScriptItemUID="Container6">
+                          <Label Text="datacaption(shoppingcartpattern, ident_shoppingcartpattern)" ScriptItemUID="Label4" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell2">
+                        <ControlReferenceControlList ID="COL_SHOPPINGCARTPATTENIDENT" ScriptItemUID="ControlRef8" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'100%'" SortColumn="Description" ScriptItemUID="Column6">
+                      <GridColumnHeader ScriptItemUID="wctl2">
+                        <Container ScriptItemUID="Container11">
+                          <Label Text="translate('#LDS#Description')" ScriptItemUID="Label6" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell3">
+                        <Container ScriptItemUID="Container12">
+                          <Label Text="from ShoppingCartPattern select current Description" ScriptItemUID="Label7" />
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'100px'" ScriptItemUID="Column7">
+                      <GridColumnHeader ScriptItemUID="wctl3">
+                        <Label Text="translate('#LDS#Actions')" ScriptItemUID="Label8" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell4">
+                        <ControlReferenceControlList ID="COL_SHOPPINGCARTPATTERNACTIONS" ScriptItemUID="ControlRef3" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'120px;'" HasHeaderCell="false" ScriptItemUID="Column8">
+                      <Cell ScriptItemUID="Cell5">
+                        <ControlReferenceControlList ID="COL_SHOPPINGCARTPATTERNSELECT" ScriptItemUID="ControlRef11" />
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                  <GridBand DataTable="ShoppingCartPatternItem" WhereClause="UID_ShoppingCartPattern = from ShoppingCartPattern select current UID_ShoppingCartPattern" OrderBy="'DisplayProduct'" ScriptItemUID="GridBand2" ConsolidateTables="true">
+                    <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="true">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef5">
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                            <ControlList ScriptItemUID="ControlList5">
+                              <ContainerTemplate DataTable="AccProduct" WhereClause="UID_AccProduct = from ShoppingCartPatternItem select current UID_AccProduct" ScriptItemUID="ContainerTemplate2">
+                                <Container ScriptItemUID="Container21">
+                                  <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="from ACCProduct select current uid_accproduct" ScriptItemUID="ProductRef2" />
+                                </Container>
+                              </ContainerTemplate>
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                            <ControlList ScriptItemUID="ControlList3">
+                              <ControlReferenceControlList ID="COL_DELETESHOPPINGCARTPATTERNITEM" ScriptItemUID="ControlRef2" />
+                            </ControlList>
+                          </VirtualControlMapping>
+                          <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                            <ControlList ScriptItemUID="ControlList4">
+                              <LayoutPanel ScriptItemUID="LayoutPanel2">
+                                <ContainerColumnTemplate DataTable="ShoppingCartPatternItem" ScriptItemUID="ContainerColumnTemplate1">
+                                  <ColumnList ScriptItemUID="ColumnList1">
+                                    <ExpressionColumnList ScriptItemUID="ExpressionColumnList2" />
+                                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="DisplayProductgroup" Caption="datacaption( accproduct, UID_AccProductGroup)" />
+                                    <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_AccProduct" Caption="datacaption( accproduct, description)" />
+                                  </ColumnList>
+                                  <Container ScriptItemUID="Container13">
+                                    <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef9">
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="ShoppingCartPatternItem" ScriptItemUID="VirtualTableMapping2">
+                                        <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                                      </VirtualTableMapping>
+                                      <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                  <Container ScriptItemUID="Container5">
+                                    <SwitchContainer ScriptItemUID="Switch1">
+                                      <SwitchContainerCase ScriptItemUID="Case5" Condition="DataColumnName(ShoppingCartPatternItem,currentcolumn) = (&quot;UID_AccProduct&quot;)">
+                                        <Label Text="from AccProduct select displayvalue(Description) where UID_AccProduct = from ShoppingCartPatternItem select current UID_AccProduct" ScriptItemUID="Label3" />
+                                      </SwitchContainerCase>
+                                      <SwitchContainerCase ScriptItemUID="Case4">
+                                        <ColumnEditor DataTable="ShoppingCartPatternItem" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor1">
+                                          <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping7" />
+                                        </ColumnEditor>
+                                      </SwitchContainerCase>
+                                    </SwitchContainer>
+                                  </Container>
+                                </ContainerColumnTemplate>
+                              </LayoutPanel>
+                            </ControlList>
+                          </VirtualControlMapping>
+                        </ControlReferenceControlList>
+                      </ControlList>
+                    </GridBandListView>
+                    <GridFilters ScriptItemUID="GridFilters2" />
+                    <GridRows />
+                    <GridColumn SortColumn="DisplayProduct" ScriptItemUID="Column9" Width="'330px'">
+                      <GridColumnHeader ScriptItemUID="wctl4">
+                        <Container ScriptItemUID="Container19">
+                          <Label Text="translate('#LDS#Product')" ScriptItemUID="Label9" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell6">
+                        <ContainerTemplate DataTable="AccProduct" WhereClause="UID_AccProduct = from ShoppingCartPatternItem select current UID_AccProduct" ScriptItemUID="ContainerTemplate1">
+                          <Container ScriptItemUID="Container20" Condition="from ShoppingCartPatternItem select current IsNullOrEmpty(ObjectKeyOrgUsedInAssign)">
+                            <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="from ACCProduct select current uid_accproduct" ScriptItemUID="ProductRef1" />
+                          </Container>
+                        </ContainerTemplate>
+                        <Container ScriptItemUID="Container25" Condition="not(from ShoppingCartPatternItem select current IsNullOrEmpty(ObjectKeyOrgUsedInAssign))" Layout="'VI_Styles_Container_Inline'">
+                          <Image Source="File" FileName="from ShoppingCartPatternItem select current variable(format(&quot;%permanentlink%dialogImgTbl={0}&quot;, GetObjectKeyTable(ObjectKeyOrgUsedInAssign)))" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image9" />
+                          <Label Text="from BaseTree select displaylong() where XObjectKey = (from ShoppingCartPatternItem select current ObjectKeyOrgUsedInAssign)" ScriptItemUID="Label10" Action="Redirect">
+                            <ServerActionCall ScriptItemUID="ServerActionCall7">
+                              <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                                <RedirectParameter Name="'ObjectKey'" Value="from ShoppingCartPatternItem select current ObjectKeyOrgUsedInAssign" />
+                              </Redirect>
+                            </ServerActionCall>
+                          </Label>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn ScriptItemUID="Column11" Width="'90%'">
+                      <GridColumnHeader ScriptItemUID="wctl6">
+                        <Label Text="datacaption( accproduct, description)" ScriptItemUID="Label14" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell8">
+                        <Label Text="from AccProduct select displayvalue(Description) where UID_AccProduct = from ShoppingCartPatternItem select current UID_AccProduct" ScriptItemUID="Label15" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn Width="'30px;'" HasHeaderCell="false" ScriptItemUID="Column12">
+                      <Cell ScriptItemUID="Cell9">
+                        <ControlReferenceControlList ID="COL_DELETESHOPPINGCARTPATTERNITEM" ScriptItemUID="ControlRef1" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn ScriptItemUID="Column1">
+                      <GridColumnHeader ScriptItemUID="wctl5" />
+                      <Cell ScriptItemUID="Cell7" />
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+              </ControlsBody>
+            </TabPage>
+          </Tab>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView ScriptItemUID="DataTableFKView1" Table="BaseTree" ViewFKDataTable="ShoppingCartPatternItem" ViewFKDataColumn="ObjectKeyOrgUsedInAssign">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+          <Column DataType="System.String" Name="XObjectKey" ScriptItemUID="Column13" DataSource="Expression" Expression="ObjectWalker(&quot;XObjectKey&quot;)+&quot;&quot;" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SaveCartPattern">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <ActionSequence ScriptItemUID="Action10">
+                <ActionOnControl />
+                <Checkpoint ActionType="CheckpointCommit" />
+                <Save DataTable="ShoppingCartPattern" ScriptItemUID="Save3" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="DiscardCartPattern">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action11">
+              <ActionSequence ScriptItemUID="Action12">
+                <Checkpoint ActionType="Rollback" />
+                <ActionOnControl />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="DeleteShoppingCartPattern">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action13">
+              <ForeachRow DataTable="ShoppingCartPatternItem" ScriptItemUID="ForeachRow1" WhereClause="uid_shoppingcartpattern = (select current uid_shoppingcartpattern from shoppingcartpattern)">
+                <ConvertInteractiveEntity DataTable="ShoppingCartPatternItem" />
+              </ForeachRow>
+              <Delete DataTable="ShoppingCartPatternItem" WhereClause="uid_shoppingcartpattern = (select current uid_shoppingcartpattern from shoppingcartpattern)" ScriptItemUID="Delete2" SetDeletionFlag="DeleteAndSave" />
+              <ForeachRow DataTable="ShoppingCartPattern" ScriptItemUID="ForeachRow2" WhereClause="uid_shoppingcartpattern = (select current uid_shoppingcartpattern from shoppingcartpattern)">
+                <ConvertInteractiveEntity DataTable="ShoppingCartPattern" />
+              </ForeachRow>
+              <Delete DataTable="ShoppingCartPattern" WhereClause="uid_shoppingcartpattern = (select current uid_shoppingcartpattern from shoppingcartpattern)" ScriptItemUID="Delete3" SetDeletionFlag="DeleteAndSave" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call7">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The selected template has been deleted.')" ScriptItemUID="VirtualFunctionMapping12" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping13" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="ShoppingCartPattern" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="ShowCartPopup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action14">
+              <Checkpoint ActionType="SetCheckpoint" DataTable="ShoppingCartPattern" />
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call8">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container32">
+                    <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container33">
+                      <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                        <FormItemLabel DataTable="ShoppingCartPattern" DataColumn="Ident_ShoppingCartPattern" ScriptItemUID="FormItemLabel1">
+                          <Label Text="translate('#LDS#Template name')" ScriptItemUID="Label18" />
+                        </FormItemLabel>
+                        <Container ScriptItemUID="Container35">
+                          <Container Condition="AllowEdit()" ScriptItemUID="Container36">
+                            <TextBox DataTable="ShoppingCartPattern" DataColumn="Ident_ShoppingCartPattern" CustomStyle="'width: 98%;'" ScriptItemUID="TextBox1" />
+                          </Container>
+                          <Container Condition="AllowEdit() = false" ScriptItemUID="Container37">
+                            <Label Text="from ShoppingCartPattern select current ident_shoppingcartpattern" ScriptItemUID="Label19" />
+                          </Container>
+                        </Container>
+                        <Label Text="translate('#LDS#Inserted by')" ScriptItemUID="Label20" />
+                        <Label Text="from ShoppingCartPattern select current displayvalue(UID_Person)" ScriptItemUID="Label21" />
+                        <FormItemLabel DataTable="ShoppingCartPattern" DataColumn="Description" ScriptItemUID="FormItemLabel2">
+                          <Label Text="translate('#LDS#Description')" ScriptItemUID="Label22" />
+                        </FormItemLabel>
+                        <Container ScriptItemUID="Container41">
+                          <Container Condition="AllowEdit()" ScriptItemUID="Container42">
+                            <TextBox DataTable="ShoppingCartPattern" DataColumn="Description" TextMode="MultiLine" Rows="3" ScriptItemUID="TextBox2" />
+                          </Container>
+                          <Container Condition="AllowEdit() = false" ScriptItemUID="Container43">
+                            <Label Text="from shoppingcartpattern select current Description" ScriptItemUID="Label23" />
+                          </Container>
+                        </Container>
+                        <Container ScriptItemUID="Container44" />
+                        <Container ScriptItemUID="Container45">
+                          <Container ScriptItemUID="Container46">
+                            <Container Condition="AllowEdit()" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container47">
+                              <CheckBox DataTable="ShoppingCartPattern" DataColumn="IsPublicPattern" Text="translate('#LDS#Template is available to other employees')" ScriptItemUID="CheckBox1" />
+                            </Container>
+                            <Container Condition="AllowEdit() = false" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container48">
+                              <Label Text="translate('#LDS#Template is available to other employees')" ScriptItemUID="Label24" />
+                              <Label Text="': '" ScriptItemUID="Label25" />
+                              <Label Text="if (select current IsPublicPattern from ShoppingCartPattern = true)&#xD;&#xA;then&#xD;&#xA;  translate('#LDS#yes')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#no')&#xD;&#xA;" ScriptItemUID="Label26" />
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container49">
+                            <Container Condition="IsTemplateManager()" ScriptItemUID="Container50">
+                              <CheckBox DataTable="ShoppingCartPattern" DataColumn="IsQualified" Text="translate('#LDS#Template has been approved')" ScriptItemUID="CheckBox2" />
+                            </Container>
+                            <Container Condition="not(IsTemplateManager())" ScriptItemUID="Container51">
+                              <Label Text="translate('#LDS#Template has been approved')" ScriptItemUID="Label27" />
+                              <Label Text="': '" ScriptItemUID="Label28" />
+                              <Label Text="if (select current IsQualified from ShoppingCartPattern = true)&#xD;&#xA;then&#xD;&#xA;  translate('#LDS#yes')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#no')&#xD;&#xA;" ScriptItemUID="Label29" />
+                            </Container>
+                          </Container>
+                        </Container>
+                      </LayoutPanel>
+                    </Container>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="if (AllowEdit() = true or AllowDelete() = true) then&#xD;&#xA;  translate(&quot;#LDS#Edit template&quot;)&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Template details&quot;)" ScriptItemUID="VirtualFunctionMapping14" />
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container52">
+                    <Container Condition="(AllowEdit() = false) and&#xA;(Not(IsTemplateManager()))" ItemUID="Default Button" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container53">
+                      <Button Text="translate(&quot;#LDS#OK&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button4">
+                        <ServerActionCall ScriptItemUID="ServerActionCall8">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                    <Container Condition="AllowEdit() or IsTemplateManager()" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container54">
+                      <Button Text="translate('#LDS#Save')" ScriptItemUID="Button5">
+                        <ServerActionCall ScriptItemUID="ServerActionCall9">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <CallAction ActionID="SaveCartPattern" ScriptItemUID="Call9" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button6" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall10">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <CallAction ActionID="DiscardCartPattern" ScriptItemUID="Call10" />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </VirtualControlMapping>
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="ShoppingCartPattern" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="COL_DELETESHOPPINGCARTPATTERNITEM">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList2">
+              <Container ScriptItemUID="Container27" Condition="AllowDelete() = true">
+                <LinkContainer ScriptItemUID="Image7Link">
+                  <ControlList ScriptItemUID="Image7Ctl">
+                    <Image StockImage="DeleteDocument" ScriptItemUID="Image7" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image7alt" Value="translate('#LDS#Delete')" />
+                      </HtmlAttributes>
+                    </Image>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall5">
+                    <ActionSequence ScriptItemUID="Action5">
+                      <ActionOnControl ActionType="PerformValidation" />
+                      <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call15">
+                        <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                          <ActionComponent ScriptItemUID="Action20">
+                            <ActionSequence ScriptItemUID="Action24">
+                              <Update DataTable="ShoppingCartPattern" DataColumn="IsQualified" Value="false" WhereClause="uid_ShoppingCartPattern = (from ShoppingCartPattern select current UID_ShoppingCartPattern)" ScriptItemUID="Update5" />
+                            </ActionSequence>
+                            <Save DataTable="ShoppingCartPattern" WhereClause="uid_ShoppingCartPattern = (from ShoppingCartPattern select current UID_ShoppingCartPattern)" ScriptItemUID="Save2" />
+                            <ForeachRow DataTable="ShoppingCartPatternItem" ScriptItemUID="ForeachRow3" WhereClause="UID_ShoppingCartPatternItem = from ShoppingCartPatternItem select current UID_ShoppingCartPatternItem">
+                              <ConvertInteractiveEntity DataTable="ShoppingCartPatternItem" />
+                            </ForeachRow>
+                            <Delete DataTable="ShoppingCartPatternItem" SetDeletionFlag="DeleteAndSave" WhereClause="UID_ShoppingCartPatternItem = from ShoppingCartPatternItem select current UID_ShoppingCartPatternItem" ScriptItemUID="Delete4" />
+                          </ActionComponent>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you want to delete the product &quot;{0}&quot; from the current template?', from ShoppingCartPatternItem select current DisplayProduct) + if ((from ShoppingCartPattern select current IsQualified = 1) and (from ShoppingCartPattern select current IsPublicPattern = 1) and ((IsNull(GetConfigParm(&quot;QER\ITShop\ShoppingCartPattern\AutoQualified&quot;), &quot;0&quot;) = &quot;0&quot;))) then translate('#LDS#The template is publicly available. Changing this template requires a new approval by an authorized employee.')&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping4" />
+                        <VirtualFunctionMapping ID="ShowYesNo()" Value="True" ScriptItemUID="VirtualFunctionMapping5" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Change template')" ScriptItemUID="VirtualFunctionMapping6" />
+                      </CallAction>
+                    </ActionSequence>
+                  </ServerActionCall>
+                </LinkContainer>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="ShoppingCartPattern" ScriptItemUID="DataTableCursor4" />
+          <DataTableCursor DataTable="ShoppingCartPatternItem" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="COL_SHOPPINGCARTPATTERNACTIONS">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList6">
+              <Container ScriptItemUID="Container14" />
+              <Container Condition="AllowEdit() or IsTemplateManager()" Layout="'VI_Styles_Container_Inline'" ItemUID="edit" ScriptItemUID="Container15">
+                <LinkContainer ScriptItemUID="Image4Link">
+                  <ControlList ScriptItemUID="Image4Ctl">
+                    <Image ScriptItemUID="Image4" StockImage="Edit" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="if (AllowEdit() = true or AllowDelete() = true) then&#xA;  translate(&quot;#LDS#Edit template&quot;)&#xA;else&#xA;  translate(&quot;#LDS#Template details&quot;)" />
+                      </HtmlAttributes>
+                    </Image>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall1">
+                    <CallAction ActionID="ShowCartPopup" ScriptItemUID="Call1" />
+                  </ServerActionCall>
+                </LinkContainer>
+              </Container>
+              <Container Condition="AllowEdit() = false &#xA;and IsTemplateManager() = false" Layout="'VI_Styles_Container_Inline'" ItemUID="info" ScriptItemUID="Container16">
+                <LinkContainer ScriptItemUID="Image5Link">
+                  <ControlList ScriptItemUID="Image5Ctl">
+                    <Image StockImage="Information" ScriptItemUID="Image5" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image5alt" Value="translate(&quot;#LDS#Information&quot;)" />
+                      </HtmlAttributes>
+                    </Image>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                    <CallAction ActionID="ShowCartPopup" ScriptItemUID="Call2" />
+                  </ServerActionCall>
+                </LinkContainer>
+              </Container>
+              <Container Condition="AllowDelete()" Layout="'VI_Styles_Container_Inline'" ItemUID="delete" ScriptItemUID="Container17">
+                <LinkContainer ScriptItemUID="Image6Link">
+                  <ControlList ScriptItemUID="Image6Ctl">
+                    <Image StockImage="DeleteDocument" ScriptItemUID="Image6" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image6alt" Value="translate('#LDS#Delete template')" />
+                      </HtmlAttributes>
+                    </Image>
+                  </ControlList>
+                  <ServerActionCall ScriptItemUID="ServerActionCall3">
+                    <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call3">
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you wish to delete the template &quot;{0}&quot;?', from ShoppingCartPattern select current Ident_ShoppingCartPattern)" ScriptItemUID="VirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+                      <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                        <ActionComponent ScriptItemUID="Action1">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <CallAction ActionID="DeleteShoppingCartPattern" ScriptItemUID="Call4" />
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualControlMapping VirtualControl="OnNo" ContainerType="ActionComponent">
+                        <ActionComponent ScriptItemUID="Action2" />
+                      </VirtualControlMapping>
+                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Delete template')" ScriptItemUID="VirtualFunctionMapping3" />
+                    </CallAction>
+                  </ServerActionCall>
+                </LinkContainer>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="ShoppingCartPattern" ScriptItemUID="DataTableCursor5" />
+        </Control>
+        <Control ID="COL_SHOPPINGCARTPATTENIDENT">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList11">
+              <Container ScriptItemUID="Container7">
+                <Container Condition="from ShoppingCartPattern select current IsQualified and IsPublicPattern" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container8">
+                  <Image StockImage="LightGreen" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate('#LDS#This template has been approved for use.')" />
+                    </HtmlAttributes>
+                  </Image>
+                </Container>
+                <Container Condition="from ShoppingCartPattern select current IsQualified = false and IsPublicPattern = true" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container9">
+                  <Image StockImage="LightYellow" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate('#LDS#This template has been marked for public use, but has not been approved yet.')" />
+                    </HtmlAttributes>
+                  </Image>
+                </Container>
+                <Container Condition="from ShoppingCartPattern select current IsPublicPattern = false" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container10">
+                  <Image StockImage="LightGrey" ScriptItemUID="Image3" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="translate('#LDS#The template has not yet been approved.')" />
+                    </HtmlAttributes>
+                  </Image>
+                </Container>
+                <Label Text="from ShoppingCartPattern select current Ident_ShoppingCartPattern" ScriptItemUID="Label5" />
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="ShoppingCartPattern" ScriptItemUID="DataTableCursor6" />
+        </Control>
+        <Control ID="COL_SHOPPINGCARTPATTERNSELECT">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList12">
+              <Container ScriptItemUID="Container18" Condition="AllowMergeShoppingCartItemsToPattern()" Layout="'VI_Styles_Container_Inline'">
+                <Button Text="translate('#LDS#select')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1">
+                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                    <ActionSequence ScriptItemUID="Action3">
+                      <LoadTable DataTable="ShoppingCartPatternItem" WhereClause="format(&quot;uid_shoppingcartpattern = '{0}'&quot;,select current uid_shoppingcartpattern from ShoppingCartPattern)" ScriptItemUID="LoadTable1">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeBulk="true" />
+                      </LoadTable>
+                      <CallAction ActionID="CreateShoppingCartPattenItems" ScriptItemUID="Call5" />
+                      <ActionSequence Condition="(IsNull(GetConfigParm(&quot;QER\ITShop\ShoppingCartPattern\AutoQualified&quot;), &quot;0&quot;) = &quot;0&quot;)" ScriptItemUID="Action4">
+                        <Update DataTable="ShoppingCartPattern" DataColumn="IsQualified" Value="false" WhereClause="uid_ShoppingCartPattern = &#xD;&#xA;(from ShoppingCartPattern select current UID_ShoppingCartPattern)&#xD;&#xA;" ScriptItemUID="Update1" />
+                      </ActionSequence>
+                      <Save DataTable="ShoppingCartPattern" WhereClause="uid_ShoppingCartPattern = &#xD;&#xA;(from ShoppingCartPattern select current UID_ShoppingCartPattern)&#xD;&#xA;" ScriptItemUID="Save1" />
+                    </ActionSequence>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="ShoppingCartPattern" ScriptItemUID="DataTableCursor7" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="ShoppingCartPattern" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action15">
+            <ActionSequence Condition="(IsNull(GetConfigParm(&quot;QER\ITShop\ShoppingCartPattern\AutoQualified&quot;), &quot;0&quot;) = &quot;0&quot;)&#xA;and&#xA;(from ShoppingCartPattern select current IsPublicPattern = false)" ScriptItemUID="Action16">
+              <Update DataTable="ShoppingCartPattern" DataColumn="IsQualified" Value="false" WhereClause="uid_ShoppingCartPattern = (from ShoppingCartPattern select current uid_shoppingCartPattern)" ScriptItemUID="Update3" />
+            </ActionSequence>
+            <ActionSequence Condition="IsNull(GetConfigParm(&quot;QER\ITShop\ShoppingCartPattern\AutoQualified&quot;), &quot;0&quot;) = &quot;1&quot;" ScriptItemUID="Action17">
+              <Update DataTable="ShoppingCartPattern" DataColumn="IsQualified" Value="from ShoppingCartPattern select current IsPublicPattern" WhereClause="uid_ShoppingCartPattern = (from ShoppingCartPattern select current uid_shoppingCartPattern)" ScriptItemUID="Update4" />
+            </ActionSequence>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsPublicPattern" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ShoppingCartPattern" Class="ShoppingCartPattern" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="ShoppingCartPatternItem" Class="ShoppingCartPatternItem" ScriptItemUID="VirtualTable2">
+        <Column Name="DisplayProduct" Expression="from AccProduct select display() where UID_AccProduct = (from ShoppingCartPatternItem select current UID_AccProduct)" DataSource="Expression" ScriptItemUID="Column3" DataType="System.String" TriggerUpdates="Never" />
+        <Column Name="DisplayProductgroup" Expression="from AccProduct select displayvalue(UID_AccProductGroup) where UID_AccProduct = (from ShoppingCartPatternItem select current UID_AccProduct)" DataSource="Expression" ScriptItemUID="Column4" DataType="System.String" TriggerUpdates="Never" />
+      </VirtualTable>
+      <VirtualTable Name="AccProduct" Class="AccProduct" ScriptItemUID="VirtualTable3" />
+      <VirtualFunction Signature="AllowDelete()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AllowEdit()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AllowMergeShoppingCartItemsToPattern()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="CreateShoppingCartPattenItems" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="ShoppingCartPattern" />
+      </VirtualControl>
+      <VirtualFunction Signature="IsTemplateManager()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsShowPersonalTemplates()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="isExpanded()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="Heading()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

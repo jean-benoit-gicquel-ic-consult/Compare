@@ -1,0 +1,214 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AccProduct_AERoleOwner" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2">
+        <LoadTable DataTable="AERole" RemoveDeleted="false" WhereClause="format( &quot;uid_aerole = {0}&quot;, sqlformatvalue( from object select current uid_orgruler, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </LoadTable>
+        <LoadTable DataTable="PersonInAERole" RemoveDeleted="false" WhereClause="-- loads IT-Shop Administrators and Target System Namespace Administrators&#xD;&#xA;format(&quot;uid_AErole in (select UID_AERole from AERoleCollection where uid_parentAErole IN ('QER-AEROLE-ITSHOPADMIN-ADMIN', 'TSB-AEROLE-NAMESPACEADMIN')) AND UID_Person = '{0}'&quot;,getuser())" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;flex-fill&quot;" />
+          </HtmlAttributes>
+          <LayoutPanel ScriptItemUID="LayoutPanel1">
+            <Label Text="datacaption(&quot;accproduct&quot;,&quot;uid_orgruler&quot;)" ScriptItemUID="Label1" />
+            <ColumnEditor DataTable="Object" DataColumn="UID_OrgRuler" ScriptItemUID="ColumnEditor1" />
+          </LayoutPanel>
+          <ContainerTemplate DataTable="AERole" WhereClause="uid_aerole = (select current uid_orgruler from object)" ScriptItemUID="ContainerTemplate1">
+            <Container Condition="select current not(uid_aerole in (GetLogicallyemptyRoles())) from aerole" ItemUID="NOT NOBODY ROLE" ScriptItemUID="Container5">
+              <Container ItemUID="EditPersonInAERole" ScriptItemUID="Container14">
+                <ControlReferenceContainer ID="VI_Edit_MR" ScriptItemUID="ControlRef1">
+                  <VirtualFunctionMapping ID="RelationName()" Value="&quot;PersonInAERole&quot;" ScriptItemUID="VirtualFunctionMapping1" />
+                  <VirtualFunctionMapping ID="RelationColumnNameLeft()" Value="&quot;UID_AERole&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="AERole" ScriptItemUID="VirtualTableMapping1" />
+                  <VirtualFunctionMapping ID="isReadOnly()" Value="-- Inserting ok for:&#xD;&#xA;-- - IT Shop Admin or NamespaceAdmins&#xD;&#xA;-- - Member of current AERole&#xD;&#xA;if ( &#xD;&#xA;(0 &lt; select Count() from PersonInAERole) OR&#xD;&#xA;Exists('PersonInAErole',format(&quot;UID_person = '{0}' AND UID_AERole = '{1}'&quot;,getUser(), from Object select current UID_OrgRuler)) &#xD;&#xA;)&#xD;&#xA;then false&#xD;&#xA;else true" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualFunctionMapping ID="AdditionalWhereClause()" Value="getconfig(&quot;VI_ITShop_Filter_PersonMembershipInAERole&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                </ControlReferenceContainer>
+              </Container>
+            </Container>
+            <Container Condition="select current (uid_aerole in (GetLogicallyEmptyRoles())) from aerole" ItemUID="NOBODY ROLE" ScriptItemUID="Container6">
+              <Label Text="translate(&quot;#LDS#In order to assign employees as owners, please select an owner role first.&quot;)" ScriptItemUID="Label2" />
+            </Container>
+          </ContainerTemplate>
+          <Container Condition="IsNoPermission()" ScriptItemUID="Container7">
+            <Label Text="translate(&quot;#LDS#You do not have permission to view assigned owners.&quot;)" ScriptItemUID="Label3" />
+          </Container>
+        </Container>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container8">
+          <Container Condition="0 &lt; select Count() from PersonInAERole" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container15" ItemUID="Create new owner role">
+            <Button Text="translate(&quot;#LDS#Add new&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Delete DataTable="AERoleNew" ScriptItemUID="Delete1" />
+                <Insert DataTable="AERoleNew" ScriptItemUID="Insert1">
+                  <ActionSequence ScriptItemUID="Action1" />
+                  <InsertValue DataColumn="UID_ParentAERole" Value="&quot;QER-AEROLE-ITSHOPADMIN-OWNER&quot;" />
+                </Insert>
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container9">
+                      <ContainerTemplate DataTable="AERoleNew" ScriptItemUID="ContainerTemplate2">
+                        <Container ScriptItemUID="Container10">
+                          <Container ScriptItemUID="Container11" />
+                          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping5">
+                              <ColumnList ScriptItemUID="ColumnList1">
+                                <SingleColumn DataColumn="Ident_AERole" ScriptItemUID="SingleColumn1" />
+                                <SingleColumn DataColumn="Description" ScriptItemUID="SingleColumn2" />
+                              </ColumnList>
+                            </VirtualFunctionMapping>
+                            <VirtualTableMapping VirtualTable="EditTable" DataTable="AERoleNew" ScriptItemUID="VirtualTableMapping2" />
+                          </ControlReferenceContainer>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container12">
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button2">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button3">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute2" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <Save DataTable="AERoleNew" ScriptItemUID="Save1" />
+                          <Update DataTable="Object" DataColumn="UID_OrgRuler" WhereClause="uid_accproduct = ( from object select current uid_accproduct)" Value="from aerolenew select top 1 uid_aerole" ScriptItemUID="Update1" />
+                          <Save DataTable="Object" WhereClause="uid_accproduct = ( from object select current uid_accproduct)" ScriptItemUID="Save2" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The new product owner role &quot;{0}&quot; has been created.', from aerolenew select top 1 display())" ScriptItemUID="VirtualFunctionMapping6" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping7" />
+                          </CallAction>
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Create new owner role&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                  <VirtualFunctionMapping ID="TableName()" Value="&quot;AERole&quot;" ScriptItemUID="VirtualFunctionMapping9" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ScriptItemUID="Container2" ItemUID="Move ownership" Condition="not(select (uid_aerole in (GetLogicallyEmptyRoles())) from aerole)">
+            <Button ScriptItemUID="Button5" Text="translate(&quot;#LDS#Move ownership&quot;)" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ServerActionCall5">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call4">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container16">
+                      <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer1">
+                        <VirtualFunctionMapping ID="HeadLine()" Value="translate(&quot;#LDS#A new owner role will be created.&quot;)" ScriptItemUID="VirtualFunctionMapping16" />
+                      </ControlReferenceContainer>
+                      <Container ScriptItemUID="Container18" Condition="Exists(&quot;PersonInAERole&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;,GetUser(),&quot;NotEqual&quot;),&#xD;&#xA;      SqlCompareUid(&quot;UID_AERole&quot;,from object select current uid_orgruler)&#xD;&#xA;   )&#xD;&#xA;)">
+                        <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef3">
+                          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Text()" Value="translate(&quot;#LDS#If you want to move all owners use the checkbox below.&quot;)" />
+                        </ControlReferenceContainer>
+                        <ColumnEditor DataColumn="CopyAllMembers" DataTable="Vars" ScriptItemUID="ColumnEditor2" />
+                        <Container ScriptItemUID="Container17" Layout="'VI_Styles_Container_Paragraph'" />
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container4">
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button7">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute6" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall7">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button6">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute5" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall6">
+                          <Method DataTable="Object" ObjectMethodType="FireEvent" ObjectEventName="TakeOwnerShip" WhereClause="uid_accproduct = from Object select current PrimaryKey()">
+                            <MethodParameter Name="&quot;NoReuse&quot;" Value="true" />
+                            <MethodParameter Name="&quot;CopyAllMembers&quot;" Value="from vars select CopyAllMembers" />
+                            <MethodParameter Name="&quot;UID_Person&quot;" Value="GetUser()" />
+                          </Method>
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call5">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping15" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping14" />
+                          </CallAction>
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Move ownership to new owner role&quot;)" ScriptItemUID="VirtualFunctionMapping13" />
+                  <VirtualFunctionMapping ID="TableName()" Value="&quot;AERole&quot;" ScriptItemUID="VirtualFunctionMapping12" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container Layout="'VI_Styles_Container_Inline'" Condition="caninsert(&quot;personinaerole&quot;)" ScriptItemUID="Container13" ItemUID="Save">
+            <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="Button4">
+              <HtmlAttributes>
+                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute3" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall4">
+                <Save DataTable="AERole" WhereClause="uid_aerole = (select current uid_orgruler from object)" ScriptItemUID="Save3" />
+                <Save DataTable="Object" WhereClause="primarykey() = select current primarykey() from object" ScriptItemUID="Save4" />
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping10" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping11" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AERole" Class="AERole" WhereClauseSQL="" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="AERole" Table="AERoleNew" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonInAERole" Table="PersonInAERole" Comment="loads IT-Shop Administrators and Target System Namespace Administrators" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.Boolean" Name="CopyAllMembers" ScriptItemUID="Column1" Caption="translate('#LDS#Move all assigned owners.')" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsNoPermission()" Expression="(0 = select count() from aerole where (uid_aerole = (select current uid_orgruler from object)))&#xD;&#xA;and&#xD;&#xA;not(isnullorempty(select current uid_orgruler from object))" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="GetLogicallyEmptyRoles()" DataType="System.String" ScriptItemUID="Function2" FunctionType="FunctionValueList">
+          <FunctionValueList ScriptItemUID="FunctionValueList1">
+            <FunctionValue Expression="&quot;ADS-AEROLE-ADSGROUP-OWNER-EMPTY&quot;" />
+            <FunctionValue Expression="&quot;SP0-AEROLE-SPSGROUP-OWNER-EMPTY&quot;" />
+          </FunctionValueList>
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Object" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action6">
+            <LoadTable DataTable="AERole" RemoveDeleted="false" WhereClause="format( &quot;uid_aerole = {0}&quot;, sqlformatvalue( from object select current uid_orgruler, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+            </LoadTable>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_OrgRuler" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" Class="AccProduct" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

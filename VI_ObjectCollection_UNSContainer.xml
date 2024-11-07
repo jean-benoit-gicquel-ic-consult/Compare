@@ -1,0 +1,50 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_ObjectCollection_UNSContainer" MigrationNotes="DIALOGCONFIGPARM;" AllowExtensions="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container5">
+        <Container ScriptItemUID="Container1">
+          <Tree ScriptItemUID="Tree1">
+            <TreeBand DataTable="UNSRoot" ScriptItemUID="TreeBand1" DataSourceType="Database" DBWhereClause="">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+              <ControlList ScriptItemUID="ControlList1">
+                <Label ScriptItemUID="Label2" Text="select current display() from unsroot" />
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall1" />
+            </TreeBand>
+            <TreeBand DataTable="HierarchyTable" Layout="'VI_Styles_TreeBand_SelectionTreeBand'" ScriptItemUID="TreeBand2" DataSourceType="Database" DBWhereClause="sqland(sqlcompareuid(&quot;UID_UNSRoot&quot;, from unsroot select current uid_unsroot), DbWhereClause())">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="select current display() from hierarchytable" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="select current cssclass() from hierarchytable" />
+                    <HtmlAttribute Name="if( DisplayType() = &quot;MultiSelect&quot;) then &quot;aria-checked&quot;" ScriptItemUID="HtmlAttribute2" Value="if(from hierarchytable select current statusdescriptor()) = &quot;ASSIGNED&quot; then &quot;true&quot; else &quot;false&quot;" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall3">
+                <ActionSequence ScriptItemUID="Action2" Condition="select current not(isnonselectable()) from hierarchytable">
+                  <CallAction ActionID="ElementSelected" ScriptItemUID="CallAction1" />
+                </ActionSequence>
+              </ServerActionCall>
+            </TreeBand>
+          </Tree>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="UNSRoot" Class="UNSRoot">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectCollection" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="HierarchyTable" Class="UNSContainer" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

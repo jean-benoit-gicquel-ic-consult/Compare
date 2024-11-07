@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_DateTimeago">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1" RefreshTriggerExpression="from Vars select HasChanged">
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="from edittable select current (cansee(editcolumn) and not(isnullorempty(editcolumn)))">
+              <Code ClassName="VI.WebRuntime.WebControls.TimeagoControl, VI.WebRuntime" ScriptItemUID="Control1">
+                <ControlList ScriptItemUID="ControlList2" />
+                <CodeParameter Name="Date" Value="from edittable select current editcolumn" ScriptItemUID="CodeParameter1" />
+              </Code>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case2">
+              <Label Text="from edittable select current IsNullOrEmpty(displayvalue(editcolumn),NullText())" ScriptItemUID="Label1" />
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.Int32" Name="HasChanged" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="EditTable" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action3">
+            <Update DataColumn="HasChanged" DataTable="Vars" ScriptItemUID="Update1" Value="HasChanged + 1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="EditColumn" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

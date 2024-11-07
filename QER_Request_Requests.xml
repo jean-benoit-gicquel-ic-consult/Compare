@@ -1,0 +1,106 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Request_Requests" HelpChapterUid="&quot;5B2C794B-2D5D-46AA-BDD1-7687348845E8&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="QER_Request_Requests_Overview" NavigationTitle="translate(&quot;#LDS#Heading My Requests&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Heading My Requests&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="submit a request">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="Identifier()" Value="&quot;submit a request&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action4">
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ProductSelection" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Caption()" Value="translate(&quot;#LDS#Start a new request&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping23" ID="Image()" Value="&quot;cux-icon cux-icon--shopping-cart&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Value()" Value="translate(&quot;#LDS#Browse the service categories for service items to request.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping24" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container3" ItemUID="request history">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="Identifier()" Value="&quot;request history&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action8">
+                  <Redirect ScriptItemUID="Redirect5" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_OrderHistory" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Heading Request History&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping27" ID="Image()" Value="&quot;cux-icon cux-icon--history&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Value()" Value="translate(&quot;#LDS#Review the history of your requests.&quot;)&#xD;&#xA;&#xD;&#xA;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping28" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container6" ItemUID="Edit Requests">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="Identifier()" Value="&quot;Edit Requests&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action6">
+                  <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_PWOSelection" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Edit Requests&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Image()" Value="&quot;cux-icon cux-icon--wrench&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Value()" Value="translate(&quot;#LDS#Review your currently active requests.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <SwitchContainer ScriptItemUID="ShoppingCartTemplates">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="isnull(getconfig(&quot;VI_ITShop_ProductSelectionFromTemplate&quot;),&quot;true&quot;)=&quot;true&quot;">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container4" ItemUID="shopping cart templates">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="Identifier()" Value="&quot;shopping cart templates&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action7">
+                      <Redirect ScriptItemUID="Redirect4" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ShoppingCartPatternOverview">
+                        <RedirectParameter Name="'uid_person'" Value="select uid_person from user" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Caption()" Value="translate('#LDS#Heading Maintain Templates')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping35" ID="Image()" Value="&quot;cux-icon cux-icon--cogs&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Shopping cart templates help with the creation of requests.&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="ImageType()" Value="'IconFont'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping36" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container5" ItemUID="shopping cart">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping38" ID="Identifier()" Value="&quot;shopping cart&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action3">
+                  <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ShoppingCart" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Caption()" Value="if(from CountOpenDatabaseItems select CountProductsInShoppingCart &gt; 0) then&#xD;&#xA;  (translate('#LDS#Heading Shopping Cart') + ' (' +  from CountOpenDatabaseItems select CountProductsInShoppingCart +')')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#Heading Shopping Cart')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping39" ID="Image()" Value="&quot;cux-icon cux-icon--shopping-cart&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Value()" Value="translate(&quot;#LDS#Shows your shopping cart where you submit IT shop requests.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping40" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping41" ID="Size()" Value="'Overview'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Highlight()" Value="(from CountOpenDatabaseItems select CountProductsInShoppingCart) &gt; 0" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

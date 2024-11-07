@@ -1,0 +1,274 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl ID="VI_Attestation_CreateEdit_AttestationPolicy" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action11">
+        <LoadTable DataTable="AttestationObjectHasPWODecisionMethod" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <CallAction ActionID="Init4Policy" ScriptItemUID="Call9" />
+      </ActionSequence>
+      <Container ItemUID="Display the policy's values" ScriptItemUID="Container1">
+        <Activator ExecuteAlways="true" ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <CallAction ActionID="Init4Policy" ScriptItemUID="CallAction23" />
+          </Action>
+        </Activator>
+        <ContainerTemplate DataTable="AttestationPolicy" ScriptItemUID="ContainerTemplate1">
+          <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;flex-fill&quot;" />
+            </HtmlAttributes>
+            <Container ItemUID="General Options" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef7">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                  <ColumnList ScriptItemUID="ColumnList2">
+                    <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="Ident_AttestationPolicy" />
+                    <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_AttestationObject" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping1" />
+              </ControlReferenceContainer>
+              <Container ScriptItemUID="Container5" RefreshTriggerExpression="from attestationpolicy select current uid_attestationobject -- need to refresh when attestation object changes">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping13">
+                    <ColumnList ScriptItemUID="ColumnList4">
+                      <SingleColumn ScriptItemUID="SingleColumn14" DataColumn="UID_PWODecisionMethod" FKWhereClause="SqlDecisionMethodBelongsToAttestationObject()" />
+                      <SingleColumn ScriptItemUID="SingleColumn13" DataColumn="UID_DialogSchedule" FKWhereClause="SqlIsAttestationDialogSchedule()" />
+                      <SingleColumn ScriptItemUID="SingleColumn12" DataColumn="SolutionDays" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping5" />
+                </ControlReferenceContainer>
+              </Container>
+              <Container ScriptItemUID="Container3" Condition="NeedsSpecificAttestators()">
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                    <ColumnList ScriptItemUID="ColumnList3">
+                      <SingleColumn ScriptItemUID="SingleColumn9" DataColumn="Attestators" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping2" />
+                </ControlReferenceContainer>
+              </Container>
+              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef6">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping3">
+                  <ColumnList ScriptItemUID="ColumnList1">
+                    <SingleColumn ScriptItemUID="SingleColumn11" DataColumn="Areas" />
+                    <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="IsInActive" />
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsAutoCloseOldCases" Condition="VisibleIsAutoCloseOldCases()" />
+                    <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Description" />
+                    <SingleColumn ScriptItemUID="SingleColumn10" DataColumn="IsApproveRequiresMfa" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping3" />
+              </ControlReferenceContainer>
+            </Container>
+            <Container ItemUID="Object Selection Conditions" Condition="not IsNullOrEmpty(from AttestationPolicy select top 1 UID_AttestationObject)" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container39">
+              <ColumnEditor DataTable="AttestationPolicy" DataColumn="WhereClauseMeta" ScriptItemUID="ColumnEditor13" />
+            </Container>
+          </Container>
+          <Container ItemUID="Buttonpanel" Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container63">
+            <Button Text="if (from AttestationPolicy select IsLoaded())&#xA;then translate('#LDS#Save')&#xA;else translate('#LDS#Create')" EnabledCondition="CanEditAny()" ScriptItemUID="Button2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button2title" Value="CannotSaveMessage()" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall3">
+                <ActionSequence Condition="Not IsNullOrEmpty(CannotSaveMessage())" ItemUID="Popup &quot;cannot save&quot; message and break" ScriptItemUID="Action3">
+                  <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call4">
+                    <VirtualFunctionMapping ID="MessageText()" Value="CannotSaveMessage()" ScriptItemUID="VirtualFunctionMapping4" />
+                    <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+                    <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Error&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                    <VirtualFunctionMapping ID="MessageBoxType()" Value="'Warning'" ScriptItemUID="VirtualFunctionMapping7" />
+                  </CallAction>
+                  <EndExecution />
+                </ActionSequence>
+                <ActionSequence Condition="Not (select top 1 IsLoaded() from AttestationPolicy)" ItemUID="Set logged in user as owner (if policy is new)" ScriptItemUID="Action8">
+                  <Update DataTable="AttestationPolicy" DataColumn="UID_PersonOwner" Value="Variable(&quot;%useruid%&quot;)" ScriptItemUID="Update1" />
+                </ActionSequence>
+                <Save DataTable="AttestationPolicy" ScriptItemUID="Save1" />
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call7">
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping8" />
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The attestation policy '{0}' has been saved.&quot;, from AttestationPolicy select current display())" ScriptItemUID="VirtualFunctionMapping9" />
+                </CallAction>
+                <Redirect Target="ReturnLastForm" NoLinkBackToThisForm="true" ScriptItemUID="Redirect1" />
+              </ServerActionCall>
+            </Button>
+            <SwitchContainer ScriptItemUID="Switch1">
+              <SwitchContainerCase ScriptItemUID="Case2" Condition="from AttestationPolicy select current IsLoaded()">
+                <Button Text="translate('#LDS#Delete')" EnabledCondition="from AttestationPolicy select IsLoaded() AND CanDelete('AttestationPolicy') and not IsDefaultPolicy()" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button3">
+                  <ServerActionCall ScriptItemUID="ServerActionCall4">
+                    <CallAction ActionID="VI_Attestation_Delete_AttestationPolicy" ScriptItemUID="Call8">
+                      <VirtualFunctionMapping ID="UidOfItemToDelete()" Value="(from AttestationPolicy select current PrimaryKey())" ScriptItemUID="VirtualFunctionMapping10" />
+                      <VirtualTableMapping VirtualTable="Items" DataTable="AttestationPolicy" ScriptItemUID="VirtualTableMapping4" />
+                    </CallAction>
+                  </ServerActionCall>
+                </Button>
+              </SwitchContainerCase>
+            </SwitchContainer>
+            <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="Button4" AssociatedWithEscapeKey="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall5">
+                <CallAction ActionID="OnCancel" ScriptItemUID="CallAction3" />
+                <Redirect Target="ReturnLastForm" NoLinkBackToThisForm="true" ScriptItemUID="Redirect2" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </ContainerTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AttestationObjectHasPWODM" Table="AttestationObjectHasPWODecisionMethod" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action12" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" Comment="Stores the variables for simple settings." ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_List_InEdit" DataType="System.String" ScriptItemUID="Column8" />
+          <Column Name="RevertDeactivation" DataType="System.Boolean" ScriptItemUID="Column9" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Init4Policy">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action39">
+              <ActionSequence ItemUID="Assertion: AttestationPolicy.Count = 1" Condition="(from AttestationPolicy select count()) &lt;&gt; 1" ScriptItemUID="Action40">
+                <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
+                  <VirtualFunctionMapping ID="MessageText()" Value="format(&quot;AttestationPolicy.Count = {0} (expected 1)&quot;, from AttestationPolicy select count())" ScriptItemUID="VirtualFunctionMapping14" />
+                  <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping15" />
+                  <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Heading Attestation Policy')" ScriptItemUID="VirtualFunctionMapping16" />
+                </CallAction>
+                <Redirect Target="ReturnLastForm" NoLinkBackToThisForm="true" ScriptItemUID="Redirect3" />
+              </ActionSequence>
+              <ActionSequence ItemUID="Reset local vars" ScriptItemUID="Action41">
+                <Update DataTable="LocalVars" DataColumn="UID_List_InEdit" ScriptItemUID="Update2" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="EditedUidList()" Expression="Unquote(from LocalVars select uid_list_inedit)" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="HasAttestationObject()" Expression="NOT (IsNullOrEmpty(from AttestationPolicy select top 1 UID_AttestationObject))" Comment="Determines if an attestation object was selected.&#xD;&#xA;This is a precondition for being able to save the attestation policy." DataType="System.Boolean" ScriptItemUID="Function4" />
+        <Function Name="HasDecisionMethod()" Expression="NOT IsNullOrEmpty(from AttestationPolicy select top 1 UID_PWODecisionMethod)" Comment="Determines if a decision method was selected.&#xD;&#xA;This is a precondition for being able to save the attestation policy." DataType="System.Boolean" ScriptItemUID="Function5" />
+        <Function Name="HasSchedule()" Expression="NOT IsNullOrEmpty(from AttestationPolicy select top 1 UID_DialogSchedule)" Comment="Determines if a payload schedule was selected.&#xD;&#xA;This is a precondition for being able to save the attestation policy." DataType="System.Boolean" ScriptItemUID="Function6" />
+        <Function Name="NeedsSpecificAttestators()" Expression="Exists(&quot;PWODecisionMethod&quot;, Format(&quot;UID_PwoDecisionMethod in (&#xD;&#xA;select UID_PwoDecisionMethod from PWODecisionMethod dm&#xD;&#xA;  join PWODecisionSubMethod sm on sm.UID_PWODecisionSubMethod = dm.UID_SubMethodOrderProduct&#xD;&#xA;  join PWODecisionStep ds on sm.UID_PWODecisionSubMethod = ds.UID_PWODecisionSubMethod &#xD;&#xA;  join pwodecisionrule dr on dr.UID_PWODecisionRule = ds.UID_PWODecisionRule&#xD;&#xA;  where dr.DecisionRule = 'AS'&#xD;&#xA;  and {0}&#xD;&#xA;)&quot;, sqlcompareuid(&quot;UID_PWODecisionMethod&quot;, from AttestationPolicy select top 1 UID_PWODecisionMethod)))" Comment="Determines whether the current decision method requires the selection of specific attestators." DataType="System.Boolean" ScriptItemUID="Function8" />
+        <Function Name="SqlDecisionMethodBelongsToAttestationObject()" Expression="if (HasAttestationObject())&#xD;&#xA;then SqlInWithFormat(&quot;UID_PWODecisionMethod&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;, from AttestationObjectHasPWODecisionMethod select UID_PWODecisionMethod where UID_AttestationObject = (from AttestationPolicy select top 1 UID_AttestationObject))&#xD;&#xA;else &quot;1=0&quot;" DataType="System.String" ScriptItemUID="Function9" />
+        <Function Name="SqlIsAttestationDialogSchedule()" Expression="SqlCompareuid(&quot;uid_dialogtablebelongsto&quot;,&quot;ATT-T-AttestationPolicy&quot;)" Comment="Returns and sql statement part (for usage withing a where clause) specifying attestation payload schedules." DataType="System.String" ScriptItemUID="Function10" />
+        <Function Name="Unquote(string text)" Expression="Replace(IsNullOrEmpty(text, &quot;&quot;), &quot;'&quot;, &quot;&quot;)" DataType="System.String" ScriptItemUID="Function11" />
+        <Function Name="Uid_AttestationPolicy()" Expression="from AttestationPolicy select top 1 uid_AttestationPolicy" DataType="System.String" ScriptItemUID="Function12" />
+        <Function Name="VisibleIsAutoCloseOldCases()" Expression="try(Convert(GetConfig(&quot;VI_Attestation_VISIBLE_POLICY_IS_AUTO_CLOSE_OLD_CASES&quot;), &quot;System.Boolean&quot;), true)" DataType="System.Boolean" ScriptItemUID="Function13" />
+        <Function Name="CannotSaveMessage()" Expression="if IsNullOrEmpty(from AttestationPolicy select Ident_AttestationPolicy) &#xD;&#xA; then MissingFieldMessage(datacaption(attestationpolicy, ident_attestationpolicy))&#xD;&#xA; else if Not HasAttestationObject()&#xD;&#xA; then MissingFieldMessage(FieldCaptionAttestationObject())&#xD;&#xA;else if Not HasDecisionMethod()&#xD;&#xA; then MissingFieldMessage(FieldCaptionDecisionMethod())&#xD;&#xA;else if Not HasSchedule() &#xD;&#xA; then MissingFieldMessage(FieldCaptionDialogSchedule())&#xD;&#xA;else if IsNullOrEmpty(from AttestationPolicy select WhereClauseMeta) &#xD;&#xA;--(1 &gt; CountRealParams() OR HasIncompleteParameters())&#xD;&#xA; then FieldCaptionConditions()&#xD;&#xA;else &quot;&quot;" DataType="System.String" ScriptItemUID="Function15" />
+        <Function Name="MissingFieldMessage(string fieldCaption)" Expression="translate(&quot;#LDS#Please specifiy a value for the required field '{0}'&quot;, fieldCaption)" DataType="System.String" ScriptItemUID="Function16" />
+        <Function Name="FieldCaptionAttestationObject()" Expression="translate(&quot;#LDS#Type&quot;)" DataType="System.String" ScriptItemUID="Function17" />
+        <Function Name="FieldCaptionDecisionMethod()" Expression="DataCaption(AttestationPolicy, UID_PWODecisionMethod)" DataType="System.String" ScriptItemUID="Function18" />
+        <Function Name="FieldCaptionAttestators()" Expression="translate(&quot;#LDS#Attestators&quot;)" DataType="System.String" ScriptItemUID="Function19" />
+        <Function Name="FieldCaptionDialogSchedule()" Expression="DataCaption(AttestationPolicy, UID_DialogSchedule)" DataType="System.String" ScriptItemUID="Function20" />
+        <Function Name="FieldCaptionSolutionDays()" Expression="DataCaption(&quot;AttestationPolicy&quot;, &quot;SolutionDays&quot;)" DataType="System.String" ScriptItemUID="Function21" />
+        <Function Name="FieldCaptionConditions()" Expression="translate(&quot;#LDS#Please specify at least one condition to select objects to be attested.&quot;)" DataType="System.String" ScriptItemUID="Function23" />
+        <Function Name="IsDefaultPolicy()" Expression="3 = (from AttestationPolicy select current IndexOf(Lower(Uid_AttestationPolicy), &quot;-&quot;, 0))" DataType="System.Boolean" ScriptItemUID="Function24">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="CanEditWhereClause()" Expression="from AttestationPolicy select current (CanEdit(WhereClause) AND CanEdit(WhereClauseMeta))" DataType="System.Boolean" ScriptItemUID="Function25">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="CanEditAttestationObject()" Expression="from AttestationPolicy select current CanEdit(UID_AttestationObject)" DataType="System.Boolean" ScriptItemUID="Function26">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor3" />
+        </Function>
+        <Function Name="CanEditDecisionMethod()" Expression="from AttestationPolicy select current CanEdit(UID_PWODecisionMethod)" DataType="System.Boolean" ScriptItemUID="Function27">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor4" />
+        </Function>
+        <Function Name="CanEditApprovers()" Expression="CanInsert('AttestationPolicyHasApprover') AND CanDelete('AttestationPolicyHasApprover')" DataType="System.Boolean" ScriptItemUID="Function28" />
+        <Function Name="CanEditDialogSchedule()" Expression="from AttestationPolicy select current CanEdit(UID_DialogSchedule)" DataType="System.Boolean" ScriptItemUID="Function29">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor5" />
+        </Function>
+        <Function Name="CanEditSolutionDays()" Expression="from AttestationPolicy select current CanEdit(SolutionDays)" DataType="System.Boolean" ScriptItemUID="Function30">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor6" />
+        </Function>
+        <Function Name="CanEditAutoCloseOldCases()" Expression="from AttestationPolicy select current CanEdit(IsAutoCloseOldCases)" DataType="System.Boolean" ScriptItemUID="Function31">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor7" />
+        </Function>
+        <Function Name="CanEditComplianceAreas()" Expression="not IsDefaultPolicy() and CanInsert('AttestationPolicyInArea') and CanDelete('AttestationPolicyInArea')" DataType="System.Boolean" ScriptItemUID="Function32">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor8" />
+        </Function>
+        <Function Name="CanEditIdent()" Expression="from AttestationPolicy select current CanEdit(Ident_AttestationPolicy)" DataType="System.Boolean" ScriptItemUID="Function33">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor9" />
+        </Function>
+        <Function Name="CanEditAny()" Expression="CanEditIdent() OR&#xA;CanEditWhereClause() OR &#xA;CanEditAttestationObject() OR &#xA;CanEditDecisionMethod() OR&#xA;CanEditApprovers() OR&#xA;(VisibleIsAutoCloseOldCases() AND CanEditAutoCloseOldCases()) OR&#xA;CanEditComplianceAreas()" DataType="System.Boolean" ScriptItemUID="Function34">
+          <DataTableCursor DataTable="AttestationPolicy" ScriptItemUID="DataTableCursor10" />
+        </Function>
+        <Function Name="CountOpenAttestations()" Expression="dbCount(&quot;AttestationCase&quot;,  SqlAnd(&#xD;&#xA; SqlCompare(&quot;IsClosed&quot;, true, &quot;bool&quot;, &quot;notequal&quot;),&#xD;&#xA; SqlCompareuid(&quot;UID_AttestationPolicy&quot;, from AttestationPolicy select top 1 UID_AttestationPolicy)&#xD;&#xA;))" DataType="System.Int32" ScriptItemUID="Function35" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="AttestationPolicy" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence Condition="from AttestationPolicy select current IsLoaded() AND&#xD;&#xA;from AttestationPolicy select current IsInActive = 1" ScriptItemUID="Action46">
+            <ActionSequence Condition="CountOpenAttestations() &gt; 0" ScriptItemUID="Action47">
+              <Update DataTable="LocalVars" DataColumn="RevertDeactivation" Value="true" ScriptItemUID="Update3" />
+              <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction18">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container40">
+                    <Container Layout="'VI_Styles_Container_Paragraph'" ItemUID="Warning Icon and Text" ScriptItemUID="Container41">
+                      <Container ItemUID="Warning Icon" ScriptItemUID="Container42" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Container42style" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+                        </HtmlAttributes>
+                        <Image StockImage="Warning" ScriptItemUID="Image1" StockImageSize="Large" />
+                        <Label Text="translate(&quot;#LDS#Do you really want to disable this attestation policy?&quot;)" ScriptItemUID="Label7" />
+                        <Label Text="translate(&quot;#LDS#This will cause automatic cancelation of pending attestation cases when saving your changes.&quot;)" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="Label5style" Value="&quot;display: inline-block; padding-top: .5em; max-width: 450px;&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </Container>
+                    </Container>
+                    <Container ItemUID="Option radiobuttons (are you sure?)" ItemUIDReference="OKButton" ScriptItemUID="Container43">
+                      <Container ItemUID="no (default)" ScriptItemUID="Container44">
+                        <RadioButton DataTable="LocalVars" DataColumn="RevertDeactivation" Text="translate(&quot;#LDS#No, I don't want this - leave the attestation policy activated&quot;)" ScriptItemUID="RadioButton1" DataValue="true" />
+                      </Container>
+                      <Container ItemUID="yes" ScriptItemUID="Container45">
+                        <RadioButton DataTable="LocalVars" DataColumn="RevertDeactivation" Text="translate(&quot;#LDS#Yes, deactivate the attestation policy and cancel {0} pending cases.&quot;, CountOpenAttestations())" ScriptItemUID="RadioButton2" DataValue="false" />
+                      </Container>
+                    </Container>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUID="Buttons" ScriptItemUID="Container46">
+                    <Button Text="translate('#LDS#OK')" ScriptItemUID="Button1" EnableCustomAttributes="true" Layout="'VI_Styles_Button_Primary'" ItemUID="OKButton">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Yes&quot;)" ScriptItemUID="HtmlAttribute4" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall10">
+                        <ActionOnControl />
+                        <ActionSequence Condition="from LocalVars select RevertDeactivation" ScriptItemUID="Action48">
+                          <Update DataTable="AttestationPolicy" DataColumn="IsInActive" Value="false" ScriptItemUID="Update4" />
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Really deactivate?&quot;)" ScriptItemUID="VirtualFunctionMapping11" />
+                <VirtualFunctionMapping ID="TableName()" Value="&quot;AttestationPolicy&quot;" ScriptItemUID="VirtualFunctionMapping12" />
+              </CallAction>
+            </ActionSequence>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="IsInActive" />
+        </DataEventHandler>
+        <DataEventHandler DataTable="AttestationPolicy" Operation="Update" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ItemUID="Update decision method" Condition="0 = (&#xA;SELECT COUNT() &#xA;FROM AttestationObjectHasPWODecisionMethod&#xA;WHERE Uid_AttestationObject = (FROM AttestationPolicy SELECT CURRENT UID_AttestationObject)&#xA;AND Uid_PWODecisionMethod = (FROM AttestationPolicy SELECT CURRENT UID_PWODecisionMethod) )" ScriptItemUID="Action49">
+            <Update DataTable="AttestationPolicy" DataColumn="UID_PWODecisionMethod" Value="''" ScriptItemUID="Update5" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_AttestationObject" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationPolicy" Comment="Holds the single one attestation policy to create or edit" Class="AttestationPolicy" ScriptItemUID="VirtualTable1">
+        <Column Name="NewWhereClause" DataType="System.String" ScriptItemUID="Column11" />
+        <ColumnMemberRelation Name="Areas" RelationTableName="&quot;AttestationPolicyInArea&quot;" ColumnNameLeft="&quot;UID_AttestationPolicy&quot;" Caption="datacaption(&quot;ComplianceArea&quot;)" ScriptItemUID="ColumnMemberRelation1" />
+        <ColumnMemberRelation Name="Attestators" RelationTableName="&quot;AttestationPolicyHasApprover&quot;" ColumnNameLeft="&quot;UID_AttestationPolicy&quot;" Caption="translate(&quot;#LDS#Attestators&quot;)" ScriptItemUID="ColumnMemberRelation2" />
+      </VirtualTable>
+      <VirtualControl ID="OnCancel" ContainerType="ActionComponent" Comment="Gets called during cancellation.&#xD;&#xA;If you want a clean start state when re-editing the same attestation policy immediately after cancellation you would have to empty the virtual collection AttestationPolicy." />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

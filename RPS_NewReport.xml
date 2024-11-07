@@ -1,0 +1,44 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="RPS_NewReport">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="RPSReport" Table="RPSReportEdit" ScriptItemUID="DataTableDbObject12">
+        <ActionSequence ScriptItemUID="Action37" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Form1">
+        <ActionSequence ScriptItemUID="Action2">
+          <Delete DataTable="RPSReportEdit" ScriptItemUID="Delete8" />
+          <Insert DataTable="RPSReportEdit" ScriptItemUID="Insert3">
+            <ActionSequence ScriptItemUID="Action29" />
+            <InsertValue DataColumn="IsListReport" Value="true" />
+            <InsertValue DataColumn="UID_PersonOwner" Value="getuser()" />
+            <InsertValue DataColumn="Ident_RPSReport" Value="-- user must enter an identifier" />
+            <InsertValue DataColumn="Description" Value="-- user should enter a description" />
+          </Insert>
+        </ActionSequence>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate('#LDS#Create a new report')" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Main">
+          <Container ScriptItemUID="Container35">
+            <ContainerTemplate ScriptItemUID="ContainerTemplate9" DataTable="RPSReportEdit" WithoutParentContainer="true">
+              <ControlReferenceControlList ID="RPS_EditSheet_RPSReport" ScriptItemUID="ControlRef13">
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="RPSReportEdit" ScriptItemUID="VirtualTableMapping14" />
+              </ControlReferenceControlList>
+            </ContainerTemplate>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

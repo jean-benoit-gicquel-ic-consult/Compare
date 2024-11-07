@@ -1,0 +1,35 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Session_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERAction11" ObjectType="ActionSequence" SortOrder="15">
+        <Update DataTable="UserMenu" DataColumn="AdditionalData" Value="from PendingItems select top 1 (if(Count= 0) then &quot;&quot;  else numformat(Count, &quot;#,#&quot;)) where Id=&quot;OpenAttestation&quot;" WhereClause="id=&quot;VI_Attestation_Pending&quot;" ScriptItemUID="ATTUpdate1" />
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <Insert ScriptItemUID="ATTInsert1" DataTable="PendingItems">
+          <ActionSequence ScriptItemUID="ATTAction1" />
+          <InsertValue Value="&quot;OpenInquiriesAttestation&quot;" DataColumn="Id" />
+          <InsertValue Value="translate(&quot;#LDS#There are new attestation inquiries.&quot;)" DataColumn="NewItemsText" />
+          <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+          <InsertValue Value="&quot;page.axd?isRequest=False&amp;ContextID=VI_ITShop_AnswerQuestions&quot;" DataColumn="URL" />
+        </Insert>
+        <Insert ScriptItemUID="ATTInsert2" DataTable="PendingItems">
+          <ActionSequence ScriptItemUID="ATTAction3" />
+          <InsertValue Value="&quot;OpenAttestation&quot;" DataColumn="Id" />
+          <InsertValue Value="translate(&quot;#LDS#There are new attestation cases.&quot;)" DataColumn="NewItemsText" />
+          <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_Attestation&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="QERAction6" ObjectType="ActionSequence" SortOrder="15">
+        <ActionSequence Condition="IsPreProp(&quot;ATTESTATION&quot;)" ItemUID="IsPreProp(&quot;ATTESTATION&quot;)" ScriptItemUID="ATTAction2">
+          <Update DataTable="PendingItems" DataColumn="Count" Value="DbCount(&quot;AttestationCase&quot;,&#xD;&#xA;   format(&#xD;&#xA;      &quot;UID_Attestationcase in( select UID_Attestationcase from ATT_VAttDecisionPerson_DO where {0})&quot;,&#xD;&#xA;      SqlAnd(&#xD;&#xA;	     &quot;IsUnderConstruction = 0&quot;,&#xD;&#xA;	     sqlcompare(&quot;rulerlevel&quot;, 2, &quot;int&quot;, &quot;notequal&quot;),&#xD;&#xA;         SqlCompareUid(&quot;UID_PersonHead&quot;,GetUser())&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)" WhereClause="Id = &quot;OpenAttestation&quot;" ScriptItemUID="ATTUpdate2" />
+          <Update DataTable="PendingItems" DataColumn="Count" Value="if(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;) = 'true')&#xD;&#xA;then&#xD;&#xA;   DbCount(&quot;AttestationHelper&quot;,SqlAnd(SqlCompareUid(&quot;UID_PersonHead&quot;,GetUser()),SqlCompare(&quot;Decision&quot;,&quot;Q&quot;,&quot;string&quot;,&quot;Equal&quot;,&quot;none&quot;)),false)&#xD;&#xA;else&#xD;&#xA;0" WhereClause="Id=&quot;OpenInquiriesAttestation&quot;" ScriptItemUID="ATTUpdate3" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="QERDataTableSingleRow1" ObjectType="DataTableSingleRow" SortOrder="15">
+        <Column DataType="System.Int32" Name="OpenAttestation" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;OpenAttestation&quot;" ScriptItemUID="ATTColumn1" TriggerUpdates="Updates" />
+        <Column DataType="System.Int32" Name="OpenInquiriesAttestation" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;OpenInquiriesAttestation&quot;" ScriptItemUID="ATTColumn2" TriggerUpdates="Updates" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

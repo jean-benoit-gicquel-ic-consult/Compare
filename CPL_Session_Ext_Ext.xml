@@ -1,0 +1,26 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Session_Ext_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERAction11" ObjectType="ActionSequence" SortOrder="35">
+        <Update DataTable="UserMenu" DataColumn="AdditionalData" Value="from PendingItems select top 1 (if(Count= 0) then &quot;&quot;  else numformat(Count, &quot;#,#&quot;)) where Id=&quot;OpenNonCompliance&quot;" WhereClause="id=&quot;VI_Compliance_ExceptionApproval_Rules&quot;" ScriptItemUID="CPLUpdate1" />
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <Insert ScriptItemUID="CPLInsert1" DataTable="PendingItems">
+          <ActionSequence ScriptItemUID="CPLAction1" />
+          <InsertValue Value="&quot;OpenNonCompliance&quot;" DataColumn="Id" />
+          <InsertValue Value="translate(&quot;#LDS#There are new compliance rule violations.&quot;)" DataColumn="NewItemsText" />
+          <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_Compliance_ExceptionApproval&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="QERAction6" ObjectType="ActionSequence" SortOrder="25">
+        <ActionSequence Condition="IsPreProp(&quot;COMPLIANCE&quot;)" ItemUID="IsPreProp(&quot;COMPLIANCE&quot;)" ScriptItemUID="CPLAction2">
+          <Update DataTable="PendingItems" DataColumn="Count" Value="DbCount(&quot;PersonInNonCompliance&quot;,&#xA;   SqlAnd(&#xA;      SqlCompare(&quot;IsDecisionMade&quot;,0,&quot;bool&quot;,&quot;Equal&quot;,&quot;none&quot;),&#xA;      Format(&quot;uid_noncompliance in (select cr.uid_noncompliance from compliancerule cr join personinaerole pae on pae.uid_aerole =  cr.uid_orgruler and {0})&quot;,&#xA;         SqlAnd(&#xA;		    SqlCompare(&quot;pae.uid_person&quot;,GetUser(),&quot;string&quot;,&quot;Equal&quot;,&quot;NonUnicodeLiterals&quot;),&#xA;			SqlCompare(&quot;cr.isexceptionallowed&quot;,1,&quot;bool&quot;,&quot;Equal&quot;,&quot;none&quot;)&#xA;		 )&#xA;      )&#xA;   )&#xA;)&#xA;																						   &#xA;																						   &#xA;																						   &#xA;					" WhereClause="Id = &quot;OpenNonCompliance&quot;" ScriptItemUID="CPLUpdate2" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="QERDataTableSingleRow1" ObjectType="DataTableSingleRow" SortOrder="25">
+        <Column DataType="System.Int32" Name="OpenNonCompliance" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;OpenNonCompliance&quot;" ScriptItemUID="CPLColumn1" TriggerUpdates="Updates" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

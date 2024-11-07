@@ -1,0 +1,82 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6644f01e-17bd-61d8-97a5-cf4d01153fad">
+  <GlobalControl ID="VI_Roles_RoleAssignmentNew" MigrationNotes="DMLREPLACE;" MetamodelVersion="2016-05-08" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action7">
+        <LoadTable DataTable="BaseTreeAssign" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <Container Condition="0 &lt; select count() from basetreeassign" ScriptItemUID="Container3" RefreshTriggerExpression="from vars select uid_basetreeassign">
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container4">
+              <Label Text="translate(&quot;#LDS#Please select the entitlement that you wish to assign.&quot;)+&quot; &quot;+translate(&quot;#LDS#Your request will be added to the shopping cart.&quot;)" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon imx-icon-Information&quot;" />
+                </HtmlAttributes>
+              </Label>
+            </Container>
+            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                <ColumnList ScriptItemUID="ColumnList1">
+                  <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="uid_basetreeassign" ColumnComponentEdit="VI_Edit_FKByComboBox" />
+                  <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ObjectKeyEntitlement" Condition="from vars select not(isnullorempty(uid_basetreeassign))" />
+                </ColumnList>
+              </VirtualFunctionMapping>
+              <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+          <Container Condition="0 = select count() from basetreeassign" ScriptItemUID="Container19">
+            <Image StockImage="Error" ScriptItemUID="Image2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Image2alt" Value="translate(&quot;#LDS#Error&quot;)" />
+                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+              </HtmlAttributes>
+            </Image>
+            <Label Text="translate(&quot;#LDS#It is not allowed to assign entitlements to this object.&quot;)" ScriptItemUID="Label6" />
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="BaseTreeAssign" Table="BaseTreeAssign" ScriptItemUID="DataTableDbObject10" WhereClauseSQL="basetreeassignfilter()">
+          <ActionSequence ScriptItemUID="Action21" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column4" DataSource="Expression" Expression="objectwalker(&quot;fk(uid_dialogtableelement).tablename&quot;)+&quot;&quot;" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="uid_basetreeassign" DataType="System.String" ScriptItemUID="Column2" ColumnDataSource="ForeignKey" DBTableName="&quot;BaseTreeAssign&quot;" DBColumnName="&quot;UID_BaseTreeAssign&quot;" FKWhereClause="basetreeassignfilter()" Caption="translate(&quot;#LDS#Entitlement type&quot;)" />
+          <Column Name="ObjectKeyEntitlement" DataType="System.String" ScriptItemUID="Column3" ColumnDataSource="ForeignKey" DBTableName="from basetreeassign select top 1 tablename where uid_basetreeassign = ( select uid_basetreeassign from vars)" DBColumnName="&quot;XObjectKey&quot;" Caption="translate(&quot;#LDS#Entitlement&quot;)" FKWhereClause="SqlAnd(&#xD;&#xA;if((select uid_basetreeassign from vars) in ('RMS-AsgnBT-ESet','APC-AsgnBT-Application','RPS-AsgnBT-RPSReport'))then&#xD;&#xA;   sqlcompare(&quot;isinactive&quot;, 0,&quot;Bool&quot;,&quot;equal&quot;,&quot;none&quot;)&#xD;&#xA;,&#xD;&#xA;if(GetObjectKeyTable(from Container select top 1 ObjectKeyParent) = 'ESet')then&#xD;&#xA;format(&quot;XObjectKey not in (select Entitlement from EsetHasEntitlement where uid_eset = '{0}')&quot;,&#xD;&#xA;ParentUID()&#xD;&#xA;)&#xD;&#xA;)" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="ParentUID()" DataType="System.String" Expression="GetUID(from Container select top 1 ObjectKeyParent)" />
+        <Function Name="GetUID(string objectKey)" Expression="{{&#xD;&#xA;string _r = null;&#xD;&#xA;try{&#xD;&#xA;_r = new DbObjectKey(objectKey).Keys[0];&#xD;&#xA;} catch{&#xD;&#xA;}&#xD;&#xA;@return _r;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function3" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="Vars" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action18">
+            <Update DataTable="Vars" DataColumn="ObjectKeyEntitlement" ScriptItemUID="Update1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="uid_basetreeassign" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Update" DataTable="Vars" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ScriptItemUID="Action1">
+            <Update DataTable="Container" DataColumn="ObjectKeySelected" Value="from vars select objectkeyentitlement" ScriptItemUID="Update2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="ObjectKeyEntitlement" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Container" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="ObjectKeySelected" DataType="System.String" />
+        <VirtualColumn Name="ObjectKeyParent" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="BaseTreeAssignFilter()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

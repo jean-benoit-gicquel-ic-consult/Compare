@@ -1,0 +1,16 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ObjectSheet_BaseTreeCommon_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container12" ObjectType="Container" SortOrder="40">
+        <Container ScriptItemUID="CPLContainer1" Condition="from object select current getobjectkeytable(xobjectkey) &lt;&gt; 'AERole'" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="CPLHtmlAttribute1" Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" />
+          </HtmlAttributes>
+          <ControlReferenceControlList ID="CPL_ObjectSheet_ComplianceTile" ScriptItemUID="CPLControlRef2">
+            <VirtualTableMapping ScriptItemUID="CPLVirtualTableMapping1" VirtualTable="Object" DataTable="Object" />
+          </ControlReferenceControlList>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

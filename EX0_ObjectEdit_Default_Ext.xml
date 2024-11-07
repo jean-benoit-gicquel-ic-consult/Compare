@@ -1,0 +1,16 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="EX0_ObjectEdit_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition">
+        <ConfigParam Key="VI_Roles_Fields_EX0DL" Type="ColumnList" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;EX0DL&quot;)" DatabaseTable="EX0DL" />
+      </AddObject>
+      <AddObject ObjectID="QBMConfigSection1" ObjectType="ConfigSection">
+        <ConfigEntry Key="VI_Roles_Fields_EX0DL" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="EX0ConfigEntry1">
+          <SingleColumn DataColumn="CanonicalName" ScriptItemUID="EX0SingleColumn10" />
+          <SingleColumn DataColumn="DistinguishedName" ScriptItemUID="EX0SingleColumn9" />
+          <SingleColumn DataColumn="SimpleDisplayName" ScriptItemUID="EX0SingleColumn6" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

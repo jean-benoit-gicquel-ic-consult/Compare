@@ -1,0 +1,703 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="915deccf-028f-f40d-f1d7-da1b1064f373">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_Membership" MigrationNotes="DMLREPLACE;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember>internal string GetDisplayFromCache(string key)
+{
+	var cache = (System.Collections.Generic.Dictionary&lt;string, string&gt;) _TableStore.UserData.GetOrAdd("DisplayCache", _ =&gt; {
+		var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();
+		var col = _TableStore.GetLocalColumn(PersonObjects, "PK");
+		foreach(var pobj in PersonObjects)
+		{
+			dict[col.GetValue(pobj).String] = pobj.LongDisplay;
+		}
+		return dict;
+	});
+	return cache.GetValueOrDefault(key);
+}
+
+internal string GetTableNameDisplayFromCache(string key)
+{
+	var cache = (System.Collections.Generic.Dictionary&lt;string, string&gt;) _TableStore.UserData.GetOrAdd("TablenameDisplayCache", _ =&gt; {
+		var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();
+		var col = _TableStore.GetLocalColumn(PersonObjects, "PK");
+		var tcol = _TableStore.GetLocalColumn(PersonObjects, "TableName");
+		foreach(var pobj in PersonObjects)
+		{
+			dict[col.GetValue(pobj).String] = VI.WebRuntime.WebSql.GetDisplayTolerantSingular(_Connection, tcol.GetValue(pobj).String);
+		}
+		return dict;
+	});
+	return cache.GetValueOrDefault(key);
+}</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="DynamicGroup" ScriptItemUID="LoadTable1" WhereClause="sqland(&#xD;&#xA;sqlcompareuid(&quot;objectkeybasetree&quot;, select current getObjectKey() from allobjects),&#xD;&#xA;SqlCompareuid(&quot;UID_DialogTableobjectClass&quot;, &quot;QER-T-Person&quot;))">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+        <Delete DataTable="PersonHasObjectAndPWO" ScriptItemUID="Delete1" />
+        <ActionSequence ItemUID="Load assignment data from object to persons" Condition="select current TableName from allobjects &lt;&gt; 'Person'" ScriptItemUID="Action2">
+          <ActionSequence ItemUID="Org, ProfitCenter, Department, Locality, AERole" Condition="select current TableName from allobjects in ('AERole','Org','Department','ProfitCenter','Locality')" ScriptItemUID="Action3">
+            <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable2" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.BaseTreeToPerson&quot;">
+              <ParameterFree Name="&quot;uidbasetree&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree1" />
+            </LoadTable>
+            <Update DataTable="PersonHasObjectAndPWO" DataColumn="UID_PersonObjectKeyAssignment" ScriptItemUID="Update4" Value="GetUIDPersonFromObjectkeyAssignment(ObjectKeyAssignment,select current pk from AllObjects)" WhereClause="not(IsNullOrEmpty(UID_PersonWantsOrg) or IsNullOrEmpty(ObjectKeyAssignment))&#xD;&#xA;" />
+            <ActionSequence ScriptItemUID="Action6" Condition="1 &lt; select count() from PersonHasObjectAndPWO where not(IsNullOrEmpty(UID_PersonWantsOrg) or IsNullOrEmpty(ObjectKeyAssignment))">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">// performance: preload UID_Person display values as bulk
+PersonHasObjectAndPWO.GetColumn("UID_PersonObjectKeyAssignment").PreloadDisplayValueCache();</CodeLiteral>
+            </ActionSequence>
+          </ActionSequence>
+          <ActionSequence ItemUID="QERResource" Condition="select current TableName from allobjects in ('QERResource')" ScriptItemUID="Action4">
+            <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable3" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.ResourceToPerson&quot;">
+              <ParameterFree Name="&quot;uidresource&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree2" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence ItemUID="QERReuseUS" Condition="select current TableName from allobjects in ('QERReuseUS')" ScriptItemUID="Action12">
+            <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable4" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.QERReuseUSToPerson&quot;">
+              <ParameterFree Name="&quot;UIDQERReuseUS&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree7" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence ItemUID="ESet" Condition="select current TableName from allobjects in ('ESet')" ScriptItemUID="Action7">
+            <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable6" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.ESetToPerson&quot;">
+              <ParameterFree Name="&quot;uideset&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree3" />
+            </LoadTable>
+          </ActionSequence>
+        </ActionSequence>
+        <ActionSequence ItemUID="Load assignment data from person to objects" Condition="select current TableName from allobjects = 'Person'" ScriptItemUID="Action9">
+          <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable12" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToBaseTree&quot;">
+            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree4" />
+          </LoadTable>
+          <ActionSequence ItemUID="QERResource" ScriptItemUID="Action10">
+            <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable8" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToResource&quot;">
+              <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree5" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence ItemUID="QERReuseUS" ScriptItemUID="Action13">
+            <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable5" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToQERReuseUS&quot;">
+              <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="ParameterFree8" />
+            </LoadTable>
+          </ActionSequence>
+          <FillTable Source="XObjectKey" DataTable="PersonObjects" DataTableSource="PersonHasObjectAndPWO" DataColumnSource="ObjectKeyTarget" DataColumnTableName="TableName" DataColumnXObjectKey="ObjectKey" ResolveMNObjects="ResolveAlways" ScriptItemUID="FillTable1" DataColumnSourceKey="PK">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+          </FillTable>
+        </ActionSequence>
+        <ReadOnlyTableModifier DataTable="PersonHasObjectAndPWO" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="-- BitMaskConfig: 0=Direct, 1=Inherit, 2=Dynamic, 3=ITShopOrder&#xD;&#xA;&#xD;&#xA;-- is it a direct assignment or a request, then we can remove the assignment&#xD;&#xA;(not(isdirectassignment) and not(isAssigned))">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <SingleColumn DataColumn="RemoveThis" ScriptItemUID="SingleColumn1" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+        <CodeLiteral ScriptItemUID="CodeLiteral1">// performance: preload UID_Person display values as bulk
+PersonHasObjectAndPWO.GetColumn("UID_Person").PreloadDisplayValueCache();
+
+// use bulk loader to load PWO objects
+PWOS.Delete();
+var bulkLoader = new ObjectKeyBulkLoader(PWOS);
+
+bulkLoader.LoadType.CollectionLoadType = ((VI.DB.Entities.EntityCollectionLoadType)((VI.DB.Entities.EntityCollectionLoadType.ForeignDisplays | VI.DB.Entities.EntityCollectionLoadType.ForeignDisplaysForAllColumns | VI.DB.Entities.EntityCollectionLoadType.BulkReadOnly)));
+
+var uidPwoColumn = PersonHasObjectAndPWO.GetColumn("UID_PersonWantsOrg");
+foreach(var row in PersonHasObjectAndPWO)
+{
+	var uidPwo = uidPwoColumn.GetValue(row).String;
+	if(string.IsNullOrEmpty(uidPwo))
+		continue;
+	bulkLoader.InsertObjectKey(new DbObjectKey("PersonWantsOrg", uidPwo), null, null);
+}
+
+await bulkLoader.LoadAsync(ct).ConfigureAwait(false);</CodeLiteral>
+        <CodeLiteral ScriptItemUID="CodeLiteral3">// configure XOriginExtended bit mask
+
+var xoriginExtended = (ExpressionColumn) TableStore.GetLocalColumn(PersonHasObjectAndPWO, "XOriginExtended");
+var mlProvider = _Database.MultiLanguage();
+var dbColumn = _Database.MetaData().GetTable("PersonInDepartment").Columns["XOrigin"];
+var captions = dbColumn.BitMaskCaptions.Captions
+.Select(key =&gt; mlProvider.Get(dbColumn.Uid, key))
+.Concat(new []{ GetCaptionPending(), GetCaptionPrimary(), GetCaptionNested()});
+
+xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
+	new ValueMetadata(c, vm) { BitMaskCaptions = new BitMaskCaptions(captions.ToArray()) };</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container Condition="0 &lt; (select count() from PersonHasObjectAndPWO where not(isnullorempty(displayperson)) )" ScriptItemUID="Container2">
+          <ControlReferenceContainer ID="HeadLineIfData" ScriptItemUID="ControlRef1" />
+        </Container>
+        <Tab ScriptItemUID="Tab2" Layout="'VI_Styles_Tab_Secondary'">
+          <TabPage ScriptItemUID="TabPage4" Condition="0 = select count() from (IsForMembershipPerson()) where result" ItemUID="No person assignment">
+            <ControlsHeader ScriptItemUID="Container17">
+              <Label Text="DataCaption(&quot;Person&quot;)" ScriptItemUID="Label9" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container18">
+              <Label ScriptItemUID="Label10" Text="translate(&quot;#LDS#Employees cannot be assigned to this object.&quot;)" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute6" Value="&quot;imx-message&quot;" />
+                  <Property Name="TagName" Value="div" />
+                </HtmlAttributes>
+              </Label>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ScriptItemUID="TabPage3" Condition="0 &lt; select count() from (IsForMembershipPerson()) where result">
+            <ControlsHeader ScriptItemUID="Container7">
+              <Label Text="DataCaption(&quot;Person&quot;)" ScriptItemUID="ADSLabel1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container6">
+              <Container Condition="'Person' &lt;&gt; (select current TableName from allobjects )" ItemUID="Not for Person" ScriptItemUID="Container14">
+                <Container Condition="select current not(isnullorempty(dynamicgroup)) from allobjects" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15">
+                  <Image Source="DialogImage" DialogImage="Dynamic Group" ScriptItemUID="Image8" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Image8alt" Value="translate(&quot;#LDS#Click here to view details about the dynamic role.&quot;)" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                    </HtmlAttributes>
+                  </Image>
+                  <Label Text="translate(&quot;#LDS#Membership is controlled by a dynamic role.&quot;)+&quot; &quot;" ScriptItemUID="Label17" />
+                </Container>
+                <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container10">
+                  <Label Text="if(&#xD;&#xA;0 &lt; select count() from PersonHasObjectAndPWO where (not(isnullorempty(displayperson))))&#xD;&#xA;&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#The following employees have access to {0}. Click on an employee to see details about why the employee has been granted access.&quot;,&#xD;&#xA;select current Display() from AllObjects )&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#No memberships in {0} were found.&quot;, select current Display() from AllObjects)" ScriptItemUID="Label16" />
+                </Container>
+              </Container>
+              <Container ScriptItemUID="Container11">
+                <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                  <HtmlAttributes />
+                  <MasterPane ScriptItemUID="MasterPane1">
+                    <Container ScriptItemUID="Container4" RefreshTriggerExpression="(from PersonHasObjectAndPWO select GetDataVersion(markedfordelete)) + (from PersonHasObjectAndPWO select GetDataVersion(markedforunsubscribe))&#xD;&#xA; +&#xD;&#xA; if(HaveItemsToDelete()) then 1 else 0">
+                      <Grid ScriptItemUID="Grid1">
+                        <GridBand DataTable="PersonHasObjectAndPWO" OrderBy="'DisplayPerson, DisplayEntitlement'" WhereClause="not(isnullorempty(displayperson))" ScriptItemUID="GridBand1" RowSelection="true" DataTableForSelection="LocalVars" DataColumnForSelection="UID_PersonHasObjectAndPwo" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="ApplyFilledHeight" Value="true" />
+                          </HtmlAttributes>
+                          <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                            <ControlList ScriptItemUID="ControlList2">
+                              <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                                <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                                  <ControlList ScriptItemUID="ControlList7">
+                                    <SwitchContainer ScriptItemUID="Switch1">
+                                      <SwitchContainerCase ScriptItemUID="Case1" Condition="'Person' = (select current TableName from allobjects )">
+                                        <Label Text="from personhasobjectandpwo select current DisplayEntitlement" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                                          <HtmlAttributes>
+                                            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from PersonHasObjectAndPWO select current getobjectkeytable(objectkeytarget)" />
+                                          </HtmlAttributes>
+                                        </Label>
+                                      </SwitchContainerCase>
+                                      <SwitchContainerCase ScriptItemUID="Case2">
+                                        <Label Text="from personhasobjectandpwo select current displayperson" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                                          <HtmlAttributes>
+                                            <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                                          </HtmlAttributes>
+                                        </Label>
+                                      </SwitchContainerCase>
+                                    </SwitchContainer>
+                                  </ControlList>
+                                </VirtualControlMapping>
+                                <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                                  <ControlList ScriptItemUID="ControlList8">
+                                    <Container ScriptItemUID="Container3" Condition="not(IsReadOnly()) &#xD;&#xA;AND(&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;from allobjects select&#xD;&#xA;(tablename in ('AERole','Org','Department','Locality','ProfitCenter','Person') Or isnull(uid_accproduct,'')&lt;&gt;'')&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;or&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;HaveItemsToDelete()&#xD;&#xA;)&#xD;&#xA;)">
+                                      <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef14">
+                                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="IsReadOnly()" Value="not(from PersonHasObjectAndPWO select current CanEdit(RemoveThis))" />
+                                        <VirtualTableMapping ScriptItemUID="VirtualTableMapping10" VirtualTable="EditTable" DataTable="PersonHasObjectAndPWO">
+                                          <VirtualColumnMapping DataColumn="RemoveThis" VirtualColumn="DoSelect" />
+                                        </VirtualTableMapping>
+                                      </ControlReferenceControlList>
+                                    </Container>
+                                  </ControlList>
+                                </VirtualControlMapping>
+                                <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                                  <ControlList ScriptItemUID="ControlList9">
+                                    <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef4">
+                                      <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonHasObjectAndPWO" ScriptItemUID="VirtualTableMapping9" />
+                                      <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping11">
+                                        <ColumnList ScriptItemUID="ColumnList3">
+                                          <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="TableNameSingle" Condition="'Person' = (select current TableName from allobjects )" />
+                                          <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="XOriginExtended" />
+                                        </ColumnList>
+                                      </VirtualFunctionMapping>
+                                    </ControlReferenceContainer>
+                                  </ControlList>
+                                </VirtualControlMapping>
+                              </ControlReferenceControlList>
+                            </ControlList>
+                          </GridBandListView>
+                          <GridFilters ScriptItemUID="GridFilters1" />
+                          <GridRows />
+                          <GridColumn Width="&quot;65px&quot;" Condition="not(IsReadOnly()) &#xD;&#xA;AND(&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;from allobjects select&#xD;&#xA;(tablename in ('AERole','Org','Department','Locality','ProfitCenter','Person') Or isnull(uid_accproduct,'')&lt;&gt;'')&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;or&#xD;&#xA;&#xD;&#xA;(&#xD;&#xA;HaveItemsToDelete()&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="GridColumn10">
+                            <GridColumnHeader ScriptItemUID="wctl1" />
+                            <Cell ScriptItemUID="Cell1">
+                              <CheckBox DataTable="PersonHasObjectAndPWO" DataColumn="RemoveThis" ScriptItemUID="CheckBox2" Text="" />
+                            </Cell>
+                          </GridColumn>
+                          <GridColumn SortColumn="DisplayPerson" AutoFilterColumn="DisplayPerson" ScriptItemUID="GridColumn9" Condition="'Person' &lt;&gt; (select current TableName from allobjects)">
+                            <GridColumnHeader ScriptItemUID="wctl2">
+                              <Label Text="datacaption(PersonHasObjectAndPWO, DisplayPerson)" ScriptItemUID="Label28" />
+                            </GridColumnHeader>
+                            <Cell ScriptItemUID="Cell2">
+                              <Label Text="from personhasobjectandpwo select current displayperson" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-Person&quot;" />
+                                </HtmlAttributes>
+                              </Label>
+                            </Cell>
+                          </GridColumn>
+                          <GridColumn SortColumn="DisplayEntitlement" AutoFilterColumn="DisplayEntitlement" ScriptItemUID="GridColumn8" Condition="'Person' = (select current TableName from allobjects )">
+                            <GridColumnHeader ScriptItemUID="wctl3">
+                              <Label Text="datacaption(PersonHasObjectAndPWO, DisplayEntitlement)" ScriptItemUID="Label24" />
+                            </GridColumnHeader>
+                            <Cell ScriptItemUID="Cell3">
+                              <Label Text="from personhasobjectandpwo select current DisplayEntitlement" ScriptItemUID="Label26" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from PersonHasObjectAndPWO select current getobjectkeytable(objectkeytarget)" />
+                                </HtmlAttributes>
+                              </Label>
+                            </Cell>
+                          </GridColumn>
+                          <GridColumnSimple ScriptItemUID="GridColumn7" Column="TableNameSingle" Condition="'Person' = (select current TableName from allobjects )" />
+                          <GridColumnSimple ScriptItemUID="Column33" Column="XOriginExtended" />
+                        </GridBand>
+                      </Grid>
+                    </Container>
+                  </MasterPane>
+                  <DetailPane ScriptItemUID="DetailPane1">
+                    <Container ScriptItemUID="Container8">
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PersonHasObjectAndPWO" WhereClause="pk = from localvars select uid_personhasobjectandpwo">
+                        <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_Secondary'">
+                          <TabPage ScriptItemUID="TabPage2" ItemUID="DETECTIVE" Condition="(&quot;QERReuseUS&quot; &lt;&gt; select current TableName from allobjects)&#xD;&#xA;and&#xD;&#xA;(&quot;QERReuseUS&quot; &lt;&gt; select current try(GetObjectKeyTable(ObjectKeyTarget),&quot;&quot;) from PersonHasObjectAndPWO)&#xD;&#xA;&#xD;&#xA;">
+                            <ControlsHeader ScriptItemUID="Container12">
+                              <Label Text="translate(&quot;#LDS#Detective&quot;)" ScriptItemUID="Label5" />
+                            </ControlsHeader>
+                            <ControlsBody ScriptItemUID="Container123">
+                              <SwitchContainer ScriptItemUID="Switch2">
+                                <SwitchContainerCase ScriptItemUID="Case3" Condition="from PersonHasObjectAndPWO select current IsPending">
+                                  <Label Text="translate(&quot;#LDS#Assignment information cannot be displayed for pending assignments.&quot;)" ScriptItemUID="Label6" />
+                                </SwitchContainerCase>
+                                <SwitchContainerCase ScriptItemUID="Case4">
+                                  <Container ScriptItemUID="Container13">
+                                    <ControlReferenceContainer ID="VI_Roles_EntitlementDetective" ScriptItemUID="ControlRef10">
+                                      <VirtualFunctionMapping ID="UID_Person()" Value="from personhasobjectandpwo select current uid_person" ScriptItemUID="VirtualFunctionMapping1" />
+                                      <VirtualFunctionMapping ID="ObjectKeyEntitlement()" Value="from personhasobjectandpwo select current ObjectKeyTarget" ScriptItemUID="VirtualFunctionMapping2" />
+                                    </ControlReferenceContainer>
+                                  </Container>
+                                </SwitchContainerCase>
+                              </SwitchContainer>
+                            </ControlsBody>
+                          </TabPage>
+                          <TabPage ScriptItemUID="TabPage1" Condition="-- this assignment was caused by a request&#xA;not(from PersonHasObjectAndPWO select current IsNullOrEmpty(UID_PersonWantsOrg))" ItemUID="REQUEST">
+                            <ControlsHeader ScriptItemUID="Container91">
+                              <Label Text="translate(&quot;#LDS#Request&quot;)" ScriptItemUID="Label4" />
+                            </ControlsHeader>
+                            <ControlsBody ScriptItemUID="Container9">
+                              <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="PWOS" WhereClause="uid_personwantsorg = ( from personhasobjectandpwo select current uid_personwantsorg)">
+                                <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlRef12">
+                                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOS" ScriptItemUID="VirtualTableMapping1" />
+                                  <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                                  <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+                                </ControlReferenceContainer>
+                              </ContainerTemplate>
+                            </ControlsBody>
+                          </TabPage>
+                        </Tab>
+                      </ContainerTemplate>
+                    </Container>
+                    <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="PersonHasObjectAndPWO" WhereClause="pk = from localvars select uid_personhasobjectandpwo" OrderBy="'DisplayPerson, DisplayEntitlement'">
+                          <SwitchContainer ScriptItemUID="Switch3">
+                            <SwitchContainerCase ScriptItemUID="Case6" Condition="'Person' &lt;&gt; (select current TableName from allobjects)" ItemUID="For Persons">
+                              <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef2">
+                                <VirtualFunctionMapping ID="Caption1()" Value="translate(&quot;#LDS#Employee&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                                <VirtualFunctionMapping ID="Value1()" Value="from personhasobjectandpwo select current displayperson" ScriptItemUID="VirtualFunctionMapping6" />
+                                <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-Person&quot;" ScriptItemUID="VirtualFunctionMapping7" />
+                              </ControlReferenceControlList>
+                            </SwitchContainerCase>
+                            <SwitchContainerCase ScriptItemUID="Case7" ItemUID="For all other">
+                              <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef13">
+                                <VirtualFunctionMapping ID="Caption1()" Value="translate(&quot;#LDS#Entitlement&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                                <VirtualFunctionMapping ID="Value1()" Value="from personhasobjectandpwo select current DisplayEntitlement" ScriptItemUID="VirtualFunctionMapping9" />
+                                <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-&quot;+from PersonHasObjectAndPWO select current getobjectkeytable(objectkeytarget)" ScriptItemUID="VirtualFunctionMapping10" />
+                              </ControlReferenceControlList>
+                            </SwitchContainerCase>
+                          </SwitchContainer>
+                        </ContainerTemplate>
+                      </ControlList>
+                    </DetailPaneHeader>
+                  </DetailPane>
+                </MasterDetailControl>
+              </Container>
+              <Container Condition="not(IsReadOnly()) &#xD;&#xA;AND(&#xD;&#xA;(&#xD;&#xA;from allobjects select&#xD;&#xA;(tablename in ('AERole','Org','Department','Locality','ProfitCenter','Person') Or isnull(uid_accproduct,'')&lt;&gt;'')&#xD;&#xA;)&#xD;&#xA;or&#xD;&#xA;(&#xD;&#xA;HaveItemsToDelete()&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="Container38" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+                </HtmlAttributes>
+                <Container Layout="'VI_Styles_Container_Inline'" Condition="ispreprop(&quot;ITSHOP&quot;)&#xD;&#xA;And&#xD;&#xA;from allobjects select Current&#xD;&#xA;(&#xD;&#xA;(tablename in ('AERole','Org','ProfitCenter','Department','Locality','ESet') &#xD;&#xA;or &#xD;&#xA;(&#xD;&#xA;isnull(uid_accproduct,'')&lt;&gt;'' &#xD;&#xA;and exists(&quot;BasetreeHasObject&quot;,format(&quot;ObjectKey = '{0}' and UID_Org in(select UID_ITShopOrg from ITShopOrg where UID_AccProduct = '{1}')&quot;,getObjectKey(),UID_AccProduct))&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Container39">
+                  <Button Text="translate(&quot;#LDS#Request memberships&quot;)" ScriptItemUID="Button13">
+                    <ServerActionCall ScriptItemUID="ServerActionCall10">
+                      <Update DataTable="LocalVars" DataColumn="UID_SelectedPerson" ScriptItemUID="Update1" />
+                      <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction16">
+                        <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                          <Container ScriptItemUID="Container40" IsBeginRenderPart="true">
+                            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container41">
+                              <Label Text="translate(&quot;#LDS#Please select the employees whom you wish to request a membership for.&quot;)+&quot; &quot;+translate(&quot;#LDS#The membership requests will be added to the shopping cart.&quot;)" ScriptItemUID="Label32" />
+                            </Container>
+                            <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef7">
+                              <VirtualFunctionMapping ID="UidListTextQualifier()" Value="&quot;&quot;" ScriptItemUID="VirtualFunctionMapping13" />
+                              <VirtualFunctionMapping ID="CandidateDbTable()" Value="'Person'" ScriptItemUID="VirtualFunctionMapping14" />
+                              <VirtualTableMapping VirtualTable="Candidate" DataTable="PersonCandidate" ScriptItemUID="VirtualTableMapping2" />
+                              <VirtualTableMapping VirtualTable="SelectedItems" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping3">
+                                <VirtualColumnMapping VirtualColumn="uidList" DataColumn="UID_SelectedPerson" />
+                              </VirtualTableMapping>
+                            </ControlReferenceContainer>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                          <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container42">
+                            <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef5">
+                              <VirtualFunctionMapping ID="MoreThanOneButton()" Value="true" ScriptItemUID="VirtualFunctionMapping15" />
+                            </ControlReferenceControlList>
+                            <Button Text="translate(&quot;#LDS#Add to cart&quot;)" ScriptItemUID="Button15" EnabledCondition="NOT IsNullOrEmpty(from LocalVars select UID_SelectedPerson)">
+                              <ServerActionCall ScriptItemUID="ServerActionCall11">
+                                <Delete DataTable="ShoppingCartItem" ScriptItemUID="Delete3" />
+                                <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="CallAction20">
+                                  <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping4" />
+                                </CallAction>
+                                <Delete DataTable="PersonForMembershipRequest" ScriptItemUID="Delete4" />
+                                <FillTable DataTable="PersonForMembershipRequest" Expression="split(from LocalVars select UID_SelectedPerson, char(7),false)" ScriptItemUID="FillTable3" DataColumn="uid_person">
+                                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                                </FillTable>
+                                <SwitchAction ScriptItemUID="Switch5">
+                                  <SwitchActionCase ScriptItemUID="Case8" Condition="from allobjects select current tablename in ('AERole','Org','Department','Locality','ProfitCenter')" ItemUID="PersonInX Request">
+                                    <ForeachRow DataTable="PersonForMembershipRequest" ScriptItemUID="ForeachRow1">
+                                      <LoadTable DataTable="PersonTMP" WhereClause="SqlCompareUid(&quot;uid_person&quot;,from PersonForMembershipRequest select current UID_Person)" ScriptItemUID="LoadTable7">
+                                        <DbObjectLoadType ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" ScriptItemUID="DbObjectLoadType5" />
+                                      </LoadTable>
+                                      <Update DataColumn="UID_ACCProduct" DataTable="LocalVars" ScriptItemUID="Update17" Value="VI_GetAccproductAssignmentMember(&#xD;&#xA;from personformembershiprequest select Current uid_person,&#xD;&#xA;from allobjects select Current GetObjectKeyRelation(format(&quot;PersonIn{0}&quot;,TableName),&quot;Person&quot;,from PersonForMembershipRequest select Current uid_person, TableName, pk)&#xD;&#xA;)" />
+                                      <ActionSequence ScriptItemUID="Action23" Condition="0 = (select Count() from AssignmentProducts Where UID_ACCProduct = (from LocalVars select UID_ACCProduct))">
+                                        <LoadTable DataTable="AssignmentProducts" ScriptItemUID="LoadTable11" WhereClause="SqlCompareUid(&quot;UID_AccProduct&quot;, from LocalVars select UID_ACCProduct)" RemoveDeleted="false" RevertExisting="false">
+                                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+                                        </LoadTable>
+                                      </ActionSequence>
+                                      <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="VI_GetAccproductAssignmentMember(&#xD;&#xA;from personformembershiprequest select current uid_person,&#xD;&#xA;from allobjects select current GetObjectKeyRelation(format(&quot;PersonIn{0}&quot;,TableName),&quot;Person&quot;,from PersonForMembershipRequest select current uid_person, TableName, pk)&#xD;&#xA;)" ScriptItemUID="wctl4">
+                                        <VirtualFunctionMapping ID="uidaccproduct()" Value="from LocalVars select UID_ACCProduct" ScriptItemUID="VirtualFunctionMapping25" />
+                                        <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from ShoppingCartOrder select top 1 UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping26" />
+                                        <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping11" />
+                                        <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="PersonTMP" ScriptItemUID="VirtualTableMapping12" />
+                                        <VirtualFunctionMapping ID="ObjectKeyAssignment()" Value="from allobjects select current GetObjectKeyRelation(format(&quot;PersonIn{0}&quot;,TableName),&quot;Person&quot;,from PersonForMembershipRequest select current uid_person, TableName, pk)" ScriptItemUID="VirtualFunctionMapping43" />
+                                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="IsNoCopyParametersPerson()" Value="from AssignmentProducts select IsNoCopyParametersPerson Where UID_ACCProduct = (from LocalVars select UID_ACCProduct)" />
+                                      </AccProductSwitchCallAction>
+                                    </ForeachRow>
+                                  </SwitchActionCase>
+                                  <SwitchActionCase ScriptItemUID="Case9" ItemUID="Request other than Org, Department, Locality, ProfitCenter, AERole">
+                                    <LoadTable DataTable="PersonTMP" WhereClause="SqlInWithFormat(&quot;UID_Person&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;, split(from LocalVars select UID_SelectedPerson, char(7),false))" ScriptItemUID="LoadTable10">
+                                      <DbObjectLoadType ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" ScriptItemUID="DbObjectLoadType6" />
+                                    </LoadTable>
+                                    <Update DataColumn="UID_ACCProduct" DataTable="LocalVars" ScriptItemUID="Update15" Value="from allobjects select current singleproperty( tablename, &quot;uid_accproduct&quot;, &quot;uid_&quot;+tablename+&quot;= '&quot;+ pk +&quot;'&quot;)" />
+                                    <ActionSequence ScriptItemUID="Action25" Condition="0 = (select Count() from AssignmentProducts Where UID_ACCProduct = (from LocalVars select UID_ACCProduct))">
+                                      <LoadTable DataTable="AssignmentProducts" ScriptItemUID="LoadTable13" WhereClause="SqlCompareUid(&quot;UID_AccProduct&quot;, from LocalVars select UID_ACCProduct)" RemoveDeleted="false" RevertExisting="false">
+                                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+                                      </LoadTable>
+                                    </ActionSequence>
+                                    <AccProductSwitchCallAction ActionType="Insert_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="from allobjects select current singleproperty( tablename, &quot;uid_accproduct&quot;, &quot;uid_&quot;+tablename+&quot;= '&quot;+ pk +&quot;'&quot;)" ScriptItemUID="wctl5">
+                                      <VirtualFunctionMapping ID="uidaccproduct()" Value="from LocalVars select UID_ACCProduct" ScriptItemUID="VirtualFunctionMapping16" />
+                                      <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from ShoppingCartOrder select top 1 UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping17" />
+                                      <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping5" />
+                                      <VirtualTableMapping VirtualTable="PersonsForOrder" DataTable="PersonTMP" ScriptItemUID="VirtualTableMapping13" />
+                                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="IsNoCopyParametersPerson()" Value="from AssignmentProducts select IsNoCopyParametersPerson Where UID_ACCProduct = (from LocalVars select UID_ACCProduct)" />
+                                    </AccProductSwitchCallAction>
+                                  </SwitchActionCase>
+                                </SwitchAction>
+                                <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction17" />
+                                <ActionOnControl />
+                                <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCart" AllowReturnToThisContext="true" ScriptItemUID="Redirect1" />
+                              </ServerActionCall>
+                            </Button>
+                          </Container>
+                        </VirtualControlMapping>
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Request memberships&quot;)" ScriptItemUID="VirtualFunctionMapping23" />
+                        <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping24" />
+                      </CallAction>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+                <Button Text="translate(&quot;#LDS#Delete memberships&quot;)" EnabledCondition="0 &lt;&gt; (&#xA;from PersonHasObjectAndPWO select Count() where RemoveThis)" ScriptItemUID="Button12" Layout="'VI_Styles_Button_Default'">
+                  <ServerActionCall ScriptItemUID="ServerActionCall14">
+                    <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedforunsubscribe" Value="0" ScriptItemUID="Update13" />
+                    <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedfordelete" Value="0" ScriptItemUID="Update14" />
+                    <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedforunsubscribe" Value="1" ScriptItemUID="Update9" WhereClause="RemoveThis and isnull(uid_personwantsorg, '') &lt;&gt; '' and UID_PersonWantsOrg in (from PWOS select UID_PersonWantsOrg where OrderState = 'Assigned')" />
+                    <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedfordelete" Value="1" WhereClause="removethis and not(isnullorempty(objectkeyassignment)) and IsDirectAssignment" ScriptItemUID="Update5" />
+                    <Update DataTable="PersonHasObjectAndPWO" DataColumn="RemoveThis" Value="0" ScriptItemUID="Update6" WhereClause="RemoveThis" />
+                    <Update DataTable="Container" DataColumn="CountDirectAssignmentsDeleted" Value="select count() from PersonHasObjectAndPWO where markedfordelete" ScriptItemUID="Update3" />
+                    <CallAction ScriptItemUID="Call2" ActionID="DELETE_DIRECT" />
+                    <Update DataTable="Container" DataColumn="CountPWOUnsubscribeGenerated" Value="select count() from PersonHasObjectAndPWO where markedforunsubscribe" ScriptItemUID="Update2" />
+                    <CallAction ScriptItemUID="Call1" ActionID="UNSUBSCRIBE" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </ControlsBody>
+          </TabPage>
+        </Tab>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="DynamicGroup" Table="DynamicGroup" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action14" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrder" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action16" />
+        </DataTableDbObject>
+        <DataTableDbObject Table="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="DataTableDbObject4">
+          <ActionSequence ScriptItemUID="Action17" />
+        </DataTableDbObject>
+        <DataTableCustom Table="PersonForMembershipRequest" ScriptItemUID="DataTableCustom1">
+          <Column Name="uid_person" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="display" DataType="System.String" ScriptItemUID="Column2" />
+        </DataTableCustom>
+        <DataTableSQL Table="PersonHasObjectAndPWO" PrimaryKeyColumn="PK" ScriptItemUID="DataTableLimitedSQL1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action18" />
+          <Column Name="ObjectKeyTarget" DataType="System.String" ScriptItemUID="Column11" />
+          <Column Name="ObjectKeyAssignment" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column5" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column Name="UID_PersonObjectKeyAssignment" DataType="System.String" ScriptItemUID="Column28" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column Name="UID_PersonWantsOrg" DataType="System.String" ScriptItemUID="Column7" ColumnDataSource="ForeignKey" DBTableName="&quot;PersonWantsOrg&quot;" DBColumnName="&quot;UID_PersonWantsOrg&quot;" FKWhereClause="" />
+          <Column Name="XOrigin" DataType="System.Int32" ScriptItemUID="Column24" />
+          <Column Name="IsPending" DataType="System.Boolean" ScriptItemUID="Column3" />
+          <Column Name="IsPrimary" DataType="System.Boolean" ScriptItemUID="Column26" />
+          <Column DataType="System.Int32" Name="XOriginExtended" ScriptItemUID="Column34" DataSource="Expression" Expression="xorigin + (if (ispending) then (2*GetMaxXOriginBit()))&#xD;&#xA;+ (if(isprimary) then (4*GetMaxXOriginBit()))&#xD;&#xA;+ (if(IsNested) then (8*GetMaxXOriginBit()))" Caption="datacaption(&quot;PersonInBasetree&quot;, &quot;XOrigin&quot;)" />
+          <Column Name="RemoveThis" DataType="System.Boolean" ScriptItemUID="Column8" Caption="translate(&quot;#LDS#Heading Select&quot;)" TriggerUpdates="Updates" />
+          <Column Name="DisplayPerson" DataType="System.String" ScriptItemUID="Column9" DataSource="Expression" Expression="if(IsNullOrEmpty(UID_PersonObjectKeyAssignment))then&#xD;&#xA;   displayvalue(UID_Person)&#xD;&#xA;else&#xD;&#xA;   displayvalue(UID_PersonObjectKeyAssignment)" Caption="translate(&quot;#LDS#Employee&quot;)" />
+          <Column Name="DisplayEntitlement" DataType="System.String" ScriptItemUID="Column10" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;GetDisplayWithCache(from PersonHasObjectAndPWO select current PK),&#xD;&#xA;BuildMnDisplay(from PersonHasObjectAndPWO select current ObjectKeyTarget))" Caption="translate(&quot;#LDS#Entitlement&quot;)" />
+          <Column Name="PK" DataType="System.String" ScriptItemUID="Column12" />
+          <Column Name="TableNameSingle" DataType="System.String" ScriptItemUID="Column13" DataSource="Expression" Expression="GetTableNameDisplayWithCache(from PersonHasObjectAndPWO select current PK)" Caption="translate(&quot;#LDS#Object type&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;" Value="true" ScriptItemUID="ParameterFree6" />
+          </Column>
+          <Column Name="IsDirectAssignment" DataType="System.Boolean" ScriptItemUID="Column25" DataSource="Expression" Expression="IsBitSet(xorigin, 1)" />
+          <Column Name="isAssigned" DataType="System.Boolean" ScriptItemUID="Column27" DataSource="Expression" Expression="try('Assigned' = (from PWOS select OrderState where UID_PersonWantsOrg = (from PersonHasObjectAndPWO select current UID_PersonWantsOrg)),false)" />
+          <Column Name="markedfordelete" DataType="System.Boolean" ScriptItemUID="Column30" TriggerUpdates="Updates" />
+          <Column Name="markedforunsubscribe" DataType="System.Boolean" ScriptItemUID="Column35" TriggerUpdates="Updates" />
+          <Column DataType="System.Boolean" Name="IsNested" ScriptItemUID="Column36" />
+        </DataTableSQL>
+        <DataTableGeneric Table="PersonAssignmentObjects" ScriptItemUID="DataTableGeneric1">
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column14" />
+        </DataTableGeneric>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="CountPWOUnsubscribeGenerated" DataType="System.Int32" ScriptItemUID="Column15" />
+          <Column Name="CountDirectAssignmentsDeleted" DataType="System.Int32" ScriptItemUID="Column17" />
+          <Column Name="OrgType" DataType="System.String" ScriptItemUID="Column18" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOS" ScriptItemUID="DataTableDbObject6">
+          <ActionSequence ScriptItemUID="Action20" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column16" DataSource="Expression" Expression="true" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="PersonObjects" PrimaryKeyColumn="custompk" ScriptItemUID="DataTableGeneric2">
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column20" />
+          <Column Name="PK" DataType="System.String" ScriptItemUID="Column21" />
+          <Column Name="ObjectKey" DataType="System.String" ScriptItemUID="Column22" />
+          <Column Name="custompk" DataType="System.String" ScriptItemUID="Column19" />
+        </DataTableGeneric>
+        <DataTableDbObject Table="PersonCandidate" ScriptItemUID="DataTableDbObject2" WhereClauseSQL="from allobjects select current&#xD;&#xA;sqland(&#xD;&#xA;getconfig(&quot;VI_ITShop_Filter_PersonMembershipRequestFor&quot;),&#xD;&#xA;&#xD;&#xA;-- do not filter on request permission here, too expensive to evaluate for a COUNT!&#xD;&#xA;&#xD;&#xA;Format(&quot;&#xD;&#xA;UID_Person not in(&#xD;&#xA;select UID_PersonOrdered from PersonWantsOrg where OrderState in (select OrderState from qer_vpwoorderstate where IsAssigned = 1 or IsOrder = 1)&#xD;&#xA;and (({1} and ObjectKeyElementUsedInAssign = Person.XObjectKey) or ObjectKeyOrdered = '{0}'))&quot;,&#xD;&#xA;GetObjectKey(),&#xD;&#xA;sqlcompareuid(&quot;ObjectKeyOrgUsedInAssign&quot;, getobjectkey(TableName, pk, &quot;&quot;))&#xD;&#xA;))" Class="Person">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="UID_SelectedPerson" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="UID_PersonHasObjectAndPwo" DataType="System.String" ScriptItemUID="Column23" />
+          <Column DataType="System.String" Name="UID_ACCProduct" ScriptItemUID="Column39" />
+        </DataTableSingleRow>
+        <DataTableDbObject Table="PersonTMP" Class="Person" TriggerUpdates="Never" ScriptItemUID="DataTableDbObject5">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject7" Table="AssignmentProducts" Class="AccProduct" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action24" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="ShowPersonAssignments">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action34">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call5">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container72">
+                    <ControlReferenceContainer ID="VI_Roles_EntitlementDetective" ScriptItemUID="ControlRef101">
+                      <VirtualFunctionMapping ID="UID_Person()" Value="from personhasobjectandpwo select current uid_person" ScriptItemUID="VirtualFunctionMapping27" />
+                      <VirtualFunctionMapping ID="ObjectKeyEntitlement()" Value="from personhasobjectandpwo select current ObjectKeyTarget" ScriptItemUID="VirtualFunctionMapping28" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container71">
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef6" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="from personhasobjectandpwo select current DisplayPerson" ScriptItemUID="VirtualFunctionMapping29" />
+                <VirtualFunctionMapping ID="TableName()" Value="&quot;Person&quot;" ScriptItemUID="VirtualFunctionMapping30" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="PersonHasObjectAndPWO" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="ShowEntitlementAssignments">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action35">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call6">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container74">
+                    <ControlReferenceContainer ID="VI_Roles_EntitlementDetective" ScriptItemUID="ControlRef11">
+                      <VirtualFunctionMapping ID="UID_Person()" Value="from PersonHasObjectAndPWO select current UID_Person" ScriptItemUID="VirtualFunctionMapping31" />
+                      <VirtualFunctionMapping ID="ObjectKeyEntitlement()" Value="from PersonObjects select ObjectKey where PK = (from PersonHasObjectAndPWO select current PK)" ScriptItemUID="VirtualFunctionMapping32" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container73">
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef8" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="from personhasobjectandpwo select current DisplayEntitlement" ScriptItemUID="VirtualFunctionMapping33" />
+                <VirtualFunctionMapping ID="TableName()" Value="from PersonObjects select TableName where PK = (from PersonHasObjectAndPWO select current PK)" ScriptItemUID="VirtualFunctionMapping34" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="PersonHasObjectAndPWO" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="ShowRequestInformation">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action36">
+              <ForeachRow DataTable="PWOS" WhereClause="UID_PersonWantsOrg = (from PersonHasObjectAndPWO select current UID_PersonWantsOrg)" ScriptItemUID="ForeachRow7">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call7">
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="from PWOS select current Display()" ScriptItemUID="VirtualFunctionMapping35" />
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container76">
+                      <Container ScriptItemUID="Container77">
+                        <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlRef3">
+                          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PWOS" ScriptItemUID="VirtualTableMapping8" />
+                        </ControlReferenceContainer>
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container75">
+                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef9" />
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="TableName()" Value="&quot;PersonWantsOrg&quot;" ScriptItemUID="VirtualFunctionMapping36" />
+                </CallAction>
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="PersonHasObjectAndPWO" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="UNSUBSCRIBE">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action22" Condition="0 &lt; (from PersonHasObjectAndPWO select count() where markedforunsubscribe)">
+              <SwitchAction ScriptItemUID="Switch4">
+                <SwitchActionCase ScriptItemUID="Case5" Condition="isnull(getconfig(&quot;VI_ITShop_ProlongateOrCancel_Without_ShoppingCartOrder&quot;), &quot;True&quot;) = &quot;True&quot;">
+                  <CallAction ScriptItemUID="Call8" ActionID="UNSUBSCRIBE_PWO" />
+                </SwitchActionCase>
+                <SwitchActionCase ScriptItemUID="Case10">
+                  <CallAction ScriptItemUID="Call9" ActionID="UNSUBSCRIBE_SHOPPINGCART" />
+                </SwitchActionCase>
+              </SwitchAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UNSUBSCRIBE_SHOPPINGCART">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action15">
+              <Delete DataTable="ShoppingCartItem" ScriptItemUID="Delete5" />
+              <ActionSequence ScriptItemUID="Action28">
+                <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="CallAction15">
+                  <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping7" />
+                </CallAction>
+              </ActionSequence>
+              <ForeachRow DataTable="PersonHasObjectAndPWO" WhereClause="markedforunsubscribe" ScriptItemUID="ForeachRow4">
+                <Insert DataTable="ShoppingCartItem" ScriptItemUID="Insert1">
+                  <ActionSequence ScriptItemUID="Action29" />
+                  <InsertValue DataColumn="UID_AccProduct" Value="from personhasobjectandpwo select current singleproperty(&quot;itshoporg&quot;, &quot;uid_accproduct&quot;, format(&quot;uid_itshoporg in ( select uid_org from personwantsorg where uid_personwantsorg = '{0}')&quot;, uid_personwantsorg))" />
+                  <InsertValue DataColumn="UID_PersonInserted" Value="getuser()" />
+                  <InsertValue DataColumn="UID_PersonOrdered" Value="from PWOS select UID_PersonOrdered where UID_PersonWantsOrg = (from PersonHasObjectAndPWO select current UID_PersonWantsOrg)" />
+                  <InsertValue DataColumn="UID_ShoppingCartOrder" Value="select top 1 uid_shoppingcartorder from shoppingcartorder" />
+                  <InsertValue DataColumn="UID_PersonWantsOrg" Value="from personhasobjectandpwo select current uid_personwantsorg" />
+                  <InsertValue DataColumn="MethodName" Value="'Unsubscribe(string, string)'" />
+                  <InsertValue DataColumn="MethodParameters" Value="format(&quot;{0}{1}{2}&quot;,getuser(), Char(7), &quot;&quot;)&#xA;" />
+                  <InsertValue DataColumn="UID_ITShopOrg" Value="from personhasobjectandpwo select current singleproperty(&quot;itshoporg&quot;, &quot;uid_itshoporg&quot;, format(&quot;uid_itshoporg in ( select uid_org from personwantsorg where uid_personwantsorg = '{0}')&quot;, uid_personwantsorg))" />
+                  <InsertValue DataColumn="OrderReason" Value="&quot;&quot;&#xA;" />
+                </Insert>
+              </ForeachRow>
+              <Save DataTable="ShoppingCartItem" ScriptItemUID="Save1" />
+              <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction14" />
+              <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedforunsubscribe" Value="0" WhereClause="markedforunsubscribe" ScriptItemUID="Update12" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call10">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#{0} cancellation(s) have been added to the shopping cart.&quot;, from container select CountPWOUnsubscribeGenerated )" ScriptItemUID="VirtualFunctionMapping42" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping41" />
+              </CallAction>
+              <ActionSequence Condition="ispreprop(&quot;ITSHOP&quot;)" ScriptItemUID="Action32">
+                <ActionOnControl />
+                <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCart" AllowReturnToThisContext="true" ScriptItemUID="Redirect2" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UNSUBSCRIBE_PWO">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action19">
+              <Method DataTable="PWOS" Method="Unsubscribe" WhereClause="UID_PersonWantsOrg in(&#xD;&#xA;   from PersonHasObjectAndPWO select UID_PersonWantsOrg where markedforunsubscribe&#xD;&#xA;)">
+                <MethodParameter Name="&quot;uidPerson&quot;" Value="GetUser()" />
+                <MethodParameter Name="&quot;reason&quot;" Value="&quot;&quot;" />
+              </Method>
+              <Delete DataTable="PersonHasObjectAndPWO" WhereClause="(XOrigin = 8) and markedforunsubscribe&#xD;&#xA;and&#xD;&#xA;UID_PersonWantsOrg in(&#xD;&#xA;   from PWOS select UID_PersonWantsOrg where orderstate = 'Unsubscribed' and not(IsNullOrEmpty(ObjectKeyAssignment))&#xD;&#xA;)&#xD;&#xA;" ScriptItemUID="Delete8" />
+              <Update DataTable="PersonHasObjectAndPWO" DataColumn="XOrigin" WhereClause="(XOrigin &gt; 8) and markedforunsubscribe&#xD;&#xA;and&#xD;&#xA;UID_PersonWantsOrg in(   &#xD;&#xA;   from PWOS select UID_PersonWantsOrg where orderstate = 'Unsubscribed' and not(IsNullOrEmpty(ObjectKeyAssignment))&#xD;&#xA;)" Value="XOrigin - 8" ScriptItemUID="Update10" />
+              <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedforunsubscribe" Value="0" WhereClause="markedforunsubscribe" ScriptItemUID="Update11" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
+                <VirtualFunctionMapping ID="MessageText()" Value="format(&quot;{0} {1}&quot;,&#xD;&#xA;translate(&quot;#LDS#{0} requests have been canceled.&quot;, from container select CountPWOUnsubscribeGenerated)&#xD;&#xA;, translate(&quot;#LDS#The changes may take a few moments to be take effect.&quot;))" ScriptItemUID="VirtualFunctionMapping40" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping39" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="DELETE_DIRECT">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action21" Condition="0 &lt; (from Container select CountDirectAssignmentsDeleted)">
+              <ActionSequence ItemUID="Direct assignment" ScriptItemUID="Action30">
+                <Delete DataTable="PersonAssignmentObjects" ScriptItemUID="Delete6" />
+                <FillTable Source="XObjectKey" DataTable="PersonAssignmentObjects" DataTableSource="PersonHasObjectAndPWO" DataColumnSource="ObjectKeyAssignment" ResolveMNObjects="NoResolve" WhereClause="markedfordelete" DataColumnXObjectKey="XObjectKey" ScriptItemUID="FillTable2">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeForeignDisplays="false" />
+                </FillTable>
+                <Delete DataTable="PersonAssignmentObjects" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete7" />
+              </ActionSequence>
+              <Delete DataTable="PersonHasObjectAndPWO" WhereClause="(XOrigin = 1) and markedfordelete" ScriptItemUID="Delete2" />
+              <Update DataTable="PersonHasObjectAndPWO" DataColumn="XOrigin" WhereClause="markedfordelete" Value="XOrigin - 1" ScriptItemUID="Update7" />
+              <Update DataTable="PersonHasObjectAndPWO" DataColumn="markedfordelete" Value="0" WhereClause="markedfordelete" ScriptItemUID="Update8" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#{0} direct assignment(s) have been deleted.&quot;, from container select CountDirectAssignmentsDeleted)" ScriptItemUID="VirtualFunctionMapping38" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping37" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsBitSet(int x1, int x2)" Expression="{{ (x1 &amp; x2) &gt; 0 }}" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="IsForMembershipPerson()" ScriptItemUID="Function2" FunctionType="FunctionResultSetList" TriggerUpdates="Never">
+          <FunctionValueList ScriptItemUID="FunctionValueList1">
+            <FunctionValue Expression="from allobjects select current (tablename in ('AERole', 'Department', 'Profitcenter', 'Locality', 'Person'))" />
+            <FunctionValue Expression="select current (dbtable()=&quot;QERResource&quot;) from AllObjects" />
+            <FunctionValue Expression="select current (dbtable()=&quot;QERReuseUS&quot;) from AllObjects" />
+          </FunctionValueList>
+        </Function>
+        <Function Name="GetUIDPersonFromObjectkeyAssignment(String objectkey, String uidorg)" Expression="{{&#xD;&#xA;string _res = &quot;&quot;;&#xD;&#xA;try{&#xD;&#xA;   var DB = new DbObjectKey(objectkey);&#xD;&#xA;   if(uidorg.Equals(DB.Keys[0]))&#xD;&#xA;      _res = DB.Keys[1];&#xD;&#xA;   else if(uidorg.Equals(DB.Keys[1]))&#xD;&#xA;      _res = DB.Keys[0];&#xD;&#xA;}&#xD;&#xA;catch{}&#xD;&#xA;@return _res;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="HaveItemsToDelete()" Expression="0 &lt; (from  PersonHasObjectAndPWO select count() where &#xD;&#xA;isAssigned&#xD;&#xA;or&#xD;&#xA;(not(isnullorempty(objectkeyassignment)) and IsDirectAssignment)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" DataType="System.Boolean" ScriptItemUID="Function4" TriggerUpdates="Updates" />
+        <Function Name="BuildMnDisplay(string key)" Expression="{{&#xD;&#xA;&#xD;&#xA;string result;&#xD;&#xA;try&#xD;&#xA;{&#xD;&#xA;result = new DbObjectKey(key).GetMnDisplayAsync(_Database).Result;&#xD;&#xA;}&#xD;&#xA;catch {&#xD;&#xA;  // ignore errors&#xD;&#xA;  result = string.Empty;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return result;&#xD;&#xA;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function5" />
+        <Function ScriptItemUID="Function6" Name="GetCaptionPending()" DataType="System.String" Expression="translate(&quot;#LDS#Pending assignment (not yet active)&quot;)" />
+        <Function ScriptItemUID="Function7" Name="GetCaptionPrimary()" DataType="System.String" Expression="translate(&quot;#LDS#Primary assignment&quot;)" />
+        <Function ScriptItemUID="Function8" Name="GetMaxXOriginBit()" DataType="System.Int32" Expression="-- must be changed when XOrigin changes. ..&#xD;&#xA;{{ (int) XOrigin.Ordered }}" />
+        <Function ScriptItemUID="Function9" Name="GetDisplayWithCache(string input)" DataType="System.String" Expression="{{&#xD;&#xA;@return GetDisplayFromCache(input);&#xD;&#xA;}}" />
+        <Function ScriptItemUID="Function10" Name="GetTableNameDisplayWithCache(string input)" DataType="System.String" Expression="{{&#xD;&#xA;@return GetTableNameDisplayFromCache(input);&#xD;&#xA;}}" />
+        <Function ScriptItemUID="Function11" Name="GetCaptionNested()" DataType="System.String" Expression="translate(&quot;#LDS#Assigned by child group&quot;)" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AllObjects" RequiresCursor="true" ScriptItemUID="VirtualTable1" TriggerUpdates="Never">
+        <Column Name="DynamicGroup" DataType="System.String" Expression="select top 1 uid_dynamicgroup from dynamicgroup" DataSource="Expression" ScriptItemUID="Column29" />
+        <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
+        <Column DataType="System.String" ScriptItemUID="Column31" Name="TableName" DataSource="Expression" Expression="dbtable()" />
+        <Column Name="PK" DataType="System.String" ScriptItemUID="Column32" DataSource="Expression" Expression="primarykey()" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="HeadLineIfData" ContainerType="Container" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

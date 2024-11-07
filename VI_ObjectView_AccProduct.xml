@@ -1,0 +1,85 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
+  <GlobalControl ID="VI_ObjectView_AccProduct" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_Filter_DialogTag" Description="translate('#LDS#Filter for IT shop tags')" Type="SQL" DatabaseTable="DialogTag" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action3">
+        <LoadTable DataTable="QERAccProductUsage" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1">
+          <Action ScriptItemUID="Action1">
+            <ActionSequence Condition="getconfig(&quot;VI_ITShop_AccProduct_Tags&quot;)=&quot;true&quot;" ScriptItemUID="Action2">
+              <LoadTable DataTable="DialogTag" RemoveDeleted="false" RevertExisting="false" ScriptItemUID="LoadTable1" WhereClause="format(&quot;UID_DialogTag in(select UID_DialogTag from DialogTaggedItem where {0})&quot;,&#xD;&#xA;sqland(sqlcompareuid(&quot;ObjectKey&quot;, from SourceObject select current xobjectkey),&#xD;&#xA;getconfig(&quot;VI_ITShop_Filter_DialogTag&quot;)&#xD;&#xA;))">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              </LoadTable>
+            </ActionSequence>
+          </Action>
+        </Activator>
+        <Tab ScriptItemUID="Tab2" Layout="if (ShowAsPrimaryTab()) then 'VI_Styles_Tab_Default' else 'VI_Styles_Tab_Secondary'">
+          <TabPage ScriptItemUID="TabPage2" ItemUID="Service Item">
+            <ControlsHeader ScriptItemUID="Container5">
+              <Label Text="DataCaptionSingle(&quot;AccProduct&quot;)" ScriptItemUID="Label2" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container6">
+              <Container Condition="select current not(isnull(jpegphoto)) from SourceObject" ScriptItemUID="Container7">
+                <Image Source="DataSet" DataTable="SourceObject" DataColumn="JPegPhoto" ScriptItemUID="Image2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="datacaption(sourceobject, jpegphoto)" />
+                  </HtmlAttributes>
+                </Image>
+              </Container>
+              <ControlReferenceContainer ID="VI_ObjectView_Default" ScriptItemUID="ControlRef2">
+                <VirtualTableMapping VirtualTable="SourceObject" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceContainer>
+              <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                  <ColumnList ScriptItemUID="ColumnList1">
+                    <SingleColumn ScriptItemUID="SingleColumn1" Caption="translate(&quot;#LDS#Type of service item&quot;)" Value="datacaptionsingle( from qeraccproductusage select top 1 tablename where uid_accproduct = ( from sourceobject select current uid_accproduct))" />
+                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DialogTags" Condition="getconfig(&quot;VI_ITShop_AccProduct_Tags&quot;)=&quot;true&quot;" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping2" />
+              </ControlReferenceContainer>
+            </ControlsBody>
+          </TabPage>
+          <TabPage ScriptItemUID="QERTabPage1" Condition="not(isnullorempty(from sourceobject select current uid_org))">
+            <ControlsHeader ScriptItemUID="QERContainer1">
+              <Label Text="translate(&quot;#LDS#Entitlements&quot;)" ScriptItemUID="QERLabel1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="QERContainer2">
+              <ControlReferenceControlList ID="QER_EntitlementList" ScriptItemUID="QERControlRef1">
+                <VirtualFunctionMapping ID="UidOrg()" Value="from sourceobject select current uid_org" ScriptItemUID="QERVirtualFunctionMapping1" />
+              </ControlReferenceControlList>
+            </ControlsBody>
+          </TabPage>
+        </Tab>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="DialogTag" Table="DialogTag" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="QERAccProductUsage" Table="QERAccProductUsage" ScriptItemUID="DataTableDbObject3" WhereClauseSQL="format(&quot;uid_accproduct = {0}&quot;, sqlformatvalue(from sourceobject select current uid_accproduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="AccProduct" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="DialogTags" DataType="System.String" ScriptItemUID="Column2" DataSource="Expression" Expression="Concat((from dialogtag select __Display order by __Display), char(7))" Caption="translate(&quot;#LDS#Tags&quot;)" Description="translate(&quot;#LDS#Tags assigned to this service item&quot;)" IsMultiValued="true" />
+        <Column Name="UID_Org" DataType="System.String" ScriptItemUID="Column1" DataSource="Expression" Expression="singleproperty(&quot;BaseTree&quot;, &quot;UID_Org&quot;, format(&quot;XObjectKey in ( select a.ObjectKeyassigntarget from qerassign a join accproduct accp on accp.uid_accproduct = a.uid_accproduct where a.uid_accproduct = {0})&quot;, sqlformatvalue(from sourceobject select current uid_accproduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" />
+      </VirtualTableExtension>
+      <VirtualFunction Signature="ShowAsPrimaryTab()" DataType="System.Boolean" DefaultValue="True" Comment="As a default this component has primary tabs.&#xD;&#xA;If this component is used in a Master-Detail-Control it looks nicer if you use a secondary tab." TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

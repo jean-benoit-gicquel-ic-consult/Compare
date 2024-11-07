@@ -1,0 +1,133 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Attestation_MyAttestations" HelpChapterUid="&quot;5CF6940B-F846-4B46-9A90-D2A6A3302B6E&quot;" MigrationNotes="DIALOGCONFIGPARM;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="uid_attestationpolicy" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="Attestation" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_Attestation_NEW_POLICY_DEFAULT_SOLUTION_DAYS" Description="translate(&quot;#LDS#Default number of days to approve attestation cases&quot;)" LongDescription="translate(&quot;#LDS#Default number of days for solving attestation cases used when creating a new attestation policy&quot;)" Type="Text" />
+        <ConfigParam Key="VI_Attestation_NEW_POLICY_DEFAULT_IS_AUTO_CLOSE_OLD_CASES" Description="translate(&quot;#LDS#Default auto-close for NEW policies&quot;)" LongDescription="translate(&quot;#LDS#Close old cases on attestation policies by default&quot;)" />
+        <ConfigParam Key="VI_Attestation_VISIBLE_POLICY_IS_AUTO_CLOSE_OLD_CASES" Description="translate(&quot;#LDS#Display setting to automatically close old attestation cases&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_Dashboard_Attestation_BO_Dashboards" Description="translate(&quot;#LDS#Attestation statistics for policy owners&quot;)" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="AttestationPolicy" Table="AttestationPolicy" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+        <Column Name="LastRun" Expression="convert(ObjectWalker(&quot;FK(UID_DialogSchedule).LastRun&quot;), &quot;System.DateTime&quot;)" DataSource="Expression" ScriptItemUID="Column1" DataType="System.DateTime" />
+        <Column Name="NextRun" Expression="convert(ObjectWalker(&quot;FK(UID_DialogSchedule).NextRun&quot;), &quot;System.DateTime&quot;)" DataSource="Expression" ScriptItemUID="Column2" DataType="System.DateTime" />
+        <Column Name="Ident_AttestationType" Expression="ObjectWalker(&quot;FK(uid_attestationobject).FK(uid_attestationtype).Ident_Attestationtype&quot;)+&quot;&quot;" DataSource="Expression" ScriptItemUID="Column3" DataType="System.String" />
+      </DataTableDbObject>
+      <DataTableDbObject Class="AttestationPolicy" Table="AttestationPolicyEdit" ScriptItemUID="DataTableDbObject2">
+        <ActionSequence ScriptItemUID="Action2" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="CurrentPolicyIsNew()" Expression="not (from AttestationPolicyEdit select top 1 IsLoaded())" DataType="System.Boolean" ScriptItemUID="Function1" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action3" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="FormOverview" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Heading Attestation Policies&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action5">
+          <ActionSequence ItemUID="if uid_attestationpolicy provided" Condition="not IsNullOrEmpty(Request(&quot;uid_attestationpolicy&quot;))&#xA;" ScriptItemUID="Action4">
+            <LoadTable DataTable="AttestationPolicyEdit" WhereClause="format(&quot;uid_attestationpolicy = '{0}'&quot;, request(&quot;uid_attestationpolicy&quot;))" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+            </LoadTable>
+            <Redirect FormID="FormCreateEdit" ScriptItemUID="Redirect1" />
+          </ActionSequence>
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#Attestation Policy Settings&quot;)" ScriptItemUID="Label3" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <ControlReferenceContainer ID="VI_Attestation_AttestationPolicyGrid" ScriptItemUID="ControlRef2">
+              <VirtualControlMapping VirtualControl="OnEdit" ContainerType="ActionComponent">
+                <ActionComponent ScriptItemUID="Action6">
+                  <Redirect FormID="FormCreateEdit" ScriptItemUID="Redirect2" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualTableMapping VirtualTable="AttestationPolicyEdit" DataTable="AttestationPolicyEdit" ScriptItemUID="VirtualTableMapping1" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer5" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList5">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Text()" Value="translate(&quot;#LDS#The following attestation policies have been defined.&quot;)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+      <Form ID="FormCreateEdit" PageFileName="VI_FormTemplate_Standard" NavigationTitle="if(CurrentPolicyIsNew()) then (translate(&quot;#LDS#Create New Attestation Policy&quot;)) else translate(&quot;#LDS#Edit Attestation Policy&quot;)" ScriptItemUID="Form2">
+        <ActionSequence ScriptItemUID="Action7" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+          <Label Text="if(CurrentPolicyIsNew()) then&#xA;translate(&quot;#LDS#Create New Attestation Policy&quot;) else&#xA;translate(&quot;#LDS#Edit Attestation Policy&quot;)" ScriptItemUID="Label4" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+          <Container ScriptItemUID="Container6">
+            <Tab ScriptItemUID="Tab2">
+              <TabPage ScriptItemUID="TabPage3">
+                <ControlsHeader ScriptItemUID="Container3">
+                  <Label Text="translate(&quot;#LDS#Main Data&quot;)" ScriptItemUID="Label5" />
+                </ControlsHeader>
+                <ControlsBody ScriptItemUID="Container1">
+                  <ControlReferenceContainer ID="VI_Attestation_CreateEdit_AttestationPolicy" ScriptItemUID="ControlRef3">
+                    <VirtualTableMapping VirtualTable="AttestationPolicy" DataTable="AttestationPolicyEdit" ScriptItemUID="VirtualTableMapping2" />
+                    <VirtualControlMapping VirtualControl="OnCancel" ContainerType="ActionComponent">
+                      <ActionComponent ItemUID="Clearing AttestationPolicyEdit so that we would have a clean state if we edit the same again immediately" ScriptItemUID="Action8">
+                        <Delete DataTable="AttestationPolicyEdit" ScriptItemUID="Delete1" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                  </ControlReferenceContainer>
+                </ControlsBody>
+              </TabPage>
+              <TabPage ScriptItemUID="TabPage4" Condition="not(CurrentPolicyIsNew())">
+                <ControlsHeader ScriptItemUID="Container4">
+                  <Label Text="translate(&quot;#LDS#Statistics&quot;)" ScriptItemUID="Label7" />
+                </ControlsHeader>
+                <ControlsBody ScriptItemUID="Container5">
+                  <CodeLiteral ScriptItemUID="CodeLiteral1">var charts = (System.Collections.Generic.List&lt;object&gt;) _UserSession.ApplicationInfo.ConfigObjects["VI_Dashboard_Attestation_BO_Dashboards"];
+	
+var objKey = ((IDbObjectRow) DataContext.AttestationPolicyEdit.First()).ObjectKey.ToXmlString();
+
+var whereClause = _Connection.SqlFormatter.UidComparison("ElementObjectKey", objKey);
+foreach (var info in charts)
+{
+	if (info is VI.WebRuntime.WebControls.HeatmapControlInfo) {
+		var c = new CustomizableView();
+		c.ClearData = true;
+		Container5.Controls.Add(c);
+
+		c.CreateHeatmapControl(new []{info as VI.WebRuntime.WebControls.HeatmapControlInfo});
+	}
+	
+	
+	if (info is VI.WebRuntime.WebControls.ChartControlInfo)
+	{
+		var theChartCopy = new ChartControlInfo(info as VI.WebRuntime.WebControls.ChartControlInfo);
+		theChartCopy.IconSize = false;
+		theChartCopy.AdditionalWhereClause = whereClause;
+		var c = new CustomizableView();
+		c.ClearData = true;
+		Container5.Controls.Add(c);
+		
+		c.CreateChartControl(new []{theChartCopy});
+	}
+	
+}
+
+
+</CodeLiteral>
+                </ControlsBody>
+              </TabPage>
+            </Tab>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

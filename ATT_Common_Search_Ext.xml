@@ -1,0 +1,19 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="23b3cd98-b90e-9b41-8a40-abcc4792d885">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Common_Search_Ext">
+    <Extensions>
+      <AddObject ObjectID="ServerActionCall3" ObjectType="ServerActionCall" SortOrder="10">
+        <ActionSequence Condition="getconfigparm(&quot;QER\Attestation&quot;)=&quot;1&quot; and&#xD;&#xA;(select current dbtablename from results)= 'AttestationPolicy'" ItemUID="ATTESTATIONPOLICY" ScriptItemUID="ATTAction1">
+          <Redirect Target="Context" ContextID="VI_Attestation_MyAttestations" AllowReturnToThisContext="true" ScriptItemUID="ATTRedirect1">
+            <RedirectParameter Name="'uid_attestationpolicy'" Value="from results select current primarykey()" />
+          </Redirect>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="25">
+        <Insert DataTable="Tables" ScriptItemUID="ATTInsert1">
+          <ActionSequence ScriptItemUID="ATTAction2" />
+          <InsertValue Value="&quot;AttestationCase&quot;" DataColumn="Name" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

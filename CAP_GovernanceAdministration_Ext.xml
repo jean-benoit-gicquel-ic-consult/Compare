@@ -1,0 +1,46 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CAP_GovernanceAdministration_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="15">
+        <SwitchContainer ScriptItemUID="TileComplianceFrameworks">
+          <SwitchContainerCase ScriptItemUID="CAPCase1" Condition="IsPreProp('COMPLIANCE') and exists(&quot;compliancearea&quot;, format(&quot;uid_orgresponsible in ( select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where xorigin &gt; 0 and uid_person = '{0}' ))&quot;, from user select uid_person))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="CAPContainer1" ItemUID="Compliance Frameworks">
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping12" ID="Identifier()" Value="&quot;Compliance Frameworks&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CAPAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_ComplianceArea" ScriptItemUID="CAPRedirect3" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Compliance Frameworks&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping13" ID="Image()" Value="&quot;ComplianceArea&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping10" ID="Value()" Value="translate('#LDS#Shows compliance information organized by framework.')" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping11" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping15" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="25">
+        <SwitchContainer ScriptItemUID="TileHighRiskOverview">
+          <SwitchContainerCase ScriptItemUID="CAPCase2" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in (&#xD;&#xA;select uid_aerole from AERole where UID_AERole in ('CAP-AEROLE-IAG-CISO', 'CAP-AEROLE-AUDITING-AUDITOR') and uid_DialogGroup in (select uid_dialoggroup from DialogGroup where isdeactivatedbypreprocessor = 0)&#xD;&#xA;)&quot;&#xD;&#xA;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="CAPContainer2" ItemUID="High Risk Overview">
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping17" ID="Identifier()" Value="&quot;High Risk Overview&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CAPAction1">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_HighRiskOverview" ScriptItemUID="CAPRedirect1" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Heading High Risk Overview&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping18" ID="Image()" Value="&quot;QERRiskIndex&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping5" ID="Value()" Value="translate('#LDS#Shows statistics grouped by type. This page also shows high-risk business objects of different types.')" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping16" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping19" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="CAPVirtualFunctionMapping20" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

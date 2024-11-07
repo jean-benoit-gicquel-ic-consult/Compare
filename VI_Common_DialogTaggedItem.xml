@@ -1,0 +1,138 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_DialogTaggedItem" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action6">
+        <LoadTable DataTable="DialogTaggedItem" WhereClause="format(&quot;ObjectKey = {0}&quot;, sqlformatvalue(from object select current xobjectkey, &quot;string&quot;))" RemoveDeleted="false" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#The following tags are associated with {0}.&quot;, from object select current display())" ScriptItemUID="VirtualFunctionMapping1" />
+        </ControlReferenceContainer>
+        <Container ScriptItemUID="Container2" />
+        <Container ScriptItemUID="Container3">
+          <Label ScriptItemUID="Label1" Text="" />
+        </Container>
+        <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container4style" Value="&quot;margin-bottom: 16px; min-height: 160px;&quot;" />
+          </HtmlAttributes>
+          <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;DialogTag&quot;))" ActionType="ObjectCollection">
+            <VirtualControlMapping VirtualControl="ElementSelected" ContainerType="ActionComponent">
+              <ActionComponent ScriptItemUID="Action1">
+                <ActionSequence Condition="iscurrentobjectassigned()" ScriptItemUID="Action2">
+                  <Delete DataTable="DialogTaggedItem" WhereClause="currentobjectfilter()" SetDeletionFlag="DeleteDeferred" ScriptItemUID="Delete1" />
+                  <EndExecution />
+                </ActionSequence>
+                <ActionSequence Condition="not(iscurrentobjectassigned())" ScriptItemUID="Action3">
+                  <Insert DataTable="DialogTaggedItem" ScriptItemUID="Insert1">
+                    <ActionSequence ScriptItemUID="Action4" />
+                    <InsertValue DataColumn="UID_DialogTag" Value="from dialogtag select current uid_dialogtag" />
+                    <InsertValue DataColumn="ObjectKey" Value="from object select current xobjectkey" />
+                  </Insert>
+                </ActionSequence>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="TableName()" Value="&quot;DialogTag&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="CssClass()" Value="if(IsCurrentobjectAssigned())&#xA;then&#xA;&quot;imx-icon imx-icon-AssignedDirect&quot;&#xA;else&#xA;&quot;imx-icon imx-icon-AssignedNone&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+            <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="DialogTag" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="DbWhereClause()" Value="if(IsNull(tagtype(),&quot;&quot;) &lt;&gt; &quot;&quot;)then&#xD;&#xA;   format(&quot;tagtype = {0}&quot;, sqlformatvalue(tagtype(),&quot;string&quot;))&#xD;&#xA;else&#xD;&#xA;   getconfig(&quot;VI_ITShop_Filter_DialogTag&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+          </ObjectSwitchContainer>
+        </Container>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container5">
+          <Container Layout="'VI_Styles_Container_Inline'" Condition="AllowAddNewTag()" ScriptItemUID="Container6">
+            <Button Text="translate(&quot;#LDS#New tag&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button3">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Delete DataTable="DialogTag" WhereClause="isnullorempty(xdateinserted) -- all non-saved objects" ScriptItemUID="Delete2" />
+                <Insert DataTable="DialogTag" ScriptItemUID="Insert2">
+                  <ActionSequence ScriptItemUID="Action5" />
+                  <InsertValue DataColumn="TagType" Value="if(IsNull(TagType(),&quot;&quot;) &lt;&gt; &quot;&quot;)then&#xD;&#xA;   TagType()&#xD;&#xA;else&#xD;&#xA;    &quot;ITSHOP&quot;" />
+                </Insert>
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container7">
+                      <Container ItemUIDReference="savebutton" ScriptItemUID="Container8">
+                        <ContainerTemplate DataTable="DialogTag" WhereClause="isnullorempty(xdateinserted)" ScriptItemUID="ContainerTemplate1">
+                          <Container ScriptItemUID="Container9">
+                            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef2">
+                              <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping5">
+                                <ColumnList ScriptItemUID="ColumnList1">
+                                  <SingleColumn DataColumn="Ident_DialogTag" ScriptItemUID="SingleColumn1" />
+                                  <SingleColumn DataColumn="Description" ScriptItemUID="SingleColumn2" />
+                                </ColumnList>
+                              </VirtualFunctionMapping>
+                              <VirtualTableMapping VirtualTable="EditTable" DataTable="DialogTag" ScriptItemUID="VirtualTableMapping2" />
+                            </ControlReferenceContainer>
+                          </Container>
+                        </ContainerTemplate>
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container10">
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="Button1" AssociatedWithEscapeKey="true" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <Delete DataTable="DialogTag" WhereClause="isnullorempty(xdateinserted) -- all non-saved objects" ScriptItemUID="Delete3" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button2" ItemUID="savebutton">
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <Save DataTable="DialogTag" WhereClause="isnullorempty(xdateinserted) -- all non-saved objects" HandleDeleteDeferred="false" ScriptItemUID="Save1" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Create a new tag&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="Button4">
+            <ServerActionCall ScriptItemUID="ServerActionCall4">
+              <Save DataTable="DialogTaggedItem" WhereClause="objectkey = ( select current xobjectkey from object)" ScriptItemUID="Save2" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call1">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping8" />
+              </CallAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="DialogTag" Table="DialogTag" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+          <Column Name="SourceKey" Expression="&quot;&quot;" DataSource="Expression" ScriptItemUID="Column1" DataType="System.String" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogTaggedItem" Table="DialogTaggedItem" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action8" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsCurrentobjectAssigned()" Expression="0 &lt; select count() from dialogtaggeditem where currentobjectfilter()" DataType="System.Boolean" ScriptItemUID="Function1">
+          <DataTableCursor DataTable="DialogTag" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="CurrentObjectFilter()" Expression="(objectkey = ( from Object select current xobjectkey) and uid_dialogtag = ( select current uid_dialogtag from dialogtag))" FilterForTable="DialogTaggedItem" DataType="System.Boolean" ScriptItemUID="Function2">
+          <DataTableCursor DataTable="DialogTag" ScriptItemUID="DataTableCursor2" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="TagType()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AllowAddNewTag()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

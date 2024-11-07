@@ -1,0 +1,114 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Masthead" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="masthead imx-toggleMastHead" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.masthead { 	
+  position: absolute; 
+  left: 0; 
+  top: 0; 
+  right: 0; 
+  height: %headerheight%px;
+  width: 100%;
+  padding: 0; 
+  margin: 0 auto;
+  background-color: %VI_Common_Color_MastHead%;
+  color: %VI_Common_Color_ColorBase1%; 
+}
+
+.masthead a.imx-dropdown-toggle {
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.masthead.imx-toggleMastHead .iconFont-logoWithProduct
+{
+  visibility: visible;
+  opacity: 1;
+}
+
+.masthead .imx-menudropdown-toggle {
+    height: %headerheight%px;
+    width: %headerheight%px;
+    text-align: center;
+}
+
+.masthead .imx-menudropdown-toggle:hover {
+    background-color: %VI_Common_Color_Blue_1%;
+}
+
+.masthead .imx-menudropdown-toggle .cux-icon--reorder {
+    font-size: 2.2em;
+}
+
+.masthead [menu-dropdown="cux-icon cux-icon--search"] .imx-menudropdown-toggle {
+	font-size: 1.3em;
+}
+
+.masthead [menu-dropdown="cux-icon cux-icon--search"] .imx-menudropdown {
+	top: %headerheight%px;
+}
+
+.masthead .imx-company-product-logo {
+      display: inline-flex;
+}
+
+@media (min-width: 1280px)
+{
+  .imx-nonMobile .masthead a.imx-dropdown-toggle {
+      max-width: 420px;
+  }
+}
+
+@media (max-width: 1280px)
+{
+  .imx-nonMobile .masthead a.imx-dropdown-toggle {
+      max-width: 220px;
+  }
+  /* hide production leve info on smaller screens */
+  .masthead span[data-imx-identifier="ProductionLevel"]
+  {
+      display: none;
+  }  
+}
+
+@media (max-width: 800px)
+{
+  .imx-nonMobile .masthead a.imx-dropdown-toggle,
+  .imx-mobile .masthead a.imx-dropdown-toggle
+  {
+      max-width: 120px;
+  }
+  
+  /* hide text - only show icon and caret */
+  .imx-nonMobile .masthead [data-imx-identifier="About"] a.imx-dropdown-toggle,
+  .imx-nonMobile .masthead [data-imx-identifier="Bookmarks"] a.imx-dropdown-toggle {
+      max-width: %headerheight%px;
+  }
+}
+
+@media %IMX_Mediaquery_Smartphone%
+{
+  .imx-mobile .masthead a.imx-dropdown-toggle {
+      max-width: 60px;
+  }
+  
+  .masthead .imx-company-product-logo {
+    position: absolute;
+  }
+}
+
+
+@media (max-width: 600px)
+{
+   /* hide text - only show icon and caret */
+  .masthead a.imx-dropdown-toggle {
+      max-width:  %headerheight%px !important;
+  }  
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

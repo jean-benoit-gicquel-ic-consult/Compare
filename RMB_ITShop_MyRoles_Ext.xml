@@ -1,0 +1,27 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_ITShop_MyRoles_Ext">
+    <Extensions>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select (&quot;BusinessRoles&quot; as area, translate(&quot;#LDS#Heading Business Roles&quot;) as caption)" />
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList2" ObjectType="FunctionValueList">
+        <FunctionValue Expression="select (&quot;BusinessRoles&quot; as area, translate('#LDS#You are responsible for the following business roles.') as caption)" />
+      </AddObject>
+      <AddObject ObjectID="Container2" ObjectType="Container" SortOrder="10">
+        <Container EnableCustomAttributes="true" ItemUID="Message for RMB-AEROLE-ROLEADMIN-ADMIN" Condition="Area() = 'BusinessRoles'&#xD;&#xA;and&#xD;&#xA;ispreprop(&quot;ORG&quot;) &#xD;&#xA;and exists(&quot;Person&quot;, variable(&quot;uid_person = '%useruid%' and uid_person in ( select piae.uid_person from personinaerole piae join AERoleCollection aec on aec.UID_AERole = piae.uid_aerole where aec.UID_ParentAERole = 'RMB-AEROLE-ROLEADMIN-ADMIN')&quot;))" ScriptItemUID="RMBContainer1">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" Value="&quot;padding-bottom: +10px;&quot;" ScriptItemUID="RMBHtmlAttribute1" />
+          </HtmlAttributes>
+          <Label Text="translate(&quot;#LDS#This page shows business roles you are directly responsible for. To view all business roles, click here.&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Action="Redirect" EnableCustomAttributes="true" ScriptItemUID="RMBLabel1">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message&quot;" ScriptItemUID="RMBHtmlAttribute2" />
+            </HtmlAttributes>
+            <ServerActionCall ScriptItemUID="RMBServerActionCall1">
+              <Redirect ScriptItemUID="RMBRedirect1" Target="Context" AllowReturnToThisContext="true" ContextID="RMB_BusinessRoles_Admin" />
+            </ServerActionCall>
+          </Label>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

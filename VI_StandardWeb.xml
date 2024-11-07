@@ -1,0 +1,207 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3cebb972-fae4-0607-0b4b-d818a5639d86">
+  <Include ID="VI_StandardWeb" SessionContextName="VI_Session" StartupContextName="VI_Start" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ConfigKeysFromWebProject="VI_StandardWeb" Comment="">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="LayoutColorDefinitions" Description="translate(&quot;#LDS#Layout color settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_Color_ColorBase1" Description="translate(&quot;#LDS#Base color&quot;)" Type="Color" SortOrder="20" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_ColorBase2" Description="translate(&quot;#LDS#Base color 2&quot;)" Type="Color" SortOrder="30" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_ColorBase3" Description="translate(&quot;#LDS#Base color 3&quot;)" Type="Color" SortOrder="40" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Font" Description="translate(&quot;#LDS#Default font color&quot;)" Type="Color" SortOrder="100" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Font_Secondary" Description="translate(&quot;#LDS#Secondary font color&quot;)" Type="Color" SortOrder="110" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Font_Secondary2" Description="translate(&quot;#LDS#Font color for dark backgrounds&quot;)" Type="Color" SortOrder="120" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Font_Deactivated" Description="translate(&quot;#LDS#Disabled font color&quot;)" Type="Color" SortOrder="130" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Font_Deactivated2" Type="Color" Description="translate(&quot;#LDS#Disabled font color for dark backgrounds&quot;)" SortOrder="140" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_ColoredLink" Description="translate(&quot;#LDS#Color for link&quot;)" Type="Color" SortOrder="150" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_ColoredLink_Secondary" Description="translate(&quot;#LDS#Color for secondary link&quot;)" Type="Color" SortOrder="160" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_MastHead" Type="Color" SortOrder="170" Description="translate(&quot;#LDS#Color e.g. for masthead&quot;)" />
+        <ConfigParam Key="VI_Common_Color_LighterGray" Description="translate(&quot;#LDS#Gray 1&quot;)" Type="Color" SortOrder="200" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_LightGray" Description="translate(&quot;#LDS#Gray 2&quot;)" Type="Color" SortOrder="210" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Gray" Description="translate(&quot;#LDS#Gray 3&quot;)" Type="Color" SortOrder="220" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_DarkerGray" Description="translate(&quot;#LDS#Gray 4&quot;)" Type="Color" SortOrder="240" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_SignaledOrMandatory" Description="translate(&quot;#LDS#Color of mandatory or signaled controls&quot;)" Type="Color" SortOrder="300" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_SignaledOrMandatoryBorder" Description="translate(&quot;#LDS#Border of mandatory or signaled controls&quot;)" Type="Color" SortOrder="310" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_BorderSignaled" Description="translate(&quot;#LDS#Color of signaled borders&quot;)" Type="Color" SortOrder="320" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_ErrorBox_Background" Description="translate(&quot;#LDS#Error box background color&quot;)" Type="Color" SortOrder="330" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_ErrorBox_Border" Description="translate(&quot;#LDS#Error box border color&quot;)" Type="Color" SortOrder="340" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Blue_1" Description="translate(&quot;#LDS#Blue 1&quot;)" Type="Color" SortOrder="400" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Blue_2" Description="translate(&quot;#LDS#Blue 2&quot;)" Type="Color" SortOrder="410" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Blue_3" Description="translate(&quot;#LDS#Blue 3&quot;)" Type="Color" SortOrder="420" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Badge_Info" Description="translate(&quot;#LDS#Badge color for information notifications.&quot;)" Type="Color" SortOrder="500" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Badge_Important" Description="translate(&quot;#LDS#Badge color for important notifications.&quot;)" Type="Color" SortOrder="510" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Badge_Warning" Description="translate(&quot;#LDS#Badge color for warning notifications.&quot;)" Type="Color" SortOrder="520" LongDescription="" />
+        <ConfigParam Key="VI_Common_Color_Badge_Success" Description="translate(&quot;#LDS#Badge color for success notifications.&quot;)" Type="Color" SortOrder="530" LongDescription="" />
+        <ConfigParam Key="QBM_Primary_Blue" Type="Color" SortOrder="600" Description="translate(&quot;#LDS#Color palette: blue&quot;)" />
+        <ConfigParam Key="QBM_Primary_Red" Type="Color" SortOrder="610" Description="translate(&quot;#LDS#Color palette: red&quot;)" />
+        <ConfigParam Key="QBM_Primary_Orange" Type="Color" SortOrder="620" Description="translate(&quot;#LDS#Color palette: orange&quot;)" />
+        <ConfigParam Key="QBM_Primary_Yellow" Type="Color" SortOrder="630" Description="translate(&quot;#LDS#Color palette: yellow&quot;)" />
+        <ConfigParam Key="QBM_Primary_Green" Type="Color" SortOrder="640" Description="translate(&quot;#LDS#Color palette: green&quot;)" />
+        <ConfigParam Key="QBM_Primary_Violet" Type="Color" SortOrder="650" Description="translate(&quot;#LDS#Color palette: violet&quot;)" />
+        <ConfigParam Key="QBM_Primary_Gray" Type="Color" SortOrder="660" Description="translate(&quot;#LDS#Color palette: gray&quot;)" />
+        <ConfigParam Key="QBM_Primary_Black" Type="Color" SortOrder="670" Description="translate(&quot;#LDS#Color palette: black&quot;)" />
+        <ConfigParam Key="QBM_Primary_White" Type="Color" SortOrder="680" Description="translate(&quot;#LDS#Color palette: white&quot;)" />
+        <ConfigParam Key="VI_Common_Color_Button_Disabled" Type="Color" SortOrder="700" />
+        <ConfigParam Key="VI_Common_Color_Button_Default" Type="Color" SortOrder="710" />
+        <ConfigParam Key="VI_Common_Color_Button_Default_Hover" Type="Color" SortOrder="720" />
+        <ConfigParam Key="VI_Common_Color_Button_Primary" Type="Color" SortOrder="730" />
+        <ConfigParam Key="VI_Common_Color_Button_Primary_Hover" Type="Color" SortOrder="740" />
+        <ConfigParam Key="VI_Common_Color_Button_Success" Type="Color" SortOrder="750" />
+        <ConfigParam Key="VI_Common_Color_Button_Success_Hover" Type="Color" SortOrder="760" />
+        <ConfigParam Key="VI_Common_Color_Button_Warning" Type="Color" SortOrder="770" />
+        <ConfigParam Key="VI_Common_Color_Button_Warning_Hover" Type="Color" SortOrder="780" />
+        <ConfigParam Key="VI_Common_Color_Button_Danger" Type="Color" SortOrder="790" />
+        <ConfigParam Key="VI_Common_Color_Button_Danger_Hover" Type="Color" SortOrder="800" />
+        <ConfigParam Key="VI_Common_Color_Button_Font" Type="Color" SortOrder="810" />
+        <ConfigParam Key="VI_Common_Color_Button_Font_Disabled" Type="Color" SortOrder="820" />
+        <ConfigParam Key="VI_Common_Color_Button_Font_Secondary" Type="Color" SortOrder="830" />
+        <ConfigParam Key="VI_Common_Color_Button_Font_Link" Type="Color" SortOrder="840" />
+        <ConfigParam Key="VI_Common_Color_Button_Font_Link_Hover" Type="Color" SortOrder="850" />
+        <ConfigParam Key="VI_Common_Color_Button_Font_Warning_Hover" Type="Color" SortOrder="860" />
+        <ConfigParam Key="VI_Common_Color_Button_Outline" Type="Color" SortOrder="870" />
+        <ConfigParam Key="VI_Common_Color_Tab" Type="Color" />
+        <ConfigParam Key="VI_Common_Color_Tab_Hover" Type="Color" />
+        <ConfigParam Key="VI_Common_Color_Tab_Active" Type="Color" />
+        <ConfigParam Key="VI_Common_Color_Tab_Font" Type="Color" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="General settings" Description="translate(&quot;#LDS#General settings&quot;)" ScriptItemUID="ConfigSectionDefinition2">
+        <ConfigParam Key="WebPartWidth" Description="translate(&quot;#LDS#Web part width (pixels)&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKeys" Description="translate(&quot;#LDS#Allow keyboard shortcuts to menu items&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKeys_Display" Description="translate(&quot;#LDS#Display keyboard shortcuts next to links&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_Common_CaptchaCaseInsensitive" Description="translate(&quot;#LDS#CAPTCHA: Do not check upper/lower case&quot;)" LongDescription="translate(&quot;#LDS#Disables checking of upper/lower case when the CAPTCHA is entered.&quot;)" />
+        <ConfigParam Key="VI_Common_AutoCompleteListCount" Type="Text" Description="translate(&quot;#LDS#Autocomplete: Number of matches&quot;)" LongDescription="translate(&quot;#LDS#Specifies how many autocomplete matches are displayed.&quot;)" />
+        <ConfigParam Key="VI_Common_FavIcon_URL" Type="Text" Description="translate(&quot;#LDS#Browser icon&quot;)" LongDescription="translate(&quot;#LDS#Sets a URL to a favicon for the application.&quot;)+&quot; &quot;+translate(&quot;#LDS#Important: A customized logo must be declared using a URL to an external resource. Project resources are not supported for this configuration setting.&quot;)" />
+        <ConfigParam Key="VI_Common_HyperView_DisableNavigation" Description="translate(&quot;#LDS#Disable navigation in all HyperViews&quot;)" LongDescription="translate(&quot;#LDS#Disables navigating to other objects for all HyperViews.&quot;)" />
+        <ConfigParam Key="IMX_Mediaquery_Smartphone" Type="Text" Description="translate(&quot;#LDS#Media query for smartphones&quot;)" LongDescription="translate(&quot;#LDS#Sets a media query which is used in CSS code to identify smartphones.&quot;)" />
+        <ConfigParam Key="VI_Common_DefaultModuleTimeout" Type="Text" Description="translate(&quot;#LDS#Default module timeout (minutes)&quot;)" />
+        <ConfigParam Key="VI_Common_AutoCompletePrefixOnly" Description="translate(&quot;#LDS#Autocomplete: Search matches must begin with search term&quot;)" LongDescription="translate(&quot;#LDS#For autocomplete, only search matches that begin with the search term are displayed. If you disable this setting, more search matches are displayed, but the search may be slower.&quot;)" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="QPM Integration" Description="translate(&quot;#LDS#QPM Integration&quot;)" ScriptItemUID="ConfigSectionDefinition3">
+        <ConfigParam Key="VI_MyData_MyPassword_QPM" Description="translate(&quot;#LDS#Display QPM links in menu&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_MyData_MyPassword_QPM_Version" Description="translate(&quot;#LDS#Use QPM version 5.0&quot;)" LongDescription="translate(&quot;#LDS#Determines if version QPM 4.7 or QPM 5.0 is used.&quot;)" />
+        <ConfigParam Key="VI_PersonalData_MyPassword_Filter" Description="translate(&quot;#LDS#Employees who can access QPM links&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_MyData_MyPassword_QPM_IdentificationDomain" Description="translate(&quot;#LDS#Identification domain&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_MyData_MyPassword_QPM_BaseURL" Description="translate(&quot;#LDS#Base URL of QPM portal&quot;)" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_MyData_MyPassword_QPM_PortalLink" Description="translate(&quot;#LDS#Base URL of web portal (for back links)&quot;)" LongDescription="translate(&quot;#LDS#Base URL of web portal like http://exampleserver/IdentityManager, or use standard value of configuration parameter 'QER\WebPortal\BaseURL'.&quot;)" Type="Text" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="AccessKeys" Description="translate(&quot;#LDS#Keyboard shortcuts (access keys)&quot;)" ScriptItemUID="ConfigSectionDefinition4">
+        <ConfigParam Key="VI_Common_AccessKey_Apply" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Apply&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_Cancel" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Cancel&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_Close" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Close&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_Yes" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Yes&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_No" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#No&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_Save" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Save&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_OK" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#OK&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_Search_Header" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Search the web portal&quot;))" Type="Text" LongDescription="" />
+        <ConfigParam Key="VI_Common_AccessKey_ShoppingCart" Description="translate(&quot;#LDS#Shortcut for button: {0}&quot;, translate(&quot;#LDS#Shopping cart&quot;))" Type="Text" LongDescription="" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="variables" Description="translate(&quot;#LDS#Display Settings - Variables&quot;)" ScriptItemUID="ConfigSectionDefinition5">
+        <ConfigParam Key="propertylabelwidth" Type="Text" SortOrder="1" LongDescription="" Description="" />
+        <ConfigParam Key="propertyeditorwidth" Type="Text" SortOrder="2" LongDescription="" Description="" />
+        <ConfigParam Key="propertywidth" Type="Text" SortOrder="3" LongDescription="" Description="" />
+        <ConfigParam Key="propertyeditortextboxwidth" Type="Text" SortOrder="4" LongDescription="" Description="" />
+        <ConfigParam Key="propertylabelrelativewidth" Type="Text" SortOrder="5" LongDescription="" Description="" />
+        <ConfigParam Key="propertyeditorrelativewidth" Type="Text" SortOrder="6" LongDescription="" Description="" />
+        <ConfigParam Key="headerheight" Type="Text" LongDescription="translate('#LDS#Height of header area (pixels)')" SortOrder="7" Description="" />
+        <ConfigParam Key="basefontsize" Type="Text" SortOrder="8" LongDescription="" Description="" />
+        <ConfigParam Key="propcellminheight" Type="Text" SortOrder="9" LongDescription="" Description="" />
+        <ConfigParam Key="HyperViewShapeWidth" Type="Text" SortOrder="10" LongDescription="" Description="" />
+        <ConfigParam Key="naviwidth" Type="Text" SortOrder="11" LongDescription="" Description="" />
+        <ConfigParam Key="UserNavigationHeight" Type="Text" LongDescription="translate('#LDS#Height of breadcrumb bar')" SortOrder="12" Description="" />
+        <ConfigParam Key="HeaderUserNavigationHeight" Type="Text" LongDescription="translate('#LDS#Height of header area + height of breadcrumb bar')" SortOrder="13" Description="" />
+        <ConfigParam Key="PopupWidthLarge" Type="Text" SortOrder="14" LongDescription="" Description="" />
+        <ConfigParam Key="HyperViewShapeWidthWide" Type="Text" SortOrder="15" LongDescription="" Description="" />
+        <ConfigParam Key="baseFontFamily" Type="Text" SortOrder="16" LongDescription="" Description="" />
+        <ConfigParam Key="baseLineHeight" Type="Text" SortOrder="17" LongDescription="" Description="" />
+      </ConfigSectionDefinition>
+      <ConfigSectionDefinition Name="Dashboard" ScriptItemUID="ConfigSectionDefinition6" Description="translate('#LDS#Dashboard settings')">
+        <ConfigParam Key="VI_Dashboard_DefaultTrafficLightWidth" Description="translate(&quot;#LDS#Default width for traffic light chart views&quot;)" LongDescription="" Type="Text" />
+        <ConfigParam Key="VI_Dashboard_KeyColorScheme" Description="translate(&quot;#LDS#Color table for dashboard values&quot;)" Type="ColorDictionary" LongDescription="" />
+        <ConfigParam Key="VI_Dashboard_ChartWidthNarrow" Description="translate(&quot;#LDS#Default width for narrow charts&quot;)" LongDescription="" Type="Text" />
+        <ConfigParam Key="VI_Dashboard_ChartWidthWide" Description="translate(&quot;#LDS#Default width for wide charts&quot;)" LongDescription="" Type="Text" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <RendererSettings>
+      <SubProjects ScriptItemUID="SubProjects1" />
+      <CssDocuments />
+      <JavascriptDocuments />
+      <Properties />
+    </RendererSettings>
+    <MenuStructure ScriptItemUID="MenuStructure1">
+      <MenuItem ID="ROOT_Request" ScriptItemUID="MenuItem6" Title="translate('#LDS#Heading Request')" Condition="ispreprop(&quot;ITSHOP&quot;)" HideIfNoChildren="true">
+        <Parameters />
+        <MenuItem ID="QER_Request_MyRequests" Title="translate(&quot;#LDS#Heading My Requests&quot;)" ContextID="QER_Request_Requests" Tooltip="translate(&quot;#LDS#Request overview&quot;)" ScriptItemUID="MenuItem10">
+          <Parameters />
+        </MenuItem>
+        <MenuItem ID="QER_Request_MyActions" Title="translate(&quot;#LDS#Heading My Actions&quot;)" ContextID="QER_Request_Actions" ScriptItemUID="MenuItem30">
+          <Parameters />
+        </MenuItem>
+        <MenuItem ID="QER_Request_Auditing" Title="translate(&quot;#LDS#Auditing&quot;)" ContextID="QER_Request_Auditing" Condition="exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ('CAP-AEROLE-AUDITING-AUDITOR')&quot;&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="MenuItem32">
+          <Parameters />
+        </MenuItem>
+        <MenuItem ID="VI_ITShop_EscalationApproval" Title="translate(&quot;#LDS#Escalation&quot;)" ScriptItemUID="MenuItem29" Condition="exists(&quot;PersonInAERole&quot;, format(&quot;uid_person = {0} and uid_aerole = 'QER-AEROLE-ITSHOP-INTERVENTION'&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" ContextID="VI_ITShop_Approvals">
+          <Parameters>
+            <RedirectParameter Name="'IsEscalation'" Value="true" />
+          </Parameters>
+        </MenuItem>
+      </MenuItem>
+      <MenuItem ScriptItemUID="MenuItem7" ID="ROOT_Attestation" Title="translate('#LDS#Heading Attestation')" HideIfNoChildren="true" Condition="IsPreProp(&quot;Attestation&quot;)">
+        <Parameters />
+      </MenuItem>
+      <MenuItem ID="ROOT_CompAndViolation" Title="translate('#LDS#Heading Compliance')" HideIfNoChildren="true" ScriptItemUID="CAPMenuItem2">
+        <Parameters />
+        <MenuItem ID="QER_GovernanceAdministration" ScriptItemUID="CAPMenuItem1" Title="translate(&quot;#LDS#Governance Administration&quot;)" ContextID="QER_GovernanceAdministration" SortOrder="20" Condition="(IsPreProp('RISKINDEX')&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in (&#xD;&#xA;select uid_aerole from AERole where UID_AERole in ('CAP-AEROLE-IAG-CISO', 'CAP-AEROLE-AUDITING-AUDITOR') and uid_DialogGroup in (select uid_dialoggroup from DialogGroup where isdeactivatedbypreprocessor = 0)&#xD;&#xA;)&quot;&#xD;&#xA;)))&#xD;&#xA;&#xD;&#xA;OR&#xD;&#xA;(IsPreProp('COMPLIANCE') and exists(&quot;compliancearea&quot;, format(&quot;uid_orgresponsible in ( select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where xorigin &gt; 0 and uid_person = '{0}' ))&quot;, from user select uid_person)))&#xD;&#xA;&#xD;&#xA;OR&#xD;&#xA;(-- visible for Compliance &amp; Security Officer&#xD;&#xA;IsPreProp('COMPLIANCE') and (&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for Auditor&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- Whereclause for: ComplianceArea.UID_OrgResponsible, ComplianceRule.UID_OrgResponsible, ComplianceRule.UID_OrgRuler, Department-Responsible&#xD;&#xA;(exists(&quot;person&quot;, format(&quot;uid_person = {1} and (uid_person in ( select piae.UID_Person from PersonInAERole piae join AERoleCollection aec on aec.UID_ParentAERole = piae.UID_AERole&#xD;&#xA;where piae.UID_AERole in ( select cr.uid_orgruler from ComplianceRule cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select cr.uid_orgresponsible from ComplianceRule cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select ca.uid_orgresponsible from compliancearea ca ))&#xD;&#xA;or UID_Person in ( select hho.UID_PersonHead from HelperHeadOrg hho join Department dep on dep.UID_Department = hho.UID_Org))&quot;&#xD;&#xA;, sqlor(sqlcompare(&quot;cr.isinactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),sqlcompare(&quot;cr.isworkingcopy&quot;,false,&quot;bool&quot;,&quot;equal&quot;)), sqlformatvalue(getuser(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)))))&#xD;&#xA;&#xD;&#xA;OR&#xD;&#xA;(-- visible for Compliance &amp; Security Officer&#xD;&#xA;IsPreProp(&quot;QERPOLICY&quot;) and (&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for Auditor&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- Whereclause for: ComplianceArea.UID_OrgResponsible, QERPolicy.UID_AERoleResponsible, QERPolicy.UID_AERoleRuler&#xD;&#xA;(exists(&quot;person&quot;, format(&quot;uid_person = {1} and (uid_person in ( select piae.UID_Person from PersonInAERole piae join AERoleCollection aec on aec.UID_ParentAERole = piae.UID_AERole&#xD;&#xA;where piae.xorigin &gt; 0 and piae.UID_AERole in ( select cr.uid_aeroleruler from qerpolicy cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select cr.uid_aeroleresponsible from qerpolicy cr where ({0}))&#xD;&#xA;or piae.UID_AERole in ( select ca.uid_orgresponsible from compliancearea ca ))&#xD;&#xA;)&quot;&#xD;&#xA;, sqlor(sqlcompare(&quot;cr.isinactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),sqlcompare(&quot;cr.isworkingcopy&quot;,false,&quot;bool&quot;,&quot;equal&quot;)), sqlformatvalue(getuser(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)))))&#xD;&#xA;&#xD;&#xA;OR&#xD;&#xA;(IsPreProp(&quot;COMPLIANCE&quot;) and IsPreProp(&quot;SAPR3&quot;) and IsPreProp(&quot;SAPRights&quot;)&#xD;&#xA;and&#xD;&#xA;exists(&quot;compliancearea&quot;, &quot;uid_compliancearea in (&#xD;&#xA;select ria.uid_compliancearea from complianceruleinarea ria&#xD;&#xA;join compliancerule cr on &quot;+&#xD;&#xA;sqland(sqlcompare(&quot;cr.IsInactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;cr.IsWorkingCopy&quot;, false, &quot;bool&quot;, &quot;equal&quot;))&#xD;&#xA;+&quot; and cr.uid_compliancerule = ria.uid_compliancerule&#xD;&#xA;join aerolecollection col on col.uid_aerole = cr.uid_orgresponsible&#xD;&#xA;join personinaerole pio on pio.uid_aerole = col.uid_parentaerole and pio.uid_person = '&quot; +&#xD;&#xA;select uid_person from user + &quot;')&quot;))&#xD;&#xA;&#xD;&#xA;OR&#xD;&#xA;(IsPreProp(&quot;COMPLIANCE&quot;) and IsPreProp(&quot;SAPR3&quot;) and IsPreProp(&quot;SAPRights&quot;) and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ( select uid_aerole from aerolecollection where uid_parentaerole = 'SAC-AEROLE-RULEADMIN-SAPRIGHTS')&quot;&#xD;&#xA;)))&#xD;&#xA;">
+          <Parameters />
+        </MenuItem>
+      </MenuItem>
+      <MenuItem ScriptItemUID="MenuItem9" ID="ROOT_Responsibilities" Title="translate('#LDS#Responsibilities')" HideIfNoChildren="true">
+        <Parameters />
+        <MenuItem ID="QER_Responsibilities_MyResponsibilities" ScriptItemUID="MenuItem16" Title="translate('#LDS#My Responsibilities')" ContextID="QER_Responsibilities_MyResponsibilities" Condition="(exists(&quot;person&quot;,&#xD;&#xA;sqland(variable(isnullorempty( getconfig(&quot;VI_Employee_Person_ManagerCondition&quot;), &#xD;&#xA;  &quot;uid_person in ( select uid_personhead from QER_VEditEmployee where uid_personhead = '%useruid%')&quot;))))  )&#xD;&#xA; OR&#xD;&#xA;(ispreprop('MAC')&#xD;&#xA;and&#xD;&#xA;(if(isnullorempty(getconfig(&quot;VI_Hardware_Person_ManagerCondition&quot;)))then true else exists(&quot;person&quot;,variable(getconfig(&quot;VI_Hardware_Person_ManagerCondition&quot;))))) &#xD;&#xA;OR&#xD;&#xA;(-- check PreProcessorCondition first&#xD;&#xA;IsPreProp('ORG')&#xD;&#xA;and &#xD;&#xA;exists(&quot;person&quot;, format(&quot;uid_person in (select hho.uid_personhead from helperheadorg hho join org o on o.uid_org = hho.uid_org where hho.uid_personhead = {0})&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))))&#xD;&#xA;OR&#xD;&#xA;(-- check PreProcessorCondition first&#xD;&#xA;IsPreProp('ESET')&#xD;&#xA;AND &#xD;&#xA;exists(&quot;eset&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_ESet&quot;)))&#xD;&#xA;)&#xD;&#xA;OR&#xD;&#xA;{{&#xD;&#xA;bool hasuns = VI.WebRuntime.WebSql.StringEquals(_Connection.GetConfigParm(&quot;TargetSystem\\UNS&quot;), &quot;1&quot;);&#xD;&#xA;bool uns = false;&#xD;&#xA;if(hasuns){&#xD;&#xA;   const string key = &quot;VI_Roles_Responsibility_UNSGroup_LimitedSQL&quot;;&#xD;&#xA;   var statementId = _UserSession.ApplicationInfo.ConfigSettings[key] as string;&#xD;&#xA;   if (string.IsNullOrEmpty(statementId))&#xD;&#xA;      throw new InvalidOperationException(&quot;Configuration setting not found: &quot; + key);&#xD;&#xA;   uns = 0 &lt;  _Database.GetLimitedSqlScalarAsync&lt;int&gt;(statementId, new[]{VI.DB.Entities.QueryParameter.Create&lt;string&gt;(&quot;uidperson&quot;, _Connection.User.Uid)}).Result;&#xD;&#xA;}&#xD;&#xA;@return uns;&#xD;&#xA;}}&#xD;&#xA;OR&#xD;&#xA;(exists(&quot;qerresource&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))&#xD;&#xA;or&#xD;&#xA;exists(&quot;qerreuse&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))&#xD;&#xA;or&#xD;&#xA;exists(&quot;qerreuseUS&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))&#xD;&#xA;or&#xD;&#xA;exists(&quot;qerassign&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_QERResource&quot;)))&#xD;&#xA;or&#xD;&#xA;(ispreprop(&quot;APP&quot;) and exists(&quot;application&quot;, variable(getconfig(&quot;VI_Roles_Responsibility_Application&quot;)))))&#xD;&#xA;OR&#xD;&#xA;(exists(&quot;person&quot;, variable(&quot;uid_person in ( select hho.uid_personhead from HelperHeadOrg hho join BaseTree bt on bt.UID_Org = hho.UID_Org and bt.UID_OrgRoot in ('QER-V-Department', 'QER-V-ProfitCenter', 'QER-V-Locality', 'QER-V-AERole')) and uid_person = '%useruid%'&quot;)))&#xD;&#xA;">
+          <Parameters />
+        </MenuItem>
+        <MenuItem ID="QER_Responsibilities_Delegation" ScriptItemUID="MenuItem20" Title="translate('#LDS#Delegation')" ContextID="QER_Responsibilities_Delegation" Condition="GetConfigParm(&quot;QER\ITShop\Delegation&quot;) = &quot;1&quot;">
+          <Parameters />
+        </MenuItem>
+        <MenuItem ID="QER_Responsibilities_Ownership" ScriptItemUID="MenuItem21" Title="translate('#LDS#Ownerships')" ContextID="QER_Responsibilities_Ownership" Condition="(ispreprop(&quot;ADS&quot;) and&#xD;&#xA;exists(&quot;person&quot;, variable(sqland(&quot;uid_person = '%useruid%'&quot;, getconfig(&quot;VI_BusinessOwnership_ClaimOwnership_FilterPerson&quot;)))))&#xD;&#xA;OR&#xD;&#xA;(getconfig(&quot;ATT_BusinessOwnership_Assign_Active&quot;) = &quot;true&quot;)">
+          <Parameters />
+        </MenuItem>
+        <MenuItem ID="VI_Audit_Responsibilities" Title="translate(&quot;#LDS#Heading Auditing&quot;)" ContextID="VI_Audit_Responsibilities" Tooltip="translate(&quot;#LDS#Browse all roles and entitlements&quot;)" ScriptItemUID="MenuItem90" Condition="exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ('CAP-AEROLE-AUDITING-AUDITOR')&quot;&#xD;&#xA;)&#xD;&#xA;)">
+          <Parameters>
+            <RedirectParameter Name="'AuditMode'" Value="'YES'" />
+          </Parameters>
+        </MenuItem>
+        <MenuItem ID="QER_Responsibilities_Administration" ScriptItemUID="MenuItem28" Title="translate('#LDS#Governance Administration')" ContextID="QER_Responsibilities_Administration" Condition="exists(&quot;Person&quot;, variable(&quot;uid_person = '%useruid%' and uid_person in ( select piae.uid_person from personinaerole piae join aerolecollection aec on aec.uid_aerole = piae.uid_aerole where aec.UID_ParentAERole in ('TSB-AEROLE-NAMESPACEADMIN', 'RMB-AEROLE-ROLEADMIN-ADMIN', 'QER-AEROLE-STRUCTADMIN-ADMIN', 'QER-AEROLE-PERSONADMIN-ADMIN', 'QER-AEROLE-ITSHOPADMIN-ADMIN'))&quot;))&#xD;&#xA;">
+          <Parameters />
+        </MenuItem>
+      </MenuItem>
+      <MenuItem ID="ROOT_RelatedApplications" Title="translate(&quot;#LDS#Heading Related Applications&quot;)" ScriptItemUID="MenuItem73" Tooltip="" HideIfNoChildren="true">
+        <Parameters />
+        <MenuItem ID="RelatedApplication" Type="Data" ActionType="Action" Title="select current displayvalue(displayname) from userrelatedapplication" Tooltip="select current displayvalue(description) from userrelatedapplication" DataTable="UserRelatedApplication" WhereClause="isnullorempty( uid_relatedapplicationparent ) and IsActiveForThisUser" RecursiveWhereClause="uid_relatedapplicationparent  = ( select current uid_relatedapplication from userrelatedapplication) and IsActiveForThisUser" ScriptItemUID="MenuItem74" OrderBy="'__Display'">
+          <ActionSequence Condition="from userrelatedapplication select current not(isnullorempty(url))" ScriptItemUID="Action13">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var url = _URL.GetValue(clickInfo.UserDataRow).String; 
+VI.WebRuntime.RuntimeUtil.CheckIsValidUrlForRedirect(url);
+if (!(url.StartsWith("http://") || url.StartsWith("https://"))) { url = "http://" + url; }</CodeLiteral>
+            <ActionSequence Condition="select current (displaytype='NV') from userrelatedapplication&#xA;-- content and navigation" ScriptItemUID="Action17">
+              <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Common_ExternalFormHost" NoLinkBackToThisForm="true" ScriptItemUID="Redirect12">
+                <RedirectParameter Name="'DisplayName'" Value="select current displayvalue(displayname) from userrelatedapplication" />
+                <RedirectParameter Name="'URL'" Value="from userrelatedapplication select current uid_relatedapplication" />
+                <RedirectParameter Name="&quot;BaseCssClass&quot;&#xA;-- set CSS class for the form host module only" Value="&quot;imx-nomenu&quot;" />
+              </Redirect>
+            </ActionSequence>
+            <ActionSequence Condition="select current (isnullorempty(displaytype) or displaytype='PP') from userrelatedapplication&#xA;-- PP=Popup" ScriptItemUID="Action16">
+              <Redirect Target="Link" InNewFrame="true" PopupID="external" Width="800" Height="600" HREF="{{url}}" ScriptItemUID="Redirect11" />
+            </ActionSequence>
+            <ActionSequence Condition="select current (displaytype='NR') from userrelatedapplication&#xA;--NR=Content" ScriptItemUID="Action15">
+              <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Common_ExternalFormHost" NoLinkBackToThisForm="true" ScriptItemUID="Redirect10">
+                <RedirectParameter Name="'DisplayName'" Value="select current displayvalue(displayname) from userrelatedapplication" />
+                <RedirectParameter Name="'URL'" Value="from userrelatedapplication select current uid_relatedapplication" />
+              </Redirect>
+            </ActionSequence>
+            <ActionSequence Condition="select current (displaytype='NT') from userrelatedapplication&#xA;-- NT=Content, navigation and header" ScriptItemUID="Action14">
+              <Redirect Target="Link" HREF="{{url}}" ScriptItemUID="Redirect9" />
+            </ActionSequence>
+          </ActionSequence>
+          <Parameters />
+        </MenuItem>
+      </MenuItem>
+    </MenuStructure>
+  </Include>
+</WebDesigner>

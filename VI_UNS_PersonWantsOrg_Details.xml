@@ -1,0 +1,20 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_UNS_PersonWantsOrg_Details" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="from accproduct select current uid_accproduct" ScriptItemUID="ProductRef1">
+          <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" />
+        </AccProductSwitchContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_PersonWantsOrg" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,44 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="Nvv/lVsAFJyY94QBJzqFww==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectView_PersonWantsOrg" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;overflow: auto;&quot;" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectView_PersonWantsOrg_Fields&quot;)" ScriptItemUID="ExpressionColumnList2" />
+                <ExpressionColumnList ColumnList="GetAccProductParams(from sourceobject select current UID_AccProduct)" ScriptItemUID="ExpressionColumnList1" />
+                <CodeLiteral ScriptItemUID="CodeLiteral1">VI.WebRuntime.IDataColumn _UID_AccProduct1_ = this.TableStore.GetLocalColumn(this.SourceObject, "UID_AccProduct");
+AE.WebRuntime.AccProductParameterService __productparameters = _UserSession.Services.Get&lt;AE.WebRuntime.AccProductParameterService&gt;();
+string[] productparametersstring = __productparameters.GetParameterString(_Connection,_UID_AccProduct1_.GetValue(this.SourceObject_Current.Row).String,null).Split(',');
+foreach(var name in productparametersstring)
+{
+	if(name != "")
+		ColumnList1_columns.Remove(SourceObject_Current.Row.Table.GetColumn(name, "PersonWantsOrg"));
+}</CodeLiteral>
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="PersonWantsOrg" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="UID_AccProduct" Expression="objectwalker(&quot;FK(uid_org).uid_accproduct&quot;)" DataSource="Expression" ScriptItemUID="Column1" DataType="System.String" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,89 @@
+﻿<WebDesigner>
+  <GlobalControl ID="QER_SingleBaseTreeCharts" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList3">
+        <Container ScriptItemUID="Container6">
+          <Container IsBeginRenderPart="true" RefreshTriggerExpression="" ScriptItemUID="Container7">
+            <Activator ExecuteAlways="true" ScriptItemUID="Activator2">
+              <Action ScriptItemUID="Action2">
+                <LoadTable DataTable="BaseTree" WhereClause="&quot;xobjectkey='&quot;+ ElementObjectKey() + &quot;'&quot;" ScriptItemUID="LoadTable2">
+                  <DbObjectLoadType ConvertToInteractive="false" ScriptItemUID="DbObjectLoadType2" />
+                </LoadTable>
+              </Action>
+            </Activator>
+            <ControlReferenceContainer ID="VI_DashboardFilterPopup" ScriptItemUID="ControlRef2">
+              <VirtualFunctionMapping ID="ConfigKey()" Value="ConfigKey()" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                <ControlList ScriptItemUID="ControlList4" />
+              </VirtualControlMapping>
+            </ControlReferenceContainer>
+            <ContainerTemplate DataTable="BaseTree" ScriptItemUID="ContainerTemplate2">
+              <Container EnableCustomAttributes="true" ScriptItemUID="Container8">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" Value="&quot;contentSliderContainer&quot;" ScriptItemUID="HtmlAttribute4" />
+                  <HtmlAttribute Name="&quot;style&quot;" Value="&quot;padding-top:30px&quot;" ScriptItemUID="HtmlAttribute5" />
+                </HtmlAttributes>
+                <Container IsBeginRenderPart="true" EnableCustomAttributes="true" ScriptItemUID="Container9">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-contentslider-preload&quot;" ScriptItemUID="HtmlAttribute6" />
+                  </HtmlAttributes>
+                  <Container ScriptItemUID="Container10" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral2">
+IUserSession theUs = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();
+var theCharts = (System.Collections.Generic.List&lt;object&gt;) theUs.ApplicationInfo.ConfigObjects[ConfigKey()];
+foreach (var theChart in theCharts) {
+	if (theChart is VI.WebRuntime.WebControls.HeatmapControlInfo) {
+		
+		var theChartCopy = new HeatmapControlInfo(theChart as VI.WebRuntime.WebControls.HeatmapControlInfo);		 						
+		theChartCopy.AdditionalWhereClause = _Connection.SqlFormatter.UidComparison("ElementObjectKey", ElementObjectKey);
+				
+		var c = new CustomizableView();
+		Container10.Controls.Add(c);
+
+		c.CreateHeatmapControl(new []{theChartCopy});
+	}
+	
+	
+	if (theChart is VI.WebRuntime.WebControls.ChartControlInfo)
+	{
+		var theChartCopy = new ChartControlInfo(theChart as VI.WebRuntime.WebControls.ChartControlInfo);
+		 
+		theChartCopy.AdditionalWhereClause = _Connection.SqlFormatter.UidComparison("ElementObjectKey", ElementObjectKey);
+		
+		var c = new CustomizableView();
+		Container10.Controls.Add(c);
+		
+		c.CreateChartControl(new []{theChartCopy});
+	}
+	
+	
+}
+</CodeLiteral>
+                </Container>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="BaseTree" Class="BaseTree" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="ContentWidth()" DataType="System.Int32" Expression="180" ScriptItemUID="Function4" />
+        <Function Name="ContentMargin()" DataType="System.Int32" Expression="12" ScriptItemUID="Function5" />
+        <Function Name="ConfigKey()" DataType="System.String" Expression="{{&#xD;&#xA;var x = new VI.DB.DbObjectKey(ElementObjectKey);&#xD;&#xA;string returnValue =&quot;&quot;;&#xD;&#xA;if (x.Tablename.Equals(&quot;Department&quot;, StringComparison.InvariantCultureIgnoreCase)) returnValue=&quot;VI_Start_ValueAndTrend_Charts_Department&quot;;&#xD;&#xA;if (x.Tablename.Equals(&quot;Locality&quot;, StringComparison.InvariantCultureIgnoreCase)) returnValue=&quot;VI_Start_ValueAndTrend_Charts_Locality&quot;;&#xD;&#xA;if (x.Tablename.Equals(&quot;ProfitCenter&quot;, StringComparison.InvariantCultureIgnoreCase)) returnValue=&quot;VI_Start_ValueAndTrend_Charts_ProfitCenter&quot;;&#xD;&#xA;&#xD;&#xA;@return returnValue;&#xD;&#xA;}}" ScriptItemUID="Function6" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ElementObjectKey()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

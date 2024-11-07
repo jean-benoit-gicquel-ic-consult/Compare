@@ -1,0 +1,50 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="RPS_ListReport_Form" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="ElementObjectKey" IsMandatory="false" />
+        <Parameter Name="IdentRpsReport" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="RPSReport" Table="RPSReport" ScriptItemUID="DataTableDbObject1" TriggerUpdates="Never">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="FormTitle()" Expression="isnullorempty( from rpsreport select top 1 display(), translate(&quot;#LDS#Report&quot;))" DataType="System.String" ScriptItemUID="Function1" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2">
+      <LoadTable DataTable="RPSReport" ScriptItemUID="LoadTable1" WhereClause="sqland(&#xA;sqlcompare(&quot;IsListReport&quot;, true, &quot;bool&quot;, &quot;equal&quot;),&#xA;sqlcompare(&quot;ident_rpsreport&quot;, request(&quot;identrpsreport&quot;), &quot;string&quot;, &quot;equal&quot;))">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+      </LoadTable>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" ScriptItemUID="Form1" NavigationTitle="FormTitle()">
+        <ActionSequence ScriptItemUID="Action1" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="FormTitle()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container1">
+            <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="RPSReport" WithoutParentContainer="true">
+              <ControlReferenceControlList ID="RPS_ListReport" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="ElementObjectKey()" Value="request(&quot;ElementObjectKey&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="IdentListReport()" Value="from rpsreport select current ident_rpsreport" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceControlList>
+            </ContainerTemplate>
+            <Container ScriptItemUID="Container2" Condition="0 = select count() from rpsreport" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-message imx-message-exception&quot;" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#The requested report was not found.&quot;)" ScriptItemUID="Label2" />
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

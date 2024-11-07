@@ -1,0 +1,105 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6644f01e-17bd-61d8-97a5-cf4d01153fad">
+  <GlobalControl MetamodelVersion="2016-05-01" ID="VI_ITShop_CalculatePWOComplianceCheck" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="CPL.Customizer.dll" />
+        <NamespaceImport Namespace="CPL.Customizer" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_CalculateComplianceCheckPostOrder" Description="translate('#LDS#Check compliance rules when viewing a submitted request')" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence Condition="convert(isnull(getconfig(&quot;VI_ITShop_CalculateComplianceCheckPostOrder&quot;),'false'), 'Boolean')&#xA;and getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;)=&quot;1&quot;" ScriptItemUID="Action2">
+          <Comment Comment="Delete results from a previous compliance check" />
+          <Delete DataTable="ComplianceCheckSimple" ScriptItemUID="Delete1" />
+          <Delete DataTable="ComplianceCheckSimpleObjects" ScriptItemUID="Delete2" />
+          <ActionSequence Condition="0 = from ComplianceCheckSimple select count()" ItemUID="From PWODecisionHistory" ScriptItemUID="Action3">
+            <LoadTable DataTable="ComplianceCheckByPWODecisionHistory" Type="LimitedSQL" ScriptItemUID="LoadTable1" IdentLimitedSQL="&quot;Webportal.VI_ITShop_CalculatePWOComplianceCheck.CCByPWOHistory1&quot;">
+              <ParameterFree Name="&quot;uidpersonwantsorg&quot;" Value="from PersonWantsOrg select current UID_PersonWantsOrg" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="0 = from ComplianceCheckSimple select count()" ScriptItemUID="Action4">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">	        // Calculate compliance status for the current PWO
+	        var dbRow = (IDbObjectRow) PersonWantsOrg_Current.Row;
+			var sPwo = dbRow.Entity;
+			var uidPwo = sPwo.GetValue("UID_PersonWantsOrg").String;
+			
+			// cannot call functions on non-interactive entities
+			if (!sPwo.IsInteractive)
+			{
+				sPwo = await sPwo.ReloadAsync(_Database, EntityLoadType.Interactive, ct).ConfigureAwait(false);
+				dbRow.Entity = sPwo;
+			}
+			
+            var ccsPwos = (CCSPwO[]) sPwo.CallFunction(_Database, "ComplianceCheckSimple");
+			foreach (var ccsPwo in ccsPwos.Where(ccsPwo =&gt; ccsPwo.IsNewObject
+				&amp;&amp; string.Equals(ccsPwo.UID_PersonWantsOrg, uidPwo, StringComparison.InvariantCultureIgnoreCase)))
+		{
+			var newValues = new ColumnInsertValues(ComplianceCheckSimple);
+			newValues[_ComplianceCheckSimple_DBObjectKey] = ccsPwo.ObjectKeyElement.ToXmlString();
+			newValues[_ComplianceCheckSimple_UID_ComplianceRule] = ccsPwo.UID_ComplianceRule;
+			newValues[_ComplianceCheckSimple_UID_ComplianceSubRule] = ccsPwo.UID_ComplianceSubRule;
+			newValues[_ComplianceCheckSimple_UID_ITShopOrg] =  ccsPwo.UID_Person;
+			newValues[_ComplianceCheckSimple_ViolationType] = "Person";
+			ComplianceCheckSimple.Insert(newValues);
+		}</CodeLiteral>
+          </ActionSequence>
+          <ActionSequence Condition="0 = from ComplianceCheckSimple select count()" ScriptItemUID="Action5">
+            <LoadTable DataTable="ComplianceCheckByPWODecisionHistory" Type="LimitedSQL" ScriptItemUID="LoadTable2" IdentLimitedSQL="&quot;Webportal.VI_ITShop_CalculatePWOComplianceCheck.CCByPWOHistory2&quot;">
+              <ParameterFree Name="&quot;uid_personwantsorg&quot;" Value="from PersonWantsOrg select current UID_PersonWantsOrg" />
+            </LoadTable>
+          </ActionSequence>
+          <Comment Comment="Retrieve objects from the object keys" />
+          <FillTable Source="XObjectKey" DataTable="ComplianceCheckSimpleObjects" DataTableSource="ComplianceCheckSimple" DataColumnSource="DBObjectKey" DataColumnSourceKey="SourceKey" DataColumnXObjectKey="ObjectKey" ScriptItemUID="FillTable1">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+          </FillTable>
+        </ActionSequence>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action6" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSQL Table="ComplianceCheckByPWODecisionHistory" PrimaryKeyColumn="pk" ScriptItemUID="DataTableLimitedSQL1">
+          <ActionSequence ScriptItemUID="Action7">
+            <ForeachRow DataTable="ComplianceCheckByPWODecisionHistory" ScriptItemUID="ForeachRow1">
+              <Insert DataTable="ComplianceCheckSimple" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action8" />
+                <InsertValue DataColumn="DBObjectKey" Value="from ComplianceCheckByPWODecisionHistory select current DBObjectKey" />
+                <InsertValue DataColumn="UID_ComplianceRule" Value="from ComplianceCheckByPWODecisionHistory select current UID_ComplianceRule" />
+                <InsertValue DataColumn="UID_ComplianceSubRule" Value="from ComplianceCheckByPWODecisionHistory select current UID_ComplianceSubRule" />
+                <InsertValue DataColumn="UID_ITShopOrg" Value="from ComplianceCheckByPWODecisionHistory select current UID_ITShopOrg" />
+                <InsertValue DataColumn="UID_PersonWantsOrg" Value="from ComplianceCheckByPWODecisionHistory select current UID_PersonWantsOrg" />
+              </Insert>
+            </ForeachRow>
+          </ActionSequence>
+          <Column Name="DBObjectKey" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="UID_ComplianceRule" DataType="System.String" ScriptItemUID="Column3" />
+          <Column Name="UID_ComplianceSubRule" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="UID_PersonWantsOrg" DataType="System.String" ScriptItemUID="Column5" />
+          <Column Name="UID_AccProduct" Comment="Holt das AccProduct zur ITShopOrg hier dazu" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="UID_ITShopOrg" DataType="System.String" ScriptItemUID="Column7" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column8" />
+        </DataTableSQL>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="ComplianceCheckSimple" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="DBObjectKey" DataType="System.String" />
+        <VirtualColumn Name="UID_ComplianceRule" DataType="System.String" />
+        <VirtualColumn Name="UID_ComplianceSubRule" DataType="System.String" />
+        <VirtualColumn Name="UID_PersonWantsOrg" DataType="System.String" />
+        <VirtualColumn Name="UID_ITShopOrg" DataType="System.String" />
+        <VirtualColumn Name="UID_Person" DataType="System.String" />
+        <VirtualColumn Name="ViolationType" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="ComplianceCheckSimpleObjects" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="ObjectKey" DataType="System.String" />
+        <VirtualColumn Name="SourceKey" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

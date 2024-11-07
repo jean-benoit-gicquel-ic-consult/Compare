@@ -1,0 +1,26 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_LinkContainer_UserMenu" Type="LinkContainer" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="LinkContainerUserMenu" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.LinkContainerUserMenu {
+  color: %VI_Common_Color_Blue_2%; 
+  padding: 5px;
+}
+.LinkContainerUserMenu:hover,
+.LinkContainerUserMenu:active{
+  color: %VI_Common_Color_ColorBase1%; 
+  background-color: %VI_Common_Color_Blue_1%;
+  text-decoration: none;
+}  
+
+.LinkContainerUserMenu:focus {
+  color: %VI_Common_Color_ColorBase1%; 
+  background-color: %VI_Common_Color_Blue_3%;
+  outline: none;
+  text-decoration: none;
+} 
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

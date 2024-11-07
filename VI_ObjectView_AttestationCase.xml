@@ -1,0 +1,110 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectView_AttestationCase" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectView" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_ObjectView_AttestationCase_Fields" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;AttestationCase&quot;))" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" Type="ColumnList" DatabaseTable="AttestationCase" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">for (var idx=1;idx&lt;5;idx++)
+{
+	// local variable because of lambda	
+	var lidx = idx;
+	var proxy = (ColumnProxy) this.TableStore.GetLocalColumn(SourceObject, "PropertyInfo" + idx + "Proxy");
+	proxy.MetadataProvider = (vm, c, r) =&gt; {
+	var vm2 = new ValueMetadata(c, vm);
+	var obj = AttestationObject.FirstOrDefault();
+	if (obj != null)
+	{
+		vm2.Display = this.AttestationObject.GetColumn("PropertyInfo" + lidx, "AttestationObject")
+		    .GetDisplayValue(obj);
+	    
+		var walkerExpression = AttestationObject.GetColumn("PropertyInfoPattern" + lidx).GetValue(obj).String;
+		if (!string.IsNullOrEmpty(walkerExpression))
+		{
+			var m = VI.DB.Scripting.ScriptSyntax.DollarExpression.Match(walkerExpression);
+			Logger.Debug("VI_ObjectView_AttestationCase {0}: expression = {1}, success = {2}", proxy.ColumnName, walkerExpression, m.Success);
+			if (m.Success)
+			{
+				var typeString = m.Groups["type"].Value;
+
+				var type = string.IsNullOrEmpty(typeString)
+                ? ValType.String
+                : (ValType)Enum.Parse(typeof(ValType), typeString);
+
+				vm2.Type = type;
+				if (type == VI.Base.ValType.Date)
+				{
+					// Dates must be stored as invariant culture
+					vm2.DisplayValueProvider = rr =&gt; {
+						var col = SourceObject.GetColumn("PropertyInfo" + lidx);
+						var str = col.GetValue(rr).String;
+						try {
+							var date = DateTime.Parse(str, System.Globalization.CultureInfo.InvariantCulture);
+							return date.ToString(LanguageManager.Culture.DateTimeFormat.ShortDatePattern);
+						}
+						catch
+						{
+							return vm.GetDisplayValue(rr);
+						}
+					};
+				}
+			}
+		}	
+	}
+		
+	return vm2;
+};
+}</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+            <ColumnList ScriptItemUID="ColumnList1">
+              <SingleColumn ScriptItemUID="SingleColumn7" DataColumn="IsNotApprovedBefore" />
+              <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="StructureDisplay1" Condition="from sourceobject select current not(isnullorempty(structuredisplay1))" Caption="from attestationobject select top 1 displayvalue(structuredisplay1)" ColumnComponentView="VI_Edit_View_ValueAndLink">
+                <ParameterFree Name="&quot;TargetUrl&quot;" Value="from sourceobject select current BuildObjectTargetUrl(objectkey1)" ScriptItemUID="ParameterFree1" />
+              </SingleColumn>
+              <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="StructureDisplay2" Condition="from sourceobject select current not(isnullorempty(structuredisplay2))" Caption="from attestationobject select top 1 displayvalue(structuredisplay2)" ColumnComponentView="VI_Edit_View_ValueAndLink">
+                <ParameterFree Name="&quot;TargetUrl&quot;" Value="from sourceobject select current BuildObjectTargetUrl(objectkey2)" ScriptItemUID="ParameterFree2" />
+              </SingleColumn>
+              <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="StructureDisplay3" Condition="from sourceobject select current not(isnullorempty(structuredisplay3))" Caption="from attestationobject select top 1 displayvalue(structuredisplay3)" ColumnComponentView="VI_Edit_View_ValueAndLink">
+                <ParameterFree Name="&quot;TargetUrl&quot;" Value="from sourceobject select current BuildObjectTargetUrl(objectkey3)" ScriptItemUID="ParameterFree3" />
+              </SingleColumn>
+              <SingleColumn ScriptItemUID="ATTSingleColumn9" DataColumn="PropertyInfo1Proxy" Condition="from sourceobject select current not(isnullorempty(propertyinfo1))" Caption="from attestationobject select top 1 displayvalue(propertyinfo1)" />
+              <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="PropertyInfo2Proxy" Condition="from sourceobject select current not(isnullorempty(propertyinfo2))" Caption="from attestationobject select top 1 displayvalue(propertyinfo2)" />
+              <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="PropertyInfo3Proxy" Condition="from sourceobject select current not(isnullorempty(propertyinfo3))" Caption="from attestationobject select top 1 displayvalue(propertyinfo3)" />
+              <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="PropertyInfo4Proxy" Condition="from sourceobject select current not(isnullorempty(propertyinfo4))" Caption="from attestationobject select top 1 displayvalue(propertyinfo4)" />
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectView_AttestationCase_Fields&quot;)" ScriptItemUID="ExpressionColumnList1" />
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping2" />
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView Table="AttestationPolicy" ViewFKDataTable="SourceObject" ViewFKDataColumn="UID_AttestationPolicy" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableFKView Table="AttestationObject" ViewFKDataTable="AttestationPolicy" ViewFKDataColumn="UID_AttestationObject" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="BuildObjectTargetUrl(string objectkey)" Expression="{{&#xD;&#xA;string url = null;&#xD;&#xA;if(!string.IsNullOrEmpty(objectkey))&#xD;&#xA;{&#xD;&#xA;   var moduleNameIn = &quot;VI_Common_ObjectSheet&quot;;&#xD;&#xA;   string moduleName;&#xD;&#xA;   if (!_UserSession.ApplicationInfo.ObjectOverrides.TryGetValue(moduleNameIn, out moduleName))&#xD;&#xA;      moduleName = moduleNameIn;&#xD;&#xA;   &#xD;&#xA;   var objectSheet = _UserSession.ApplicationInfo.Modules[moduleName];&#xD;&#xA;   var dict = new System.Collections.Generic.Dictionary&lt;string, string&gt;();&#xD;&#xA;   dict[&quot;ObjectKey&quot;] = objectkey;&#xD;&#xA;   url = WebApplication.Instance.AbsoluteApplicationPath + objectSheet.GetUrl(dict);&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return url;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="AttestationCase" ScriptItemUID="VirtualTableExtension1">
+        <ColumnProxy Name="PropertyInfo1Proxy" ScriptItemUID="ColumnProxy1" DataColumn="PropertyInfo1" />
+        <ColumnProxy Name="PropertyInfo2Proxy" ScriptItemUID="ColumnProxy2" DataColumn="PropertyInfo2" />
+        <ColumnProxy Name="PropertyInfo3Proxy" ScriptItemUID="ColumnProxy3" DataColumn="PropertyInfo3" />
+        <ColumnProxy Name="PropertyInfo4Proxy" ScriptItemUID="ColumnProxy4" DataColumn="PropertyInfo4" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

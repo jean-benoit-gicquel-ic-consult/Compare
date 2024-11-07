@@ -1,0 +1,11 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Label_TableHeader" Type="Label" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="TableHeader" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.TableHeader{
+font-size: 1.3em; font-weight: bolder;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

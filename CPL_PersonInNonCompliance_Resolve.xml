@@ -1,0 +1,271 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="CPL_PersonInNonCompliance_Resolve">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action1">
+        <Delete DataTable="ComplianceCheckObjects" ScriptItemUID="Delete1" />
+        <LoadTable DataTable="NonCompliantObjects" Type="LimitedSQL" ScriptItemUID="CPLLoadTable1" IdentLimitedSQL="&quot;Webportal.VI_Responsibilities_Memberships.CPL_PersonCheckDetail&quot;">
+          <ParameterFree Name="&quot;uidobject&quot;" Value="UIDPerson()" ScriptItemUID="CPLParameterFree1" />
+          <ParameterFree Name="&quot;uidcompliancerule&quot;" Value="UIDComplianceRule()" ScriptItemUID="ParameterFree1" />
+        </LoadTable>
+        <FillTable Source="XObjectKey" DataTable="ComplianceCheckObjects" DataTableSource="NonCompliantObjects" DataColumnSource="ObjectKeyElement" ScriptItemUID="FillTable1" WhereClause="uid_compliancerule = UIDComplianceRule()">
+          <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType1" ConvertToInteractive="false" />
+        </FillTable>
+      </ActionSequence>
+      <ActionComponent ScriptItemUID="Action2">
+        <Popup DisplayType="Controls">
+          <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+            </HtmlAttributes>
+            <Wizard ScriptItemUID="Wizard1">
+              <OnCancel ScriptItemUID="Action11">
+                <ActionOnControl />
+              </OnCancel>
+              <WizardPage ScriptItemUID="WizardPage1" Title="translate(&quot;#LDS#Select permissions for removal&quot;)" AllowBackAction="false">
+                <OnNext ScriptItemUID="Action12">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral2">Actions.ObjectList.Clear();
+
+var removeThisCol = TableStore.GetLocalColumn(ComplianceCheckObjects, "RemoveThis");
+foreach (IDbObjectRow obj in ComplianceCheckObjects.Where(o=&gt;removeThisCol.GetValue(o).Bool))
+{
+	var asgn = new QER.CompositionApi.Assignment.PersonAssignment(UIDPerson, obj.ObjectKey);
+	asgn.Config.ExcludeDescription = TranslatePreventRuleViolation();
+	foreach (var removeAction in await asgn.GetRemoveActionsAsync(_Database, ct).ConfigureAwait(false))
+	{
+		Actions.ObjectList.Add(removeAction);
+	}	
+}</CodeLiteral>
+                </OnNext>
+                <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#Resolve a rule violation&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container4" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute6" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container3">
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate(&quot;#LDS#The following permissions contribute to this rule violation. Select one or more permissions that should be removed.&quot;)" />
+                  </ControlReferenceContainer>
+                  <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef3">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="PropertyList()" IsPropertyList="true">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="Person" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="Rule" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="EditTable" DataTable="Vars" />
+                  </ControlReferenceContainer>
+                  <Grid ScriptItemUID="Grid1">
+                    <GridBand DataTable="ComplianceCheckObjects" ScriptItemUID="GridBand1" DisplayHeader="Always" RowSelection="Multiple" DataColumnSelectState="RemoveThis" RowSelectionActive="" NoRowsText="translate(&quot;#LDS#No permissions were found. The cause for the violation may has already been resolved. You may close this wizard.&quot;)">
+                      <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="Auto" />
+                      <GridFilters ScriptItemUID="GridFilters1" />
+                      <GridRows />
+                      <GridColumnSimple ScriptItemUID="Column6" Column="__LongDisplay" />
+                      <GridColumnSimple ScriptItemUID="Column7" Column="TableName" />
+                    </GridBand>
+                  </Grid>
+                </Container>
+                <Validator DisplayType="Generic" ScriptItemUID="Validator1">
+                  <ValidationModifier Condition="0 = select count() from compliancecheckobjects where removethis" ID="AtLeastOnePermission" Text="translate(&quot;#LDS#Select at least one permission.&quot;)" />
+                </Validator>
+                <Container ScriptItemUID="Container11" />
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage2" Title="translate(&quot;#LDS#Review actions&quot;)">
+                <OnNext ScriptItemUID="Action5">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral1">
+    var keysToRemove = Actions.ObjectList.Where(a =&gt; a.IsActive).Select(a =&gt; a.KeyRemoved).ToArray();	
+    var analyzer = new QER.CompositionApi.Role.EntitlementLossAnalyzer(UIDPerson, keysToRemove);
+
+	foreach (var keyOrigin in Actions.ObjectList.Where(a =&gt; a.IsActive).Select(a =&gt; a.KeyOrigin).Distinct())
+	{
+		// these are the entitlements that the user wants to remove -&gt; ignore them
+	    analyzer.EntitlementsToIgnore.Add(keyOrigin);
+	}
+	
+	var keysLoseAlso = await analyzer.GetEntitlementsAsync(_Database, ct).ConfigureAwait(false);
+    
+	EntitlementsLoseAlso.Delete();
+	foreach (var k in keysLoseAlso)
+	{
+		var v = new ColumnInsertValues(EntitlementsLoseAlso);
+		v["Key"] = k.ToXmlString();
+		v["Table"] = k.Tablename;
+		v["Display"] = _Database.Source().Get(k, EntityLoadType.ReadOnly).Display;
+		EntitlementsLoseAlso.Insert(v);
+	}</CodeLiteral>
+                </OnNext>
+                <OnBack ScriptItemUID="Action10" />
+                <Label ScriptItemUID="Label2" Text="translate(&quot;#LDS#Resolve a rule violation&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container6" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute8" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container2">
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Text()" Value="translate(&quot;#LDS#The following actions will be taken to remove the permissions that contribute to the rule violation.&quot;)" />
+                  </ControlReferenceContainer>
+                </Container>
+                <Grid ScriptItemUID="Grid2">
+                  <GridBand DataTable="Actions" ScriptItemUID="GridBand2" OrderBy="'SortOrder'" EnableCustomAttributes="true" DisplayHeader="Always" RowSelection="Multiple" DataColumnSelectState="IsActiveProxy" RowSelectionActive="">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters4" />
+                    <GridRows />
+                    <GridColumnSimple ScriptItemUID="Column16" Column="ObjectDisplayProxy" />
+                    <GridColumnSimple ScriptItemUID="Column17" Column="DisplayProxy" />
+                  </GridBand>
+                </Grid>
+                <Validator DisplayType="Generic" ScriptItemUID="Validator2">
+                  <ValidationModifier Condition="0 = select count() from actions where isactive" ID="AtLeastOneAction" Text="translate(&quot;#LDS#No objects selected&quot;)" />
+                </Validator>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage3" Title="translate(&quot;#LDS#Loss of entitlements&quot;)">
+                <OnNext ScriptItemUID="Action3">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral7">var groups = Actions.ObjectList.Where(t =&gt; t.IsActive).GroupBy(a =&gt; a.KeyOrigin.ToXmlString());
+
+var pinckey = DbObjectKey.GetObjectKey("PersonInNonCompliance", "UID_Person", UIDPerson, "UID_NonCompliance", UidNonCompliance());
+
+foreach (var grp in groups)
+{
+	var key = grp.Key;
+	var actions = string.Join("|", grp.Select(g =&gt; g.Id));
+	using (var u = _Database.StartUnitOfWork())
+	{
+		var dict = new System.Collections.Generic.Dictionary&lt;string, object&gt;();
+        dict["ObjectKey"] = key;
+		dict["ActionIDs"] = actions;
+		dict["Culture"] = LanguageManager.Culture.Name;
+		var personinnoncpl = await _Database.Source().GetAsync(pinckey, EntityLoadType.DelayedLogic).ConfigureAwait(false);
+        await u.GenerateAsync(personinnoncpl, "RESOLVE", dict).ConfigureAwait(false);
+        await u.CommitAsync().ConfigureAwait(false);
+    }
+}</CodeLiteral>
+                </OnNext>
+                <OnBack ScriptItemUID="Action4" />
+                <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Resolve a rule violation&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container1" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute7" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container5" Condition="0 = select count() from EntitlementsLoseAlso">
+                  <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#The employee will not lose any additional entitlements.&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="div" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+                <Container ScriptItemUID="Container10" Condition="0 &lt; select count() from EntitlementsLoseAlso">
+                  <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#The employee will lose the following entitlements when the selected actions take effect. Review the list to avoid unintentional loss of access. Go back to the previous page to change the selection.&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="div" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Grid ScriptItemUID="Grid3">
+                    <GridBand DataTable="EntitlementsLoseAlso" ScriptItemUID="GridBand3" DisplayHeader="Always">
+                      <GridBandListView ScriptItemUID="GridBandListView3" EnableListView="Auto" />
+                      <GridFilters ScriptItemUID="GridFilters2" />
+                      <GridRows />
+                      <GridColumnSimple ScriptItemUID="Column13" Column="Table" />
+                      <GridColumnSimple ScriptItemUID="Column12" Column="Display" />
+                    </GridBand>
+                  </Grid>
+                </Container>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage4" Title="translate(&quot;#LDS#Results&quot;)" AllowBackAction="false" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowCancelAction="false">
+                <OnNext ScriptItemUID="Action9">
+                  <ActionOnControl />
+                </OnNext>
+                <Label ScriptItemUID="Label5" Text="translate(&quot;#LDS#Resolve a rule violation&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container8" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute9" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container9">
+                  <Label ScriptItemUID="Label4" Text="translate(&quot;#LDS#The changes are now queued for execution. You can track the progress in the page header.&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="div" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+              </WizardPage>
+            </Wizard>
+          </Container>
+        </Popup>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="Person" ScriptItemUID="Column3" DataSource="Expression" Expression="DisplayPerson()" Caption="datacaptionsingle(&quot;Person&quot;)" />
+          <Column DataType="System.String" Name="Rule" ScriptItemUID="Column4" TriggerUpdates="Never" DataSource="Expression" Expression="DisplayRule()" Caption="datacaptionsingle(&quot;ComplianceRule&quot;)" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="NonCompliantObjects" ScriptItemUID="DataTableCustom1">
+          <Column DataType="System.String" Name="UID_ComplianceRule" ScriptItemUID="Column9" />
+          <Column DataType="System.String" Name="ObjectKeyElement" ScriptItemUID="Column1" />
+        </DataTableCustom>
+        <DataTableGeneric Table="ComplianceCheckObjects" ScriptItemUID="DataTableGeneric1">
+          <Column DataType="System.Boolean" Name="RemoveThis" ScriptItemUID="Column2" Caption="translate(&quot;#LDS#Remove&quot;)" />
+          <Column DataType="System.String" Name="TableName" ScriptItemUID="Column8" TriggerUpdates="Never" DataSource="Expression" Expression="dbtable()" DisplayValueExpression="datacaptionsingle(TableName+&quot;&quot;)" Caption="translate(&quot;#LDS#Type&quot;)" />
+        </DataTableGeneric>
+        <DataTableObjectView Table="Actions" ElementType="QER.CompositionApi.Assignment.EntitlementRemoveAction, QER.CompositionApi" ScriptItemUID="DataTableObjectView3" DisplayColumn="Display">
+          <ColumnProxy ScriptItemUID="ColumnProxy4" DataColumn="IsActive" Name="IsActiveProxy" Caption="translate(&quot;#LDS#Execute&quot;)" />
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy15" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xD;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree14" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy16" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableObjectView>
+        <DataTableCustom Table="EntitlementsLoseAlso" ScriptItemUID="DataTableCustom2">
+          <Column DataType="System.String" Name="Key" ScriptItemUID="Column5" />
+          <Column DataType="System.String" Name="Table" ScriptItemUID="Column10" DisplayValueExpression="datacaptionsingle(table+&quot;&quot;)" Caption="translate(&quot;#LDS#Type&quot;)" />
+          <Column DataType="System.String" Name="Display" ScriptItemUID="Column11" Caption="translate(&quot;#LDS#Display&quot;)" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="UidNonCompliance()" DataType="System.String" Expression="singleproperty(&quot;ComplianceRule&quot;, &quot;UID_NonCompliance&quot;, sqlcompareuid(&quot;UID_ComplianceRule&quot;, UIDComplianceRule()))" TriggerUpdates="Never" />
+        <Function ScriptItemUID="Function2" Name="TranslatePreventRuleViolation()" DataType="System.String" Expression="translate('#LDS#PreventRuleViolation', DisplayRule())" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="UIDPerson()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="UIDComplianceRule()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="DisplayPerson()" />
+      <VirtualFunction DataType="System.String" Signature="DisplayRule()" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

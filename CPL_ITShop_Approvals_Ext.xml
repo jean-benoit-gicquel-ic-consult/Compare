@@ -1,0 +1,31 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ITShop_Approvals_Ext">
+    <Extensions>
+      <AddObject ObjectID="DataEventHandlers1" ObjectType="DataEventHandlers" SortOrder="0">
+        <DataEventHandler DataTable="PWOToDecide" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence Condition="from pwotodecide select current (checkstatus=false and checkstatussemaphor&gt;0) -- is there now a compliance violation?" ScriptItemUID="Action17">
+            <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction2">
+              <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#This request will now cause a compliance violation. Please review the details by clicking the compliance rule violations icon before proceeding.&quot;)" ScriptItemUID="CPLVirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="CPLVirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from pwotodecide select current display()" ScriptItemUID="CPLVirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="MessageBoxType()" Value="'Warning'" ScriptItemUID="CPLVirtualFunctionMapping4" />
+            </CallAction>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="CheckStatus" />
+        </DataEventHandler>
+      </AddObject>
+      <AddObject ObjectID="DataTableDbObject6" ObjectType="DataTableDbObject" SortOrder="50">
+        <Column Name="CheckStatus" Expression="if(getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;) = &quot;1&quot;)then(&#xD;&#xA;if(0 = (from PWODecisionHistory select count() where UID_PersonWantsOrg = (select current uid_personwantsorg from PWOToDecide) and not(IsNullOrEmpty(UID_ComplianceRule))))then(&#xD;&#xA;if(orderstate = 'OrderProduct')&#xD;&#xA;then(&#xD;&#xA;-- dependency on checkstatussemaphor to trigger recalculation&#xD;&#xA;checkstatussemaphor&gt;=0 and&#xD;&#xA;not(exists(&quot;personwantsorg&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompareuid(&quot;UID_PersonWantsOrg&quot;,UID_PersonWantsOrg),&#xD;&#xA;format(&quot;uid_personwantsorg in (select uid_personwantsorg from {0} where {1})&quot;,&#xD;&#xA;sqlfunctioncalltable(&quot;CPL&quot;,&quot;GComplianceCheck&quot;, &quot;FTCCSPWOCheck&quot;,sqlformatvalue(UID_PersonWantsOrg,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;sqlcompare(&quot;IsNewObject&quot;,true,&quot;bool&quot;,&quot;equal&quot;)&#xD;&#xA;))&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;else(true)&#xD;&#xA;)&#xD;&#xA;else(false)&#xD;&#xA;)&#xD;&#xA;else(true)" DataSource="Expression" ScriptItemUID="Column15" DataType="System.Boolean" />
+      </AddObject>
+      <AddObject ObjectID="DataTableDbObject6" ObjectType="DataTableDbObject" SortOrder="80">
+        <Column Name="ComplianceRelevance" Expression="-- If this Configuration is disabled, the value will be 1 (the approval workflow will always show compliance messages)&#xD;&#xA;if(not(convert(isnull(getconfig(&quot;VI_ITShop_Evaluate_ComplianceRelevance&quot;),'false'), 'Boolean')))then(1)&#xD;&#xA;&#xD;&#xA;-- If the ComplianceRelevance at decisionstep is &gt; 0  than we will take it&#xD;&#xA;else if(0 &lt; (from QERWorkingStep select sum(isnull(ComplianceRelevance,0)) where UID_QERWorkingStep in (from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from PWOToDecide)))) then(&#xD;&#xA;   from QERWorkingStep select sum(isnull(ComplianceRelevance,0)) where UID_QERWorkingStep in (from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from PWOToDecide))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;-- for the following exceptions we will adjust the relevance to 1 and will see always a compliance message&#xD;&#xA;else if(0 &lt; (from QERWorkingStep select count() where UID_QERWorkingStep in (from PWOHelperPWO select UID_QERWorkingStep where UID_PersonWantsOrg = (select current UID_PersonWantsOrg from PWOToDecide)) and objectwalker(&quot;FK(UID_PWODecisionRule).decisionrule&quot;)+&quot;&quot; in ('OC','OA','OH')))then (1)&#xD;&#xA;&#xD;&#xA;-- all other cases are not relevant&#xD;&#xA;else (0)&#xD;&#xA;&#xD;&#xA;" DataSource="Expression" ScriptItemUID="Column19" DataType="System.Int32" />
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="50">
+        <ConfigParam Key="VI_ITShop_Evaluate_ComplianceRelevance" Description="translate('#LDS#Evaluate compliance relevance in the approval workflow')" LongDescription="" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="50">
+        <ConfigEntry Key="VI_ITShop_Evaluate_ComplianceRelevance" Value="True" ScriptItemUID="CPLConfigEntry1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

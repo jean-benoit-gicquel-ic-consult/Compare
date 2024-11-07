@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_ListBox_Default" Type="ListBox" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClass" Value="defaultList" Comment="Listbox default layout" />
+    <Property Name="Rows" Value="10" Comment="" />
+    <CssDocument CssName="CSS">.defaultList				{ border: solid 1px %VI_Common_Color_DarkerGray%; padding-left: 2px; padding-top: 1px; padding-bottom: 1px; padding-right: 10px; width: 300px; font-family: %baseFontFamily%; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

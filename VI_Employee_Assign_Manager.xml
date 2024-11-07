@@ -1,0 +1,234 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Employee_Assign_Manager" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="VI.DB.Entities" />
+        <NamespaceImport Namespace="QBM.CompositionApi.UiAction" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action4">
+        <Update DataTable="Person" DataColumn="UID_PersonHeadNew" Value="uid_personhead" ScriptItemUID="Update1" />
+        <ActionSequence ScriptItemUID="Action5">
+          <Update DataTable="Vars" DataColumn="UID_ITShopOrg" Value="singleproperty(&quot;itshoporg&quot;, &quot;uid_itshoporg&quot;,&#xD;&#xA;format(&quot;uid_itshoporg in (select uid_itshoporgpr from {0}) &quot;,&#xD;&#xA;sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,&#xD;&#xA;sqlformatvalue(from person select current primarykey(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;sqlformatvalue('QER-9F7E5C3156D54C979C427FDB081C7056', &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;&quot;null&quot;,&#xD;&#xA;&quot;null&quot;))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Update2" />
+          <Delete DataTable="PWOReassignment" ScriptItemUID="Delete1" />
+          <Insert DataTable="PWOReassignment" ScriptItemUID="Insert1">
+            <ActionSequence ScriptItemUID="Action6" />
+            <InsertValue DataColumn="UID_PersonOrdered" Value="from person select current primarykey()" />
+            <InsertValue DataColumn="UID_PersonInserted" Value="getuser()" />
+            <InsertValue DataColumn="UID_Org" Value="from vars select uid_itshoporg" />
+            <InsertValue DataColumn="ValidFrom" Value="NullTime(adddays(getdate(),1))" />
+          </Insert>
+        </ActionSequence>
+        <LoadTable DataTable="PWOExisting" WhereClause="sqland(&#xD;&#xA;   sqlcompare(&quot;orderstate&quot;, 'Assigned', &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;),&#xD;&#xA;   sqlcompareuid(&quot;uid_personordered&quot;, from person select current primarykey())&#xD;&#xA;)" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+          <FillTableDisplayColumn DataColumn="ObjectKeyAssignment" />
+          <FillTableDisplayColumn DataColumn="ObjectKeyOrdered" />
+        </LoadTable>
+        <LoadTable DataTable="PersonHasObject" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+        <FillTable Source="XObjectKey" DataTable="PersonAssignmentObjects" ScriptItemUID="FillTable1" DataTableSource="PersonHasObject" DataColumnSource="ObjectKeyRelation" DataColumnXObjectKey="XObjectKey" ResolveMNObjects="NoResolve" WhereClause="ObjectKeyRelation &lt;&gt; &quot;&quot; and CanDelete(GetMNTableName(GetObjectKeyTable(ObjectKey)))">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeBulk="true" />
+        </FillTable>
+        <FillTable Source="XObjectKey" DataTable="PersonObjects" ScriptItemUID="FillTable2" DataTableSource="PersonHasObject" DataColumnSource="ObjectKey" DataColumnTableName="" DataColumnXObjectKey="XObjectKey" ResolveMNObjects="NoResolve" WhereClause="ObjectKeyRelation &lt;&gt; &quot;&quot; and CanDelete(GetMNTableName(GetObjectKeyTable(ObjectKey)))">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+        </FillTable>
+        <CodeLiteral ScriptItemUID="CodeLiteral1">// Build action group
+var group = new XmlUiActionGroup();
+
+// Fill in all assignment requests
+foreach (var pwo in PWOExisting)
+{
+	IEntity entity = ((IDbObjectRow)pwo).Entity;
+	var pwoDiff = new Diff(new DiffData
+	{
+		MethodCalls = new[]
+		{
+			new MethodCallData
+			{
+                Name = "Unsubscribe"
+            }
+        }
+    });
+	
+	var objectKeyForDisplay = pwo.GetValue("ObjectKeyAssignment").String;
+	if (string.IsNullOrEmpty(objectKeyForDisplay))
+	{
+		objectKeyForDisplay = pwo.GetValue("ObjectKeyOrdered").String;
+	}
+
+	string objectDisplay = "";
+	IEntity entityForDisplay;
+	if (_Database.Source().TryGet(new DbObjectKey(objectKeyForDisplay), out entityForDisplay))
+	{
+		objectDisplay = entityForDisplay.LongDisplay;
+	}
+	
+	var diffMethodCall = new DiffAction(pwoDiff, new DbObjectKey(pwo.GetValue("XObjectKey")))
+	{
+		Display = GetCaptionPwoValue(),
+		ObjectDisplay = objectDisplay
+	};
+
+	diffMethodCall.UserData["DisplayKey"] = GetCaptionPwoKey();	
+	diffMethodCall.UserData["ObjectKeyForDisplay"] = objectKeyForDisplay;
+
+	group.Actions.Add(diffMethodCall);
+}
+
+// Fill in all PersonHasObject objects
+var relationColumn = TableStore.GetLocalColumn(PersonHasObject, "ObjectKeyRelation");
+var objectKeyColumn = PersonHasObject.GetColumn("ObjectKey");
+foreach (var pho in PersonHasObject)
+{
+	var key = relationColumn.GetValue(pho);
+	if (string.IsNullOrEmpty(key))
+		continue;
+	
+	var phoDiff = new Diff(new DiffData {State = EntityState.Deleted});
+	
+	var objectKey = objectKeyColumn.GetValue(pho);
+	string objectDisplay = "";
+	IEntity entityForDisplay;
+	if (_Database.Source().TryGet(new DbObjectKey(objectKey), out entityForDisplay))
+	{
+		objectDisplay = entityForDisplay.LongDisplay;
+	}
+	
+	var deletePersonHasObject = new DiffAction(phoDiff, new DbObjectKey(key))
+	{
+		Display = GetCaptionValue(),
+		ObjectDisplay = objectDisplay
+	};
+	
+	deletePersonHasObject.UserData["DisplayKey"] = GetCaptionKey();
+	deletePersonHasObject.UserData["ObjectKeyForDisplay"] = objectKey;
+
+	group.Actions.Add(deletePersonHasObject);
+}
+
+// write to additional data
+
+PWOReassignment.First().SetValue("AdditionalData", group.GetXmlAsync(_Database).Result);</CodeLiteral>
+      </ActionSequence>
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="AssignToNew" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Heading Assign To New Manager&quot;)" ScriptItemUID="Form1">
+          <ActionSequence ScriptItemUID="Action1" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+            <Label Text="translate(&quot;#LDS#Heading Assign To New Manager&quot;)" ScriptItemUID="Label1" />
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+            <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;flex-fill&quot;" />
+              </HtmlAttributes>
+              <Container Condition="from vars select isnullorempty(uid_itshoporg)" ScriptItemUID="Container3">
+                <Label Text="translate(&quot;#LDS#You do not have permission to assign a new manager.&quot;)" ScriptItemUID="Label2" />
+              </Container>
+              <ContainerTemplate DataTable="Person" WhereClause="from vars select not(isnullorempty(uid_itshoporg))" ScriptItemUID="ContainerTemplate1">
+                <ContainerTemplate DataTable="PWOReassignment" ScriptItemUID="ContainerTemplate2">
+                  <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container5">
+                    <Label Text="translate(&quot;#LDS#Please select the new manager for {0}.&quot;, from person select current display())" ScriptItemUID="Label3" />
+                  </Container>
+                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                    <Label Text="translate(&quot;#LDS#New manager&quot;)" ScriptItemUID="Label4" />
+                    <ColumnEditor DataTable="Person" DataColumn="UID_PersonHeadNew" ScriptItemUID="ColumnEditor1">
+                      <VirtualFunctionMapping ID="AdditionalWhereClause()" Value="sqland(&#xD;&#xA;sqlcompare(&quot;IsInActive&quot;, 0, &quot;bool&quot;, &quot;equal&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompare(&quot;uid_person&quot;, getuser(), &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;),&#xD;&#xA;sqlcompare(&quot;uid_person&quot;, from person select current uid_person, &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" ScriptItemUID="VirtualFunctionMapping1" />
+                    </ColumnEditor>
+                    <FormItemLabel DataTable="PWOReassignment" DataColumn="ValidFrom" ScriptItemUID="FormItemLabel1">
+                      <Label Text="translate(&quot;#LDS#Effective date&quot;)" ScriptItemUID="Label5" />
+                    </FormItemLabel>
+                    <ColumnEditor DataTable="PWOReassignment" DataColumn="ValidFrom" ScriptItemUID="ColumnEditor2" />
+                  </LayoutPanel>
+                  <ControlReferenceControlList ID="QER_PersonWantsOrg_EditActionGroup" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping VirtualTable="PWO" DataTable="PWOReassignment" ScriptItemUID="VirtualTableMapping1">
+                      <VirtualColumnMapping VirtualColumn="Data" DataColumn="AdditionalData" />
+                    </VirtualTableMapping>
+                    <VirtualFunctionMapping ID="MarkActiveActionsIrreversible()" Value="true -- if the current manager says that something must be deleted, the new manager should not have the option to un-delete" ScriptItemUID="VirtualFunctionMapping2" />
+                  </ControlReferenceControlList>
+                </ContainerTemplate>
+              </ContainerTemplate>
+            </Container>
+            <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container17">
+              <Button Text="translate(&quot;#LDS#Back&quot;)" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button1">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect1" />
+                </ServerActionCall>
+              </Button>
+              <Button Text="translate(&quot;#LDS#Submit&quot;)" EnabledCondition="from pworeassignment select top 1 not(isnullorempty(orderdetail1))" ScriptItemUID="Button2">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction1">
+                    <VirtualControlMapping VirtualControl="OnOK" ContainerType="ActionComponent">
+                      <ActionComponent ScriptItemUID="Action3">
+                        <CodeLiteral ScriptItemUID="CodeLiteral2">// call AdditionalDataWrite delegate
+var dict = (System.Collections.Generic.IDictionary&lt;IDataRow, Action&gt;) DataContext.PWOReassignment.ExtendedProperties["AdditionalDataWrite"];
+dict[DataContext.PWOReassignment.First()]();</CodeLiteral>
+                        <Save DataTable="PWOReassignment" ScriptItemUID="Save1" />
+                        <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction2">
+                          <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your manager change request has been submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                          <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping7" />
+                        </CallAction>
+                        <ActionOnControl />
+                        <Redirect Target="ReturnLastForm" ScriptItemUID="Redirect2" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you want to save these changes?&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                    <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping9" />
+                    <VirtualFunctionMapping ID="ShowCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping10" />
+                    <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Assign to new manager&quot;)" ScriptItemUID="VirtualFunctionMapping11" />
+                  </CallAction>
+                </ServerActionCall>
+              </Button>
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOReassignment" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOExisting" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action8" />
+          <Column Name="CheckStatus" Expression="true" DataSource="Expression" ScriptItemUID="Column15" DataType="System.Boolean" />
+          <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column1" MinLength="" MaxLength="" Comment="dummy property, required for interface compatibility" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_ITShopOrg" DataType="System.String" ScriptItemUID="Column4" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="PersonHasObject" Table="PersonHasObject" ScriptItemUID="DataTableDbObject4" WhereClauseSQL="SqlAnd(&#xD;&#xA;   sqlcompareuid(&quot;uid_person&quot;, from person select current primarykey()),&#xD;&#xA;   sqlcompare(&quot;inheritinfo&quot;, 1, &quot;int&quot;, &quot;bitsset&quot;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+          <ActionSequence ScriptItemUID="Action9" />
+          <Column Name="ObjectKeyRelation" DataType="System.String" ScriptItemUID="Column8" DataSource="Expression" Expression="if(Exists(GetObjectKeyRelation(GetMNTableName(GetObjectKeyTable(ObjectKey)),GetObjectKeyTable(ObjectKey), GetUIDFromObjectKey(ObjectKey),&quot;Person&quot;,from person select current primarykey())))then&#xD;&#xA;   GetObjectKeyRelation(GetMNTableName(GetObjectKeyTable(ObjectKey)),GetObjectKeyTable(ObjectKey), GetUIDFromObjectKey(ObjectKey),&quot;Person&quot;,from person select current primarykey())&#xD;&#xA;else&#xD;&#xA;   &quot;&quot;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="PersonAssignmentObjects" ScriptItemUID="DataTableGeneric1">
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column14" />
+        </DataTableGeneric>
+        <DataTableGeneric Table="PersonObjects" ScriptItemUID="DataTableGeneric2">
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column7" />
+        </DataTableGeneric>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="GetUIDFromObjectKey(String objectkey)" Expression="Substring(Convert(objectkey,&quot;System.String&quot;),IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7,(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/P&gt;&lt;/Key&gt;&quot;,0)-(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7)))" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="GetMNTableName(String tablename)" Expression="if(tablename in (&quot;Department&quot;,&quot;ProfitCenter&quot;,&quot;Locality&quot;,&quot;Org&quot;,&quot;ITShopOrg&quot;,&quot;AERole&quot;))then(&#xD;&#xA;   format(&quot;PersonIn{0}&quot;,tablename)&#xD;&#xA;)&#xD;&#xA;else if(tablename = &quot;&quot;)then(&#xD;&#xA;   &quot;&quot;&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   if(Exists(&quot;DialogTable&quot;,SqlAnd(SqlCompare(&quot;IsDeactivatedByPreProcessor&quot;, &quot;0&quot;,&quot;Int&quot;,&quot;equal&quot;,&quot;none&quot;),SqlCompare(&quot;TableName&quot;, format(&quot;PersonHas{0}&quot;,replace(tablename, &quot;Application&quot;, &quot;App&quot;)),&quot;String&quot;,&quot;equal&quot;,&quot;none&quot;))))then&#xD;&#xA;      format(&quot;PersonHas{0}&quot;,replace(tablename, &quot;Application&quot;, &quot;App&quot;))&#xD;&#xA;   else&#xD;&#xA;      &quot;&quot;&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="GetCaptionValue()" Expression="translate(&quot;#LDS#Delete assignment on the effective date&quot;)" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="GetCaptionPwoValue()" Expression="translate(&quot;#LDS#Cancel request on the effective date&quot;)" DataType="System.String" ScriptItemUID="Function5" />
+        <Function Name="GetCaptionKey()" Expression="&quot;Delete assignment on the effective date&quot;" DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="GetCaptionPwoKey()" Expression="&quot;Cancel request on the effective date&quot;" DataType="System.String" ScriptItemUID="Function6" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="Person" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action11">
+            <Update DataTable="PWOReassignment" DataColumn="OrderDetail1" Value="from person select current &#xD;&#xA;(if(isnullorempty(uid_personheadnew)) then &quot;&quot;&#xD;&#xA;else&#xD;&#xA;getobjectkey(&quot;Person&quot;, uid_personheadnew, &quot;&quot;))" ScriptItemUID="Update3" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonHeadNew" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Person" Class="Person" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <Column Name="UID_PersonHeadNew" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" DataType="System.String" ScriptItemUID="Column5" Caption="translate(&quot;#LDS#New Manager&quot;)" FKWhereClause="" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

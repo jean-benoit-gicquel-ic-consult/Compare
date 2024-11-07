@@ -1,0 +1,133 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a3aeff03-2cc1-fe06-4bf2-7979a25edaba">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_Session_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="0">
+        <DataTableDbObject Table="User" Class="Person" WhereClauseSQL="&quot;uid_person = '&quot;+ getuser() + &quot;'&quot;" ScriptItemUID="QERDataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="QERAction1">
+            <LoadTable DataTable="UserRelatedApplication" ScriptItemUID="QERLoadTable1">
+              <DbObjectLoadType ScriptItemUID="QERDbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <Column Name="CountUpdate" DataType="System.Int32" ScriptItemUID="QERColumn1" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="50">
+        <DataTableDbObject Class="RelatedApplication" Table="UserRelatedApplication" ScriptItemUID="QERDataTableDbObject2">
+          <ActionSequence ScriptItemUID="QERAction2" />
+          <Column Name="IsActiveForThisUser" DataType="System.Boolean" ScriptItemUID="QERColumn2" DataSource="Expression" Expression="if(isnullorempty(whereclause)) then true&#xD;&#xA;else exists(&quot;person&quot;, &quot;uid_person = '&quot;+getuser()+&quot;' and (&quot;+ variable(whereclause) +&quot;)&quot;)" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Action4" ObjectType="ActionSequence" SortOrder="0">
+        <LoadTable DataTable="User" ScriptItemUID="QERLoadTable2">
+          <DbObjectLoadType ScriptItemUID="QERDbObjectLoadType2" />
+          <FillTableDisplayColumn DataColumn="UID_DialogCulture" />
+          <FillTableDisplayColumn DataColumn="UID_DialogCultureFormat" />
+        </LoadTable>
+        <ActionSequence Condition="isnull(getconfig(&quot;VI_Common_DisplayOpenItems&quot;),'true') = 'true'" ScriptItemUID="QERAction3">
+          <Timer Timeout="Convert(isnull(getconfig(&quot;VI_Common_DisplayOpenItemsUpdateInterval&quot;),'60000'), 'System.Int32')" ExecuteImmediately="false" RepeatCondition="">
+            <ActionSequence ScriptItemUID="QERAction4">
+              <CallAction ActionID="UpdateOpenItems" ScriptItemUID="QERCall1" />
+            </ActionSequence>
+          </Timer>
+        </ActionSequence>
+        <CodeLiteral ScriptItemUID="QERCodeLiteral1">_UserSession.SessionInitialized += (s,e)=&gt; UpdateOpenItems().Wait();</CodeLiteral>
+        <CodeLiteral ScriptItemUID="QERCodeSetCulture">// Handling of the user's preferred culture
+
+var theUser = User.Rows.FirstOrDefault();
+
+if (theUser != null)
+{
+	await QER.CompositionApi.Person.SetSessionCulture.SetCultureFromPersonAsync(((IDbObjectRow)theUser).Entity, new SessionStateAdapter(_Database)).ConfigureAwait(false);
+}
+
+</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="0">
+        <Control ID="UpdateOpenItems">
+          <LocalControlContext ContainerType="ActionComponent" Comment="Updates the indicator numbers of open requests, attestation cases and approval cases.">
+            <ActionComponent ScriptItemUID="QERAction5">
+              <ActionSequence ItemUID="Count All" ScriptItemUID="QERAction6">
+                <ActionSequence Condition="IsPreProp(&quot;ITSHOP&quot;)" ItemUID="IsPreProp(&quot;ITSHOP&quot;)" ScriptItemUID="QERAction7">
+                  <Update DataTable="PendingItems" DataColumn="Count" Value="DbCount(&quot;PersonWantsOrg&quot;,format(&quot;uid_personwantsorg in (select uid_personwantsorg from QER_VITShopDecisionPerson where {0})&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompare(&quot;rulerlevel&quot;, 2, &quot;int&quot;, &quot;notequal&quot;),&#xD;&#xA;SqlCompare(&quot;decisionorcomment&quot;,&quot;D&quot;,&quot;string&quot;,&quot;Equal&quot;,&quot;NonUnicodeLiterals&quot;),SqlCompare(&quot;UID_Person&quot;,GetUser(),&quot;string&quot;,&quot;Equal&quot;,&quot;NonUnicodeLiterals&quot;))))" ScriptItemUID="QERUpdate2" WhereClause="Id = &quot;OpenPWO&quot;" />
+                  <Update DataTable="PendingItems" DataColumn="Count" Value="DbCount(&quot;ShoppingCartItem&quot;,SqlAnd(format(&quot;not {0}&quot;,SqlEmpty(&quot;UID_ShoppingCartOrder&quot;,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;SqlCompareUid(&quot;UID_PersonInserted&quot;,GetUser())))" ScriptItemUID="QERUpdate3" WhereClause="Id = &quot;CountProductsInShoppingCart&quot;" />
+                  <Update DataTable="PendingItems" DataColumn="Count" Value="if(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;) = 'true')then&#xD;&#xA;   DbCount(&quot;PWOHelperPWO&quot;,SqlAnd(SqlCompareUid(&quot;UID_PersonHead&quot;,GetUser()),SqlCompare(&quot;Decision&quot;,&quot;Q&quot;,&quot;string&quot;,&quot;Equal&quot;,&quot;none&quot;)),false)&#xD;&#xA;else&#xD;&#xA;   0" ScriptItemUID="QERUpdate15" WhereClause="Id=&quot;OpenInquiries&quot;" />
+                </ActionSequence>
+                <ActionSequence ScriptItemUID="QERAction12" ItemUID="my Processes">
+                  <CodeLiteral ScriptItemUID="QERCodeLiteral3">var provider = new VI.WebRuntime.Util.LastLookupDateProvider(VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserConfiguration&gt;());
+
+if (provider == null || !provider.IsEnabled()) return;
+
+// get last lookup date
+var lastDate = await provider.GetAsync("UserProcess").ConfigureAwait(false);
+var countNewProcesses = await new QBM.CompositionApi.ProgressView.Process().GetCountUpdatedProcessesAsync(_Database, lastDate).ConfigureAwait(false);
+
+foreach (var procRow in this.PendingItems.Where(p =&gt; "NewProcesses".Equals(PendingItems.GetColumn("Id").GetValue(p).String)))
+{
+	PendingItems.GetColumn("Count").SetValue(procRow, countNewProcesses);
+}
+</CodeLiteral>
+                </ActionSequence>
+              </ActionSequence>
+              <Update DataTable="UserMenu" DataColumn="AdditionalData" Value="from countopendatabaseitems select (if(AllOpenDecisions = 0) then &quot;&quot;  else numformat(AllOpenDecisions, &quot;#,#&quot;))" WhereClause="id=&quot;ROOT_ITShop_Approve&quot;" ScriptItemUID="QERUpdate7" />
+              <Update DataTable="User" DataColumn="CountUpdate" Value="countupdate+1" ScriptItemUID="QERUpdate8" />
+              <ActionSequence ItemUID="fill actions with quantity" ScriptItemUID="QERAction11">
+                <Update DataTable="UserMenu" DataColumn="AdditionalData" Value="from PendingItems select top 1 (if(Count = 0) then &quot;&quot;  else numformat(Count , &quot;#,#&quot;)) where Id=&quot;OpenPWO&quot;" WhereClause="id=&quot;VI_ITShop_Approvals&quot;" ScriptItemUID="QERUpdate9" />
+                <Update DataTable="UserMenu" DataColumn="AdditionalData" Value="from PendingItems select top 1 (if(Count= 0) then &quot;&quot;  else numformat(Count, &quot;#,#&quot;)) where Id=&quot;OpenInquiries&quot;" WhereClause="id=&quot;VI_ITShop_AnswerQuestions&quot;" ScriptItemUID="QERUpdate11" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableSingleRow Table="CountOpenDatabaseItems" ScriptItemUID="QERDataTableSingleRow1">
+          <Column DataType="System.Int32" Name="OpenPWO" ScriptItemUID="QERColumn3" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;OpenPWO&quot;" TriggerUpdates="Updates" />
+          <Column DataType="System.Int32" Name="OpenInquiries" ScriptItemUID="QERColumn4" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;OpenInquiries&quot;" TriggerUpdates="Updates" />
+          <Column Name="AllOpenDecisions" DataType="System.Int32" ScriptItemUID="QERColumn9" DataSource="Expression" Expression="from pendingitems select sum(Count) where IsCountAsDecision" TriggerUpdates="Updates" />
+          <Column DataType="System.Int32" Name="CountProductsInShoppingCart" ScriptItemUID="QERColumn5" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;CountProductsInShoppingCart&quot;" TriggerUpdates="Updates" />
+          <Column DataType="System.Int32" Name="NewProcesses" ScriptItemUID="QERColumn6" DataSource="Expression" Expression="from PendingItems select top 1 Count where Id = &quot;NewProcesses&quot;" TriggerUpdates="Updates" />
+        </DataTableSingleRow>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition2" ObjectType="ConfigSectionDefinition" SortOrder="15">
+        <ConfigParam Key="VI_Common_AccessControl_StarlingEnabled" Description="translate(&quot;#LDS#Enable Starling two-factor authentication&quot;)" />
+        <ConfigParam Key="VI_Common_AccessControl_Starling_AllowUnregistered" Description="translate(&quot;#LDS#Allow access for users who are not registered with Starling two-factor authentication&quot;)" />
+        <ConfigParam Key="VI_Common_AccessControl_Webauthn_2FA" Description="translate(&quot;#LDS#Webauthn: Enable Webauthn two-factor authentication&quot;)" LongDescription="translate(&quot;#LDS#Specify whether you want to enable Webauthn two-factor authentication.&quot;)" />
+        <ConfigParam Key="VI_Common_AccessControl_Webauthn_2FAID" Type="Text" Description="translate(&quot;#LDS#Webauthn: Secondary authentication provider ID&quot;)" LongDescription="translate(&quot;#LDS#Enter the ID of the secondary authentication provider for Webauthn two-factor authentication. The ID can be found in your RSTS configuration.&quot;)" />
+        <ConfigParam Key="VI_Common_AccessControl_Webauthn_2FA_VisibleControls" Description="translate(&quot;#LDS#Webauthn: Manage security keys in web application&quot;)" LongDescription="translate(&quot;#LDS#Specify whether users can manage Webauthn security keys in the web application.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QBMConfigSection1" ObjectType="ConfigSection">
+        <ConfigEntry ScriptItemUID="QERConfigEntry1" Key="VI_Common_AccessControl_StarlingEnabled" Value="False" />
+        <ConfigEntry ScriptItemUID="QERConfigEntry2" Key="VI_Common_AccessControl_Starling_AllowUnregistered" Value="True" />
+        <ConfigEntry ScriptItemUID="QERConfigEntry3" Key="VI_Common_AccessControl_Webauthn_2FA" Value="False" />
+        <ConfigEntry ScriptItemUID="QERConfigEntry4" Key="VI_Common_AccessControl_Webauthn_2FAID" Value="fido" />
+        <ConfigEntry ScriptItemUID="QERConfigEntry5" Key="VI_Common_AccessControl_Webauthn_2FA_VisibleControls" Value="False" />
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence" SortOrder="25">
+        <Insert DataTable="PendingItems" ScriptItemUID="QERInsert1">
+          <ActionSequence ScriptItemUID="QERAction8" />
+          <InsertValue Value="&quot;CountProductsInShoppingCart&quot;" DataColumn="Id" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence" SortOrder="15">
+        <Insert DataTable="PendingItems" ScriptItemUID="QERInsert2">
+          <ActionSequence ScriptItemUID="QERAction9" />
+          <InsertValue Value="&quot;OpenInquiries&quot;" DataColumn="Id" />
+          <InsertValue Value="translate(&quot;#LDS#There are new IT shop inquiries.&quot;)" DataColumn="NewItemsText" />
+          <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_ITShop_AnswerQuestions&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence" SortOrder="5">
+        <Insert DataTable="PendingItems" ScriptItemUID="QERInsert3">
+          <ActionSequence ScriptItemUID="QERAction10" />
+          <InsertValue Value="&quot;OpenPWO&quot;" DataColumn="Id" />
+          <InsertValue Value="translate(&quot;#LDS#There are new requests that you can approve or reject.&quot;)" DataColumn="NewItemsText" />
+          <InsertValue Value="true" DataColumn="IsCountAsDecision" />
+          <InsertValue Value="&quot;page.axd?ContextID=VI_ITShop_Approvals&quot;" DataColumn="URL" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="CompilationSettings1" ObjectType="CompilationSettings">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

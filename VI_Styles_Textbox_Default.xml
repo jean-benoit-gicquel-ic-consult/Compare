@@ -1,0 +1,37 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Textbox_Default" Type="TextBox" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClass" Value="imx-textbox" Comment="" />
+    <Property Name="CssClassNameIfMandatory" Value="imx-textbox imx-textbox-mandatory" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-textbox	{
+  font-family: %baseFontFamily%; 
+  font-size: inherit !important;
+  width: %propertyeditortextboxwidth%px; 
+  padding: 2px 4px !important; 
+  outline: none; 
+  color: %VI_Common_Color_Font% !important;
+}
+
+textarea.imx-textbox {overflow: auto; height: auto;}
+.imx-textbox:focus { border-color: %QBM_Primary_Blue%; }
+
+.imx-textbox.imx-invalid { border-color: %VI_Common_Color_BorderSignaled%; }
+
+.imx-mdc-detail .imx-textbox
+{
+  width: 100%;
+}
+
+@media %IMX_Mediaquery_Smartphone%
+{
+    .LayoutpPropCol1 .imx-textbox
+	{
+	    width: 100%;
+		box-sizing: border-box;
+		height: inherit;
+	}
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

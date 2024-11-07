@@ -1,0 +1,297 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PWO_Detail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container1">
+          <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlReferenceContainer2">
+            <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="False" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container9" ItemUID="ButtonBar" Condition="-- AnyButtonAvailable(from PersonWantsOrg select current UID_PersonWantsOrg)">
+          <Container ItemUID="resend request" ScriptItemUID="Container10" Condition="ResendRequestAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)">
+            <Button Text="translate('#LDS#Submit again')" ScriptItemUID="ctl50" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ctl60">
+                <CallAction ActionID="VI_ITShop_PersonWantsOrg_Resubmit" ScriptItemUID="ctl61" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ItemUID="withdraw request" ScriptItemUID="Container11" Condition="WithdrawRequestAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)">
+            <Button Text="translate('#LDS#Cancel request')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button6">
+              <ServerActionCall ScriptItemUID="ServerActionCall4">
+                <Update DataColumn="IsStatusChanged" DataTable="Vars" ScriptItemUID="Update3" Value="false" />
+                <Update DataColumn="CancelOrderReason" DataTable="Vars" ScriptItemUID="Update4" />
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction5">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container12" RefreshTriggerExpression="from Vars select IsStatusChanged">
+                      <SwitchContainer ScriptItemUID="Switch2">
+                        <SwitchContainerCase ScriptItemUID="Case3" Condition="not(from Vars select IsStatusChanged)">
+                          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container13">
+                            <FormItemLabel DataTable="PersonWantsOrg" DataColumn="CancelReason" ScriptItemUID="FormItemLabel1">
+                              <Label Text="translate('#LDS#Please enter a reason for cancelation.')" ScriptItemUID="Label6" />
+                            </FormItemLabel>
+                          </Container>
+                          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container14">
+                            <TextBox DataTable="Vars" DataColumn="CancelOrderReason" TextMode="MultiLine" Rows="3" CustomStyle="&quot;width:520px;&quot;" ScriptItemUID="TextBox1" />
+                          </Container>
+                        </SwitchContainerCase>
+                        <SwitchContainerCase ScriptItemUID="Case4">
+                          <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+                            <Label Text="translate('#LDS#The status of the selected request has been changed. The request is reloaded.')" ScriptItemUID="Label1" />
+                          </Container>
+                        </SwitchContainerCase>
+                      </SwitchContainer>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container15" RefreshTriggerExpression="from Vars select IsStatusChanged">
+                      <SwitchContainer ScriptItemUID="Switch3">
+                        <SwitchContainerCase ScriptItemUID="Case5" Condition="not(from Vars select IsStatusChanged)">
+                          <Button Text="translate('#LDS#OK')" ScriptItemUID="Button7">
+                            <ServerActionCall ScriptItemUID="ServerActionCall5">
+                              <LoadTable DataTable="PersonWantsOrg" ScriptItemUID="LoadTable1" WhereClause="SqlCompareUid(&quot;UID_PersonWantsOrg&quot;,from PersonWantsOrg select current UID_PersonWantsOrg)" LoadNew="false" RemoveDeleted="false">
+                                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+                              </LoadTable>
+                              <SwitchAction ScriptItemUID="Switch1">
+                                <SwitchActionCase ScriptItemUID="Case1" Condition="WithdrawRequestAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)" ItemUID="Check for orderstate">
+                                  <ForeachRow DataTable="PersonWantsOrg" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" ScriptItemUID="ForeachRow1">
+                                    <Method DataTable="PersonWantsOrg" Method="CancelOrder" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)">
+                                      <MethodParameter Name="'strUID_PersonHead'" Value="from user select uid_person " />
+                                      <MethodParameter Name="'strReasonText'" Value="from Vars select isnull(CancelOrderReason,'')" />
+                                    </Method>
+                                  </ForeachRow>
+                                  <ActionOnControl />
+                                  <CallAction ActionID="InvalidateTableStore" ScriptItemUID="Call1" />
+                                </SwitchActionCase>
+                                <SwitchActionCase ScriptItemUID="Case2">
+                                  <Update DataColumn="IsStatusChanged" DataTable="Vars" ScriptItemUID="Update2" Value="true" />
+                                </SwitchActionCase>
+                              </SwitchAction>
+                            </ServerActionCall>
+                          </Button>
+                          <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button8" AssociatedWithEscapeKey="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute2" />
+                            </HtmlAttributes>
+                            <ServerActionCall ScriptItemUID="ServerActionCall6">
+                              <ActionOnControl />
+                            </ServerActionCall>
+                          </Button>
+                        </SwitchContainerCase>
+                        <SwitchContainerCase ScriptItemUID="Case6">
+                          <Button Text="translate('#LDS#OK')" ScriptItemUID="Button4">
+                            <ServerActionCall ScriptItemUID="ServerActionCall1">
+                              <ActionOnControl />
+                              <CallAction ActionID="InvalidateTableStore" ScriptItemUID="Call5" />
+                            </ServerActionCall>
+                          </Button>
+                        </SwitchContainerCase>
+                      </SwitchContainer>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="Translate('#LDS#Cancel request')" ScriptItemUID="VirtualFunctionMapping3" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ItemUID="withdraw delegation (after choosing another approver)" ScriptItemUID="Container16" Condition="WithdrawDelegationAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)">
+            <Button Text="translate('#LDS#Withdraw delegation')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button9" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button9title" Value="translate('#LDS#Withdraw delegation of approval')" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall7">
+                <CallAction ActionID="RevokeDelegation" ScriptItemUID="CallAction6" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ItemUID="withdraw additional approver" ScriptItemUID="Container17" Condition="WithdrawAdditionalApproverAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)">
+            <Button Text="translate('#LDS#withdraw additional approval')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button10" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button10title" Value="translate('#LDS#Withdraw additional approver')" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall8">
+                <CallAction ActionID="RevokeDelegation" ScriptItemUID="CallAction7" />
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ItemUID="RecallQuery" ScriptItemUID="Container18" Condition="RecallQueryAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)">
+            <Button Text="translate('#LDS#Recall last question')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button11">
+              <ServerActionCall ScriptItemUID="ctl1xc">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction8">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container19">
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container20">
+                        <FormItemLabel DataTable="PersonWantsOrg" DataColumn="CancelReason" ScriptItemUID="FormItemLabel2">
+                          <Label Text="translate('#LDS#Please enter a reason for recall.')" ScriptItemUID="Label7" />
+                        </FormItemLabel>
+                      </Container>
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container21">
+                        <TextBox DataTable="PersonWantsOrg" DataColumn="CancelReason" TextMode="MultiLine" Rows="3" CustomStyle="&quot;width:520px;&quot;" ScriptItemUID="TextBox2" />
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container22">
+                      <Button Text="translate('#LDS#OK')" ScriptItemUID="Button12">
+                        <ServerActionCall ScriptItemUID="ServerActionCall9">
+                          <ForeachRow DataTable="PersonWantsOrg" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" ScriptItemUID="ForeachRow2">
+                            <Method DataTable="PersonWantsOrg" Method="RecallQuery" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)">
+                              <MethodParameter Name="'strReasonText'" Value="from personwantsorg select current isnull(CancelReason,'')" />
+                            </Method>
+                          </ForeachRow>
+                          <ActionOnControl />
+                          <CallAction ActionID="InvalidateTableStore" ScriptItemUID="Call2" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Cancel')" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" ScriptItemUID="Button13" AssociatedWithEscapeKey="true" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall10">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="Translate('#LDS#Recall last question')" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ItemUID="ResetReservation" ScriptItemUID="Container23" Condition="ResetReservationAllowed(from PersonWantsOrg select current UID_PersonWantsOrg)">
+            <Button Text="translate('#LDS#Revoke hold status')" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'">
+              <ServerActionCall ScriptItemUID="ServerActionCall11">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container24">
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container25">
+                        <Label Text="translate('#LDS#DescriptionResetReservation')" ScriptItemUID="Label2" />
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container26">
+                      <Button Text="translate('#LDS#OK')" ScriptItemUID="Button3">
+                        <ServerActionCall ScriptItemUID="ServerActionCall12">
+                          <ForeachRow DataTable="PersonWantsOrg" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" ScriptItemUID="ForeachRow3">
+                            <Method DataTable="PersonWantsOrg" Method="ResetReservation" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" />
+                          </ForeachRow>
+                          <ActionOnControl />
+                          <CallAction ActionID="InvalidateTableStore" ScriptItemUID="Call3" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Cancel')" ScriptItemUID="Button2" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute5" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall13">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Revoke hold status')" ScriptItemUID="VirtualFunctionMapping5" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <ControlReferenceControlList ID="AdditionalActions" ScriptItemUID="ControlRef1" />
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCRView Class="PWOHelperPWO" Table="PWOHelperPWOForRecallQuery" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" RelationDBWhereClause="&quot;Decision = 'Q'&quot;" ViewFKWhereClause="isnull(IsReserved,false) and UID_PersonHead = GetUser()" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+        </DataTableCRView>
+        <DataTableSingleRow Table="Vars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Notice" DataType="System.String" ScriptItemUID="Column1" Caption="translate(&quot;#LDS#Reason&quot;)" MinLength="1" />
+          <Column DataType="System.Boolean" Name="IsStatusChanged" ScriptItemUID="Column2" />
+          <Column DataType="System.String" Name="CancelOrderReason" ScriptItemUID="Column3" />
+        </DataTableSingleRow>
+        <DataTableCRView Table="PWODecisionHistory" Class="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+        </DataTableCRView>
+        <DataTableCRView Table="PWOHelperPWO" Class="PWOHelperPWO" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView3" RelationDBWhereClause="format(&quot;UID_PWOHelperPWO in (&#xD;&#xA;select pwoh.UID_PWOHelperPWO from PWOHelperPWO pwoh&#xD;&#xA;join PersonWantsOrg pwo on pwo.UID_PersonWantsOrg = pwoh.UID_PersonWantsOrg&#xD;&#xA;and pwo.DecisionLevel = pwoh.LevelNumber where {0})&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;   sqlcompareuid(&quot;pwoh.UID_PersonHead&quot;,GetUser()),&#xD;&#xA;   SqlNotInWithFormat(&quot;pwoh.Decision&quot;,&quot;string&quot;,&quot;NonUnicodeLiterals&quot;, Split(&quot;P,N&quot;,&quot;,&quot;,False))&#xD;&#xA;)&#xD;&#xA;)">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" LoadTypeSlim="true" />
+        </DataTableCRView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="RevokeDelegation">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <ActionOnControl />
+              <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction12">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container37">
+                    <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
+                      <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef2">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1">
+                          <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="Notice" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                      <TextBox DataTable="Vars" DataColumn="Notice" TextMode="MultiLine" Rows="8" ScriptItemUID="TextBox3" />
+                    </LayoutPanel>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container40">
+                    <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" EnableCustomAttributes="true" ScriptItemUID="Button14">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="HtmlAttribute3" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall17">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <ActionSequence ItemUID="ok" ScriptItemUID="Action7">
+                          <Method DataTable="PersonWantsOrg" Method="RevokeDelegation" WhereClause="UID_PersonWantsOrg = (select Current UID_PersonWantsOrg  from PersonWantsOrg )">
+                            <MethodParameter Name="'strUID_PersonDecision'" Value="getUser()" />
+                            <MethodParameter Name="'strReasonText'" Value="from Vars select Notice" />
+                          </Method>
+                          <ActionOnControl />
+                          <CallAction ActionID="InvalidateTableStore" ScriptItemUID="Call4" />
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="ctl52" EnableCustomAttributes="true" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute4" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ctl53">
+                        <ActionOnControl />
+                        <Update DataTable="Vars" DataColumn="Notice" ScriptItemUID="Update1" />
+                        <EndExecution />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Please enter a reason.')" ScriptItemUID="VirtualFunctionMapping6" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="InvalidateTableStore">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action1">
+              <CodeLiteral ScriptItemUID="CodeLiteral1">PersonWantsOrg.TableStore.Invalidate();</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="AnyButtonAvailable(string UID)" Expression="ResendRequestAllowed(UID) or&#xD;&#xA;WithdrawAdditionalApproverAllowed(UID) or&#xD;&#xA;WithdrawDelegationAllowed(UID) or&#xD;&#xA;WithdrawRequestAllowed(UID) or&#xD;&#xA;RecallQueryAllowed(UID) or&#xD;&#xA;ResetReservationAllowed(UID)" FilterForTable="" DataType="System.Boolean" Comment="does not display the button bar, if no buttons are present" ScriptItemUID="Function1" />
+        <Function Name="ResendRequestAllowed(string UID)" Expression="ShowCancelOrder()&#xD;&#xA;and&#xD;&#xA;(from PersonWantsOrg select&#xD;&#xA;  (Orderstate in ('Aborted', 'Dismissed', 'Unsubscribed')&#xD;&#xA;  and (uid_personinserted = (select uid_person from user) or uid_personordered = (select uid_person from user))&#xD;&#xA;  and (IsNullOrEmpty(OrderDetail1) and IsNullOrEmpty(OrderDetail2) and IsNullOrEmpty(ObjectKeyAssignment))&#xD;&#xA;  and getconfig(&quot;VI_ITShop_OrderHistory_ResendOrder&quot;)=&quot;true&quot;)&#xD;&#xA;where UID_PersonWantsOrg = UID)&#xD;&#xA;and Exists(&quot;AccProduct&quot;,format(&quot;({1}) and UID_AccProduct in (select UID_AccProduct from ITShopOrg where UID_ItShopOrg = '{0}')&quot;,from PersonWantsOrg select UID_Org where UID_PersonWantsOrg = UID,variable(getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;))))" DataType="System.Boolean" ScriptItemUID="Function2" />
+        <Function DataType="System.Boolean" Name="WithdrawRequestAllowed(string UID)" Expression="ShowCancelOrder()&#xD;&#xA;and&#xD;&#xA;(getconfig(&quot;VI_ITShop_OrderHistory_CancelOrder&quot;)=&quot;true&quot;)&#xD;&#xA;and&#xD;&#xA;from PersonWantsOrg select&#xD;&#xA;  (Orderstate in ('OrderProduct','OrderProlongate','OrderUnsubscribe', 'Granted', 'Waiting')&#xD;&#xA;  and (&#xD;&#xA;  (uid_personinserted = (select uid_person from user))&#xD;&#xA;  or &#xD;&#xA;  (uid_personordered = (select uid_person from user))&#xD;&#xA;  or &#xD;&#xA;  HasCancelFeature()&#xD;&#xA;  or&#xD;&#xA;  (From PWODecisionHistory select top 1 (DecisionType in ('Order', 'Prolongate', 'Unsubscribe'))&#xD;&#xA;  where UID_PersonWantsOrg = UID and UID_PersonHead = GetUser() order by XDateInserted desc)  &#xD;&#xA;  )&#xD;&#xA;  )&#xD;&#xA;where UID_PersonWantsOrg = UID&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Function3" />
+        <Function DataType="System.Boolean" Name="WithdrawDelegationAllowed(string UID)" Expression="ShowCancelOrder()&#xD;&#xA;And&#xD;&#xA;   from PersonWantsOrg select Current IsReserved = 0&#xD;&#xA;And &#xD;&#xA;  (0 &lt; from PWOHelperPWO select count() Where Not(IsNullOrEmpty(UID_PersonInsteadOf)))&#xD;&#xA;And&#xD;&#xA;convert( isnull(getconfig(&quot;VI_ITShop_OrderHistory_CancelOrder&quot;), 'false'), 'System.Boolean')" ScriptItemUID="Function4" />
+        <Function DataType="System.Boolean" Name="WithdrawAdditionalApproverAllowed(string UID)" Expression="ShowCancelOrder()&#xD;&#xA;And&#xD;&#xA;   from PersonWantsOrg select Current IsReserved = 0&#xD;&#xA;and&#xD;&#xA;   (0 &lt; from PWOHelperPWO select count() Where IsNullOrEmpty(UID_PersonInsteadOf) And Not(IsNullOrEmpty(UID_PersonAdditional)))&#xD;&#xA;And getconfig(&quot;VI_ITShop_OrderHistory_CancelOrder&quot;)=&quot;true&quot;" ScriptItemUID="Function5" />
+        <Function DataType="System.Boolean" Name="RecallQueryAllowed(string UID)" Expression="(0 &lt; (from PWOHelperPWOForRecallQuery select count() where UID_PersonWantsOrg = UID))&#xD;&#xA;and&#xD;&#xA;(IsReadOnly()=false)" ScriptItemUID="Function6" />
+        <Function DataType="System.Boolean" Name="ResetReservationAllowed(string UID)" Expression="(0 = (from PWOHelperPWOForRecallQuery select count() where UID_PersonWantsOrg = UID))&#xA;and&#xA;(from PersonWantsOrg select (IsReserved and UID_PersonHead = GetUser())  where UID_PersonWantsOrg = UID)&#xA;and&#xA;(IsReadOnly()=false)" ScriptItemUID="Function7" />
+        <Function Name="HasCancelFeature()" Expression="-- if the logged user has this feature, cancelling requests is always allowed&#xD;&#xA;&#xD;&#xA;{{ _Connection.Features.IsAllowedAsync(&quot;QER_CancelPwO&quot;).Result }}" DataType="System.Boolean" ScriptItemUID="Function8" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Edit_PersonWantsOrg" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

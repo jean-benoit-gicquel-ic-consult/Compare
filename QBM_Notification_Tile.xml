@@ -1,0 +1,40 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Notification_Tile">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="General settings" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Common_EnableNotifications" Description="translate(&quot;#LDS#Enable browser notifications&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container8" ItemUID="notifications" Condition="getconfig(&quot;VI_Common_EnableNotifications&quot;)=&quot;true&quot;" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute17" Name="&quot;class&quot;" Value="&quot;imx-tile&quot;" />
+            <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;display: none;&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute21" Value="&quot;imx-tile-small&quot;" />
+              <Property Name="TagName" Value="a" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;onclick&quot;" Value="-- see https://stackoverflow.com/questions/38114266/notification-requestpermission-throws-an-error-in-mac-versions-of-safari&#xD;&#xA;&#xD;&#xA;&quot;Promise.resolve(Notification.requestPermission()).then(function(){ $('[data-imx-identifier=&quot;&quot;notifications&quot;&quot;]').css('display', 'none'); })&quot;" />
+              <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;href&quot;" Value="&quot;javascript:void(0);&quot;" />
+            </HtmlAttributes>
+            <Label ScriptItemUID="Label8" EnableCustomAttributes="true" Text="translate('#LDS#Allow this site to send you notifications')">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute22" Name="&quot;class&quot;" Value="&quot;imx-tile-small-title&quot;" />
+              </HtmlAttributes>
+            </Label>
+          </Container>
+        </Container>
+        <Literal Expression="&quot;&lt;script&gt;&#xD;&#xA;$(function(){&#xD;&#xA;   &#xD;&#xA;   // show notification tile&#xD;&#xA;   if(typeof(Notification) !== &quot;&quot;undefined&quot;&quot; &amp;&amp; Notification.permission !== 'granted' &amp;&amp; Notification.permission !== 'denied')&#xD;&#xA;   {&#xD;&#xA;      $('[data-imx-identifier=&quot;&quot;notifications&quot;&quot;]').css('display', '');&#xD;&#xA;   }&#xD;&#xA;});&#xD;&#xA;&lt;/script&gt;&quot;" />
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,15 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_LayoutPanel_WideSplitted" Type="LayoutPanel" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="LayoutpWideSplittedItems" Comment="" />
+    <Property Name="CssClassNameColumnPrefix" Value="LayoutpWideSplittedCol" Comment="" />
+    <Property Name="CssClassNameRow" Value="LayoutpWideSplittedRow" Comment="" />
+    <Property Name="CssClassNameCell" Value="LayoutpWideSplittedCol" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.LayoutpWideSplittedItems { min-width: %propertywidth%px; padding-right: 30px; d-isplay: table; }
+.LayoutpWideSplittedCol0 { min-height: %propcellminheight%; float: left; padding: 2px 5px 5px 0;  }
+.LayoutpWideSplittedCol1 { min-height: %propcellminheight%; padding: 1px 0 5px 0; }
+.LayoutpWideSplittedRow  { clear: both; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

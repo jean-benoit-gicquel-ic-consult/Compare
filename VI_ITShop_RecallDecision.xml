@@ -1,0 +1,84 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_RecallDecision" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container1">
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
+                <Label Text="translate(&quot;#LDS#Are you sure that you wish to recall your last decision?&quot;)" ScriptItemUID="Label1" />
+              </Container>
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+                <LayoutPanel ScriptItemUID="LayoutPanel1">
+                  <FormItemLabel DataTable="Container" DataColumn="ReasonText" ScriptItemUID="FormItemLabel1">
+                    <Label Text="translate(&quot;#LDS#Reason for the recall&quot;)" ScriptItemUID="Label2" />
+                  </FormItemLabel>
+                  <TextBox DataTable="Container" DataColumn="ReasonText" Rows="3" ScriptItemUID="TextBox1" />
+                </LayoutPanel>
+              </Container>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container6">
+              <Button Text="translate(&quot;#LDS#Revoke last decision&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <ActionSequence ScriptItemUID="Action2">
+                    <ActionSequence Condition="DBTable(PersonWantsOrg) = 'PersonWantsOrg'" ScriptItemUID="Action3">
+                      <LoadTable DataTable="PWO" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from PersonWantsOrg select current XObjectKey)" ScriptItemUID="LoadTable1">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                      </LoadTable>
+                      <Method DataTable="PWO" Method="RecallDecision" WhereClause="&#xA;&#xA;">
+                        <MethodParameter Name="&quot;strUID_PersonHead&quot;" Value="getuser()" />
+                        <MethodParameter Name="&quot;strReasonText&quot;" Value="from container select isnull(reasontext,'')" />
+                      </Method>
+                    </ActionSequence>
+                    <CodeLiteral ScriptItemUID="CodeLiteral1">// invalidate the table store --&gt; reload all data
+PersonWantsOrg.TableStore.Invalidate();</CodeLiteral>
+                    <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The decision has been successfully saved.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping2" />
+                    </CallAction>
+                    <ActionOnControl />
+                  </ActionSequence>
+                </ServerActionCall>
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Revoke last decision&quot;)" />
+                </HtmlAttributes>
+              </Button>
+              <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" ScriptItemUID="Button2" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                </ServerActionCall>
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                </HtmlAttributes>
+              </Button>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="PopupTitle()" Value="from PersonWantsOrg select current display()" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="TableName()" Value="DBTable(PersonWantsOrg)" ScriptItemUID="VirtualFunctionMapping4" />
+        </CallAction>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action5" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ReasonText" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+        <DataTableDbObject Table="PWO" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

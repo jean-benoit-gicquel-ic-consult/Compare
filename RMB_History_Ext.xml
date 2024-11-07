@@ -1,0 +1,17 @@
+﻿<WebDesigner TdnsHash="4da96f52-cf84-6bf4-64a8-a37adc5c1c3d">
+  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMB_History_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="RMBCodeLiteral1">dataProvider.AddMemberRelationTable("PersonInOrg", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");
+
+dataProvider.AddAssignmentColumn("Org", "UID_PersonHead", "AddResponsibility", "RemoveResponsibility", "Responsibility");
+dataProvider.AddAssignmentColumn("Org", "UID_PersonHeadSecond", "AddResponsibility", "RemoveResponsibility", "Responsibility");</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="20">
+        <ActionSequence ScriptItemUID="RMBAction1" Condition="Type()=&quot;Org&quot; and not(ShowAudit())" ItemUID="ORG">
+          <Update DataTable="LocalVars" DataColumn="AllowRollback" ScriptItemUID="Update1" Value="true" />
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,391 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_Roles_CompareAndMerge">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <NamespaceImport Namespace="QER.CompositionApi.Role" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2">
+        <ActionSequence ScriptItemUID="Action11" Condition="getobjectkeytable(objectkeyrole()) = &quot;Department&quot;&#xD;&#xA;OR&#xD;&#xA;(getconfig(&quot;Allow_Roles_Merge_Different_Organisation_Type&quot;) = &quot;True&quot;)" ItemUID="DEPARTMENT">
+          <Insert ScriptItemUID="Insert1" DataTable="Tables">
+            <ActionSequence ScriptItemUID="Action12" />
+            <InsertValue Value="&quot;Department&quot;" DataColumn="Name" />
+            <InsertValue Value="if(from vars select isstructadmin) then &quot;1=1&quot;&#xD;&#xA;else&#xD;&#xA;format(&quot;XObjectKey in (select bt.XObjectkey from basetree bt join basetreecollection btc on btc.uid_org = bt.uid_org join helperheadorg hho on hho.UID_Org = btc.UID_ParentOrg where {0})&quot;, sqlcompareuid(&quot;hho.UID_PersonHead&quot;, getuser()))" DataColumn="DbWhereClause" />
+          </Insert>
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="Action13" Condition="getobjectkeytable(objectkeyrole()) = &quot;Locality&quot;&#xD;&#xA;OR&#xD;&#xA;(getconfig(&quot;Allow_Roles_Merge_Different_Organisation_Type&quot;) = &quot;True&quot;)" ItemUID="LOCALITY">
+          <Insert ScriptItemUID="Insert2" DataTable="Tables">
+            <ActionSequence ScriptItemUID="Action14" />
+            <InsertValue Value="&quot;Locality&quot;" DataColumn="Name" />
+            <InsertValue Value="if(from vars select isstructadmin) then &quot;1=1&quot;&#xD;&#xA;else&#xD;&#xA;format(&quot;XObjectKey in (select bt.XObjectkey from basetree bt join basetreecollection btc on btc.uid_org = bt.uid_org join helperheadorg hho on hho.UID_Org = btc.UID_ParentOrg where {0})&quot;, sqlcompareuid(&quot;hho.UID_PersonHead&quot;, getuser()))" DataColumn="DbWhereClause" />
+          </Insert>
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="Action15" Condition="getobjectkeytable(objectkeyrole()) = &quot;ProfitCenter&quot;&#xD;&#xA;OR&#xD;&#xA;(getconfig(&quot;Allow_Roles_Merge_Different_Organisation_Type&quot;) = &quot;True&quot;)" ItemUID="PROFITCENTER">
+          <Insert ScriptItemUID="Insert3" DataTable="Tables">
+            <ActionSequence ScriptItemUID="Action16" />
+            <InsertValue Value="&quot;ProfitCenter&quot;" DataColumn="Name" />
+            <InsertValue Value="if(from vars select isstructadmin) then &quot;1=1&quot;&#xD;&#xA;else&#xD;&#xA;format(&quot;XObjectKey in (select bt.XObjectkey from basetree bt join basetreecollection btc on btc.uid_org = bt.uid_org join helperheadorg hho on hho.UID_Org = btc.UID_ParentOrg where {0})&quot;, sqlcompareuid(&quot;hho.UID_PersonHead&quot;, getuser()))" DataColumn="DbWhereClause" />
+          </Insert>
+        </ActionSequence>
+        <CodeLiteral ScriptItemUID="CodeLiteral3">var colTbl = (LocalColumn) Vars.GetColumn("TargetTableName");
+var limv = new LimitedValuesCollection();
+foreach (var r in Tables.Rows)
+{
+	var tblName = r.GetValue("Name").String;
+	limv.Add(new LimitedValue(tblName, _Database.MetaData().GetTable(tblName).Display.Translated));
+}
+
+colTbl.MetadataProvider = (vm,c,r)=&gt;{
+	
+	var metadata = new ValueMetadata(c,vm);
+	metadata.LimitedValues = limv;
+	return metadata;
+};
+</CodeLiteral>
+      </ActionSequence>
+      <ActionComponent ScriptItemUID="Action1">
+        <LoadTable DataTable="RoleSource" ScriptItemUID="LoadTable1" DBTableName="getobjectkeytable(objectkeyrole())" WhereClause="sqlcompareuid(&quot;XobjectKey&quot;, objectkeyrole())">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <Update DataColumn="TargetTableName" DataTable="Vars" ScriptItemUID="Update2" Value="-- set empty value when starting the wizard" />
+        <ActionSequence ScriptItemUID="Action5">
+          <Popup DisplayType="Controls">
+            <Container ScriptItemUID="Container15" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute15" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+              </HtmlAttributes>
+              <Wizard ScriptItemUID="Wizard1">
+                <OnCancel ScriptItemUID="Action6">
+                  <ActionOnControl />
+                </OnCancel>
+                <WizardPage ScriptItemUID="WizardPage1" Title="translate(&quot;#LDS#Select a comparison role&quot;)" AllowBackAction="false" NextButtonCaption="translate(&quot;#LDS#Merge the selected roles&quot;)">
+                  <OnNext ScriptItemUID="Action7">
+                    <ActionOnControl ActionType="PerformValidation" />
+                    <CodeLiteral ScriptItemUID="CodeLiteral2">// Collect merge actions
+var roleCompare = (RoleCompare) TableStore.UserData["RoleCompare"];
+var mergeTasks =  (await roleCompare.GetMergeActionsAsync(_Database, CompareItems.ObjectList).ConfigureAwait(false)).ToArray();
+
+DataContext.Actions.ObjectList.Clear();
+foreach(var a in mergeTasks)
+{
+	DataContext.Actions.ObjectList.Add(a);
+}</CodeLiteral>
+                  </OnNext>
+                  <Label ScriptItemUID="Label12" Text="translate(&quot;#LDS#Compare and merge&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-compare&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Container ScriptItemUID="Container18" EnableCustomAttributes="true" ItemUID="message container">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute17" />
+                    </HtmlAttributes>
+                  </Container>
+                  <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="RoleSource" WithoutParentContainer="true">
+                    <Container ScriptItemUID="Container17" RefreshTriggerExpression="from vars select getdataversion(targettablename)">
+                      <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+                        <VirtualFunctionMapping ID="PropertyList()" ScriptItemUID="VirtualFunctionMapping2" IsPropertyList="true">
+                          <ColumnList ScriptItemUID="ColumnList1">
+                            <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="TargetTableName" />
+                            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="KeyRole" FKWhereClause="sqlcompareuid(&quot;XObjectKey&quot;, ObjectKeyRole(), &quot;notequal&quot;)" Condition="from vars select not(isnullorempty(targettablename))" />
+                          </ColumnList>
+                        </VirtualFunctionMapping>
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping1" />
+                      </ControlReferenceContainer>
+                    </Container>
+                  </ContainerTemplate>
+                  <Container ScriptItemUID="Container1" Condition="not(isnullorempty(from vars select keyrole))" RefreshTriggerExpression="from vars select keyrole">
+                    <CodeLiteral ScriptItemUID="CodeLiteral1">var translator = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;ITranslator&gt;();
+var comp = new RoleCompare(new DbObjectKey(ObjectKeyRole), new DbObjectKey(Vars.SingleRow.GetValue("KeyRole").String), translator);
+
+TableStore.UserData["RoleCompare"] = comp;
+
+var compareItems = comp.GetCompareItemsAsync(_Database).Result;
+CompareItems.ObjectList.Clear();
+
+foreach (var i in compareItems)
+{
+	CompareItems.ObjectList.Add(i);
+}
+
+var messages = comp.IsMergePossibleAsync(_Database).Result;
+Vars.GetColumn("Message").SetValue(Vars.SingleRow, string.Join(" ", messages));</CodeLiteral>
+                    <Container ScriptItemUID="Container19" Condition="not(isnullorempty(from vars select message))">
+                      <Label ScriptItemUID="Label16" Text="from vars select message" />
+                    </Container>
+                    <Grid ScriptItemUID="Grid1" AllowExport="true" ExportFileName="" ExportTitle="translate(&quot;#LDS#Comparison of {0} and {1}&quot;, from rolesource select top 1 display(), from vars select displayvalue(keyrole))">
+                      <GridBand DataTable="CompareItems" ScriptItemUID="GridBand1" DisplayHeader="Always" OrderBy="'DbTableNameDisplay'" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="ApplyFilledHeight" Value="true" />
+                        </HtmlAttributes>
+                        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                        <GridFilters ScriptItemUID="GridFilters1" />
+                        <GridRows />
+                        <GridColumnSimple ScriptItemUID="Column2" Column="DisplayProxy" />
+                        <GridColumn ScriptItemUID="Column4" AutoFilterColumn="DbTableNameDisplay" SortColumn="DbTableNameDisplay">
+                          <GridColumnHeader ScriptItemUID="wctl2">
+                            <Label ScriptItemUID="Label3" Text="datacaption(compareitems, dbtablenamedisplay)" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell2">
+                            <Label ScriptItemUID="Label4" Text="from compareitems select current displayvalue(dbtablenamedisplay)" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon imx-table-&quot;+from compareitems select current dbtablename" />
+                              </HtmlAttributes>
+                            </Label>
+                          </Cell>
+                        </GridColumn>
+                        <GridColumn ScriptItemUID="Column14" Width="&quot;160px&quot;">
+                          <GridColumnHeader ScriptItemUID="wctl3">
+                            <Label ScriptItemUID="Label5" Text="from rolesource select top 1 display()" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell3">
+                            <Container ScriptItemUID="Container8" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current xoriginrole1 = 0" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge5" Text="translate(&quot;#LDS#Not assigned&quot;)" />
+                            </Container>
+                            <Container ScriptItemUID="Container9" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole1order" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge6" Text="translate(&quot;#LDS#Requested&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container10" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole1dynamic" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge7" Text="translate(&quot;#LDS#Dynamic&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole1inherit" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge8" Text="translate(&quot;#LDS#Inherited&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container12" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole1direct" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge9" Text="translate(&quot;#LDS#Direct&quot;)" BadgeType="Info" />
+                            </Container>
+                          </Cell>
+                        </GridColumn>
+                        <GridColumn ScriptItemUID="Column15" Width="&quot;160px&quot;">
+                          <GridColumnHeader ScriptItemUID="wctl4">
+                            <Label ScriptItemUID="Label7" Text="from vars select displayvalue(keyrole)" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell4">
+                            <Container ScriptItemUID="Container2" Condition="from compareitems select current isrole2direct" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge1" Text="translate(&quot;#LDS#Direct&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container5" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole2order" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge2" Text="translate(&quot;#LDS#Requested&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container6" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole2dynamic" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge3" Text="translate(&quot;#LDS#Dynamic&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container7" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current isrole2inherit" EnableCustomAttributes="true">
+                              <HtmlAttributes />
+                              <Badge ScriptItemUID="Badge4" Text="translate(&quot;#LDS#Inherited&quot;)" BadgeType="Info" />
+                            </Container>
+                            <Container ScriptItemUID="Container13" Layout="'VI_Styles_Container_Inline'" Condition="from compareitems select current xoriginrole2 = 0" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;style&quot;" Value="&quot;display: inline-block; margin-right: 4px; margin-bottom: 2px;&quot;" />
+                              </HtmlAttributes>
+                              <Badge ScriptItemUID="Badge10" Text="translate(&quot;#LDS#Not assigned&quot;)" />
+                            </Container>
+                          </Cell>
+                        </GridColumn>
+                        <GridColumn ScriptItemUID="Column5" Width="&quot;160px&quot;" AutoFilterColumn="CompareResult" SortColumn="CompareResult">
+                          <GridColumnHeader ScriptItemUID="wctl1">
+                            <Label ScriptItemUID="Label2" Text="datacaption(compareitems, compareresult)" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell1" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from compareitems select &quot;imx-rolecompare-&quot;+compareresult" />
+                            </HtmlAttributes>
+                            <Label ScriptItemUID="Label1" Text="from compareitems select current displayvalue(compareresult)" />
+                          </Cell>
+                        </GridColumn>
+                      </GridBand>
+                    </Grid>
+                  </Container>
+                </WizardPage>
+                <WizardPage ScriptItemUID="WizardPage2" Title="translate(&quot;#LDS#Review actions&quot;)" BackButtonCaption="">
+                  <OnNext ScriptItemUID="Action8">
+                    <CodeLiteral ScriptItemUID="CodeLiteral7">// Collect selected merge actions
+var actions = DataContext.Actions.ObjectList.Where(t =&gt; t.IsActive);
+
+var runner = new QBM.CompositionApi.UiAction.ActionRunner(_Connection.Session, actions);
+
+var results = await runner.RunAsync(ct).ConfigureAwait(false);
+
+DataContext.Results.ObjectList.Clear();
+
+foreach (var result in results)
+{
+	DataContext.Results.ObjectList.Add(result);
+}</CodeLiteral>
+                  </OnNext>
+                  <OnBack ScriptItemUID="Action9" />
+                  <Label ScriptItemUID="Label13" Text="translate(&quot;#LDS#Compare and merge&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute18" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-compare&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Container ScriptItemUID="Container3" EnableCustomAttributes="true" ItemUID="message container">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute19" />
+                    </HtmlAttributes>
+                  </Container>
+                  <Container ScriptItemUID="Container14" Layout="'VI_Styles_Container_Paragraph'" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;class&quot;" Value="&quot;imx-message&quot;" />
+                    </HtmlAttributes>
+                    <Label ScriptItemUID="Label6" EnableSubControls="true" Text="translate(&quot;#LDS#The following changes are required to merge the role {0} into the role {1}. Review the list and uncheck any change that should not be made.&quot;)">
+                      <ControlList ScriptItemUID="ControlList1">
+                        <Label ScriptItemUID="Label11" Text="from vars select displayvalue(keyrole)" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute21" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                        <Label ScriptItemUID="Label8" Text="from rolesource select top 1 display()" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </ControlList>
+                    </Label>
+                  </Container>
+                  <Grid ScriptItemUID="Grid2" AllowExport="true" ExportFileName="" ExportTitle="">
+                    <GridBand DataTable="Actions" ScriptItemUID="GridBand2" OrderBy="'SortOrder'" EnableCustomAttributes="true" RowSelection="Multiple" DataColumnSelectState="IsActiveProxy" RowSelectionActive="">
+                      <HtmlAttributes>
+                        <Property Name="ApplyFilledHeight" Value="true" />
+                      </HtmlAttributes>
+                      <GridBandListView ScriptItemUID="GridBandListView2" EnableListView="Auto" />
+                      <GridFilters ScriptItemUID="GridFilters4" />
+                      <GridRows />
+                      <GridColumnSimple ScriptItemUID="Column16" Column="ObjectDisplayProxy" />
+                      <GridColumnSimple ScriptItemUID="Column17" Column="DisplayProxy" />
+                    </GridBand>
+                  </Grid>
+                </WizardPage>
+                <WizardPage ScriptItemUID="WizardPage3" Title="translate(&quot;#LDS#Results&quot;)" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowCancelAction="false" AllowBackAction="false">
+                  <OnNext ScriptItemUID="Action4">
+                    <ActionOnControl />
+                  </OnNext>
+                  <Label ScriptItemUID="Label15" Text="translate(&quot;#LDS#Compare and merge&quot;)" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-compare&quot;" />
+                    </HtmlAttributes>
+                  </Label>
+                  <Container ScriptItemUID="Container16" EnableCustomAttributes="true" ItemUID="message container">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute20" />
+                    </HtmlAttributes>
+                  </Container>
+                  <Container ScriptItemUID="Container4">
+                    <ControlReferenceControlList ID="QBM_Common_ActionResultViewer" ScriptItemUID="ControlRef2">
+                      <VirtualControlMapping ContainerType="ControlList" VirtualControl="Success">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <Label ScriptItemUID="Label17" Text="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <Property Name="TagName" Value="div" />
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute22" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </ControlList>
+                      </VirtualControlMapping>
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="Results" DataTable="Results" />
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="Actions" DataTable="Actions" />
+                    </ControlReferenceControlList>
+                  </Container>
+                </WizardPage>
+              </Wizard>
+            </Container>
+          </Popup>
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="RoleSource" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="getobjectkeytable(objectkeyrole())">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column DataType="System.String" Name="UID_OrgRoot" ScriptItemUID="Column18" DataSource="Expression" Expression="&quot;&quot; + objectwalker(&quot;UID_OrgRoot&quot;)" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column DataType="System.String" Name="TargetTableName" ScriptItemUID="Column21" Caption="translate(&quot;#LDS#Object type&quot;)" MinLength="1" />
+          <Column Name="KeyRole" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" Caption="translate(&quot;#LDS#Comparison role&quot;)" MinLength="1" DBColumnName="&quot;XObjectKey&quot;" DBTableName="isnullorempty(from vars select targettablename, &quot;Department&quot;)" FKWhereClause="sqland(&#xD;&#xA;sqlcompareuid(&quot;XObjectKey&quot;, ObjectKeyRole(), &quot;notequal&quot;),&#xD;&#xA;from tables select top 1 dbwhereclause where name = (from vars select targettablename))" />
+          <Column DataType="System.Boolean" Name="IsStructAdmin" ScriptItemUID="Column20" DataSource="Expression" Expression="IsMember(&quot;QER-AEROLE-STRUCTADMIN-ADMIN&quot;)" TriggerUpdates="Never" />
+          <Column DataType="System.String" Name="Message" ScriptItemUID="Column24" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="Tables" ScriptItemUID="DataTableCustom1">
+          <Column DataType="System.String" Name="Name" ScriptItemUID="Column22" TriggerUpdates="Never" />
+          <Column DataType="System.String" Name="DbWhereClause" ScriptItemUID="Column23" TriggerUpdates="Never" />
+        </DataTableCustom>
+        <DataTableObjectView Table="CompareItems" ElementType="QER.CompositionApi.Role.IRoleCompareItem, QER.CompositionApi" ScriptItemUID="DataTableObjectView1">
+          <Column Name="CompareResult" DataType="System.Int32" ScriptItemUID="Column3" ColumnDataSource="LimitedValues" DataSource="Expression" Expression="from compareitems select current (if(xoriginrole1 = 0) then (if(xoriginrole2 &gt; 0) then 2 else 0) else (if(xoriginrole2 &gt; 0) then 0 else 1))" TriggerUpdates="Never" Caption="translate(&quot;#LDS#Comparison&quot;)">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="0" Display="translate(&quot;#LDS#In both roles&quot;)" Comment="" />
+              <ColumnLimitedValue Name="1" Display="translate(&quot;#LDS#Only in role {0}&quot;, &quot;1&quot;)" Comment="" />
+              <ColumnLimitedValue Name="2" Display="translate(&quot;#LDS#Only in role {0}&quot;, &quot;2&quot;)" Comment="" />
+            </ColumnLimitedValues>
+            <ParameterFree Name="&quot;FilterByValueList&quot;" Value="&quot;true&quot;" ScriptItemUID="ParameterFree2" />
+          </Column>
+          <ColumnProxy Name="DbTableNameDisplay" ScriptItemUID="ColumnProxy1" DataColumn="DbTableName" Caption="translate(&quot;#LDS#Type&quot;)" DisplayValueExpression="datacaptionsingle(dbtablename+&quot;&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;" Value="&quot;true&quot;" ScriptItemUID="ParameterFree1" />
+          </ColumnProxy>
+          <ColumnProxy Name="DisplayProxy" ScriptItemUID="ColumnProxy2" DataColumn="Display" Caption="translate(&quot;#LDS#Object&quot;)" />
+          <Column DataType="System.Boolean" Name="IsRole1Direct" ScriptItemUID="Column6" DataSource="Expression" Expression="IsDirectAssignment(xoriginrole1)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole1Order" ScriptItemUID="Column7" DataSource="Expression" Expression="IsOrderAssignment(xoriginrole1)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole1Dynamic" ScriptItemUID="Column8" DataSource="Expression" Expression="IsDynamicAssignment(xoriginrole1)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole1Inherit" ScriptItemUID="Column9" DataSource="Expression" Expression="IsInheritAssignment(xoriginrole1)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole2Direct" ScriptItemUID="Column10" DataSource="Expression" Expression="IsDirectAssignment(xoriginrole2)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole2Order" ScriptItemUID="Column11" DataSource="Expression" Expression="IsOrderAssignment(xoriginrole2)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole2Dynamic" ScriptItemUID="Column12" DataSource="Expression" Expression="IsDynamicAssignment(xoriginrole2)" TriggerUpdates="Never" />
+          <Column DataType="System.Boolean" Name="IsRole2Inherit" ScriptItemUID="Column13" DataSource="Expression" Expression="IsInheritAssignment(xoriginrole2)" TriggerUpdates="Never" />
+        </DataTableObjectView>
+        <DataTableObjectView Table="Actions" ElementType="QBM.CompositionApi.UiAction.IUiAction, QBM.CompositionApi" ScriptItemUID="DataTableObjectView3" DisplayColumn="Display">
+          <ColumnProxy ScriptItemUID="ColumnProxy4" DataColumn="IsActive" Name="IsActiveProxy" Caption="translate(&quot;#LDS#Execute&quot;)" />
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy15" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree14" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy16" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableObjectView>
+        <DataTableObjectView Table="Results" ScriptItemUID="DataTableObjectView2" ElementType="QBM.CompositionApi.UiAction.UiActionResult, QBM.CompositionApi" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsDirectAssignment(int xorigin)" Expression="-- the first bit of XOrigin means that it is a direct assignment&#xD;&#xA;{{ (xorigin &amp; 1) == 1 }}" DataType="System.Boolean" ScriptItemUID="Function6" />
+        <Function Name="IsOrderAssignment(int xorigin)" Expression="{{ (xorigin &amp; 8) &gt; 0 }}" DataType="System.Boolean" ScriptItemUID="Function4" />
+        <Function Name="IsDynamicAssignment(int xorigin)" Expression="{{ (xorigin &amp; 4) &gt; 0 }}" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="IsInheritAssignment(int xorigin)" Expression="{{ (xorigin &amp; 2) &gt; 0 }}" DataType="System.Boolean" ScriptItemUID="Function2" />
+        <Function Name="IsMember(string uidAerole)" Expression="exists(&quot;Person&quot;, variable(&quot;uid_person = '%useruid%' and uid_person in ( select piae.uid_person from personinaerole piae join AERoleCollection aec on aec.UID_AERole = piae.uid_aerole where aec.UID_ParentAERole = '&quot; + uidAErole + &quot;')&quot;))" DataType="System.Boolean" ScriptItemUID="Function3" TriggerUpdates="Never" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action17">
+            <Update DataColumn="KeyRole" DataTable="Vars" ScriptItemUID="Update1" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="TargetTableName" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ObjectKeyRole()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

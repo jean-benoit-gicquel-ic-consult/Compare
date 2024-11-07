@@ -1,0 +1,87 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="ATT_Attestation_AttestationPolicies" HelpChapterUid="from VARS select HelpChapterID">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="VARS">
+        <Column DataType="System.String" Name="HelpChapterID" ScriptItemUID="Column1" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="ATT_Attestation_AttestationPolicies" NavigationTitle="translate('#LDS#Governance Administration')">
+        <ActionSequence ScriptItemUID="Action2">
+          <Update DataColumn="HelpChapterID" DataTable="VARS" ScriptItemUID="Update1" Value="&quot;B1F2FB24-69B8-4DF6-B779-E84D62413879&quot;" />
+        </ActionSequence>
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate('#LDS#Governance Administration')" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="Main">
+          <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container1" ItemUID="Runs">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Identifier()" Value="&quot;Runs&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action6">
+                  <Redirect ScriptItemUID="Redirect3" FormID="AttestationRuns" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Caption()" Value="translate(&quot;#LDS#Attestation Policy Runs&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Image()" Value="&quot;AttestationCase&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Views attestation forecast information and shows pending attestation cases.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <SwitchContainer ScriptItemUID="TilePolicySettings">
+              <SwitchContainerCase ScriptItemUID="Case1" Condition="-- visible for Compliance &amp; Security Officer&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '%useruid%'&quot;))&#xD;&#xA;or&#xD;&#xA;-- visible for ATT-AEROLE-ATTESTATIONADMIN-ADMIN&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;xorigin &gt; 0 and uid_aerole = 'ATT-AEROLE-ATTESTATIONADMIN-ADMIN' and uid_person = '%useruid%'&quot;))">
+                <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="Policy Settings">
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="Identifier()" Value="&quot;Policy Settings&quot;" />
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                    <ActionComponent ScriptItemUID="Action3">
+                      <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Attestation_MyAttestations" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Attestation Policy Settings&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Image()" Value="&quot;cux-icon cux-icon--wrench&quot;" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Value()" Value="translate(&quot;#LDS#Shows the list of defined attestation policies. You can also create a new attestation policy.&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="ImageType()" Value="'IconFont'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="ContentType()" Value="'Text'" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Size()" Value="'Overview'" />
+                </ControlReferenceContainer>
+              </SwitchContainerCase>
+            </SwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+      <Form ScriptItemUID="Form2" ID="AttestationRuns">
+        <ActionSequence ScriptItemUID="Action5">
+          <Update DataColumn="HelpChapterID" DataTable="VARS" ScriptItemUID="Update2" Value="&quot;2A288F2C-345B-4A0D-BD88-0C488289C495&quot;" />
+        </ActionSequence>
+        <PagePartContainer ScriptItemUID="PagePartContainer4" ID="Title">
+          <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#Attestation Policy Runs&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer5" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList5">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef4">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Text()" Value="translate('#LDS#This page displays current and forecast information of pending attestation runs. It also allows you to change the due date of those runs and send reminder e-mails to their attestors.')" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer6" ID="Main">
+          <Container ScriptItemUID="Container3">
+            <ControlReferenceContainer ID="VI_Attestation_AttestationRunGrid" ScriptItemUID="ControlRef3" />
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

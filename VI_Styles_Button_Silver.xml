@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Button_Silver" Type="Button" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="btn qui qui-btn-medium qui-btn-push qui-btn-silver" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.btn .qui .qui-btn-medium .qui-btn-push .qui-btn-silver  {}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

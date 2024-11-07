@@ -1,0 +1,82 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl ID="VI_ITShop_WebPart_Top5Attestation" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="WebParts" Description="" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_WebPart_Top5Attestations_Visibility" Description="translate(&quot;#LDS#Display web component '{0}'&quot;, translate(&quot;#LDS#Overview of your attestations&quot;))" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action5" Condition="getconfig(&quot;VI_ITShop_WebPart_Top5Attestations_Visibility&quot;)=&quot;true&quot;">
+        <CallAction ActionID="LoadAttestation" ScriptItemUID="Call1" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true" Condition="getconfig(&quot;VI_ITShop_WebPart_Top5Attestations_Visibility&quot;)=&quot;true&quot;">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="&quot;margin-bottom: 12px;&quot;" />
+        </HtmlAttributes>
+        <Container ScriptItemUID="Container10" ItemUID="pending attestations" Condition="0 &lt; select count() from attestationcase">
+          <Label Text="translate(&quot;#LDS#Pending Attestations&quot;)" ScriptItemUID="Label5" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="h2" />
+            </HtmlAttributes>
+          </Label>
+          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AttestationCase" Layout="" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="ul" />
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-list&quot;" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate1style" Value="" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="li" />
+              </HtmlAttributes>
+              <ControlReferenceControlList ID="VI_Common_WebPart_TaskTile" ScriptItemUID="ControlRef1">
+                <VirtualControlMapping VirtualControl="Clicked" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action1">
+                    <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Attestation">
+                      <RedirectParameter Name="'uid_attestationcase'" Value="from attestationcase select current uid_attestationcase" />
+                    </Redirect>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="TimeStamp()" Value="from attestationcase select current tosolvetill" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="HeadText()" Value="from attestationcase select current display()" ScriptItemUID="VirtualFunctionMapping2" />
+              </ControlReferenceControlList>
+            </Container>
+          </ContainerTemplate>
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="&quot;font-style: italic; text-align: right;&quot;" />
+            </HtmlAttributes>
+            <Label Text="&quot;&gt; &quot;+ translate(&quot;#LDS#View all pending attestations&quot;)" ScriptItemUID="Label1" Action="Redirect">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Attestation" />
+              </ServerActionCall>
+            </Label>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AttestationCase" Class="AttestationCase" ScriptItemUID="DataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action6" />
+          <Column Name="AttestationPolicy" DataType="System.String" ScriptItemUID="Column1" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="LoadAttestation">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action7">
+              <LoadTable DataTable="AttestationCase" WhereClause="sqland(AttestationCaseDBWhereClause(),&#xD;&#xA;sqland(&quot;not &quot;+SqlEmpty(&quot;tosolvetill&quot;,&quot;date&quot;), &#xD;&#xA;sqlcompare(&quot;tosolvetill&quot;,addseconds(nulltime(getdate()),1),&quot;date&quot;, &quot;lowerthan&quot;)))" OrderBy="'ToSolveTill desc'" RevertExisting="false" LoadLimit="5" ScriptItemUID="LoadTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              </LoadTable>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="AttestationCaseDBWhereClause()" Expression="format(&quot;uid_attestationcase in ( select uid_attestationcase from ATT_VAttDecisionPerson_DO where {0})&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompare(&quot;rulerlevel&quot;, 2, &quot;int&quot;, &quot;notequal&quot;),&#xD;&#xA;sqlcompareuid(&quot;uid_personhead&quot;, GetUser()))&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

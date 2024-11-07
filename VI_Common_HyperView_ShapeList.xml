@@ -1,0 +1,87 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_ShapeList" MigrationNotes="DMLREPLACE;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="HyperView" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_Common_HyperView_ElementsInList" Description="translate(&quot;#LDS#Maximum number of list entries in HyperViews&quot;)" Type="Text" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlReferenceContainer1">
+          <VirtualFunctionMapping ID="ObjectCount()" Value="select count() from table where TableFilter()" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="ShapeContent" ContainerType="Container">
+            <Container ScriptItemUID="Container2">
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="Table" Layout="'VI_Styles_GridBand_Borderless'" CustomStyleBlock="'margin-top: 4px; max-height: 200px; overflow-y: auto; overflow-x: hidden;'" DisplayHeader="Never" EnableCustomAttributes="true" ScriptItemUID="GridBand1" EntriesPerPage="5" WhereClause="TableFilter()" OrderBy="" EnableGridViewSetting="false">
+                  <HtmlAttributes>
+                    <Property Name="RenderImmediately" Value="true" Comment="" />
+                  </HtmlAttributes>
+                  <GridBandListView ScriptItemUID="GridBandListView1" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn HasHeaderCell="false" ScriptItemUID="GridColumn1">
+                    <Cell ScriptItemUID="Cell1">
+                      <LinkContainer Layout="'VI_Styles_LinkContainer_LineLink'" EnabledCondition="EnableNavigation()" ScriptItemUID="LinkContainer1">
+                        <ControlList ScriptItemUID="ControlList1">
+                          <Label Text="from table select current DisplayLong()" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="from table select current DisplayLong()" />
+                            </HtmlAttributes>
+                          </Label>
+                          <ControlReferenceContainer ID="AdditionalObjectContent" ScriptItemUID="ControlReferenceContainer2" />
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall1" EnableRedirectByUrl="true">
+                          <RedirectByUrl>
+                            <Redirect ScriptItemUID="Redirect12" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
+                              <RedirectParameter Name="'TableName'" Value="from table select current dbtable()" />
+                              <RedirectParameter Name="'UID'" Value="from table select current primarykey()" />
+                            </Redirect>
+                          </RedirectByUrl>
+                          <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                            <RedirectParameter Name="'ObjectKey'" Value="from table select current xobjectkey" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="Caption()" Value="Caption()" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="ImageURL()" Value="ImageURL()" ScriptItemUID="VirtualFunctionMapping3" />
+          <VirtualFunctionMapping ID="ColorKey()" Value="ColorKey()" ScriptItemUID="VirtualFunctionMapping4" />
+          <VirtualFunctionMapping ID="HeaderText()" Value="headertext()" ScriptItemUID="VirtualFunctionMapping5" />
+          <VirtualFunctionMapping ID="SizeType()" Value="SizeType()" ScriptItemUID="VirtualFunctionMapping6" />
+          <VirtualFunctionMapping ID="DbTableName()" Value="dbtable(table)" ScriptItemUID="VirtualFunctionMapping7" />
+          <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ElementColor()" Value="ElementColor()" />
+        </ControlReferenceContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Table" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="Caption()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ImageURL()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ColorKey()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="HeaderText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="TableFilter()" DataType="System.Boolean" FilterForTable="Table" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalObjectContent" ContainerType="Container" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="SizeType()" VirtualFunctionHasLimitedValues="true" DataType="System.String" TriggerUpdates="Never">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="Normal" Comment="" />
+          <VirtualFunctionLimitedValue Name="Wide" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualFunction DataType="System.String" Signature="ElementColor()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

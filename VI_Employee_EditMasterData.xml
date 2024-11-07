@@ -1,0 +1,323 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Employee_EditMasterData">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.Customizer.dll" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="Mitarbeiter" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Employee_MasterData_DoNotMerge" Type="ColumnList" Description="translate('#LDS#Do not allow merge of these attributes')" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;data-imx-layout&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;flex-fill&quot;" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="VI_ObjectEdit_Person" ScriptItemUID="ControlRef1">
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="Person" ScriptItemUID="VirtualTableMapping2" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ItemUID="Buttons" ScriptItemUID="Container8" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container6" Layout="'VI_Styles_Container_Inline'" Condition="not(IsNewEmployee())">
+            <Button Text="translate(&quot;#LDS#Assign to new manager&quot;)" ScriptItemUID="Button4" EnabledCondition="GetConfigParm(&quot;QER\ITShop&quot;) = &quot;1&quot;" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;margin-bottom: 2px;&quot;" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall2">
+                <Redirect Target="FormModule" ScriptItemUID="Redirect2">
+                  <RedirectFormModule ID="VI_Employee_Assign_Manager" ScriptItemUID="RedirectForm1" />
+                </Redirect>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ScriptItemUID="Container10" Layout="'VI_Styles_Container_Inline'" Condition="not(IsNewEmployee())">
+            <Button Text="translate(&quot;#LDS#Generate report&quot;)" ScriptItemUID="Button3" Layout="'VI_Styles_Button_Default'" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;style&quot;" Value="&quot;margin-bottom: 2px;&quot;" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall4">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call3">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container13">
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container14">
+                        <Label Text="translate(&quot;#LDS#Click the following button to view a detailed report of this employee.&quot;)" ScriptItemUID="Label5" />
+                      </Container>
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15">
+                        <CheckBox DataTable="Container" DataColumn="IncludeHistory" Text="translate(&quot;#LDS#Generate report including history&quot;)" ScriptItemUID="CheckBox1" />
+                      </Container>
+                      <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container19">
+                        <CheckBox DataTable="Container" DataColumn="IncludeSubIdentities" Text="translate(&quot;#LDS#Include data for sub identities in the report&quot;)" ScriptItemUID="CheckBox2" />
+                      </Container>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="from Person select current display()" ScriptItemUID="VirtualFunctionMapping4" />
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container16">
+                      <Button Text="translate(&quot;#LDS#Generate report&quot;)" ItemUID="Default Button" ScriptItemUID="Button2">
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <Update DataTable="Container" DataColumn="ReportUID" Value="newid()" ScriptItemUID="Update2" />
+                          <ActionSequence ItemUID="compile report w/o history" Condition="from Container select IncludeHistory = false" ScriptItemUID="Action6">
+                            <PrepareReport ReportName="getconfig(&quot;VI_MyData_PersonalData_ReportName&quot;)" CompiledReportUID="from container select ReportUID">
+                              <ParameterFree Name="'ObjectKeyBase'" Value="from person select current xobjectkey" ScriptItemUID="ParameterFree1" />
+                              <ParameterFree Name="&quot;IncludeSubIdentities&quot;" Value="from container select IncludeSubIdentities" ScriptItemUID="ParameterFree5" />
+                            </PrepareReport>
+                          </ActionSequence>
+                          <ActionSequence ItemUID="compile report with history" Condition="from Container select IncludeHistory" ScriptItemUID="Action7">
+                            <PrepareReport ReportName="getconfig(&quot;VI_MyData_PersonalDataWithHistory_ReportName&quot;)" CompiledReportUID="from container select ReportUID">
+                              <ParameterFree Name="'PersonKey'" Value="from person select current XObjectKey" ScriptItemUID="ParameterFree2" />
+                              <ParameterFree Name="'MinDate'" Value="'1899-12-31'" ScriptItemUID="ParameterFree3" />
+                              <ParameterFree Name="&quot;IncludeSubIdentities&quot;" Value="from container select IncludeSubIdentities" ScriptItemUID="ParameterFree4" />
+                            </PrepareReport>
+                          </ActionSequence>
+                          <ActionOnControl />
+                          <Redirect Target="Context" InNewFrame="true" AbortExecution="false" PopupID="Report" Width="'800'" Height="'400'" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" ScriptItemUID="Redirect1">
+                            <RedirectParameter Name="'uid_compiledreport'" Value="from Container select ReportUID" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </Button>
+                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef75">
+                        <VirtualFunctionMapping ID="MoreThanOneButton()" Value="True" ScriptItemUID="VirtualFunctionMapping5" />
+                      </ControlReferenceControlList>
+                    </Container>
+                  </VirtualControlMapping>
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+          <Container ScriptItemUID="Container1" Layout="'VI_Styles_Container_Inline'">
+            <Button Text="translate('#LDS#Save')" ItemUID="SAVE" ScriptItemUID="Button1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;style&quot;" Value="&quot;margin-bottom: 2px;&quot;" />
+              </HtmlAttributes>
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <ActionOnControl ActionType="PerformValidation" />
+                <CallAction ActionID="VI_Employee_CheckData" ScriptItemUID="Call2">
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnExist">
+                    <ActionComponent ScriptItemUID="Action3">
+                      <Redirect ScriptItemUID="Redirect6" Target="FormModule" AbortExecution="false">
+                        <RedirectFormModule ScriptItemUID="RedirectForm2" ID="Form2" />
+                      </Redirect>
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnNotExist">
+                    <ActionComponent ScriptItemUID="Action5">
+                      <CallAction ScriptItemUID="Call5" ActionID="SaveChangesToPerson" />
+                    </ActionComponent>
+                  </VirtualControlMapping>
+                  <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="Person" DataTable="Person" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="WhereClauseForExistingEmployees()" Value="WhereClauseForExistingEmployees()" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Container">
+          <Column DataType="System.String" Name="UID_PersonSelected" ScriptItemUID="Column13" />
+          <Column Name="IncludeHistory" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="ReportUID" ScriptItemUID="Column3" DataType="System.String" />
+          <Column DataType="System.Boolean" Name="IsNew" ScriptItemUID="Column1" />
+          <Column DataType="System.Boolean" Name="IncludeSubIdentities" ScriptItemUID="Column6" />
+        </DataTableSingleRow>
+        <DataTableDbObject ScriptItemUID="DataTableDbObject2" Table="PersonExists" Class="Person" WhereClauseSQL="WhereClauseForExistingEmployees()">
+          <ActionSequence ScriptItemUID="Action17" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SaveChangesToPerson">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <Update DataTable="Container" DataColumn="IsNew" Value="IsNewEmployee()" ScriptItemUID="Update3" />
+              <Save DataTable="Person" ScriptItemUID="Save1" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
+                <VirtualFunctionMapping ID="MessageText()" Value="if(from Container select IsNew) then&#xD;&#xA;translate(&quot;#LDS#The new employee {0} was successfully added.&quot;, from person select current display())&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The employee data for {0} have been updated.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping6" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping15" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="Person" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="MergeChangesToPerson">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action18">
+              <CodeLiteral ScriptItemUID="CodeLiteral1">System.Collections.Generic.List&lt;VI.WebRuntime.IDataColumn&gt; ColumnList7_columns = new System.Collections.Generic.List&lt;VI.WebRuntime.IDataColumn&gt;();
+ColumnList7_columns.AddRange(_UserSession.ApplicationInfo.GetConfigColumnList("VI_Employee_MasterData_DoNotMerge", this.DataContext.PersonExists));
+System.Collections.Generic.IEnumerator&lt;VI.WebRuntime.IDataColumn&gt; _enumerating7 = ColumnList7_columns.GetEnumerator();
+var VI_Employee_MasterData_DoNotMerge_ColumnNames = new System.Collections.Generic.HashSet&lt;string&gt;();
+for (int _columnIndex7 = 0; _enumerating7.MoveNext(); _columnIndex7 = (_columnIndex7 + 1)){				
+	VI.WebRuntime.IDataColumn _currentColumn7 = _enumerating7.Current;
+	VI_Employee_MasterData_DoNotMerge_ColumnNames.Add(_currentColumn7.StorageColumn.ColumnName);				
+}</CodeLiteral>
+              <ForeachColumn DataTable="PersonExists" ScriptItemUID="ForeachColumn1">
+                <ColumnList IsWithoutRow="true" ScriptItemUID="ColumnList2">
+                  <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_attributes&quot;)" ScriptItemUID="ExpressionColumnList2" />
+                  <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_OrganizationalAttributes&quot;)" ScriptItemUID="ExpressionColumnList3" />
+                  <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_LocalityAttributes&quot;)" ScriptItemUID="ExpressionColumnList4" />
+                </ColumnList>
+                <ActionSequence ScriptItemUID="Action19" Condition="not IsNullOrEmpty(&#xD;&#xA;{{&#xD;&#xA;_Person_Current2.Row.GetValue(_currentColumn.StorageColumn.ColumnName)&#xD;&#xA;}}&#xD;&#xA;)&#xD;&#xA;and (from PersonExists select CanEdit(currentcolumn) where uid_person = from Container select UID_PersonSelected)&#xD;&#xA;and {{!VI_Employee_MasterData_DoNotMerge_ColumnNames.Contains(_currentColumn.StorageColumn.ColumnName)}}">
+                  <Update DataTable="PersonExists" DataColumn="currentcolumn" Value="{{&#xD;&#xA;_Person_Current2.Row.GetValue(_currentColumn.StorageColumn.ColumnName)&#xD;&#xA;}}" WhereClause="uid_person = from Container select UID_PersonSelected" ScriptItemUID="Update4" />
+                </ActionSequence>
+              </ForeachColumn>
+              <Save DataTable="PersonExists" WhereClause="uid_person = from Container select UID_PersonSelected" HandleDeleteDeferred="false" ScriptItemUID="Save2" ReloadAfterSave="NoReload" />
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call10">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The employee data for {0} have been updated.&quot;, from PersonExists select display() where uid_person = from Container select UID_PersonSelected)" ScriptItemUID="VirtualFunctionMapping26" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping27" />
+              </CallAction>
+              <Redirect ScriptItemUID="Redirect8" Target="Context" AllowReturnToThisContext="false" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
+                <RedirectParameter Name="&quot;ObjectKey&quot;" Value="from PersonExists select xobjectkey where uid_person = from Container select UID_PersonSelected" />
+              </Redirect>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="Person" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="DetailPaneContent">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList3">
+              <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;Person&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                <VirtualTableMapping VirtualTable="SourceObject" DataTable="PersonExists" ScriptItemUID="VirtualTableMapping5" />
+                <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping24" />
+                <VirtualFunctionMapping ID="ShowHeading()" Value="false" ScriptItemUID="VirtualFunctionMapping25" />
+              </ObjectSwitchContainer>
+              <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container17">
+                <Button Text="translate(&quot;#LDS#Overview&quot;)" ScriptItemUID="Button8">
+                  <ServerActionCall ScriptItemUID="ServerActionCall8">
+                    <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect7" AbortExecution="false">
+                      <RedirectParameter Name="'ObjectKey'" Value="from PersonExists select current xobjectkey" />
+                    </Redirect>
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="PersonExists" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="DetailPaneHeader">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList4">
+              <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef13">
+                <VirtualFunctionMapping ID="Value1()" Value="from PersonExists select current display()" ScriptItemUID="VirtualFunctionMapping28" />
+                <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-Person&quot;" ScriptItemUID="VirtualFunctionMapping29" />
+              </ControlReferenceControlList>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="PersonExists" ScriptItemUID="DataTableCursor4" />
+        </Control>
+        <Control ID="Form2">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="FormGroup1">
+              <Form ID="F2" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#More employees with comparable properties&quot;)" ScriptItemUID="Form2">
+                <ActionSequence ScriptItemUID="Action11" />
+                <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
+                  <Label Text="translate(&quot;#LDS#More employees with comparable properties&quot;)" ScriptItemUID="Label3" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
+                  <Activator ScriptItemUID="Activator1">
+                    <Action ScriptItemUID="Action12" />
+                  </Activator>
+                  <Container ScriptItemUID="Container9">
+                    <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+                      <HtmlAttributes />
+                      <MasterPane ScriptItemUID="MasterPane1">
+                        <Container ItemUID="person grid" ScriptItemUID="Container11">
+                          <Grid AllowExport="true" ExportFileName="" ExportTitle="" ScriptItemUID="Grid1">
+                            <GridBand DataTable="PersonExists" DisplayHeader="Always" RowSelection="true" DataTableForSelection="Container" DataColumnForSelection="UID_PersonSelected" EnableCustomAttributes="true" DataSourceType="Database" DBWhereClause="WhereClauseForExistingEmployees()" DbOrderBy="" ScriptItemUID="GridBand1">
+                              <HtmlAttributes>
+                                <Property Name="ApplyFilledHeight" Value="true" />
+                              </HtmlAttributes>
+                              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" />
+                              <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                              <GridFilters ScriptItemUID="GridFilters1" />
+                              <GridRows />
+                              <GridColumnColumnTemplate DataTable="PersonExists" ScriptItemUID="GridColumnColumnTemplate1">
+                                <ColumnList IsWithoutRow="true" ScriptItemUID="ColumnList1">
+                                  <SingleColumn DataColumn="__Display" FKWhereClause="" ScriptItemUID="SingleColumn1" />
+                                  <ExpressionColumnList ColumnList="getconfig(&quot;VI_MyData_WhitePages_ResultAttributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
+                                </ColumnList>
+                                <GridColumnGroup DataTable="PersonExists" ScriptItemUID="GridColumnGroup1">
+                                  <GridColumnSimple Column="currentcolumn" ScriptItemUID="Column5" />
+                                </GridColumnGroup>
+                              </GridColumnColumnTemplate>
+                            </GridBand>
+                          </Grid>
+                        </Container>
+                      </MasterPane>
+                      <DetailPane ScriptItemUID="DetailPane1">
+                        <Container ScriptItemUID="Container12">
+                          <ContainerTemplate DataTable="PersonExists" WhereClause="UID_Person = ( from Container select UID_PersonSelected)" ScriptItemUID="ContainerTemplate2">
+                            <ControlReferenceControlList ID="DetailPaneContent" ScriptItemUID="ControlRef11" />
+                          </ContainerTemplate>
+                        </Container>
+                        <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                          <ControlList ScriptItemUID="ControlList2">
+                            <ContainerTemplate DataTable="PersonExists" WhereClause="UID_Person = ( from Container select UID_PersonSelected)" ScriptItemUID="ContainerTemplate3">
+                              <ControlReferenceControlList ID="DetailPaneHeader" ScriptItemUID="ControlRef12" />
+                            </ContainerTemplate>
+                          </ControlList>
+                        </DetailPaneHeader>
+                      </DetailPane>
+                    </MasterDetailControl>
+                    <ContainerTemplate DataTable="Person" EnableCustomAttributes="true" ScriptItemUID="ContainerTemplate4">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" ScriptItemUID="HtmlAttribute2" />
+                      </HtmlAttributes>
+                      <Button Text="translate('#LDS#WD_Cancel')" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button5">
+                        <ServerActionCall ScriptItemUID="ServerActionCall5">
+                          <Redirect Target="Context" ContextID="VI_Employee_Overview" AllowReturnToThisContext="false" NoLinkBackToThisForm="true" ScriptItemUID="Redirect3" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Update employee data')" Layout="'VI_Styles_Button_Default'" EnabledCondition="Exists(&quot;Person&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;,from Container select UID_PersonSelected),&#xD;&#xA;      variable(getconfig(&quot;VI_Employee_Person_Filter&quot;))&#xD;&#xA;   )&#xD;&#xA;)" ScriptItemUID="Button6">
+                        <ServerActionCall ScriptItemUID="ServerActionCall6">
+                          <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call6">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to save your changes?&quot;)" ScriptItemUID="VirtualFunctionMapping18" />
+                            <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping19" />
+                            <VirtualFunctionMapping ID="MessageBoxTitle()" Value="select Display() from PersonExists where uid_person = (from Container select UID_PersonSelected)" ScriptItemUID="VirtualFunctionMapping20" />
+                            <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                              <ActionComponent ScriptItemUID="Action13">
+                                <CallAction ActionID="MergeChangesToPerson" ScriptItemUID="Call7" />
+                              </ActionComponent>
+                            </VirtualControlMapping>
+                          </CallAction>
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Add a new employee')" Layout="'VI_Styles_Button_Primary'" ScriptItemUID="Button7">
+                        <ServerActionCall ScriptItemUID="ServerActionCall7">
+                          <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call8">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to add the new employee?&quot;)" ScriptItemUID="VirtualFunctionMapping21" />
+                            <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping22" />
+                            <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from Person select current display()" ScriptItemUID="VirtualFunctionMapping23" />
+                            <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                              <ActionComponent ScriptItemUID="Action15">
+                                <CallAction ActionID="SaveChangesToPerson" ScriptItemUID="Call9" />
+                                <Redirect ScriptItemUID="Redirect5" Target="Context" AllowReturnToThisContext="false" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
+                                  <RedirectParameter Name="&quot;ObjectKey&quot;" Value="from Person select current xobjectkey" />
+                                </Redirect>
+                              </ActionComponent>
+                            </VirtualControlMapping>
+                          </CallAction>
+                        </ServerActionCall>
+                      </Button>
+                    </ContainerTemplate>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsNewEmployee()" Expression="not(from Person select current IsLoaded())" DataType="System.Boolean" ScriptItemUID="Function1" TriggerUpdates="Never" />
+        <Function Name="WhereClauseForExistingEmployees()" Expression="SqlOr(&#xD;&#xA;if (from person select Len(CentralAccount) &gt; 0) then(&#xD;&#xA;   sqlcompare(&quot;CentralAccount&quot;, from Person select CentralAccount, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;)&#xD;&#xA;),&#xD;&#xA;if (from person select Len(DefaultEmailAddress) &gt; 0) then(&#xD;&#xA;   sqlcompare(&quot;DefaultEmailAddress&quot;, from Person select DefaultEmailAddress, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;)&#xD;&#xA;),&#xD;&#xA;SqlAnd(&#xD;&#xA;   sqlcompare(&quot;FirstName&quot;, from Person select FirstName, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;),&#xD;&#xA;   sqlcompare(&quot;Lastname&quot;, from Person select Lastname, &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;)&#xD;&#xA;)&#xD;&#xA;)" DataType="System.String" TriggerUpdates="Updates" ScriptItemUID="Function2" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Person" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="Person" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

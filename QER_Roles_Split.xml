@@ -1,0 +1,259 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_Roles_Split">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.CompositionApi.dll" />
+        <NamespaceImport Namespace="QER.CompositionApi.Role" />
+        <AssemblyReference Assembly="AE.WebRuntime.dll" />
+        <NamespaceImport Namespace="QER.WebRuntime" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action1">
+        <Insert ScriptItemUID="Insert1" DataTable="CandidateTable">
+          <ActionSequence ScriptItemUID="Action4" />
+          <InsertValue Value="&quot;Department&quot;" DataColumn="Name" />
+        </Insert>
+        <Insert ScriptItemUID="Insert4" DataTable="CandidateTable">
+          <ActionSequence ScriptItemUID="Action7" />
+          <InsertValue Value="&quot;Locality&quot;" DataColumn="Name" />
+        </Insert>
+        <Insert ScriptItemUID="Insert5" DataTable="CandidateTable">
+          <ActionSequence ScriptItemUID="Action8" />
+          <InsertValue Value="&quot;ProfitCenter&quot;" DataColumn="Name" />
+        </Insert>
+      </ActionSequence>
+      <ActionComponent ScriptItemUID="Action2">
+        <Delete DataTable="NewObject" ScriptItemUID="Delete3" />
+        <LoadTable DataTable="RoleSource" ScriptItemUID="LoadTable1" DBTableName="getobjectkeytable(objectkeyrole())" WhereClause="sqlcompareuid(&quot;XobjectKey&quot;, objectkeyrole())">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ActionSequence ScriptItemUID="Action13" Condition="not(getconfig(&quot;Allow_Roles_Split_Different_Organisation_Type&quot;) = &quot;True&quot;)" ItemUID="Allow_Roles_Split_Different_Organisation_Type">
+          <Delete DataTable="CandidateTable" ScriptItemUID="Delete2" WhereClause="Name &lt;&gt; (from Vars select NewObjectType)" />
+        </ActionSequence>
+        <Update DataColumn="NewObjectType" DataTable="Vars" ScriptItemUID="Update3" />
+        <Update DataColumn="NewObjectType" DataTable="Vars" ScriptItemUID="Update1" Value="getobjectkeytable(objectkeyrole())" />
+        <Popup DisplayType="Controls">
+          <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+            </HtmlAttributes>
+            <Wizard ScriptItemUID="Wizard1">
+              <OnCancel ScriptItemUID="Action11">
+                <Update DataColumn="NewObjectType" DataTable="Vars" ScriptItemUID="Update2" />
+                <ActionOnControl />
+              </OnCancel>
+              <WizardPage ScriptItemUID="WizardPage1" Title="translate(&quot;#LDS#New role data&quot;)" AllowBackAction="false">
+                <OnNext ScriptItemUID="Action12">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral2">SplitItems.ObjectList.Clear();
+
+var split = (QER.CompositionApi.Role.RoleSplit)TableStore.UserData["RoleSplit"];
+
+await split.CheckAsync(ct).ConfigureAwait(false);
+
+foreach (var i in split.SplitItems)
+{
+	SplitItems.ObjectList.Add(i);
+}</CodeLiteral>
+                </OnNext>
+                <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#Split a role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container4" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute6" />
+                  </HtmlAttributes>
+                </Container>
+                <LayoutPanel ScriptItemUID="LayoutPanel1">
+                  <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="EditTable" DataTable="Vars">
+                      <VirtualColumnMapping DataColumn="NewObjectType" VirtualColumn="EditColumn" />
+                    </VirtualTableMapping>
+                  </ControlReferenceContainer>
+                  <ComboBox DataColumn="NewObjectType" DataTable="Vars" ScriptItemUID="ComboBox1" SourceTable="CandidateTable" SourceValueColumn="Name" WhereClause="caninsert(name)" />
+                </LayoutPanel>
+                <Container ScriptItemUID="Container3">
+                  <ContainerTemplate DataTable="NewObject" ScriptItemUID="ContainerTemplate1">
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Text()" Value="translate(&quot;#LDS#Enter the following properties for the new role.&quot;)" />
+                    </ControlReferenceContainer>
+                    <ObjectSwitchContainer ObjectKey="singleproperty(&quot;DialogTable&quot;, &quot;XobjectKey&quot;, sqlcompare(&quot;Tablename&quot;, from vars select newobjecttype, &quot;string&quot;, &quot;equal&quot;))" ActionType="ObjectEdit" ScriptItemUID="ObjectSwitchContainer1">
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="NewObject" />
+                    </ObjectSwitchContainer>
+                  </ContainerTemplate>
+                </Container>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage2" Title="translate(&quot;#LDS#Split configuration&quot;)">
+                <OnNext ScriptItemUID="Action14">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <CodeLiteral ScriptItemUID="CodeLiteral3">Actions.ObjectList.Clear();
+
+var split = (QER.CompositionApi.Role.RoleSplit)TableStore.UserData["RoleSplit"];
+
+foreach(var action in split.GetSplitActions())
+{
+	Actions.ObjectList.Add(action);
+}</CodeLiteral>
+                </OnNext>
+                <OnBack ScriptItemUID="Action15" />
+                <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Split a role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container5" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute7" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container1">
+                  <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef9">
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Text()" Value="translate(&quot;#LDS#Select which assignments should be copied or moved to the new role.&quot;)" />
+                  </ControlReferenceContainer>
+                </Container>
+                <CodeLiteral ScriptItemUID="CodeLiteral4">_targetContainer2.Init += (_s,_e) =&gt;
+{
+	// renderPart is only defined when targetContainer2 is loaded into the page 
+	var bucket = new VI.WebRuntime.WebControls.Bucket.BucketControl();
+	_targetContainer2.Controls.Add(bucket);
+	var renderPart = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.IoC.IObjectFactory&gt;().FormRenderPartFunc((IControl)_targetContainer2);
+	var split = (QER.CompositionApi.Role.RoleSplit)TableStore.UserData["RoleSplit"];
+	var method = new RoleSplitDataFormMethod(split.SplitItems, new SessionTranslator(_Connection), _Database.MetaData());
+	var methodCall = renderPart.RegisterFormMethod(bucket, "Data", method);
+	bucket.DataSourceUrl = methodCall.URL;
+};</CodeLiteral>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage3" Title="translate(&quot;#LDS#Review actions&quot;)">
+                <OnNext ScriptItemUID="Action5">
+                  <CodeLiteral ScriptItemUID="CodeLiteral7">// Collect selected split actions
+var actions = DataContext.Actions.ObjectList.Where(t =&gt; t.IsActive);
+
+var runner = new QBM.CompositionApi.UiAction.ActionRunner(_Connection.Session, actions);
+
+var results = await runner.RunAsync(ct).ConfigureAwait(false);
+
+DataContext.Results.ObjectList.Clear();
+
+foreach (var result in results)
+{
+	DataContext.Results.ObjectList.Add(result);
+}</CodeLiteral>
+                </OnNext>
+                <OnBack ScriptItemUID="Action10" />
+                <Label ScriptItemUID="Label2" Text="translate(&quot;#LDS#Split a role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container6" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute8" />
+                  </HtmlAttributes>
+                </Container>
+                <Grid ScriptItemUID="Grid2">
+                  <GridBand DataTable="Actions" ScriptItemUID="GridBand2" OrderBy="'SortOrder'" EnableCustomAttributes="true" RowSelection="Multiple" DataColumnSelectState="IsActiveProxy" RowSelectionActive="CanExecute">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters4" />
+                    <GridRows />
+                    <GridColumnSimple ScriptItemUID="Column16" Column="ObjectDisplayProxy" />
+                    <GridColumnSimple ScriptItemUID="Column17" Column="DisplayProxy" />
+                  </GridBand>
+                </Grid>
+              </WizardPage>
+              <WizardPage ScriptItemUID="WizardPage4" Title="translate(&quot;#LDS#Results&quot;)" AllowBackAction="false" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowCancelAction="false">
+                <OnNext ScriptItemUID="Action9">
+                  <ActionOnControl />
+                </OnNext>
+                <Label ScriptItemUID="Label5" Text="translate(&quot;#LDS#Split a role&quot;)" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h2" />
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-action-copy&quot;" />
+                  </HtmlAttributes>
+                </Label>
+                <Container ScriptItemUID="Container8" EnableCustomAttributes="true" ItemUID="message container">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute9" />
+                  </HtmlAttributes>
+                </Container>
+                <Container ScriptItemUID="Container9">
+                  <ControlReferenceControlList ID="QBM_Common_ActionResultViewer" ScriptItemUID="ControlRef2">
+                    <VirtualControlMapping ContainerType="ControlList" VirtualControl="Success">
+                      <ControlList ScriptItemUID="ControlList2">
+                        <Label ScriptItemUID="Label4" Text="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="TagName" Value="div" />
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                          </HtmlAttributes>
+                        </Label>
+                      </ControlList>
+                    </VirtualControlMapping>
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="Results" DataTable="Results" />
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="Actions" DataTable="Actions" />
+                  </ControlReferenceControlList>
+                </Container>
+              </WizardPage>
+            </Wizard>
+          </Container>
+        </Popup>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="RoleSource" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="getobjectkeytable(objectkeyrole())">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableCustom Table="CandidateTable" ScriptItemUID="DataTableCustom1" DisplayColumn="DisplayName">
+          <Column DataType="System.String" Name="Name" ScriptItemUID="Column1" />
+          <Column DataType="System.String" Name="DisplayName" ScriptItemUID="Column3" DataSource="Expression" Expression="datacaptionsingle(name+&quot;&quot;)" />
+        </DataTableCustom>
+        <DataTableGeneric Table="NewObject" ScriptItemUID="DataTableGeneric1" />
+        <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="Vars">
+          <Column DataType="System.String" Name="NewObjectType" ScriptItemUID="Column2" Caption="translate(&quot;#LDS#Type of the new role&quot;)" />
+        </DataTableSingleRow>
+        <DataTableObjectView Table="Actions" ElementType="QBM.CompositionApi.UiAction.IUiAction, QBM.CompositionApi" ScriptItemUID="DataTableObjectView3" DisplayColumn="Display">
+          <ColumnProxy ScriptItemUID="ColumnProxy4" DataColumn="IsActive" Name="IsActiveProxy" Caption="translate(&quot;#LDS#Execute&quot;)" />
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy15" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xD;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree14" />
+          </ColumnProxy>
+          <ColumnProxy DataColumn="ObjectDisplay" Name="ObjectDisplayProxy" ScriptItemUID="ColumnProxy16" Caption="translate(&quot;#LDS#Object&quot;)" />
+        </DataTableObjectView>
+        <DataTableObjectView Table="SplitItems" ScriptItemUID="DataTableObjectView1" ElementType="QER.CompositionApi.Role.IRoleSplitItem, QER.CompositionApi">
+          <ColumnProxy DataColumn="Display" Name="DisplayProxy" ScriptItemUID="ColumnProxy1" Caption="translate(&quot;#LDS#Action&quot;)">
+            <ParameterFree Name="&quot;FilterByValueList&quot;&#xD;&#xA;-- allow filtering based on actual data values" Value="&quot;true&quot;" ScriptItemUID="ParameterFree1" />
+          </ColumnProxy>
+        </DataTableObjectView>
+        <DataTableObjectView Table="Results" ScriptItemUID="DataTableObjectView2" ElementType="QBM.CompositionApi.UiAction.UiActionResult, QBM.CompositionApi" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action6">
+            <Delete DataTable="NewObject" ScriptItemUID="Delete1" />
+            <CodeLiteral ScriptItemUID="CodeLiteral1">            var name = Vars.GetColumn("NewObjectType").GetValue(Vars.First());
+			
+			if(!string.IsNullOrEmpty(name))
+			{
+				
+			var split = new QER.CompositionApi.Role.RoleSplit(new DbObjectKey(ObjectKeyRole), new SessionTranslator(_Connection));
+			TableStore.UserData["RoleSplit"] = split;
+			await split.InitAsync(_Database, name, ct).ConfigureAwait(false);
+			await NewObject.InsertEntityAsync(split.NewRole, new VI.WebRuntime.ColumnInsertValues(), ct).ConfigureAwait(false);
+			}</CodeLiteral>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="NewObjectType" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="ObjectKeyRole()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

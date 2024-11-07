@@ -1,0 +1,134 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl ID="VI_QERPolicy_ExceptionApproval_Filter" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action6">
+        <CallAction ActionID="SetInitial" ScriptItemUID="Call6" />
+        <CallAction ActionID="LoadData" ScriptItemUID="Call7" />
+        <SwitchAction ScriptItemUID="Switch1">
+          <SwitchActionCase ScriptItemUID="case2" Condition="showaudit()" ItemUID="AUDIT">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update15" Value="translate('#LDS#The page displays all approvable policy violations in the selected period. Select an employee to show only the policy violations edited by the selected employee.')" />
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search person, with preselected User in tabs">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update16" Value="translate('#LDS#The page displays all policy violations in the selected period which have been edited by the selected employee.')" />
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case1" Condition="not(showaudit()) and not(showhistory()) and isnull(setuseraudit(),'') = ''&#xD;&#xA;and from vars select isnullorempty(uid_qerpolicyhasobject)" ItemUID="NoAudit - History">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update12" Value="translate('#LDS#The page displays all policy violations you are entitled to approve or deny  in the selected period.')" />
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="Case1" Condition="not(showaudit()) and showhistory() and isnull(setuseraudit(),'') = ''" ItemUID="NOAUDIT AND HISTORY">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update19" Value="translate('#LDS#This page shows policy violations you have edited.')" />
+          </SwitchActionCase>
+        </SwitchAction>
+        <CodeLiteral ScriptItemUID="Try">{{
+try{</CodeLiteral>
+        <Update DataColumn="HeadLine" DataTable="TargetTable" ScriptItemUID="Update13" Value="from Vars select HeadLine" />
+        <Update DataColumn="HeadLineIsExternal" DataTable="Vars" ScriptItemUID="Update20" Value="true" />
+        <CodeLiteral ScriptItemUID="Catch">}
+catch{}
+}}</CodeLiteral>
+      </ActionSequence>
+      <Container ItemUIDReference="Search" ScriptItemUID="Container1">
+        <Container ItemUID="HeadLine" ScriptItemUID="Container2" Condition="not(from Vars select HeadLineIsExternal)">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="Text()" Value="from Vars select HeadLine" ScriptItemUID="VirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ScriptItemUID="Container7" Condition="showaudit()">
+          <LayoutPanel ScriptItemUID="LayoutPanel2">
+            <Label Text="translate('#LDS#Approver')" ScriptItemUID="Label1" />
+            <ColumnEditor DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="ColumnEditor1" />
+          </LayoutPanel>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ShowOpen" DataType="System.Boolean" ScriptItemUID="Column2" />
+          <Column Name="ShowApproved" DataType="System.Boolean" ScriptItemUID="Column3" />
+          <Column Name="ShowDenied" DataType="System.Boolean" ScriptItemUID="Column4" />
+          <Column Name="UID_PersonAudit" DataType="System.String" ScriptItemUID="Column6" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column Name="HideOpen" DataType="System.Boolean" ScriptItemUID="Column9" />
+          <Column Name="HideApproved" DataType="System.Boolean" ScriptItemUID="Column10" />
+          <Column Name="HideDenied" DataType="System.Boolean" ScriptItemUID="Column11" />
+          <Column Name="UID_QERPolicyHasObject" DataType="System.String" ScriptItemUID="Column12" />
+          <Column DataType="System.Boolean" Name="HeadLineIsExternal" ScriptItemUID="Column1" />
+          <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column5" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SetInitial">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <ActionSequence Condition="isnull(setuseraudit(),'') &lt;&gt; '' " ItemUID="pre-filled user" ScriptItemUID="Action9">
+                <Update DataTable="Vars" DataColumn="UID_PersonAudit" Value="setuseraudit()" ScriptItemUID="Update1" />
+              </ActionSequence>
+              <ActionSequence Condition="isnull(Request(&quot;aeweb_UID_QERPolicyHasObject&quot;),'') &lt;&gt; '' " ItemUID="QERPolicyHasObject pre-filled" ScriptItemUID="Action10">
+                <Update DataTable="Vars" DataColumn="UID_QERPolicyHasObject" Value="Request(&quot;aeweb_UID_QERPolicyHasObject&quot;)" ScriptItemUID="Update2" />
+              </ActionSequence>
+              <Update DataTable="Vars" DataColumn="ShowApproved" Value="true" ScriptItemUID="Update3" />
+              <Update DataTable="Vars" DataColumn="ShowDenied" Value="true" ScriptItemUID="Update4" />
+              <Update DataTable="Vars" DataColumn="ShowOpen" Value="true" ScriptItemUID="Update5" />
+              <ActionSequence Condition="not(showaudit()) and isnull(setuseraudit(),'') = ''" ItemUID="no audit" ScriptItemUID="Action11">
+                <ActionSequence Condition="showhistory()" ItemUID="History view" ScriptItemUID="Action12">
+                  <Update DataTable="Vars" DataColumn="ShowOpen" Value="false" ScriptItemUID="Update6" />
+                  <Update DataTable="Vars" DataColumn="HideOpen" Value="true" ScriptItemUID="Update7" />
+                </ActionSequence>
+                <ActionSequence Condition="not(showhistory())" ItemUID="Pending view" ScriptItemUID="Action13">
+                  <Update DataTable="Vars" DataColumn="ShowDenied" Value="false" ScriptItemUID="Update8" />
+                  <Update DataTable="Vars" DataColumn="ShowApproved" Value="false" ScriptItemUID="Update9" />
+                </ActionSequence>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="LoadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action14">
+              <ActionSequence Condition="not(showaudit()) and isnull(setuseraudit(),'') = ''" ItemUID="No Audit" ScriptItemUID="Action15">
+                <ActionSequence ScriptItemUID="Action16">
+                  <ActionSequence Condition="showhistory()" ItemUID="History view" ScriptItemUID="Action17">
+                    <Update DataTable="TargetTable" DataColumn="QERPolicyWhereClause" Value="sqland(&#xD;&#xA;SingleObjWhereClause(),&#xD;&#xA;statuswhereclause(),&#xD;&#xA;sqlcompare(&quot;isdecisionmade&quot;, 1,&quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;),&#xD;&#xA;sqlcompareuid(&quot;UID_PersonDecisionMade&quot;, GetUser())&#xD;&#xA;)" ScriptItemUID="Update10" />
+                  </ActionSequence>
+                  <ActionSequence Condition="not(showhistory())" ItemUID="Pending view" ScriptItemUID="Action18">
+                    <Update DataTable="TargetTable" DataColumn="QERPolicyWhereClause" Value="sqland(&#xD;&#xA;SingleObjWhereClause(),&#xD;&#xA;format(&quot;uid_qerpolicy in (select cr.uid_qerpolicy from qerpolicy cr join personinaerole pae on pae.uid_aerole = cr.uid_aeroleruler and {0} and {1})&quot;,&#xD;&#xA;sqlcompare(&quot;pae.uid_person&quot;, getuser(),&quot;string&quot;,&quot;equal&quot;,&quot;NonUnicodeLiterals&quot;),&#xD;&#xA;IsExceptionAllowedWhereClause()&#xD;&#xA;))" ScriptItemUID="Update11" />
+                  </ActionSequence>
+                </ActionSequence>
+              </ActionSequence>
+              <ActionSequence Condition="showaudit() or isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Auditmode" ScriptItemUID="Action20">
+                <Update DataTable="TargetTable" DataColumn="QERPolicyWhereClause" Value="sqland(&#xA;SingleObjWhereClause(),&#xA;statuswhereclause(),&#xA;personwhereclause()&#xA;)" ScriptItemUID="Update14" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="statuswhereclause()" Expression="sqlor(&#xD;&#xA;--aktiv&#xD;&#xA;if( (from vars select not(ShowOpen))) then &quot;1=0&quot; else&#xD;&#xA;sqlcompare(&quot;isdecisionmade&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;&#xD;&#xA;--abgelehnt&#xD;&#xA;if( (from vars select not(ShowDenied))) then &quot;1=0&quot; else&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;isdecisionmade&quot;, true, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsExceptionGranted&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;),&#xD;&#xA;&#xD;&#xA;--genehmigt&#xD;&#xA;if( (from vars select not(ShowApproved))) then &quot;1=0&quot; else&#xD;&#xA;sqlcompare(&quot;IsExceptionGranted&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="personwhereclause()" Expression="if(from Vars select isnull(UID_PersonAudit,'') &lt;&gt; '')then&#xD;&#xA;sqlcompareuid(&quot;UID_PersonDecisionMade&quot;, (from Vars select UID_PersonAudit))" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="IsExceptionAllowedWhereClause()" Expression="sqlcompare(&quot;cr.IsExceptionAllowed&quot;, true, &quot;bool&quot;,&quot;equal&quot;,&quot;none&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="SingleObjWhereClause()" Expression="from vars select&#xD;&#xA;(if(isnullorempty(uid_qerpolicyhasobject)) then getnull()&#xD;&#xA;else&#xD;&#xA;sqlcompareuid(&quot;UID_QERPolicyHasObject&quot;, UID_QERPolicyHasObject))" DataType="System.String" ScriptItemUID="Function4" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action21">
+            <CallAction ActionID="LoadData" ScriptItemUID="Call8" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonAudit" />
+          <DataEventHandlerColumn DataColumn="ShowApproved" />
+          <DataEventHandlerColumn DataColumn="ShowDenied" />
+          <DataEventHandlerColumn DataColumn="ShowOpen" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="showaudit()" Comment="Set the auditing mode person search control" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="showhistory()" Comment="Visible in My Actions / Pending policy violation" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="setuseraudit()" Comment="Set the user for auditing and the auditing mode" DataType="System.String" />
+      <VirtualFunction Signature="popuptitle()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="TargetTable" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="QERPolicyWhereClause" DataType="System.String" />
+        <VirtualColumn Name="HeadLine" DataType="System.String" IsMandatory="false" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

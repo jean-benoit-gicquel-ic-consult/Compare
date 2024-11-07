@@ -1,0 +1,21 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-02" ID="POL_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="280">
+        <ConfigParam Key="VI_ObjectView_QERPolicy_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;QERPolicy&quot;))" DatabaseTable="QERPolicy" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="300">
+        <ConfigEntry Key="VI_ObjectView_QERPolicy_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="POLConfigEntry1">
+          <SingleColumn DataColumn="Ident_QERPolicy" FKWhereClause="" ScriptItemUID="POLSingleColumn1" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="POLSingleColumn2" />
+          <SingleColumn DataColumn="PolicyNumber" FKWhereClause="" ScriptItemUID="POLSingleColumn3" />
+          <SingleColumn ScriptItemUID="POLSingleColumn8" DataColumn="IsExceptionAllowed" />
+          <SingleColumn DataColumn="UID_AERoleAttestator" FKWhereClause="" ScriptItemUID="POLSingleColumn4" />
+          <SingleColumn DataColumn="UID_AERoleRuler" FKWhereClause="" ScriptItemUID="POLSingleColumn5" />
+          <SingleColumn DataColumn="UID_AERoleResponsible" FKWhereClause="" ScriptItemUID="POLSingleColumn6" />
+          <SingleColumn DataColumn="UID_QERPolicyGroup" FKWhereClause="" ScriptItemUID="POLSingleColumn7" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

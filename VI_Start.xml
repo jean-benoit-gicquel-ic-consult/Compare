@@ -1,0 +1,209 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="49d4660e-0f36-c7c2-0e60-fe4c29e9780a">
+  <Context ID="VI_Start" Comment="Startup module" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;B53CD496-8A96-4813-B5A7-6F04A68B0C14&quot;" AllowUrlNavigation="true" Cardinality="Single" SingleInstanceTimeout="60" ScriptItemUID="Context1" DefaultLinkObjectID="Portal_IAM_MyIdentity">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Common_Heatmap" />
+        <ObjectInclude ObjectIncludeID="VI_Common_Chart" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="ChartsGraphs" ScriptItemUID="ConfigSectionDefinition1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1" />
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" NavigationTitle="translate(&quot;#LDS#Heading Home Page&quot;)" SkipNavigation="false" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate(&quot;#LDS#Welcome&quot;)" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-tilebar-small&quot;" />
+              </HtmlAttributes>
+              <SwitchContainer ScriptItemUID="TileLossOfMemberships">
+                <SwitchContainerCase ScriptItemUID="Case1" Condition="ispreprop(&quot;ITSHOP&quot;)&#xD;&#xA;and&#xD;&#xA;not(isnullorempty(getconfigparm(&quot;QER\ITShop\ChallengeRoleRemoval\ITShopOrg&quot;)))&#xD;&#xA;and&#xD;&#xA;exists(&#xD;&#xA;   &quot;personwantsorg&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_PersonOrdered&quot;,GetUser()),&#xD;&#xA;      SqlCompareUid(&quot;UID_Org&quot;,getconfigparm(&quot;QER\ITShop\ChallengeRoleRemoval\ITShopOrg&quot;)),&#xD;&#xA;      SqlCompare('OrderState', 'Assigned','string', 'equal')&#xD;&#xA;   )&#xD;&#xA;)">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container4" ItemUID="loss of memberships">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action6">
+                        <Redirect ScriptItemUID="Redirect11" Target="Context" ContextID="VI_MyData_PersonHyperView" AllowReturnToThisContext="true" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Some of your memberships are about to expire.&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping24" ID="Identifier()" Value="&quot;loss of memberships&quot;" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="TileNoPasswordQuerySet">
+                <SwitchContainerCase ScriptItemUID="Case2" Condition="(IsNullOrEmpty(getconfig(&quot;VI_MyData_MyPassword_Visibility&quot;), &quot;true&quot;) =&quot;true&quot;)&#xD;&#xA;AND&#xD;&#xA;(&#xD;&#xA;   (try(Convert(IsNullOrEmpty(GetConfigParm(&quot;QER\Person\PasswordResetAuthenticator\QueryAnswerDefinitions&quot;),&quot;0&quot;),&quot;int32&quot;),0) &gt; DbCount(&quot;QERPasswordQueryAndAnswer&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;,GetUser()),&#xD;&#xA;      SqlCompare(&quot;IsLocked &quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;   )   &#xD;&#xA;   ))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container8" ItemUID="no password query and answer set">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action10">
+                        <Redirect ScriptItemUID="Redirect5" Target="Context" AllowReturnToThisContext="true" ContextID="VI_MyData_MyPassword" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="Caption()" Value="if Not Exists(&quot;QERPasswordQueryAndAnswer&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;    SqlCompareUid(&quot;UID_Person&quot;,GetUser()),&#xD;&#xA;    SqlCompare(&quot;IsLocked &quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;))then&#xD;&#xA;   translate('#LDS#Set your secret password answer now to unlock your account in the future.')&#xD;&#xA;else&#xD;&#xA;   translate('#LDS#Specify additional password questions to be able to unlock your account.')" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping27" ID="Identifier()" Value="&quot;no password query and answer set&quot;" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <ControlReferenceControlList ID="QBM_Notification_Tile" ScriptItemUID="ControlRef7" />
+              <SwitchContainer ScriptItemUID="TileResetPasswordWeb">
+                <SwitchContainerCase ScriptItemUID="Case4" Condition="not(isnullorempty(getconfig(&quot;VI_Common_PasswordWebLink&quot;)))">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container14" ItemUID="Reset password web link">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action11">
+                        <Redirect ScriptItemUID="Redirect4" Target="Link" HREF="getconfig(&quot;VI_Common_PasswordWebLink&quot;)" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Caption()" Value="translate(&quot;#LDS#Manage your passwords&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping28" ID="Identifier()" Value="&quot;Reset password web link&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="Image()" Value="&quot;Key&quot;  " />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping40" ID="ImageType()" Value="'StockImage'" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping41" ID="ContentType()" Value="'Image'" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="TileShoppingCart">
+                <SwitchContainerCase ScriptItemUID="Case3" Condition="ispreprop(&quot;ITSHOP&quot;) and 0 &lt; from countopendatabaseitems select CountProductsInShoppingCart">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container1" ItemUID="shopping cart">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action12">
+                        <Redirect ScriptItemUID="Redirect6" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ShoppingCart" AbortExecution="false" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="Caption()" Value="translate(&quot;#LDS#Requests not yet submitted&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Value()" Value="from countopendatabaseitems select countproductsinshoppingcart" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Identifier()" Value="&quot;shopping cart&quot;" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="TileStartNewRequest">
+                <SwitchContainerCase ScriptItemUID="Case5" Condition="ispreprop(&quot;ITSHOP&quot;)">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container6" ItemUID="start a new request">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action8">
+                        <Redirect ScriptItemUID="Redirect12" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_ProductSelection" AbortExecution="false" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Caption()" Value="translate(&quot;#LDS#Start a new request&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Image()" Value="&quot;Shop&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="Identifier()" Value="&quot;start a new request&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ContentType()" Value="'Image'" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="TileItShopApprovals">
+                <SwitchContainerCase ScriptItemUID="Case6" Condition="ispreprop(&quot;ITSHOP&quot;) and 0 &lt; from countopendatabaseitems select openpwo">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container5" ItemUID="IT shop approvals">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action9">
+                        <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_Approvals" AbortExecution="false" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Caption()" Value="translate(&quot;#LDS#Pending requests&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Value()" Value="from countopendatabaseitems select openpwo" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Identifier()" Value="&quot;IT shop approvals&quot;" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="TileItShopApprovalInquiries">
+                <SwitchContainerCase ScriptItemUID="Case7" Condition="ispreprop(&quot;ITSHOP&quot;) and&#xD;&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean') AND &#xD;&#xA;0 &lt; from countopendatabaseitems select OpenInquiries">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container18" ItemUID="IT shop approval inqueries">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action13">
+                        <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_ITShop_AnswerQuestions" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect1">
+                          <RedirectParameter Value="true" Name="'isRequest'" />
+                        </Redirect>
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="Caption()" Value="translate('#LDS#Heading Request Inquiries')" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping23" ID="Value()" Value="from countopendatabaseitems select OpenInquiries" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="Identifier()" Value="&quot;IT shop approval inqueries&quot;" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="TileMyProcesses">
+                <SwitchContainerCase ScriptItemUID="Case8" Condition="from CountOpenDatabaseItems select NewProcesses">
+                  <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container19" ItemUID="My Processes">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action14">
+                        <Redirect ScriptItemUID="Redirect10" Target="Context" AllowReturnToThisContext="true" ContextID="QBM_MyProcesses" AbortExecution="false" />
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="Caption()" Value="translate(&quot;#LDS#My Processes&quot;)" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="Value()" Value="from CountOpenDatabaseItems select NewProcesses" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Identifier()" Value="&quot;My Processes&quot;" />
+                  </ControlReferenceContainer>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;class&quot;" Value="&quot;imx-tilebar&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceControlList ID="QER_BusinessOwner_ChartSummary" ScriptItemUID="ControlRef3" />
+              <ControlReferenceControlList ID="QBM_Common_FavoritesView" ScriptItemUID="ControlRef1" />
+              <SwitchContainer ScriptItemUID="DashboardEmployeesByRiskIndex">
+                <SwitchContainerCase ScriptItemUID="Case9" Condition="ispreprop(&quot;RISKINDEX&quot;) and exists(&quot;Person&quot;, getconfig(&quot;VI_Start_Governance_Risk_Condition&quot;))" ItemUID="Access Governance - Risk">
+                  <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="ControlRef8" ItemUID="Access Governance - Risk">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action16">
+                        <Redirect ScriptItemUID="Redirect9" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false">
+                          <RedirectParameter Value="&quot;Risk&quot;" Name="'Part'" />
+                        </Redirect>
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="DisplayNameDialogDashboardDef()" Value="&quot;QAMEmployeesByRiskIndex10&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="ChartType()" Value="&quot;ChartBar&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Caption()" Value="translate('#LDS#Employees by risk index')" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Identifier()" Value="&quot;Dashboard_EmployeesByRiskIndex&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="UseHistogramStyle()" Value="true" />
+                  </ControlReferenceControlList>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="DashboardOrganization">
+                <SwitchContainerCase ScriptItemUID="Case10" Condition="exists(&quot;person&quot;, getconfig(&quot;VI_Start_Governance_Organisation_Condition&quot;))" ItemUID="Access Governance - Organization">
+                  <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="ControlRef4">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action3">
+                        <Redirect ScriptItemUID="Redirect7" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false">
+                          <RedirectParameter Value="&quot;Organization&quot;" Name="'Part'" />
+                        </Redirect>
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="DisplayNameDialogDashboardDef()" Value="&quot;TotalNumberOfOrganizationalUnits&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="ChartType()" Value="&quot;ChartBar&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="Caption()" Value="translate('#LDS#Organization')" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping35" ID="Identifier()" Value="&quot;Dashboard_Organization&quot;" />
+                  </ControlReferenceControlList>
+                </SwitchContainerCase>
+              </SwitchContainer>
+              <SwitchContainer ScriptItemUID="DashboardRequests">
+                <SwitchContainerCase ScriptItemUID="Case11" ItemUID="Access Governance - IT Shop" Condition="ispreprop(&quot;ITSHOP&quot;) and exists(&quot;person&quot;, getconfig(&quot;VI_Start_Governance_ITShop_Condition&quot;))">
+                  <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="ControlRef6">
+                    <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                      <ActionComponent ScriptItemUID="Action4">
+                        <Redirect ScriptItemUID="Redirect13" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false">
+                          <RedirectParameter Value="&quot;ITShop&quot;" Name="'Part'" />
+                        </Redirect>
+                      </ActionComponent>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="DisplayNameDialogDashboardDef()" Value="&quot;ITShopOrdersByDate&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ChartType()" Value="&quot;ChartLine&quot;" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping38" ID="Caption()" Value="translate('#LDS#Heading Requests')" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping39" ID="Identifier()" Value="&quot;Dashboard_Requests&quot;" />
+                  </ControlReferenceControlList>
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

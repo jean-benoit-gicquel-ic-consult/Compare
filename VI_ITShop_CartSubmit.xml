@@ -1,0 +1,110 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="cc9acf44-0555-2085-4e2f-dcc204d1407c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_CartSubmit" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="QER.Customizer.dll" />
+        <NamespaceImport Namespace="QER.Customizer" />
+        <TypeMember ItemUID="AddHistoryEntryTermsOfUse">public static void AddHistoryEntryTermsOfUse(string pwoWhereClause)
+{
+	
+	var conn = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;().UserDataConnection;
+
+	var colPwo = conn.CreateCol("PersonWantsOrg");
+	colPwo.Prototype.WhereClause = pwoWhereClause;
+	colPwo.Load();
+	foreach (ISingleDbObject pwo in colPwo.Select(d =&gt; d.Create()))
+	{
+		var eData = new VI.DB.Entities.Transport.EntityData();
+		eData.Key = new VI.DB.Entities.Transport.KeyData{ Table = "PWODecisionHistory"};
+		eData.PutValue("UID_QERJustification", "QER-95f268209082426aa7d8b5e6d5e0d242"); // "The recipient has accepted the terms of use."
+		eData.PutValue("UID_PersonWantsOrg", pwo.GetValue("UID_PersonWantsOrg").String);
+		eData.PutValue("DisplayPersonHead", "#LDS#Automatic approval.");
+		eData.PutValue("OrderState", pwo.GetValue("OrderState").String);
+             
+		pwo.Custom.CallMethod("AddHistoryEntry", eData.ToXml(false));
+		pwo.Save();
+	}
+
+}</TypeMember>
+        <NamespaceImport Namespace="VI.DB.Entities.Transport" />
+      </CompilationSettings>
+      <ConfigSectionDefinition Name="IT Shop" Description="translate(&quot;#LDS#IT Shop&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_TermsOfUseRequireADAuthentication" Description="translate(&quot;#LDS#Requester must authenticate in Active Directory before submitting the shopping cart&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_TermsOfUseRequireMFA" Description="translate(&quot;#LDS#Requester must authenticate to Starling 2FA when accepting terms of use&quot;)" LongDescription="translate(&quot;#LDS#When this setting is active and Starling 2FA integration is active, accepting terms of use will require a multi-factor authentication.&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Save DataTable="ShoppingCartItem" ScriptItemUID="Save1" />
+        <SwitchAction ScriptItemUID="Switch1">
+          <SwitchActionCase ScriptItemUID="Case1" Condition="DisplayTermsOfUse()">
+            <Redirect ScriptItemUID="Redirect3" Target="FormModule">
+              <RedirectFormModule ID="QER_ITShop_AcceptTermsOfUse" ScriptItemUID="RedirectForm1">
+                <VirtualControlMapping VirtualControl="OnTermsOfUseAccepted" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action4">
+                    <CallAction ActionID="SubmitCart" ScriptItemUID="Call4" />
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="HeaderText()" Value="translate(&quot;#LDS#One or more products in your shopping cart require that you accept the terms of use before proceeding.&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+              </RedirectFormModule>
+            </Redirect>
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="Case2">
+            <CallAction ActionID="SubmitCart" ScriptItemUID="Call3" />
+          </SwitchActionCase>
+        </SwitchAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="ShoppingCartItem" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView1" ViewFKWhereClause="-- ignore requests made for other employees&#xD;&#xA;uid_personinserted = uid_personordered">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableFKView Table="QERTermsOfUse" ViewFKDataTable="AccProduct" ViewFKDataColumn="UID_QERTermsOfUse" ScriptItemUID="DataTableFKView2" ViewFKWhereClause="uid_accproduct in (select uid_accproduct from shoppingcartitem where uid_personordered = uid_personinserted)">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SubmitCart">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action3">
+              <CodeLiteral ScriptItemUID="CodeLiteral1">    object[] _callParams = new object[2];
+    _callParams[0] = this.uid_ShoppingCartOrder;
+    _callParams[1] = false;
+	
+	Logger.Debug("Reloading person entity for OrderShoppingCart: "+_Connection.User.Uid);
+	var person = _Connection.Session.Source().Get("Person", _Connection.User.Uid, EntityLoadType.Interactive);
+
+    var orderInfo = (OrderInfo) person.CallFunction(_Database, "OrderShoppingCart", _callParams);
+</CodeLiteral>
+              <CodeLiteral ScriptItemUID="CodeLiteral5">var conn = _Connection;
+foreach (var termsOfUseObj in QERTermsOfUse)
+{
+	AddHistoryEntryTermsOfUse(string.Format("uid_shoppingcartorder = {0} and uid_personordered = uid_personinserted and uid_org in ( select uid_itshoporg from itshoporg where uid_accproduct in ( select uid_accproduct from accproduct where uid_qertermsofuse = {1}))",
+	    conn.SqlFormatter.FormatValue(uid_ShoppingCartOrder, VI.Base.ValType.String),
+	    conn.SqlFormatter.FormatValue(termsOfUseObj.GetValue("UID_QERTermsOfUse").String, VI.Base.ValType.String)));
+}</CodeLiteral>
+              <LoadTable DataTable="ShoppingCartItem" ScriptItemUID="LoadTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+              </LoadTable>
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call1">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The request was successfully submitted.&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping3" />
+              </CallAction>
+              <CallAction ActionID="UpdateOpenItems" ScriptItemUID="Call2" />
+              <Redirect Target="Context" NoLinkBackToThisForm="true" ContextID="VI_ITShop_ShoppingCart" ScriptItemUID="Redirect1" AllowReturnToThisContext="false" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="DisplayTermsOfUse()" Expression="(0 &lt; select count() from QERTermsOfUse)&#xD;&#xA;AND&#xD;&#xA;( 0 = from ShoppingCartItem&#xD;&#xA;      select count() &#xD;&#xA;	  where MethodName like 'Unsubscribe%'&#xD;&#xA;	  AND UID_AccProduct in (from AccProduct select UID_AccProduct where NOT IsNullOrEmpty(UID_QERTermsOfUse))&#xD;&#xA;)&#xD;&#xA;" DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="GetTermsOfUseAcceptText(string termsOfUseDisplay)" Expression="translate(&quot;#LDS#The requester has accepted the terms of use: {0}&quot;, termsOfUseDisplay)" DataType="System.String" ScriptItemUID="Function2" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="uid_ShoppingCartOrder()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

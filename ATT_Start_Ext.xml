@@ -1,0 +1,77 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Start_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container7" ObjectType="Container" SortOrder="35">
+        <SwitchContainer ScriptItemUID="TileAttestation">
+          <SwitchContainerCase ScriptItemUID="ATTCase1" Condition="ispreprop(&quot;attestation&quot;) and 0 &lt; from countopendatabaseitems select OpenAttestation">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ATTContainer1" ItemUID="attestation">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action7">
+                  <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Attestation" AbortExecution="false" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Caption()" Value="translate(&quot;#LDS#Pending Attestations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Value()" Value="from countopendatabaseitems select OpenAttestation" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping2" ID="Identifier()" Value="&quot;attestation&quot;" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+        <SwitchContainer ScriptItemUID="TileAttestationInquiries">
+          <SwitchContainerCase ScriptItemUID="ATTCase2" Condition="ispreprop(&quot;attestation&quot;) and &#xD;&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean') AND&#xD;&#xA;0 &lt; from countopendatabaseitems select OpenInquiriesAttestation">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ATTContainer10" ItemUID="attestation inqueries">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="ATTAction3">
+                  <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_ITShop_AnswerQuestions" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="ATTRedirect1" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Heading Attestation Inquiries&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping4" ID="Value()" Value="from countopendatabaseitems select OpenInquiriesAttestation" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping5" ID="Identifier()" Value="&quot;attestation inqueries&quot;" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="5">
+        <ConfigParam Key="VI_Start_My_Attestations" Type="ObjectSelection" ObjectType="VI.WebDesigner.Definition.Controls.ChartInfoDefinition, WebDesigner.AppModel" />
+      </AddObject>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="95">
+        <SwitchContainer ScriptItemUID="ATTSwitch1">
+          <SwitchContainerCase ScriptItemUID="ATTCase4" Condition="exists(&quot;attestationpolicy&quot;, &quot;UID_AttestationObject = 'TSB-46A0392199784628A827A9C6D651DD50' and IsInactive=0&quot;)">
+            <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="ATTControlRef2" ItemUID="My Entitlement attestations">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="ATTAction2">
+                  <Redirect ScriptItemUID="ATTRedirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_Attestation">
+                    <RedirectParameter Value="&quot;UNSGroup&quot;" Name="'objecttablename'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping8" ID="DisplayNameDialogDashboardDef()" Value="&quot;SystemEntitlementAttestationStats&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping11" ID="ChartType()" Value="&quot;ChartPie&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping14" ID="Caption()" Value="translate('#LDS#My Entitlement Attestations')" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping15" ID="Identifier()" Value="&quot;Dashboard_MyEntitlementAttestations&quot;" />
+            </ControlReferenceControlList>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="Container3" ObjectType="Container" SortOrder="85">
+        <SwitchContainer ScriptItemUID="DashboardOpenAttestationCases">
+          <SwitchContainerCase ScriptItemUID="ATTCase3" Condition="exists(&quot;person&quot;, getconfig(&quot;VI_Start_Governance_Attestation_Condition&quot;))" ItemUID="Access Governance - Attestation">
+            <ControlReferenceControlList ID="QBM_Common_Chart_Tile" ScriptItemUID="ATTControlRef3">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="ATTAction4">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Start_Governance" AbortExecution="false" ScriptItemUID="ATTRedirect4">
+                    <RedirectParameter Value="&quot;Attestation&quot;" Name="'Part'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping3" ID="DisplayNameDialogDashboardDef()" Value="&quot;Attestation.OpenCases&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping6" ID="ChartType()" Value="&quot;ChartLine&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping9" ID="Caption()" Value="translate('#LDS#Open attestation cases')" />
+              <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping10" ID="Identifier()" Value="&quot;Dashboard_OpenAttestationCases&quot;" />
+            </ControlReferenceControlList>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

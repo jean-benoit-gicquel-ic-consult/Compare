@@ -1,0 +1,14 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="RPS_Infosystem_DashboardObjectData_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="30">
+        <Container ScriptItemUID="Container2" Condition="select top 1 not(isnullorempty(ident_rpsreport)) from availablequeries  where key=(from option select selected)">
+          <ControlReferenceControlList ID="RPS_ListReport" ScriptItemUID="RPSControlRef1">
+            <VirtualFunctionMapping ID="ElementObjectKey()" Value="from Object select XObjectKey" />
+            <VirtualFunctionMapping ID="IdentListReport()" Value="select top 1 ident_rpsreport from availablequeries  where key=(from option select selected)" />
+          </ControlReferenceControlList>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

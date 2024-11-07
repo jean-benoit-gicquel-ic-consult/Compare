@@ -1,0 +1,13 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_GridColumn_Default" Type="GridColumn" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">/* Columns can be hidden in a vertical master-detail view with an open detail pane */
+
+.imx-mdc-vertical.imx-mdc-detail-opened .imx-grid-expandedonly
+{
+	display: none;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

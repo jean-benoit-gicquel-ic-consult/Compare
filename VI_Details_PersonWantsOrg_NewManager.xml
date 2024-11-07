@@ -1,0 +1,27 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Details_PersonWantsOrg_NewManager" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2">
+        <Update DataTable="PersonWantsOrg" DataColumn="DoNotAllowApprove" Value="true" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg ) and isnullorempty( orderdetail1 )&#xD;&#xA;-- if no manager is set, then do not allow approval" ScriptItemUID="Update1" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from personwantsorg" ScriptItemUID="AccProductSwitchContainer1" />
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="PersonWantsOrg" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action1">
+            <Update DataTable="PersonWantsOrg" DataColumn="DoNotAllowApprove" WhereClause="uid_personwantsorg = ( select current uid_personwantsorg from personwantsorg)" Value="isnullorempty(orderdetail1)" ScriptItemUID="Update3" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="OrderDetail1" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_PersonWantsOrg" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

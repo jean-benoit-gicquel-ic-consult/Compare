@@ -1,0 +1,31 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Button_Warning" Type="Button" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="imx-button--warning" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-button--warning  {
+    color: %VI_Common_Color_Button_Font_Secondary%;  
+    background-color: %VI_Common_Color_Button_Warning%;  
+ }
+
+.imx-button--warning:hover {    
+    color: %VI_Common_Color_Button_Font_Warning_Hover%;  
+    background-color: %VI_Common_Color_Button_Warning_Hover%;  
+	text-decoration: none;
+}
+.imx-button--warning:focus {
+    color: %VI_Common_Color_Button_Font_Warning_Hover%;  
+    background-color: %VI_Common_Color_Button_Warning_Hover%;  
+	text-decoration: none; 
+    outline: 1px %VI_Common_Color_Button_Outline% dotted;
+    outline-offset: 1px;
+}
+
+.imx-button--warning:Disabled  {
+    color: %VI_Common_Color_Button_Font_Disabled%;
+	background-color: %VI_Common_Color_Button_Disabled%;
+	cursor: not-allowed;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

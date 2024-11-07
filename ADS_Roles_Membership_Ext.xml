@@ -1,0 +1,49 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_Roles_Membership_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab2" ObjectType="Tab">
+        <TabPage ScriptItemUID="ADSTabPage2" Condition="IsPreProp('MAC') and (select current dbtable() from AllObjects) = 'ADSGroup'" ItemUID="Hardware">
+          <ControlsHeader ScriptItemUID="ADSContainer5">
+            <Label Text="DataCaption(&quot;ADSMachine&quot;)" ScriptItemUID="ADSLabel2" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="ADSContainer6">
+            <Activator ScriptItemUID="ADSActivator1" ExecuteAlways="true">
+              <Action ScriptItemUID="ADSAction2">
+                <LoadTable DataTable="ADSGroup" ScriptItemUID="ADSLoadTable1" WhereClause="format( &quot;uid_adsgroup = '{0}'&quot;, from allobjects select current primarykey())">
+                  <DbObjectLoadType ScriptItemUID="ADSDbObjectLoadType1" />
+                </LoadTable>
+              </Action>
+            </Activator>
+            <ContainerTemplate ScriptItemUID="ADSContainerTemplate1" DataTable="ADSGroup">
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="ADSContainer8">
+                <Label Text="translate(&quot;#LDS#The following machines are members of {0}.&quot;,&#xD;&#xA;select current Display() from AllObjects )" ScriptItemUID="ADSLabel3" />
+              </Container>
+              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ADSControlRef1">
+                <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ADSVirtualFunctionMapping1">
+                  <ColumnList ScriptItemUID="ADSColumnList1">
+                    <SingleColumn ScriptItemUID="ADSSingleColumn1" DataColumn="ADSMachineInADSGroup" />
+                  </ColumnList>
+                </VirtualFunctionMapping>
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="ADSVirtualFunctionMapping2" />
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSGroup" ScriptItemUID="ADSVirtualTableMapping1" />
+              </ControlReferenceContainer>
+              <Container ScriptItemUID="ADSContainer1" Layout="'VI_Styles_Container_ButtonBar'">
+                <Button Text="translate(&quot;#LDS#Save&quot;)" ScriptItemUID="ADSButton1" EnabledCondition="select current ischanged() from adsgroup">
+                  <ServerActionCall ScriptItemUID="ADSServerActionCall1">
+                    <Save DataTable="ADSGroup" WhereClause="PrimaryKey() = select current PrimaryKey() from adsgroup" ScriptItemUID="ADSSave1" />
+                  </ServerActionCall>
+                </Button>
+              </Container>
+            </ContainerTemplate>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableDbObject Class="ADSGroup" Table="ADSGroup" ScriptItemUID="ADSDataTableDbObject1">
+          <ActionSequence ScriptItemUID="ADSAction1" />
+          <ColumnMemberRelation Name="ADSMachineInADSGroup" RelationTableName="&quot;ADSMachineInADSGroup&quot;" ColumnNameLeft="&quot;UID_ADSGroup&quot;" Caption="datacaption(&quot;ADSMachine&quot;)" ScriptItemUID="ADSColumnMemberRelation1" />
+        </DataTableDbObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

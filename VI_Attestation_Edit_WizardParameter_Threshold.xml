@@ -1,0 +1,41 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Attestation_Edit_WizardParameter_Threshold" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <LayoutPanel ScriptItemUID="LayoutPanel1">
+          <ControlList ScriptItemUID="ControlList1">
+            <Container ScriptItemUID="Container2">
+              <Label Text="translate(&quot;#LDS#Risk level&quot;)" ScriptItemUID="Label1" />
+            </Container>
+          </ControlList>
+          <ControlList ScriptItemUID="ControlList2">
+            <Container ScriptItemUID="Container3">
+              <ControlReferenceContainer ID="VI_Edit_Decimal_Range" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="MinValue()" Value="0" />
+                <VirtualFunctionMapping ID="MaxValue()" Value="1" />
+                <VirtualTableMapping VirtualTable="Result" DataTable="ParameterInEdit">
+                  <VirtualColumnMapping VirtualColumn="LowerBound" DataColumn="LowerBound" />
+                  <VirtualColumnMapping VirtualColumn="UpperBound" DataColumn="UpperBound" />
+                </VirtualTableMapping>
+              </ControlReferenceContainer>
+            </Container>
+          </ControlList>
+        </LayoutPanel>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface>
+      <VirtualTable Name="ParameterInEdit" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="LowerBound" DataType="System.Double" />
+        <VirtualColumn Name="UpperBound" DataType="System.Double" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

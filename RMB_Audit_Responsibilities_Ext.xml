@@ -1,0 +1,11 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Audit_Responsibilities_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action5" ObjectType="ActionSequence" SortOrder="25" Condition="IsPreProp(&quot;Org&quot;)">
+        <LoadTable DataTable="DialogTable" WhereClause="SqlIn(&quot;Tablename&quot;,&quot;String&quot;,&quot;Org&quot;)" RemoveDeleted="false" ScriptItemUID="RMBLoadTable1">
+          <DbObjectLoadType ConvertToInteractive="false" ScriptItemUID="RMBDbObjectLoadType1" />
+        </LoadTable>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

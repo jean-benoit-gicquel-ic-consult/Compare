@@ -1,0 +1,108 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl ID="VI_ObjectView_AttestationPolicy" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectView" Description="translate('#LDS#Object details')" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ObjectView_AttestationPolicy_Fields" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;AttestationPolicy&quot;))" Type="ColumnList" DatabaseTable="AttestationPolicy" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="AttestationPolicyHasMControl" RemoveDeleted="false" RevertExisting="false" WhereClause="format(&quot;UID_MitigatingControl in( select UID_MitigatingControl from AttestationPolicyHasMControl where UID_AttestationPolicy = '{0}')&quot;,from SourceObject select current UID_AttestationPolicy)" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container2">
+          <ControlReferenceContainer ID="VI_ObjectView_Default" ScriptItemUID="ControlRef1">
+            <VirtualTableMapping VirtualTable="SourceObject" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" />
+          </ControlReferenceContainer>
+          <Container Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;" ScriptItemUID="Container3">
+            <Container Condition="0 = (select count() from AttestationPolicyHasMControl where UID_AttestationPolicy = (from SourceObject select current UID_AttestationPolicy))&#xA;and ((from SourceObject select current RiskIndex) &gt; 0)" ScriptItemUID="Container4">
+              <LayoutPanel Layout="'VI_Styles_LayoutPanel_WidePropertyList'" Columns="2" ScriptItemUID="LayoutPanel1">
+                <Label Text="datacaption(SourceObject, RiskIndex)" ScriptItemUID="Label1" />
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef2">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping2">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </LayoutPanel>
+            </Container>
+            <Container Condition="0 &lt; (select count() from AttestationPolicyHasMControl where UID_AttestationPolicy = (from SourceObject select current UID_AttestationPolicy))" ScriptItemUID="Container7">
+              <LayoutPanel Layout="'VI_Styles_LayoutPanel_WidePropertyList'" Columns="2" ScriptItemUID="LayoutPanel2">
+                <Label Text="datacaption(SourceObject, RiskIndex)" ScriptItemUID="Label2" />
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef3">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping3">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndex" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+                <Label Text="datacaption(SourceObject, RiskIndexReduced)" ScriptItemUID="Label3" />
+                <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="ControlRef4">
+                  <VirtualTableMapping VirtualTable="Object" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping4">
+                    <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexReduced" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </LayoutPanel>
+              <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef5">
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-icon imx-table-MitigatingControl&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="HeadLine()" Value="datacaption(&quot;MitigatingControl&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+              </ControlReferenceContainer>
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="MitigatingControl" WhereClause="UID_MitigatingControl in (&#xA;select UID_MitigatingControl from AttestationPolicyHasMControl where UID_AttestationPolicy = (from SourceObject select current UID_AttestationPolicy)&#xA;)" ScriptItemUID="GridBand1">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn SortColumn="Ident_MitigatingControl" Width="'200px'" ScriptItemUID="Column1">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Container ScriptItemUID="Container12">
+                        <Label Text="DataCaption(&quot;MitigatingControl&quot;,&quot;Ident_MitigatingControl&quot;)" ScriptItemUID="Label4" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label Text="from MitigatingControl select current displayvalue(Ident_MitigatingControl)" ScriptItemUID="Label5" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn SortColumn="Description" ScriptItemUID="Column2">
+                    <GridColumnHeader ScriptItemUID="wctl2">
+                      <Container ScriptItemUID="Container13">
+                        <Label Text="DataCaption(&quot;MitigatingControl&quot;,&quot;Description&quot;)" ScriptItemUID="Label6" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell2">
+                      <Label Text="from MitigatingControl select current displayvalue(Description)" ScriptItemUID="Label7" />
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn SortColumn="SignificancyReduction" Width="'120px'" ScriptItemUID="Column3">
+                    <GridColumnHeader ScriptItemUID="wctl3">
+                      <Container ScriptItemUID="Container14">
+                        <Label Text="DataCaption(&quot;MitigatingControl&quot;,&quot;SignificancyReduction&quot;)" ScriptItemUID="Label8" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell3">
+                      <Label Text="from MitigatingControl select current displayvalue(SignificancyReduction)" ScriptItemUID="Label9" />
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </Container>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="AttestationPolicyHasMControl" Class="AttestationPolicyHasMControl" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action2" />
+        </DataTableDbObject>
+        <DataTableFKView Table="MitigatingControl" ViewFKDataTable="AttestationPolicyHasMControl" ViewFKDataColumn="UID_MitigatingControl" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="AttestationPolicy" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

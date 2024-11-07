@@ -1,0 +1,16 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="10fa832d-4d82-5101-419f-6ddd38dbbb63">
+  <LayoutObject ID="VI_Styles_DropDownList_Default" Type="ComboBox" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClass" Value="imx-combobox" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-combobox
+{
+border: solid 1px %VI_Common_Color_Gray%;
+width: 100%;
+font-family: %baseFontFamily%;
+height: 2em;
+margin-bottom: 0px;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,40 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Attestation_Display_WizardParameter_Generic" DataTableDebugDisplay="Parameter" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action3">
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var uidList = Parameter_Value.GetValue(Parameter_Current.Row).String ?? string.Empty;
+var uids = uidList.Replace("'", "").Split(',').Select(s =&gt; s.Trim()).ToArray();
+var columnName = CandidateTargetValueColumn ?? _Connection.Tables[DBTableName].PrimaryKeyColumns.First().Columnname;
+var inClause = _Connection.SqlFormatter.InClause(columnName, VI.Base.ValType.String, uids);
+Objects.Load(new DbObjectLoadInfo(DBTableName, inClause, null));
+</CodeLiteral>
+          </Action>
+        </Activator>
+        <ControlReferenceContainer ID="VI_Common_CompactLabel" ScriptItemUID="ControlRef1">
+          <VirtualTableMapping VirtualTable="AvailableItems" DataTable="Objects" />
+        </ControlReferenceContainer>
+      </ControlList>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="Objects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="DBTableName()">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="DBTableName()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="Parameter" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="Value" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="CandidateTargetValueColumn()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

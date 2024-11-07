@@ -1,0 +1,52 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_MyActions_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="5">
+        <SwitchContainer ScriptItemUID="TilePendingRuleViolations">
+          <SwitchContainerCase ScriptItemUID="CPLCase1" Condition="IsNull(GetConfigParm(&quot;QER\ComplianceCheck&quot;), &quot;0&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_orgruler from compliancerule ))&quot;&#xD;&#xA;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="CPLContainer1" ItemUID="Pending Rule Violations">
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping13" ID="Identifier()" Value="&quot;Pending Rule Violations&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CPLAction3">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_ExceptionApproval" ScriptItemUID="CPLRedirect3">
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading Pending Rule Violations&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping7" ID="Caption()" Value="if  ( (from CountOpenDatabaseItems select OpenNonCompliance) &gt; 0 ) then &#xD;&#xA;  ( translate(&quot;#LDS#Heading Pending Rule Violations&quot;) + ' (' + from CountOpenDatabaseItems select OpenNonCompliance + ')' )&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Heading Pending Rule Violations&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping14" ID="Image()" Value="&quot;ComplianceRule&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping11" ID="Value()" Value="translate('#LDS#Displays the pending rule violations that you can approve or deny.')" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping12" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping15" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping16" ID="Size()" Value="'Overview'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping2" ID="Highlight()" Value="(from CountOpenDatabaseItems select OpenNonCompliance) &gt; 0" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="10">
+        <SwitchContainer ScriptItemUID="TileRuleViolationHistory">
+          <SwitchContainerCase ScriptItemUID="CPLCase2" Condition="IsNull(GetConfigParm(&quot;QER\ComplianceCheck&quot;), &quot;0&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_orgruler from compliancerule ))&quot;&#xD;&#xA;))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="CPLContainer2" ItemUID="Rule Violation History">
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping17" ID="Identifier()" Value="&quot;Rule Violation History&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="CPLAction1">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_Compliance_ExceptionApproval" ScriptItemUID="CPLRedirect1">
+                    <RedirectParameter Name="'HistoryMode'" Value="'YES'" />
+                    <RedirectParameter Value="translate('#LDS#Heading Rule Violation History')" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Heading Rule Violation History')" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping8" ID="Value()" Value="translate(&quot;#LDS#Review your compliance rule exception approvals.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping9" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping18" ID="Image()" Value="&quot;cux-icon cux-icon--history&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping19" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="CPLVirtualFunctionMapping20" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

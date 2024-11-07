@@ -1,0 +1,64 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="RAibPEJqu9V6ZuB3VszcpA==">
+  <GlobalControl MetamodelVersion="2014-01-03" ID="VI_ObjectEdit_Person" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Container ItemUID="Personal Data - Fields" ScriptItemUID="Container5">
+          <Label Text="translate('#LDS#Personal data')" ScriptItemUID="Label1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="h3" />
+            </HtmlAttributes>
+          </Label>
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef4">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+              <ColumnList ScriptItemUID="ColumnList7">
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_attributes&quot;)" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ItemUID="Organisational data - Fields" ScriptItemUID="Container18">
+          <Label Text="translate('#LDS#Organizational information')" ScriptItemUID="Label3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="h3" />
+            </HtmlAttributes>
+          </Label>
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef5">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+              <ColumnList ScriptItemUID="ColumnList2">
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_OrganizationalAttributes&quot;)" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container ItemUID="Location data - Fields" ScriptItemUID="Container11">
+          <Label Text="translate('#LDS#Locational information')" ScriptItemUID="Label2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="h3" />
+            </HtmlAttributes>
+          </Label>
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_localityattributes&quot;)" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+          </ControlReferenceContainer>
+        </Container>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit">
+      <VirtualTableExtension Name="EditTable" Class="Person" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

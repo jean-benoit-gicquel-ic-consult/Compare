@@ -1,0 +1,49 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_HyperView_ShapeSimple">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.WebControls.DynamicHyperView.ISimpleShape" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Element1" Condition="if(isnullorempty(dbwhereclause())) then true&#xD;&#xA;else exists(&quot;DialogDatabase&quot;, dbwhereclause())" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'imx-layout'" Value="isnullorempty( LayoutType(), &quot;BottomRight&quot;)" ScriptItemUID="HtmlAttribute1" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container1">
+            <ControlReferenceContainer ID="VI_Common_HyperView_Shape" ScriptItemUID="ControlReferenceContainer1">
+              <VirtualControlMapping VirtualControl="ShapeContent" ContainerType="Container">
+                <Container ScriptItemUID="Container2">
+                  <Label ScriptItemUID="Label1" Text="Description()" />
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="Caption()" Value="Caption()" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="ColorKey()" Value="LayoutType()" ScriptItemUID="VirtualFunctionMapping5" />
+              <VirtualFunctionMapping ID="HeaderText()" Value="headertext()" ScriptItemUID="VirtualFunctionMapping6" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="ShapeLinkUrl()" Value="ShapeLinkUrl()" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ElementColor()" Value="ElementColor()" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="ImageURL()" Value="ImageUrl()" />
+            </ControlReferenceContainer>
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction DataType="System.String" Signature="Caption()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="HeaderText()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.Boolean" Signature="EnableNavigation()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ShapeLinkUrl()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ElementColor()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="ImageUrl()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="Description()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="DbWhereClause()" TriggerUpdates="Never" />
+      <VirtualFunction DataType="System.String" Signature="LayoutType()" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

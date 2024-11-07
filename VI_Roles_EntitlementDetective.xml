@@ -1,0 +1,312 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ee72d379-b5f3-2d7f-73df-adfaea6b6f2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_EntitlementDetective" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action3" />
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action1">
+            <CallAction ActionID="Recalculate" ScriptItemUID="Call1" />
+          </Action>
+        </Activator>
+        <Container ScriptItemUID="Container2" Condition="0 &lt; select count() from EntitlementSource">
+          <Tree ScriptItemUID="Tree1">
+            <TreeBand DataTable="Vars" ScriptItemUID="TreeBand1">
+              <ControlList ScriptItemUID="ControlList1">
+                <Label Text="from vars select title" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="from vars select cssclass" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+              <OnPrepareRow ScriptItemUID="Action7" />
+              <ServerActionCall ScriptItemUID="ServerActionCall1" />
+            </TreeBand>
+            <TreeBand DataTable="EntitlementTree" ScriptItemUID="TreeBand2" IsRecursive="true" RecursiveWhereClause="(not(isnullorempty( select current objectkeychild from entitlementtree)) and&#xD;&#xA;objectkeyparent = ( select current objectkeychild from entitlementtree))" WhereClause="-- start with the reasons for the entitlement&#xD;&#xA;Isnullorempty(objectkeyparent)">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="from entitlementtree select current &#xD;&#xA;(&#xD;&#xA;(if(iterationcount()&gt;1) then ((iterationindex()+1)+&quot;. &quot;))&#xD;&#xA;+&#xD;&#xA;&#xD;&#xA;Description)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="from entitlementtree select current cssclass" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlList>
+              <OnPrepareRow ScriptItemUID="Action12">
+                <CodeLiteral ScriptItemUID="CodeLiteral3">// load data for child rows
+
+HandleESource(new RowCursor(_args1.Data));</CodeLiteral>
+              </OnPrepareRow>
+              <ServerActionCall ScriptItemUID="ServerActionCall2">
+                <Update DataTable="Vars" DataColumn="EntitlementSourceSelected" Value="from entitlementtree select current primarykey()" ScriptItemUID="Update1" />
+              </ServerActionCall>
+            </TreeBand>
+          </Tree>
+          <Container ScriptItemUID="Container3" ItemUID="Details" Layout="'VI_Styles_Container_PaddedTop'">
+            <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="EntitlementTree" WhereClause="primarykey() = (select entitlementsourceselected from vars)">
+              <Label Text="from entitlementtree select current description " ScriptItemUID="Label3" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="h3" Comment="" />
+                </HtmlAttributes>
+              </Label>
+              <ContainerTemplate ScriptItemUID="ContainerTemplate6" DataTable="AssignedObjects" WhereClause="objectkey = (select current objectkeychild from entitlementtree)">
+                <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef5">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+                    <ColumnList ScriptItemUID="ColumnList4">
+                      <SingleColumn ScriptItemUID="SingleColumn10" Caption="translate(&quot;#LDS#Type&quot;)" Value="from assignedobjects select current datacaptionsingle(tablename+&quot;&quot;)" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="AssignedObjects" ScriptItemUID="VirtualTableMapping1" />
+                </ControlReferenceContainer>
+              </ContainerTemplate>
+              <Container ScriptItemUID="Container4" ItemUID="Assignment object">
+                <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="AssignedObjects" WhereClause="objectkey = (select current objectkeyparent from entitlementtree)&#xA;and (select current isdirectassignment from entitlementtree)">
+                  <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
+                      <ColumnList ScriptItemUID="ColumnList1">
+                        <SingleColumn ScriptItemUID="SingleColumn8" Caption="translate(&quot;#LDS#Type&quot;)" Value="from assignedobjects select current datacaptionsingle(tablename+&quot;&quot;)" />
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="XDateInserted" Condition="from entitlementtree select current isdirectassignment" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="XUserInserted" Condition="from entitlementtree select current isdirectassignment" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="AssignedObjects" ScriptItemUID="VirtualTableMapping2" />
+                  </ControlReferenceContainer>
+                </ContainerTemplate>
+              </Container>
+              <Container ScriptItemUID="Container5" ItemUID="Dynamic group">
+                <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="AssignedObjects" WhereClause="objectkey= (select current objectkeychild from entitlementtree)&#xA;and (select current isbydynamicgroup from entitlementtree)">
+                  <Label Text="translate(&quot;#LDS#Membership in {0} is controlled by the dynamic group {1}.&quot;)" ScriptItemUID="Label4" EnableSubControls="true">
+                    <ControlList ScriptItemUID="ControlList3">
+                      <Label Text="from entitlementtree select current displayparent" ScriptItemUID="Label5" />
+                      <Label Text="from assignedobjects select current display()" ScriptItemUID="Label6" />
+                    </ControlList>
+                  </Label>
+                </ContainerTemplate>
+              </Container>
+              <Container ScriptItemUID="Container6" ItemUID="Request">
+                <ContainerTemplate ScriptItemUID="ContainerTemplate4" DataTable="PersonWantsOrg" WhereClause="xobjectkey= (select current objectkeypwo from entitlementtree)">
+                  <ControlReferenceContainer ID="VI_ITShop_PersonWantsOrg_Information" ScriptItemUID="ControlRef1">
+                    <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping3" />
+                    <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                    <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+                  </ControlReferenceContainer>
+                </ContainerTemplate>
+              </Container>
+              <Container ScriptItemUID="Container7" ItemUID="Primary assignment to the base object" Condition="from entitlementtree select current isprimaryassignment">
+                <Container ScriptItemUID="Container8">
+                  <Label Text="translate(&quot;#LDS#{0} has a primary membership in {1}.&quot;,&#xA;from person select top 1 display() where uid_person = uid_person(),&#xA;from assignedobjects select top 1 display() where objectkey = objectkeyentitlement())" ScriptItemUID="Label7" />
+                </Container>
+                <ContainerTemplate ScriptItemUID="ContainerTemplate5" DataTable="PersonChangeHistory" WhereClause="-- get last change only&#xA;primarykey() = getlastchangepk()">
+                  <Label Text="translate(&quot;#LDS#Last change of the primary assignment&quot;)" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h4" />
+                    </HtmlAttributes>
+                  </Label>
+                  <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef3">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping5">
+                      <ColumnList ScriptItemUID="ColumnList2">
+                        <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="User" Caption="translate(&quot;#LDS#User&quot;)" />
+                        <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="ChangeTime" Caption="datacaption(&quot;person&quot;, &quot;xdateupdated&quot;)" />
+                        <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="OldValueDisplay" DisplayValueExpression="isnullorempty(oldvaluedisplay, translate(&quot;#LDS#no value assigned&quot;))" Caption="translate(&quot;#LDS#Previous value&quot;)" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonChangeHistory" ScriptItemUID="VirtualTableMapping4" />
+                  </ControlReferenceContainer>
+                </ContainerTemplate>
+                <Container ScriptItemUID="Container9" Condition="isnullorempty(getlastchangepk())">
+                  <Label Text="translate(&quot;#LDS#The primary assignment has not been modified.&quot;)" ScriptItemUID="Label9" />
+                </Container>
+              </Container>
+              <Container ScriptItemUID="Container10" ItemUID="By another object (e.g. a parent group)">
+                <ContainerTemplate ScriptItemUID="ContainerTemplate7" DataTable="AssignedObjects" WhereClause="objectkey= (select current objectkeychild from entitlementtree)&#xA;and (select current IsByAnotherObject from entitlementtree)">
+                  <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef4">
+                    <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping6">
+                      <ColumnList ScriptItemUID="ColumnList3">
+                        <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="__Display" />
+                      </ColumnList>
+                    </VirtualFunctionMapping>
+                    <VirtualTableMapping VirtualTable="EditTable" DataTable="AssignedObjects" ScriptItemUID="VirtualTableMapping5" />
+                  </ControlReferenceContainer>
+                </ContainerTemplate>
+              </Container>
+            </ContainerTemplate>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSQL Table="EntitlementSource" ScriptItemUID="DataTableSQL1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="ObjectKeySource" DataType="System.String" ScriptItemUID="Column3" />
+          <Column Name="ObjectKeyParent" DataType="System.String" ScriptItemUID="Column9" />
+          <Column Name="ObjectKeyReason1" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="ObjectKeyReason2" ScriptItemUID="Column2" DataType="System.String" />
+        </DataTableSQL>
+        <DataTableCustom Table="EntitlementTree" ScriptItemUID="DataTableCustom2" TriggerUpdates="Never" DisplayColumn="Description">
+          <Column Name="ObjectKeyParent" DataType="System.String" ScriptItemUID="Column20" />
+          <Column Name="ObjectKeyChild" DataType="System.String" ScriptItemUID="Column29" />
+          <Column Name="ObjectDisplay" DataType="System.String" ScriptItemUID="Column11" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;from AssignedObjects select top 1 display() where objectkey = ( from entitlementtree select current objectkeychild),&#xD;&#xA;BuildMnDisplay(from entitlementtree select current objectkeychild)&#xD;&#xA;)" />
+          <Column Name="ObjectType" DataType="System.String" ScriptItemUID="Column7" DataSource="Expression" Expression="from AssignedObjects select top 1 dbtable() where objectkey = ( from entitlementtree select current objectkeychild)" />
+          <Column Name="CssClass" DataType="System.String" ScriptItemUID="Column12" DataSource="Expression" Expression="if(isnullorempty(objecttype))&#xA;then &quot;imx-icon imx-icon-AssignedDirect&quot;&#xA;else &quot;imx-icon imx-table-&quot;+objecttype" />
+          <Column Name="IsDirectAssignment" DataType="System.Boolean" ScriptItemUID="Column25" DataSource="Expression" Expression="-- nodes that cannot be analyzed further&#xA;isnullorempty(objectkeychild)" />
+          <Column Name="Description" DataType="System.String" ScriptItemUID="Column10" DataSource="Expression" Expression="if(IsDirectAssignment) then translate(&quot;#LDS#Direct assignment&quot;)&#xD;&#xA;else&#xD;&#xA;if(isbydynamicgroup) then translate(&quot;#LDS#Membership controlled by a dynamic group&quot;)&#xD;&#xA;else&#xD;&#xA;if(tablenamechild in ('Org', 'Locality', 'Profitcenter', 'Department')) then translate(&quot;#LDS#Primary assignment: {0} {1}&quot;, objecttypedisplay, objectdisplay)&#xD;&#xA;else&#xD;&#xA;ObjectDisplay" />
+          <Column Name="ObjectTypeDisplay" DataType="System.String" ScriptItemUID="Column17" DataSource="Expression" Expression="datacaptionsingle(objecttype+&quot;&quot;)" />
+          <Column Name="IsPrimaryAssignment" DataType="System.Boolean" ScriptItemUID="Column19" DataSource="Expression" Expression="not(isnullorempty(uid_person())) and objectkeychild = getobjectkey(&quot;Person&quot;, uid_person(), &quot;&quot;)" />
+          <Column Name="TableNameChild" DataType="System.String" ScriptItemUID="Column13" DataSource="Expression" Expression="getobjectkeytable(objectkeychild)" />
+          <Column Name="IsByDynamicGroup" DataType="System.Boolean" ScriptItemUID="Column23" DataSource="Expression" Expression="tablenamechild = &quot;DynamicGroup&quot;" />
+          <Column Name="IsByAnotherObject" DataType="System.Boolean" ScriptItemUID="Column26" DataSource="Expression" Expression="(not (isprimaryassignment) and not(isbydynamicgroup) and not(isdirectassignment) )" />
+          <Column Name="DisplayParent" DataType="System.String" ScriptItemUID="Column24" DataSource="Expression" Expression="from assignedobjects select top 1 display() where objectkey = (select current objectkeyparent from entitlementtree)" />
+          <Column Name="ObjectKeyPWO" DataType="System.String" ScriptItemUID="Column8" DataSource="Expression" Expression="if(getobjectkeytable(objectkeychild)=&quot;PersonWantsOrg&quot;) then objectkeychild" />
+        </DataTableCustom>
+        <DataTableCustom Table="ObjectsRead" ScriptItemUID="DataTableCustom1" Comment="Holds the object keys that have already been analyzed">
+          <Column Name="ObjectKey" DataType="System.String" ScriptItemUID="Column5" />
+        </DataTableCustom>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="AssignedObjects" ScriptItemUID="DataTableGeneric1" TriggerUpdates="Never">
+          <Column Name="TableName" ScriptItemUID="Column14" DataType="System.String" DataSource="Expression" Expression="getobjectkeytable(objectkey)" />
+          <Column Name="ObjectKey" ScriptItemUID="Column15" DataType="System.String" />
+          <Column Name="SourceKey" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="XDateInserted" DataType="System.DateTime" ScriptItemUID="Column21" DisplayValueExpression="formatdate(xdateinserted, &quot;d&quot;)" Caption="datacaption(&quot;personindepartment&quot;, &quot;xdateinserted&quot;)" />
+          <Column Name="XUserInserted" ScriptItemUID="Column22" DataType="System.String" MinLength="" MaxLength="" Caption="datacaption(&quot;personindepartment&quot;, &quot;xuserinserted&quot;)" />
+        </DataTableGeneric>
+        <DataTableDbObject Table="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action6" />
+          <Column Name="CheckStatus" Expression="getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;)&lt;&gt;&quot;1&quot; or&#xD;&#xA;-- is there at least one entry for this PWO?&#xD;&#xA;orderstate &lt;&gt; 'OrderProduct' or&#xD;&#xA;not(exists(&quot;personwantsorg&quot;,&#xD;&#xA;format(&quot;uid_personwantsorg in (select uid_personwantsorg from {0} where {1})&quot;,&#xD;&#xA;sqlfunctioncalltable(&quot;CPL&quot;,&quot;GComplianceCheck&quot;, &quot;FTCCSPWOCheck&quot;,sqlformatvalue(UID_PersonWantsOrg,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;sqlcompare(&quot;IsNewObject&quot;,true,&quot;bool&quot;,&quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)" DataSource="Expression" ScriptItemUID="Column18" DataType="System.Boolean" />
+        </DataTableDbObject>
+        <DataTableCRView Class="PWODecisionHistory" Table="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </DataTableCRView>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="EntitlementSourceSelected" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="Title" DataType="System.String" ScriptItemUID="Column27" DataSource="Expression" Expression="if(isnullorempty(uid_person())) then&#xA;translate(&quot;#LDS#Assignment analysis&quot;)&#xA;else&#xA;translate(&quot;#LDS#Analysis for {0}&quot;, from person select top 1 display())" />
+          <Column Name="CssClass" DataType="System.String" ScriptItemUID="Column28" DataSource="Expression" Expression="if(isnullorempty(uid_person())) then &quot;imx-icon imx-icon-Document&quot; else &quot;imx-icon imx-table-Person&quot;" />
+        </DataTableSingleRow>
+        <DataTableHistoryView Table="PersonChangeHistory" ScriptItemUID="DataTableHistoryView1" TriggerUpdates="Never" />
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Recalculate">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <CodeLiteral ScriptItemUID="CodeLiteral1">// clear all data
+foreach (var table in TableStore.Tables)
+	if (table != Vars)
+		table.Delete();</CodeLiteral>
+              <LoadTable DataTable="Person" WhereClause="sqlcompareuid(&quot;uid_person&quot;, uid_person())" RemoveDeleted="false" ScriptItemUID="LoadTable2">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+              </LoadTable>
+              <LoadTable DataTable="EntitlementSource" ScriptItemUID="LoadTable4" Type="LimitedSQL" IdentLimitedSQL="&quot;Webportal.VI_Roles_EntitlementSourceDetective&quot;">
+                <InsertValue DataColumn="ObjectKeySource" Value="ObjectKeyEntitlement()" />
+                <ParameterFree Name="&quot;uidperson&quot;" Value="uid_person()" ScriptItemUID="ParameterFree1" />
+                <ParameterFree Name="&quot;objectkey&quot;" Value="ObjectKeyEntitlement()" ScriptItemUID="ParameterFree2" />
+              </LoadTable>
+              <ActionSequence ScriptItemUID="Action10" Condition="0 = select count() from EntitlementSource" ItemUID="If no result at all --&gt; it is a primary assignment">
+                <Insert DataTable="EntitlementSource" ScriptItemUID="Insert3">
+                  <ActionSequence ScriptItemUID="Action11" />
+                  <InsertValue DataColumn="ObjectKeySource" Value="ObjectKeyEntitlement()" />
+                  <InsertValue DataColumn="ObjectKeyReason2" Value="ObjectKeyEntitlement()" />
+                </Insert>
+              </ActionSequence>
+              <LoadTable ScriptItemUID="FillTable4" DataTable="AssignedObjects" DBTableName="getobjectkeytable(objectkeyentitlement())" WhereClause="sqlcompareuid(&quot;xobjectkey&quot;, objectkeyentitlement())" RemoveDeleted="false" LoadLimit="">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+                <InsertValue DataColumn="ObjectKey" Value="ObjectKeyEntitlement()" />
+              </LoadTable>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="HandleESource">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action2">
+              <CodeLiteral ScriptItemUID="CodeLiteral2">var rowCheck = _EntitlementTree_Current.Row;
+var newObjKey = EntitlementTree.GetColumn("ObjectKeyChild").GetValue(rowCheck).String;
+
+if (string.IsNullOrEmpty(newObjKey))
+	return;
+
+if (ObjectsRead.Select(rowRead =&gt; ObjectsRead.GetColumn("ObjectKey").GetValue(rowRead).String).Contains(newObjKey))
+	return;
+	
+
+	// mark object as read
+	var _newObjectsRead = this.ObjectsRead.Insert(new ColumnInsertValues{
+		{ObjectsRead.GetColumn("ObjectKey"), newObjKey}
+		});
+	var _loadOptions1 = new VI.WebRuntime.LoadTableOptions();
+	var _ObjectKeyParent2 = this.EntitlementSource.GetColumn("ObjectKeyParent");
+	_loadOptions1.InsertValues[_ObjectKeyParent2] = newObjKey;
+	_loadOptions1.InsertValues[EntitlementSource.GetColumn("ObjectKeySource")] = ObjectKeyEntitlement;
+	_loadOptions1.RemoveDeleted = false;
+	((VI.WebRuntime.IDataSourceTable&lt;System.Data.IDataReader&gt;)(this.EntitlementSource))
+		.Load(VI.WebRuntime.UserTable.GetLimitedSqlDataReader(
+		"Webportal.VI_Roles_EntitlementSourceDetective",
+		new VI.DB.Entities.QueryParameter[] {
+			VI.DB.Entities.QueryParameter.Create&lt;string&gt;("uidperson", this.UID_Person),
+			VI.DB.Entities.QueryParameter.Create&lt;string&gt;("objectkey", newObjKey)}),
+		_loadOptions1);
+</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="EntitlementTree" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="getlastchangepk()" Expression="select top 1 primarykey() from personchangehistory where columnname = ('UID_'+getobjectkeytable(objectkeyentitlement())) order by changetime desc" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="BuildMnDisplay(string key)" Expression="{{&#xD;&#xA;&#xD;&#xA;string result;&#xD;&#xA;try&#xD;&#xA;{&#xD;&#xA;result = new DbObjectKey(key).GetMnDisplayAsync(_Database).Result;&#xD;&#xA;}&#xD;&#xA;catch {&#xD;&#xA;  // ignore errors&#xD;&#xA;  result = string.Empty;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return result;&#xD;&#xA;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="Function5" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="EntitlementSource" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action13">
+            <CodeLiteral ScriptItemUID="CodeLiteral4">// build tree structure from EntitlementSource
+// expand EntitlementTree when there is a new entry in EntitlementSource
+
+	var parent = _rowArgs.GetValue("ObjectKeyParent").String;
+	var reason1 = _rowArgs.GetValue("ObjectKeyReason1").String;
+	var reason2 = _rowArgs.GetValue("ObjectKeyReason2").String;
+	
+	var newValues = new ColumnInsertValues(EntitlementTree);
+	newValues["ObjectKeyParent"] = parent;
+	newValues["ObjectKeyChild"] = reason1;
+	EntitlementTree.Insert(newValues);
+
+	if(!string.IsNullOrEmpty(reason2))
+	{
+	   newValues["ObjectKeyChild"] = reason2;
+	   EntitlementTree.Insert(newValues);
+	}
+</CodeLiteral>
+          </ActionSequence>
+        </DataEventHandler>
+        <DataEventHandler DataTable="EntitlementTree" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ScriptItemUID="Action14" Condition="from entitlementtree select current not(isnullorempty(objectkeypwo))">
+            <LoadTable DataTable="PersonWantsOrg" RemoveDeleted="false" WhereClause="sqlcompareuid(&quot;xobjectkey&quot;, from EntitlementTree select current objectkeypwo)" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+        </DataEventHandler>
+        <DataEventHandler DataTable="EntitlementTree" ScriptItemUID="DataEventHandler3">
+          <ActionSequence ScriptItemUID="Action15" Condition="from entitlementtree select current isprimaryassignment">
+            <LoadTableHistorical DataTable="PersonChangeHistory" ObjectKey="getobjectkey(&quot;Person&quot;, from person select top 1 uid_person, &quot;&quot;)" LoadBackTo="from person select top 1 xdateinserted" />
+          </ActionSequence>
+        </DataEventHandler>
+        <DataEventHandler DataTable="EntitlementTree" ScriptItemUID="DataEventHandler4">
+          <ActionSequence ScriptItemUID="Action9">
+            <FillTable Source="XObjectKey" DataTable="AssignedObjects" DataTableSource="EntitlementTree" DataColumnSource="ObjectKeyChild" DataColumnXObjectKey="ObjectKey" ScriptItemUID="FillTable1" DataColumnSourceKey="SourceKey" ResolveMNObjects="ResolveAlways" WhereClause="primarykey() = (select current primarykey() from entitlementtree)">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+              <InsertValue DataColumn="XDateInserted" Value="objectwalker(&quot;XDateInserted&quot;)" />
+              <InsertValue DataColumn="XUserInserted" Value="objectwalker(&quot;XUserInserted[d]&quot;)" />
+            </FillTable>
+            <FillTable Source="XObjectKey" DataTable="AssignedObjects" DataTableSource="EntitlementTree" DataColumnSource="ObjectKeyChild" DataColumnXObjectKey="ObjectKey" ScriptItemUID="FillTable3" DataColumnSourceKey="SourceKey" ResolveMNObjects="NoResolve" WhereClause="primarykey() = (select current primarykey() from entitlementtree)">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" LoadTypeForeignDisplaysEvenWhenExpensive="true" />
+              <InsertValue DataColumn="XDateInserted" Value="objectwalker(&quot;XDateInserted&quot;)" />
+              <InsertValue DataColumn="XUserInserted" Value="objectwalker(&quot;XUserInserted[d]&quot;)" />
+            </FillTable>
+          </ActionSequence>
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="UID_Person()" DataType="System.String" TriggerUpdates="Never" Comment="UID_Person of the employee to analyze." />
+      <VirtualFunction Signature="ObjectKeyEntitlement()" DataType="System.String" TriggerUpdates="Never" Comment="XML object key string of the entitlement to analyze." />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,70 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Insert_ShoppingCartItem_Default" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
+        <ConfigParam Key="VI_ITShop_AddOptionalProductsOnInsert" Description="translate(&quot;#LDS#Offer to add optional products immediately when adding a product to the shopping cart&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action11" />
+      <ActionComponent ScriptItemUID="Action1">
+        <Update DataTable="ShoppingCartItem" DataColumn="ItemIsAllreadyIn" Value="true" ScriptItemUID="Update1" />
+        <ForeachRow DataTable="PersonsForOrder" ScriptItemUID="ForeachRow2">
+          <CallAction ActionID="VI_ITShop_AddCartItem" ScriptItemUID="CallAction1">
+            <VirtualFunctionMapping ID="uidaccproduct()" Value="uidaccproduct()" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="uidpersonordered()" Value="from PersonsForOrder select current UID_Person" ScriptItemUID="VirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="UID_ShoppingCartItemParentForOptional()" Value="from ShoppingCartItem select IsNullOrEmpty(UID_ShoppingCartItem,UID_ShoppingCartItemParentForOptional())&#xD;&#xA;where ((UID_PersonOrdered = (from PersonsForOrder select current UID_Person))&#xD;&#xA;and (UID_AccProduct = (from ShoppingCartItem select UID_AccProduct where UID_ShoppingCartItem = UID_ShoppingCartItemParentForOptional())))&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="UID_ShoppingCartOrder()" ScriptItemUID="VirtualFunctionMapping4" />
+            <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="ObjectKeyAssignment()" Value="ObjectKeyAssignment()" ScriptItemUID="VirtualFunctionMapping5" />
+            <VirtualFunctionMapping ID="autoITShopOrg()" Value="1 &lt; (from PersonsForOrder select count())" ScriptItemUID="VirtualFunctionMapping6" />
+            <VirtualFunctionMapping ID="UID_ShoppingCartItemParent()" Value="UID_ShoppingCartItemParent()" ScriptItemUID="VirtualFunctionMapping9" />
+          </CallAction>
+        </ForeachRow>
+        <ActionSequence ScriptItemUID="ActionEditor" Condition="getconfig(&quot;VI_ITShop_AddOptionalProductsOnInsert&quot;) = &quot;true&quot;">
+          <Update DataTable="LocalVars" DataColumn="InsertFailed" Value="false" ScriptItemUID="Update2" />
+          <ForeachRow DataTable="ShoppingCartItem" WhereClause="not(ItemIsAllreadyIn)" ScriptItemUID="ForeachRow1" OrderBy="'XDateInserted'">
+            <ActionSequence Condition="0 &lt; (from ShoppingCartItem select count() where UID_ShoppingCartItem = (from ShoppingCartItem select current UID_ShoppingCartItem) and not(ItemIsAllreadyIn))" ScriptItemUID="Action15">
+              <CallAction ActionID="VI_ITShop_ShoppingCartItem_Editor" ScriptItemUID="CallAction2">
+                <VirtualFunctionMapping ID="DeleteProductOnCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+                <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualControlMapping VirtualControl="OnInsertCancel" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action4">
+                    <Update DataTable="LocalVars" DataColumn="InsertFailed" Value="true" ScriptItemUID="Update3" />
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="EditAllEqualAccProducts()" Value="AccProductAllowsCopyParameter(from ShoppingCartItem select current UID_AccProduct)&#xD;&#xA;and&#xD;&#xA;1 &lt; (from PersonsForOrder select count())" ScriptItemUID="VirtualFunctionMapping8" />
+              </CallAction>
+              <Update DataTable="ShoppingCartItem" DataColumn="ItemIsAllreadyIn" Value="true" WhereClause="if(AccProductAllowsCopyParameter(from ShoppingCartItem select current UID_AccProduct))then&#xD;&#xA;   UID_AccProduct = (from ShoppingCartItem select current UID_AccProduct)&#xD;&#xA;else&#xD;&#xA;   UID_ShoppingCartItem = (from ShoppingCartItem select current UID_ShoppingCartItem)" ScriptItemUID="Update4" />
+            </ActionSequence>
+          </ForeachRow>
+        </ActionSequence>
+        <ActionSequence Condition="false = (from LocalVars select InsertFailed)" ScriptItemUID="ActionOk">
+          <CallAction ActionID="OnAfterInsert" ScriptItemUID="Call1" />
+          <ForeachRow DataTable="PersonsForOrder" ScriptItemUID="ForeachRow3">
+            <ActionSequence ScriptItemUID="ActionTSB" />
+          </ForeachRow>
+        </ActionSequence>
+        <ActionSequence Condition="true = (from LocalVars select InsertFailed)" ScriptItemUID="ActionCancel">
+          <CallAction ActionID="OnAfterInsertCancel" ScriptItemUID="CallAction6" />
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="InsertFailed" DataType="System.Boolean" ScriptItemUID="Column1" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="AccProductAllowsCopyParameter(string uid_accproduct)" Expression="If(IsNullOrEmpty(IsNoCopyParametersPerson()))Then(&#xD;&#xA;Exists(&quot;AccProduct&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompareuid(&quot;UID_AccProduct&quot;, uid_accproduct),&#xD;&#xA;sqlcompare(&quot;IsNoCopyParametersPerson&quot;, 0, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;Else(&#xD;&#xA;IsNoCopyParametersPerson()&#xD;&#xA;)" DataType="System.Boolean" ScriptItemUID="Function2" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Insert_ShoppingCartItem" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTableExtension1">
+        <Column Name="ItemIsAllreadyIn" DataType="System.Boolean" ScriptItemUID="Column2" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

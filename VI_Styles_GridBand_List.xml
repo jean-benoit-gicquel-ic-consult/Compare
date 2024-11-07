@@ -1,0 +1,15 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_GridBand_List" Type="GridBand" HasRelatedObject="true" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <LayoutRelatedObject Name="VI_Styles_GridBand_Borderless" />
+    <Property Name="DoNotAutoNormalizeLayout" Value="true" Comment="" />
+    <Property Name="CssClassNameTable" Value="GridTable GridTableAsList" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.GridTableAsList { table-layout: auto; }
+
+.GridTableAsList a:hover, .GridTableAsList a:focus, .GridTableAsList a:active { background-color: %VI_Common_Color_Blue_1%;}
+
+.GridTableAsList .GridCell { padding-top: 4px; padding-bottom: 4px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

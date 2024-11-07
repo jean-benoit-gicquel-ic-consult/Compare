@@ -1,0 +1,11 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="QER_Audit_Responsibilities_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action5" ObjectType="ActionSequence" SortOrder="35" Condition="IsPreProp(&quot;ESET&quot;)">
+        <LoadTable DataTable="DialogTable" WhereClause="SqlIn(&quot;Tablename&quot;,&quot;String&quot;,&quot;ESet&quot;)" RemoveDeleted="false" ScriptItemUID="QERLoadTable1">
+          <DbObjectLoadType ConvertToInteractive="false" ScriptItemUID="QERDbObjectLoadType1" />
+        </LoadTable>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

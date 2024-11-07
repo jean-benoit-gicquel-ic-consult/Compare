@@ -1,0 +1,71 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Compliance_HighRiskOverview_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableDbObject Class="ESet" Table="ESet" WhereClauseSQL="if (getsystem()=&quot;ORACLE&quot;) then&#xD;&#xA;Format(&quot;UID_ESet in (select UID_ESet from(select UID_ESet from ESet where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated desc) where rownum &lt; {0})&quot;,havecount()+1, threshold())&#xD;&#xA;else&#xD;&#xA;Format(&quot;UID_ESet in (select top {0} UID_ESet from ESet where RiskIndexCalculated &gt; {1} order by RiskIndexCalculated desc)&quot;,havecount(), threshold())" ScriptItemUID="RMSDataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="RMSAction1" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Tab1" ObjectType="Tab" SortOrder="40">
+        <TabPage ItemUID="ESet" Condition="0 &lt; select count() from eset" ScriptItemUID="RMSTabPage1">
+          <ControlsHeader ScriptItemUID="RMSContainer1">
+            <Label Text="mkdesc(datacaption(&quot;ESet&quot;))" ScriptItemUID="RMSLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RMSContainer3">
+            <Grid AllowExport="true" ExportTitle="mkdesc(datacaption(&quot;ESet&quot;))" ScriptItemUID="RMSGrid1" ExportFileName="">
+              <GridBand DataTable="ESet" OrderBy="'RiskIndexCalculated desc, Ident_ESet'" ScriptItemUID="RMSGridBand1" RowSelection="Action" RowSelectionActive="">
+                <GridBandListView ScriptItemUID="RMSGridBandListView1" EnableListView="Auto" />
+                <SelectionAction ScriptItemUID="RMSServerActionCall2">
+                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="RMSRedirect2">
+                    <RedirectParameter Name="'ObjectKey'" Value="from eset select current xobjectkey" />
+                  </Redirect>
+                </SelectionAction>
+                <GridFilters ScriptItemUID="RMSGridFilters1" />
+                <GridRows />
+                <GridColumnColumnTemplate DataTable="ESet" ScriptItemUID="RMSGridColumnColumnTemplate1">
+                  <ColumnList ScriptItemUID="RMSColumnList1">
+                    <SingleColumn ScriptItemUID="RMSSingleColumn4" DataColumn="Ident_ESet" />
+                    <SingleColumn DataColumn="DisplayName" ScriptItemUID="RMSSingleColumn1" />
+                    <SingleColumn DataColumn="UID_PersonResponsible" ScriptItemUID="RMSSingleColumn2" />
+                    <SingleColumn DataColumn="RiskIndexCalculated" ScriptItemUID="RMSSingleColumn3" />
+                  </ColumnList>
+                  <GridColumnGroup DataTable="ESet" ScriptItemUID="RMSGridColumnGroup1">
+                    <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" Width="if(DataColumnName(ESet,currentcolumn) = 'RiskIndexCalculated') then &quot;150px;&quot;" ScriptItemUID="RMSColumn2">
+                      <GridColumnHeader ScriptItemUID="RMSwctl2">
+                        <Container ScriptItemUID="RMSContainer5">
+                          <Label Text="datacaption(ESet, currentcolumn)" ScriptItemUID="RMSLabel4" />
+                        </Container>
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="RMSCell2">
+                        <Container ScriptItemUID="RMSContainer6">
+                          <Container Condition="not(from ESet select current DataColumnName(ESet,currentcolumn) = 'RiskIndexCalculated')" ScriptItemUID="RMSContainer7">
+                            <Label Text="select current displayvalue(currentcolumn) from ESet" ScriptItemUID="RMSLabel5" />
+                          </Container>
+                          <Container Condition="from ESet select current DataColumnName(ESet,currentcolumn) = 'RiskIndexCalculated'" ScriptItemUID="RMSContainer8">
+                            <ControlReferenceContainer ID="VI_Compliance_RuleSeverityIndicator" ScriptItemUID="RMSControlRef1">
+                              <VirtualTableMapping VirtualTable="Object" DataTable="ESet" ScriptItemUID="RMSVirtualTableMapping1">
+                                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="RiskIndexCalculated" />
+                              </VirtualTableMapping>
+                            </ControlReferenceContainer>
+                          </Container>
+                        </Container>
+                      </Cell>
+                    </GridColumn>
+                  </GridColumnGroup>
+                </GridColumnColumnTemplate>
+              </GridBand>
+            </Grid>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Action10" ObjectType="ActionSequence" SortOrder="20">
+        <LoadTable DataTable="ESet" ScriptItemUID="RMSLoadTable1">
+          <DbObjectLoadType ScriptItemUID="RMSDbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </AddObject>
+      <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList" SortOrder="40">
+        <FunctionValue Expression="from ESet select (PrimaryKey() as PK, DisplayLong() as Display,'ESet' as Type, RiskIndexCalculated as RiskIndex, xobjectkey)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

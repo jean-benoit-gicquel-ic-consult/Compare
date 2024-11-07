@@ -1,0 +1,920 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Reporting_Subscriptions">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="Report Subscriptions" Description="translate(&quot;#LDS#Report Subscriptions&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Reporting_Subscription_FilterRPSSubscription" Description="translate(&quot;#LDS#Filter for subscribable reports&quot;)" Type="ColumnList" DatabaseTable="RPSSubscription" LongDescription="" />
+        <ConfigParam Key="VI_Reporting_Subscription_FilterPersonCC" Description="translate(&quot;#LDS#Filter for employees that can receive copies of subscribed reports&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action11">
+        <LoadTable DataTable="RPSSubscription" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" />
+        </LoadTable>
+        <LoadTable DataTable="RPSReport" ScriptItemUID="LoadTable4">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+        </LoadTable>
+        <LoadTable DataTable="RPSSubscriptionCCHelper" ScriptItemUID="LoadTable5">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" />
+        </LoadTable>
+        <LoadTable DataTable="RPSSubscriptionCC" ScriptItemUID="LoadTable6">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" />
+        </LoadTable>
+        <LoadTable DataTable="AdditionalSubscribers" ScriptItemUID="LoadTable7">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" />
+        </LoadTable>
+        <LoadTable DataTable="DialogParameterSetSubscription" ScriptItemUID="LoadTable8">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType9" />
+        </LoadTable>
+        <LoadTable DataTable="DialogParameterSetSubscriptionCC" ScriptItemUID="LoadTable9">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType10" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
+          <MasterPane ScriptItemUID="MasterPane1">
+            <Container ScriptItemUID="Container10">
+              <Container ScriptItemUID="Container11">
+                <Label ScriptItemUID="Label3" Text="translate('#LDS#My Subscriptions')" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h3" />
+                  </HtmlAttributes>
+                </Label>
+                <Grid ScriptItemUID="Grid11">
+                  <GridBand DataTable="RPSSubscription" ScriptItemUID="GridBand11" RowSelection="true" RowSelectionActive="" DataTableForSelection="Vars" DataColumnForSelection="UID_RPSSubscription" NoRowsText="translate('#LDS#No data available')" DisplayHeader="Always">
+                    <GridBandListView ScriptItemUID="GridBandListView11" />
+                    <GridFilters ScriptItemUID="GridFilters11" />
+                    <GridRows />
+                    <GridColumnSimple ScriptItemUID="Column33" Column="__Display" />
+                  </GridBand>
+                </Grid>
+              </Container>
+              <Container ScriptItemUID="Container71" ItemUID="Additional subscriptions of unknown RPSReports" Condition="(select count() from RPSSubscriptionCC  ) &gt; 0">
+                <Label ScriptItemUID="Label18" Text="translate('#LDS#Additional subscriptions')" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="TagName" Value="h3" />
+                  </HtmlAttributes>
+                </Label>
+                <Grid ScriptItemUID="Grid7">
+                  <GridBand DataTable="RPSSubscriptionCC" ScriptItemUID="GridBand7" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_RPSSubscription" DisplayHeader="Always">
+                    <GridBandListView ScriptItemUID="GridBandListView8" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters7" />
+                    <GridRows />
+                    <GridColumnSimple ScriptItemUID="Column17" Column="__Display" />
+                  </GridBand>
+                </Grid>
+              </Container>
+            </Container>
+          </MasterPane>
+          <DetailPane ScriptItemUID="DetailPane1">
+            <Container ScriptItemUID="Container18">
+              <Container ScriptItemUID="Container14">
+                <ContainerTemplate DataTable="RPSSubscription" ScriptItemUID="ContainerTemplate15" WhereClause="UID_RPSSubscription = (from Vars select UID_RPSSubscription)">
+                  <Container ScriptItemUID="Container68">
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef28">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping62" ID="PropertyList()" IsPropertyList="true">
+                        <ColumnList ScriptItemUID="ColumnList15">
+                          <SingleColumn ScriptItemUID="SingleColumn27" DataColumn="__Display" />
+                          <SingleColumn ScriptItemUID="SingleColumn26" DataColumn="ScheduleDisplay" />
+                          <SingleColumn ScriptItemUID="SingleColumn25" DataColumn="AdditionalSubscribersDisplay" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping61" ID="IsReadOnly()" Value="false" />
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping23" VirtualTable="EditTable" DataTable="RPSSubscription" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping60" ID="ShowReadOnlyAsViewer()" Value="true" />
+                    </ControlReferenceContainer>
+                    <Container ScriptItemUID="Container70" ItemUID="Parameter">
+                      <ControlReferenceControlList ID="SubscriptionParameter" ScriptItemUID="ControlRef27" />
+                    </Container>
+                    <Container ScriptItemUID="Container69" ItemUID="buttonbar" Layout="'VI_Styles_Container_ButtonBar'">
+                      <Container ScriptItemUID="Container29" ItemUID="toolbar button for various actions " EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;dropup&quot;" />
+                        </HtmlAttributes>
+                        <ToolbarButton Text="translate(&quot;#LDS#Actions&quot;)" Tooltip="translate(&quot;#LDS#Actions&quot;)" ScriptItemUID="ToolbarButton1" Layout="'VI_Styles_ToolbarButton_Dropup'">
+                          <Menu ScriptItemUID="Menu1">
+                            <MenuElement Text="translate('#LDS#Additional subscribers')" Tooltip="translate('#LDS#Remove or add employees to this subscription')" ScriptItemUID="MenuElement1">
+                              <ServerActionCall ScriptItemUID="ServerActionCall37">
+                                <CallAction ActionID="AddSubscribers" ScriptItemUID="Call42" />
+                              </ServerActionCall>
+                            </MenuElement>
+                            <MenuElement Text="translate('#LDS#Get report now')" Tooltip="translate(&quot;#LDS#Get report now&quot;)" ScriptItemUID="MenuElement7">
+                              <ServerActionCall ScriptItemUID="ServerActionCall36">
+                                <CallAction ActionID="Mail" ScriptItemUID="Call41" />
+                              </ServerActionCall>
+                            </MenuElement>
+                          </Menu>
+                          <ServerActionCall ScriptItemUID="ServerActionCall17" />
+                        </ToolbarButton>
+                      </Container>
+                      <Button ScriptItemUID="Button6" Text="translate('#LDS#Edit')" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute41" Value="translate('#LDS#Edit subscription settings')" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute42" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall38">
+                          <Update DataColumn="UID_SubscriptionNew" DataTable="LocalVars" ScriptItemUID="Update3" />
+                          <CallAction ActionID="EditParameters" ScriptItemUID="Call43" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button ScriptItemUID="Button9" Text="translate('#LDS#Heading Unsubscribe')" Layout="'VI_Styles_Button_Pill'" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute38" Value="translate('#LDS#Unsubscribe')" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall35">
+                          <CallAction ActionID="Unsubscribe" ScriptItemUID="Call40" />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+              <Container ScriptItemUID="Container26">
+                <ContainerTemplate DataTable="RPSSubscriptionCC" ScriptItemUID="ContainerTemplate8" WhereClause="PrimaryKey() = (from Vars select UID_RPSSubscription)">
+                  <Container ScriptItemUID="Container32">
+                    <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef19">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping51" ID="PropertyList()" IsPropertyList="true">
+                        <ColumnList ScriptItemUID="ColumnList9">
+                          <SingleColumn ScriptItemUID="SingleColumn16" DataColumn="__Display" />
+                          <SingleColumn ScriptItemUID="SingleColumn15" DataColumn="Ident_PayloadSchedule" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping47" ID="IsReadOnly()" Value="false" />
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping15" VirtualTable="EditTable" DataTable="RPSSubscriptionCC" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping46" ID="ShowReadOnlyAsViewer()" Value="true" />
+                    </ControlReferenceContainer>
+                    <Container ScriptItemUID="Container54" ItemUID="parameter">
+                      <ControlReferenceControlList ID="ReportParameterCC" ScriptItemUID="ControlRef17" />
+                    </Container>
+                    <Container ScriptItemUID="Container33" ItemUID="buttonpanel" Layout="'VI_Styles_Container_ButtonBar'">
+                      <LinkContainer ScriptItemUID="LinkContainer8">
+                        <ControlList ScriptItemUID="ControlList11">
+                          <Image StockImage="Mail" ItemUID="Mail" ScriptItemUID="Image15" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute17" Value="translate(&quot;#LDS#Get report now&quot;)" />
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall23">
+                          <CallAction ActionID="MailCC" ScriptItemUID="Call33" />
+                        </ServerActionCall>
+                      </LinkContainer>
+                      <LinkContainer ScriptItemUID="LinkContainer7">
+                        <ControlList ScriptItemUID="ControlList10">
+                          <Image StockImage="Delete" ItemUID="delete" ScriptItemUID="Image14" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute16" Value="translate('#LDS#Unsubscribe')" />
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;role&quot;" Value="&quot;presentation&quot;" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall22">
+                          <CallAction ActionID="DeleteCC" ScriptItemUID="Call32" />
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+            </Container>
+            <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+              <ControlList ScriptItemUID="ControlList1">
+                <Container ScriptItemUID="Container15">
+                  <Label Text="from RPSSubscription select Display() where UID_RPSSubscription = (from vars select UID_RPSSubscription)  &#xD;&#xA;  &#xD;&#xA;  " ScriptItemUID="Label2" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+                <Container ScriptItemUID="Container16">
+                  <Label Text="( from RPSSubscriptionCC select Ident_RPSSubscription where PrimaryKey() = (from vars select UID_RPSSubscription) ) &#xD;&#xA;  &#xD;&#xA;  &#xD;&#xA;  " ScriptItemUID="Label5" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                    </HtmlAttributes>
+                  </Label>
+                </Container>
+              </ControlList>
+            </DetailPaneHeader>
+          </DetailPane>
+        </MasterDetailControl>
+        <Container ScriptItemUID="Container3" Layout="'VI_Styles_Container_ButtonBar'" ItemUID="add subscription">
+          <Button ScriptItemUID="Button13" Text="translate('#LDS#Add Subscription')" Layout="'VI_Styles_Button_Primary'" EnabledCondition="Exists(&quot;RPSReport&quot;, format(&quot;isinactive=0 and IsDeactivatedByPreProcessor=0 and uid_rpsreport in (select uid_rpsreport from personhasrpsreport where XIsInEffect=1 and {0}) &quot;, SqlCompareUid(&quot;UID_Person&quot;,GetUser())))&#xD;&#xA;&#xD;&#xA;">
+            <ServerActionCall ScriptItemUID="ServerActionCall10">
+              <Update DataColumn="UID_SubscriptionNew" DataTable="LocalVars" ScriptItemUID="Update4" />
+              <Update DataColumn="UID_SelectedPerson" DataTable="LocalVars" ScriptItemUID="Update8" />
+              <Popup DisplayType="Controls">
+                <Container ScriptItemUID="Container41" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="TSBHtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+                  </HtmlAttributes>
+                  <Wizard ScriptItemUID="Wizard1">
+                    <OnCancel ScriptItemUID="Action39">
+                      <ForeachRow DataTable="RPSSubscription" ScriptItemUID="ForeachRow8" WhereClause="UID_RPSSubscription = (from localvars select UID_SubscriptionNew)">
+                        <CallAction ScriptItemUID="Call5" ActionID="CancelRPSSubscriptionParameters" />
+                      </ForeachRow>
+                      <ActionOnControl />
+                    </OnCancel>
+                    <WizardPage ScriptItemUID="WizardPage1" Title="translate('#LDS#Choose a report')">
+                      <OnNext ScriptItemUID="Action40">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <ForeachRow ScriptItemUID="ForeachRow4" DataTable="RPSReport" WhereClause="UID_RPSReport = (from Vars select UID_RPSReport)">
+                          <CallAction ScriptItemUID="Call1" ActionID="AddSubscription" />
+                        </ForeachRow>
+                      </OnNext>
+                      <OnBack ScriptItemUID="Action41" />
+                      <Label ScriptItemUID="Label4" EnableCustomAttributes="true" Text="translate('#LDS#Add report subscription')">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h3" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="Container25" EnableCustomAttributes="true" ItemUID="message container">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute7" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute6" Name="&quot;style&quot;" Value="&quot;padding-bottom: 6px;&quot;" />
+                        </HtmlAttributes>
+                      </Container>
+                      <Grid ScriptItemUID="Grid3">
+                        <GridBand DataTable="RPSReport" ScriptItemUID="GridBand3" DataSourceType="Database" DbOrderBy="" DBWhereClause="" RowSelection="true" RowSelectionActive="" DataTableForSelection="Vars" DataColumnForSelection="UID_RPSReport">
+                          <DbObjectLoadType ScriptItemUID="DbObjectLoadType14" />
+                          <GridBandListView ScriptItemUID="GridBandListView6" EnableListView="Auto" />
+                          <GridFilters ScriptItemUID="GridFilters2" />
+                          <GridRows />
+                          <GridColumnSimple ScriptItemUID="Column18" Column="__Display" />
+                          <GridColumnSimple ScriptItemUID="Column20" Column="Description" />
+                        </GridBand>
+                      </Grid>
+                      <Validator ScriptItemUID="Validator2" DisplayType="Generic">
+                        <ValidationModifier Condition="from Vars select IsNullOrEmpty(UID_RPSReport)" ID="Report" Text="translate(&quot;#LDS#Choose a report&quot;)" />
+                      </Validator>
+                    </WizardPage>
+                    <WizardPage ScriptItemUID="WizardPage2" Title="translate('#LDS#Edit report parameters')" BackButtonCaption="" AllowCancelAction="false">
+                      <OnNext ScriptItemUID="Action42">
+                        <ForeachRow DataTable="RPSSubscription" ScriptItemUID="ForeachRow7" WhereClause="UID_RPSSubscription = (from localvars select UID_SubscriptionNew)">
+                          <CallAction ScriptItemUID="Call24" ActionID="SaveRPSSubscriptionParameters" />
+                        </ForeachRow>
+                      </OnNext>
+                      <OnBack ScriptItemUID="Action43">
+                        <ForeachRow DataTable="RPSSubscription" ScriptItemUID="ForeachRow6" WhereClause="UID_RPSSubscription = (from localvars select UID_SubscriptionNew)">
+                          <CallAction ScriptItemUID="Call22" ActionID="CancelRPSSubscriptionParameters" />
+                        </ForeachRow>
+                      </OnBack>
+                      <Label ScriptItemUID="Label10" EnableCustomAttributes="true" Text="translate('#LDS#Add report subscription')">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h3" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="Container21">
+                        <ContainerTemplate DataTable="RPSSubscription" ScriptItemUID="ContainerTemplate6" WhereClause="UID_RPSSubscription = (from localvars select UID_SubscriptionNew)">
+                          <ControlReferenceContainer ID="EditRPSSubscriptionParameters" ScriptItemUID="ControlRef9" />
+                        </ContainerTemplate>
+                      </Container>
+                    </WizardPage>
+                    <WizardPage ScriptItemUID="WizardPage3" Title="translate('#LDS#Additional subscribers')" NextButtonCaption="translate(&quot;#LDS#Save&quot;)" AllowBackAction="false">
+                      <OnNext ScriptItemUID="Action21">
+                        <ForeachRow DataTable="RPSSubscription" ScriptItemUID="ForeachRow1" WhereClause="UID_RPSSubscription = (from localvars select UID_SubscriptionNew)">
+                          <CallAction ScriptItemUID="Call4" ActionID="SaveRPSSubscriptionCC" />
+                        </ForeachRow>
+                        <Update DataColumn="ShowMessage" DataTable="Vars" ScriptItemUID="Update10" Value="false" />
+                      </OnNext>
+                      <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+                        <Action ScriptItemUID="Action23" Condition="isnullorempty(from User select DefaultEmailAddress,'')=''">
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call6">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#There is no e-mail address associated with your employee record. Please contact your system administrator to assign an e-mail address.')" ScriptItemUID="VirtualFunctionMapping16" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Warning'" ScriptItemUID="VirtualFunctionMapping17" />
+                          </CallAction>
+                        </Action>
+                      </Activator>
+                      <Container ScriptItemUID="Container22" EnableCustomAttributes="true" ItemUID="message container">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute19" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;padding-bottom: 6px;&quot;" />
+                        </HtmlAttributes>
+                      </Container>
+                      <Label ScriptItemUID="Label6" Text="translate('#LDS#Add report subscription')" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h3" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="Container12">
+                        <ControlReferenceContainer ID="AddRPSSubscriptionCC" ScriptItemUID="ControlRef1" />
+                      </Container>
+                    </WizardPage>
+                    <WizardPage ScriptItemUID="WizardPage4" Title="translate('#LDS#Overview')" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowBackAction="false" AllowCancelAction="false">
+                      <OnNext ScriptItemUID="Action22">
+                        <Update DataColumn="UID_SubscriptionNew" DataTable="LocalVars" ScriptItemUID="Update7" />
+                        <ActionOnControl />
+                      </OnNext>
+                      <Activator ScriptItemUID="Activator2" ExecuteAlways="true">
+                        <Action ScriptItemUID="Action25" Condition="(select Count() from PersonCC &#xD;&#xA;where uid_person in (select uid_person from AdditionalSubscribers where UID_RPSSubscription = (from localvars select UID_SubscriptionNew)) &#xD;&#xA;and (cansee(DefaultEMailAddress) and isnullorempty(DefaultEmailAddress))) &gt; 0">
+                          <Update DataColumn="ShowMessage" DataTable="Vars" ScriptItemUID="Update9" Value="true" />
+                        </Action>
+                      </Activator>
+                      <Container ScriptItemUID="Container24" EnableCustomAttributes="true" ItemUID="message container">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute5" />
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;padding-bottom: 6px;&quot;" />
+                        </HtmlAttributes>
+                      </Container>
+                      <Container ScriptItemUID="Container27" Condition="from Vars select ShowMessage" Layout="'VI_Styles_Container_Paragraph'">
+                        <Container ScriptItemUID="Container46" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute18" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+                          </HtmlAttributes>
+                          <Image StockImage="Warning" ScriptItemUID="Image4" />
+                        </Container>
+                        <Label Text="translate('#LDS#The following recipients do not have an assigned e-mail address:')" ScriptItemUID="Label14" />
+                        <Grid ScriptItemUID="Grid4" HideMenu="true">
+                          <GridBand DataTable="PersonCC" WhereClause="uid_person in (select uid_person from AdditionalSubscribers where UID_RPSSubscription = (from localvars select UID_SubscriptionNew)) &#xD;&#xA;and (cansee(defaultemailaddress) and isnullorempty(DefaultEmailAddress))" DisplayHeader="Never" Layout="'VI_Styles_GridBand_List'" ScriptItemUID="GridBand4" EnableGridViewSetting="false">
+                            <GridBandListView ScriptItemUID="GridBandListView7" />
+                            <GridFilters ScriptItemUID="GridFilters3" />
+                            <GridRows />
+                            <GridColumnSimple ScriptItemUID="Column21" Column="__Display" />
+                          </GridBand>
+                        </Grid>
+                      </Container>
+                      <Label ScriptItemUID="Label7" Text="translate('#LDS#Add report subscription')" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h3" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="Container28">
+                        <ContainerTemplate DataTable="RPSSubscription" ScriptItemUID="ContainerTemplate1" WhereClause="UID_RPSSubscription = (from localvars select UID_SubscriptionNew)">
+                          <Container ScriptItemUID="Container13">
+                            <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef5">
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="PropertyList()" IsPropertyList="true">
+                                <ColumnList ScriptItemUID="ColumnList3">
+                                  <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="__Display" />
+                                  <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="ScheduleDisplay" />
+                                  <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="AdditionalSubscribersDisplay" />
+                                </ColumnList>
+                              </VirtualFunctionMapping>
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="IsReadOnly()" Value="false" />
+                              <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="EditTable" DataTable="RPSSubscription" />
+                              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="ShowReadOnlyAsViewer()" Value="true" />
+                            </ControlReferenceContainer>
+                            <Container ScriptItemUID="Container23" ItemUID="Parameter">
+                              <ControlReferenceControlList ID="SubscriptionParameter" ScriptItemUID="ControlRef4" />
+                            </Container>
+                          </Container>
+                        </ContainerTemplate>
+                      </Container>
+                    </WizardPage>
+                  </Wizard>
+                </Container>
+              </Popup>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="RPSSubscriptionCC" Table="AdditionalSubscribers" WhereClauseSQL="format(&quot;UID_RPSSubscription in (select UID_RPSSubscription from RPSSubscription where {0})&quot;, WhereClause(RPSSubscription))&#xA;" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="RPSReport" Table="RPSReport" WhereClauseSQL="format(&quot;isinactive=0 and &#xD;&#xA;IsDeactivatedByPreProcessor=0 and &#xD;&#xA;uid_rpsreport in ( select uid_rpsreport from personhasrpsreport where XIsInEffect=1 and uid_person = '{0}') &quot;, getUser())" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="RPSSubscription" Table="RPSSubscription" WhereClauseSQL="format(&quot;(uid_person = {0} and IsRejected = 0)&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action4" />
+          <Column Name="Description" Expression="select Description from RPSReport where uid_rpsreport=(select current uid_rpsreport from RPSSubscription)" DataSource="Expression" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="hasPersons" Expression="select count() from AdditionalSubscribers where uid_rpssubscription = ( select current uid_rpssubscription from rpssubscription ) AND (IsLoaded() = true)" DataSource="Expression" ScriptItemUID="Column2" DataType="System.Int32" />
+          <Column Name="hasParameter" Comment="select count() from rpssubscriptionparameter where uid_rpssubscription in ( select current uid_rpssubscription from rpssubscription)" Expression="select count() &#xA;from DialogParameterSubscription &#xA;where UID_DialogParameterSet = ( select UID_DialogParameterSet &#xA;                                 from DialogParameterSetSubscription &#xA;								 where ObjectKeyUsedBy = ( select current XObjectKey &#xA;								                           from rpssubscription )&#xA;								)&#xA;AND isnullorempty(ParameterValue,'')&lt;&gt;''" DataSource="Expression" ScriptItemUID="Column3" DataType="System.Int32" />
+          <RedefineColumn DataColumn="ExportFormat" ScriptItemUID="RedefineColumn1" DefineLimitedValues="true">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues2">
+              <ColumnLimitedValue Name="HTML" Display="&quot;HTML&quot;" Comment="" />
+              <ColumnLimitedValue Name="PDF" Display="&quot;PDF&quot;" Comment="" />
+              <ColumnLimitedValue Name="RTF" Display="&quot;RTF&quot;" Comment="" />
+              <ColumnLimitedValue Name="TEXT" Display="&quot;TEXT&quot;" Comment="" />
+              <ColumnLimitedValue Name="XLS" Display="&quot;XLS&quot;" Comment="" />
+              <ColumnLimitedValue Name="TIFF" Display="&quot;TIFF&quot;" Comment="" />
+              <ColumnLimitedValue Name="XML" Display="&quot;XML&quot;" Comment="" />
+              <ColumnLimitedValue Name="CSV" Display="&quot;CSV&quot;" Comment="" />
+              <ColumnLimitedValue Name="XPS" Display="&quot;XPS&quot;" Comment="" />
+              <ColumnLimitedValue Name="DOCX" Display="&quot;DOCX&quot;" Comment="" />
+              <ColumnLimitedValue Name="XLSX" Display="&quot;XLSX&quot;" Comment="" />
+            </ColumnLimitedValues>
+          </RedefineColumn>
+          <Column Name="AdditionalSubscribersDisplay" DataType="System.String" ScriptItemUID="Column14" DataSource="Expression" Expression="GetAdditionalSubscribersDisplay()" Caption="translate('#LDS#Additional subscribers')" />
+          <Column Name="ScheduleDisplay" DataType="System.String" ScriptItemUID="Column19" DataSource="Expression" Expression="GetScheduleDisplay()" Caption="datacaption(rpssubscription, uid_dialogschedule)" />
+          <Column Name="UID_DialogParameterSet" DataType="System.String" ScriptItemUID="Column10" DataSource="Expression" Expression="from dialogparametersetsubscription select top 1 primarykey() where objectkeyusedby = (from rpssubscription select current getobjectkey())" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="RPSSubscriptionCC" Table="RPSSubscriptionCC" WhereClauseSQL="SqlAnd(format(&quot;(uid_person = {0})&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;format(&quot;(UID_RPSSubscription in (select UID_RPSSubscription from RPSSubscription where IsRejected = 0))&quot;))&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="DataTableDbObject4">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="hasParameter" Comment="select count() from rpssubscriptionparameter where uid_rpssubscription in ( select current uid_rpssubscription from rpssubscription)" Expression="select count() &#xA;from DialogParameterSubscriptionCC &#xA;where UID_DialogParameterSet = ( select UID_DialogParameterSet &#xA;                                 from DialogParameterSetSubscriptionCC &#xA;								 where ObjectKeyUsedBy = ( select current XObjectKey(&quot;RPSSubscription&quot;, UID_RPSSubscription)&#xA;								                           from RPSSubscriptionCC  )&#xA;								)&#xA;AND isnullorempty(ParameterValue,'')&lt;&gt;''" DataSource="Expression" ScriptItemUID="Column4" DataType="System.Int32" />
+          <Column Name="Ident_RPSSubscription" Expression="select top 1 DisplaySubscription from RPSSubscriptionCCHelper where UID_RPSSubscription = (select current UID_RPSSubscription from RPSSubscriptionCC)&#xD;&#xA;" DataSource="Expression" ScriptItemUID="Column5" DataType="System.String" />
+          <Column Name="Ident_PayloadSchedule" Expression="select top 1 DisplayValue(UID_DialogSchedule) from RPSSubscriptionCCHelper where UID_RPSSubscription = (select current UID_RPSSubscription from RPSSubscriptionCC)" DataSource="Expression" ScriptItemUID="Column6" DataType="System.String" Caption="datacaption(&quot;RPSSubscription&quot;, &quot;UID_DialogSchedule&quot;)" DisplayValueExpression="isnullorempty(ident_payloadschedule, translate(&quot;#LDS#Not scheduled for automatic delivery&quot;))" />
+          <Column DataType="System.String" Name="UID_RPSReport" ScriptItemUID="Column24" DataSource="Expression" Expression="select top 1 UID_RPSReport from RPSSubscriptionCCHelper where UID_RPSSubscription = (select current UID_RPSSubscription from RPSSubscriptionCC)" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="RPSSubscription" Table="RPSSubscriptionCCHelper" WhereClauseSQL="format(&quot;UID_RPSSubscription in ( select UID_RPSSubscription from RPSSubscriptionCC where uid_person = {0}) &quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="DataTableDbObject5">
+          <ActionSequence ScriptItemUID="Action6" />
+          <Column Name="DisplaySubscription" Expression="(DisplayValue(UID_Person)+ &quot; - &quot; + Ident_RPSSubscription) " DataSource="Expression" ScriptItemUID="Column7" DataType="System.String" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogParameterSet" Table="DialogParameterSetSubscription" WhereClauseSQL="&quot;ObjectKeyUsedBy in  (select XObjectKey from RPSSubscription where &quot; + whereclause (RPSSubscription) + &quot;)&quot;" ScriptItemUID="DataTableDbObject6">
+          <ActionSequence ScriptItemUID="Action7">
+            <LoadTable DataTable="DialogParameterSubscription" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType11" />
+            </LoadTable>
+          </ActionSequence>
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogParameterSet" Table="DialogParameterSetSubscriptionCC" WhereClauseSQL="&quot;ObjectKeyUsedBy in  (select XObjectKey from RPSSubscription where UID_RPSSubscription in (select UID_RPSSubscription from RPSSubscriptionCC where &quot; + whereclause (RPSSubscriptionCC) + &quot;))&quot;" ScriptItemUID="DataTableDbObject7">
+          <ActionSequence ScriptItemUID="Action8">
+            <LoadTable DataTable="DialogParameterSubscriptionCC" ScriptItemUID="LoadTable2">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType12" />
+            </LoadTable>
+          </ActionSequence>
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogParameter" Table="DialogParameterSubscription" WhereClauseSQL="&quot;uid_dialogParameterSet in (select uid_dialogParameterSet from DialogParameterSet where &quot;+ whereclause(DialogParameterSetSubscription)+&quot;)&quot;" ScriptItemUID="DataTableDbObject8">
+          <ActionSequence ScriptItemUID="Action9" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogParameter" Table="DialogParameterSubscriptionCC" WhereClauseSQL="&quot;uid_dialogParameterSet in (select uid_dialogParameterSet from DialogParameterSet where &quot;+ whereclause(DialogParameterSetSubscriptionCC)+&quot;)&quot;" ScriptItemUID="DataTableDbObject9">
+          <ActionSequence ScriptItemUID="Action10" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="PersonCC" WhereClauseSQL="getConfig(&quot;VI_Reporting_Subscription_FilterPersonCC&quot;)" ScriptItemUID="DataTableDbObject10" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action111" />
+          <Column DataType="System.Boolean" Name="selected" ScriptItemUID="Column22" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="SubscriptionQuantity" Expression="select count() from RPSSubscription where IsLoaded() = true" DataSource="Expression" ScriptItemUID="Column8" DataType="System.Int32" />
+          <Column Name="UID_SelectedPerson" DataType="System.String" ScriptItemUID="Column11" />
+          <Column Name="currentUID" DataType="System.String" ScriptItemUID="Column12" />
+          <Column DataType="System.String" Name="UID_SubscriptionNew" ScriptItemUID="Column26" />
+        </DataTableSingleRow>
+        <DataTableCustom Table="AdditionalSubscribersUIDs" PrimaryKeyColumn="" DisplayColumn="" ScriptItemUID="DataTableCustom1">
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="Column13" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow2">
+          <Column DataType="System.String" Name="UID_RPSSubscription" ScriptItemUID="Column16" />
+          <Column DataType="System.String" Name="UID_RPSReport" ScriptItemUID="Column25" />
+          <Column DataType="System.Boolean" Name="ShowMessage" ScriptItemUID="Column9" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Mail">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action16">
+              <Method ObjectMethodType="FireEvent" DataTable="RPSSubscription" ObjectEventName="PreViewMail" WhereClause="(UID_RPSSubscription=(from RPSSubscription select current UID_RPSSubscription))">
+                <MethodParameter Name="'ParameterSet'" Value="from DialogParameterSetSubscription &#xA;select UID_DialogParameterSet&#xA;where ObjectKeyUsedBy = From RPSSubscription select current XObjectKey('RPSSubscription',UID_RPSSubscription)" />
+              </Method>
+              <ActionSequence ItemUID="Check for email address" Condition="isnullorempty(from User select DefaultEmailAddress,'')=''" ScriptItemUID="Action30">
+                <CallAction ActionID="MissingMailAddressMessageBox" ScriptItemUID="Call11" />
+              </ActionSequence>
+              <ActionSequence ItemUID="Check for email address" Condition="isnullorempty(from User select DefaultEmailAddress,'')&lt;&gt;''" ScriptItemUID="Action31">
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call12">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The report {0} has been delivered to your e-mail address.&quot;, from rpssubscription select current display())" ScriptItemUID="VirtualFunctionMapping7" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping8" />
+                </CallAction>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor7" />
+        </Control>
+        <Control ID="AddSubscription">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action2">
+              <Insert DataTable="RPSSubscription" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action28">
+                  <Method DataTable="RPSSubscription" ObjectMethodType="ExecuteTemplates" WhereClause="PrimaryKey()=select current PrimaryKey() from RPSSubscription" />
+                  <FillDialogParameter DataTable="RPSSubscription" TargetTableParameterSet="DialogParameterSetSubscription" TargetTableParameter="DialogParameterSubscription" WhereClause="PrimaryKey()=select current PrimaryKey() from RPSSubscription" Name="translate('#LDS#Subscription')+' - '+( from rpsreport select current displayvalue(uid_rpsreport))+' ('+getdate()+')'" ParentObjectKey="XObjectKey('RPSReport',UID_RPSReport)&#xA;" />
+                  <Save DataTable="RPSSubscription" WhereClause="primarykey()=select current primarykey() from rpssubscription" ScriptItemUID="Save1" />
+                  <Save DataTable="DialogParameterSetSubscription" WhereClause="primarykey()=(select current uid_dialogparameterset from rpssubscription)" ScriptItemUID="Save2" />
+                  <Update DataTable="DialogParameterSubscription" DataColumn="UID_DialogParameterSet" Value="select current uid_dialogparameterset from rpssubscription" WhereClause="isnullorempty(uid_dialogparameterset)" ScriptItemUID="Update1" />
+                  <Save DataTable="DialogParameterSubscription" WhereClause="UID_DialogParameterSet = (select current uid_dialogparameterset from rpssubscription)" ScriptItemUID="Save3" />
+                  <Update DataColumn="UID_SubscriptionNew" DataTable="LocalVars" ScriptItemUID="Update2" Value="from rpssubscription select current UID_RPSSubscription " />
+                </ActionSequence>
+                <InsertValue DataColumn="UID_Person" Value="getUser()" />
+                <InsertValue DataColumn="UID_RPSReport" Value="from RPSReport select current UID_RPSReport" />
+                <InsertValue DataColumn="UID_DialogSchedule" Value="&quot;RPS-E2BAA042F4DE444FA57B77926D641512&quot;" />
+              </Insert>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSReport" ScriptItemUID="DataTableCursor2" />
+        </Control>
+        <Control ID="DeleteSubscription">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action12">
+              <Delete DataTable="RPSSubscriptionCC" SetDeletionFlag="DeleteAndSave" WhereClause="UID_RPSSubscription=(from RPSSubscription select current UID_RPSSubscription)" ScriptItemUID="Delete1" />
+              <LoadTable DataTable="AdditionalSubscribers" ScriptItemUID="LoadTable10">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+              </LoadTable>
+              <Delete DataTable="AdditionalSubscribers" SetDeletionFlag="DeleteAndSave" WhereClause="UID_RPSSubscription=(from RPSSubscription select current UID_RPSSubscription)" ScriptItemUID="Delete2" />
+              <Delete DataTable="DialogParameterSubscription" SetDeletionFlag="DeleteAndSave" WhereClause="UID_DialogParameterSet  in (select UID_DialogParameterSet from DialogParameterSetSubscription where ObjectKeyUsedBy = (from RPSSubscription select current XObjectKey(&quot;RPSSubscription&quot;, UID_RPSSubscription)))" ScriptItemUID="Delete3" />
+              <Delete DataTable="DialogParameterSetSubscription" SetDeletionFlag="DeleteAndSave" WhereClause="ObjectKeyUsedBy = (from RPSSubscription select current XObjectKey(&quot;RPSSubscription&quot;, UID_RPSSubscription))" ScriptItemUID="Delete4" />
+              <Delete DataTable="RPSSubscription" SetDeletionFlag="DeleteAndSave" WhereClause="UID_RPSSubscription=(from RPSSubscription select current UID_RPSSubscription)" ScriptItemUID="Delete5" />
+              <ActionOnControl />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor1" />
+        </Control>
+        <Control ID="EditRPSSubscriptionCC">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action15">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Additional subscribers&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container9">
+                    <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef2">
+                      <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping10">
+                        <ColumnList ScriptItemUID="ColumnList1">
+                          <SingleColumn DataColumn="Ident_RPSSubscription" ScriptItemUID="SingleColumn1" />
+                        </ColumnList>
+                      </VirtualFunctionMapping>
+                      <VirtualTableMapping VirtualTable="EditTable" DataTable="RPSSubscription" ScriptItemUID="VirtualTableMapping1" />
+                    </ControlReferenceContainer>
+                    <ControlReferenceContainer ID="AddRPSSubscriptionCC" ScriptItemUID="ControlRef10" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container5">
+                    <Button Text="translate('#LDS#Save')" ScriptItemUID="Button3">
+                      <ServerActionCall ScriptItemUID="ServerActionCall3">
+                        <CallAction ScriptItemUID="Call23" ActionID="SaveRPSSubscriptionCC" />
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </Button>
+                    <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button5" AssociatedWithEscapeKey="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall5">
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor3" />
+        </Control>
+        <Control ID="AddRPSSubscriptionCC">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container4">
+              <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef3">
+                <VirtualFunctionMapping ID="CandidateDbTable()" Value="'Person'" ScriptItemUID="VirtualFunctionMapping11" />
+                <VirtualTableMapping VirtualTable="Candidate" DataTable="PersonCC" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualTableMapping VirtualTable="SelectedItems" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping3">
+                  <VirtualColumnMapping VirtualColumn="uidList" DataColumn="UID_SelectedPerson" />
+                </VirtualTableMapping>
+                <VirtualFunctionMapping ID="UidListTextQualifier()" Value="&quot;&quot;" ScriptItemUID="VirtualFunctionMapping12" />
+              </ControlReferenceContainer>
+            </Container>
+          </LocalControlContext>
+        </Control>
+        <Control ID="SaveRPSSubscriptionCC">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action47">
+              <Delete DataTable="AdditionalSubscribers" WhereClause="UID_RPSSubscription = ( select current PrimaryKey() from RPSSubscription )" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete9" />
+              <Delete DataTable="AdditionalSubscribersUIDs" ScriptItemUID="Delete10" />
+              <FillTable DataTable="AdditionalSubscribersUIDs" Expression="split(from LocalVars select UID_SelectedPerson, char(7),false)" DataColumn="UID_Person" ScriptItemUID="FillTable2">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType15" ConvertToInteractive="false" />
+              </FillTable>
+              <ForeachRow DataTable="AdditionalSubscribersUIDs" ScriptItemUID="ForeachRow3">
+                <ActionSequence ScriptItemUID="Action46">
+                  <Insert DataTable="AdditionalSubscribers" ScriptItemUID="Insert4">
+                    <ActionSequence ScriptItemUID="Action48" />
+                    <InsertValue DataColumn="UID_RPSSubscription" Value="select current PrimaryKey() from RPSSubscription " />
+                    <InsertValue DataColumn="UID_Person" Value="from AdditionalSubscribersUIDs select current UID_Person" />
+                  </Insert>
+                </ActionSequence>
+              </ForeachRow>
+              <Save DataTable="AdditionalSubscribers" ScriptItemUID="Save6" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor10" />
+        </Control>
+        <Control ID="EditRPSSubscriptionParameters">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container17">
+              <ContainerTemplate DataTable="RPSSubscription" ScriptItemUID="ContainerTemplate4" WhereClause="UID_RPSSubscription = (from RPSSubscription select current UID_RPSSubscription)">
+                <CodeLiteral ScriptItemUID="CodeLiteral1">var colFormat = (DatabaseColumn) DataContext.RPSSubscription.GetColumn("ExportFormat");
+var uidRpsReport = RPSSubscription_Current.Row.GetValue("UID_RPSReport").String;
+// make sure the RPSReport is loaded
+DataContext.RPSReport.LoadAsync(new DbObjectLoadInfo("RPSReport", _Database.SqlFormatter().UidComparison("UID_RPSReport", uidRpsReport)),
+	new LoadTableOptions { RemoveDeleted = false }).Wait();
+var rpsReport = DataContext.RPSReport.GetRowForPrimaryKey(uidRpsReport);
+var allowedFormats = DataContext.RPSReport.GetColumn("ExportFormat").GetValue(rpsReport).String;
+if (string.IsNullOrEmpty(allowedFormats))
+{
+	colFormat.LimitedValues = null;
+}
+else
+{
+	var limv = new LimitedValuesCollection(allowedFormats);
+	colFormat.LimitedValues = limv;
+}</CodeLiteral>
+                <CodeLiteral ScriptItemUID="CodeLiteral2">// ensure that all parameters exist (missing parameters are re-created)
+VI.WebRuntime.DialogParameterObjectProxy.InsertDialogParameter(DataContext.DialogParameterSubscription, _Connection.Session,
+TableStore.GetLocalColumn(RPSSubscription_Current.Row.Table, "UID_DialogParameterSet").GetValue(RPSSubscription_Current.Row).String);</CodeLiteral>
+                <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef7">
+                  <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping41">
+                    <ColumnList ScriptItemUID="ColumnList2">
+                      <ExpressionColumnList ColumnList="GetConfig(&quot;VI_Reporting_Subscription_FilterRPSSubscription&quot;)" ScriptItemUID="ExpressionColumnList2" />
+                      <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="ExportFormat" />
+                    </ColumnList>
+                  </VirtualFunctionMapping>
+                  <VirtualTableMapping VirtualTable="EditTable" DataTable="RPSSubscription" ScriptItemUID="VirtualTableMapping16" />
+                </ControlReferenceContainer>
+                <ContainerTemplate DataTable="DialogParameterSetSubscription" WhereClause="primarykey()=( select current uid_dialogparameterset from rpssubscription)" ScriptItemUID="ContainerTemplate5">
+                  <ControlReferenceContainer ID="VI_Reporting_ParameterEdit" ScriptItemUID="ControlRef6">
+                    <VirtualTableMapping VirtualTable="DialogParameter" DataTable="DialogParameterSubscription" ScriptItemUID="VirtualTableMapping14" />
+                    <VirtualTableMapping VirtualTable="DialogParameterSet" DataTable="DialogParameterSetSubscription" ScriptItemUID="VirtualTableMapping13" />
+                  </ControlReferenceContainer>
+                </ContainerTemplate>
+              </ContainerTemplate>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor15" />
+        </Control>
+        <Control ID="EditParameters">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action13">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call8">
+                <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Edit subscription settings')" ScriptItemUID="VirtualFunctionMapping42" />
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container20">
+                    <ControlReferenceContainer ID="EditRPSSubscriptionParameters" ScriptItemUID="ControlRef8" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container19">
+                    <SwitchContainer ScriptItemUID="Switch2">
+                      <SwitchContainerCase ScriptItemUID="Case2" Condition="from localvars select UID_SubscriptionNew = (select current UID_RPSSubscription from RPSSubscription)">
+                        <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button1">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                          </HtmlAttributes>
+                          <ServerActionCall ScriptItemUID="ServerActionCall1">
+                            <CallAction ScriptItemUID="Call21" ActionID="CancelRPSSubscriptionParameters" />
+                            <ActionOnControl />
+                          </ServerActionCall>
+                        </Button>
+                      </SwitchContainerCase>
+                      <SwitchContainerCase ScriptItemUID="Case1">
+                        <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button4">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute8" />
+                          </HtmlAttributes>
+                          <ServerActionCall ScriptItemUID="ServerActionCall4">
+                            <ActionOnControl />
+                          </ServerActionCall>
+                        </Button>
+                      </SwitchContainerCase>
+                    </SwitchContainer>
+                    <Button Text="translate('#LDS#Save')" ScriptItemUID="Button2">
+                      <ServerActionCall ScriptItemUID="ServerActionCall2">
+                        <CallAction ScriptItemUID="Call9" ActionID="SaveRPSSubscriptionParameters" />
+                        <ActionOnControl />
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor5" />
+        </Control>
+        <Control ID="AddSubscribers">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action14">
+              <Update DataTable="LocalVars" DataColumn="UID_SelectedPerson" Value="listselect(&#xD;&#xA;AdditionalSubscribers,&#xD;&#xA;UID_Person, &#xD;&#xA;uid_RPSSubscription = (from RPSSubscription select current PrimaryKey()),&#xD;&#xA;&quot;&quot;,&#xD;&#xA;char(7)&#xD;&#xA;)" ScriptItemUID="Update5" />
+              <CallAction ActionID="EditRPSSubscriptionCC" ScriptItemUID="Call10" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor6" />
+        </Control>
+        <Control ID="Unsubscribe">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action17">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call13">
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action32">
+                    <CallAction ActionID="DeleteSubscription" ScriptItemUID="Call14" />
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Do you wish to delete this subscription?')" ScriptItemUID="VirtualFunctionMapping24" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping25" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from RPSSubscription select current Ident_RPSSubscription" ScriptItemUID="VirtualFunctionMapping26" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor8" />
+        </Control>
+        <Control ID="SubscriptionParameter">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList4">
+              <Container ScriptItemUID="Container112" RefreshTriggerExpression="from rpssubscription select current hasparameter">
+                <SwitchContainer ScriptItemUID="Switch5">
+                  <SwitchContainerCase ScriptItemUID="Case9" ItemUID="parameter" Condition="0 &lt; from RPSSubscription select current hasParameter">
+                    <LayoutPanel ScriptItemUID="LayoutPanel1">
+                      <ContainerTemplate DataTable="DialogParameterSubscription" WhereClause="UID_DialogParameterSet in &#xA;(from DialogParameterSetSubscription select UID_DialogParameterSet where ObjectKeyUsedBy = &#xA;  (from RPSSubscription select current XObjectKey))&#xA;and IsNullOrEmpty(ParameterValue,'')&lt;&gt;''" OrderBy="'SortOrder'" ScriptItemUID="ContainerTemplate2" WithoutParentContainer="true">
+                        <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate1" DataTable="DialogParameterSubscription">
+                          <ColumnList ScriptItemUID="ColumnList4">
+                            <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="ParameterValue">
+                              <ParameterFree Name="&quot;DisplayPattern&quot;" Value="{{ DialogParameterObjectProxy.GetOrAdd((IDbObjectRow) ContainerTemplate2_Current.Row, _Database).ParameterObject.DataDisplayPattern }}" ScriptItemUID="ParameterFree1" />
+                            </SingleColumn>
+                          </ColumnList>
+                          <Container ScriptItemUID="Container2">
+                            <Label Text="{{ _currentColumn.GetMetadata(ContainerTemplate2_Current.Row).Display }}" ScriptItemUID="Label23" />
+                          </Container>
+                          <Container ScriptItemUID="Container113">
+                            <ColumnEditor DataTable="DialogParameterSubscription" DataColumn="currentcolumn" ScriptItemUID="ColumnEditor1" Type="IsForView" />
+                          </Container>
+                        </ContainerColumnTemplate>
+                      </ContainerTemplate>
+                    </LayoutPanel>
+                  </SwitchContainerCase>
+                  <SwitchContainerCase ScriptItemUID="Case10" ItemUID="no parameter">
+                    <Label Text="translate(&quot;#LDS#No parameter&quot;)" ScriptItemUID="Label25" />
+                  </SwitchContainerCase>
+                </SwitchContainer>
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor11" />
+        </Control>
+        <Control ID="ReportParameterCC">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList7">
+              <SwitchContainer ScriptItemUID="Switch8">
+                <SwitchContainerCase ScriptItemUID="Case15" Condition="0 &lt;&gt; from RPSSubscriptionCC select current  isnullorempty(hasParameter,'0')" ItemUID="parameter">
+                  <ContainerTemplate DataTable="DialogParameterSubscriptionCC" WhereClause=" UID_DialogParameterSet in (from DialogParameterSetSubscriptionCC select UID_DialogParameterSet where ObjectKeyUsedBy = (from RPSSubscriptionCC select current XObjectKey(&quot;RPSSubscription&quot;,UID_RPSSubscription))) and Parametertype = 'Query'" OrderBy="'SortOrder'" ScriptItemUID="ContainerTemplate3">
+                    <Container Condition="IsNullOrEmpty(from DialogParameterSubscriptionCC select current ParameterValue,'')&lt;&gt;''" ScriptItemUID="Container50">
+                      <Label Text="from DialogParameterSubscriptionCC select current ParameterName +&quot;: &quot;" ScriptItemUID="Label36" />
+                      <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container51">
+                        <Label Text="from DialogParameterSubscriptionCC select current displayvalue(ParameterValue)" ScriptItemUID="Label37" />
+                      </Container>
+                    </Container>
+                  </ContainerTemplate>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case16" ItemUID="no parameter">
+                  <Label Text="translate(&quot;#LDS#No parameter&quot;)" ScriptItemUID="Label38" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscriptionCC" ScriptItemUID="DataTableCursor14" />
+        </Control>
+        <Control ID="MailCC">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action26">
+              <Method ObjectMethodType="FireEvent" DataTable="RPSSubscriptionCC" ObjectEventName="GenerateMail" WhereClause="(UID_RPSSubscription=(from RPSSubscriptionCC select current UID_RPSSubscription))">
+                <MethodParameter Name="'ParameterSet'" Value="from DialogParameterSetSubscriptionCC &#xD;&#xA;select UID_DialogParameterSet&#xD;&#xA;where ObjectKeyUsedBy = From RPSSubscriptionCC select current XObjectKey('RPSSubscription',UID_RPSSubscription)" />
+              </Method>
+              <ActionSequence ScriptItemUID="Action34" Condition="isnullorempty(from User select DefaultEmailAddress,'')=''" ItemUID="Check for email address">
+                <CallAction ActionID="MissingMailAddressMessageBox" ScriptItemUID="Call31" />
+              </ActionSequence>
+              <ActionSequence ScriptItemUID="Action35" Condition="isnullorempty(from User select DefaultEmailAddress,'')&lt;&gt;''" ItemUID="Check for email address">
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call30">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The report {0} has been delivered to your e-mail address.&quot;, from RPSSubscriptionCC select current display())" ScriptItemUID="VirtualFunctionMapping27" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping28" />
+                </CallAction>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscriptionCC" ScriptItemUID="DataTableCursor12" />
+        </Control>
+        <Control ID="DeleteCC">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action27">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call17">
+                <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action36">
+                    <Delete DataTable="DialogParameterSubscriptionCC" WhereClause="UID_DialogParameterSet  in (select UID_DialogParameterSet from DialogParameterSetSubscription where ObjectKeyUsedBy = (from RPSSubscriptionCC select current XObjectKey(&quot;RPSSubscription&quot;, UID_RPSSubscription)))" ScriptItemUID="Delete14" />
+                    <Delete DataTable="DialogParameterSetSubscriptionCC" WhereClause="ObjectKeyUsedBy = (from RPSSubscriptionCC select current XObjectKey(&quot;RPSSubscription&quot;, UID_RPSSubscription))" ScriptItemUID="Delete15" />
+                    <Delete DataTable="RPSSubscriptionCC" SetDeletionFlag="DeleteAndSave" WhereClause="UID_RPSSubscription=(from RPSSubscriptionCC select current UID_RPSSubscription)" ScriptItemUID="Delete16" />
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Do you wish to delete this subscription?')" ScriptItemUID="VirtualFunctionMapping29" />
+                <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping30" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from RPSSubscriptionCC select current Ident_RPSSubscription" ScriptItemUID="VirtualFunctionMapping31" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscriptionCC" ScriptItemUID="DataTableCursor13" />
+        </Control>
+        <Control ID="MissingMailAddressMessageBox">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action33">
+              <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call15">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Delivering your report subscription is not possible due to missing e-mail address. Please contact you system administrator to assign an e-mail address.')" ScriptItemUID="VirtualFunctionMapping32" />
+                <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping33" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Missing e-mail address')" ScriptItemUID="VirtualFunctionMapping34" />
+                <VirtualFunctionMapping ID="MessageBoxType()" Value="'Warning'" ScriptItemUID="VirtualFunctionMapping35" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="SaveRPSSubscriptionParameters">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action38">
+              <ActionSequence Condition="0 &lt; &#xA;select count() &#xA;from RPSSubscription &#xA;where Ident_RPSSubscription = (from RPSSubscription select current Ident_RPSSubscription)&#xA;AND UID_RPSSubscription &lt;&gt; (from RPSSubscription select current UID_RPSSubscription)" ItemUID="check if name already exists" ScriptItemUID="Action37">
+                <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call20">
+                  <VirtualFunctionMapping ID="MessageText()" Value="Translate('#LDS#The entered name is already assigned to another subscription. Please enter a different name.')" ScriptItemUID="VirtualFunctionMapping40" />
+                  <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping39" />
+                  <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from RPSSubscription select current Ident_RPSSubscription" ScriptItemUID="VirtualFunctionMapping38" />
+                  <VirtualFunctionMapping ID="MessageBoxType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping37" />
+                </CallAction>
+                <EndExecution />
+              </ActionSequence>
+              <ForeachRow DataTable="DialogParameterSetSubscription" WhereClause="primarykey()=(select current uid_dialogparameterset from rpssubscription)" ScriptItemUID="ForeachRow5">
+                <CallAction ActionID="VI_Reporting_ParameterCheck" ScriptItemUID="Call18">
+                  <VirtualTableMapping VirtualTable="DialogParameterSet" DataTable="DialogParameterSetSubscription" ScriptItemUID="VirtualTableMapping12" />
+                  <VirtualTableMapping VirtualTable="DialogParameter" DataTable="DialogParameterSubscription" ScriptItemUID="VirtualTableMapping11" />
+                  <VirtualTableMapping VirtualTable="SourceObject" DataTable="RPSSubscription" ScriptItemUID="VirtualTableMapping10" />
+                </CallAction>
+              </ForeachRow>
+              <ActionSequence ItemUID="Check for email address" Condition="false and isnullorempty(from User select DefaultEmailAddress,'')=''" ScriptItemUID="Action29">
+                <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call16">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#There is no e-mail address associated with your employee record. Please contact your system administrator to assign an e-mail address.')" ScriptItemUID="VirtualFunctionMapping36" />
+                  <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
+                  <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Missing e-mail address')" ScriptItemUID="VirtualFunctionMapping5" />
+                  <VirtualFunctionMapping ID="MessageBoxType()" Value="'Warning'" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ActionSequence>
+              <Save DataTable="RPSSubscription" WhereClause="primarykey()=select current primarykey() from rpssubscription" ScriptItemUID="Save7" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor17" />
+        </Control>
+        <Control ID="CancelRPSSubscriptionParameters">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action24">
+              <Delete DataTable="DialogParameterSubscription" WhereClause="UID_DialogParameterSet = (select current UID_DialogParameterSet from RPSSubscription)" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete18" />
+              <Delete DataTable="DialogParameterSetSubscription" WhereClause="primarykey()=(select current uid_dialogparameterset from rpssubscription)" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete17" />
+              <Delete DataTable="RPSSubscription" WhereClause="UID_RPSSubscription = ( from localvars select UID_SubscriptionNew)" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete8" />
+              <Update DataColumn="UID_SubscriptionNew" DataTable="LocalVars" ScriptItemUID="Update6" />
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor18" />
+        </Control>
+        <Control ID="SaveRPSSubscriptionCC">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action50">
+              <Delete DataTable="AdditionalSubscribers" WhereClause="UID_RPSSubscription = ( select current PrimaryKey() from RPSSubscription )" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete6" />
+              <Delete DataTable="AdditionalSubscribersUIDs" ScriptItemUID="Delete7" />
+              <FillTable DataTable="AdditionalSubscribersUIDs" Expression="split(from LocalVars select UID_SelectedPerson, char(7),false)" DataColumn="UID_Person" ScriptItemUID="FillTable1">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+              </FillTable>
+              <ForeachRow DataTable="AdditionalSubscribersUIDs" ScriptItemUID="ForeachRow2">
+                <ActionSequence ScriptItemUID="Action18">
+                  <Insert DataTable="AdditionalSubscribers" ScriptItemUID="Insert2">
+                    <ActionSequence ScriptItemUID="Action19" />
+                    <InsertValue DataColumn="UID_RPSSubscription" Value="select current PrimaryKey() from RPSSubscription " />
+                    <InsertValue DataColumn="UID_Person" Value="from AdditionalSubscribersUIDs select current UID_Person" />
+                  </Insert>
+                </ActionSequence>
+              </ForeachRow>
+              <Save DataTable="AdditionalSubscribers" ScriptItemUID="Save4" />
+              <ActionSequence Condition="(select Count() from PersonCC &#xD;&#xA;where uid_person in (select uid_person from AdditionalSubscribers where UID_RPSSubscription = (select current UID_RPSSubscription  from RPSSubscription)) &#xD;&#xA;and (cansee(defaultemailaddress) and isnullorempty(DefaultEmailAddress))) &gt; 0&#xD;&#xA;&#xD;&#xA;" ItemUID="check for email adress" ScriptItemUID="Action20">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call3">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container6">
+                      <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Container7style" Value="&quot;display: inline-block; vertical-align: top;&quot;" />
+                        </HtmlAttributes>
+                        <Image StockImage="Warning" StockImageSize="Large" ScriptItemUID="Image1" />
+                      </Container>
+                      <Label Text="translate('#LDS#The following recipients do not have an assigned e-mail address:')" ScriptItemUID="Label1" />
+                      <Grid ScriptItemUID="Grid1">
+                        <GridBand DataTable="PersonCC" WhereClause="uid_person in (select uid_person from AdditionalSubscribers where UID_RPSSubscription = (select current UID_RPSSubscription  from RPSSubscription)) &#xD;&#xA;and (cansee(defaultemailaddress) and isnullorempty(DefaultEmailAddress))" DisplayHeader="Never" Layout="'VI_Styles_GridBand_List'" ScriptItemUID="GridBand1">
+                          <GridBandListView ScriptItemUID="GridBandListView4" />
+                          <GridFilters ScriptItemUID="GridFilters4" />
+                          <GridRows />
+                          <GridColumnSimple ScriptItemUID="Column23" Column="__Display" />
+                        </GridBand>
+                      </Grid>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container8">
+                      <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef21" />
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Missing e-mail address')" ScriptItemUID="VirtualFunctionMapping13" />
+                </CallAction>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor20" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="XObjectKey(string type, string uid)" Expression="GetObjectKey(type ,uid, &quot;&quot;)" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="GetAdditionalSubscribersDisplay()" Expression="if ( (from RPSSubscription select current  hasPersons) &gt; 0 )&#xD;&#xA;then&#xD;&#xA;concat(from AdditionalSubscribers select DisplayValue(Uid_person) where UID_RPSSubscription = (from RPSSubscription select current uid_RPSSubscription) AND IsLoaded() = true, '; ')&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#No additional subscribers&quot;)" DataType="System.String" ScriptItemUID="Function2">
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor16" />
+        </Function>
+        <Function Name="GetScheduleDisplay()" Expression="from RPSSubscription select current isnullorempty( DisplayValue (UID_DialogSchedule), &quot;(&quot;+translate(&quot;#LDS#Not scheduled for automatic delivery&quot;)+&quot;)&quot;)" DataType="System.String" ScriptItemUID="Function3">
+          <DataTableCursor DataTable="RPSSubscription" ScriptItemUID="DataTableCursor9" />
+        </Function>
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

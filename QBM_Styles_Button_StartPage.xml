@@ -1,0 +1,45 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <LayoutObject ID="QBM_Styles_Button_StartPage" Type="Button" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="imx-button-StartPage" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.imx-button-StartPage {
+    min-width: 80px;
+    background-color: %VI_Common_Color_ColorBase1%;
+    color: %VI_Common_Color_ColorBase3%;
+    height: 2em;
+    float: right;
+    border: 1px solid %VI_Common_Color_LighterGray%;
+    border-radius: 16px;
+    text-align: center;
+}
+
+
+.imx-button-StartPage:hover {
+   border-color: %VI_Common_Color_Gray%;
+}
+.imx-button-StartPage:focus  {
+   border-color: %VI_Common_Color_Button_Primary_Hover%;
+   text-decoration: none; 
+   outline: 1px %VI_Common_Color_Button_Outline% dotted;
+   outline-offset: 1px;
+}
+
+.imx-button-StartPage:Disabled  {
+    color: %VI_Common_Color_Button_Font_Disabled%;
+	background-color: %VI_Common_Color_Button_Disabled%;
+	cursor: not-allowed;
+}
+
+@media %IMX_Mediaquery_Smartphone%
+{
+.imx-button-StartPage {
+    font-size: 1.1rem;
+    margin-top: inherit;
+    margin-right: inherit;
+	min-width: 30px;
+}	
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

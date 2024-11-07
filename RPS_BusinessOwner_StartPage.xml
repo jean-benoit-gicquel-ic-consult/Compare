@@ -1,0 +1,97 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="RPS_BusinessOwner_StartPage">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action3">
+            <Delete DataTable="Compliance" ScriptItemUID="Delete2" />
+            <ActionSequence ScriptItemUID="Action2" />
+            <CodeLiteral ScriptItemUID="CodeLiteral1">// calculate counts using list reports
+
+foreach (var row in Compliance)
+{
+	var identRpsReport = row.GetValue("IdentRpsReport").String;
+	var def = new ListReportControlDef {
+		IdentRpsReport = identRpsReport
+	};
+	
+	def.LoadOptions.DataParameters.Add(_Database.SqlFormatter().CreateDataParameter("ElementObjectKey", ValType.String,
+	new DbObjectKey("Person", _Database.User().Uid).ToXmlString()));
+	
+	var tryData = def.TryGetDataAsync(_Database).Result;
+	if (tryData.Success)
+	{
+		var data = tryData.Result;
+		var count = data.DataSource.GetLevel().GetTotalCountAsync().Result;
+		row.SetValue("Count", count);
+	}
+}</CodeLiteral>
+          </Action>
+        </Activator>
+        <SwitchContainer ScriptItemUID="TileCompliance">
+          <SwitchContainerCase ScriptItemUID="Case1" ItemUID="Tile Compliance" Condition="IsPreProp('COMPLIANCE') and (0 &lt; (select count() from compliance where count&gt; 0))">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef1">
+              <VirtualControlMapping ContainerType="Container" VirtualControl="Container">
+                <Container ScriptItemUID="Container4">
+                  <ContainerTemplate DataTable="Compliance" ScriptItemUID="ContainerTemplate1" Layout="" OrderBy="'Count desc'" WhereClause="count&gt;0" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="ul" />
+                      <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-valuelist&quot;" />
+                    </HtmlAttributes>
+                    <Container ScriptItemUID="Container5" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="li" />
+                      </HtmlAttributes>
+                      <LinkContainer ScriptItemUID="LinkContainer1">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <Label ScriptItemUID="Label1" Text="from compliance select current message" EnableCustomAttributes="true" EnableSubControls="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="&quot;imx-col&quot;" />
+                            </HtmlAttributes>
+                            <ControlList ScriptItemUID="ControlList5">
+                              <Label ScriptItemUID="Label2" Text="from compliance select current count" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                                </HtmlAttributes>
+                              </Label>
+                            </ControlList>
+                          </Label>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall1">
+                          <Redirect ScriptItemUID="Redirect2" AbortExecution="false" Target="Context" AllowReturnToThisContext="true" ContextID="RPS_ListReport_Form">
+                            <RedirectParameter Value="from compliance select current identrpsreport" Name="'IdentRpsReport'" />
+                            <RedirectParameter Value="getobjectkey(&quot;Person&quot;, getuser(), &quot;&quot;)" Name="'ElementObjectKey'" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </LinkContainer>
+                    </Container>
+                  </ContainerTemplate>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Compliance')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="ActionDisabled()" Value="true" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Identifier()" Value="&quot;Tile_Compliance&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Size()" Value="'Dashboard'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ContentType()" Value="'Container'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="Compliance" ScriptItemUID="DataTableCustom2">
+          <Column DataType="System.String" Name="Message" ScriptItemUID="Column4" />
+          <Column DataType="System.Int32" Name="Count" ScriptItemUID="Column5" />
+          <Column DataType="System.String" Name="IdentRpsReport" ScriptItemUID="Column1" TriggerUpdates="Never" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

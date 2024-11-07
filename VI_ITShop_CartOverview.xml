@@ -1,0 +1,217 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl ID="VI_ITShop_CartOverview" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action10" />
+      <GridBand DataTable="ShoppingCartItem" IsRecursive="true" WhereClause="isactivated and isnull( uid_shoppingcartitemparent, '' ) = '' and additionalfilter()" OrderBy="'UID_AccProduct'" RecursiveWhereClause="uid_shoppingcartitemparent = ( select current uid_shoppingcartitem from shoppingcartitem)" ScriptItemUID="GridBand1" RowSelection="true" DisplayHeader="Always" DataTableForSelection="Container" DataColumnForSelection="UID_ShoppingCartItemSelected">
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                <ControlList ScriptItemUID="ControlList7">
+                  <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = (select current uid_accproduct from ShoppingCartItem)" ScriptItemUID="ContainerTemplate3">
+                    <AccProductSwitchContainer ActionType="Details_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from ShoppingCartItem" ScriptItemUID="ProductRef1">
+                      <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping9" />
+                      <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping8" />
+                    </AccProductSwitchContainer>
+                    <Container Condition="0 &lt; (select count() from PersonWantsOrg where Uid_personwantsorg = (select current uid_personwantsorg from ShoppingCartItem) and isnull(ObjectKeyAssignment,'') &lt;&gt; '')" ScriptItemUID="Container2" ItemUID="Assignment info for base PWO" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;imx-icon&quot;" />
+                      </HtmlAttributes>
+                      <ContainerTemplate DataTable="PersonWantsOrg" WhereClause="Uid_personwantsorg = select current uid_personwantsorg from ShoppingCartItem" ScriptItemUID="ContainerTemplate4">
+                        <Container Condition="0 &lt; select count() from PersonWantsOrg where &#xD;&#xA;Uid_personwantsorg = (select current uid_personwantsorg from ShoppingCartItem) &#xD;&#xA;and&#xD;&#xA;isnull(ObjectKeyAssignment,'') &lt;&gt; ''" ScriptItemUID="Container3">
+                          <ControlReferenceContainer ID="VI_ITShop_AssignmentInfo" ScriptItemUID="ControlRef2">
+                            <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping7" />
+                          </ControlReferenceContainer>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                    <Container Condition="from ShoppingCartItem select current&#xD;&#xA;(isnull(ObjectKeyAssignment,'') &lt;&gt; ''&#xD;&#xA;and&#xD;&#xA;not(isnull(Uid_PersonWantsOrg,'') &lt;&gt; '')&#xD;&#xA;)" ScriptItemUID="Container1" ItemUID="Assignment info for shopping cart item" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-icon&quot;" />
+                      </HtmlAttributes>
+                      <ControlReferenceContainer ID="VI_ITShop_AssignmentInfo" ScriptItemUID="ControlRef1">
+                        <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping6">
+                          <VirtualColumnMapping VirtualColumn="ObjectKeyAssignment" DataColumn="ObjectKeyAssignment" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                    </Container>
+                  </ContainerTemplate>
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                <ControlList ScriptItemUID="ControlList9">
+                  <LayoutPanel ScriptItemUID="LayoutPanel1">
+                    <ContainerColumnTemplate DataTable="ShoppingCartItem" ScriptItemUID="ContainerColumnTemplate2">
+                      <ColumnList ScriptItemUID="ColumnList3">
+                        <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
+                        <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="OrderType" Condition="not(from ShoppingCartItem select current IsNullOrEmpty(UID_PersonWantsOrg))" />
+                        <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="UID_PersonOrdered" Condition="not(IsHidePersonOrdered())" />
+                        <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="CheckStatus" Condition="not(isForLater())" />
+                      </ColumnList>
+                      <Container ScriptItemUID="Container6">
+                        <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping10">
+                            <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                          </VirtualTableMapping>
+                          <VirtualFunctionMapping ID="IsAlwaysReadOnly()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                        </ControlReferenceContainer>
+                      </Container>
+                      <Container ScriptItemUID="Container7">
+                        <SwitchContainer ScriptItemUID="Switch2">
+                          <SwitchContainerCase ScriptItemUID="Case1" Condition="{{_currentColumn.ColumnName == &quot;OrderType&quot;}}">
+                            <Label Text="(if(from ShoppingCartItem select current OrderType='Prolongate')&#xD;&#xA;then translate(&quot;#LDS#Renewal&quot;) else translate(&quot;#LDS#Request cancelation&quot;))" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-icon imx-icon-Information&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </SwitchContainerCase>
+                          <SwitchContainerCase ScriptItemUID="Case2" Condition="{{_currentColumn.ColumnName == &quot;CheckStatus&quot;}}">
+                            <Label Text="if(0 &lt; (from ShoppingCartItem select count() where UID_ShoppingCartItemparent = (from ShoppingCartItem select current UID_ShoppingCartItem) and (isnullorempty(checkstatus,&quot;OK&quot;)&lt;&gt;'OK'))&#xD;&#xA;and from ShoppingCartItem select current isnullorempty(checkstatus,&quot;OK&quot;)='OK'&#xD;&#xA;)then&#xD;&#xA;   translate(&quot;#LDS#See dependent requests.&quot;)&#xD;&#xA;else&#xD;&#xA;   from shoppingcartitem select current displayvalue(checkstatus)" ScriptItemUID="Label2" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute9" Value="if(0 &lt; (from ShoppingCartItem select count() where UID_ShoppingCartItemparent = (from ShoppingCartItem select current UID_ShoppingCartItem) and (isnullorempty(checkstatus,&quot;OK&quot;)&lt;&gt;'OK'))&#xD;&#xA;and from ShoppingCartItem select current isnullorempty(checkstatus,&quot;OK&quot;)='OK'&#xD;&#xA;)then(&#xD;&#xA;&quot;imx-icon imx-icon-warning&quot;&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;from ShoppingCartItem select current&#xD;&#xA;if(isnullorempty(checkstatus)) then &quot;&quot;&#xD;&#xA;else&#xD;&#xA;(&quot;imx-icon &quot;+&#xD;&#xA;if( CheckStatus = 'OK')then &quot;imx-icon-ok&quot;&#xD;&#xA;else if(CheckStatus in ('Right','Existing','Time','Forbidden_Doublettes','ExistingAssignment','Invalid','Error','PermissionExclusion'))then &quot;imx-icon-Error&quot;&#xD;&#xA;else &quot;imx-icon-warning&quot;)&#xD;&#xA;)" />
+                              </HtmlAttributes>
+                            </Label>
+                          </SwitchContainerCase>
+                          <SwitchContainerCase ScriptItemUID="Case3">
+                            <ColumnEditor DataTable="ShoppingCartItem" DataColumn="currentcolumn" Type="IsForView" ScriptItemUID="ColumnEditor2">
+                              <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                            </ColumnEditor>
+                          </SwitchContainerCase>
+                        </SwitchContainer>
+                      </Container>
+                    </ContainerColumnTemplate>
+                  </LayoutPanel>
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                <ControlList ScriptItemUID="ControlList2">
+                  <Container ScriptItemUID="Container4" Condition="isForLater()">
+                    <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef14">
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="IsReadOnly()" Value="false" />
+                      <VirtualTableMapping ScriptItemUID="VirtualTableMapping11" VirtualTable="EditTable" DataTable="ShoppingCartItem">
+                        <VirtualColumnMapping DataColumn="Selected" VirtualColumn="DoSelect" />
+                      </VirtualTableMapping>
+                    </ControlReferenceControlList>
+                  </Container>
+                </ControlList>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <GridColumn Width="'40px'" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="GridColumn34" Condition="isForLater()">
+          <GridColumnHeader ScriptItemUID="wctl3">
+            <Label ScriptItemUID="Label1" Text="translate('#LDS#Heading Select')" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell4">
+            <Container ScriptItemUID="Container8" IsBeginRenderPart="true" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute6" Value="translate('#LDS#Heading Select')" />
+              </HtmlAttributes>
+              <CheckBox DataTable="ShoppingCartItem" DataColumn="Selected" ScriptItemUID="CheckBox2" />
+            </Container>
+          </Cell>
+        </GridColumn>
+        <GridColumn Width="'100%'" SortColumn="UID_AccProduct" AutoFilterColumn="UID_AccProduct" ScriptItemUID="GridColumn2">
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Label Text="translate('#LDS#Request')" ScriptItemUID="Label4" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell3">
+            <ContainerTemplate DataTable="AccProduct" WhereClause="uid_accproduct = (select current uid_accproduct from ShoppingCartItem)" ScriptItemUID="ContainerTemplate1">
+              <AccProductSwitchContainer ActionType="Details_ShoppingCartItem" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from ShoppingCartItem" ScriptItemUID="AccProductSwitchContainer1">
+                <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
+                <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping2" />
+              </AccProductSwitchContainer>
+              <Container Condition="from ShoppingCartItem select current isnull(Uid_PersonWantsOrg,'') &lt;&gt; ''" ScriptItemUID="Container9" ItemUID="Assignment info for base PWO" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;imx-icon&quot;" />
+                </HtmlAttributes>
+                <ContainerTemplate DataTable="PersonWantsOrg" WhereClause="Uid_personwantsorg = select current uid_personwantsorg from ShoppingCartItem" ScriptItemUID="ContainerTemplate2">
+                  <Container Condition="0 &lt; select count() from PersonWantsOrg where &#xD;&#xA;Uid_personwantsorg = (select current uid_personwantsorg from ShoppingCartItem) &#xD;&#xA;and&#xD;&#xA;isnull(ObjectKeyAssignment,'') &lt;&gt; ''" ScriptItemUID="Container10">
+                    <ControlReferenceContainer ID="VI_ITShop_AssignmentInfo" ScriptItemUID="ControlReferenceContainer2">
+                      <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping3" />
+                    </ControlReferenceContainer>
+                  </Container>
+                </ContainerTemplate>
+              </Container>
+              <Container Condition="from ShoppingCartItem select current&#xD;&#xA;(isnull(ObjectKeyAssignment,'') &lt;&gt; ''&#xD;&#xA;and&#xD;&#xA;not(isnull(Uid_PersonWantsOrg,'') &lt;&gt; '')&#xD;&#xA;)" ScriptItemUID="Container11" ItemUID="Assignment info for shopping cart item" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-icon&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="VI_ITShop_AssignmentInfo" ScriptItemUID="ControlReferenceContainer3">
+                  <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping4">
+                    <VirtualColumnMapping VirtualColumn="ObjectKeyAssignment" DataColumn="ObjectKeyAssignment" />
+                  </VirtualTableMapping>
+                </ControlReferenceContainer>
+              </Container>
+            </ContainerTemplate>
+            <Container Condition="not(from ShoppingCartItem select current IsNullOrEmpty(UID_PersonWantsOrg))" ScriptItemUID="Container12" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'style'" ScriptItemUID="Container12style" Value="&quot;margin-left: 22px;&quot;" />
+              </HtmlAttributes>
+              <Label Text="(if(from ShoppingCartItem select current OrderType='Prolongate')&#xD;&#xA;then translate(&quot;#LDS#Renewal&quot;) else translate(&quot;#LDS#Request cancelation&quot;))" ScriptItemUID="Label5" />
+            </Container>
+          </Cell>
+        </GridColumn>
+        <ControlReferenceGridColumnGroup ID="VI_ITShop_ShoppingCartItem_GridColumns" DataTable="ShoppingCartItem" ScriptItemUID="Columngroup2">
+          <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping5" />
+          <VirtualFunctionMapping ID="HidePersonOrdered()" Value="IsHidePersonOrdered()" ScriptItemUID="VirtualFunctionMapping1" />
+        </ControlReferenceGridColumnGroup>
+        <GridColumn Width="'200px'" SortColumn="CheckStatus" Condition="not(isForLater())" ScriptItemUID="GridColumn1">
+          <GridColumnHeader ScriptItemUID="wctl2">
+            <Label Text="translate('#LDS#Status')" ScriptItemUID="Label3" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell2">
+            <Label Text="if(0 &lt; (from ShoppingCartItem select count() where UID_ShoppingCartItemparent = (from ShoppingCartItem select current UID_ShoppingCartItem) and (isnullorempty(checkstatus,&quot;OK&quot;)&lt;&gt;'OK'))&#xD;&#xA;and from ShoppingCartItem select current isnullorempty(checkstatus,&quot;OK&quot;)='OK'&#xD;&#xA;)then&#xD;&#xA;   translate(&quot;#LDS#See dependent requests.&quot;)&#xD;&#xA;else&#xD;&#xA;   from shoppingcartitem select current displayvalue(checkstatus)" ScriptItemUID="Label6" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute5" Value="if(0 &lt; (from ShoppingCartItem select count() where UID_ShoppingCartItemparent = (from ShoppingCartItem select current UID_ShoppingCartItem) and (isnullorempty(checkstatus,&quot;OK&quot;)&lt;&gt;'OK'))&#xD;&#xA;and from ShoppingCartItem select current isnullorempty(checkstatus,&quot;OK&quot;)='OK'&#xD;&#xA;)then(&#xD;&#xA;&quot;imx-icon imx-icon-warning&quot;&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;from ShoppingCartItem select current&#xD;&#xA;if(isnullorempty(checkstatus)) then &quot;&quot;&#xD;&#xA;else&#xD;&#xA;(&quot;imx-icon &quot;+&#xD;&#xA;if( CheckStatus = 'OK')then &quot;imx-icon-ok&quot;&#xD;&#xA;else if(CheckStatus in ('Right','Existing','Time','Forbidden_Doublettes','ExistingAssignment','Invalid','Error','PermissionExclusion','RuleNoException'))then &quot;imx-icon-Error&quot;&#xD;&#xA;else &quot;imx-icon-warning&quot;)&#xD;&#xA;)" />
+              </HtmlAttributes>
+            </Label>
+          </Cell>
+        </GridColumn>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableFKView Table="PersonWantsOrg" ViewFKDataTable="ShoppingCartItem" ViewFKDataColumn="UID_PersonWantsOrg" ScriptItemUID="DataTableFKView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </DataTableFKView>
+        <DataTableCRView Class="PWODecisionHistory" Table="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PersonWantsOrg" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableCRView>
+        <DataTableFKView Table="AccProduct" ViewFKDataTable="ShoppingCartItem" ViewFKDataColumn="UID_AccProduct" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="isForLater()" Expression="0 &lt; select count() from ShoppingCartItem where IsNullOrEmpty(UID_ShoppingCartOrder)" DataType="System.Boolean" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="ShoppingCartItem" ScriptItemUID="DataEventHandler11">
+          <ActionSequence ScriptItemUID="Action58">
+            <Update DataTable="ShoppingCartItem" DataColumn="Selected" Value="Selected" WhereClause="UID_ShoppingCartItemParent = (from ShoppingCartItem select Current UID_ShoppingCartItem)&#xD;&#xA;Or&#xD;&#xA;UID_ShoppingCartItem = (from ShoppingCartItem select Current UID_ShoppingCartItemParent)" ScriptItemUID="Update38" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="Selected" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="AdditionalFilter()" DataType="System.Boolean" FilterForTable="ShoppingCartItem" DefaultValue="true" />
+      <VirtualFunction Signature="IsHidePersonOrdered()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="OrderType" DataType="System.String" />
+        <VirtualColumn Name="CheckStatus" DataType="System.String" />
+        <VirtualColumn Name="Selected" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualControl ID="OnShoppingCartItemSelected" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="ShoppingCartItem" />
+      </VirtualControl>
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable1" RequiresCursor="true">
+        <VirtualColumn Name="UID_ShoppingCartItemSelected" DataType="System.String" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

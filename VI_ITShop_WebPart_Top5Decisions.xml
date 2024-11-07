@@ -1,0 +1,73 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl ID="VI_ITShop_WebPart_Top5Decisions" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="WebParts" Description="" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_WebPart_Top5Decisions_Visibility" Description="translate(&quot;#LDS#Display web component '{0}'&quot;, translate(&quot;#LDS#Overview of your decisions&quot;))" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" Condition="getconfig(&quot;VI_ITShop_WebPart_Top5Decisions_Visibility&quot;)=&quot;true&quot;">
+        <LoadTable DataTable="PWORecent" RemoveDeleted="false" WhereClause="format(&quot;uid_personwantsorg in (select uid_personwantsorg from QER_VITShopDecisionPerson where decisionorcomment = 'D' and rulerlevel &lt;&gt; 2 and uid_person = '{0}')&quot;,getuser())" LoadLimit="5" ScriptItemUID="LoadTable2" OrderBy="&quot;XDateInserted desc&quot;">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true" Condition="getconfig(&quot;VI_ITShop_WebPart_Top5Decisions_Visibility&quot;)=&quot;true&quot;">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="&quot;margin-bottom: 12px;&quot;" />
+        </HtmlAttributes>
+        <Container ScriptItemUID="Container15" ItemUID="pending requests" Condition="0 &lt; select count() from pworecent">
+          <Container ScriptItemUID="Container16" Layout="'VI_Styles_Container_Heading_2'">
+            <Label Text="translate(&quot;#LDS#Pending Requests&quot;)" ScriptItemUID="Label15" />
+          </Container>
+          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PWORecent" Layout="" EnableCustomAttributes="true" OrderBy="'XDateInserted desc'">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="ul" />
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-list&quot;" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate1style" Value="" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="li" />
+              </HtmlAttributes>
+              <ControlReferenceControlList ID="VI_Common_WebPart_TaskTile" ScriptItemUID="ControlRef2">
+                <VirtualControlMapping VirtualControl="Clicked" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action3">
+                    <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_Approvals">
+                      <RedirectParameter Name="'UID_PersonWantsOrg'" Value="from pworecent select current uid_personwantsorg" />
+                    </Redirect>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="TimeStamp()" Value="from pworecent select current orderdate" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="HeadText()" Value="from pworecent select current display()" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="SecondaryText()" Value="from pworecent select current displaypersonordered" ScriptItemUID="VirtualFunctionMapping3" />
+              </ControlReferenceControlList>
+            </Container>
+          </ContainerTemplate>
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="&quot;font-style: italic; text-align: right;&quot;" />
+            </HtmlAttributes>
+            <Label Text="&quot;&gt; &quot;+ translate(&quot;#LDS#View all pending requests&quot;)" ScriptItemUID="Label1" Action="Redirect">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Redirect ScriptItemUID="Redirect2" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_Approvals" />
+              </ServerActionCall>
+            </Label>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="PWORecent" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action5" />
+        </DataTableDbObject>
+        <DataTableCRView Table="PWODecisionHistory" Class="PWODecisionHistory" CRDataColumn="UID_PersonWantsOrg" ViewFKDataTable="PWORecent" ScriptItemUID="DataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableCRView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

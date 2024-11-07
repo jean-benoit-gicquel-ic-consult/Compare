@@ -1,0 +1,131 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <Context ID="VI_MyData_PersonalData" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;E6F067FE-54D5-4017-9ACF-ED03D903FA49&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1" Cardinality="Single" SingleInstanceTimeout="" DefaultLinkObjectID="Portal_IAM_MyIdentity">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject ScriptItemUID="DataTableDbObject2" Table="DialogDashboarddef" Class="DialogDashBoardDef" WhereClauseSQL="{{&#xD;&#xA;IUserSession us = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();&#xD;&#xA;var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();&#xD;&#xA;&#xD;&#xA;var gets = provider.Get();&#xD;&#xA;var returnValue = &quot;ident_dialogdashboarddef in (&quot;;&#xD;&#xA;if (!gets.ExcludedIdents.Any()){&#xD;&#xA;returnValue = &quot;0=1&quot;;&#xD;&#xA;} else {&#xD;&#xA;&#xD;&#xA;var isFirst = true;&#xD;&#xA;foreach (var bla in gets.ExcludedIdents)&#xD;&#xA;{&#xD;&#xA;    if (!isFirst) {&#xD;&#xA;	returnValue += &quot;,&quot;;&#xD;&#xA;	} else {&#xD;&#xA;	isFirst= false;}&#xD;&#xA;	&#xD;&#xA;	returnValue += &quot;'&quot;+bla+ &quot;'&quot;;&#xD;&#xA;}&#xD;&#xA;returnValue +=&quot;)&quot;;&#xD;&#xA;&#xD;&#xA;}&#xD;&#xA;@return returnValue;&#xD;&#xA;&#xD;&#xA;}}">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+      <DataTableSingleRow ScriptItemUID="DataTableSingleRow1" Table="option">
+        <Column DataType="System.Boolean" Name="ShowNeutralTrend" ScriptItemUID="Column1" />
+      </DataTableSingleRow>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="person" Class="Person">
+        <ActionSequence ScriptItemUID="Action6" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate( '#LDS#My Settings' )" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action4" />
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+          <Tab ScriptItemUID="Tab1">
+            <TabPage ScriptItemUID="TabPage2" ItemUID="Mail Subscriptions">
+              <ControlsHeader ScriptItemUID="Container60">
+                <Label Text="translate(&quot;#LDS#Heading Mail Subscriptions&quot;)" ScriptItemUID="Label4" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'title'" ScriptItemUID="Label4title" Value="translate('#LDS#Settings for your email notifications')" />
+                  </HtmlAttributes>
+                </Label>
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container6">
+                <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef3">
+                  <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Here you can specify on which events you want to be notified by email.&quot;)" ScriptItemUID="VirtualFunctionMapping6" />
+                </ControlReferenceContainer>
+                <ControlReferenceContainer ID="VI_MyData_MailSubscriptions" ScriptItemUID="ControlRef4" />
+              </ControlsBody>
+            </TabPage>
+            <TabPage ScriptItemUID="TabPage1" Condition="{{&#xD;&#xA;var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();&#xD;&#xA;var chartSettingProvider = provider as ChartSettingsProvider;&#xD;&#xA;@return !(chartSettingProvider == null || !chartSettingProvider.IsEnabled());&#xD;&#xA;}}">
+              <ControlsHeader ScriptItemUID="Container1">
+                <Label ScriptItemUID="Label2" Text="translate(&quot;#LDS#Personal Dashboard Settings&quot;)" />
+              </ControlsHeader>
+              <ControlsBody ScriptItemUID="Container2">
+                <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+                  <Action ScriptItemUID="Action1">
+                    <LoadTable DataTable="DialogDashboarddef" ScriptItemUID="LoadTable1">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                    </LoadTable>
+                    <CodeLiteral ScriptItemUID="CodeLiteral1">var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();
+
+
+VI.WebRuntime.IDataColumn _ShowNeutralTrend2 = this.DataContext.option.GetColumn("ShowNeutralTrend");
+_ShowNeutralTrend2.SetValue(this.DataContext.option.SingleRow,provider.Get().ShowNeutralTrendCharts);
+</CodeLiteral>
+                  </Action>
+                </Activator>
+                <Container ScriptItemUID="Container3">
+                  <CheckBox DataTable="option" ScriptItemUID="CheckBox1" DataColumn="ShowNeutralTrend" Text="translate(&quot;#LDS#Show charts with neutral trends&quot;)" />
+                  <Container ScriptItemUID="Container5" Condition="(select count() from dialogdashboarddef) &gt;0">
+                    <Label ScriptItemUID="Label3" Text="translate(&quot;#LDS#The following charts are currently not being displayed. Click on an item to show the charts.&quot;)" />
+                    <HtmlNode ScriptItemUID="HtmlNode3" HtmlNodeName="br">
+                      <HtmlAttributes />
+                    </HtmlNode>
+                    <ContainerTemplate DataTable="DialogDashboarddef" ScriptItemUID="ContainerTemplate2" OrderBy="'__Display'">
+                      <LinkContainer ScriptItemUID="LinkContainer1">
+                        <ControlList ScriptItemUID="ControlList1">
+                          <Label Text="from dialogdashboarddef select current display()" ScriptItemUID="Label8" EnableCustomAttributes="true" ItemUID="display selected entry">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;imx-icon imx-icon-AssignedDirect imx-multiselect-delete&quot;" />
+                            </HtmlAttributes>
+                          </Label>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="wctl1">
+                          <ActionSequence ItemUID="Item is selected" ScriptItemUID="Action5">
+                            <Delete DataTable="DialogDashboarddef" ScriptItemUID="Delete1" WhereClause="ident_dialogdashboarddef= from dialogdashboarddef select current ident_dialogdashboarddef" />
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </LinkContainer>
+                      <HtmlNode ScriptItemUID="HtmlNode2" HtmlNodeName="br">
+                        <HtmlAttributes />
+                      </HtmlNode>
+                    </ContainerTemplate>
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="Container4" Layout="'VI_Styles_Container_ButtonBar'">
+                  <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="Default Button" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Primary'">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute2" />
+                    </HtmlAttributes>
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <CodeLiteral ScriptItemUID="CodeLiteral2">var us = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IUserSession&gt;();
+
+var provider = VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IChartSettingsProvider&gt;();
+
+VI.WebRuntime.IDataColumn _radio2 = this.TableStore.GetColumn(this.DataContext.DialogDashboarddef, "ident_dialogdashboarddef");
+
+var newSet = new System.Collections.Generic.List&lt;string&gt;();
+
+System.Collections.Generic.IEnumerator&lt;VI.WebRuntime.RowCursor&gt; _enumerating1 = new VI.WebRuntime.RowCursorList(this.DataContext.DialogDashboarddef).GetEnumerator();
+for (int _rowIndex1 = 0; _enumerating1.MoveNext(); _rowIndex1 = (_rowIndex1 + 1))
+{
+	VI.WebRuntime.RowCursor Update2_Current = _enumerating1.Current;
+	
+	var theVal =_radio2.GetValue(Update2_Current.Row).String;
+		
+	newSet.Add(theVal);
+	
+}
+VI.WebRuntime.IDataColumn _ShowNeutralTrend2 = this.DataContext.option.GetColumn("ShowNeutralTrend");
+var val = provider.Get();
+val.ShowNeutralTrendCharts =  _ShowNeutralTrend2.GetValue(this.DataContext.option.SingleRow).Bool;
+provider.Put(val);
+
+provider.SetExcluded(newSet);</CodeLiteral>
+                    </ServerActionCall>
+                  </Button>
+                </Container>
+              </ControlsBody>
+            </TabPage>
+          </Tab>
+        </PagePartContainer>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer2">
+          <Label Text="translate('#LDS#My Settings')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

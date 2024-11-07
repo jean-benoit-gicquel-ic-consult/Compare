@@ -1,0 +1,37 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Container_PortalSelection" Type="Container" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="portalSelection" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.portalSelection
+{  
+   position: absolute; 
+   top: %HeaderHeight%px; 
+   bottom: 0;
+   left: 0; 
+   width: %naviwidth%px;
+   word-wrap: break-word;
+   line-height: %UserNavigationHeight%px;
+   height: %UserNavigationHeight%px;
+   background-color:  %VI_Common_Color_LighterGray%;
+   color: %VI_Common_Color_ColorBase1%;
+   }
+.portalSelection:hover,
+.portalSelection:focus,
+.portalSelection:active {background-color: %VI_Common_Color_ColorBase3%;}
+
+.portalSelection.imx-elementbeingreplaced
+{ 
+   opacity: 1;
+   transition: none;
+}</CssDocument>
+    <CssDocument CssName="CSS Mobile" ScriptItemUID="CssDocument2">.ui-mobile .portalSelection 
+{
+  position: inherit;
+  background: %VI_Common_Color_ColorBase2%;
+  width: %MobileNaviWidth%em;
+}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

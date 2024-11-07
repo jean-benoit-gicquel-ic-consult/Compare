@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2014-01-03" ID="CPL_Interfaces_ObjectSwitch_Edit_PersonWantsOrg_Ext">
+    <Extensions>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable">
+        <VirtualColumn Name="CheckStatus" DataType="System.Boolean" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

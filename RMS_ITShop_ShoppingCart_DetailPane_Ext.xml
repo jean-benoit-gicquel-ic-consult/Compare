@@ -1,0 +1,31 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_ITShop_ShoppingCart_DetailPane_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab1" ObjectType="Tab">
+        <TabPage ScriptItemUID="RMSTabPage1" Condition="-- does this service item correspond to a system role?&#xD;&#xA;convert({{&#xD;&#xA;var uidaccproduct = this.ShoppingCartItem_Current.Row.GetValue(&quot;UID_AccProduct&quot;);&#xD;&#xA;@return QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, uidaccproduct).Result.TableName == &quot;ESet&quot;; }}, &quot;System.Boolean&quot;)">
+          <ControlsHeader ScriptItemUID="RMSContainer1">
+            <Label Text="translate(&quot;#LDS#Entitlements&quot;)" ScriptItemUID="RMSLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="RMSContainer2">
+            <ControlReferenceControlList ID="RMS_EntitlementList" ScriptItemUID="RMSControlRef1">
+              <VirtualFunctionMapping ID="UidAccProduct()" Value="from shoppingcartitem select current uid_accproduct" ScriptItemUID="RMSVirtualFunctionMapping1" />
+            </ControlReferenceControlList>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Container5" ObjectType="Container" SortOrder="15">
+        <Container ScriptItemUID="RMSContainer3" Condition="isESetHasEntitlement()">
+          <LayoutPanel ScriptItemUID="LayoutPanel2">
+            <Label Text="DataCaptionSingle('Eset')+&quot;&quot;" ScriptItemUID="RMSLabel3" />
+            <Label ScriptItemUID="RMSLabel2" Text="from ShoppingCartItem select DisplayValue(ObjectKeyOrgUsedInAssign)" />
+            <Label ScriptItemUID="Label7" Text="from ShoppingCartItem select DataCaptionSingle(GetObjectKeyTable(ObjectKeyelementUsedInAssign))" />
+            <Label ScriptItemUID="Label6" Text="from ShoppingCartItem select DisplayValue(ObjectKeyElementUsedInAssign)" />
+          </LayoutPanel>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function ScriptItemUID="RMSFunction1" Name="isESetHasEntitlement()" DataType="System.Boolean" Expression="(from shoppingcartitem select Current uid_accproduct = 'RMS-79b6410a215f48aa8648cd20bf1d4ed1')" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

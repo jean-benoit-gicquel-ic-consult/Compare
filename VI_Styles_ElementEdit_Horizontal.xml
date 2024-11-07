@@ -1,0 +1,8 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_ElementEdit_Horizontal" Type="ElementEdit" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <ContextParameters />
+    </ContextConfiguration>
+    <Property Name="LayoutType" Value="Horizontal" Comment="" />
+  </LayoutObject>
+</WebDesigner>

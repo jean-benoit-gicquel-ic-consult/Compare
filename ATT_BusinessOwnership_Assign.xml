@@ -1,0 +1,272 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="ATT_BusinessOwnership_Assign" AllowUrlNavigation="true" HelpChapterUid="&quot;EB31885A-E2C1-42C0-AB2D-483A88649166&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <TypeMember>internal async Task CreateAttestationAsync(string uidAttestationPolicy, string uidPerson, string objectKey, CancellationToken ct)
+{
+	var db = _UserSession.Database;
+
+	var ap = db.Source().Get("AttestationPolicy", uidAttestationPolicy, EntityLoadType.Interactive);
+try 
+{
+	await _Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+	var caseKey = new DbObjectKey( ((IDbObjectKey) await ap.CallFunctionAsync("CreateAttestation", objectKey, ct).ConfigureAwait(false)).ToXmlString());
+	
+	var dps = await _Database.Source().CreateNewAsync("DialogParameterSet", EntityCreationType.Interactive, ct).ConfigureAwait(false);
+	dps.PutValue("DisplayName", caseKey.Keys[0]);
+	dps.PutValue("ObjectKeyUsedBy", caseKey.ToXmlString());
+
+	var dp = await _Database.Source().CreateNewAsync("DialogParameter", EntityCreationType.DelayedLogic, ct).ConfigureAwait(false);
+	dp.PutValue("UID_DialogParameterSet", dps.GetValue&lt;string&gt;("UID_DialogParameterSet"));
+	dp.PutValue("ParameterName", "UID_PROPOSED_OWNER");
+	dp.PutValue("DisplayName", "Suggested owner");
+	dp.PutValue("IsMandatory", true);
+	dp.PutValue("UID_DialogColumnQuery", "QER-CA9C55F788954D2CBB1B864D8D21B17F"); // Person.UID_Person
+	dp.PutValue("ParameterType", "Query");
+	dp.PutValue("DataSourceType", "Table");
+	dp.PutValue("DataType", 6); // string
+	dp.PutValue("ParameterValue", uidPerson);
+	dp.PutValue("Description", GetParameterDescription());
+	
+	using (var u = _Database.StartUnitOfWork())
+	{
+		await u.PutAsync(dps, ct).ConfigureAwait(false);
+		await u.PutAsync(dp, ct).ConfigureAwait(false);
+		await u.CommitAsync(ct).ConfigureAwait(false);
+	}
+	
+	await _Database.CommitTransactionAsync(ct).ConfigureAwait(false);
+}
+catch
+{
+	_Database.RollbackTransactionAsync(ct).Wait();
+	throw;
+}
+
+}</TypeMember>
+        <NamespaceImport Namespace="System.Threading" />
+        <NamespaceImport Namespace="System.Threading.Tasks" />
+      </CompilationSettings>
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="Assign Business Ownership" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#Assign ownership&quot;)">
+        <ConfigParam Key="ATT_BusinessOwnership_Assign_Active" Description="translate(&quot;#LDS#Users can assign business ownerships&quot;)" />
+        <ConfigParam Key="ATT_BusinessOwnership_Filter_Hardware" Description="translate(&quot;#LDS#Business ownership assignment: Filter for devices&quot;)" Type="SQL" DatabaseTable="Hardware" />
+        <ConfigParam Key="ATT_BusinessOwnership_Filter_Hardware_Suggestion" Description="translate(&quot;#LDS#Business ownership assignment: Suggested device owners&quot;)" Type="SQL" DatabaseTable="Person" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow ScriptItemUID="DataTableCustom1" Table="Vars">
+        <Column DataType="System.String" Name="UID_Hardware" ScriptItemUID="Column1" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_Hardware&quot;" DBTableName="&quot;Hardware&quot;" FKWhereClause="getconfig(&quot;ATT_BusinessOwnership_Filter_Hardware&quot;)" MinLength="1" />
+        <Column DataType="System.String" Name="HardwareUID_PersonOwner" ScriptItemUID="Column2" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_Person&quot;" DBTableName="&quot;Person&quot;" FKWhereClause="&quot;isinactive=0&quot;" MinLength="1" />
+        <Column DataType="System.Boolean" Name="HardwareOwnerManual" ScriptItemUID="Column3" />
+      </DataTableSingleRow>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="Hardware" Class="Hardware">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+      <DataTableDbObject ScriptItemUID="DataTableDbObject2" Table="PersonSuggestionHardware" Class="Person">
+        <ActionSequence ScriptItemUID="Action9" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function ScriptItemUID="Function1" Name="GetParameterDescription()" DataType="System.String" Expression="translate(&quot;#LDS#If the selected owner for the business object is not correct, select the correct owner.&quot;)" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+        <ActionSequence ScriptItemUID="Action4">
+          <LoadTable DataTable="Hardware" ScriptItemUID="LoadTable1" WhereClause="sqlcompareuid(&quot;uid_hardware&quot;, from vars select uid_hardware)" RemoveDeleted="false">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="UID_Hardware" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Form" NavigationTitle="translate(&quot;#LDS#Heading Assign Ownership&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Heading Assign Ownership&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+          <Container ScriptItemUID="Container1">
+            <Label ScriptItemUID="Label8" EnableCustomAttributes="true" Text="translate(&quot;#LDS#Select the type of business object to start.&quot;)">
+              <HtmlAttributes>
+                <Property Name="TagName" Value="p" />
+              </HtmlAttributes>
+            </Label>
+            <Container ScriptItemUID="Container2">
+              <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef1" ItemUID="Hardware">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Identifier()" Value="&quot;Hardware&quot;" />
+                <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                  <ActionComponent ScriptItemUID="Action13">
+                    <ActionSequence ScriptItemUID="Action14" Condition="Exists(&#xD;&#xA;   &quot;AttestationPolicy&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Attestationpolicy&quot;,&quot;ATT-A82E1A00FC874F0D9F20EB43D1E50727&quot;),&#xD;&#xA;      Sqlcompare(&quot;IsInActive&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;   )&#xD;&#xA;)" ItemUID="AttestationPolicy deactivated">
+                      <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call1">
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Device ownership attestation is deactivated.&quot;)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping9" />
+                        <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping8" />
+                      </CallAction>
+                      <EndExecution />
+                    </ActionSequence>
+                    <Update DataColumn="HardwareUID_PersonOwner" DataTable="Vars" ScriptItemUID="Update3" />
+                    <Update DataColumn="UID_Hardware" DataTable="Vars" ScriptItemUID="Update4" />
+                    <Popup DisplayType="Controls">
+                      <Container ScriptItemUID="Container17" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+                        </HtmlAttributes>
+                        <Wizard ScriptItemUID="Wizard2">
+                          <OnCancel ScriptItemUID="Action15">
+                            <ActionOnControl />
+                          </OnCancel>
+                          <WizardPage ScriptItemUID="WizardPage6" Title="translate(&quot;#LDS#Select a device&quot;)" AllowBackAction="false">
+                            <OnNext ScriptItemUID="Action19">
+                              <ActionOnControl ActionType="PerformValidation" />
+                              <LoadTable DataTable="PersonSuggestionHardware" ScriptItemUID="LoadTable3" WhereClause="format(getconfig(&quot;ATT_BusinessOwnership_Filter_Hardware_Suggestion&quot;),&#xD;&#xA;sqlformatvalue(from vars select uid_hardware, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+                                <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" LoadTypeForeignDisplaysForAllColumns="false" ConvertToInteractive="false" />
+                              </LoadTable>
+                            </OnNext>
+                            <Label ScriptItemUID="Label16" Text="translate(&quot;#LDS#Assign an owner to a device&quot;)" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <Property Name="TagName" Value="h2" />
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute20" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-table-Hardware-large&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                            <Container ScriptItemUID="Container30" EnableCustomAttributes="true" ItemUID="message container">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute19" />
+                              </HtmlAttributes>
+                            </Container>
+                            <Container ScriptItemUID="Container29">
+                              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef9">
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="PropertyList()" IsPropertyList="true">
+                                  <ColumnList ScriptItemUID="ColumnList4">
+                                    <SingleColumn ScriptItemUID="SingleColumn4" DataColumn="UID_Hardware" />
+                                  </ColumnList>
+                                </VirtualFunctionMapping>
+                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping6" VirtualTable="EditTable" DataTable="Vars" />
+                              </ControlReferenceContainer>
+                              <ContainerTemplate DataTable="Hardware" ScriptItemUID="ContainerTemplate2" WhereClause="uid_hardware = ( from vars select uid_hardware)">
+                                <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef8">
+                                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="Text()" Value="translate(&quot;#LDS#You have selected the following device.&quot;)" />
+                                </ControlReferenceContainer>
+                                <ObjectSwitchContainer ObjectKey="&quot;&lt;Key&gt;&lt;T&gt;DialogTable&lt;/T&gt;&lt;P&gt;QER-T-Hardware&lt;/P&gt;&lt;/Key&gt;&quot;" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer2">
+                                  <VirtualTableMapping ScriptItemUID="VirtualTableMapping5" VirtualTable="SourceObject" DataTable="Hardware" />
+                                </ObjectSwitchContainer>
+                              </ContainerTemplate>
+                            </Container>
+                          </WizardPage>
+                          <WizardPage ScriptItemUID="WizardPage5" Title="translate(&quot;#LDS#Select the new owner&quot;)">
+                            <OnNext ScriptItemUID="Action18">
+                              <ActionOnControl ActionType="PerformValidation" />
+                              <CodeLiteral ScriptItemUID="CodeLiteral2">var key = new DbObjectKey("Hardware", DataContext.Vars.SingleRow.GetValue("UID_Hardware")).ToXmlString();
+var uidPerson = DataContext.Vars.GetColumn("HardwareUID_PersonOwner").GetValue(DataContext.Vars.SingleRow);
+await DataContext.CreateAttestationAsync("ATT-A82E1A00FC874F0D9F20EB43D1E50727", uidPerson, key, ct).ConfigureAwait(false);</CodeLiteral>
+                            </OnNext>
+                            <OnBack ScriptItemUID="Action17" />
+                            <Label ScriptItemUID="Label15" Text="translate(&quot;#LDS#Assign an owner to a device&quot;)" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <Property Name="TagName" Value="h2" />
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute18" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-table-Hardware-large&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                            <Container ScriptItemUID="Container28" EnableCustomAttributes="true" ItemUID="message container">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute17" />
+                              </HtmlAttributes>
+                            </Container>
+                            <Container ScriptItemUID="Container18">
+                              <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef7">
+                                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="PropertyList()" IsPropertyList="true">
+                                  <ColumnList ScriptItemUID="ColumnList3">
+                                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="UID_Hardware" CannotEdit="true" />
+                                  </ColumnList>
+                                </VirtualFunctionMapping>
+                                <VirtualTableMapping ScriptItemUID="VirtualTableMapping3" VirtualTable="EditTable" DataTable="Vars" />
+                              </ControlReferenceContainer>
+                              <LayoutPanel ScriptItemUID="LayoutPanel2">
+                                <Container ScriptItemUID="Container27" />
+                                <Container ScriptItemUID="Container24" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <Property Name="TagName" Value="fieldset" />
+                                  </HtmlAttributes>
+                                  <Container ScriptItemUID="Container26">
+                                    <RadioButton DataTable="Vars" ScriptItemUID="RadioButton4" DataColumn="HardwareOwnerManual" DataValue="false" Text="translate(&quot;#LDS#Select one of the calculated possible owners&quot;)" />
+                                  </Container>
+                                  <Container ScriptItemUID="Container25">
+                                    <RadioButton DataTable="Vars" ScriptItemUID="RadioButton3" DataColumn="HardwareOwnerManual" DataValue="true" Text="translate(&quot;#LDS#Select another owner&quot;)" />
+                                  </Container>
+                                </Container>
+                                <Container ScriptItemUID="Container23" />
+                                <Container ScriptItemUID="Container20">
+                                  <Container ScriptItemUID="Container22" Condition="from vars select not(hardwareownermanual)">
+                                    <ComboBox DataColumn="HardwareUID_PersonOwner" DataTable="Vars" ScriptItemUID="ComboBox2" SourceTable="PersonSuggestionHardware" SourceValueColumn="UID_Person" />
+                                  </Container>
+                                  <Container ScriptItemUID="Container21" Condition="from vars select hardwareownermanual">
+                                    <ColumnEditor DataColumn="HardwareUID_PersonOwner" DataTable="Vars" ScriptItemUID="ColumnEditor2" />
+                                  </Container>
+                                </Container>
+                              </LayoutPanel>
+                              <Container ScriptItemUID="Container19" Condition="from vars select not(isnullorempty(HardwareUID_PersonOwner))" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;class&quot;" Value="&quot;imx-message&quot;" />
+                                </HtmlAttributes>
+                                <Label ScriptItemUID="Label12" Text="translate('#LDS#Click &quot;Next&quot; to assign ownership for the device {0} to {1}.')" EnableSubControls="true">
+                                  <ControlList ScriptItemUID="ControlList2">
+                                    <Label ScriptItemUID="Label14" EnableCustomAttributes="true" Text="from vars select displayvalue(UID_Hardware)">
+                                      <HtmlAttributes>
+                                        <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                                      </HtmlAttributes>
+                                    </Label>
+                                    <Label ScriptItemUID="Label13" EnableCustomAttributes="true" Text="from vars select displayvalue(HardwareUID_PersonOwner)">
+                                      <HtmlAttributes>
+                                        <HtmlAttribute ScriptItemUID="HtmlAttribute15" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                                      </HtmlAttributes>
+                                    </Label>
+                                  </ControlList>
+                                </Label>
+                              </Container>
+                              <Validator DataColumn="HardwareUID_PersonOwner" DataTable="Vars" ScriptItemUID="Validator2" />
+                            </Container>
+                          </WizardPage>
+                          <WizardPage ScriptItemUID="WizardPage4" Title="translate(&quot;#LDS#Results&quot;)" AllowBackAction="false" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowCancelAction="false">
+                            <OnNext ScriptItemUID="Action16">
+                              <ActionOnControl />
+                            </OnNext>
+                            <Label ScriptItemUID="Label11" Text="translate(&quot;#LDS#Assign an owner to a device&quot;)" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <Property Name="TagName" Value="h2" />
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-table-Hardware-large&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                            <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <Property Name="TagName" Value="div" />
+                                <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </WizardPage>
+                        </Wizard>
+                      </Container>
+                    </Popup>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Caption()" Value="datacaptionsingle(&quot;Hardware&quot;)" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ImageType()" Value="'TableName'" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Image()" Value="&quot;Hardware&quot;" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="Size()" Value="'Square'" />
+              </ControlReferenceContainer>
+            </Container>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <ControlList ScriptItemUID="ControlList5">
+            <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Text()" Value="translate(&quot;#LDS#On this page, you can assign business objects to owners. You can assign a business object to yourself, or to somebody else. If you name somebody else, the person will need to approve.&quot;)" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

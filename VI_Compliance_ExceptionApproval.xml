@@ -1,0 +1,72 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="KdUD1j88VR+5PVTc+mr1ZA==">
+  <Context MetamodelVersion="2016-05-08" ID="VI_Compliance_ExceptionApproval" MigrationNotes="DMLREPLACE;" HelpChapterUid="--Compliance &gt; Auditing &gt; Rule Violations&#xD;&#xA;if (IsNull(request(&quot;AuditMode&quot;), &quot;NO&quot;) = &quot;YES&quot;) then&#xD;&#xA;  &quot;E693801A-C0D1-415E-B74F-102C1D2D6BF7&quot;&#xD;&#xA;  &#xD;&#xA;--Compliance &gt; My Actions &gt; Rule Violations History&#xD;&#xA;else if (IsNull(request(&quot;HistoryMode&quot;), &quot;NO&quot;) = &quot;YES&quot;) then&#xD;&#xA;  &quot;8D105ED9-137D-491A-900A-FC6D31813ADD&quot;&#xD;&#xA;  &#xD;&#xA;--Compliance &gt; My Actions &gt; Pending Rule Violations&#xD;&#xA;else&#xD;&#xA;   &quot;ACC0BC10-0CA7-4677-9CD4-4740587EB5D7&quot;&#xD;&#xA;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="AuditMode" IsMandatory="false" />
+        <Parameter Name="showpersonnoncompliance" IsMandatory="false" />
+        <Parameter Name="HistoryMode" IsMandatory="false" />
+        <Parameter Name="Title" IsMandatory="false" />
+      </ContextParameters>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="PersonInNonCompliance" Class="PersonInNonCompliance" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+        <Column Name="displaystatus" DataSource="Expression" DataType="System.String" ScriptItemUID="Column1" Caption="translate(&quot;#LDS#Approval state&quot;)" ColumnDataSource="LimitedValues" Expression="if (not(IsDecisionMade)) then&#xD;&#xA;   &quot;pending&quot;&#xD;&#xA;else if ( not(IsExceptionGranted)) then&#xD;&#xA;   &quot;exception_denied&quot;&#xD;&#xA;else&#xD;&#xA;   &quot;exception_granted&quot;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="pending" Display="translate(&quot;#LDS#Decision pending&quot;)" WhereClause="SqlCompare('IsDecisionMade', 0, 'bool',  'equal')" Comment="" />
+            <ColumnLimitedValue Name="exception_granted" Display="translate(&quot;#LDS#Exception granted&quot;)" WhereClause="SqlCompare('IsExceptionGranted', 1, 'bool', 'equal')" Comment="" />
+            <ColumnLimitedValue Name="exception_denied" Display="translate(&quot;#LDS#Exception denied&quot;)" WhereClause="sqland(&#xD;&#xA;SqlCompare('IsDecisionMade', 1, 'bool', 'equal'),&#xD;&#xA;SqlCompare('IsExceptionGranted', 0, 'bool', 'equal')&#xD;&#xA;)" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+        <Column Name="UID_QERJustificationSelected" DataType="System.String" ScriptItemUID="Column5" ColumnDataSource="ForeignKey" DBTableName="&quot;QERJustification&quot;" DBColumnName="&quot;UID_QERJustification&quot;" FKWhereClause="sqlcompare(&quot;IsDecisionBySystem&quot;, 1,&quot;bool&quot;,&quot;notequal&quot;,&quot;none&quot;)" />
+        <Column Name="ReasonForDecision" ScriptItemUID="Column6" DataType="System.String" Caption="translate(&quot;#LDS#Approval reasons&quot;)" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ComplianceRule" Class="ComplianceRule" ScriptItemUID="DataTableDbObject2">
+        <ActionSequence ScriptItemUID="Action2" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="DbWhereClause" DataType="System.String" ScriptItemUID="Column3" />
+        <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column2" />
+      </DataTableSingleRow>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="getTitleAndHeadline()" Expression="If(isnullorempty(GetTitle()))Then&#xD;&#xA;   translate(&quot;#LDS#Heading Pending Rule Violations&quot;)&#xD;&#xA;Else&#xD;&#xA;   GetTitle()" DataType="System.String" ScriptItemUID="Function1" />
+      <Function ScriptItemUID="Function2" Name="GetTitle()" DataType="System.String" Expression="If(Request(&quot;AuditMode&quot;) = 'YES') Then (&#xD;&#xA;translate('#LDS#Heading Auditing') + &#xD;&#xA;&quot; - &quot; + &#xD;&#xA;(If(Not IsNullOrEmpty(Request('Title'))) Then&#xD;&#xA; Request('Title')&#xD;&#xA;Else  ( from UserMenu select Title Where id in (select linkobjectid from UserRuntimeModule Where UidModule = GetRuntimeContextID() ))&#xD;&#xA;) )&#xD;&#xA;&#xD;&#xA;Else If(Not IsNullOrEmpty(Request('Title'))) Then&#xD;&#xA; Request('Title')&#xD;&#xA;Else  ( from UserMenu select Title Where id in (select linkobjectid from UserRuntimeModule Where UidModule = GetRuntimeContextID() ))&#xD;&#xA;" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action3" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="getTitleAndHeadline()" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action4" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer2">
+          <Label Text="getTitleAndHeadline()" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <ControlReferenceContainer ID="VI_Compliance_ExceptionApproval_Filter" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="showaudit()" Value="Request(&quot;AuditMode&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="showpersonnoncompliance()" Value="Request(&quot;showpersonnoncompliance&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ID="showhistory()" Value="Request(&quot;HistoryMode&quot;) = 'YES'" ScriptItemUID="VirtualFunctionMapping3" />
+            </ControlReferenceContainer>
+            <ControlReferenceControlList ID="CPL_PersonInNonCompliance_MasterDetail" ScriptItemUID="ControlRef3">
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="Request(&quot;AuditMode&quot;) = 'YES' or request('HistoryMode') = 'YES'" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualFunctionMapping ID="showpersonnoncompliance()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+              <VirtualFunctionMapping ID="DbWhereClause()" Value="from container select dbwhereclause" ScriptItemUID="VirtualFunctionMapping6" />
+            </ControlReferenceControlList>
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
+          <Container ScriptItemUID="Container3" RefreshTriggerExpression="from Container select GetDataVersion(HeadLine)">
+            <ControlList ScriptItemUID="ControlList10">
+              <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef14">
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Text()" Value="from Container select HeadLine" />
+              </ControlReferenceControlList>
+            </ControlList>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

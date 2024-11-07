@@ -1,0 +1,16 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CAP_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="CAPMenuItem2" ObjectType="MenuItem" SortOrder="5">
+        <MenuItem ID="CAP_MyActions" Title="translate(&quot;#LDS#Heading My Actions&quot;)" ContextID="CAP_MyActions" Condition="(GetConfigParm(&quot;QER\Policy&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_aeroleruler from qerpolicy ))&quot;&#xD;&#xA;)))&#xD;&#xA;or&#xD;&#xA;(IsNull(GetConfigParm(&quot;QER\ComplianceCheck&quot;), &quot;0&quot;) = &quot;1&quot;&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;uid_aerole in ( select uid_parentaerole from aerolecollection where uid_aerole in (select uid_orgruler from compliancerule ))&quot;&#xD;&#xA;)))" SortOrder="5" ScriptItemUID="CAPMenuItem3">
+          <Parameters />
+        </MenuItem>
+      </AddObject>
+      <AddObject ObjectID="CAPMenuItem2" ObjectType="MenuItem" SortOrder="6">
+        <MenuItem ID="CAP_Auditing" Title="translate(&quot;#LDS#Auditing&quot;)" ContextID="CAP_Auditing" Condition="(ispreprop(&quot;QERPOLICY&quot;) or ispreprop(&quot;COMPLIANCE&quot;))&#xD;&#xA;and&#xD;&#xA;exists(&quot;personinaerole&quot;,&#xD;&#xA;sqland(&#xD;&#xA;sqlcompareuid(&quot;uid_person&quot;, getuser()),&#xD;&#xA;&quot;xorigin &gt; 0 and uid_aerole in ('CAP-AEROLE-AUDITING-AUDITOR')&quot;&#xD;&#xA;)&#xD;&#xA;)" SortOrder="10" ScriptItemUID="CAPMenuItem4">
+          <Parameters />
+        </MenuItem>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

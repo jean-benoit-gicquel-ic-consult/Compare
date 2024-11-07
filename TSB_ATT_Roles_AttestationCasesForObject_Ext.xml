@@ -1,0 +1,61 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_ATT_Roles_AttestationCasesForObject_Ext" RequiredDbModules="ATT,TSB">
+    <Extensions>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="30">
+        <ActionSequence ScriptItemUID="TSBAction3" Condition="-- add a category for entitlement attestations of employees who are member&#xD;&#xA;&#xD;&#xA;getobjectkeytable(from baseobject select current getobjectkey()) in ( 'Department', 'Profitcenter', 'Locality', 'Org', 'AERole' )" ItemUID="entitlement attestations of employees who are member">
+          <Insert DataTable="CaseCategory" ScriptItemUID="TSBInsert4">
+            <ActionSequence ScriptItemUID="Action4" />
+            <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Entitlements of members&quot;)" />
+            <InsertValue DataColumn="CaseWhereClause" Value="GetAccountInGroupForOrgMemberWhereClause()" />
+            <InsertValue DataColumn="PolicyWhereClause" Value="-- all policies for the attestation object &quot;System entitlement attestation&quot;&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao  where ao.uid_dialogtable = 'TSB-T-UNSAccountInUNSGroup' )&quot;)" />
+            <InsertValue DataColumn="Position" Value="3" />
+          </Insert>
+          <Update DataColumn="CaseWhereClause" DataTable="CaseCategory" ScriptItemUID="TSBUpdate2" WhereClause="IsAllCategory" Value="-- patch &quot;all cases&quot; where clause to include this category&#xD;&#xA;&quot;uid_attestationcase in ( select uid_attestationcase from attestationcase where &quot;&#xD;&#xA;+ CaseWhereClause&#xD;&#xA;+ &quot; union all select uid_attestationcase from attestationcase where &quot;&#xD;&#xA;+ GetAccountInGroupForOrgMemberWhereClause()&#xD;&#xA;+ &quot;)&quot;" />
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="TSBAction8" Condition="-- look up account-in-group memberships while considering union tables (i.e. ADSGroup object --&gt; attestation is on UNSGroup)&#xD;&#xA;&#xD;&#xA;exists(&quot;dialogtable&quot;, sqland(&#xD;&#xA;sqlcompare(&quot;TableName&quot;, getobjectkeytable(from baseobject select current getobjectkey()), &quot;string&quot;, &quot;equal&quot;, &quot;none&quot;),&#xD;&#xA;sqlcompareuid(&quot;UID_DialogtableUnion&quot;, &quot;TSB-T-UNSGroup&quot;)))">
+          <ActionSequence ScriptItemUID="TSBAction1" ItemUID="account-in-group memberships while considering union tables">
+            <Insert DataTable="CaseCategory" ScriptItemUID="TSBInsert1">
+              <ActionSequence ScriptItemUID="TSBAction2" />
+              <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Group memberships&quot;)" />
+              <InsertValue DataColumn="CaseWhereClause" Value="format(&quot;objectkeybase in ( select uag.xobjectkey from unsaccountinunsgroup uag where {0} )&quot;, &#xD;&#xA;&#xD;&#xA;sqlcompareuid(&quot;uag.uid_unsgroup&quot;, from baseobject select current PrimaryKey())&#xD;&#xA;)" />
+              <InsertValue DataColumn="PolicyWhereClause" Value="-- all policies for the attestation object &quot;System entitlement attestation&quot;&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao  where ao.uid_dialogtable = 'TSB-T-UNSAccountInUNSGroup' )&quot;)" />
+              <InsertValue DataColumn="Position" Value="4" />
+            </Insert>
+          </ActionSequence>
+          <ActionSequence ScriptItemUID="TSBAction9" ItemUID="ownership attestations">
+            <Insert DataTable="CaseCategory" ScriptItemUID="TSBInsert5">
+              <ActionSequence ScriptItemUID="TSBAction10" />
+              <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Ownership attestation&quot;)" />
+              <InsertValue DataColumn="CaseWhereClause" Value="sqlcompareuid(&quot;objectkey1&quot;, from baseobject select current getobjectkey())" />
+              <InsertValue DataColumn="PolicyWhereClause" Value="-- all policies for the attestation object &quot;System entitlement attestation&quot;&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao  where ao.uid_dialogtable = 'TSB-T-TSBVUNSGroupOwner' )&quot;)" />
+              <InsertValue DataColumn="Position" Value="8" />
+            </Insert>
+          </ActionSequence>
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="TSBAction4" Condition="-- look up account-in-group memberships for a person&#xD;&#xA;&#xD;&#xA;from baseobject select current dbtable()=&quot;Person&quot;" ItemUID="account-in-group memberships for a person">
+          <Insert DataTable="CaseCategory" ScriptItemUID="TSBInsert2">
+            <ActionSequence ScriptItemUID="TSBAction5" />
+            <InsertValue DataColumn="DisplayName" Value="translate(&quot;#LDS#Group memberships&quot;)" />
+            <InsertValue DataColumn="CaseWhereClause" Value="GetAccountInGroupForPersonWhereClause()" />
+            <InsertValue DataColumn="PolicyWhereClause" Value="-- all policies for the attestation object &quot;System entitlement attestation&quot;&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao  where ao.uid_dialogtable = 'TSB-T-UNSAccountInUNSGroup' )&quot;)" />
+            <InsertValue DataColumn="Position" Value="5" />
+          </Insert>
+          <Update DataColumn="CaseWhereClause" DataTable="CaseCategory" WhereClause="IsAllCategory&#xD;&#xA;-- this is necessary for attestation cases for group memberships for accounts that were not assigned to the correct person at the time of creation" Value="-- patch &quot;all cases&quot; where clause to include this category&#xD;&#xA;&quot;uid_attestationcase in ( select uid_attestationcase from attestationcase where &quot;&#xD;&#xA;+ CaseWhereClause&#xD;&#xA;+ &quot; union all select uid_attestationcase from attestationcase where &quot;&#xD;&#xA;+ GetAccountInGroupForPersonWhereClause()&#xD;&#xA;+ &quot;)&quot;" ScriptItemUID="TSBUpdate3" />
+        </ActionSequence>
+        <ActionSequence ScriptItemUID="TSBAction6" Condition="-- look up accounts for a person&#xD;&#xA;&#xD;&#xA;from baseobject select current dbtable()=&quot;Person&quot;" ItemUID="accounts for a person">
+          <Insert DataTable="CaseCategory" ScriptItemUID="TSBInsert3">
+            <ActionSequence ScriptItemUID="TSBAction7" />
+            <InsertValue DataColumn="DisplayName" Value="datacaption(&quot;UNSAccount&quot;)" />
+            <InsertValue DataColumn="CaseWhereClause" Value="format(&quot;objectkeybase in ( select ug.xobjectkey from unsaccount ug where {0} )&quot;, &#xD;&#xA;sqlcompareuid(&quot;ug.uid_person&quot;, from baseobject select current PrimaryKey())&#xD;&#xA;)" />
+            <InsertValue DataColumn="PolicyWhereClause" Value="-- all policies for the attestation object &quot;User account attestation&quot;&#xD;&#xA;format(&quot;uid_attestationobject in ( select ao.uid_attestationobject from attestationobject ao  where ao.uid_dialogtable = 'TSB-T-UNSAccount' )&quot;)" />
+            <InsertValue DataColumn="Position" Value="5" />
+          </Insert>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions">
+        <Function ScriptItemUID="TSBFunction1" Name="GetAccountInGroupForPersonWhereClause()" DataType="System.String" Expression="format(&quot;objectkeybase in ( select uag.xobjectkey from unsaccountinunsgroup uag join unsaccount ug on ug.uid_unsaccount = uag.uid_unsaccount where {0} )&quot;, &#xD;&#xA;sqlcompareuid(&quot;ug.uid_person&quot;, from baseobject select current PrimaryKey())&#xD;&#xA;)" TriggerUpdates="Never" />
+        <Function ScriptItemUID="TSBFunction2" Name="GetAccountInGroupForOrgMemberWhereClause()" DataType="System.String" Expression="format(&quot;objectkeybase in ( select uag.xobjectkey from unsaccountinunsgroup uag join unsaccount ac on ac.uid_unsaccount = uag.uid_unsaccount join helperpersonorg hpo on hpo.uid_person = ac.uid_person where {0} )&quot;, &#xD;&#xA;&#xD;&#xA;sqlcompareuid(&quot;hpo.uid_org&quot;, from baseobject select current PrimaryKey())&#xD;&#xA;)" TriggerUpdates="Never" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,18 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="wFEK6Jlk/67dyUofJTEE/A==">
+  <GlobalControl ID="VI_Edit_Default" MetamodelVersion="2013-01-09" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <ContextParameters />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container1">
+        <TextBox DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="cctl1" />
+      </Container>
+      <ActionSequence ScriptItemUID="wctl1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="wctl2" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,129 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_History_Filter" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action7">
+        <CallAction ActionID="SetInitial" ScriptItemUID="Call6" />
+        <ActionSequence ScriptItemUID="Action8">
+          <CallAction ActionID="LoadData" ScriptItemUID="Call7" />
+        </ActionSequence>
+        <SwitchAction ScriptItemUID="Switch1">
+          <SwitchActionCase ScriptItemUID="case2" Condition="showaudit() and isnull(getuseraudit(),'') = ''" ItemUID="ShowAudit">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update6" Value="translate('#LDS#Select an attestor to show only decisions by the selected employee. The view also includes pending approvals by the employee.')" />
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search description">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update7" Value="translate('#LDS#The page displays all approvals of the selected employee where the selected employee was involved in the approval process.')" />
+          </SwitchActionCase>
+          <SwitchActionCase ScriptItemUID="case1" Condition="not(showaudit()) and isnull(setuseraudit(),'') = ''" ItemUID="NoAudit">
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update11" Value="translate('#LDS#This page shows the history of your attestation decisions.') + &quot; &quot;" />
+          </SwitchActionCase>
+        </SwitchAction>
+        <CodeLiteral ScriptItemUID="Try">{{
+try{</CodeLiteral>
+        <Update DataColumn="HeadLine" DataTable="Container" ScriptItemUID="Update17" Value="from Vars select HeadLine" />
+        <Update DataColumn="HeadLineIsExternal" DataTable="Vars" ScriptItemUID="Update20" Value="true" />
+        <CodeLiteral ScriptItemUID="Catch">}
+catch{}
+}}</CodeLiteral>
+      </ActionSequence>
+      <Container ItemUIDReference="Search" ScriptItemUID="Container1">
+        <Container ItemUID="HeadLine" ScriptItemUID="Container2" Condition="not(from Vars select HeadLineIsExternal)">
+          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="Text()" Value="from Vars select HeadLine" ScriptItemUID="VirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+        <Container Condition="showaudit()" ItemUID="Audit Personensuche" ScriptItemUID="Container6">
+          <LayoutPanel Columns="2" Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel1">
+            <Label Text="translate('#LDS#Attestor')" ScriptItemUID="Label1" />
+            <ColumnEditor DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="ColumnEditor1" />
+          </LayoutPanel>
+        </Container>
+        <Container ScriptItemUID="Container9">
+          <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;role&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;presentation&quot; -- because the table only has one row" />
+            </HtmlAttributes>
+            <Label Text="translate('#LDS#Attestation state')" ScriptItemUID="Label3" />
+            <Container ScriptItemUID="Container13">
+              <Container ScriptItemUID="Container14" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container14style" Value="&quot;float:left;&quot;" />
+                </HtmlAttributes>
+                <CheckBox DataTable="Vars" DataColumn="ShowApproved" Text="translate('#LDS#Approved')" ScriptItemUID="CheckBox1" />
+              </Container>
+              <Container ScriptItemUID="Container15" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container15style" Value="&quot;float:left;padding-left:15px&quot;" />
+                </HtmlAttributes>
+                <CheckBox DataTable="Vars" DataColumn="ShowDenied" Text="translate('#LDS#not approved')" ScriptItemUID="CheckBox2" />
+              </Container>
+              <Container ScriptItemUID="Container16" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container16style" Value="&quot;float:left;padding-left:15px&quot;" />
+                </HtmlAttributes>
+                <CheckBox DataTable="Vars" DataColumn="ShowOpen" Text="translate('#LDS#Pending')" ScriptItemUID="CheckBox3" />
+              </Container>
+            </Container>
+          </LayoutPanel>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="ShowOpen" DataType="System.Boolean" ScriptItemUID="Column4" />
+          <Column Name="ShowApproved" DataType="System.Boolean" ScriptItemUID="Column5" />
+          <Column Name="ShowDenied" DataType="System.Boolean" ScriptItemUID="Column6" />
+          <Column Name="UID_PersonAudit" DataType="System.String" ScriptItemUID="Column8" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" FKWhereClause="" />
+          <Column DataType="System.String" Name="HeadLine" ScriptItemUID="Column1" />
+          <Column DataType="System.Boolean" Name="HeadLineIsExternal" ScriptItemUID="Column2" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SetInitial">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action10">
+              <ActionSequence Condition="isnull(setuseraudit(),'') &lt;&gt; '' " ScriptItemUID="Action11">
+                <Update DataTable="Vars" DataColumn="UID_PersonAudit" Value="setuseraudit()" ScriptItemUID="Update1" />
+              </ActionSequence>
+              <Update DataTable="Vars" DataColumn="ShowApproved" Value="true" ScriptItemUID="Update2" />
+              <Update DataTable="Vars" DataColumn="ShowDenied" Value="true" ScriptItemUID="Update3" />
+              <Update DataTable="Vars" DataColumn="ShowOpen" Value="true" ScriptItemUID="Update4" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="LoadData">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ItemUID="Load Attestations" ScriptItemUID="Action12">
+              <Update DataTable="Container" DataColumn="WhereClause" Value="sqland(&#xD;&#xA;statuswhereclause(),&#xD;&#xA;if(auditmode() or showaudit())then(&#xD;&#xA;if (getuseraudit()&lt;&gt;'') then&#xD;&#xA;   format(&quot;uid_attestationcase in(select uid_attestationcase from attestationhistory where uid_personhead = '{0}' {1})&quot;,&#xD;&#xA;      getuseraudit(),&#xD;&#xA;	  if(from vars select(ShowOpen))then&#xD;&#xA;         format(&quot;union select uid_attestationcase from ATT_VAttDecisionPerson_DO where rulerlevel=0 and uid_personhead = '{0}'&quot;,getuseraudit())&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;format(&quot;UID_AttestationCase in (select UID_AttestationCase from AttestationHistory where UID_PersonHead = '{0}' and DecisionType in ('Grant', 'Dismiss', 'Answer', 'Query', 'AddAdditional', 'AddInsteadOf', 'Direct', 'Escalate', 'Deny') and {1})&quot;,GetUser(),IsNullOrEmpty(variable(getconfig(&quot;VI_Attestation_History_Filter&quot;)),&quot;1=1&quot;))&#xD;&#xA;)&#xD;&#xA;)" ScriptItemUID="Update5" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="statuswhereclause()" Expression="sqlor(&#xD;&#xA;--aktiv  isclosed=0&#xD;&#xA;if( (from vars select not(ShowOpen))) then &quot;1=0&quot; else&#xD;&#xA;sqlcompare(&quot;isclosed&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;,&#xD;&#xA;&#xD;&#xA;--abgelehnt isclosed= 1    isgranted=0&#xD;&#xA;if( (from vars select not(ShowDenied))) then &quot;1=0&quot; else&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;isclosed&quot;, true, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;isgranted&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;),&#xD;&#xA;&#xD;&#xA;--genehmigt isgranted=1&#xD;&#xA;if( (from vars select not(ShowApproved))) then &quot;1=0&quot; else&#xD;&#xA;sqlcompare(&quot;isgranted&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="getuseraudit()" Expression="if (from vars select isnull(uid_personaudit,'') = '' and not showaudit()) then(&#xD;&#xA;getuser()&#xD;&#xA;) &#xD;&#xA;else(&#xD;&#xA;from vars select isnull(uid_personaudit,'')&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="auditmode()" Expression="from vars select not(isnullorempty(uid_personaudit))" DataType="System.Boolean" ScriptItemUID="Function4" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action13">
+            <CallAction ActionID="LoadData" ScriptItemUID="Call2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonAudit" />
+          <DataEventHandlerColumn DataColumn="ShowApproved" />
+          <DataEventHandlerColumn DataColumn="ShowDenied" />
+          <DataEventHandlerColumn DataColumn="ShowOpen" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="showaudit()" Comment="Set the auditing mode person search control" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="setuseraudit()" Comment="Set the user for auditing and the auditing mode" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualTable Name="Container" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="WhereClause" DataType="System.String" />
+        <VirtualColumn Name="HeadLine" DataType="System.String" IsMandatory="false" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,84 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_CheckBoxMulti_DecisionControl" Type="CheckBoxMulti" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.checkboxAll_yes, .checkboxAll_no {
+    /* Enable absolute positioning of the hidden form controls */
+    position: relative;
+    /* Just a bit of space. */
+    margin-bottom: 0.5em;
+    /*
+    Match line-height to the height of the replacement image to ensure it
+    doesn't get clipped
+    */
+    line-height: 24px;
+}
+fieldset : last-child {
+    margin-bottom: 0;
+}
+/*
+Position and hide the real checkboxes and radio buttons.
+The inputs are made transparent instead of completely hidden to preserve
+clickability in browsers that don't have clickable labels, like Safari for
+iOS 5 and older.
+*/
+.checkboxAll_yes input[type="checkbox"], 
+.checkboxAll_no  input[type="checkbox"]  {
+    position: absolute;
+    /* Match the image dimensions */
+    width: 24px;
+    height: 24px;
+    /* Reset anything that could peek out or interfere with dimensions */
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    opacity: 0;
+}
+/*
+Insert a pseudo element inside each label and give it a background
+image that will become the custom checkbox or radio button.
+Using inline-block lets you use vertical-align to adjust it vertically
+as needed.
+*/
+.checkboxAll_yes input[type="checkbox"] + label:before,
+.checkboxAll_no  input[type="checkbox"] + label:before {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    content: " ";
+    vertical-align: top;
+}
+/*
+Position the background image differently depending on the state of each
+checkbox and radio button.
+*/
+
+.checkboxAll_yes input[type="checkbox"] + label:before {
+    background:  url('%permanentlink%img=24_approveALL_normal.png');
+}
+.checkboxAll_yes input[type="checkbox"]:checked + label:before {
+   background:  url('%permanentlink%img=24_approveALL_selected.png');
+}
+.checkboxAll_yes input[type="checkbox"]:indeterminate + label:before {
+   background:  url('%permanentlink%img=24_approveALL_tristate.png');
+}
+
+.checkboxAll_no input[type="checkbox"] + label:before {
+    background:  url('%permanentlink%img=24_denyALL_normal.png');
+}
+.checkboxAll_no input[type="checkbox"]:checked + label:before {
+   background:  url('%permanentlink%img=24_denyALL_selected.png');
+}
+.checkboxAll_no input[type="checkbox"]:indeterminate + label:before {
+   background:  url('%permanentlink%img=24_denyALL_tristate.png');
+}
+
+.imx-multiCheckBox-hidden {
+  visibility: hidden;
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

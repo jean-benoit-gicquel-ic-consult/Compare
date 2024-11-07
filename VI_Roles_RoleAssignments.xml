@@ -1,0 +1,367 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2234921e-368e-2977-4069-661bd39c6419">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Roles_RoleAssignments" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action16">
+        <ReadOnlyTableModifier DataTable="AssignedObjects" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="not(IsDirectAssignment(xorigin) or (IsOrderAssignment(xorigin) and OrderIsAssigned))">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <SingleColumn DataColumn="DeleteThis" FKWhereClause="" ScriptItemUID="SingleColumn1" CannotEdit="" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+        <CodeLiteral ScriptItemUID="CodeLiteral3">// configure XOrigin bit mask
+
+var xorigin = (ExpressionColumn) TableStore.GetLocalColumn(AssignedObjects, "XOrigin");
+var mlProvider = _Database.MultiLanguage();
+var dbColumn = _Database.MetaData().GetTable("PersonInDepartment").Columns["XOrigin"];
+var captions = dbColumn.BitMaskCaptions.Captions
+.Select(key =&gt; mlProvider.Get(dbColumn.Uid, key));
+
+xorigin.MetadataProvider = (vm,c,r) =&gt;
+	new ValueMetadata(c, vm) { BitMaskCaptions = new BitMaskCaptions(captions.ToArray()) };</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action5">
+            <CallAction ActionID="Reinitialize" ScriptItemUID="CallAction13" />
+          </Action>
+        </Activator>
+        <Container ScriptItemUID="Container2">
+          <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+            <HtmlAttributes />
+            <MasterPane ScriptItemUID="MasterPane1">
+              <Container ScriptItemUID="Container3">
+                <Grid ScriptItemUID="Grid1">
+                  <GridBand DataTable="AssignedObjects" OrderBy="'Display'" ScriptItemUID="GridBand1" DisplayHeader="Always" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="pkselected" WhereClause="XOrigin &gt; 0 and XMarkedForDeletion = 0" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="ApplyFilledHeight" Value="true" />
+                    </HtmlAttributes>
+                    <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                    <GridFilters ScriptItemUID="GridFilters1" />
+                    <GridRows />
+                    <GridColumn Width="&quot;65px&quot;" Condition="not(IsReadOnly())" ScriptItemUID="GridColumn1">
+                      <GridColumnHeader ScriptItemUID="wctl1" />
+                      <Cell ScriptItemUID="Cell2">
+                        <CheckBox DataTable="AssignedObjects" DataColumn="DeleteThis" ScriptItemUID="CheckBox1" Text="--" />
+                        <FormItemLabel DataTable="AssignedObjects" DataColumn="DeleteThis" IsInvisible="true" ScriptItemUID="FormItemLabel1">
+                          <Label Text="translate(&quot;#LDS#Heading Select&quot;)" ScriptItemUID="Label2" />
+                        </FormItemLabel>
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn ScriptItemUID="GridColumn2">
+                      <GridColumnHeader ScriptItemUID="wctl2">
+                        <Label Text="datacaption(AssignedObjects, Display)" ScriptItemUID="Label3" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell3">
+                        <Label Text="from assignedobjects select current display" ScriptItemUID="Label4" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn ScriptItemUID="Column5" SortColumn="XOrigin" AutoFilterColumn="XOrigin">
+                      <GridColumnHeader ScriptItemUID="wctl4">
+                        <Label ScriptItemUID="Label1" Text="datacaption(assignedobjects, xorigin)" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell1">
+                        <Label ScriptItemUID="Label8" Text="from assignedobjects select current displayvalue(xorigin)" />
+                      </Cell>
+                    </GridColumn>
+                    <GridColumn SortColumn="TableNameDisplay" AutoFilterColumn="TableNameDisplay" ScriptItemUID="GridColumn3">
+                      <GridColumnHeader ScriptItemUID="wctl3">
+                        <Label Text="datacaption(AssignedObjects, TableNameDisplay)" ScriptItemUID="Label5" />
+                      </GridColumnHeader>
+                      <Cell ScriptItemUID="Cell4">
+                        <Label Text="from assignedobjects select current TableNameDisplay" ScriptItemUID="Label6" />
+                      </Cell>
+                    </GridColumn>
+                  </GridBand>
+                </Grid>
+              </Container>
+            </MasterPane>
+            <DetailPane ScriptItemUID="DetailPane1">
+              <Container ScriptItemUID="Container4">
+                <SwitchContainer ScriptItemUID="Switch1">
+                  <SwitchContainerCase ScriptItemUID="Case1" Condition="TableName() = &quot;ESet&quot;" />
+                  <SwitchContainerCase ScriptItemUID="Case2">
+                    <Container ScriptItemUID="Container5">
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AssignedObjects" WhereClause="primarykey()= ( from vars select pkselected)">
+                        <Container ScriptItemUID="Container6">
+                          <ControlReferenceContainer ID="VI_Roles_EntitlementDetective" ScriptItemUID="ControlRef1">
+                            <VirtualFunctionMapping ID="ObjectKeyEntitlement()" Value="from assignedobjects select current XObjectKey" ScriptItemUID="VirtualFunctionMapping1" />
+                          </ControlReferenceContainer>
+                        </Container>
+                      </ContainerTemplate>
+                    </Container>
+                  </SwitchContainerCase>
+                </SwitchContainer>
+              </Container>
+              <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                <ControlList ScriptItemUID="ControlList2">
+                  <Label Text="from assignedobjects select top 1 display where primarykey()= ( from vars select pkselected)" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <Property Name="TagName" Value="h2" />
+                    </HtmlAttributes>
+                  </Label>
+                </ControlList>
+              </DetailPaneHeader>
+            </DetailPane>
+          </MasterDetailControl>
+          <Container Condition="ispreprop(&quot;ITSHOP&quot;)&#xA;and&#xA;not(IsReadOnly())" ScriptItemUID="Container12" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
+            </HtmlAttributes>
+            <Button Text="translate(&quot;#LDS#Add new&quot;)" ScriptItemUID="Button2">
+              <ServerActionCall ScriptItemUID="ServerActionCall3">
+                <Update DataTable="Container" DataColumn="ObjectKeySelected" ScriptItemUID="Update1" />
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction2">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container13">
+                      <ControlReferenceContainer ID="VI_Roles_RoleAssignmentNew" ScriptItemUID="ControlReferenceContainer2">
+                        <VirtualFunctionMapping ID="BaseTreeAssignFilter()" Value="if(IsBasetreeAssignment())&#xD;&#xA;then&#xD;&#xA;format(&quot;uid_basetreeassign in (select o.uid_basetreeassign from orgrootassign o&#xD;&#xA;join basetreeassign btasgn on btasgn.uid_basetreeassign = o.uid_basetreeassign&#xD;&#xA;join dialogtable DTT on DTT.uid_dialogTablebase = btasgn.uid_dialogtablemn and DTT.IsDeactivatedByPreProcessor = 0&#xD;&#xA;join qbm_vqbmrelation r on r.UID_DialogTableChild = dtt.UID_DialogTable and {1}&#xD;&#xA;where {0} and o.isassignmentallowed = 1 and btasgn.IsITShopEnabled = 1)&quot;,&#xD;&#xA;SqlCompareUid(&quot;o.uid_orgroot&quot;,from object select top 1 objectwalker(&quot;UID_Orgroot&quot;)),&#xD;&#xA;SqlCompareUid(&quot;r.UID_DialogTableParent&quot;,Replace(format(&quot;QER-T-{0}&quot;,TableName()),&quot;QER-T-Org&quot;,&quot;RMB-T-Org&quot;)))&#xD;&#xA;else&#xD;&#xA;&quot;isesetenabled = 1&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+                        <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="Container" DataTable="Container">
+                          <VirtualColumnMapping DataColumn="ObjectKey" VirtualColumn="ObjectKeyParent" />
+                          <VirtualColumnMapping DataColumn="ObjectKeySelected" VirtualColumn="ObjectKeySelected" />
+                        </VirtualTableMapping>
+                      </ControlReferenceContainer>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container14">
+                      <Button Text="translate(&quot;#LDS#Request&quot;)" EnabledCondition="from Container select not(isnullorempty(objectkeyselected))" ScriptItemUID="Button3">
+                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                          <ActionSequence Condition="isbasetreeassignment()" ItemUID="BaseTree assignment" ScriptItemUID="Action2">
+                            <ActionSequence ScriptItemUID="Action3">
+                              <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="CallAction3">
+                                <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrder" ScriptItemUID="VirtualTableMapping1" />
+                              </CallAction>
+                              <CallAction ActionID="VI_ITShop_AddCartItem" ScriptItemUID="CallAction4">
+                                <VirtualFunctionMapping ID="uidaccproduct()" Value="VI_GetAccproductAssignmentMember(getuser(), BuildObjectKeyAssignment())" ScriptItemUID="VirtualFunctionMapping4" />
+                                <VirtualFunctionMapping ID="uidpersonordered()" Value="getuser()" ScriptItemUID="VirtualFunctionMapping5" />
+                                <VirtualFunctionMapping ID="UID_ShoppingCartOrder()" Value="from ShoppingCartOrder select top 1 UID_ShoppingCartOrder" ScriptItemUID="VirtualFunctionMapping6" />
+                                <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping2" />
+                                <VirtualFunctionMapping ID="ObjectKeyAssignment()" Value="BuildObjectKeyAssignment()" ScriptItemUID="VirtualFunctionMapping7" />
+                              </CallAction>
+                              <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction1" />
+                              <ActionOnControl />
+                              <Redirect Target="Context" AbortExecution="false" ContextID="VI_ITShop_ShoppingCart" AllowReturnToThisContext="true" ScriptItemUID="Redirect1" />
+                            </ActionSequence>
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" ScriptItemUID="Button6" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall7">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Add a new entitlement&quot;)" ScriptItemUID="VirtualFunctionMapping8" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+            <Button Text="translate(&quot;#LDS#Remove&quot;)" EnabledCondition="0 &lt; select count() from assignedobjects where deletethis" Layout="'VI_Styles_Button_Default'" ScriptItemUID="Button7">
+              <ServerActionCall ScriptItemUID="ServerActionCall8">
+                <ActionSequence ItemUID="Remove from Org,Locality,Department,ProfitCenter,AERole" Condition="isbasetreeassignment()" ScriptItemUID="Action10">
+                  <ForeachRow DataTable="AssignedObjects" WhereClause="SourceObject = pk() and deletethis and isdirectassignment(xorigin)" ScriptItemUID="ForeachRow2">
+                    <ActionSequence ScriptItemUID="Action14" ItemUID="Delete direct">
+                      <FillTable Source="XObjectKey" DataTable="PersonAssignmentObjects" DataTableSource="AssignedObjects" DataColumnSource="XObjectKey" WhereClause="primarykey() = select current primarykey() from assignedobjects" ResolveMNObjects="NoResolve" ScriptItemUID="FillTable1">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" LoadTypeBulk="true" />
+                      </FillTable>
+                      <Delete DataTable="PersonAssignmentObjects" SetDeletionFlag="DeleteAndSave" ScriptItemUID="Delete1" />
+                    </ActionSequence>
+                  </ForeachRow>
+                  <CallAction ScriptItemUID="Call3" ActionID="UNSUBSCRIBE" />
+                  <CallAction ActionID="Reinitialize" ScriptItemUID="CallAction11" />
+                  <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="CallAction12">
+                    <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="VirtualFunctionMapping10" />
+                    <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping11" />
+                  </CallAction>
+                </ActionSequence>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableGeneric Table="Object" ScriptItemUID="DataTableGeneric1">
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="dynamicpk" DataType="System.String" ScriptItemUID="Column2" />
+        </DataTableGeneric>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="CancelFlag" DataType="System.Boolean" ScriptItemUID="Column21" />
+          <Column Name="ShoppingCartFlag" DataType="System.Boolean" ScriptItemUID="Column22" />
+          <Column Name="pkselected" DataType="System.String" ScriptItemUID="Column4" />
+        </DataTableSingleRow>
+        <DataTableGeneric Table="PersonAssignmentObjects" ScriptItemUID="DataTableGeneric2" />
+        <DataTableDbObject Class="ShoppingCartItem" Table="ShoppingCartItemForUnsubscribe" ScriptItemUID="DataTableDbObject7">
+          <ActionSequence ScriptItemUID="Action23" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrderForUnsubscribe" ScriptItemUID="DataTableDbObject8">
+          <ActionSequence ScriptItemUID="Action24" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow2">
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column23" />
+          <Column Name="ObjectKeySelected" DataType="System.String" ScriptItemUID="Column25" />
+          <Column DataType="System.String" Name="ObjectKey" ScriptItemUID="Column9" DataSource="Expression" Expression="from Object select top 1 objectwalker(&quot;XObjectKey&quot;)" />
+        </DataTableSingleRow>
+        <DataTableDbObject Table="ShoppingCartOrder" Class="ShoppingCartOrder" ScriptItemUID="DataTableDbObject9">
+          <ActionSequence ScriptItemUID="Action25" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="ShoppingCartItem" Table="ShoppingCartItem" ScriptItemUID="DataTableDbObject10">
+          <ActionSequence ScriptItemUID="Action26" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOForUnsubscribe" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="BaseTreeHasObject" Table="BaseTreeHasObject" ScriptItemUID="DataTableDbObject2" WhereClauseSQL="format(&quot;uid_org = '{0}'&quot;, pk())">
+          <ActionSequence ScriptItemUID="Action6">
+            <Delete DataTable="MNAssignmentObjects" ScriptItemUID="Delete4" />
+            <FillTable Source="XObjectKey" DataTable="AssignedObjects" ScriptItemUID="FillTable3X" DataTableSource="BaseTreeHasObject" DataColumnSource="ObjectKeyRelation" DataColumnXObjectKey="XObjectKey" ResolveMNObjects="NoResolve" DataColumnTableName="TableName" WhereClause="ObjectKeyRelation &lt;&gt; ''" DataColumnSourceKey="pk">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" LoadTypeBulk="true" />
+            </FillTable>
+            <FillTable Source="XObjectKey" DataTable="MNAssignmentObjects" ScriptItemUID="FillTable4" DataTableSource="AssignedObjects" DataColumnSource="ObjectKey" DataColumnXObjectKey="XObjectKey" ResolveMNObjects="NoResolve" DataColumnSourceKey="pk" DataColumnTableName="TableName">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" LoadTypeBulk="true" />
+            </FillTable>
+          </ActionSequence>
+          <Column Name="ObjectKeyRelation" DataType="System.String" ScriptItemUID="Column8" DataSource="Expression" Expression="if(Exists(&quot;DialogTable&quot;,format(&quot;Tablename = '{0}'&quot;,AssignmentTable(TableName(),GetObjectKeyTable(ObjectKey)))))then(&#xD;&#xA;   GetObjectKeyRelation(	  &#xD;&#xA;	  AssignmentTable(TableName(),GetObjectKeyTable(ObjectKey)),	  &#xD;&#xA;      GetObjectKeyTable(ObjectKey),&#xD;&#xA;      GetUIDFromObjectKey(ObjectKey),&#xD;&#xA;      TableName(),&#xD;&#xA;      pk()&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="AssignedObjects" ScriptItemUID="DataTableGeneric3">
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column24" />
+          <Column Name="Display" DataType="System.String" ScriptItemUID="Column17" Caption="translate(&quot;#LDS#Entitlement&quot;)" DataSource="Expression" Expression="if(IsBasetreeAssignment())then&#xD;&#xA;   (from MNAssignmentObjects select Display() where pk = from AssignedObjects select current PrimaryKey())&#xD;&#xA;else&#xD;&#xA;   (from AssignedObjects select current Display())&#xD;&#xA;&#xD;&#xA;" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="SourceObject" DataType="System.String" ScriptItemUID="Column30" DataSource="Expression" Expression="pk()&#xD;&#xA;-- from MNAssignmentObjects select PrimaryKey() where pk = from AssignedObjects select current PrimaryKey()" />
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column14" />
+          <Column Name="XOrigin" DataType="System.Int32" ScriptItemUID="Column7" DataSource="Expression" Expression="if(IsBasetreeAssignment())then&#xD;&#xA;   Convert(objectwalker(&quot;XOrigin&quot;),&quot;System.Int32&quot;)&#xD;&#xA;Else&#xD;&#xA;   1" Caption="datacaption(&quot;PersonInBasetree&quot;, &quot;XOrigin&quot;)" />
+          <Column Name="DeleteThis" DataType="System.Boolean" ScriptItemUID="Column26" />
+          <Column Name="TableNameDisplay" DataType="System.String" Expression="from AssignedObjects select current datacaption(tablename+&quot;&quot;)" DataSource="Expression" ScriptItemUID="Column27" Caption="translate(&quot;#LDS#Entitlement type&quot;)" />
+          <Column Name="ObjectKey" DataType="System.String" ScriptItemUID="Column20" DataSource="Expression" Expression="from BaseTreeHasObject select ObjectKey where UID_BaseTreeHasObject = from AssignedObjects select current pk" />
+          <Column Name="XMarkedForDeletion" DataType="System.Int32" ScriptItemUID="Column3" DataSource="Expression" Expression="if(IsBasetreeAssignment())then&#xD;&#xA;   Convert(objectwalker(&quot;XMarkedForDeletion&quot;),&quot;System.Int32&quot;)&#xD;&#xA;else&#xD;&#xA;   0" />
+          <Column DataType="System.Boolean" Name="OrderIsAssigned" ScriptItemUID="Column10" DataSource="Expression" Expression="if(IsOrderAssignment(xorigin))then&#xD;&#xA;   Exists(&quot;PersonWantsOrg&quot;,format(&quot;orderstate = 'Assigned' and objectkeyassignment = {0}&quot;, sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" />
+        </DataTableGeneric>
+        <DataTableGeneric Table="MNAssignmentObjects" ScriptItemUID="DataTableGeneric4">
+          <Column Name="XObjectKey" DataType="System.String" ScriptItemUID="Column19" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column28" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column29" />
+        </DataTableGeneric>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Reinitialize">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action30">
+              <Delete DataTable="Object" ScriptItemUID="Delete2" />
+              <Delete DataTable="AssignedObjects" ScriptItemUID="Delete3" />
+              <LoadTable ScriptItemUID="FillTable2" DataTable="Object" DBTableName="tablename()" WhereClause="format(&quot;uid_{0} = '{1}'&quot;, tablename(), pk())" RemoveDeleted="false" LoadLimit="">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+                <InsertValue DataColumn="TableName" Value="tablename()" />
+                <InsertValue DataColumn="dynamicpk" Value="pk()" />
+              </LoadTable>
+              <ActionSequence ScriptItemUID="Action7" Condition="IsBasetreeAssignment()">
+                <LoadTable DataTable="BaseTreeHasObject" ScriptItemUID="LoadTable1">
+                  <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" />
+                </LoadTable>
+              </ActionSequence>
+              <CallAction ActionID="OnReinitialized" ScriptItemUID="Call1" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UNSUBSCRIBE">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action22">
+              <SwitchAction ScriptItemUID="Switch4">
+                <SwitchActionCase ScriptItemUID="Case5" Condition="isnull(getconfig(&quot;VI_ITShop_ProlongateOrCancel_Without_ShoppingCartOrder&quot;), &quot;True&quot;) = &quot;True&quot;">
+                  <CallAction ScriptItemUID="Call8" ActionID="UNSUBSCRIBE_PWO" />
+                </SwitchActionCase>
+                <SwitchActionCase ScriptItemUID="Case10">
+                  <CallAction ScriptItemUID="Call9" ActionID="UNSUBSCRIBE_SHOPPINGCART" />
+                </SwitchActionCase>
+              </SwitchAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UNSUBSCRIBE_SHOPPINGCART">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <Update DataTable="Vars" DataColumn="ShoppingCartFlag" Value="false" ScriptItemUID="Update2" />
+              <ForeachRow DataTable="AssignedObjects" WhereClause="SourceObject = pk() and deletethis and IsOrderAssignment(xorigin)" ScriptItemUID="ForeachRow1">
+                <ActionSequence ScriptItemUID="Action17" ItemUID="UnSubscribe">
+                  <SwitchAction ScriptItemUID="Switch3">
+                    <SwitchActionCase ScriptItemUID="Case7" Condition="isbasetreeassignment()" ItemUID="Org,Locality,Department,ProfitCenter,AERole">
+                      <LoadTable DataTable="PWOForUnsubscribe" WhereClause="format( &quot;orderstate in (select orderstate from QER_VPWOOrderState where IsAssigned=1 and IsOrder=0 ) and objectkeyassignment = {0}&quot;, from assignedobjects select current sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable2">
+                        <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" />
+                      </LoadTable>
+                    </SwitchActionCase>
+                  </SwitchAction>
+                  <ActionSequence ScriptItemUID="Action18" Condition="0 &lt; select count() from pwoforunsubscribe">
+                    <ActionSequence Condition="0 = select count() from shoppingcartorderforunsubscribe" ScriptItemUID="Action21">
+                      <CallAction ActionID="VI_ITShop_LoadShoppingCartOrder" ScriptItemUID="Call2">
+                        <VirtualFunctionMapping ID="CreateNew()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                        <VirtualTableMapping VirtualTable="ShoppingCartOrder" DataTable="ShoppingCartOrderForUnsubscribe" ScriptItemUID="VirtualTableMapping5" />
+                      </CallAction>
+                    </ActionSequence>
+                    <Insert DataTable="ShoppingCartItemForUnsubscribe" ScriptItemUID="Insert1">
+                      <ActionSequence ScriptItemUID="Action20">
+                        <Save DataTable="ShoppingCartItemForUnsubscribe" WhereClause="uid_shoppingcartitem = select current uid_shoppingcartitem from shoppingcartitemforunsubscribe" ScriptItemUID="Save2" />
+                      </ActionSequence>
+                      <InsertValue DataColumn="UID_AccProduct" Value="from PWOForUnsubscribe select top 1 objectwalker(&quot;FK(uid_org).uid_accproduct&quot;)" />
+                      <InsertValue DataColumn="UID_PersonInserted" Value="getuser()" />
+                      <InsertValue DataColumn="UID_PersonOrdered" Value="from PWOForUnsubscribe select top 1 uid_personordered" />
+                      <InsertValue DataColumn="UID_ShoppingCartOrder" Value="from shoppingcartorderforunsubscribe select top 1 uid_shoppingcartorder" />
+                      <InsertValue DataColumn="UID_PersonWantsOrg" Value="from pwoforunsubscribe select top 1 uid_personwantsorg" />
+                      <InsertValue DataColumn="MethodName" Value="'Unsubscribe(string, string)'" />
+                      <InsertValue DataColumn="MethodParameters" Value="format(&quot;{0}{1}{2}&quot;,getuser(), Char(7), &quot;&quot;)&#xA;" />
+                      <InsertValue DataColumn="UID_ITShopOrg" Value="from PWOForUnsubscribe select top 1 uid_org" />
+                      <InsertValue DataColumn="OrderReason" Value="&quot;&quot;" />
+                    </Insert>
+                    <Update DataTable="Vars" DataColumn="ShoppingCartFlag" Value="true" ScriptItemUID="Update6" />
+                  </ActionSequence>
+                </ActionSequence>
+              </ForeachRow>
+              <ActionSequence Condition="from vars select shoppingcartflag&#xA;&#xA;-- something was added to the shopping cart -&gt; go to shopping cart" ScriptItemUID="Action15">
+                <CallAction ActionID="UpdateOpenItems" ScriptItemUID="CallAction21" />
+                <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCart" AllowReturnToThisContext="true" ScriptItemUID="Redirect2" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="UNSUBSCRIBE_PWO">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action19">
+              <ForeachRow DataTable="AssignedObjects" WhereClause="SourceObject = pk() and deletethis and IsOrderAssignment(xorigin)" ScriptItemUID="ForeachRow3">
+                <SwitchAction ScriptItemUID="Switch2">
+                  <SwitchActionCase ScriptItemUID="Case3" Condition="isbasetreeassignment()" ItemUID="Org,Locality,Department,ProfitCenter,AERole">
+                    <LoadTable DataTable="PWOForUnsubscribe" WhereClause="format( &quot;orderstate in (select orderstate from QER_VPWOOrderState where IsAssigned=1 and IsOrder=0 ) and objectkeyassignment = {0}&quot;, from assignedobjects select current sqlformatvalue(XObjectKey, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable3">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />
+                    </LoadTable>
+                  </SwitchActionCase>
+                </SwitchAction>
+                <Method DataTable="PWOForUnsubscribe" Method="Unsubscribe">
+                  <MethodParameter Name="&quot;uidPerson&quot;" Value="GetUser()" />
+                  <MethodParameter Name="&quot;reason&quot;" Value="&quot;&quot;" />
+                </Method>
+              </ForeachRow>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="AssignmentTable()" Expression="AssignmentTable(TableName(), OrgBaseTable())" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="OrgBaseTable()" Expression="from Container select getobjectkeytable(objectkeyselected)" DataType="System.String" ScriptItemUID="Function2" />
+        <Function Name="BuildObjectKeyAssignment()" Expression="-- build object key XML for the M:N assignment table&#xD;&#xA;&#xD;&#xA;GetObjectKeyRelation(assignmenttable(),&#xD;&#xA;OrgBaseTable(), -- ADSGroup, NDOGroup, SAPGroup, etc....&#xD;&#xA;&quot;&quot;+{{&#xD;&#xA;&#xD;&#xA;string _r = null;&#xD;&#xA;try{&#xD;&#xA;var objectKey = Container.GetColumn(&quot;ObjectKeySelected&quot;).GetValue(Container.SingleRow).String;&#xD;&#xA;_r = new DbObjectKey(objectKey).Keys[0];&#xD;&#xA;} catch{&#xD;&#xA;}&#xD;&#xA;@return _r;&#xD;&#xA;&#xD;&#xA;}},&#xD;&#xA;TableName(), pk())&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="IsBasetreeAssignment()" Expression="tablename() in('Org', 'Department', 'ProfitCenter', 'Locality', 'AERole')" DataType="System.Boolean" ScriptItemUID="Function5" />
+        <Function Name="IsDirectAssignment(int xorigin)" Expression="-- the first bit of XOrigin means that it is a direct assignment&#xD;&#xA;{{ (xorigin &amp; 1) == 1 }}" DataType="System.Boolean" ScriptItemUID="Function6" />
+        <Function Name="IsOrderAssignment(int xorigin)" Expression="-- the first bit of XOrigin means that it is a direct assignment&#xD;&#xA;{{ (xorigin &amp; 8) &gt; 0 }}" DataType="System.Boolean" ScriptItemUID="Function4" />
+        <Function Name="GetUIDFromObjectKey(string objectkey)" Expression="Substring(Convert(objectkey,&quot;System.String&quot;),IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7,(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/P&gt;&lt;/Key&gt;&quot;,0)-(IndexOf(Convert(objectkey,&quot;System.String&quot;),&quot;&lt;/T&gt;&lt;P&gt;&quot;,0)+7)))" DataType="System.String" ScriptItemUID="Function7" />
+        <Function Name="AssignmentTable(String BaseTreeTableName, String AssignmentTableName)" Expression="SingleProperty(&#xD;&#xA;   &quot;DialogTable&quot;,&#xD;&#xA;   &quot;TableName&quot;,&#xD;&#xA;   format(&quot;&#xD;&#xA;      UID_DialogTable in (select d.UID_DialogTable &#xD;&#xA;      from dialogtable d&#xD;&#xA;      join basetreeassign bta on d.UID_DialogTableBase = bta.UID_DialogTableMN&#xD;&#xA;      join QBM_VQBMRelation rel1 on rel1.UID_DialogTableParent = bta.UID_DialogTableElement and rel1.ChildTable = d.tablename&#xD;&#xA;      join QBM_VQBMRelation rel2 on rel2.UID_DialogTableParent &lt;&gt; bta.UID_DialogTableElement and rel2.ChildTable = d.tablename&#xD;&#xA;      where {0})&quot;,&#xD;&#xA;      SqlAnd(&#xD;&#xA;         SqlCompare(&quot;IsDeactivatedByPreprocessor&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;         SqlCompare(&quot;rel2.ParentTable&quot;, BaseTreeTableName, &quot;string&quot;, &quot;equal&quot;),&#xD;&#xA;         SqlCompare(&quot;rel1.ParentTable&quot;, AssignmentTableName, &quot;string&quot;, &quot;equal&quot;),&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function9" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="pk()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="TableName()" DataType="System.String" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="OnReinitialized" ContainerType="ActionComponent" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

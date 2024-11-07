@@ -1,0 +1,20 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_RPS_BusinessOwner_StartPage_Ext" RequiredDbModules="RPS,CPL">
+    <Extensions>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="15">
+        <Insert DataTable="Compliance" ScriptItemUID="CPLInsert1">
+          <ActionSequence ScriptItemUID="CPLAction1" />
+          <InsertValue Value="translate(&quot;#LDS#{0} system entitlements with rule violations&quot;)" DataColumn="Message" />
+          <InsertValue Value="&quot;Groups contributing to rule violations&quot;" DataColumn="IdentRpsReport" />
+        </Insert>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="25">
+        <Insert DataTable="Compliance" ScriptItemUID="CPLInsert2">
+          <ActionSequence ScriptItemUID="CPLAction2" />
+          <InsertValue Value="translate(&quot;#LDS#{0} employees with rule violations&quot;)" DataColumn="Message" />
+          <InsertValue Value="&quot;Compliance rule violations by direct reports&quot;" DataColumn="IdentRpsReport" />
+        </Insert>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

@@ -1,0 +1,125 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3d893be2-b0a6-f360-b7ff-8698fa181ef1">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_MultiFK" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.IColumnEditorFKComponent" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action4">
+        <CodeLiteral ScriptItemUID="CodeLiteral1">((ColumnProxy)TableStore.GetLocalColumn(this.EditTable, "EditColumnBuffer")).IsValueBuffer = !DisplayNoPopup;</CodeLiteral>
+        <CodeLiteral ScriptItemUID="CodeLiteral3">object customDisplayPattern;
+// Copy custom display pattern from the column to the collection holding the target objects
+if (EditTable_EditColumn.ExtendedProperties.TryGetValue(BaseRuntimeTable.DisplayPatternKey, out customDisplayPattern))
+{
+	ChildCandidate.ExtendedProperties[BaseRuntimeTable.DisplayPatternKey] = customDisplayPattern;
+}</CodeLiteral>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container ScriptItemUID="Container5" ItemUID="WITH POPUP" Condition="not(displaynopopup())" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;imx-flex-row&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;imx-flex-child imx-proped-viewbox&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceControlList ID="VI_Edit_View_MultiFK" ScriptItemUID="ControlRef4">
+              <VirtualFunctionMapping ID="EnableNavigation()" Value="false" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="NullText()" Value="translate(&quot;#LDS#No objects selected&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1">
+                <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="EditColumn" />
+              </VirtualTableMapping>
+            </ControlReferenceControlList>
+          </Container>
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute4" Value="&quot;imx-proped-actions&quot;" />
+            </HtmlAttributes>
+            <Button Text="translate(&quot;#LDS#Change&quot;)" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Pill'">
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="Call2">
+                  <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ScriptItemUID="Container3" IsBeginRenderPart="true">
+                      <ControlReferenceContainer ID="AdditionalContentHeader" ScriptItemUID="wctl1" />
+                      <ControlReferenceControlList ID="Content" ScriptItemUID="ControlRef2" />
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container4">
+                      <Button Text="translate(&quot;#LDS#Close&quot;)" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ItemUID="Default Button" ScriptItemUID="Button1">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Close&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <CodeLiteral ScriptItemUID="CodeLiteral2">((ColumnProxy)DataContext.TableStore.GetLocalColumn(DataContext.EditTable, "EditColumnBuffer")).SetBaseColumnValue(DataContext.EditTable_Current.Row);</CodeLiteral>
+                          <ActionOnControl />
+                          <ActionSequence ScriptItemUID="Action8">
+                            <CallAction ActionID="OnClose" ScriptItemUID="CallAction1" />
+                          </ActionSequence>
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="{{ DataContext.EditTable_EditColumn.GetMetadata(DataContext.EditTable_Current.Row).Display }}" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+        <Container ScriptItemUID="Container6" ItemUID="WITHOUT POPUP" Condition="displaynopopup()">
+          <ControlReferenceControlList ID="Content" ScriptItemUID="ControlRef3" />
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="ChildCandidate" DbObjectTypeDynamic="true" DynamicClass="FKParentTableName()" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action7" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="PreSelectWhereClause" ScriptItemUID="Column4" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="Content">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList1">
+              <ObjectSwitchContainer ScriptItemUID="TableRef1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, FKParentTableName()))" ActionType="ObjectSelection">
+                <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="VirtualTableMapping2">
+                  <VirtualColumnMapping VirtualColumn="TargetWhereClause" DataColumn="PreSelectWhereClause" />
+                </VirtualTableMapping>
+                <VirtualFunctionMapping ID="AdditionalWhereClause()" Value="additionalwhereclause()" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="TableName()" Value="FKParentTableName()" ScriptItemUID="VirtualFunctionMapping6" />
+              </ObjectSwitchContainer>
+              <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="Candidate" DataTable="ChildCandidate" ScriptItemUID="VirtualTableMapping3" />
+                <VirtualTableMapping VirtualTable="SelectedItems" DataTable="EditTable" ScriptItemUID="VirtualTableMapping4">
+                  <VirtualColumnMapping VirtualColumn="uidList" DataColumn="EditColumnBuffer" />
+                </VirtualTableMapping>
+                <VirtualFunctionMapping ID="UidListTextQualifier()" Value="&quot;&quot;" ScriptItemUID="VirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="CandidateDbTable()" Value="FKParentTableName()" ScriptItemUID="VirtualFunctionMapping8" />
+                <VirtualFunctionMapping ID="CandidateTargetValue()" Value="objectwalker(select current GetParameterParentColumn(editcolumn) from edittable)" ScriptItemUID="VirtualFunctionMapping9" />
+                <VirtualFunctionMapping ID="CandidateTargetValueColumn()" Value="select current GetParameterParentColumn(editcolumn) from edittable" ScriptItemUID="VirtualFunctionMapping10" />
+                <VirtualFunctionMapping ID="CandidateDbWhereClause()" Value="sqland(&#xA;variable(AdditionalWhereClause()),&#xA;from vars select PreSelectWhereClause,&#xA;&#xA;-- read column-level WHERE clause&#xA;{{&#xA;EditTable_EditColumn.GetMetadata(EditTable_Current.Row).ForeignKeyWhereClause&#xA;}}&#xA;&#xA;)" ScriptItemUID="VirtualFunctionMapping11" />
+              </ControlReferenceContainer>
+            </ControlList>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="FKParentTableName()" Expression="isnullorempty(&#xD;&#xA;-- obtain static table name if possible&#xD;&#xA;GetFKParentTable(DBTable( edittable), DataColumnName(edittable, editcolumn)),&#xD;&#xA;&#xD;&#xA;-- different FK table for every row allowed - this cannot be optimized by the compiler!&#xD;&#xA;select current getfkparenttable(editcolumn) from edittable&#xD;&#xA;)" DataType="System.String" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualControl ID="AdditionalContentHeader" ContainerType="Container" />
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension1">
+        <VirtualColumnExtension Name="EditColumn" DataType="System.String" />
+        <ColumnProxy DataColumn="EditColumn" Name="EditColumnBuffer" ScriptItemUID="ColumnProxy1" />
+      </VirtualTableExtension>
+      <VirtualControl ID="OnClose" ContainerType="ActionComponent" />
+      <VirtualFunction Signature="InfoText()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="DisplayNoPopup()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

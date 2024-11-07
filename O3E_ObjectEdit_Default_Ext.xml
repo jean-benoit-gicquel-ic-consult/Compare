@@ -1,0 +1,33 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="O3E_ObjectEdit_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="45">
+        <ConfigParam Key="VI_Roles_Fields_O3EUnifiedGroup" Type="ColumnList" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;O3EUnifiedGroup&quot;)" DatabaseTable="O3EUnifiedGroup" />
+        <ConfigParam Key="VI_Roles_Fields_O3EDL" Type="ColumnList" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;)" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;O3EDL&quot;)" DatabaseTable="O3EDL" />
+      </AddObject>
+      <AddObject ObjectID="QBMConfigSection1" ObjectType="ConfigSection">
+        <ConfigEntry Key="VI_Roles_Fields_O3EUnifiedGroup" ScriptItemUID="O3EConfigEntry1" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn DataColumn="DisplayName" ScriptItemUID="O3ESingleColumn8" />
+          <SingleColumn DataColumn="UID_AADOrganization" ScriptItemUID="O3ESingleColumn7" />
+          <SingleColumn DataColumn="UID_AccProduct" ScriptItemUID="O3ESingleColumn6" />
+          <SingleColumn DataColumn="MatchPatternForMembership" ScriptItemUID="O3ESingleColumn5" />
+          <SingleColumn DataColumn="RiskIndex" ScriptItemUID="O3ESingleColumn3" />
+          <SingleColumn DataColumn="IsForITShop" ScriptItemUID="O3ESingleColumn2" />
+          <SingleColumn DataColumn="IsITShopOnly" ScriptItemUID="O3ESingleColumn1" />
+          <SingleColumn ScriptItemUID="O3ESingleColumn4" DataColumn="Alias" />
+          <SingleColumn ScriptItemUID="O3ESingleColumn9" DataColumn="GroupType" />
+          <SingleColumn ScriptItemUID="O3ESingleColumn10" DataColumn="AccessType" />
+        </ConfigEntry>
+        <ConfigEntry Key="VI_Roles_Fields_O3EDL" ScriptItemUID="O3EConfigEntry2" Type="ConfigEntryObjects" ObjectType="ColumnList">
+          <SingleColumn DataColumn="DisplayName" ScriptItemUID="O3ESingleColumn20" />
+          <SingleColumn DataColumn="UID_AADOrganization" ScriptItemUID="O3ESingleColumn19" />
+          <SingleColumn DataColumn="UID_AccProduct" ScriptItemUID="O3ESingleColumn18" />
+          <SingleColumn DataColumn="MatchPatternForMembership" ScriptItemUID="O3ESingleColumn17" />
+          <SingleColumn DataColumn="IsForITShop" ScriptItemUID="O3ESingleColumn15" />
+          <SingleColumn DataColumn="IsITShopOnly" ScriptItemUID="O3ESingleColumn14" />
+          <SingleColumn ScriptItemUID="O3ESingleColumn13" DataColumn="Alias" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

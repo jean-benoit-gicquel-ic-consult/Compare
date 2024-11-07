@@ -1,0 +1,8 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_ChartTitle" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="ChartTitle" Comment="" />
+  </LayoutObject>
+</WebDesigner>

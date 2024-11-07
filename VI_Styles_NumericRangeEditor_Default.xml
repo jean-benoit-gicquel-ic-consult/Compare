@@ -1,0 +1,16 @@
+﻿<WebDesigner>
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_NumericRangeEditor_Default" Type="NumericRangeEditor" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">
+.numericTextbox {
+width: 12em;
+padding-top: 1px !important;
+padding-bottom: 1px !important;
+padding-left: 2px !important;
+padding-right: 2px !important;
+
+}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,21 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="wFEK6Jlk/67dyUofJTEE/A==">
+  <GlobalControl ID="VI_Edit_Date" MetamodelVersion="2014-01-04" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1" Layout="'VI_Styles_Container_Inline'">
+        <FormItemLabel DataTable="EditTable" DataColumn="EditColumn" IsInvisible="true" ScriptItemUID="FormItemLabel1">
+          <Label Text="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Display }}" ScriptItemUID="Label1" />
+        </FormItemLabel>
+        <DateControl DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="DateControl1" Type="FromColumn" DefaultTime="" />
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+  </GlobalControl>
+</WebDesigner>

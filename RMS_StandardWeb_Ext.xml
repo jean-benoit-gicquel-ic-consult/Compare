@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection">
+        <ConfigEntry Key="ColumnEditor_ESet.UID_ESetType" ScriptItemUID="RMSConfigEntry1" Value="VI_Edit_FKByComboBox" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

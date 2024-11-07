@@ -1,0 +1,48 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="9a4402b4-8cdb-a3ae-1fd9-db144d716191">
+  <Context ID="VI_Employee_Edit" Comment="Edit master data for an employee" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="--add new employee&#xD;&#xA;&quot;1048fd6a-055b-4c00-a693-b33ca7d2c3e2&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="UID_Person" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="Mitarbeiter" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_Employee_MasterData_Attributes" Type="ColumnList" Description="translate('#LDS#Personal data')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_Employee_MasterData_LocalityAttributes" Type="ColumnList" Description="translate('#LDS#Location information')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_Employee_MasterData_OrganizationalAttributes" Type="ColumnList" Description="translate('#LDS#Organizational attributes')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_Employee_MasterData_PassCode_HoursValid" Type="Text" Description="translate('#LDS#Determines how long the passcode is valid.')" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="Person" Class="Person" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action2">
+      <ActionSequence ScriptItemUID="Action3" Condition="not(isnullorempty(request(&quot;UID_Person&quot;)))">
+        <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="false" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
+          <RedirectParameter Value="GetObjectKey(&quot;Person&quot;, request(&quot;UID_Person&quot;), &quot;&quot;)" Name="'ObjectKey'" />
+        </Redirect>
+      </ActionSequence>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="if ( isnull(request(&quot;uid_person&quot;),'')='')&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Heading Add a New Employee')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Employee Data For {0}', from person select top 1 display())" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action4">
+          <CallAction ActionID="VI_Employee_PreEdit" ScriptItemUID="Call1" />
+        </ActionSequence>
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label Text="translate('#LDS#Heading Add a New Employee')" ScriptItemUID="Label1" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <ContainerTemplate DataTable="Person" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">
+            <ControlReferenceControlList ID="VI_Employee_EditMasterData" ScriptItemUID="ControlRef1">
+              <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="Person" DataTable="Person" />
+            </ControlReferenceControlList>
+          </ContainerTemplate>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

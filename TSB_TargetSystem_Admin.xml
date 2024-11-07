@@ -1,0 +1,44 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="960da72a-e209-ac62-0cc5-c201a8c10567">
+  <Context MetamodelVersion="2016-05-08" ID="TSB_TargetSystem_Admin" ScriptItemUID="Context1" HelpChapterUid="&quot;8A930E51-DBAC-40AC-AA03-F5100BE1FEAF&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+      <ConfigSectionDefinition Name="Administration" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="TSB_TargetSystem_Admin_UNSGroupFilter" Description="translate(&quot;#LDS#Visible groups for target system administrators&quot;)" Type="SQL" DatabaseTable="UNSGroup" LongDescription="" EmptySQLWhereClauseEquivalent="false" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Class="UNSGroup" Table="UNSGroup" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="Form1" NavigationTitle="translate(&quot;#LDS#Heading System Entitlements&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Label ScriptItemUID="Label2" Text="translate(&quot;#LDS#Heading System Entitlements&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <ObjectSwitchContainer ObjectKey="&quot;&lt;Key&gt;&lt;T&gt;DialogTable&lt;/T&gt;&lt;P&gt;TSB-T-UNSGroup&lt;/P&gt;&lt;/Key&gt;&quot;" ActionType="ObjectCollection" ScriptItemUID="ObjectSwitchContainer1">
+              <VirtualControlMapping VirtualControl="ElementSelected" ContainerType="ActionComponent">
+                <ActionComponent ScriptItemUID="Action4">
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
+                    <RedirectParameter Name="'ObjectKey'" Value="from unsgroup select current xobjectkey" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="TableName()" Value="&quot;UNSGroup&quot;" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="DbWhereClause()" Value="getconfig(&quot;TSB_TargetSystem_Admin_UNSGroupFilter&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualTableMapping VirtualTable="HierarchyTable" DataTable="UNSGroup" ScriptItemUID="VirtualTableMapping1" />
+            </ObjectSwitchContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

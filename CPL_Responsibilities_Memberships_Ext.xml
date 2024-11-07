@@ -1,0 +1,101 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Responsibilities_Memberships_Ext" RequiredDbModules="">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="110">
+        <DataTableSQL Table="ComplianceCheckSimple" ScriptItemUID="CPLDataTableSQL1">
+          <ActionSequence ScriptItemUID="CPLAction1" />
+          <Column Name="UID_Org" ScriptItemUID="CPLColumn7" DataType="System.String" />
+          <Column Name="UID_Eset" ScriptItemUID="CPLColumn1" DataType="System.String" />
+          <Column Name="UID_Person" DataType="System.String" ScriptItemUID="CPLColumn11" Caption="datacaptionsingle(&quot;Person&quot;)" />
+          <Column Name="UID_ComplianceRule" ScriptItemUID="CPLColumn2" DataType="System.String" Caption="datacaptionsingle(&quot;ComplianceRule&quot;)" ColumnDataSource="ForeignKey" DBTableName="&quot;ComplianceRule&quot;" DBColumnName="&quot;UID_ComplianceRule&quot;" FKWhereClause="" />
+          <Column Name="uid_complianceSubrule" ScriptItemUID="CPLColumn3" DataType="System.String" />
+          <Column Name="DBObjectKey" ScriptItemUID="CPLColumn4" DataType="System.String" MaxLength="" MinLength="" />
+          <Column Name="ObjectKeyElement" DataType="System.String" ScriptItemUID="CPLColumn5" />
+          <Column Name="DBObjectKeyMETA" ScriptItemUID="CPLColumn9" DataType="System.String" DataSource="Expression" Expression="IsNullOrEmpty(DBObjectKey,ObjectKeyElement)" />
+          <Column Name="UID_ITShopOrg" ScriptItemUID="CPLColumn6" DataType="System.String" />
+          <Column Name="ViolationType" DataType="System.String" ScriptItemUID="CPLColumn91" ColumnDataSource="LimitedValues">
+            <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+              <ColumnLimitedValue Name="Person" Display="" Comment="" />
+              <ColumnLimitedValue Name="Org" Display="" Comment="" />
+            </ColumnLimitedValues>
+          </Column>
+          <Column DataType="System.Boolean" Name="IsNoEffectivePerson" ScriptItemUID="CPLColumn10" TriggerUpdates="Never" />
+        </DataTableSQL>
+        <DataTableGeneric Table="ComplianceCheckSimpleObjects" ScriptItemUID="CPLDataTableGeneric1">
+          <Column Name="sourcekey" ScriptItemUID="CPLColumn8" DataType="System.String" />
+        </DataTableGeneric>
+        <DataTableDbObject Class="ComplianceRule" Table="ComplianceRule" ScriptItemUID="CPLDataTableDbObject1">
+          <ActionSequence ScriptItemUID="CPLAction2" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Action95" ObjectType="ActionSequence" SortOrder="70">
+        <Delete DataTable="ComplianceCheckSimple" ScriptItemUID="CPLDelete1" />
+        <ActionSequence Condition="getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;)=&quot;1&quot; and&#xA;candocompliancecheck()" ScriptItemUID="CPLAction3">
+          <LoadTable DataTable="ComplianceCheckSimple" Type="LimitedSQL" ScriptItemUID="CPLLoadTable1" IdentLimitedSQL="if(DbTableName() in ('Department','Profitcenter', 'Locality', 'Org', 'AERole')) then&#xD;&#xA;   &quot;Webportal.VI_Responsibilities_Memberships.CPL_OrgCheckDetail&quot;&#xD;&#xA;else if(DbTableName() = 'ESet')then&#xD;&#xA;   &quot;Webportal.VI_Responsibilities_Memberships.CPL_ESetCheckDetail&quot;&#xD;&#xA;else if(DbTableName() = 'Person')then&#xD;&#xA;   &quot;Webportal.VI_Responsibilities_Memberships.CPL_PersonCheckDetail&quot;">
+            <ParameterFree Name="&quot;uidobject&quot;" Value="from container select uid_objectselected" ScriptItemUID="CPLParameterFree1" />
+          </LoadTable>
+          <FillTable Source="XObjectKey" DataTable="ComplianceCheckSimpleObjects" DataTableSource="ComplianceCheckSimple" DataColumnSource="DBObjectKeyMETA" ScriptItemUID="CPLFillTable1" DataColumnSourceKey="sourcekey">
+            <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType1" ConvertToInteractive="false" />
+          </FillTable>
+          <LoadTable DataTable="ComplianceRule" WhereClause="format(&quot;uid_compliancerule in ( {0})&quot;, listselect(compliancechecksimple, uid_compliancerule))" ScriptItemUID="CPLLoadTable2">
+            <DbObjectLoadType ScriptItemUID="CPLDbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Container24" ObjectType="Container" SortOrder="0">
+        <Container Condition="candocompliancecheck() and 0 &lt; select count() from compliancechecksimple" ScriptItemUID="CPLContainer4" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="CPLHtmlAttribute1" Value="&quot;imx-message imx-message-compliance&quot;" />
+          </HtmlAttributes>
+          <Label Text="translate(&quot;#LDS#This object contains compliance rule violations. Check the compliance overview tab for more information.&quot;)" ScriptItemUID="CPLLabel2" />
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Functions1" ObjectType="Functions" SortOrder="5">
+        <Function Name="CanDoComplianceCheck()" Expression="GetConfigParm(&quot;QER\ComplianceCheck&quot;) = &quot;1&quot;&#xD;&#xA;And&#xD;&#xA;(DbTableName() in ('Department','Profitcenter', 'Locality', 'Org', 'ESet', 'Person'))" DataType="System.Boolean" ScriptItemUID="Function6" />
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="115">
+        <Control ID="FormCompliance">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="CPLFormGroup1">
+              <Form ID="FormCompliance" ScriptItemUID="CPLForm1">
+                <ActionSequence ScriptItemUID="CPLAction4" />
+                <PagePartContainer ID="Title" ScriptItemUID="CPLPagePartContainer1">
+                  <Label Text="translate(&quot;#LDS#Compliance&quot;)  + &quot; - &quot; + (from dbobjects select display() where UID_Object = (from Container select UID_ObjectSelected))" ScriptItemUID="CPLLabel1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="CPLPagePartContainer2">
+                  <Container ScriptItemUID="CPLContainer3">
+                    <ControlReferenceContainer ID="VI_Compliance_SimulationResultOverview" ScriptItemUID="CPLControlRef1">
+                      <VirtualFunctionMapping ID="ShowBandHeader()" Value="true" ScriptItemUID="CPLVirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="ShowPerson()" Value="false" ScriptItemUID="CPLVirtualFunctionMapping2" />
+                      <VirtualTableMapping ScriptItemUID="CPLVirtualTableMapping1" VirtualTable="ComplianceCheckSimple" DataTable="ComplianceCheckSimple">
+                        <VirtualColumnMapping DataColumn="DBObjectKeyMETA" VirtualColumn="DBObjectKey" />
+                      </VirtualTableMapping>
+                    </ControlReferenceContainer>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container12" ObjectType="Container" SortOrder="47">
+        <Container EnableCustomAttributes="true" ItemUID="Compliance" Condition="candocompliancecheck()" ScriptItemUID="CPLContainer5">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="CPLHtmlAttribute2" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="CPLControlRef2">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="CPLAction5">
+                <Redirect Target="FormModule" AbortExecution="false" ScriptItemUID="CPLRedirect1">
+                  <RedirectFormModule ID="FormCompliance" ScriptItemUID="CPLRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Compliance&quot;)" ScriptItemUID="CPLVirtualFunctionMapping3" />
+            <VirtualFunctionMapping ID="Description()" Value="translate('#LDS#Shows the compliance violations related to this object.')" ScriptItemUID="CPLVirtualFunctionMapping4" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

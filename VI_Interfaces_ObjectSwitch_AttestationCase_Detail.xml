@@ -1,0 +1,21 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="8391a72c-0c71-c4ec-6f6d-dd35d98eb22f">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_AttestationCase_Detail">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ComponentInterfaceObject ContainerType="ControlList" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="AttestationCase" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualTable Name="DialogParameter" ScriptItemUID="VirtualTable2" Class="DialogParameter" />
+      <VirtualTable Name="DialogParameterSet" ScriptItemUID="VirtualTable3" Class="DialogParameterSet" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

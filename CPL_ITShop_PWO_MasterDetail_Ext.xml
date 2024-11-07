@@ -1,0 +1,9 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ITShop_PWO_MasterDetail_Ext">
+    <Extensions>
+      <AddObject ObjectID="VirtualTable1" ObjectType="VirtualTable">
+        <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="CPLColumn1" DataSource="Expression" Expression="if(getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;) = &quot;1&quot;)then(&#xD;&#xA;if(0 = (from PWODecisionHistory select count() where UID_PersonWantsOrg = (select current uid_personwantsorg from PersonWantsOrg) and not(IsNullOrEmpty(UID_ComplianceRule))))then(&#xD;&#xA;if(orderstate = 'OrderProduct')&#xD;&#xA;then(&#xD;&#xA;not(exists(&quot;personwantsorg&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompareuid(&quot;UID_PersonWantsOrg&quot;,UID_PersonWantsOrg),&#xD;&#xA;format(&quot;uid_personwantsorg in (select uid_personwantsorg from {0} where {1})&quot;,&#xD;&#xA;sqlfunctioncalltable(&quot;CPL&quot;,&quot;GComplianceCheck&quot;, &quot;FTCCSPWOCheck&quot;,sqlformatvalue(UID_PersonWantsOrg,&quot;string&quot;, &quot;NonUnicodeLiterals&quot;)),&#xD;&#xA;sqlcompare(&quot;IsNewObject&quot;,true,&quot;bool&quot;,&quot;equal&quot;)&#xD;&#xA;))&#xD;&#xA;)))&#xD;&#xA;else(true)&#xD;&#xA;)&#xD;&#xA;else(false)&#xD;&#xA;)&#xD;&#xA;else(true)" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

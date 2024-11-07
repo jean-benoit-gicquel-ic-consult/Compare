@@ -1,0 +1,102 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="332a3e2c-c5ff-424e-0c7c-8ae5bd70659a">
+  <GlobalControl ID="VI_Attestation_AttestationCase" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Attestation_Edit_Global" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
+      <Container ScriptItemUID="Container1">
+        <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+          <Action ScriptItemUID="Action1">
+            <Delete DataTable="AttestationPolicy" ScriptItemUID="Delete1" />
+            <Delete DataTable="AttestationObject" ScriptItemUID="Delete2" />
+            <LoadTable DataTable="AttestationPolicy" ScriptItemUID="LoadTable2" WhereClause="sqland(&quot;isinactive=0&quot;, AttestationPolicyDbWhereClause())">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </Action>
+        </Activator>
+        <SwitchContainer ScriptItemUID="Switch1">
+          <SwitchContainerCase ScriptItemUID="Case1" Condition="UseOneGridForAllPolicies()" ItemUID="All cases in a single grid">
+            <ControlReferenceControlList ID="VI_Attestation_AttestationCase_ViewMultiplePolicy" ScriptItemUID="ControlRef1">
+              <VirtualFunctionMapping ID="OptionalAttestationCaseFilter()" Value="sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;format(&quot;uid_attestationpolicy in (select uid_attestationpolicy from attestationpolicy where {0})&quot;,&#xD;&#xA;isnullorempty(AttestationPolicyDbWhereClause(), &quot;1=1&quot;)))" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="NoItemsText()" Value="NoItemsText()" />
+              <VirtualControlMapping ContainerType="Container" VirtualControl="AdditionalControlsColumn1">
+                <Container ScriptItemUID="Container2">
+                  <ControlReferenceContainer ID="AdditionalControlsColumn1" ScriptItemUID="ControlRef2" />
+                </Container>
+              </VirtualControlMapping>
+            </ControlReferenceControlList>
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case3" Condition="0 = dbcount(&quot;attestationcase&quot;, sqland(&#xD;&#xA;AttestationCaseDbWhereClause(),&#xD;&#xA;format(&quot;uid_attestationpolicy in (select uid_attestationpolicy from attestationpolicy where {0})&quot;,&#xD;&#xA;isnullorempty(AttestationPolicyDbWhereClause(), &quot;1=1&quot;))))" ItemUID="No items found">
+            <Label ScriptItemUID="Label1" Text="noitemstext()" />
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case2" ItemUID="One grid per policy">
+            <ControlList ScriptItemUID="ControlList1">
+              <Tab Layout="'VI_Styles_Tab_AccordeonMultiselect'" CustomStyle="'margin-top: 10px;'" ScriptItemUID="Tab1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <Property Name="ShowTabsIfOnePage" Value="false" />
+                </HtmlAttributes>
+                <TabPageTemplate DataTable="AttestationPolicy" ScriptItemUID="TabPageTemplate1">
+                  <TabPage ExpandedCondition="0 = select current iterationindex() from attestationpolicy --expand the first policy" ScriptItemUID="TabPage1">
+                    <ControlsHeader ScriptItemUID="Container4">
+                      <Label Text="from attestationpolicy select current display()&#xA;+&quot; (&quot;+countcases+&quot;)&quot;" ScriptItemUID="Label8" />
+                    </ControlsHeader>
+                    <ControlsBody ScriptItemUID="Container5">
+                      <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="AttestationObject" WithoutParentContainer="true" WhereClause="uid_attestationobject = ( select current uid_attestationobject from attestationpolicy)">
+                        <ObjectSwitchContainer ObjectKey="getobjectkey(&quot;AttestationObject&quot;, from AttestationPolicy select current UID_AttestationObject, &quot;&quot;)" ActionType="Attestation_EditCases" ScriptItemUID="ObjectSwitchContainer1">
+                          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping3" />
+                          <VirtualFunctionMapping ID="OptionalAttestationCaseFilter()" Value="AttestationCaseDbWhereClause()" ScriptItemUID="VirtualFunctionMapping4" />
+                        </ObjectSwitchContainer>
+                      </ContainerTemplate>
+                    </ControlsBody>
+                  </TabPage>
+                </TabPageTemplate>
+              </Tab>
+            </ControlList>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="AttestationPolicy" Table="AttestationPolicy" ScriptItemUID="DataTableDbObject3" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="CountCases" DataType="System.Int32" ScriptItemUID="Column4" DataSource="Expression" Expression="dbcount(&quot;attestationcase&quot;, sqland(&#xD;&#xA;attestationcasedbwhereclause(),&#xD;&#xA;format(&quot;uid_attestationpolicy = {0}&quot;, sqlformatvalue(UID_AttestationPolicy, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))))" />
+        </DataTableDbObject>
+        <DataTableFKView Table="AttestationObject" ViewFKDataTable="AttestationPolicy" ViewFKDataColumn="UID_AttestationObject" ViewFKWhereClause="" ScriptItemUID="DataTableFKView2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </DataTableFKView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AttestationCase" ScriptItemUID="VirtualTable1" Class="AttestationCase">
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <Column Name="AttestationStateDisplay" DataType="System.String" ScriptItemUID="Column1" ColumnDataSource="LimitedValues" DataSource="Expression" Expression="if(isgranted) then &quot;approved&quot; else (if(isclosed) then &quot;denied&quot; else &quot;pending&quot;)" Caption="translate(&quot;#LDS#Status&quot;)">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="pending" Display="lower(translate(&quot;#LDS#Pending&quot;))" Comment="" />
+            <ColumnLimitedValue Name="approved" Display="lower(translate(&quot;#LDS#Approved&quot;))" Comment="" />
+            <ColumnLimitedValue Name="denied" Display="lower(translate(&quot;#LDS#Denied&quot;))" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+      </VirtualTable>
+      <VirtualFunction Signature="noitemstext()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="AttestationCaseDbWhereClause()" DataType="System.String" />
+      <VirtualFunction Signature="AttestationPolicyDbWhereClause()" DataType="System.String" />
+      <VirtualTable Name="Vars" ScriptItemUID="VirtualTable4" RequiresCursor="true">
+        <VirtualColumn Name="UID_AttestationCaseSelected" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="UseOneGridForAllPolicies()" DataType="System.Boolean" TriggerUpdates="Never" Comment="If true, all cases will be shown in a single grid regardless of their policy" />
+      <VirtualTable Name="DialogParameter" ScriptItemUID="VirtualTable2" Class="DialogParameter" />
+      <VirtualTable Name="DialogParameterSet" ScriptItemUID="VirtualTable3" Class="DialogParameterSet" />
+      <VirtualControl ContainerType="Container" ID="AdditionalControlsColumn1">
+        <VirtualTableCursor DataTable="AttestationCase" />
+      </VirtualControl>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

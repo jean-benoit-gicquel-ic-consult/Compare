@@ -1,0 +1,302 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context MetamodelVersion="2016-05-08" ID="VI_ITShop_ShoppingCartPatternAddOrMerge" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;1CF884F0-42C1-4280-9866-890CB209F522&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1">
+        <Parameter Name="UID_ShoppingCartOrder" IsMandatory="false" />
+        <Parameter Name="UID_Person_ReferenceUser" IsMandatory="false" />
+      </ContextParameters>
+      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Templates&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_AccProductCanAddToPattern" Description="translate(&quot;#LDS#Condition for adding products to templates&quot;)" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="ShoppingCartOrder" Class="ShoppingCartOrder" WhereClauseSQL="format(&quot;uid_shoppingcartorder = '{0}'&quot;, &#xD;&#xA;isnull(request(&quot;UID_ShoppingCartOrder&quot;), &quot;&quot;))" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1">
+          <LoadTable DataTable="ShoppingCartItem" ScriptItemUID="LoadTable1" WhereClause="sqland(&#xD;&#xA;format( &quot;uid_personinserted = '{0}'&quot;, from user select uid_person),&#xD;&#xA;sqlcompareuid(&quot;uid_shoppingcartorder&quot;, IsNull(request(&quot;UID_ShoppingCartOrder&quot;), &quot;&quot;)),&#xD;&#xA;SqlOr(format(&quot;ObjectKeyOrdered not in(select XObjectKey from QERAssign)&quot;),format(&quot;ObjectKeyAssignment like '&lt;Key&gt;&lt;T&gt;PersonIn%'&quot;)),&#xD;&#xA;format(&quot;UID_ShoppingCartItem not in(&#xD;&#xA;select S.UID_ShoppingCartItem from ShoppingCartItem S&#xD;&#xA;join ShoppingCartItem S2 on S.UID_ShoppingCartItemParent = S2.UID_ShoppingCartItem&#xD;&#xA;join AccProductDependencies A on S.UID_AccProduct = A.UID_AccProductRelated and S2.UID_AccProduct = A.UID_AccProduct&#xD;&#xA;where {0} and A.IsMandatory=1)&quot;,sqlcompareuid(&quot;S.uid_shoppingcartorder&quot;, IsNull(request(&quot;UID_ShoppingCartOrder&quot;), &quot;&quot;)))&#xD;&#xA;)">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="DataTableDbObject2">
+        <ActionSequence ScriptItemUID="Action2">
+          <LoadTable DataTable="AccProduct" RevertExisting="false" ScriptItemUID="LoadTable2" WhereClause="&quot;uid_accproduct in ( select uid_accproduct from shoppingcartitem where &quot;+whereclause(shoppingcartitem)+&quot;)&quot;">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+          </LoadTable>
+          <LoadTable DataTable="BaseTree" ScriptItemUID="LoadTable13" WhereClause="Format(&quot;UID_Org in ({0})&quot;,listselect(ShoppingCartItem,ObjectKeyOrgUsedInAssignLocal,not(IsNullOrEmpty(ObjectKeyOrgUsedInAssignLocal))))">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType12" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+          </LoadTable>
+        </ActionSequence>
+        <Column Name="DisplayProduct" Expression="displayvalue(uid_accproduct)" DataSource="Expression" ScriptItemUID="Column1" DataType="System.String" />
+        <Column DataType="System.String" Name="ObjectKeyOrgUsedInAssignLocal" ScriptItemUID="Column12" DataSource="Expression" Expression="GetOrgFromAssignmentKey(ObjectKeyAssignment)" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="AccProduct" Class="AccProduct" ScriptItemUID="DataTableDbObject3">
+        <ActionSequence ScriptItemUID="Action3" />
+        <Column Name="CanAddToPattern" Expression="isnull(getconfig(&quot;VI_ITShop_AccProductCanAddToPattern&quot;), &quot;true&quot;) = &quot;true&quot;" DataSource="Expression" ScriptItemUID="Column2" DataType="System.Boolean" />
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartPattern" Class="ShoppingCartPattern" WhereClauseSQL="SqlCompareUid(&quot;UID_Person&quot;, GetUser())" ScriptItemUID="DataTableDbObject4">
+        <ActionSequence ScriptItemUID="Action4">
+          <LoadTable DataTable="ShoppingCartPatternItem" ScriptItemUID="LoadTable3">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+          </LoadTable>
+        </ActionSequence>
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartPatternItem" Class="ShoppingCartPatternItem" WhereClauseSQL="&quot;uid_shoppingcartpattern in ( select uid_shoppingcartpattern from shoppingcartpattern where &quot;+&#xD;&#xA;whereclause(shoppingcartpattern)+&quot;)&quot;" ScriptItemUID="DataTableDbObject5">
+        <ActionSequence ScriptItemUID="Action5">
+          <LoadTable DataTable="ShoppingCartPatternAccProducts" ScriptItemUID="LoadTable4">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </DataTableDbObject>
+      <DataTableDbObject Table="ShoppingCartPatternAccProducts" Class="AccProduct" WhereClauseSQL="&quot;uid_accproduct in ( &#xD;&#xA;  select uid_accProduct from ShoppingCartPatternItem where &#xD;&#xA;  uid_shoppingcartpattern in ( &#xD;&#xA;    select uid_shoppingcartpattern from shoppingcartpattern where &quot;+&#xD;&#xA;  whereclause(shoppingcartpattern)+&quot;))&quot;" ScriptItemUID="DataTableDbObject6">
+        <ActionSequence ScriptItemUID="Action6" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="NewPatternName" ScriptItemUID="Column3" DataType="System.String" />
+        <Column Name="PatternUIDToAddItems" ScriptItemUID="Column4" DataType="System.String" />
+      </DataTableSingleRow>
+      <DataTableView Table="ProductsAndFiles" PrimaryKeyColumn="ID" ViewExpression="union(&#xD;&#xA;from ShoppingCartItem select distinct (UID_AccProduct,OrderDetail1,OrderDetail2,ObjectKeyOrgUsedInAssignLocal) where isnull(uid_personwantsorg,'') = '',&#xD;&#xA;from AccProductReferenceUser select (UID_AccProduct,&quot;&quot;,&quot;&quot;,&quot;&quot;),&#xD;&#xA;from PersonInBaseTree select(UID_ACCPRODUCT,&quot;&quot;,&quot;&quot;,UID_ORG)&#xD;&#xA;)&#xD;&#xA;" DisplayColumn="DisplayProduct" ScriptItemUID="DataTableView1">
+        <Column Name="UID_AccProduct" ScriptItemUID="Column5" DataType="System.String" />
+        <Column Name="OrderDetail1" ScriptItemUID="Column6" DataType="System.String" />
+        <Column Name="OrderDetail2" ScriptItemUID="Column7" DataType="System.String" />
+        <Column DataType="System.String" Name="UID_ORG" ScriptItemUID="Column23" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_ORG&quot;" DBTableName="&quot;BaseTree&quot;" FKWhereClause="" />
+        <Column Name="DisplayProduct" Expression="from AccProduct select display() where UID_AccProduct = (from ProductsAndFiles select current UID_AccProduct)" DataSource="Expression" ScriptItemUID="Column8" DataType="System.String" />
+        <Column Name="DisplayProductGroup" Expression="from AccProduct select displayvalue(UID_AccProductGroup) where UID_AccProduct = (from ProductsAndFiles select current UID_AccProduct)" DataSource="Expression" ScriptItemUID="Column9" DataType="System.String" Caption="datacaption(accproduct, uid_accproductgroup)" />
+        <Column Name="CanAddToPattern" Expression="from AccProduct select CanAddToPattern where UID_AccProduct = (from ProductsAndFiles select current UID_AccProduct)" DataSource="Expression" ScriptItemUID="Column10" DataType="System.Boolean" />
+        <Column Name="ID" MaxLength="" ScriptItemUID="Column11" DataType="System.String" />
+      </DataTableView>
+      <DataTableDbObject Class="AccProduct" Table="AccProductReferenceUser" ScriptItemUID="DataTableDbObject7">
+        <ActionSequence ScriptItemUID="Action21">
+          <LoadTable DataTable="AccProduct" RevertExisting="false" ScriptItemUID="LoadTable10" WhereClause="whereclause(AccProductReferenceUser)">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType10" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </DataTableDbObject>
+      <DataTableDbObject Class="PersonInBaseTree" Table="PersonInBaseTree" ScriptItemUID="DataTableDbObject8">
+        <ActionSequence ScriptItemUID="Action22">
+          <LoadTable DataTable="BaseTree" ScriptItemUID="LoadTable11">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType11" ConvertToInteractive="false" LoadTypeForeignDisplaysForAllColumns="false" />
+          </LoadTable>
+          <LoadTable DataTable="AccProduct" RevertExisting="false" ScriptItemUID="LoadTable14" WhereClause="SqlInWithFormat(&quot;UID_AccProduct&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;, from PersonInBaseTree select UID_ACCPRODUCT)" RemoveDeleted="false">
+            <DbObjectLoadType ScriptItemUID="DbObjectLoadType15" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+        <Column DataType="System.String" Name="UID_ACCPRODUCT" ScriptItemUID="Column22" DataSource="Expression" Expression="from PersonInBaseTree select(VI_GetAccproductAssignmentMember(GetUser(),XObjectKey))" />
+      </DataTableDbObject>
+      <DataTableDbObject Class="BaseTree" Table="BaseTree" WhereClauseSQL="Format(&quot;UID_Org in (select UID_Org from PersonInBaseTree where {0})&quot;,WhereClause(PersonInBaseTree))" ScriptItemUID="DataTableDbObject9">
+        <ActionSequence ScriptItemUID="Action23" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="CreateShoppingCartPatten">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action8">
+            <ActionSequence ScriptItemUID="Action9">
+              <Insert DataTable="ShoppingCartPattern" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action10">
+                  <Save DataTable="ShoppingCartPattern" WhereClause="uid_shoppingcartpattern = from shoppingcartpattern select current uid_shoppingcartpattern" ScriptItemUID="Save1" />
+                  <Update DataTable="Container" DataColumn="PatternUIDToAddItems" Value="from ShoppingCartPattern select current uid_shoppingCartPattern" ScriptItemUID="Update1" />
+                  <CallAction ActionID="CreateShoppingCartPattenItem" ScriptItemUID="Call1" />
+                </ActionSequence>
+                <InsertValue DataColumn="Ident_ShoppingCartPattern" Value="from Container select NewPatternName" />
+                <InsertValue DataColumn="UID_Person" Value="from user select uid_person" />
+              </Insert>
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+      <Control ID="CreateShoppingCartPattenItem">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action11">
+            <ActionSequence ScriptItemUID="Action12">
+              <ForeachRow DataTable="ProductsAndFiles" WhereClause="CanAddToPattern" ScriptItemUID="ForeachRow1">
+                <ActionSequence ScriptItemUID="Action13" Condition="0 = (&#xD;&#xA;select count() from ShoppingCartPatternItem where&#xD;&#xA;(&#xD;&#xA;UID_AccProduct = (from ProductsAndFiles select current UID_AccProduct)&#xD;&#xA;and&#xD;&#xA;(OrderDetail1 = (from ProductsAndFiles select current OrderDetail1))&#xD;&#xA;and&#xD;&#xA;(OrderDetail2 = (from ProductsAndFiles select current OrderDetail2))&#xD;&#xA;and&#xD;&#xA;(UID_ShoppingCartPattern = (from Container select PatternUIDToAddItems))&#xD;&#xA;and&#xD;&#xA;(ObjectKeyOrgUsedInAssign = IsNullOrEmpty((from BaseTree select XObjectKey where Uid_Org = (from ProductsAndFiles select current UID_ORG)),&quot;&quot;))&#xD;&#xA;)&#xD;&#xA;)">
+                  <Insert DataTable="ShoppingCartPatternItem" ScriptItemUID="Insert2">
+                    <ActionSequence ScriptItemUID="Action14">
+                      <Save DataTable="ShoppingCartPatternItem" WhereClause="Uid_ShoppingCartPatternItem = from ShoppingCartPatternItem select current Uid_ShoppingCartPatternItem" ScriptItemUID="Save2" />
+                    </ActionSequence>
+                    <InsertValue DataColumn="UID_ShoppingCartPattern" Value="from Container select PatternUIDToAddItems" />
+                    <InsertValue DataColumn="UID_AccProduct" Value="from ProductsAndFiles select current UID_AccProduct" />
+                    <InsertValue DataColumn="OrderDetail1" Value="from ProductsAndFiles select current OrderDetail1" />
+                    <InsertValue DataColumn="OrderDetail2" Value="from ProductsAndFiles select current OrderDetail2" />
+                    <InsertValue Value="from BaseTree select XObjectKey where Uid_Org = (from ProductsAndFiles select current UID_ORG)" DataColumn="ObjectKeyOrgUsedInAssign" />
+                  </Insert>
+                </ActionSequence>
+              </ForeachRow>
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1">
+      <Function Name="GetOrgFromAssignmentKey(string key)" Expression="{{&#xD;&#xA;if(string.IsNullOrEmpty(key))&#xD;&#xA;return null;&#xD;&#xA;&#xD;&#xA;var k = new DbObjectKey(key);&#xD;&#xA;var vals = k.Keys;&#xD;&#xA;string result = null;&#xD;&#xA;&#xD;&#xA;// one of the foreign-keys must point to Person, as we want to show entitlements that&#xD;&#xA;// will be inherited to the employee&#xD;&#xA;var isAssignToPerson = false;&#xD;&#xA;&#xD;&#xA;for (var i = 0; i &lt; vals.Length; i++)&#xD;&#xA;{&#xD;&#xA;   var fkRel = k.GetTable(_Connection).PrimaryKeyColumns[i].FKRelation;&#xD;&#xA;   &#xD;&#xA;   if (fkRel == null)&#xD;&#xA;      continue;&#xD;&#xA;   &#xD;&#xA;   var parentTable = fkRel.ParentColumn.TableDef;&#xD;&#xA;   if (parentTable.Tablename.Equals(&quot;Person&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;      isAssignToPerson = true;&#xD;&#xA;   &#xD;&#xA;   var b = parentTable.BaseTable;&#xD;&#xA;   &#xD;&#xA;   // is the foreign key pointing to a basetree deriving table?&#xD;&#xA;   &#xD;&#xA;   if (b != null &amp;&amp; b.Tablename.Equals(&quot;Basetree&quot;, StringComparison.OrdinalIgnoreCase))&#xD;&#xA;   {&#xD;&#xA;      result = vals[i];&#xD;&#xA;      continue;&#xD;&#xA;   }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;@return isAssignToPerson ? result : null;&#xD;&#xA;}}" DataType="System.String" ScriptItemUID="QERFunction1" />
+    </Functions>
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action7">
+      <ActionSequence ScriptItemUID="Action19" ItemUID="With UID_ShoppingCartOrder" Condition="isnull(request(&quot;UID_ShoppingCartOrder&quot;), &quot;&quot;) &lt;&gt; &quot;&quot;">
+        <LoadTable DataTable="ShoppingCartOrder" ScriptItemUID="LoadTable5">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <ActionSequence ScriptItemUID="Action20" ItemUID="With UID_Person_ReferenceUser" Condition="isnull(request(&quot;UID_Person_ReferenceUser&quot;), &quot;&quot;) &lt;&gt; &quot;&quot;">
+        <LoadTable DataTable="AccProductReferenceUser" WhereClause="format(&quot;({0}) and &#xD;&#xA;uid_accproduct in (&#xD;&#xA;select p.uid_accproduct from QER_VPWOProductNodes p&#xD;&#xA;join personhasobject pho on pho.ObjectKey = p.ObjectKeyOrdered&#xD;&#xA;where &#xD;&#xA;p.ObjectKeyOrdered not in( select XObjectKey from QERAssign) and pho.UID_Person = {1})&quot;,&#xD;&#xA;variable(getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;)),&#xD;&#xA;sqlformatvalue(request(&quot;UID_Person_ReferenceUser&quot;), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable9">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType9" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" />
+        </LoadTable>
+        <LoadTable DataTable="PersonInBaseTree" WhereClause="SqlAnd(&#xD;&#xA;   sqlcompareuid(&quot;UID_Person&quot;, request(&quot;UID_Person_ReferenceUser&quot;)),&#xD;&#xA;   Format(&quot;UID_Org in (select UID_Org from Basetree where UID_OrgRoot in (select UID_OrgRoot from OrgRoot where {0}))&quot;,&#xD;&#xA;      SqlOr(&#xD;&#xA;	     &quot;UID_OrgRoot in ('QER-V-Locality', 'QER-V-Department', 'QER-V-ProfitCenter')&quot;,&#xD;&#xA;         if(IsPreProp(&quot;ORG&quot;))then&#xD;&#xA;            &quot;UID_OrgRoot in ( select uid_orgroot from org)&quot;&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable12">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType13" ConvertToInteractive="false" LoadTypeForeignDisplays="false" LoadTypeForeignDisplaysForAllColumns="false" />
+        </LoadTable>
+      </ActionSequence>
+      <LoadTable DataTable="ShoppingCartPattern" ScriptItemUID="LoadTable6">
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" />
+      </LoadTable>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Main" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Cart templates&quot;)" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action15" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <Label Text="translate(&quot;#LDS#Cart templates&quot;)" ScriptItemUID="Label1" />
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container ItemUID="Head" ScriptItemUID="Container3">
+              <Label Text="translate('#LDS#The following products in your shopping cart may be added to a template.')" ScriptItemUID="Label2" />
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="ProductsAndFiles" WhereClause="CanAddToPattern = true" OrderBy="'__Display'" ScriptItemUID="GridBand1">
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows />
+                  <GridColumn Width="'330px'" AutoFilterColumn="__Display" SortColumn="__Display" ScriptItemUID="Column14">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Container ScriptItemUID="Container4">
+                        <Label Text="translate('#LDS#Product')" ScriptItemUID="Label3" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Container ScriptItemUID="Container5">
+                        <ContainerTemplate DataTable="AccProduct" WhereClause="UID_AccProduct = from ProductsAndFiles select current UID_AccProduct" ScriptItemUID="ContainerTemplate1">
+                          <Container ScriptItemUID="Container6">
+                            <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="select current uid_accproduct from AccProduct" ScriptItemUID="ProductRef1">
+                              <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
+                            </AccProductSwitchContainer>
+                          </Container>
+                        </ContainerTemplate>
+                        <Container ScriptItemUID="Container25" Condition="not(from ProductsAndFiles select current IsNullOrEmpty(UID_ORG))&#xD;&#xA;and&#xD;&#xA;(0 &lt; from BaseTree select count() where UID_Org = (from ProductsAndFiles select current UID_ORG))">
+                          <Image Source="File" FileName="from BaseTree select variable(format(&quot;%permanentlink%dialogImgTbl={0}&quot;, GetObjectKeyTable(XObjectKey))) where UID_Org = (from ProductsAndFiles select current UID_ORG)" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image9" />
+                          <Label Text="from BaseTree select displaylong() where UID_Org = (from ProductsAndFiles select current UID_ORG)" ScriptItemUID="Label4" Action="Redirect">
+                            <ServerActionCall ScriptItemUID="ServerActionCall7">
+                              <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                                <RedirectParameter Name="'ObjectKey'" Value="from BaseTree select XObjectKey where UID_Org = (from ProductsAndFiles select current UID_ORG)" />
+                              </Redirect>
+                            </ServerActionCall>
+                          </Label>
+                        </Container>
+                      </Container>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn Width="'180px'" SortColumn="DisplayProductGroup" AutoFilterColumn="DisplayProductGroup" ScriptItemUID="Column15">
+                    <GridColumnHeader ScriptItemUID="wctl2">
+                      <Container ScriptItemUID="Container9">
+                        <Label Text="datacaption(accproduct, uid_accproductgroup)" ScriptItemUID="Label6" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell2">
+                      <Container ScriptItemUID="Container10">
+                        <Label Text="from ProductsAndFiles select current DisplayProductGroup&#xD;&#xA;" ScriptItemUID="Label7" />
+                      </Container>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn Width="'100%'" ScriptItemUID="Column16">
+                    <GridColumnHeader ScriptItemUID="wctl3">
+                      <Container ScriptItemUID="Container11">
+                        <Label Text="datacaption( accproduct, description)" ScriptItemUID="Label8" />
+                      </Container>
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell3">
+                      <Container ScriptItemUID="Container12">
+                        <Label Text="from AccProduct select displayvalue(Description) where UID_AccProduct = from ProductsAndFiles select current UID_AccProduct" ScriptItemUID="Label9" />
+                      </Container>
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </Container>
+            <Container ItemUID="Select existing pattern" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container13">
+              <ControlReferenceContainer ID="VI_ITShop_CartPatternEdit" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="ShoppingCartPattern" DataTable="ShoppingCartPattern" ScriptItemUID="VirtualTableMapping2" />
+                <VirtualTableMapping VirtualTable="ShoppingCartPatternItem" DataTable="ShoppingCartPatternItem" ScriptItemUID="VirtualTableMapping3" />
+                <VirtualTableMapping VirtualTable="AccProduct" DataTable="ShoppingCartPatternAccProducts" ScriptItemUID="VirtualTableMapping4" />
+                <VirtualFunctionMapping ID="AllowDelete()" Value="false" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="AllowEdit()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="AllowMergeShoppingCartItemsToPattern()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualControlMapping VirtualControl="CreateShoppingCartPattenItems" ContainerType="ActionComponent">
+                  <ActionComponent ScriptItemUID="Action16">
+                    <Update DataTable="Container" DataColumn="PatternUIDToAddItems" Value="from ShoppingCartPattern select current UID_ShoppingCartPattern" ScriptItemUID="Update2" />
+                    <CallAction ActionID="CreateShoppingCartPattenItem" ScriptItemUID="Call2" />
+                    <LoadTable DataTable="ShoppingCartPattern" ScriptItemUID="LoadTable7">
+                      <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" />
+                    </LoadTable>
+                    <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Selected products has been successfully added to template.')" ScriptItemUID="VirtualFunctionMapping4" />
+                      <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping5" />
+                    </CallAction>
+                  </ActionComponent>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="Heading()" Value="translate('#LDS#To add products to a template, please select a template or enter a name for a new template.')" ScriptItemUID="VirtualFunctionMapping6" />
+                <VirtualFunctionMapping ID="isExpanded()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
+                <VirtualFunctionMapping ID="IsShowPersonalTemplates()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
+              </ControlReferenceContainer>
+            </Container>
+            <Container Layout="'VI_Styles_Container_Paragraph'" ItemUID="New ordernumber" ScriptItemUID="Container14">
+              <LayoutPanel Columns="3" ScriptItemUID="LayoutPanel1" Layout="'VI_Styles_LayoutPanel_WideSplitted'">
+                <Container ScriptItemUID="LayoutPanelItem1">
+                  <Container ScriptItemUID="Container15" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="Container15style" Value="&quot;width:180px&quot;" />
+                    </HtmlAttributes>
+                    <FormItemLabel DataTable="Container" DataColumn="NewPatternName" ScriptItemUID="FormItemLabel1">
+                      <Label Text="translate('#LDS#Name of the new template')" ScriptItemUID="Label10" />
+                    </FormItemLabel>
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="LayoutPanelItem2">
+                  <Container ScriptItemUID="Container16">
+                    <TextBox DataTable="Container" DataColumn="NewPatternName" CustomStyle="'width: 280px;'" ScriptItemUID="TextBox1" />
+                  </Container>
+                </Container>
+                <Container ScriptItemUID="LayoutPanelItem3">
+                  <Container ScriptItemUID="Container17">
+                    <Button Text="translate('#LDS#Create template')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;margin-left: 10px;&quot;" />
+                      </HtmlAttributes>
+                      <ServerActionCall ScriptItemUID="ServerActionCall1">
+                        <ActionSequence ItemUID="Kein Name eingegeben" Condition="IsNull(from Container select NewPatternName, '') = ''" ScriptItemUID="Action17">
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
+                            <VirtualFunctionMapping ID="MessageText()" Value="Translate(&quot;#LDS#Please enter a name for the template.&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping10" />
+                          </CallAction>
+                        </ActionSequence>
+                        <ActionSequence ItemUID="Vorlage anlegen" Condition="IsNull(from Container select NewPatternName, '') &lt;&gt; ''" ScriptItemUID="Action18">
+                          <CallAction ActionID="CreateShoppingCartPatten" ScriptItemUID="Call5" />
+                          <LoadTable DataTable="ShoppingCartPattern" ScriptItemUID="LoadTable8">
+                            <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" />
+                          </LoadTable>
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call6">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Selected products has been successfully added to template.')" ScriptItemUID="VirtualFunctionMapping11" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping12" />
+                          </CallAction>
+                        </ActionSequence>
+                      </ServerActionCall>
+                    </Button>
+                  </Container>
+                </Container>
+              </LayoutPanel>
+            </Container>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

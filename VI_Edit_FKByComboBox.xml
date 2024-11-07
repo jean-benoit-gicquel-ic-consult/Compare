@@ -1,0 +1,57 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_FKByComboBox">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2">
+        <CodeLiteral ScriptItemUID="CodeLiteral2">object customDisplayPattern;
+// Copy custom display pattern from the column to the collection holding the target objects
+if (EditTable_EditColumn.ExtendedProperties.TryGetValue(BaseRuntimeTable.DisplayPatternKey, out customDisplayPattern))
+{
+	ChildCandidate.ExtendedProperties[BaseRuntimeTable.DisplayPatternKey] = customDisplayPattern;
+}</CodeLiteral>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList6">
+        <Container Layout="'VI_Styles_Container_Inline'" Condition="from edittable select current canedit(editcolumn)" ScriptItemUID="Container2" />
+        <Container Condition="from edittable select current not(canedit(editcolumn))" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'title'" ScriptItemUID="Container4title" Value="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Description }}" />
+          </HtmlAttributes>
+          <ColumnEditor DataTable="EditTable" DataColumn="EditColumn" Type="IsForView" ScriptItemUID="ColumnEditor1">
+            <VirtualFunctionMapping ID="NullText()" Value="isnull( NullText(), translate(&quot;#LDS#(not assigned)&quot;))" ScriptItemUID="VirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping2" />
+          </ColumnEditor>
+        </Container>
+        <ControlReferenceContainer ID="AdditionalContentHeader" ScriptItemUID="ControlReferenceContainer1" />
+        <Container Layout="'VI_Styles_Container_Inline'" Condition="from edittable select current canedit(editcolumn)" ScriptItemUID="Container5">
+          <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+            <Action ScriptItemUID="Action4">
+              <LoadTable DataTable="ChildCandidate" ScriptItemUID="LoadTable1" DBTableName="FKParenttableName()" WhereClause="DBWhereClause()">
+                <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              </LoadTable>
+            </Action>
+          </Activator>
+          <ComboBox SourceTable="ChildCandidate" DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="ComboBox1" AllowNull="true" Tooltip="{{ EditTable_EditColumn.GetMetadata(EditTable_Current.Row).Description }}" />
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="ChildCandidate" DbObjectTypeDynamic="true" DynamicClass="FKParentTableName()" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action6" />
+        </DataTableDbObject>
+        <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="PreSelectWhereClause" ScriptItemUID="Column5" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="FKParentTableName()" Expression="select current getfkparenttable(editcolumn) from edittable" DataType="System.String" ScriptItemUID="Function1" />
+        <Function Name="DbWhereClause()" Expression="sqland(&#xA;variable(AdditionalWhereClause()),&#xA;from vars select PreSelectWhereClause,&#xA;&#xA;-- read column-level WHERE clause&#xA;{{&#xA;EditTable_EditColumn.GetMetadata(EditTable_Current.Row).ForeignKeyWhereClause&#xA;}}&#xA;&#xA;)" DataType="System.String" ScriptItemUID="Function2" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualControl ID="AdditionalContentHeader" ContainerType="Container" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

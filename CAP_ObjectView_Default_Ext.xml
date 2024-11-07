@@ -1,0 +1,15 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2013-01-23" ID="CAP_ObjectView_Default_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="140">
+        <ConfigParam Key="VI_ObjectView_MitigatingControl_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;MitigatingControl&quot;))" DatabaseTable="MitigatingControl" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="130">
+        <ConfigEntry Key="VI_ObjectView_MitigatingControl_Fields" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="CAPConfigEntry1">
+          <SingleColumn DataColumn="Ident_MitigatingControl" FKWhereClause="" ScriptItemUID="CAPSingleColumn1" />
+          <SingleColumn DataColumn="Description" FKWhereClause="" ScriptItemUID="CAPSingleColumn2" />
+        </ConfigEntry>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

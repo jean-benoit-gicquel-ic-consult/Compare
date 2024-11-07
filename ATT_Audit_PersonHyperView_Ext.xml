@@ -1,0 +1,80 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Audit_PersonHyperView_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tab2" ObjectType="Tab" SortOrder="20">
+        <TabPage ItemUID="ATTESTATIONS" Condition="GetConfigParm(&quot;QER\Attestation&quot;) = &quot;1&quot;" ScriptItemUID="ATTTabPage1">
+          <ControlsHeader ScriptItemUID="ATTContainer1">
+            <Label Text="translate('#LDS#Attestation')" ScriptItemUID="ATTLabel1" />
+          </ControlsHeader>
+          <ControlsBody ScriptItemUID="ATTContainer2">
+            <ControlReferenceContainer ID="VI_Attestation_History_Filter" ScriptItemUID="ATTControlRef1">
+              <VirtualFunctionMapping ID="setuseraudit()" Value="from Container select UID_Person" ScriptItemUID="ATTVirtualFunctionMapping1" />
+              <VirtualTableMapping VirtualTable="Container" DataTable="AttestationWhereClause" ScriptItemUID="ATTVirtualTableMapping1">
+                <VirtualColumnMapping VirtualColumn="WhereClause" DataColumn="WhereClause" />
+              </VirtualTableMapping>
+            </ControlReferenceContainer>
+            <Container ScriptItemUID="ATTContainer3">
+              <ControlReferenceContainer ID="VI_Attestation_AttestationCaseMasterDetail" ScriptItemUID="ATTControlRef2">
+                <VirtualFunctionMapping ID="noitemstext()" Value="translate(&quot;#LDS#There were no results for your search.&quot;)" ScriptItemUID="ATTVirtualFunctionMapping2" />
+                <VirtualFunctionMapping ID="AttestationCaseDbWhereClause()" Value="from attestationwhereclause select whereclause" ScriptItemUID="ATTVirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="AttestationPolicyDbWhereClause()" Value="format(&quot;uid_attestationpolicy in ( select uid_attestationpolicy from attestationcase where {0})&quot;, from attestationwhereclause select whereclause)" ScriptItemUID="ATTVirtualFunctionMapping4" />
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="ATTVirtualFunctionMapping5" />
+              </ControlReferenceContainer>
+            </Container>
+          </ControlsBody>
+        </TabPage>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableSingleRow Table="AttestationWhereClause" ScriptItemUID="ATTDataTableSingleRow1">
+          <Column Name="WhereClause" DataType="System.String" ScriptItemUID="ATTColumn1" />
+        </DataTableSingleRow>
+        <DataTableDbObject Class="AttestationCase" Table="AttestationCase" ScriptItemUID="DataTableDbObject33">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="DoApprove" DataType="System.Boolean" ScriptItemUID="Column7" />
+          <Column Name="DoReject" DataType="System.Boolean" ScriptItemUID="Column8" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="65">
+        <Control ID="FormAttestation">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="ATTFormGroup1">
+              <Form ID="FormAttestation" ScriptItemUID="ATTForm1">
+                <ActionSequence ScriptItemUID="ATTAction1" />
+                <PagePartContainer ID="Title" ScriptItemUID="ATTPagePartContainer1">
+                  <Label Text="translate('#LDS#Attestation') + &quot; - &quot; + from person select display() where uid_person = ( from container select uid_person)" ScriptItemUID="ATTLabel2" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="ATTPagePartContainer2">
+                  <ContainerTemplate DataTable="Person" ScriptItemUID="ATTContainerTemplate1" WhereClause="uid_person = (from container select uid_person) ">
+                    <ControlReferenceContainer ID="VI_Roles_AttestationCasesForObject" ScriptItemUID="ATTControlRef3">
+                      <VirtualTableMapping VirtualTable="BaseObject" DataTable="Person" ScriptItemUID="ATTVirtualTableMapping2" />
+                      <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="ATTVirtualFunctionMapping6" />
+                      <VirtualFunctionMapping ID="ShowAsPrimaryTab()" Value="false" ScriptItemUID="ATTVirtualFunctionMapping7" />
+                    </ControlReferenceContainer>
+                  </ContainerTemplate>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container26" ObjectType="Container" SortOrder="65">
+        <Container ItemUID="Attestation" EnableCustomAttributes="true" ScriptItemUID="ATTContainer6" Condition="getconfigparm(&quot;QER\Attestation&quot;)=&quot;1&quot;">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="ATTHtmlAttribute1" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ScriptItemUID="ATTControlRef4">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="ATTAction2">
+                <Redirect Target="FormModule" ScriptItemUID="ATTRedirect1">
+                  <RedirectFormModule ID="FormAttestation" ScriptItemUID="ATTRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Attestation&quot;)" ScriptItemUID="ATTVirtualFunctionMapping8" />
+            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows the attestation status for this employee.')" ScriptItemUID="ATTVirtualFunctionMapping9" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

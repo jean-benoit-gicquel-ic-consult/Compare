@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_Common_ObjectSheet_ADSOtherSID" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <Tab ScriptItemUID="Tab1">
+          <TabPage ItemUID="Overview" ScriptItemUID="TabPage1">
+            <ControlsHeader ScriptItemUID="Container2">
+              <Label Text="translate(&quot;#LDS#Overview&quot;)" ScriptItemUID="Label1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container3">
+              <ControlReferenceContainer ID="VI_Object_Overview_Default" ScriptItemUID="ControlRef1" />
+            </ControlsBody>
+          </TabPage>
+        </Tab>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSheet">
+      <VirtualTableExtension Name="Object" Class="ADSOtherSID" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

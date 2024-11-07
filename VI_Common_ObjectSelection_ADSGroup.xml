@@ -1,0 +1,44 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
+  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Common_ObjectSelection_ADSGroup" MigrationNotes="DIALOGCONFIGPARM;" Comment="Caution: This component is also used for ADSAccount selection.">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+            <ColumnList ScriptItemUID="ColumnList1">
+              <SingleColumn DataColumn="UID_ADSContainer" ScriptItemUID="SingleColumn1" />
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping1" />
+        </ControlReferenceContainer>
+      </Container>
+      <ActionSequence ScriptItemUID="Action2" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_ADSContainer" MaxLength="" ColumnDataSource="ForeignKey" DBTableName="&quot;adscontainer&quot;" DBColumnName="&quot;uid_adscontainer&quot;" Caption="datacaption(&quot;adscontainer&quot;, &quot;uid_adscontainer&quot;)" ScriptItemUID="Column1" DataType="System.String" FKWhereClause="" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="NewSearch">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <Update DataTable="TargetTable" DataColumn="TargetWhereClause" WhereClause="primarykey() = select current primarykey() from targettable" Value="if('' &lt;&gt; from localvars select uid_adscontainer)then&#xD;&#xA;   sqlcompareuid(&quot;uid_adscontainer&quot;, from localvars select uid_adscontainer)&#xD;&#xA;" ScriptItemUID="Update1" />
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="LocalVars" Operation="Update" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action5">
+            <CallAction ActionID="NewSearch" ScriptItemUID="CallAction2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_ADSContainer" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSelection" ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

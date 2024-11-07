@@ -1,0 +1,29 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="18dd120b-1dbc-1d04-3402-88ef0a261276">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Reporting_ParameterCheck" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
+      <ActionComponent ScriptItemUID="Action1">
+        <ActionSequence ItemUID="save if everything is ok" ScriptItemUID="Action3">
+          <ActionOnControl ActionType="PerformValidation" />
+          <Save DataTable="SourceObject" ScriptItemUID="Save1" />
+          <Save DataTable="DialogParameterSet" HandleDeleteDeferred="false" ScriptItemUID="Save2" />
+          <Update DataTable="DialogParameter" DataColumn="UID_DialogParameterSet" WhereClause="-- now associate all new parameter objects with the set&#xA;isnullorempty( uid_dialogparameterset )" Value="select current uid_dialogparameterset from dialogparameterset" ScriptItemUID="Update1" />
+          <Update DataTable="DialogParameter" DataColumn="ParameterType" Value="&quot;Fix&quot;" WhereClause="not( isnullorempty(parametervalue))&#xD;&#xA;and&#xD;&#xA;uid_dialogparameterset in ( select current uid_dialogparameterset from dialogparameterset )" ScriptItemUID="Update2" />
+          <Save DataTable="DialogParameter" ScriptItemUID="Save3" />
+        </ActionSequence>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DialogParameter" Class="DialogParameter" ScriptItemUID="VirtualTable1" />
+      <VirtualTable Name="DialogParameterSet" Class="DialogParameterSet" RequiresCursor="true" ScriptItemUID="VirtualTable2" />
+      <VirtualTable Name="SourceObject" ScriptItemUID="VirtualTable3" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

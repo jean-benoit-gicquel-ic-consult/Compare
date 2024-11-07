@@ -1,0 +1,48 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="960da72a-e209-ac62-0cc5-c201a8c10567">
+  <PageTypeObject ID="VI_FormTemplate_UserRegistration" MetamodelVersion="2016-05-08">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <PageParts>
+      <PagePart ID="Title" />
+      <PagePart ID="Main" />
+    </PageParts>
+    <ControlReferenceControlList ID="QBM_FormTemplate_Base" ScriptItemUID="ControlRef15">
+      <VirtualControlMapping VirtualControl="Content" ContainerType="ControlList">
+        <ControlList ScriptItemUID="ControlList2">
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;data-imx-mainpage&quot;" Value="&quot;true&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="VI_UserRegistration_Header" ScriptItemUID="ControlRef3" />
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'class'" ScriptItemUID="HtmlAttribute2" Value="'ContentPart imx-flex'" />
+                <HtmlAttribute Name="'role'" ScriptItemUID="HtmlAttribute5" Value="'main'" />
+                <Property Name="TagName" Value="main" />
+              </HtmlAttributes>
+              <Container EnableCustomAttributes="true" ScriptItemUID="Container1" ItemUID="Title">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="h1" Comment="" />
+                </HtmlAttributes>
+                <PageRenderContent PagePart="Title" />
+              </Container>
+              <Literal Expression="variable('&lt;a name=&quot;main&quot;&gt;&lt;/a&gt;')" />
+              <Container ScriptItemUID="Container7" EnableCustomAttributes="true" ItemUID="message container">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="HtmlAttribute3" />
+                </HtmlAttributes>
+              </Container>
+              <Container EnableCustomAttributes="true" ScriptItemUID="Container6" ItemUID="Main Form">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'class'" Value="'PartMain'" ScriptItemUID="HtmlAttribute4" />
+                </HtmlAttributes>
+                <PageRenderContent PagePart="Main" />
+              </Container>
+            </Container>
+          </Container>
+        </ControlList>
+      </VirtualControlMapping>
+    </ControlReferenceControlList>
+  </PageTypeObject>
+</WebDesigner>

@@ -1,0 +1,229 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_Chart" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ComponentInterfaceAdditional Name="VI.WebRuntime.WebControls.IChartControl" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action8">
+        <ForeachRow DataTable="DashboardInfo" ScriptItemUID="ForeachRow2">
+          <CallAction ActionID="VI_Common_ChartLoadData" ScriptItemUID="CallAction1" />
+        </ForeachRow>
+        <ActionSequence ItemUID="loading objects associated with element name" ScriptItemUID="Action10">
+          <ForeachRow DataTable="DashboardInfo" ScriptItemUID="ForeachRow1" WhereClause="not(isnullorempty( ElementNameCollectionRef)) and not(isnullorempty(ElementNameColumnRef))">
+            <LoadTable ScriptItemUID="FillTable1" DataTable="ElementNameObjects" DBTableName="from DashboardInfo select current ElementNameCollectionRef" WhereClause="sqlin(&#xD;&#xA;from Dashboardinfo select current elementnamecolumnref,&#xD;&#xA;&quot;string&quot;,&#xD;&#xA;from ElementNames select ElementName where ident_dialogdashboarddef = ( from dashboardinfo select current displayname)&#xD;&#xA;)" RemoveDeleted="false" LoadLimit="">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+              <InsertValue DataColumn="UID_DialogDashboardDef" Value="from dashboarddef select uid_dialogdashboarddef where ident_dialogdashboarddef = (select current displayname from dashboardinfo)" />
+              <InsertValue DataColumn="PropertyValue" Value="objectwalker( from dashboardinfo select current ElementNameColumnRef)" />
+              <InsertValue DataColumn="TableName" Value="from dashboardinfo select current ElementNameCollectionRef" />
+            </LoadTable>
+          </ForeachRow>
+          <Update DataTable="ElementNames" DataColumn="IsActive" Value="true" ScriptItemUID="Update1" />
+        </ActionSequence>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="DashboardDef" WithoutParentContainer="true">
+          <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="DashboardInfo" WhereClause="displayname= (from dashboarddef select current ident_DialogDashBoardDef)" WithoutParentContainer="true">
+            <ControlReferenceControlList ID="VI_Common_ChartWithObject" ScriptItemUID="ctl5">
+              <VirtualFunctionMapping ID="gaugetype()" Value="from dashboardinfo select current controltype" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualTableMapping VirtualTable="DashboardDef" DataTable="DashboardDef" ScriptItemUID="VirtualTableMapping1" />
+              <VirtualTableMapping VirtualTable="DashboardContent" DataTable="DashboardContentAgg" ScriptItemUID="VirtualTableMapping2" />
+              <VirtualFunctionMapping ID="ChartClickMode()" Value="IsNullOrEmpty( from dashboardinfo select current clickmode,&quot;NoClick&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+              <VirtualControlMapping VirtualControl="AdditionalDashboardInfo" ContainerType="Container">
+                <Container ScriptItemUID="Container12">
+                  <Container Condition="from dashboarddef select current not(isnullorempty(aggregatefunction))" ScriptItemUID="Container13">
+                    <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container14">
+                      <Label Text="from dashboarddef select current&#xA;(if(aggregatefunction = &quot;sum&quot;) then (translate(&quot;#LDS#The displayed value is the sum of the values calculated for the following objects&quot;)+&quot;:&quot;)&#xA;else if(aggregatefunction = &quot;avg&quot;) then (translate(&quot;#LDS#The displayed value is the average of the values calculated for the following objects&quot;)+&quot;:&quot;))" ScriptItemUID="Label4" />
+                    </Container>
+                    <Grid ScriptItemUID="Grid1">
+                      <GridBand DataTable="ReferencedObjects" WhereClause="key in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'__Display'" EntriesPerPage="10" ScriptItemUID="GridBand1">
+                        <GridBandListView ScriptItemUID="GridBandListView1" />
+                        <GridFilters ScriptItemUID="GridFilters1" />
+                        <GridRows />
+                        <GridColumn SortColumn="__Display" ScriptItemUID="GridColumn1">
+                          <GridColumnHeader ScriptItemUID="wctl1">
+                            <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label5" />
+                          </GridColumnHeader>
+                          <Cell ScriptItemUID="Cell1">
+                            <Container ScriptItemUID="Container15" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Container15style" Value="&quot;white-space: nowrap; overflow: hidden;&quot;" />
+                              </HtmlAttributes>
+                              <Image Source="File" FileName="from referencedobjects select current variable(format(&quot;%permanentlink%dialogimgTbl={0}&amp;size=Small&quot;, tablename))" ItemUID="Image DialogTable" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image1" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="from referencedobjects select current DataCaption(tablename+&quot;&quot;)" />
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="Image1style" Value="&quot;padding-left: 3px;&quot;" />
+                                </HtmlAttributes>
+                              </Image>
+                              <Label Text="from referencedobjects select current display()" Action="Redirect" ScriptItemUID="Label6">
+                                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                                  <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                                    <RedirectParameter Name="'ObjectKey'" Value="from referencedobjects select current key" />
+                                  </Redirect>
+                                </ServerActionCall>
+                              </Label>
+                            </Container>
+                          </Cell>
+                        </GridColumn>
+                      </GridBand>
+                    </Grid>
+                  </Container>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualControlMapping VirtualControl="AdditionalTabPages" ContainerType="TabPageGroup">
+                <TabPageGroup ScriptItemUID="TabPageGroup1">
+                  <TabPage ItemUID="STATISTICS RAW DATA" ScriptItemUID="TabPage3">
+                    <ControlsHeader ScriptItemUID="Container4">
+                      <Label Text="translate(&quot;#LDS#View source data&quot;)" ScriptItemUID="Label13" />
+                    </ControlsHeader>
+                    <ControlsBody ScriptItemUID="Container3">
+                      <Grid AllowExport="true" ExportTitle="from DashboardDef select current DisplayValue(displayname)" ScriptItemUID="Grid2" ExportFileName="">
+                        <GridBand DataTable="DashboardContent" WhereClause="uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" OrderBy="'ElementDate'" ScriptItemUID="GridBand2" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="ApplyFilledHeight" Value="true" />
+                          </HtmlAttributes>
+                          <GridBandListView ScriptItemUID="GridBandListView2" />
+                          <GridFilters ScriptItemUID="GridFilters2" />
+                          <GridRows />
+                          <GridColumn SortColumn="ElementName" AutoFilterColumn="ElementName" ScriptItemUID="Column13">
+                            <GridColumnHeader ScriptItemUID="wctl2">
+                              <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label14" />
+                            </GridColumnHeader>
+                            <Cell ScriptItemUID="Cell6">
+                              <Label Text="from dashboardcontent select current elementname" ScriptItemUID="Label15" />
+                            </Cell>
+                          </GridColumn>
+                          <GridColumn SortColumn="ElementDate" Width="&quot;130px&quot;" Layout="'VI_Styles_GridColumn_Centered'" ScriptItemUID="Column2">
+                            <GridColumnHeader ScriptItemUID="wctl3">
+                              <Label Text="translate(&quot;#LDS#Date&quot;)" ScriptItemUID="Label16" />
+                            </GridColumnHeader>
+                            <Cell ScriptItemUID="Cell2">
+                              <Label Text="from dashboardcontent select current formatdate(elementdate,&quot;d&quot;)" ScriptItemUID="Label17" />
+                            </Cell>
+                          </GridColumn>
+                          <GridColumn SortColumn="ElementValue" Layout="'VI_Styles_GridColumn_Centered'" Width="&quot;110px&quot;" ScriptItemUID="Column24">
+                            <GridColumnHeader ScriptItemUID="wctl4">
+                              <Label Text="translate(&quot;#LDS#Value&quot;)" ScriptItemUID="Label18" />
+                            </GridColumnHeader>
+                            <Cell ScriptItemUID="Cell3">
+                              <Label Text="from dashboardcontent select current displayvalue(elementvalue)" ScriptItemUID="Label19" />
+                            </Cell>
+                          </GridColumn>
+                          <GridColumn ScriptItemUID="Column1">
+                            <GridColumnHeader ScriptItemUID="wctl5">
+                              <Label Text="translate(&quot;#LDS#Associated object&quot;)" ScriptItemUID="Label20" />
+                            </GridColumnHeader>
+                            <Cell ScriptItemUID="Cell5">
+                              <Container Condition="from dashboardcontent select current not(isnullorempty(elementobjectkeytable))" ScriptItemUID="Container16">
+                                <Image Source="File" FileName="from dashboardcontent select current variable(format(&quot;%permanentlink%dialogImgTbl={0}&quot;, elementobjectkeytable))" Layout="'VI_Styles_Image_Image1616'" ScriptItemUID="Image2" />
+                                <Label Text="from referencedobjects select top 1 DisplayLong() where key = ( from dashboardcontent select current elementobjectkey)" Action="Redirect" ScriptItemUID="Label21">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall2">
+                                    <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                                      <RedirectParameter Name="'ObjectKey'" Value="from dashboardcontent select current elementobjectkey" />
+                                    </Redirect>
+                                  </ServerActionCall>
+                                </Label>
+                              </Container>
+                            </Cell>
+                          </GridColumn>
+                        </GridBand>
+                      </Grid>
+                    </ControlsBody>
+                  </TabPage>
+                </TabPageGroup>
+              </VirtualControlMapping>
+              <VirtualControlMapping VirtualControl="FilterData" ContainerType="Container">
+                <Container ScriptItemUID="Container6" Condition="from dashboardinfo select current filterbyelementname">
+                  <Tab ScriptItemUID="Tab1" Layout="'VI_Styles_Tab_AccordeonMultiselect'">
+                    <TabPage ScriptItemUID="TabPage1">
+                      <ControlsHeader ScriptItemUID="Container8">
+                        <Label Text="translate(&quot;#LDS#Filter by&quot;)+&quot;: &quot;+(from Dashboardinfo select top 1 ( datacaption(ElementNameCollectionRef+&quot;&quot;, ElementNameColumnRef+&quot;&quot;)) where DisplayName= (select current ident_dialogdashboarddef from dashboarddef))" ScriptItemUID="Label1" />
+                      </ControlsHeader>
+                      <ControlsBody ScriptItemUID="Container7">
+                        <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="ElementNames" WhereClause="uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" Layout="'VI_Styles_Container_Inline'">
+                          <CheckBox DataTable="ElementNames" DataColumn="IsActive" Text="from elementnames select current display()" ScriptItemUID="CheckBox1" />
+                        </ContainerTemplate>
+                      </ControlsBody>
+                    </TabPage>
+                  </Tab>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="hasFilter()" Value="from dashboardinfo select current filterbyelementname" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualFunctionMapping ID="updateTrigger()" Value="select Count() from Elementnames where IsActive" ScriptItemUID="VirtualFunctionMapping4" />
+            </ControlReferenceControlList>
+          </ContainerTemplate>
+        </ContainerTemplate>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="DashboardDef" Class="DialogDashBoardDef" ScriptItemUID="DataTableDbObject1" TriggerUpdates="Never">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+        <DataTableSQL Table="DashboardContent" PrimaryKeyColumn="pk" ScriptItemUID="DataTableSQL1">
+          <ActionSequence ScriptItemUID="Action3" />
+          <Column Name="uid_dialogdashboarddef" ScriptItemUID="Column14" DataType="System.String" />
+          <Column Name="ElementName" ScriptItemUID="Column15" DataType="System.String" Caption="translate(&quot;#LDS#Name&quot;)" />
+          <Column Name="ElementObjectKey" Comment="Empty on aggregate statistics" ScriptItemUID="Column16" DataType="System.String" />
+          <Column Name="ElementValue" ScriptItemUID="Column17" DataType="System.Double" />
+          <Column Name="ElementValue100" ScriptItemUID="Column18" DataType="System.Double" />
+          <Column Name="ElementOrder" DataType="System.Int32" ScriptItemUID="Column19" />
+          <Column Name="HistoryNumber" DataType="System.Int32" ScriptItemUID="Column20" />
+          <Column Name="ElementDate" DataType="System.DateTime" ScriptItemUID="Column21" />
+          <Column Name="IsInactive" ScriptItemUID="Column23" DataType="System.Boolean" MinLength="" MaxLength="" />
+          <Column Name="pk" ScriptItemUID="Column25" DataType="System.String" />
+          <Column Name="ElementObjectKeyTable" Expression="if(isnullorempty(elementobjectkey)) then getnull() else getobjectkeytable(elementobjectkey)" DataSource="Expression" ScriptItemUID="Column26" DataType="System.String" />
+          <Column Name="ElementNameDisplay" Expression="isnullorempty(&#xD;&#xA;from elementnames select top 1 elementnamedisplay where (uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboardcontent) and elementname = ( select current elementname from dashboardcontent )),&#xD;&#xA;&#xD;&#xA;translatecolumn(elementname, &quot;dialogdashboardcontent&quot;, &quot;elementname&quot;))" DataSource="Expression" ScriptItemUID="Column27" DataType="System.String" />
+          <Column Name="ElementText" DataType="System.String" ScriptItemUID="Column3" />
+          <Column Name="ElementTooltip" DataType="System.String" ScriptItemUID="Column4" />
+          <Column Name="ElementValueHistoric" DataType="System.Double" ScriptItemUID="Column5" />
+          <Column Name="HasHistoricValue" DataType="System.Boolean" ScriptItemUID="Column7" />
+          <Column Name="HistoricValueDate" DataType="System.DateTime" ScriptItemUID="Column9" />
+        </DataTableSQL>
+        <DataTableGeneric Table="ReferencedObjects" ScriptItemUID="DataTableGeneric1">
+          <Column Name="TableName" ScriptItemUID="Column30" DataType="System.String" />
+          <Column Name="key" ScriptItemUID="Column31" DataType="System.String" />
+        </DataTableGeneric>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="SelectedObjectKey" ScriptItemUID="Column37" DataType="System.String" />
+        </DataTableSingleRow>
+        <DataTableView Table="DashboardContentAgg" PrimaryKeyColumn="pk" ViewExpression="union(&#xD;&#xA;&#xD;&#xA;-- 1. collect aggregated content &#xD;&#xA;select distinct (uid_dialogdashboarddef, elementname, '' as ElementObjectKey, historynumber, elementdate, '' as elementtooltip) from dashboardcontent where uid_dialogdashboarddef in (select uid_dialogdashboarddef from DashboardDef where isnull(aggregatefunction,'')&lt;&gt;'') and not(isinactive) and not (uid_dialogdashboarddef in (select uid_dialogdashboarddef from DashboardDef where (ident_dialogdashboarddef in select displayname from dashboardinfo where SumByElementName)))&#xD;&#xA;,&#xD;&#xA;&#xD;&#xA;-- 2. collect non-aggregated content&#xD;&#xA;select distinct (uid_dialogdashboarddef, elementname, elementobjectkey, historynumber, elementdate, elementtooltip) from dashboardcontent where uid_dialogdashboarddef in (select uid_dialogdashboarddef from DashboardDef where isnull(aggregatefunction,'')='') and not(isinactive) and not (uid_dialogdashboarddef in (select uid_dialogdashboarddef from DashboardDef where (ident_dialogdashboarddef in select displayname from dashboardinfo where SumByElementName)))&#xD;&#xA;&#xD;&#xA;,&#xD;&#xA;-- 3. SumByElementName&#xD;&#xA;select distinct (uid_dialogdashboarddef, translate('#LDS#Sum'), elementobjectkey, historynumber, elementdate,'' as elementtooltip) from dashboardcontent where uid_dialogdashboarddef in (select uid_dialogdashboarddef from DashboardDef where (ident_dialogdashboarddef in select displayname from dashboardinfo where SumByElementName)) and not(isinactive)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;)" DisplayColumn="ElementNameDisplay" ScriptItemUID="DataTableView2">
+          <Column Name="uid_dialogdashboarddef" ScriptItemUID="Column38" DataType="System.String" />
+          <Column Name="elementname" ScriptItemUID="Column39" DataType="System.String" />
+          <Column Name="ElementObjectKey" Comment="Bei aggregierten Dashboards leer" ScriptItemUID="Column40" DataType="System.String" />
+          <Column Name="HistoryNumber" DataType="System.Int32" ScriptItemUID="Column42" />
+          <Column Name="ElementDate" DataType="System.DateTime" ScriptItemUID="Column43" />
+          <Column Name="elementvalue" Expression="-- SUM&#xD;&#xA;if( from DashboardDef select (AggregateFunction='SUM') where UID_DialogDashBoardDef = ( select current UID_DialogDashBoardDef from dashboardcontentagg)) then&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select sum(elementvalue) where (not(isinactive) and elementname = ( select current elementname from DashboardContentAgg) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg)))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;-- AVG&#xD;&#xA;else if( from DashboardDef select (AggregateFunction='AVG') where UID_DialogDashBoardDef = ( select current UID_DialogDashBoardDef from dashboardcontentagg)) then&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select avg(elementvalue) where (not(isinactive) and elementname = ( select current elementname from DashboardContentAgg) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg)))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;-- SumByElementName&#xD;&#xA;else if ( select top 1 SumByElementName from dashboardinfo where displayname= ( select ident_dialogdashboarddef from DashboardDef where uid_dialogdashboarddef= (select current  uid_dialogdashboarddef from  dashboardcontentagg))) then&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select sum(elementvalue) where (not(isinactive) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) and elementobjectkey=(select current elementobjectkey from dashboardcontentagg) and historynumber= (select current historynumber from dashboardcontentagg)&#xD;&#xA;and not(elementname in&#xD;&#xA;(&#xD;&#xA;-- filter by element name&#xD;&#xA;select elementname from ElementNames where (not(isactive) and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboardcontentagg))&#xD;&#xA;))))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;else -- no aggregate function&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select top 1 (elementvalue) where (not(isinactive) and elementname = ( select current elementname from DashboardContentAgg) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) and elementobjectkey=(select current elementobjectkey from dashboardcontentagg) and historynumber = ( select current historynumber from dashboardcontentagg)))" DataSource="Expression" ScriptItemUID="Column44" DataType="System.Double" />
+          <Column Name="elementvalue100" Expression="if( from DashboardDef select (AggregateFunction100='SUM') where UID_DialogDashBoardDef = ( select current UID_DialogDashBoardDef from dashboardcontentagg)) then&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select sum(elementvalue100) where  (not(isinactive) and elementname = ( select current elementname from DashboardContentAgg) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg)))&#xD;&#xA;&#xD;&#xA;else if( from DashboardDef select (AggregateFunction100='AVG') where UID_DialogDashBoardDef = ( select current UID_DialogDashBoardDef from dashboardcontentagg)) then&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select avg(elementvalue100) where (not(isinactive) and elementname = ( select current elementname from DashboardContentAgg) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) ))&#xD;&#xA;&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;(from dashboardcontent select top 1 elementvalue100 where (not(isinactive) and elementname = ( select current elementname from DashboardContentAgg) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) and elementobjectkey=(select current elementobjectkey from dashboardcontentagg)))&#xD;&#xA;" DataSource="Expression" ScriptItemUID="Column45" DataType="System.Double" />
+          <Column Name="pk" ScriptItemUID="Column46" DataType="System.String" />
+          <Column Name="ElementNameDisplay" Expression="from DashboardContent select top 1 translatecolumn(elementname, &quot;dialogdashboardcontent&quot;, &quot;elementname&quot;) where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboardcontentagg) and elementname = ( select current elementname from dashboardcontentagg)&#xA;" DataSource="Expression" ScriptItemUID="Column47" DataType="System.String" />
+          <Column Name="ElementOrder" Expression="from DashboardContent select top 1 elementorder where UID_DialogDashBoardDef = ( select current uid_dialogdashboarddef from dashboardcontentagg) and (elementname = ( select current elementname from dashboardcontentagg) or from DashboardInfo select SumByElementName where displayname = (from DashboardDef select ident_dialogdashboarddef where uid_dialogdashboarddef=(from DashboardContentAgg select current uid_dialogdashboarddef)))&#xD;&#xA;&#xD;&#xA;-- ElementOrder across groups" DataSource="Expression" ScriptItemUID="Column48" DataType="System.Int32" />
+          <Column Name="ElementOrderGroup" Expression="isnull(&#xD;&#xA;from DashboardContent select top 1 elementorder where UID_DialogDashBoardDef = ( select current uid_dialogdashboarddef from dashboardcontentagg) and (elementname = ( select current elementname from dashboardcontentagg) or from DashboardInfo select SumByElementName where displayname = (from DashboardDef select ident_dialogdashboarddef where uid_dialogdashboarddef=(from DashboardContentAgg select current uid_dialogdashboarddef))) &#xD;&#xA;&#xD;&#xA;and (if(select current isnullorempty(elementobjectkey) from dashboardcontentagg) then true else elementobjectkey = ( select current elementobjectkey from dashboardcontentagg)),&#xD;&#xA;0)&#xD;&#xA;&#xD;&#xA;-- Element order for each group" DataSource="Expression" ScriptItemUID="Column49" DataType="System.Int32" />
+          <Column Name="ElementObjectKeyNavigation" Comment="Bei aggregierten Dashboards leer" DataSource="Expression" DataType="System.String" Expression="isnullorempty(from DashboardContentAgg select current ElementObjectKey, from DashboardContent select top 1 elementobjectkey where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboardcontentagg) and elementname = ( select current elementname from dashboardcontentagg))" ScriptItemUID="Column61" />
+          <Column Name="ElementValueHistoric" DataType="System.Double" ScriptItemUID="Column6" DataSource="Expression" Expression="&#xD;&#xA;from dashboardcontent select top 1 (elementvaluehistoric) where (not(isinactive) and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) )&#xD;&#xA;&#xD;&#xA;" />
+          <Column Name="HasHistoricValue" DataType="System.Boolean" ScriptItemUID="Column8" DataSource="Expression" Expression="&#xD;&#xA;(from dashboardcontent select top 1 (hashistoricvalue) where not(isinactive)  and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) and historynumber = ( select current historynumber from dashboardcontentagg))" />
+          <Column Name="HistoricValueDate" DataType="System.DateTime" ScriptItemUID="Column10" DataSource="Expression" Expression="&#xD;&#xA;(from dashboardcontent select top 1 (historicvaluedate) where (not(isinactive)  and uid_dialogdashboarddef=(select current UID_DialogDashBoardDef from dashboardcontentagg) and historynumber = ( select current historynumber from dashboardcontentagg)))" />
+          <Column Name="ObjectDisplay" Expression="from ReferencedObjects select top 1 displaylong() where key = ( &#xD;&#xA;IsNullOrEmpty(select current elementobjectkey from dashboardcontentagg, select current elementobjectkeynavigation from dashboardcontentagg)&#xD;&#xA;)" DataSource="Expression" ScriptItemUID="Column11" DataType="System.String" />
+        </DataTableView>
+        <DataTableView Table="ElementNames" PrimaryKeyColumn="pk" ViewExpression="select distinct (elementname, uid_dialogdashboarddef) from dashboardcontent where uid_dialogdashboarddef in ( from DashboardDef select UID_DialogDashboarddef)" DisplayColumn="ElementNameDisplay" ScriptItemUID="DataTableView3">
+          <Column Name="ElementName" DataType="System.String" ScriptItemUID="Column62" />
+          <Column Name="UID_DialogDashboardDef" DataType="System.String" ScriptItemUID="Column63" />
+          <Column Name="pk" DataType="System.String" ScriptItemUID="Column64" />
+          <Column Name="ElementNameDisplay" DataType="System.String" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;from elementnameobjects select top 1 displaylong() where (uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from elementnames) and propertyvalue = ( select current elementname from elementnames )),&#xD;&#xA;elementname)" ScriptItemUID="Column65" />
+          <Column Name="IsActive" DataType="System.Boolean" ScriptItemUID="Column66" />
+          <Column Name="ident_dialogdashboarddef" DataType="System.String" ScriptItemUID="Column12" DataSource="Expression" Expression="select ident_dialogdashboarddef from dashboarddef where uid_dialogdashboarddef= ( select current uid_dialogdashboarddef from ElementNames)" />
+        </DataTableView>
+        <DataTableGeneric Table="ElementNameObjects" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric2">
+          <Column Name="UID_DialogDashboardDef" DataType="System.String" ScriptItemUID="Column67" />
+          <Column Name="PropertyValue" DataType="System.String" ScriptItemUID="Column68" />
+          <Column Name="TableName" DataType="System.String" ScriptItemUID="Column69" />
+        </DataTableGeneric>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DashboardInfo" ElementType="VI.WebRuntime.WebControls.ChartControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

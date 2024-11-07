@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_CheckBox_Default" Type="CheckBox" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="checkbox" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.checkbox, .checkbox input 
+{ margin: 0 0.5em 0 0 !important; vertical-align: top; padding-left: 0;}
+.checkbox label 
+{ padding-right: 0.5em; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Tree_Default" Type="Tree" MigrationNotes="DMLREPLACE;" MetamodelVersion="2016-05-08" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="Tree" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">div.TreeContentBlock span {display:inline-block;}
+</CssDocument>
+  </LayoutObject>
+</WebDesigner>

@@ -1,0 +1,972 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <GlobalControl ID="VI_Common_ChartWithObject" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" DataTableDebugDisplay="DashboardDef">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action14">
+        <FillTable DataTable="ColorScheme" DataColumn="Color" Expression="getfromxml(getconfig(&quot;VI_Dashboard_KeyColorScheme&quot;))" ScriptItemUID="FillTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </FillTable>
+      </ActionSequence>
+      <ControlList ScriptItemUID="ControlList9">
+        <ContainerTemplate DataTable="DashboardObjects" WhereClause="if(IsOneDashboardForAllGroups())&#xD;&#xA;then&#xD;&#xA;(&#xD;&#xA;elementobjectkey in ( select top 1 elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))&#xD;&#xA;)&#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;-- Iterate over all selected objects whose data have not been aggregated&#xD;&#xA;&#xD;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">
+          <SwitchContainer ScriptItemUID="Switch1">
+            <SwitchContainerCase ScriptItemUID="Case1" Condition="from DashboardInfo select second">
+              <SwitchContainer ScriptItemUID="Switch3">
+                <SwitchContainerCase ScriptItemUID="Case6" ItemUID="Small charts in ContentSlider" Condition="from DashboardInfo select IconSize">
+                  <SwitchContainer ScriptItemUID="Switch4">
+                    <SwitchContainerCase ScriptItemUID="Case8" ItemUID="Value and trend chart" Condition="gaugetype() = &quot;ChartValueAndTrend&quot;">
+                      <ContainerTemplate DataTable="DashboardContent" WhereClause=" uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" ScriptItemUID="ContainerTemplate2" WithoutParentContainer="true">
+                        <Container ScriptItemUID="Container47" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute25" Name="&quot;class&quot;" Value="&quot;ValueAndTrendContainer Chart&quot;" />
+                            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute22" Value="&quot;height:&quot;+ ValueTrendHeight() +&quot;px; width:&quot; + ValueTrendWidth() + &quot;px; box-sizing: border-box;&quot;  " />
+                          </HtmlAttributes>
+                          <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true" EnabledCondition="ChartClickMode() in ( 'clickglobal', 'clickdatapoint' )">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;dashboardDataItemLink&quot;" ScriptItemUID="HtmlAttribute39" />
+                            </HtmlAttributes>
+                            <ControlList ScriptItemUID="ControlList1">
+                              <Label Text="from dashboarddef select current title" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute38" Name="&quot;class&quot;" Value="&quot;IconChartDescriptionLabelFourLines&quot;" />
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute37" Value="from dashboarddef select current title" />
+                                  <Property Name="TagName" Value="h4" />
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute36" Value="&quot;position:absolute; margin-top:0.5em;&quot;" />
+                                </HtmlAttributes>
+                              </Label>
+                              <Container ScriptItemUID="Container52" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute30" Name="&quot;class&quot;" Value="&quot;ValueAndTrendInnerContainer&quot;" />
+                                  <Property Name="TagName" Value="span" />
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute29" Value="from dashboardcontent select current elementtooltip" />
+                                </HtmlAttributes>
+                                <Label Text="if (select current  elementValue from dashboardcontent&lt;1 and select current  elementValue from dashboardcontent&gt;0)&#xD;&#xA;then &#xD;&#xA;( numformat(select current  elementValue from dashboardcontent, '0.00')) else (&#xD;&#xA;&#xD;&#xA;select current  elementValue from dashboardcontent)" ScriptItemUID="Label3" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute35" Value="if( NOT  from dashboardcontent select current HasHistoricValue ) then&#xD;&#xA;variable(&quot;color: %VI_Common_Color_Font%; right: .3em;&quot;)&#xD;&#xA;else&#xD;&#xA;format(&quot;{0} {1} &quot;,&#xD;&#xA;if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;color: %VI_Common_Color_Font%;&quot;) else&#xD;&#xA;if (from dashboardcontent select current ElementValue &lt; from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;color: %QBM_Primary_Green%;&quot;) &#xD;&#xA;else&#xD;&#xA;variable(&quot;color: %QBM_Primary_Red%;&quot;) &#xD;&#xA;,&#xD;&#xA;if( from dashboardcontent select current HasHistoricValue) then&#xD;&#xA;&quot;right: 1.1em;&quot;&#xD;&#xA;else&#xD;&#xA;&quot;right: .3em;&quot;&#xD;&#xA;)" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute34" Name="&quot;class&quot;" Value="&quot;ValueAndTrendLabel&quot;" />
+                                  </HtmlAttributes>
+                                </Label>
+                                <Container ScriptItemUID="Container56" Condition=" from dashboardcontent select current HasHistoricValue" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <Property Name="TagName" Value="span" />
+                                  </HtmlAttributes>
+                                  <Image ScriptItemUID="Image1" Source="File" EnableCustomAttributes="true" FileName="if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionForward_normal_20.png&amp;effect=tint&amp;color=&quot;) + substring(variable(&quot;%QBM_Primary_Blue%&quot;),1) else&#xD;&#xA;if (from dashboardcontent select current ElementValue &lt; from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionImport_normal_20.png&amp;effect=tint&amp;color=&quot;) +  substring(variable(&quot;%QBM_Primary_Green%&quot;),1) else&#xD;&#xA;variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionExport_normal_20.png&amp;effect=tint&amp;color=&quot;) + substring(variable(&quot;%QBM_Primary_Red%&quot;),1) &#xD;&#xA;">
+                                    <HtmlAttributes>
+                                      <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute33" Value="&#xD;&#xA;if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;translate(&quot;#LDS#No changes since {0}&quot;, from dashboardcontent select current formatDate(HistoricValueDate, &quot;d&quot;)) else&#xD;&#xA;((if (from dashboardcontent select current ElementValue &lt; from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;translate(&quot;#LDS#Decreased by {0} since {1}&quot;, &#xD;&#xA;&#xD;&#xA;(if ((from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&gt;0 and (from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&lt;1) then (&#xD;&#xA;numformat(abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric),'0.00') +&quot;&quot;) else (abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric) + &quot;&quot;)&#xD;&#xA;),&#xD;&#xA;&#xD;&#xA;from dashboardcontent select current formatDate(HistoricValueDate, &quot;d&quot;)&#xD;&#xA;&#xD;&#xA;)  else translate(&quot;#LDS#Increased by {0} since {1}&quot;, &#xD;&#xA;&#xD;&#xA;(if ((from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&gt;0 and (from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&lt;1) then (&#xD;&#xA;numformat(abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric),'0.00') +&quot;&quot;) else (abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric) + &quot;&quot;)&#xD;&#xA;),&#xD;&#xA;from dashboardcontent select current formatDate(HistoricValueDate, &quot;d&quot;)&#xD;&#xA;&#xD;&#xA;) )&#xD;&#xA;&#xD;&#xA;) &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+                                      <HtmlAttribute ScriptItemUID="HtmlAttribute32" Name="&quot;data-neutral&quot;" Value="if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then &quot;true&quot; else &quot;false&quot;" />
+                                      <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute31" Value="&quot;position: absolute; bottom: 9px; right: 9px; width: 20px; height: 20px&quot;" />
+                                    </HtmlAttributes>
+                                  </Image>
+                                </Container>
+                              </Container>
+                              <Container ScriptItemUID="Container51" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute28" Name="&quot;sliderPrio&quot;" Value="if (from DashboardInfo select RedLimit &lt; from dashboardcontent select current elementvalue) then &#xD;&#xA;&#xD;&#xA;(&quot;2&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;if (from DashboardInfo select GreenLimit &gt;= from dashboardcontent select current elementvalue) then &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;(&quot;0&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;(&quot;1&quot;)&#xD;&#xA;" />
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute27" Name="&quot;class&quot;" Value="(if (isRed( from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;) )) then &#xD;&#xA;&#xD;&#xA;&quot;ChartStatusCritical&quot;&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;if (isGreen(from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;))) then &#xD;&#xA;&#xD;&#xA;&quot;ChartStatusOK&quot;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;&quot;ChartStatusWarning&quot;) + &#xD;&#xA;&#xD;&#xA;&quot; ChartStatusBox&quot;&#xD;&#xA;" />
+                                  <Property Name="TagName" Value="span" />
+                                  <HtmlAttribute Name="&quot;aria-label&quot;" ScriptItemUID="HtmlAttribute26" Value="if (isRed( from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;) )) then &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#The value is in the critical range&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;if (isGreen(from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;))) then &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#The value is in the uncritical range&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#The value is in the middle range&quot;)" />
+                                </HtmlAttributes>
+                              </Container>
+                            </ControlList>
+                            <ServerActionCall ScriptItemUID="ServerActionCall14">
+                              <ObjectSwitchCallAction ObjectKey="from dashboarddef select current xobjectkey" ActionType="Select_DialogDashboardDef" ScriptItemUID="ObjectSwitchCallAction1">
+                                <VirtualTableMapping VirtualTable="DialogDashboardContent" DataTable="DashboardContent" ScriptItemUID="VirtualTableMapping7">
+                                  <VirtualColumnMapping VirtualColumn="ElementObjectKey" DataColumn="ElementObjectKeyNavigation" />
+                                </VirtualTableMapping>
+                                <VirtualTableMapping VirtualTable="DialogDashboardDef" DataTable="DashboardDef" ScriptItemUID="VirtualTableMapping6" />
+                              </ObjectSwitchCallAction>
+                            </ServerActionCall>
+                          </LinkContainer>
+                        </Container>
+                      </ContainerTemplate>
+                    </SwitchContainerCase>
+                    <SwitchContainerCase ScriptItemUID="Case7" ItemUID="Other small charts">
+                      <Container Condition="&#xD;&#xA;" ItemUID="Chart" ScriptItemUID="Container1" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute17" Value="&quot;height:100%;&quot;" />
+                        </HtmlAttributes>
+                        <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <Property Name="TagName" Value="div" />
+                          </HtmlAttributes>
+                          <Container ScriptItemUID="Container28" Condition="gaugetype()='ChartPie'" ItemUID="Pie chart">
+                            <Container ScriptItemUID="Container136">
+                              <Container ScriptItemUID="Container70" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute49" Name="&quot;style&quot;" Value="&quot;display: inline-block;&quot;" />
+                                </HtmlAttributes>
+                                <Container ScriptItemUID="Container29" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute24" Name="&quot;style&quot;" Value="&quot;position: absolute; top:10px; bottom:10px; left:10px; right:50%&quot;" />
+                                  </HtmlAttributes>
+                                  <Chart Width="0" Height="0" ScriptItemUID="Chart10" PercentInTooltip="false" HasLegend="false" CustomStyle="&quot;display: inline-block;&quot;">
+                                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;GetCurrentContentFilter()&#xD;&#xA;and&#xD;&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef) and historynumber=0&#xD;&#xA;and elementvalue&lt;&gt;0&#xD;&#xA;&#xD;&#xA;and not (elementname='Due in days')&#xD;&#xA;-- nur die zuletzt gelesenen Samples nehmen" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&#xD;&#xA;select current (display+&quot;: &quot;+elementvalue+(from dashboarddef select current trim(' '+displayunit))) from DashboardContent)" ColorExpression="GetCurrentElementColor()" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;select current (display+&quot;: &quot;+elementvalue+(from dashboarddef select current trim(' '+displayunit))) from DashboardContent)" OrderBy="'HistoryNumber desc, ElementOrder'" ScriptItemUID="ChartDataSet10">
+                                      <ServerActionCall ScriptItemUID="ServerActionCall13" />
+                                    </ChartDataSet>
+                                  </Chart>
+                                </Container>
+                              </Container>
+                              <Container ScriptItemUID="Container69" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute20" Name="&quot;style&quot;" Value="&quot;display: inline-block;&#xD;&#xA;    vertical-align: top;&#xD;&#xA;    margin-top: 60px;    &#xD;&#xA;	position: absolute;&#xD;&#xA;	left:50%;&#xD;&#xA;	margin-left: 10px;&quot;&#xD;&#xA;" />
+                                </HtmlAttributes>
+                                <Label ScriptItemUID="Label12" Text="if ((from dashboardcontent select elementvalue where elementname='Due in days' )&gt;=0) then&#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#Due in days&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#Days overdue&quot;)" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute21" Name="&quot;style&quot;" Value="&quot;font-size: 1.3em;&quot;&#xD;&#xA;" />
+                                  </HtmlAttributes>
+                                </Label>
+                                <Label ScriptItemUID="Label10" Text="Abs(&#xD;&#xA;from dashboardcontent select elementvalue where elementname='Due in days'&#xD;&#xA;) + &quot;&quot;" EnableCustomAttributes="true">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute18" Name="&quot;class&quot;" Value="&quot;imx-tile-small-value&quot;" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute19" Name="&quot;style&quot;" Value="if ((from dashboardcontent select elementvalue where elementname='Due in days' )&gt;=0) then &quot;&quot;&#xD;&#xA;else variable(&quot;color: %VI_Common_Color_SignaledOrMandatory%;&quot;)" />
+                                  </HtmlAttributes>
+                                </Label>
+                              </Container>
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container86" Condition="gaugetype()='ChartBar' and not (from dashboardinfo select current HistogramStyle)" ItemUID="Bar chart">
+                            <Container ScriptItemUID="Container88">
+                              <Container ScriptItemUID="Container90" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute50" Name="&quot;style&quot;" Value="&quot;display: inline-block&quot;" />
+                                </HtmlAttributes>
+                                <Chart Type="Bar" Width="if(AutoSize()) then 0 else 395" Height="if(AutoSize()) then 0 else 169" PointsOnPage="0" ScriptItemUID="Chart31" HasLegend="false">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" DataColumnX="ElementOrder" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects) and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,select current display() from DashboardContent)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;select current (display+&quot;: &quot;+ elementvalue ) from DashboardContent)" ColorExpression="GetCurrentElementColor()" ScriptItemUID="ChartDataSet31">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall26" />
+                                  </ChartDataSet>
+                                </Chart>
+                              </Container>
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container71" Condition="gaugetype()='ChartBar' and from dashboardinfo select current HistogramStyle" ItemUID="Bar chart">
+                            <Container ScriptItemUID="Container72">
+                              <Container ScriptItemUID="Container79" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute55" Name="&quot;style&quot;" Value="&quot;display: inline-block&quot;" />
+                                </HtmlAttributes>
+                                <Chart Type="Bar" Width="if(AutoSize()) then 0 else 395" Height="if(AutoSize()) then 0 else 169" PointsOnPage="0" ScriptItemUID="Chart9" HasLegend="false" Layout="'VI_Styles_Chart_Histogram'">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" DataColumnX="ElementOrder" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects) and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,select current display() from DashboardContent)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;select current (display+&quot;: &quot;+ elementvalue ) from DashboardContent)" ColorExpression="GetCurrentElementColor()" ScriptItemUID="ChartDataSet9">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall12" />
+                                  </ChartDataSet>
+                                </Chart>
+                              </Container>
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container27" Condition="gaugetype() = &quot;ChartLine&quot;" ItemUID="Line chart">
+                            <Container ScriptItemUID="Container73">
+                              <Container ScriptItemUID="Container81" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute58" Name="&quot;style&quot;" Value="&quot;display: inline-block&quot;" />
+                                </HtmlAttributes>
+                                <Chart Width="if(AutoSize()) then 0 else 395" Height="if(AutoSize()) then 0 else 169" ScriptItemUID="Chart8" HasLegend="false" Type="Line" Tension="false" Layout="'VI_Styles_Chart_RotatedLabels'" PercentInTooltip="false">
+                                  <ChartDataSetTemplate DataTable="DashboardSeries" WhereClause="uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" ScriptItemUID="ChartDataSetTemplate17">
+                                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)&#xD;&#xA;and elementnamedisplay = ( select current ElementNameDisplay from dashboardseries)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,getformatteddate())" Name="(from DashboardSeries select current ElementNameDisplay)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ ElementNameDisplay +&quot;: &quot;+elementvalue))" ColorExpression="GetCurrentElementColorSeries()" ScriptItemUID="ChartDataSet8" OrderBy="'ElementDate'">
+                                      <ServerActionCall ScriptItemUID="ServerActionCall11" />
+                                    </ChartDataSet>
+                                  </ChartDataSetTemplate>
+                                </Chart>
+                              </Container>
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container22" ItemUID="Bar chart clustered" Condition="gaugetype()='ChartBarClustered'">
+                            <Chart Type="Bar" Width="ValueTrendWidth()" Height="ValueTrendHeight()" PointsOnPage="0" MultipleDataSets="clustered" ScriptItemUID="Chart7" HasLegend="false">
+                              <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate5">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; - &quot;+ (from dashboardcontent select current elementvalue) ))" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet7" Name="select current isnullorempty(elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall10" />
+                                </ChartDataSet>
+                              </ChartDataSetTemplate>
+                            </Chart>
+                          </Container>
+                          <Container ItemUID="Clustered bar chart" Condition="gaugetype() = &quot;ChartBarClustered&quot;" ScriptItemUID="Container20">
+                            <Container ScriptItemUID="Container21">
+                              <Chart Type="Bar" Width="ValueTrendWidth()" Height="ValueTrendHeight()" PointsOnPage="10" MultipleDataSets="clustered" ScriptItemUID="Chart6" HasLegend="false">
+                                <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate4">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; - &quot;+ (from dashboardcontent select current elementvalue) ))" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet6" Name="select current isnullorempty(elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall9" />
+                                  </ChartDataSet>
+                                </ChartDataSetTemplate>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container ItemUID="Grouped pie chart" Condition="gaugetype() = 'ChartPieGrouped'" ScriptItemUID="Container18">
+                            <Container ItemUID="Grouped pie chart" ScriptItemUID="Container19">
+                              <Chart Width="ValueTrendWidth()" Height="ValueTrendHeight()" ScriptItemUID="Chart5" HasLegend="false">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef) and historynumber=0" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" ColorExpression="GetCurrentElementColor()" OrderBy="'ElementDate'" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = ( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) ) or  isnullorempty(( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) )))&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display )&#xD;&#xA;else&#xD;&#xA;( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) )&#xD;&#xA;)" ScriptItemUID="ChartDataSet5">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall8" />
+                                </ChartDataSet>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container17" ItemUID="Grouped line chart" Condition="gaugetype() = &quot;ChartLineGrouped&quot;">
+                            <Container ScriptItemUID="Container83">
+                              <Container ScriptItemUID="Container84" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute56" Name="&quot;style&quot;" Value="&quot;display: inline-block&quot;" />
+                                </HtmlAttributes>
+                                <Chart Type="Line" Width="if(AutoSize()) then 0 else 395" Height="if(AutoSize()) then 0 else 169" Tension="false" ScriptItemUID="Chart4" HasLegend="false" Layout="'VI_Styles_Chart_RotatedLabels'" PercentInTooltip="false">
+                                  <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate3">
+                                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,getformatteddate())" Name="(from DashboardObjects select current ElementDisplay)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ ElementNameDisplay +&quot;: &quot;+elementvalue))" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet4" OrderBy="'ElementDate'">
+                                      <ServerActionCall ScriptItemUID="ServerActionCall5" />
+                                    </ChartDataSet>
+                                  </ChartDataSetTemplate>
+                                </Chart>
+                              </Container>
+                            </Container>
+                          </Container>
+                          <Container ItemUID="Stacked bar chart" Condition="gaugetype() = &quot;ChartBarStacked&quot;" ScriptItemUID="Container11">
+                            <Container ScriptItemUID="Container14">
+                              <Chart Type="Bar" Width="ValueTrendWidth()" Height="ValueTrendHeight()" PointsOnPage="10" ScriptItemUID="Chart3" HasLegend="false">
+                                <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate2">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; (&quot;+ (from dashboardcontent select current elementvalue) +&quot;)&quot;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet3" Name="select current isnullorempty( elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall4" />
+                                  </ChartDataSet>
+                                </ChartDataSetTemplate>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container ItemUID="Bar chart with one bar per object" Condition="gaugetype() = &quot;ChartBarOnePerObject&quot;" ScriptItemUID="Container7">
+                            <Container ScriptItemUID="Container10">
+                              <Chart Type="Bar" Width="ValueTrendWidth()" Height="ValueTrendHeight()" ShortenAxisLabels="true" MultipleDataSets="clustered" BarOrientation="horizontal" PercentInTooltip="false" ScriptItemUID="Chart2" HasLegend="false" PointsOnPage="" AxisLabelLength="">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnX="ElementOrderGroup" DataColumnY="ElementValue" ScriptItemUID="ChartDataSet2" WhereClause="uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="from dashboardcontent select current elementtooltip" ColorExpression="GetCurrentElementColor()" OrderBy="'ElementDate'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall2" />
+                                </ChartDataSet>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container Condition="gaugetype() = &quot;ChartLineStacked&quot;" ItemUID="Stacked area chart" ScriptItemUID="Container5" IsBeginRenderPart="true" RefreshTriggerExpression="updateTrigger()">
+                            <Container ScriptItemUID="Container6">
+                              <Chart Type="StackedLine" Width="ValueTrendWidth()" Height="ValueTrendHeight()" Tension="false" ScriptItemUID="Chart1" HasLegend="false" TrendLine="true" Area="true">
+                                <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" ScriptItemUID="ChartDataSetTemplate1" OrderBy="'ElementDisplay'">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Name="(from DashboardObjects select current ElementDisplay)" ScriptItemUID="ChartDataSet1" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ elementnamedisplay+&quot;: &quot;+elementvalue)&#xD;&#xA;)" ColorExpression="GetCurrentObjectColor()" OrderBy="'ElementDate'">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall1" />
+                                  </ChartDataSet>
+                                </ChartDataSetTemplate>
+                              </Chart>
+                            </Container>
+                          </Container>
+                        </Container>
+                      </Container>
+                    </SwitchContainerCase>
+                  </SwitchContainer>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case5">
+                  <ControlReferenceContainer ID="Big Chart in container" ScriptItemUID="ControlRef3" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </SwitchContainerCase>
+            <SwitchContainerCase ScriptItemUID="Case4" Condition="&#xD;&#xA;not(from DashboardInfo select second)">
+              <SwitchContainer ScriptItemUID="Switch2">
+                <SwitchContainerCase ScriptItemUID="Case3" ItemUID="Small charts in ContentSlider" Condition="from DashboardInfo select current (IconSize and gaugetype() &lt;&gt; &quot;ChartTable&quot; )&#xD;&#xA;-- ChartTable is not supported as IconSize">
+                  <SwitchContainer ScriptItemUID="Switch5">
+                    <SwitchContainerCase ScriptItemUID="Case10" ItemUID="Value and trend chart" Condition="gaugetype() = &quot;ChartValueAndTrend&quot;">
+                      <ContainerTemplate DataTable="DashboardContent" WhereClause=" uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" ScriptItemUID="ContainerTemplate3" WithoutParentContainer="true">
+                        <Container ScriptItemUID="Container57" EnableCustomAttributes="true" Condition="((from dashboardinfo select showneutral) or not(from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric))">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute9" Name="&quot;class&quot;" Value="&quot;ValueAndTrendContainer Chart&quot;" />
+                            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute8" Value="&quot;height:&quot;+ ValueTrendHeight() +&quot;px; width:&quot; + ValueTrendWidth() + &quot;px; box-sizing: border-box;&quot;  " />
+                          </HtmlAttributes>
+                          <LinkContainer ScriptItemUID="LinkContainer2" EnableCustomAttributes="true" EnabledCondition="ChartClickMode() in ( 'clickglobal', 'clickdatapoint' )">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="&quot;class&quot;" Value="&quot;dashboardDataItemLink&quot;" ScriptItemUID="HtmlAttribute48" />
+                            </HtmlAttributes>
+                            <ControlList ScriptItemUID="ControlList2">
+                              <Label Text="from dashboarddef select current title" ScriptItemUID="Label9" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute47" Name="&quot;class&quot;" Value="&quot;IconChartDescriptionLabelFourLines&quot;" />
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute46" Value="from dashboarddef select current title" />
+                                  <Property Name="TagName" Value="h4" />
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute45" Value="&quot;position:absolute; margin-top:0.5em;&quot;" />
+                                </HtmlAttributes>
+                              </Label>
+                              <Container ScriptItemUID="Container59" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute14" Name="&quot;sliderPrio&quot;" Value="if (from DashboardInfo select RedLimit &lt; from dashboardcontent select current elementvalue) then &#xD;&#xA;&#xD;&#xA;(&quot;2&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;if (from DashboardInfo select GreenLimit &gt;= from dashboardcontent select current elementvalue) then &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;(&quot;0&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;(&quot;1&quot;)&#xD;&#xA;" />
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute13" Name="&quot;class&quot;" Value="(if (isRed( from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;) )) then &#xD;&#xA;&#xD;&#xA;&quot;ChartStatusCritical&quot;&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;if (isGreen(from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;))) then &#xD;&#xA;&#xD;&#xA;&quot;ChartStatusOK&quot;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;&quot;ChartStatusWarning&quot;) + &#xD;&#xA;&#xD;&#xA;&quot; ChartStatusBox&quot;&#xD;&#xA;" />
+                                  <Property Name="TagName" Value="span" />
+                                  <HtmlAttribute Name="&quot;aria-label&quot;" ScriptItemUID="HtmlAttribute12" Value="if (isRed( from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;) )) then &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#The value is in the critical range&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;if (isGreen(from dashboardcontent select current convert( elementvalue, &quot;decimal&quot;))) then &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#The value is in the uncritical range&quot;)&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#xD;&#xA;translate(&quot;#LDS#The value is in the middle range&quot;)" />
+                                </HtmlAttributes>
+                              </Container>
+                              <Label Text="if (select current  elementValue from dashboardcontent&lt;1 and select current  elementValue from dashboardcontent&gt;0)&#xD;&#xA;then &#xD;&#xA;( numformat(select current  elementValue from dashboardcontent, '0.00')) else (&#xD;&#xA;&#xD;&#xA;select current  elementValue from dashboardcontent)" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute44" Value="if( NOT  from dashboardcontent select current HasHistoricValue ) then&#xD;&#xA;variable(&quot;color: %VI_Common_Color_Font%; right: 15px;&quot;)&#xD;&#xA;else&#xD;&#xA;format(&quot;{0} right: 37px; &quot;,&#xD;&#xA;if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;color: %VI_Common_Color_Font%;&quot;) else&#xD;&#xA;if (from dashboardcontent select current ElementValue &lt; from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;color: %QBM_Primary_Green%;&quot;) &#xD;&#xA;else&#xD;&#xA;variable(&quot;color: %QBM_Primary_Red%;&quot;) &#xD;&#xA;&#xD;&#xA;)" />
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute43" Name="&quot;class&quot;" Value="&quot;ValueAndTrendLabel&quot;" />
+                                </HtmlAttributes>
+                              </Label>
+                              <Container ScriptItemUID="Container68" Condition=" from dashboardcontent select current HasHistoricValue" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <Property Name="TagName" Value="span" />
+                                </HtmlAttributes>
+                                <Image ScriptItemUID="Image2" Source="File" EnableCustomAttributes="true" FileName="if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionForward_normal_20.png&amp;effect=tint&amp;color=&quot;) + substring(variable(&quot;%QBM_Primary_Blue%&quot;),1) else&#xD;&#xA;if (from dashboardcontent select current ElementValue &lt; from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionImport_normal_20.png&amp;effect=tint&amp;color=&quot;) +  substring(variable(&quot;%QBM_Primary_Green%&quot;),1) else&#xD;&#xA;variable(&quot;%permanentlink%dojoFile=qui/Actions/ic_actionExport_normal_20.png&amp;effect=tint&amp;color=&quot;) + substring(variable(&quot;%QBM_Primary_Red%&quot;),1) &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Layout="'VI_Styles_Image_NoLayout'">
+                                  <HtmlAttributes>
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="'class'" Value="&quot;ChartTrendImage&quot;" />
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute42" Value="&#xD;&#xA;if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;translate(&quot;#LDS#No changes since {0}&quot;, from dashboardcontent select current formatDate(HistoricValueDate, &quot;d&quot;)) else&#xD;&#xA;((if (from dashboardcontent select current ElementValue &lt; from dashboardcontent select current ElementValueHistoric) then&#xD;&#xA;translate(&quot;#LDS#Decreased by {0} since {1}&quot;, &#xD;&#xA;&#xD;&#xA;(if ((from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&gt;0 and (from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&lt;1) then (&#xD;&#xA;numformat(abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric),'0.00') +&quot;&quot;) else (abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric) + &quot;&quot;)&#xD;&#xA;),&#xD;&#xA;&#xD;&#xA;from dashboardcontent select current formatDate(HistoricValueDate, &quot;d&quot;)&#xD;&#xA;&#xD;&#xA;)  else translate(&quot;#LDS#Increased by {0} since {1}&quot;, &#xD;&#xA;&#xD;&#xA;(if ((from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&gt;0 and (from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric)&lt;1) then (&#xD;&#xA;numformat(abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric),'0.00') +&quot;&quot;) else (abs(from dashboardcontent select current ElementValue - from dashboardcontent select current ElementValueHistoric) + &quot;&quot;)&#xD;&#xA;),&#xD;&#xA;from dashboardcontent select current formatDate(HistoricValueDate, &quot;d&quot;)&#xD;&#xA;&#xD;&#xA;) )&#xD;&#xA;&#xD;&#xA;) &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+                                    <HtmlAttribute ScriptItemUID="HtmlAttribute41" Name="&quot;data-neutral&quot;" Value="if (from dashboardcontent select current ElementValue = from dashboardcontent select current ElementValueHistoric) then &quot;true&quot; else &quot;false&quot;" />
+                                  </HtmlAttributes>
+                                </Image>
+                              </Container>
+                              <Container ScriptItemUID="Container64" EnableCustomAttributes="true">
+                                <HtmlAttributes>
+                                  <HtmlAttribute ScriptItemUID="HtmlAttribute16" Name="&quot;class&quot;" Value="&quot;ValueAndTrendInnerContainer&quot;" />
+                                  <Property Name="TagName" Value="span" />
+                                  <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute15" Value="from dashboardcontent select current elementtooltip" />
+                                </HtmlAttributes>
+                              </Container>
+                            </ControlList>
+                            <ServerActionCall ScriptItemUID="ServerActionCall25">
+                              <ObjectSwitchCallAction ObjectKey="from dashboarddef select current xobjectkey" ActionType="Select_DialogDashboardDef" ScriptItemUID="ObjectSwitchCallAction2">
+                                <VirtualTableMapping VirtualTable="DialogDashboardContent" DataTable="DashboardContent" ScriptItemUID="VirtualTableMapping2">
+                                  <VirtualColumnMapping VirtualColumn="ElementObjectKey" DataColumn="ElementObjectKeyNavigation" />
+                                </VirtualTableMapping>
+                                <VirtualTableMapping VirtualTable="DialogDashboardDef" DataTable="DashboardDef" ScriptItemUID="VirtualTableMapping1" />
+                              </ObjectSwitchCallAction>
+                            </ServerActionCall>
+                          </LinkContainer>
+                        </Container>
+                      </ContainerTemplate>
+                    </SwitchContainerCase>
+                    <SwitchContainerCase ScriptItemUID="Case9" ItemUID="Other small charts">
+                      <Container Condition="--only show if there is at least one value&#xD;&#xA;0 &lt;&gt; &#xD;&#xA;select count() from dashboardcontent where (GetCurrentContentFilter()&#xD;&#xA;&#xD;&#xA;and elementvalue &lt;&gt; 0&#xD;&#xA;)&#xD;&#xA;" ItemUID="Chart" ScriptItemUID="Container8" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;ValueAndTrendContainer Chart&quot;" />
+                          <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute23" Value="&quot;height:&quot;+ ValueTrendHeight() +&quot;px; width:&quot; + ValueTrendWidth() + &quot;px; box-sizing: border-box;&quot;  " />
+                        </HtmlAttributes>
+                        <Container ScriptItemUID="Container48" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute5" Value="&quot;position:absolute; margin-top:0.5em;&quot;" />
+                          </HtmlAttributes>
+                          <Label Text="ChartTitle()" ScriptItemUID="Label7" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute ScriptItemUID="HtmlAttribute7" Name="&quot;class&quot;" Value="&quot;IconChartDescriptionLabel&quot;" />
+                              <Property Name="TagName" Value="h4" />
+                            </HtmlAttributes>
+                          </Label>
+                        </Container>
+                        <Container ScriptItemUID="Container9" EnableCustomAttributes="true">
+                          <HtmlAttributes>
+                            <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;ValueAndTrendInnerContainer&quot;" />
+                            <Property Name="TagName" Value="div" />
+                            <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="&quot;margin-top: 2.5em; font-size: 15px;&quot;" />
+                          </HtmlAttributes>
+                          <Container ScriptItemUID="Container46" Condition="gaugetype()='ChartPie'" ItemUID="Pie chart">
+                            <Chart Width="0" Height="0" ScriptItemUID="Chart21" PercentInTooltip="false" HasLegend="false">
+                              <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;GetCurrentContentFilter()&#xD;&#xA;and&#xD;&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef) and historynumber=0&#xD;&#xA;and elementvalue&lt;&gt;0&#xD;&#xA;-- nur die zuletzt gelesenen Samples nehmen" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&#xD;&#xA;select current (display+&quot;: &quot;+elementvalue+(from dashboarddef select current trim(' '+displayunit))) from DashboardContent)" ColorExpression="GetCurrentElementColor()" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;select current (display+&quot;: &quot;+elementvalue+(from dashboarddef select current trim(' '+displayunit))) from DashboardContent)" OrderBy="'HistoryNumber desc, ElementOrder'" ScriptItemUID="ChartDataSet21">
+                                <ServerActionCall ScriptItemUID="ServerActionCall24">
+                                  <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call22" />
+                                </ServerActionCall>
+                              </ChartDataSet>
+                            </Chart>
+                          </Container>
+                          <Container ScriptItemUID="Container45" ItemUID="Bar chart" Condition="gaugetype()='ChartBar'">
+                            <Chart Type="Bar" Width="0" Height="0" ShortenAxisLabels="true" PointsOnPage="0" BarOrientation="horizontal" ScriptItemUID="Chart19" HasLegend="false" AxisLabelLength="">
+                              <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" DataColumnX="ElementOrder" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and&#xD;&#xA;elementvalue &lt;&gt; &quot;0&quot; and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;select current (display+&quot;: &quot;+ elementvalue ) from DashboardContent)" ColorExpression="GetCurrentElementColor()" ScriptItemUID="ChartDataSet19">
+                                <ServerActionCall ScriptItemUID="ServerActionCall23">
+                                  <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call21" />
+                                </ServerActionCall>
+                              </ChartDataSet>
+                            </Chart>
+                          </Container>
+                          <Container ScriptItemUID="Container42" ItemUID="Line chart" Condition="gaugetype() = &quot;ChartLine&quot;">
+                            <Chart Width="0" Height="0" ScriptItemUID="Chart18" HasLegend="false" Type="Line" Tension="false">
+                              <ChartDataSetTemplate DataTable="DashboardSeries" WhereClause="uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" ScriptItemUID="ChartDataSetTemplate11">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)&#xD;&#xA;and elementnamedisplay = ( select current ElementNameDisplay from dashboardseries)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Name="(from DashboardObjects select current ElementDisplay)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ ElementNameDisplay +&quot;: &quot;+elementvalue))" ColorExpression="GetCurrentElementColorSeries()" ScriptItemUID="ChartDataSet18" OrderBy="'ElementDate'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall21">
+                                    <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call20" />
+                                  </ServerActionCall>
+                                </ChartDataSet>
+                              </ChartDataSetTemplate>
+                            </Chart>
+                          </Container>
+                          <Container ScriptItemUID="Container36" ItemUID="Bar chart clustered" Condition="gaugetype()='ChartBarClustered'">
+                            <Chart Type="Bar" Width="0" Height="0" PointsOnPage="0" MultipleDataSets="clustered" ScriptItemUID="Chart17" HasLegend="false">
+                              <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xD;&#xA;&#xD;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate10">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; - &quot;+ (from dashboardcontent select current elementvalue) ))" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet17" Name="select current isnullorempty(elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall20">
+                                    <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call19" />
+                                  </ServerActionCall>
+                                </ChartDataSet>
+                              </ChartDataSetTemplate>
+                            </Chart>
+                          </Container>
+                          <Container ItemUID="Clustered bar chart" Condition="gaugetype() = &quot;ChartBarClustered&quot;" ScriptItemUID="Container34">
+                            <Container ScriptItemUID="Container35">
+                              <Chart Type="Bar" Width="0" Height="0" PointsOnPage="10" MultipleDataSets="clustered" ScriptItemUID="Chart16" HasLegend="false">
+                                <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate9">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; - &quot;+ (from dashboardcontent select current elementvalue) ))" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet16" Name="select current isnullorempty(elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall19">
+                                      <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call18" />
+                                    </ServerActionCall>
+                                  </ChartDataSet>
+                                </ChartDataSetTemplate>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container ItemUID="Grouped pie chart" Condition="gaugetype() = 'ChartPieGrouped'" ScriptItemUID="Container31">
+                            <Container ItemUID="Grouped pie chart" ScriptItemUID="Container32">
+                              <Chart Width="0" Height="0" ScriptItemUID="Chart15" HasLegend="false">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef) and historynumber=0" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" ColorExpression="GetCurrentElementColor()" OrderBy="'ElementDate'" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = ( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) ) or  isnullorempty(( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) )))&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display )&#xD;&#xA;else&#xD;&#xA;( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) )&#xD;&#xA;)" ScriptItemUID="ChartDataSet15">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall18">
+                                    <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call17" />
+                                  </ServerActionCall>
+                                </ChartDataSet>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="Container26" ItemUID="Grouped line chart" Condition="gaugetype() = &quot;ChartLineGrouped&quot;">
+                            <Chart Type="Line" Width="0" Height="0" Tension="false" ScriptItemUID="Chart14" HasLegend="false">
+                              <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate8">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Name="(from DashboardObjects select current ElementDisplay)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ ElementNameDisplay +&quot;: &quot;+elementvalue))" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet14" OrderBy="'ElementDate'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall17">
+                                    <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call15" />
+                                  </ServerActionCall>
+                                </ChartDataSet>
+                              </ChartDataSetTemplate>
+                            </Chart>
+                          </Container>
+                          <Container ItemUID="Stacked bar chart" Condition="gaugetype() = &quot;ChartBarStacked&quot;" ScriptItemUID="Container24">
+                            <Container ScriptItemUID="Container25">
+                              <Chart Type="Bar" Width="0" Height="0" PointsOnPage="10" ScriptItemUID="Chart13" HasLegend="false">
+                                <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate7">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; (&quot;+ (from dashboardcontent select current elementvalue) +&quot;)&quot;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet13" Name="select current isnullorempty( elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall16">
+                                      <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call14" />
+                                    </ServerActionCall>
+                                  </ChartDataSet>
+                                </ChartDataSetTemplate>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container ItemUID="Bar chart with one bar per object" Condition="gaugetype() = &quot;ChartBarOnePerObject&quot;" ScriptItemUID="Container15">
+                            <Container ScriptItemUID="Container16">
+                              <Chart Type="Bar" Width="0" Height="0" ShortenAxisLabels="true" MultipleDataSets="clustered" BarOrientation="horizontal" PercentInTooltip="false" ScriptItemUID="Chart12" HasLegend="false" PointsOnPage="" AxisLabelLength="">
+                                <ChartDataSet DataTable="DashboardContent" DataColumnX="ElementOrderGroup" DataColumnY="ElementValue" ScriptItemUID="ChartDataSet12" WhereClause="uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Tooltip="from dashboardcontent select current elementtooltip" ColorExpression="GetCurrentElementColor()" OrderBy="'ElementDate'">
+                                  <ServerActionCall ScriptItemUID="ServerActionCall15">
+                                    <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call13" />
+                                  </ServerActionCall>
+                                </ChartDataSet>
+                              </Chart>
+                            </Container>
+                          </Container>
+                          <Container Condition="gaugetype() = &quot;ChartLineStacked&quot;" ItemUID="Stacked area chart" ScriptItemUID="Container12" IsBeginRenderPart="true" RefreshTriggerExpression="updateTrigger()">
+                            <Container ScriptItemUID="Container13">
+                              <Chart Type="StackedLine" Width="0" Height="0" Tension="false" ScriptItemUID="Chart11" HasLegend="false" Area="true" TrendLine="true">
+                                <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" ScriptItemUID="ChartDataSetTemplate6" OrderBy="'ElementDisplay'">
+                                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&quot;&quot;)" Name="(from DashboardObjects select current ElementDisplay)" ScriptItemUID="ChartDataSet11" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ elementnamedisplay+&quot;: &quot;+elementvalue)&#xD;&#xA;)" ColorExpression="GetCurrentObjectColor()" OrderBy="'ElementDate'">
+                                    <ServerActionCall ScriptItemUID="ServerActionCall3">
+                                      <CallAction ActionID="Big Chart in Popup" ScriptItemUID="Call12" />
+                                    </ServerActionCall>
+                                  </ChartDataSet>
+                                </ChartDataSetTemplate>
+                              </Chart>
+                            </Container>
+                          </Container>
+                        </Container>
+                      </Container>
+                    </SwitchContainerCase>
+                  </SwitchContainer>
+                </SwitchContainerCase>
+                <SwitchContainerCase ScriptItemUID="Case2">
+                  <ControlReferenceContainer ID="Big Chart in container" ScriptItemUID="ControlRef4" />
+                </SwitchContainerCase>
+              </SwitchContainer>
+            </SwitchContainerCase>
+          </SwitchContainer>
+        </ContainerTemplate>
+        <Container Layout="'VI_Styles_Container_Paragraph'" Condition="if (from DashboardInfo select IconSize and not(from dashboardinfo select second)) then (false) else&#xD;&#xA;&#xD;&#xA;if(IsOneDashboardForAllGroups())&#xD;&#xA;then&#xD;&#xA;(false)&#xD;&#xA;else&#xD;&#xA;(&#xD;&#xA;0 = select count() from DashboardContent&#xD;&#xA;&#xD;&#xA;)" ScriptItemUID="Container23" ItemUID="NO DATA">
+          <Container ScriptItemUID="Container82">
+            <Label Text="translate(&quot;#LDS#There is no data to display.&quot;)" ScriptItemUID="Label16" />
+          </Container>
+          <Container Condition="from dashboarddef select current&#xA;&#xA;(not(isadhoc)&#xA;and not(isnullorempty(uid_dialogschedule))&#xA;and isnull( objectwalker(&quot;FK(uid_dialogschedule).lastrun&quot;)))" ScriptItemUID="Container80">
+            <Image StockImage="Warning" ScriptItemUID="Image3" />
+            <Label Text="translate(&quot;#LDS#The statistical information for this chart has not yet been collected.&quot;)" ScriptItemUID="Label15" />
+          </Container>
+        </Container>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableView Table="DashboardSeries" PrimaryKeyColumn="uid_pk" ViewExpression="select distinct (elementnamedisplay, uid_dialogdashboarddef) from DashboardContent" ScriptItemUID="DataTableView1">
+          <Column Name="ElementNameDisplay" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="UID_DialogDashboardDef" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="uid_pk" ScriptItemUID="Column3" DataType="System.String" />
+          <Column Name="targetColor" Expression="select top 1 targetColor from DashboardContent where ElementNameDisplay = (select current ElementNameDisplay from DashboardSeries) and UID_DialogDashboardDef = (select current UID_DialogDashboardDef from DashboardSeries)" DataSource="Expression" ScriptItemUID="Column4" DataType="System.String" />
+        </DataTableView>
+        <DataTableCustom Table="ColorScheme" ScriptItemUID="DataTableCustom1">
+          <Column Name="Color" ScriptItemUID="Column5" DataType="System.String" />
+          <Column Name="Key" ScriptItemUID="Column6" DataType="System.String" MinLength="" MaxLength="" />
+        </DataTableCustom>
+        <DataTableView Table="DashboardDates" PrimaryKeyColumn="uid_pk" ViewExpression="select distinct (elementdate,historynumber,uid_dialogdashboarddef) from DashboardContent" ScriptItemUID="DataTableView2">
+          <Column Name="ElementDate" DataType="System.DateTime" ScriptItemUID="Column7" />
+          <Column Name="HistoryNumber" DataType="System.Int32" ScriptItemUID="Column8" />
+          <Column Name="UID_DialogDashboardDef" ScriptItemUID="Column9" DataType="System.String" />
+          <Column Name="uid_pk" ScriptItemUID="Column10" DataType="System.String" />
+        </DataTableView>
+        <DataTableView Table="DashboardObjects" PrimaryKeyColumn="pk" ViewExpression="select distinct elementobjectkey from dashboardcontent" ScriptItemUID="DataTableView3" DisplayColumn="ElementDisplay">
+          <Column Name="ElementObjectKey" ScriptItemUID="Column11" DataType="System.String" />
+          <Column Name="pk" ScriptItemUID="Column12" DataType="System.String" />
+          <Column Name="ElementDisplay" DataSource="Expression" Expression="select top 1 display() from referencedobjects where key = (select current elementobjectkey from dashboardobjects)" DataType="System.String" ScriptItemUID="Column26" />
+          <Column Name="ElementDisplayLong" DataSource="Expression" Expression="select top 1 displaylong() from referencedobjects where key = (select current elementobjectkey from dashboardobjects)" DataType="System.String" ScriptItemUID="Column27" />
+        </DataTableView>
+        <DataTableView Table="DashboardNames" PrimaryKeyColumn="uid_pk" ViewExpression="select distinct (elementnamedisplay, uid_dialogdashboarddef) from DashboardContent" ScriptItemUID="DataTableView4">
+          <Column Name="ElementNameDisplay" ScriptItemUID="Column14" DataType="System.String" />
+          <Column Name="UID_DialogDashboardDef" ScriptItemUID="Column15" DataType="System.String" />
+          <Column Name="uid_pk" ScriptItemUID="Column16" DataType="System.String" />
+        </DataTableView>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="CallSelectAction">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action12" Condition="ChartClickMode()=&quot;ClickDataPoint&quot;">
+              <ObjectSwitchCallAction ObjectKey="from dashboarddef select current xobjectkey" ActionType="Select_DialogDashboardDef" ScriptItemUID="ObjectSwitchCallAction13">
+                <VirtualTableMapping VirtualTable="DialogDashboardContent" DataTable="DashboardContent" ScriptItemUID="VirtualTableMapping3">
+                  <VirtualColumnMapping VirtualColumn="ElementObjectKey" DataColumn="ElementObjectKeyNavigation" />
+                </VirtualTableMapping>
+                <VirtualTableMapping VirtualTable="DialogDashboardDef" DataTable="DashboardDef" ScriptItemUID="VirtualTableMapping4" />
+                <VirtualFunctionMapping ID="ElementObjectKey()" Value="from dashboardcontent select current elementobjectkeynavigation" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="ElementName()" Value="from dashboardcontent select current elementnamedisplay" ScriptItemUID="VirtualFunctionMapping2" />
+              </ObjectSwitchCallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DashboardContent" ScriptItemUID="DataTableCursor6" />
+        </Control>
+        <Control ID="Big Chart in container">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container2" Condition="not(gaugetype() = &quot;ChartValueAndTrend&quot;)" Layout="'VI_Styles_Container_ChartContainer'">
+              <Container Layout="'VI_Styles_Container_ChartTitle'" ScriptItemUID="Container3">
+                <Label Text="ChartTitle()" ScriptItemUID="Label5" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute Name="'style'" ScriptItemUID="Label5style" Value="&quot;padding-right: 16px;&quot;" />
+                  </HtmlAttributes>
+                </Label>
+              </Container>
+              <ControlReferenceControlList ID="Big Chart only" ScriptItemUID="ControlRef5" />
+              <ControlReferenceContainer ID="Chart help" ScriptItemUID="ControlRef1" />
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor7" />
+        </Control>
+        <Control ID="Big Chart in Popup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action1">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="Call16">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container55">
+                    <ControlReferenceControlList ID="Big Chart only" ScriptItemUID="ControlRef9" />
+                    <ControlReferenceContainer ID="Chart help" ScriptItemUID="ControlRef2" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container ScriptItemUID="Container54">
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef6" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-chart imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="PopupTitle()" Value="ChartTitle()" ScriptItemUID="VirtualFunctionMapping4" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor8" />
+        </Control>
+        <Control ID="Big Chart only">
+          <LocalControlContext ContainerType="ControlList">
+            <ControlList ScriptItemUID="ControlList11">
+              <Container Layout="'VI_Styles_Container_Paragraph'" Condition="if(IsOneDashboardForAllGroups())&#xD;&#xA;then&#xD;&#xA;(false)&#xD;&#xA;else&#xD;&#xA;(&#xD;&#xA;0 = select count() from DashboardContent where GetCurrentContentFilter()&#xD;&#xA;&#xD;&#xA;and&#xD;&#xA;(&#xD;&#xA;if ( gaugetype()=&quot;ChartPie&quot;) then (elementvalue&lt;&gt;0)&#xD;&#xA;else true&#xD;&#xA;))" ScriptItemUID="Container43" ItemUID="NO DATA" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container43style" Value="&quot;width:&quot; + ChartWidthNarrow() + &quot;px;&quot;" />
+                </HtmlAttributes>
+                <Container ScriptItemUID="Container50">
+                  <Label Text="translate(&quot;#LDS#There is no data to display.&quot;)" ScriptItemUID="Label4" />
+                </Container>
+                <Container Condition="from dashboarddef select current&#xA;&#xA;(not(isadhoc)&#xA;and not(isnullorempty(uid_dialogschedule))&#xA;and isnull( objectwalker(&quot;FK(uid_dialogschedule).lastrun&quot;)))" ScriptItemUID="Container49">
+                  <Image StockImage="Warning" ScriptItemUID="Image7" />
+                  <Label Text="translate(&quot;#LDS#The statistical information for this chart has not yet been collected.&quot;)" ScriptItemUID="Label2" />
+                </Container>
+              </Container>
+              <Container Layout="'VI_Styles_Container_SmallText'" ScriptItemUID="Container53" ItemUID="DRILL DOWN INFO">
+                <Label Text="if(chartclickmode()=&quot;ClickDataPoint&quot;) then translate(&quot;#LDS#Click on a data point to drill down&quot;)" ScriptItemUID="Label11" />
+                <Literal Expression="&quot;&amp;nbsp;&quot;" />
+              </Container>
+              <Container Condition="gaugetype()='ChartPie'" ItemUID="Pie chart" ScriptItemUID="Container58">
+                <Container Condition="--only show if there is at least one value&#xA;0 &lt;&gt; &#xA;select count() from dashboardcontent where (GetCurrentContentFilter()&#xA;and historynumber=0 &#xA;and elementvalue &lt;&gt; 0&#xA;)&#xA;" ScriptItemUID="Container60">
+                  <Chart Width="ChartWidthNarrow()" Height="360" ScriptItemUID="Chart20" HasLegend="true">
+                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;GetCurrentContentFilter()&#xD;&#xA;and&#xD;&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef) and historynumber=0&#xD;&#xA;and elementvalue&lt;&gt;0&#xD;&#xA;-- nur die zuletzt gelesenen Samples nehmen" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,select current display from DashboardContent)&#xA;&#xA;" ColorExpression="GetCurrentElementColor()" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;select current (display+&quot;: &quot;+elementvalue+(from dashboarddef select current trim(' '+displayunit))) from DashboardContent&#xD;&#xA;)" OrderBy="'HistoryNumber desc, ElementOrder'" ScriptItemUID="ChartDataSet20">
+                      <ServerActionCall ScriptItemUID="ServerActionCall28">
+                        <CallAction ActionID="CallSelectAction" ScriptItemUID="Call25" />
+                      </ServerActionCall>
+                    </ChartDataSet>
+                  </Chart>
+                </Container>
+              </Container>
+              <Container Condition="gaugetype()='ChartBar'" ItemUID="Bar chart" ScriptItemUID="Container61">
+                <Chart Type="Bar" Width="ChartWidthNarrow()" Height="360" ShortenAxisLabels="true" PointsOnPage="10" BarOrientation="horizontal" ScriptItemUID="Chart22" HasLegend="" AxisLabelLength="">
+                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" DataColumnX="ElementOrder" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and&#xD;&#xA;elementvalue &lt;&gt; &quot;0&quot; and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,select current display() from DashboardContent)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;select current (display+&quot;: &quot;+ elementvalue ) from DashboardContent&#xD;&#xA;)" ColorExpression="GetCurrentElementColor()" ScriptItemUID="ChartDataSet22">
+                    <ServerActionCall ScriptItemUID="ServerActionCall30">
+                      <CallAction ActionID="CallSelectAction" ScriptItemUID="Call26" />
+                    </ServerActionCall>
+                  </ChartDataSet>
+                </Chart>
+              </Container>
+              <Container Condition="gaugetype()='ChartLine'" ItemUID="Line chart" ScriptItemUID="Container62">
+                <Chart Type="Line" Width="ChartWidthWide()" Height="360" Tension="false" PercentInTooltip="false" ScriptItemUID="Chart23" HasLegend="true">
+                  <ChartDataSetTemplate DataTable="DashboardSeries" WhereClause="uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" ScriptItemUID="ChartDataSetTemplate12">
+                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and&#xD;&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from DashboardDef) and elementnamedisplay = ( select current ElementNameDisplay from dashboardseries) and historynumber&lt;8" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,getformatteddate())" Tooltip="select current (FormatDate(elementdate, &quot;special_monthday&quot;) + &quot; - &quot; + elementnameDisplay+&quot;: &quot;+ elementvalue) from DashboardContent" ColorExpression="GetCurrentElementColorSeries()" ScriptItemUID="ChartDataSet23" Name="select current ElementNameDisplay from DashboardSeries" OrderBy="'ElementDate'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall31">
+                        <CallAction ActionID="CallSelectAction" ScriptItemUID="Call27" />
+                      </ServerActionCall>
+                    </ChartDataSet>
+                  </ChartDataSetTemplate>
+                </Chart>
+              </Container>
+              <Container ItemUID="Traffic light" Condition="gaugetype()='TrafficLight'" Layout="'VI_Styles_Container_ChartTrafficLightContainer'" ScriptItemUID="Container63">
+                <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container75">
+                  <Image Source="File" FileName="from DashboardContent select top 1&#xD;&#xA;(&#xD;&#xA;if(isnull(elementvalue)) then&#xD;&#xA;variable(&quot;%link%img=TrafficLight_Green.png&quot;)&#xD;&#xA;else if( isRed(percentage()))&#xD;&#xA;then&#xD;&#xA;variable(&quot;%link%img=TrafficLight_Red.png&quot;)&#xD;&#xA;else (if( isGreen(percentage()))&#xD;&#xA;then&#xD;&#xA;variable(&quot;%link%img=TrafficLight_Green.png&quot;)&#xD;&#xA;else&#xD;&#xA;variable(&quot;%link%img=TrafficLight_Yellow.png&quot;)))&#xD;&#xA;where (GetCurrentContentFilter())" ScriptItemUID="Image8" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image8alt" Value="from DashboardContent select top 1&#xA;(&#xA;if(isnull(elementvalue)) then&#xA;translate(&quot;#LDS#Green&quot;)&#xA;else if( isRed(percentage()))&#xA;then&#xA;translate(&quot;#LDS#Red&quot;)&#xA;else (if( isGreen(percentage()))&#xA;then&#xA;translate(&quot;#LDS#Green&quot;)&#xA;else&#xA;translate(&quot;#LDS#Yellow&quot;)))&#xA;where (GetCurrentContentFilter())" />
+                    </HtmlAttributes>
+                  </Image>
+                </Container>
+                <Container Layout="'VI_Styles_Container_ChartTitle'" ScriptItemUID="Container65">
+                  <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container67">
+                    <Label Text="from DashboardContent select top 1 numformat(ElementValue,&quot;0.##&quot;) where &#xA;--filter by current object (or the null object)&#xA;GetCurrentContentFilter()&#xA;" ScriptItemUID="Label19" />
+                    <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container74" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="Container74style" Value="'font-weight: bold; padding-left: 3px; '" />
+                      </HtmlAttributes>
+                      <Label Text="trim(from dashboarddef select current displayvalue(displayunit))" ScriptItemUID="Label18" />
+                    </Container>
+                  </Container>
+                  <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container66">
+                    <Label Text="from DashboardContent select top 1 ElementNameDisplay where GetCurrentContentFilter()&#xA;" ScriptItemUID="Label17" />
+                  </Container>
+                </Container>
+              </Container>
+              <Container Condition="gaugetype()='ChartTable' and istranspose()" ItemUID="Table chart" ScriptItemUID="Container76" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container76style" Value="format( &quot;width: {0}px;&quot;, (ChartWidthWide()))" />
+                </HtmlAttributes>
+                <Table Layout="'VI_Styles_Table_Chart'" CustomStyle="format( &quot;width: {0}px;&quot;, (ChartWidthWide()))" ScriptItemUID="Table3">
+                  <Row ScriptItemUID="Row5">
+                    <CellTemplate DataTable="DashboardContent" WhereClause="uid_dialogdashboarddef = (select current uid_dialogdashboarddef from DashboardDef) and historynumber&lt;8" OrderBy="'ElementOrder'" ScriptItemUID="CellTemplate4">
+                      <Cell ScriptItemUID="Cell2">
+                        <LinkContainer EnabledCondition="ChartClickMode()=&quot;ClickDataPoint&quot;&#xA;" ScriptItemUID="LinkContainer7">
+                          <ControlList ScriptItemUID="ControlList13">
+                            <Label Text="select current ElementNameDisplay from DashboardContent" ScriptItemUID="Label21" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Label21style" Value="&quot;text-decoration: none;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                          <ServerActionCall ScriptItemUID="ServerActionCall33">
+                            <CallAction ActionID="CallSelectAction" ScriptItemUID="Call31" />
+                          </ServerActionCall>
+                        </LinkContainer>
+                      </Cell>
+                    </CellTemplate>
+                  </Row>
+                  <Row ScriptItemUID="Row4">
+                    <CellTemplate DataTable="DashboardContent" WhereClause="uid_dialogdashboarddef = (select current uid_dialogdashboarddef from DashboardDef) and historynumber&lt;8" OrderBy="'ElementOrder'" ScriptItemUID="CellTemplate3">
+                      <Cell ScriptItemUID="Cell1">
+                        <LinkContainer EnabledCondition="ChartClickMode()=&quot;ClickDataPoint&quot;" ScriptItemUID="LinkContainer6">
+                          <ControlList ScriptItemUID="ControlList12">
+                            <Label Text="select current elementvalue from DashboardContent" ScriptItemUID="Label20" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Label20style" Value="&quot;text-decoration: none;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                          <ServerActionCall ScriptItemUID="ServerActionCall32">
+                            <CallAction ActionID="CallSelectAction" ScriptItemUID="Call30" />
+                          </ServerActionCall>
+                        </LinkContainer>
+                      </Cell>
+                    </CellTemplate>
+                  </Row>
+                </Table>
+              </Container>
+              <Container Condition="gaugetype()='ChartTable' and not(istranspose())" ItemUID="Table chart transposed" ScriptItemUID="Container77" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container77style" Value="format( &quot;width: {0}px;&quot;, ChartWidthNarrow())" />
+                </HtmlAttributes>
+                <Table Layout="'VI_Styles_Table_Chart'" ScriptItemUID="Table4">
+                  <RowTemplate DataTable="DashboardContent" WhereClause="uid_dialogdashboarddef = (select current uid_dialogdashboarddef from DashboardDef) and historynumber&lt;8" OrderBy="'ElementOrder'" ScriptItemUID="RowTemplate2">
+                    <Row ScriptItemUID="Row6">
+                      <Cell ScriptItemUID="Cell4" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Cell4style" Value="&quot;text-align: right; width: 100%;&quot;" />
+                        </HtmlAttributes>
+                        <LinkContainer EnabledCondition="ChartClickMode()=&quot;ClickDataPoint&quot;" ScriptItemUID="LinkContainer9">
+                          <ControlList ScriptItemUID="ControlList15">
+                            <Label Text="select current ElementNameDisplay from DashboardContent" ScriptItemUID="Label26" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Label26style" Value="&quot;text-decoration: none;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                          <ServerActionCall ScriptItemUID="ServerActionCall35">
+                            <CallAction ActionID="CallSelectAction" ScriptItemUID="Call33" />
+                          </ServerActionCall>
+                        </LinkContainer>
+                      </Cell>
+                      <Cell ScriptItemUID="Cell3" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'style'" ScriptItemUID="Cell3style" Value="&quot;text-align: left; min-width: 90px; padding-left: 16px; text-align: center;&quot;" />
+                        </HtmlAttributes>
+                        <LinkContainer EnabledCondition="ChartClickMode()=&quot;ClickDataPoint&quot;" ScriptItemUID="LinkContainer8">
+                          <ControlList ScriptItemUID="ControlList14">
+                            <Label Text="isnullorempty(&#xD;&#xA;select current elementvalueFormatted from DashboardContent,&#xD;&#xA;&#xD;&#xA;&quot;0&quot;)" ScriptItemUID="Label25" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="'style'" ScriptItemUID="Label25style" Value="&quot;text-decoration: none;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                          <ServerActionCall ScriptItemUID="ServerActionCall34">
+                            <CallAction ActionID="CallSelectAction" ScriptItemUID="Call32" />
+                          </ServerActionCall>
+                        </LinkContainer>
+                      </Cell>
+                    </Row>
+                  </RowTemplate>
+                </Table>
+              </Container>
+              <Container ItemUID="Clustered bar chart" Condition="gaugetype() = &quot;ChartBarClustered&quot;" ScriptItemUID="Container78">
+                <Chart Type="Bar" Width="ChartWidthWide()" Height="360" PointsOnPage="10" MultipleDataSets="clustered" ScriptItemUID="Chart24" HasLegend="not(isnull(hidelegend(), false))">
+                  <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate13">
+                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&#xD;&#xA;select current display  from DashboardContent)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; - &quot;+ (from dashboardcontent select current elementvalue) )&#xD;&#xA;)" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet24" Name="select current isnullorempty(elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall36">
+                        <CallAction ActionID="CallSelectAction" ScriptItemUID="Call34" />
+                      </ServerActionCall>
+                    </ChartDataSet>
+                  </ChartDataSetTemplate>
+                </Chart>
+              </Container>
+              <Container ItemUID="Grouped pie chart" Condition="gaugetype() = 'ChartPieGrouped'" ScriptItemUID="Container85">
+                <Chart Width="ChartWidthNarrow()" Height="360" ScriptItemUID="Chart25" HasLegend="true">
+                  <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xA;uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef) and historynumber=0" DataColumnX="ElementOrder" Text="&#xD;&#xA;IsNullOrEmpty(from dashboardcontent select current ElementText,&#xD;&#xA;select current display  from DashboardContent)" ColorExpression="GetCurrentElementColor()" OrderBy="'ElementDate'" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = ( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) ) or  isnullorempty(( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) )))&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display )&#xD;&#xA;else&#xD;&#xA;( from DashboardObjects select ElementDisplayLong where ElementObjectKey = ( from DashboardContent select current ElementObjectKey ) )&#xD;&#xA;)" ScriptItemUID="ChartDataSet25">
+                    <ServerActionCall ScriptItemUID="ServerActionCall37">
+                      <CallAction ActionID="CallSelectAction" ScriptItemUID="Call35" />
+                    </ServerActionCall>
+                  </ChartDataSet>
+                </Chart>
+              </Container>
+              <Container Condition="gaugetype() = &quot;ChartLineGrouped&quot;" ItemUID="Grouped line chart" ScriptItemUID="Container87">
+                <Chart Type="Line" Width="ChartWidthWide()" Height="240" Tension="false" ScriptItemUID="Chart26" HasLegend="true">
+                  <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate14">
+                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&#xD;&#xA;GetFormattedDate()&#xD;&#xA;)" Name="(from DashboardObjects select current ElementDisplay)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ ElementNameDisplay +&quot;: &quot;+elementvalue)&#xD;&#xA;)" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet26" OrderBy="'ElementDate'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall38">
+                        <CallAction ActionID="CallSelectAction" ScriptItemUID="Call36" />
+                      </ServerActionCall>
+                    </ChartDataSet>
+                  </ChartDataSetTemplate>
+                </Chart>
+              </Container>
+              <Container ItemUID="Stacked bar chart" Condition="gaugetype() = &quot;ChartBarStacked&quot;" ScriptItemUID="Container89">
+                <Chart Type="Bar" Width="ChartWidthWide()" Height="360" PointsOnPage="10" ScriptItemUID="Chart27" HasLegend="not(isnull(hidelegend(),false))">
+                  <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" OrderBy="'ElementDisplay'" ScriptItemUID="ChartDataSetTemplate15">
+                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="GetCurrentContentFilter()" DataColumnX="ElementOrder" Text="IsNullOrEmpty(&#xD;&#xA;from dashboardcontent select current ElementText&#xD;&#xA;,&#xD;&#xA;select current display  from DashboardContent&#xD;&#xA;)" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;&#xD;&#xA;if( (from DashboardContent select current Display) = (from DashboardObjects select current ElementDisplayLong) )&#xD;&#xA;then&#xD;&#xA;( from DashboardContent select current Display)+&quot;: &quot;+ (from dashboardcontent select current elementvalue)&#xD;&#xA;else&#xD;&#xA;((from DashboardObjects select current isnullorempty(ElementDisplayLong, translate(&quot;#LDS#(none)&quot;)))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; (&quot;+ (from dashboardcontent select current elementvalue) +&quot;)&quot;)&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ColorExpression="GetCurrentObjectColor()" ScriptItemUID="ChartDataSet27" Name="select current isnullorempty( elementdisplay, translate(&quot;#LDS#(none)&quot;)) from dashboardobjects" OrderBy="'ElementDate'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall39">
+                        <CallAction ActionID="CallSelectAction" ScriptItemUID="Call37" />
+                      </ServerActionCall>
+                    </ChartDataSet>
+                  </ChartDataSetTemplate>
+                </Chart>
+              </Container>
+              <Container ItemUID="Bar chart with one bar per object" Condition="gaugetype() = &quot;ChartBarOnePerObject&quot;" ScriptItemUID="Container91" RefreshTriggerExpression="updateTrigger()">
+                <Chart Type="Bar" Width="ChartWidthWide()" Height="360" ShortenAxisLabels="true" MultipleDataSets="clustered" BarOrientation="horizontal" PercentInTooltip="false" ScriptItemUID="Chart28" HasLegend="" PointsOnPage="" AxisLabelLength="">
+                  <ChartDataSet DataTable="DashboardContent" DataColumnX="ElementOrderGroup" DataColumnY="ElementValue" ScriptItemUID="ChartDataSet28" WhereClause="uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef)" Text="IsNullOrEmpty(&#xD;&#xA;from dashboardcontent select current elementtext,&#xD;&#xA;&#xD;&#xA;(from DashboardObjects select top 1 elementdisplaylong where elementobjectkey = ( from DashboardContent select current elementobjectkey))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; (&quot; + (from dashboardcontent select current elementvalue) +&quot;)&quot;&#xD;&#xA;)" Tooltip="IsNullOrEmpty(&#xD;&#xA;from dashboardcontent select current ElementTooltip,&#xD;&#xA;&#xD;&#xA;(from DashboardObjects select top 1 elementdisplaylong where elementobjectkey = ( from DashboardContent select current elementobjectkey))+&quot;: &quot;+( from DashboardContent select current Display)+&quot; (&quot; + (from dashboardcontent select current elementvalue) +&quot;)&quot;&#xD;&#xA;)" ColorExpression="GetCurrentElementColor()" OrderBy="'ElementDate'">
+                    <ServerActionCall ScriptItemUID="ServerActionCall40">
+                      <CallAction ActionID="CallSelectAction" ScriptItemUID="Call38" />
+                    </ServerActionCall>
+                  </ChartDataSet>
+                </Chart>
+              </Container>
+              <Container Condition="gaugetype() = &quot;ChartLineStacked&quot;" ItemUID="Stacked area chart" ScriptItemUID="Container94" IsBeginRenderPart="true" RefreshTriggerExpression="updateTrigger()">
+                <Chart Type="StackedLine" Width="ChartWidthWide()" Height="240" Tension="false" ScriptItemUID="Chart30" HasLegend="true" Area="true" TrendLine="true">
+                  <ChartDataSetTemplate DataTable="DashboardObjects" WhereClause="-- iterate over all selected objects&#xA;&#xA;elementobjectkey in ( select elementobjectkey from dashboardcontent where uid_dialogdashboarddef = ( select current uid_dialogdashboarddef from dashboarddef))" ScriptItemUID="ChartDataSetTemplate16" OrderBy="'ElementDisplay'">
+                    <ChartDataSet DataTable="DashboardContent" DataColumnY="ElementValue" WhereClause="--filter by current object (or the null object)&#xD;&#xA;elementobjectkey = ( select current elementobjectkey from dashboardobjects)&#xD;&#xA;and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef)" DataColumnX="ElementDate" Text="IsNullOrEmpty(from dashboardcontent select current ElementText,&#xD;&#xA;GetFormattedDate())" Name="(from DashboardObjects select current ElementDisplay)" ScriptItemUID="ChartDataSet30" Tooltip="IsNullOrEmpty(from dashboardcontent select current elementtooltip,&#xD;&#xA;from DashboardContent select current&#xD;&#xA;(FormatDate(elementdate, &quot;d&quot;) +&quot; - &quot;+ elementnamedisplay+&quot;: &quot;+elementvalue)&#xD;&#xA;)" ColorExpression="GetCurrentObjectColor()" OrderBy="'ElementDate'">
+                      <ServerActionCall ScriptItemUID="ServerActionCall42">
+                        <CallAction ActionID="CallSelectAction" ScriptItemUID="Call40" />
+                      </ServerActionCall>
+                    </ChartDataSet>
+                  </ChartDataSetTemplate>
+                </Chart>
+              </Container>
+              <Container ScriptItemUID="Container96" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container96style" Value="&quot;max-width:&quot; + ChartWidthWide() + &quot;px;&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="FilterData" ScriptItemUID="ControlRef7" />
+              </Container>
+            </ControlList>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor9" />
+        </Control>
+        <Control ID="Chart help">
+          <LocalControlContext ContainerType="Container">
+            <Container ScriptItemUID="Container44" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute10" Value="&quot;imx-smalllink&quot;" />
+              </HtmlAttributes>
+              <Label Text="translate(&quot;#LDS#Help&quot;)" Action="Redirect" ScriptItemUID="Label32">
+                <ServerActionCall ScriptItemUID="ServerActionCall6">
+                  <CallAction ActionID="VI_Popup" ScriptItemUID="Call3">
+                    <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                      <Container ScriptItemUID="Container33">
+                        <Tab ScriptItemUID="Tab3">
+                          <TabPage ItemUID="STATISTICS INFO" ScriptItemUID="TabPage6">
+                            <ControlsHeader ScriptItemUID="Container40">
+                              <Label Text="translate(&quot;#LDS#Statistics information&quot;)" ScriptItemUID="Label38" />
+                            </ControlsHeader>
+                            <ControlsBody ScriptItemUID="Container39">
+                              <LayoutPanel ScriptItemUID="LayoutPanel3">
+                                <ControlList ScriptItemUID="ControlList19">
+                                  <Label Text="datacaption(&quot;dialogdashboarddef&quot;, &quot;description&quot;)" ScriptItemUID="Label37" />
+                                </ControlList>
+                                <ControlList ScriptItemUID="ControlList18">
+                                  <Label Text="from DashboardDef select current DisplayValue(description)" ScriptItemUID="Label36" />
+                                </ControlList>
+                                <ControlList ScriptItemUID="ControlList17">
+                                  <Label Text="datacaption(&quot;dialogdashboarddef&quot;, &quot;uid_dialogschedule&quot;)" ScriptItemUID="Label35" />
+                                </ControlList>
+                                <ControlList ScriptItemUID="ControlList16">
+                                  <Label Text="if(from dashboarddef select current isadhoc)&#xA;then&#xA;&quot;(&quot;+translate(&quot;#LDS#Calculated on demand&quot;)+&quot;)&quot;&#xA;else&#xA;from DashboardDef select current DisplayValue(uid_dialogschedule)" ScriptItemUID="Label34" />
+                                </ControlList>
+                              </LayoutPanel>
+                              <ControlReferenceContainer ID="AdditionalDashboardInfo" ScriptItemUID="ControlRef16" />
+                            </ControlsBody>
+                          </TabPage>
+                          <TabPage ScriptItemUID="TabPage5" ItemUID="FILTER SETTINGS" Condition="hasFilter()">
+                            <ControlsHeader ScriptItemUID="Container38">
+                              <Label Text="translate(&quot;#LDS#Filter data&quot;)" ScriptItemUID="Label33" />
+                            </ControlsHeader>
+                            <ControlsBody ScriptItemUID="Container37">
+                              <ControlReferenceContainer ID="FilterData" ScriptItemUID="ControlRef15" />
+                            </ControlsBody>
+                          </TabPage>
+                          <ControlReferenceTabPageGroup ID="AdditionalTabPages" ScriptItemUID="ControlRef14" />
+                        </Tab>
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                      <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container30">
+                        <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef13" />
+                      </Container>
+                    </VirtualControlMapping>
+                    <VirtualFunctionMapping ID="PopupTitle()" Value="from DashboardDef select current DisplayValue(displayname)" ScriptItemUID="VirtualFunctionMapping5" />
+                    <VirtualFunctionMapping ID="TableName()" Value="&quot;DialogDashBoardDef&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="CssClass()" Value="&quot;imx-popup-large&quot;" />
+                  </CallAction>
+                </ServerActionCall>
+              </Label>
+              <Container Condition="chartclickmode()=&quot;clickglobal&quot;" ScriptItemUID="Container41" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute11" Value="&quot;imx-smalllink&quot;" />
+                  <HtmlAttribute Name="'style'" ScriptItemUID="Container41style" Value="&quot;display: inline-block; margin-left: 16px;&quot;" />
+                </HtmlAttributes>
+                <Label Text="translate(&quot;#LDS#More information&quot;)" Action="Redirect" ScriptItemUID="Label39">
+                  <ServerActionCall ScriptItemUID="ServerActionCall7">
+                    <ObjectSwitchCallAction ObjectKey="from dashboarddef select current xobjectkey" ActionType="Select_DialogDashboardDef" ScriptItemUID="ObjectSwitchCallAction4">
+                      <VirtualTableMapping VirtualTable="DialogDashboardDef" DataTable="DashboardDef" ScriptItemUID="VirtualTableMapping5" />
+                    </ObjectSwitchCallAction>
+                  </ServerActionCall>
+                </Label>
+              </Container>
+            </Container>
+          </LocalControlContext>
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor12" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="warningThreshold()" Expression="if (ChartInfoThresholdsSet()) then (&#xD;&#xA;select current convert( greenlimit, &quot;decimal&quot;) from dashboardinfo&#xD;&#xA;) else&#xD;&#xA;&#xD;&#xA;select current convert( greenlimit, &quot;decimal&quot;) from dashboarddef" DataType="System.Decimal" ScriptItemUID="Function1" />
+        <Function Name="errorThreshold()" Expression="if (ChartInfoThresholdsSet()) then (&#xD;&#xA;select current convert( redlimit, &quot;decimal&quot;) from dashboardinfo&#xD;&#xA;) else&#xD;&#xA;&#xD;&#xA;select current convert( redlimit, &quot;decimal&quot;) from dashboarddef" DataType="System.Decimal" ScriptItemUID="Function2" />
+        <Function Name="isNegateThresholds()" Expression="errorThreshold()&lt;warningThreshold()" Comment="Gibt zurück, ob die Schwellwerte negiert sind. (siehe VI.DialogEngine.Statistic.SystemStatistic)" DataType="System.Boolean" ScriptItemUID="Function3" />
+        <Function Name="isRed(decimal val)" Expression="if( isNegateThresholds()) then (val &gt;= warningThreshold()) else (val &gt;= errorThreshold())" DataType="System.Boolean" ScriptItemUID="Function4" />
+        <Function Name="isGreen(decimal val)" Expression="if( isNegateThresholds()) then (val &lt;= errorThreshold()) else (val &lt;= warningThreshold())" DataType="System.Boolean" ScriptItemUID="Function5" />
+        <Function Name="percentage()" Expression="isnull(if(elementvalue100=0) then convert( elementvalue100, &quot;decimal&quot;)&#xD;&#xA;else convert(try(&#xD;&#xA;elementvalue/elementvalue100, 0), &quot;decimal&quot;), convert(elementvalue, &quot;decimal&quot;))" DataType="System.Decimal" FilterForTable="DashboardContent" ScriptItemUID="Function6" />
+        <Function Name="IsOneDashboardForAllGroups()" Expression="gaugetype() in ( 'ChartLineGrouped', 'ChartLineStacked', 'ChartBarClustered', 'ChartPieGrouped', 'ChartBarStacked', 'ChartTable', 'ChartBarOnePerObject', 'ChartValueAndTrend' )" DataType="System.Boolean" ScriptItemUID="Function7" />
+        <Function Name="GetCurrentContentFilter()" Expression="(elementobjectkey = ( select current elementobjectkey from dashboardobjects) and uid_dialogdashboarddef = (select current uid_dialogdashboarddef from dashboarddef))" FilterForTable="DashboardContent" DataType="System.Boolean" ScriptItemUID="Function8" TriggerUpdates="Never">
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor1" />
+        </Function>
+        <Function Name="GetCurrentElementColor()" Expression="isnullorempty(&#xD;&#xA;-- get defined color&#xD;&#xA;select current targetcolor from dashboardcontent,&#xD;&#xA;&#xD;&#xA;-- if no defined color, pick color for index&#xD;&#xA;select top 1 color from colorscheme where key= (select current (iterationindex()%GetMaxGenericColorScheme()) from dashboardcontent))" DataType="System.String" ScriptItemUID="Function9" TriggerUpdates="Never">
+          <DataTableCursor DataTable="DashboardContent" ScriptItemUID="DataTableCursor2" />
+        </Function>
+        <Function Name="GetMaxGenericColorScheme()" Expression="select count() from colorscheme where match(key,'\d*') -- number of numeric entries in the table" DataType="System.Int32" Comment="Gets number of entries in the color scheme for  generic elements (those with a numeric key)." ScriptItemUID="Function10" />
+        <Function Name="GetCurrentObjectColor()" Expression="(from colorscheme select top 1 color where key=(select current (iterationindex() % getmaxgenericColorScheme() )from dashboardobjects))" DataType="System.String" ScriptItemUID="Function11">
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor3" />
+        </Function>
+        <Function Name="GetFormattedDate()" Expression="if(from dashboarddef select current (timescaleunit='Month'))&#xD;&#xA;then&#xD;&#xA;(select current FormatDate(elementdate, &quot;MMM&quot;) from DashboardContent)&#xD;&#xA;else if(from dashboarddef select current (timescaleunit='Day')) then&#xD;&#xA;(select current FormatDate(elementdate, &quot;special_monthday&quot;) from DashboardContent)&#xD;&#xA;else if(from dashboarddef select current (timescaleunit='Week')) then&#xD;&#xA;(select current FormatDate(elementdate, &quot;special_monthday&quot;) from DashboardContent)&#xD;&#xA;else -- ???&#xD;&#xA;select current FormatDate(elementdate, &quot;special_monthday&quot;) from DashboardContent" DataType="System.String" ScriptItemUID="Function12">
+          <DataTableCursor DataTable="DashboardContent" ScriptItemUID="DataTableCursor4" />
+        </Function>
+        <Function Name="GetCurrentElementColorSeries()" Expression="isnullorempty(&#xD;&#xA;-- get defined color&#xD;&#xA;select current targetcolor from DashboardSeries,&#xD;&#xA;&#xD;&#xA;-- if no defined color, pick color for index&#xD;&#xA;select top 1 color from colorscheme where key= (select current (iterationindex()%GetMaxGenericColorScheme()) from DashboardSeries))" DataType="System.String" ScriptItemUID="Function13">
+          <DataTableCursor DataTable="DashboardSeries" ScriptItemUID="DataTableCursor5" />
+        </Function>
+        <Function Name="ValueTrendHeight()" Expression="180" DataType="System.Int32" ScriptItemUID="Function14" />
+        <Function Name="ValueTrendWidth()" Expression="270" DataType="System.Int32" ScriptItemUID="Function16" />
+        <Function Name="IsTranspose()" Expression="from dashboardinfo select current invert" DataType="System.Boolean" ScriptItemUID="Function15" />
+        <Function Name="ChartWidthNarrow()" Expression="if(AutoSize())&#xD;&#xA;then 0&#xD;&#xA;else&#xD;&#xA;if ((from dashboardinfo select current width) =0) then ( Convert(variable('%VI_Dashboard_ChartWidthNarrow%'),'System.Int32')) else &#xD;&#xA;(from dashboardinfo select current width)" DataType="System.Int32" ScriptItemUID="Function17" />
+        <Function Name="ChartWidthWide()" Expression="if(AutoSize()) then 0&#xD;&#xA;else&#xD;&#xA;if ((from dashboardinfo select current width) =0) then ( Convert(variable('%VI_Dashboard_ChartWidthWide%'),'System.Int32')) else &#xD;&#xA;(from dashboardinfo select current width)" DataType="System.Int32" ScriptItemUID="Function18" />
+        <Function Name="ChartTitle()" Expression="if(IsOneDashboardForAllGroups()) then &quot;&quot; else (&#xD;&#xA;from DashboardObjects select current (if(isnull(elementdisplay,'')&lt;&gt;'') then (ElementDisplay+&quot; - &quot;) else &quot;&quot;))&#xD;&#xA;+&#xD;&#xA;{{ &#xD;&#xA;var theInfo = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)DashboardInfo_Current.Row).TargetObject;&#xD;&#xA;&#xD;&#xA;@return theInfo.computeTitle(DashboardDef_Current.Row,_DashboardObjects_Current2.Row.Display(),null); &#xD;&#xA;}}&#xD;&#xA;" DataType="System.String" ScriptItemUID="Function19">
+          <DataTableCursor DataTable="DashboardObjects" ScriptItemUID="DataTableCursor11" />
+        </Function>
+        <Function Name="ChartInfoThresholdsSet()" Expression="not(from DashboardInfo select current GreenLimit=0 and from DashboardInfo select current RedLimit=0)&#xD;&#xA;" DataType="System.Boolean" ScriptItemUID="Function20" />
+        <Function ScriptItemUID="Function21" Name="AutoSize()" DataType="System.Boolean" Expression="from dashboardinfo select current AutoSize" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="gaugetype()" VirtualFunctionHasLimitedValues="true" DataType="System.String" TriggerUpdates="Never">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="ChartLine" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartPie" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartBar" Comment="" />
+          <VirtualFunctionLimitedValue Name="TrafficLight" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartBarClustered" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartLineGrouped" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartPieGrouped" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartTable" Comment="" />
+          <VirtualFunctionLimitedValue Name="ChartLineStacked" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualTable Name="DashboardDef" Class="DialogDashBoardDef" RequiresCursor="true" ScriptItemUID="VirtualTable1" TriggerUpdates="Never">
+        <Column Name="Title" DataType="System.String" ScriptItemUID="Column21" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{ &#xD;&#xA;//@return GetDashboardDefTitle(DashboardDef_Current.Row, DashboardInfo_Current.Row); &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;var theInfo = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)DashboardInfo_Current.Row).TargetObject;&#xD;&#xA;&#xD;&#xA;@return theInfo.computeTitle(DashboardDef_Current.Row,null,null); &#xD;&#xA;}}&#xD;&#xA;&#xD;&#xA;" />
+      </VirtualTable>
+      <VirtualTable Name="DashboardContent" ScriptItemUID="VirtualTable2" TriggerUpdates="Never">
+        <Column Name="Display" Expression="ElementNameDisplay" DataSource="Expression" ScriptItemUID="Column17" DataType="System.String" />
+        <VirtualColumn Name="ElementName" DataType="System.String" />
+        <VirtualColumn Name="ElementValue" DataType="System.Double" />
+        <Column Name="ElementValueFormatted" Expression="try( numformat(convert(elementvalue, &quot;System.Double&quot;), &quot;#,#.#&quot;), elementvalue )" DataSource="Expression" ScriptItemUID="Column18" DataType="System.String" />
+        <VirtualColumn Name="ElementValue100" DataType="System.Double" />
+        <VirtualColumn Name="UID_DialogDashboardDef" DataType="System.String" />
+        <VirtualColumn Name="ElementObjectKey" DataType="System.String" />
+        <VirtualColumn Name="ElementOrder" DataType="System.Int32" />
+        <VirtualColumn Name="ElementDate" DataType="System.DateTime" />
+        <VirtualColumn Name="HistoryNumber" DataType="System.Int32" />
+        <VirtualColumn Name="ElementObjectKeyNavigation" DataType="System.String" />
+        <Column Name="TargetColor" Expression="from colorscheme select top 1 color where key = (select current elementname from dashboardcontent)" DataSource="Expression" ScriptItemUID="Column19" DataType="System.String" />
+        <VirtualColumn Name="ElementOrderGroup" DataType="System.Int32" />
+        <VirtualColumn Name="ElementNameDisplay" DataType="System.String" />
+        <VirtualColumn Name="ElementValueHistoric" DataType="System.Double" />
+        <VirtualColumn Name="HasHistoricValue" DataType="System.Boolean" />
+        <VirtualColumn Name="HistoricValueDate" DataType="System.DateTime" />
+        <VirtualColumn Name="ObjectDisplay" DataType="System.String" />
+        <Column Name="ElementText" DataType="System.String" ScriptItemUID="Column13" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{&#xD;&#xA;&#xD;&#xA;var dataPoint = new ChartDataPoint{&#xD;&#xA;  Value = (double)(this.DashboardContent_ElementValue.GetValue(queryRow)),  //queryRow.GetValue(&quot;elementvalue&quot;).Double,&#xD;&#xA;  ElementObjectKey = queryRow.GetValue(&quot;ElementObjectKey&quot;).String,&#xD;&#xA;  ElementName = queryRow.GetValue(&quot;ElementName&quot;).String,&#xD;&#xA;  ObjectDisplay = (string)(this.DashboardContent_ObjectDisplay.GetValue(queryRow))//queryRow.GetValue(&quot;Display&quot;).String Display&#xD;&#xA;};&#xD;&#xA;var theText = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)DashboardInfo_Current.Row).TargetObject.Text;&#xD;&#xA;@return ( theText ==null ? String.Empty: theText(dataPoint));&#xD;&#xA;}}" />
+        <Column Name="ElementTooltip" DataType="System.String" ScriptItemUID="Column20" DataSource="Expression" Expression="&quot;&quot;+&#xD;&#xA;{{&#xD;&#xA;&#xD;&#xA;var dataPoint = new ChartDataPoint{&#xD;&#xA;   Value = (double)(this.DashboardContent_ElementValue.GetValue(queryRow)),  //queryRow.GetValue(&quot;elementvalue&quot;).Double,&#xD;&#xA;  ElementObjectKey = queryRow.GetValue(&quot;ElementObjectKey&quot;).String,&#xD;&#xA;  ElementName = queryRow.GetValue(&quot;ElementName&quot;).String,&#xD;&#xA;  ObjectDisplay = (string)(this.DashboardContent_ObjectDisplay.GetValue(queryRow))//queryRow.GetValue(&quot;Display&quot;).String Display&#xD;&#xA;};&#xD;&#xA;&#xD;&#xA;var theText = ((VI.WebRuntime.ObjectViewRow&lt;VI.WebRuntime.WebControls.ChartControlInfo&gt;)DashboardInfo_Current.Row).TargetObject.Tooltip;&#xD;&#xA;@return ( theText ==null ? String.Empty: theText(dataPoint));&#xD;&#xA;&#xD;&#xA;}}" />
+      </VirtualTable>
+      <VirtualTable Name="ReferencedObjects" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="Key" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="ChartClickMode()" VirtualFunctionHasLimitedValues="true" DataType="System.String" TriggerUpdates="Never">
+        <VirtualFunctionLimitedValues>
+          <VirtualFunctionLimitedValue Name="NoClick" Comment="" />
+          <VirtualFunctionLimitedValue Name="ClickGlobal" Comment="" />
+          <VirtualFunctionLimitedValue Name="ClickDataPoint" Comment="" />
+        </VirtualFunctionLimitedValues>
+      </VirtualFunction>
+      <VirtualControl ID="AdditionalDashboardInfo" ContainerType="Container" />
+      <VirtualFunction Signature="HideLegend()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="FilterData" ContainerType="Container" />
+      <VirtualFunction Signature="hasFilter()" DataType="System.Boolean" DefaultValue="true" TriggerUpdates="Never" />
+      <VirtualControl ID="AdditionalTabPages" ContainerType="TabPageGroup" />
+      <VirtualTable Name="DashboardInfo" ElementType="VI.WebRuntime.WebControls.ChartControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable5" RequiresCursor="true" />
+      <VirtualFunction Signature="updateTrigger()" DataType="System.Int32" DefaultValue="0" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

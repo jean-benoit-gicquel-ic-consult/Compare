@@ -1,0 +1,37 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="TSB_Common_ObjectSheet_CommonRoot">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Tab ScriptItemUID="Tab1">
+          <TabPage ScriptItemUID="TabPage1">
+            <ControlsHeader ScriptItemUID="Container2">
+              <Label Text="translate(&quot;#LDS#Overview&quot;)" ScriptItemUID="Label1" />
+            </ControlsHeader>
+            <ControlsBody ScriptItemUID="Container3">
+              <Container ScriptItemUID="Container6" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;data-imx-layout&quot;" Value="&quot;flex-fill&quot;" />
+                </HtmlAttributes>
+                <ControlReferenceContainer ID="VI_Object_Overview_Default" ScriptItemUID="ControlRef1" />
+              </Container>
+            </ControlsBody>
+          </TabPage>
+          <ControlReferenceTabPageGroup ID="AdditionalTabs" ScriptItemUID="ControlRef5" />
+        </Tab>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Object" ScriptItemUID="VirtualTable1" RequiresCursor="true" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" />
+      <VirtualControl ContainerType="TabPageGroup" ID="AdditionalTabs" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

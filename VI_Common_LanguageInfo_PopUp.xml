@@ -1,0 +1,119 @@
+﻿<WebDesigner>
+  <GlobalControl MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ID="VI_Common_LanguageInfo_PopUp" MetamodelVersion="2016-05-08" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <AssemblyReference Assembly="VI.Web.ConfigBase.dll" />
+        <AssemblyReference Assembly="System.Configuration.dll" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ActionComponent ScriptItemUID="Action3">
+        <CallAction ScriptItemUID="Call2" ActionID="LoadCulture" />
+        <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction1">
+          <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+            <Container ScriptItemUID="Container2">
+              <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container3">
+                <Label Text="translate(&quot;#LDS#Change language setting&quot;)" ScriptItemUID="Label1" />
+              </Container>
+              <ControlReferenceContainer ID="VI_Edit_ComboBox" ScriptItemUID="ControlReferenceContainer1">
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="timeZoneId" ScriptItemUID="VirtualTableMapping1">
+                  <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="id" />
+                </VirtualTableMapping>
+                <VirtualTableMapping VirtualTable="SourceTable" DataTable="QBMCulture" ScriptItemUID="VirtualTableMapping2">
+                  <VirtualColumnMapping VirtualColumn="SourceColumn" DataColumn="UID_DialogCulture" />
+                  <VirtualColumnMapping VirtualColumn="SourceDisplay" DataColumn="NativeName" />
+                </VirtualTableMapping>
+              </ControlReferenceContainer>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+            <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container4">
+              <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" ScriptItemUID="Button1">
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <CodeLiteral ScriptItemUID="CodeLiteral2">var session = System.Web.HttpContext.Current.Session;
+var key = VI.WebRuntime.ThreadCultureModule.CultureUrlParameter;
+session[key] = this.GetSelectedLanguage();
+VI.Base.LanguageManager.Culture = VI.Base.LanguageManager.UICulture = System.Globalization.CultureInfo.GetCultureInfo(this.GetSelectedLanguage());
+
+// close popups
+int y = _Form.PopupHost.OpenedPopups.Count();
+for (int i = 0; i &lt; y; i++)
+{
+    _Form.PopupHost.ClosePopup();
+}
+
+// reload page
+VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;VI.WebRuntime.Communication.IAjaxResponse&gt;().AddCommand(new VI.WebRuntime.AjaxScriptCommand("location.reload();"));
+</CodeLiteral>
+                </ServerActionCall>
+              </Button>
+              <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef1">
+                <VirtualFunctionMapping ID="MoreThanOneButton()" Value="True" ScriptItemUID="VirtualFunctionMapping1" />
+              </ControlReferenceControlList>
+            </Container>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Language&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+        </CallAction>
+      </ActionComponent>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="timeZoneId" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="id" DataType="System.String" ScriptItemUID="Column4" />
+        </DataTableSingleRow>
+        <DataTableSQL Table="QBMCulture" ScriptItemUID="DataTableSQL1" PrimaryKeyColumn="UID_DialogCulture" DisplayColumn="Display" SQLStatement="SqlOr(&#xD;&#xA;sqlcompare(&quot;IsForFrontend&quot;,true,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;if(isnullorempty(from timeZoneId select id)) then getnull() else SqlCompareUid(&quot;UID_DialogCulture&quot;,from timeZoneId select id)&#xD;&#xA;)">
+          <ActionSequence ScriptItemUID="Action1" />
+          <Column DataType="System.String" Name="Ident_DialogCulture" ScriptItemUID="Column2" />
+          <Column DataType="System.String" Name="UID_DialogCulture" ScriptItemUID="Column3" />
+          <Column DataType="System.String" Name="DisplayName" ScriptItemUID="Column5" />
+          <Column DataType="System.String" Name="Display" ScriptItemUID="Column9" />
+          <Column DataType="System.String" Name="NativeName" ScriptItemUID="Column1" />
+        </DataTableSQL>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="LoadCulture">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="ActionLoad">
+              <Delete DataTable="QBMCulture" ScriptItemUID="Delete1" />
+              <CodeLiteral ScriptItemUID="CodeLiteral4">var conn = _Connection;
+if(!_UserSession.IsAuthenticated){
+   conn = new VI.WebRuntime.ServiceConnection(VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IConfigDocument&gt;()).Get();
+}
+var session = System.Web.HttpContext.Current.Session;
+var key = VI.WebRuntime.ThreadCultureModule.CultureUrlParameter;
+var sessionValue = session[key] as string;
+var UID_DialogCulture = string.IsNullOrEmpty(sessionValue) ? null :
+conn.GetSingleProperty(
+	"QBMCulture",
+	"UID_DialogCulture",
+	conn.SqlFormatter.Comparison("Ident_DialogCulture", sessionValue, VI.Base.ValType.String, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase)
+).String;
+this.timeZoneId.GetColumn("id").SetValue(this.timeZoneId.FirstOrDefault(),UID_DialogCulture);
+var q = Query.From("QBMCulture").Select("Ident_DialogCulture").Select("NativeName").Where(
+	conn.SqlFormatter.OrRelation(
+		conn.SqlFormatter.Comparison("IsForFrontend", true, VI.Base.ValType.Bool, VI.DB.CompareOperator.Equal, VI.DB.FormatterOptions.IgnoreCase),
+		string.IsNullOrEmpty(UID_DialogCulture) ? null : conn.SqlFormatter.UidComparison("UID_DialogCulture", UID_DialogCulture)
+	)
+);
+var coll = conn.Session.Source().GetCollection(q);
+foreach (var e in coll)
+{
+	var values = new ColumnInsertValues(QBMCulture);
+	values["Display"] = e.Display;
+	values["Ident_DialogCulture"] = e.GetValue("Ident_DialogCulture");
+	values["UID_DialogCulture"] = e.GetValue("UID_DialogCulture");
+	values["DisplayName"] = e.GetValue("DisplayName");
+	values["NativeName"] = e.GetValue("NativeName");
+	QBMCulture.Insert(values);
+}</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function ScriptItemUID="Function1" Name="GetSelectedLanguage()" DataType="System.String" Expression="from QBMCulture select Ident_DialogCulture where UID_DialogCulture = (from timeZoneId select top 1 id)" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

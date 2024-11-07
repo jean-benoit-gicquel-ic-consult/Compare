@@ -1,0 +1,110 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_ApprovalItem" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="IT Shop Approval" ScriptItemUID="ConfigSectionDefinition1" Description="translate('#LDS#IT Shop - Approval')">
+        <ConfigParam Key="VI_ITShop_ApproverCanSeeShoppingCartOrder" Description="translate(&quot;#LDS#Approver can see all products of requester's shopping cart&quot;)" LongDescription="translate(&quot;#LDS#Approver can see all products of requester's shopping cart&quot;)" />
+        <ConfigParam Key="VI_ITShop_ApprovalItem_InsteadOfApprover" Description="translate('#LDS#Assign approver instead of original approver')" LongDescription="translate(&quot;#LDS#Delegate IT shop decisions to other employees&quot;)" Type="SQL" DatabaseTable="Person" />
+        <ConfigParam Key="VI_ITShop_ApprovalItem_AdditionalToApprover" Description="translate('#LDS#Add additional approver')" LongDescription="translate('#LDS#Add additional approvers to a request')" Type="SQL" DatabaseTable="Person" />
+        <ConfigParam Key="VI_ITShop_ApproverCanAddToShoppingCartOrder" Description="translate(&quot;#LDS#Approver can add requests to requester's shopping cart&quot;)" LongDescription="translate(&quot;#LDS#Approver can add requests to requester's shopping cart&quot;)" />
+        <ConfigParam Key="VI_ITShop_AllowSelectAll" Description="translate('#LDS#Approver can select all visible items at once') + &quot; (&quot; +DataCaption(&quot;PersonWantsOrg&quot;) + &quot;)&quot;" LongDescription="translate('#LDS#Display a checkbox to select all items.')" />
+        <ConfigParam Key="VI_ITShop_NextApproverCanBeSeen" Description="translate(&quot;#LDS#Approver and requester can see employees who are entitled to approve the request after the current workflow step&quot;)" LongDescription="translate(&quot;#LDS#Approver and requester can see employees who are entitled to approve the request after the current workflow step&quot;)" />
+        <ConfigParam Key="VI_ITShop_CurrentApproversCanBeSeen" Description="translate(&quot;#LDS#Approver and requester can see the currently entitled employees to approve requests&quot;)" LongDescription="translate(&quot;#LDS#Approver and requester can see the currently entitled employees to approve requests&quot;)" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="GridBand">
+      <ActionSequence ScriptItemUID="Action5">
+        <ReadOnlyTableModifier DataTable="PersonWantsOrg" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="donotallowapprove">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <SingleColumn ScriptItemUID="SingleColumn1" DataColumn="DoApprove" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </ActionSequence>
+      <GridBand DataTable="PersonWantsOrg" DisplayHeader="Always" ItemUID="PersonWantsOrgGrid" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="DbWhereClause()" RowSelection="true" DataTableForSelection="Vars" DataColumnForSelection="UID_PWOSelected" EnableCustomAttributes="true" DbOrderBy="&quot;PWOPriority DESC, OrderDate DESC&quot;">
+        <HtmlAttributes>
+          <Property Name="ApplyFilledHeight" Value="true" />
+          <CodeLiteral ScriptItemUID="CodeLiteral6">// configure for search-after-load to improve search experience
+
+GridBand1.IsSearchAfterLoad = true;</CodeLiteral>
+        </HtmlAttributes>
+        <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+          <ControlList ScriptItemUID="ControlList1">
+            <ControlReferenceControlList ID="VI_ITShop_PersonWantsOrg_ListViewItem" ScriptItemUID="ControlRef4">
+              <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                <ControlList ScriptItemUID="ControlList4">
+                  <ControlReferenceControlList ID="VI_Common_DecisionControlListView" ScriptItemUID="ControlRef3">
+                    <VirtualTableMapping ScriptItemUID="VirtualTableMapping4" VirtualTable="EditTable" DataTable="PersonWantsOrg" />
+                  </ControlReferenceControlList>
+                </ControlList>
+              </VirtualControlMapping>
+              <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping3" />
+              <VirtualFunctionMapping ID="ShowDocumentNumber()" Value="false" ScriptItemUID="VirtualFunctionMapping4" />
+              <VirtualControlMapping VirtualControl="AdditionalControlsColumn1" ContainerType="Container">
+                <Container ScriptItemUID="Container1">
+                  <ControlReferenceContainer ID="AdditionalControls" ScriptItemUID="ControlRef1" />
+                </Container>
+              </VirtualControlMapping>
+              <VirtualControlMapping VirtualControl="TriggerRecalculateCompliance" ContainerType="ActionComponent">
+                <ActionComponent ScriptItemUID="Action2">
+                  <CallAction ActionID="TriggerRecalculateCompliance" ScriptItemUID="Call1" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="ShowUIDPriority()" Value="true" ScriptItemUID="VirtualFunctionMapping5" />
+            </ControlReferenceControlList>
+          </ControlList>
+        </GridBandListView>
+        <GridFilters ScriptItemUID="GridFilters1" />
+        <GridRows />
+        <ControlReferenceGridColumnGroup ID="VI_ITShop_PersonWantsOrg_GridColumns" DataTable="PersonWantsOrg" ScriptItemUID="wctl1">
+          <VirtualTableMapping VirtualTable="PersonWantsOrg" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="ShowDocumentNumber()" Value="false" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualControlMapping VirtualControl="AdditionalControlsColumn1" ContainerType="Container">
+            <Container ScriptItemUID="Container2">
+              <ControlReferenceContainer ID="AdditionalControls" ScriptItemUID="ControlReferenceContainer1" />
+            </Container>
+          </VirtualControlMapping>
+          <VirtualControlMapping VirtualControl="TriggerRecalculateCompliance" ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action1">
+              <CallAction ActionID="TriggerRecalculateCompliance" ScriptItemUID="CallAction1" />
+            </ActionComponent>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ID="ShowUIDPriority()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+        </ControlReferenceGridColumnGroup>
+        <ControlReferenceGridColumnGroup ID="VI_Common_DecisionControl" DataTable="PersonWantsOrg" ScriptItemUID="wctl2">
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="PersonWantsOrg" ScriptItemUID="VirtualTableMapping2">
+            <VirtualColumnMapping VirtualColumn="DoApprove" DataColumn="DoApprove" />
+            <VirtualColumnMapping VirtualColumn="DoReject" DataColumn="DoReject" />
+          </VirtualTableMapping>
+          <VirtualFunctionMapping ID="DenySelectAll()" Value="not(&quot;true&quot;=getconfig(&quot;VI_ITShop_AllowSelectAll&quot;))" ScriptItemUID="VirtualFunctionMapping2" />
+        </ControlReferenceGridColumnGroup>
+      </GridBand>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoReject" DataType="System.Boolean" />
+        <VirtualColumn Name="DoNotAllowApprove" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualControl ID="AdditionalControls" ContainerType="Container">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualControl ID="TriggerRecalculateCompliance" ContainerType="ActionComponent">
+        <VirtualTableCursor DataTable="PersonWantsOrg" />
+      </VirtualControl>
+      <VirtualFunction Signature="DbWhereClause()" DataType="System.String" />
+      <VirtualTable Name="Vars" ScriptItemUID="VirtualTable2" RequiresCursor="true">
+        <VirtualColumn Name="UID_PWOSelected" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="AccProduct" ScriptItemUID="VirtualTable1" Class="AccProduct">
+        <VirtualColumn Name="HelperIsReusable" DataType="System.Boolean" />
+        <VirtualColumn Name="HelperIsReusableWithUnsubscribe" DataType="System.Boolean" />
+      </VirtualTable>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

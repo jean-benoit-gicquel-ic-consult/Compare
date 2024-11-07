@@ -1,0 +1,109 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Roles_RolesAndEntitlements_Ext">
+    <Extensions>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="20">
+        <ConfigParam Key="VI_Roles_Responsibility_Org" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;Org&quot;)" Type="SQL" DatabaseTable="Org" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+      </AddObject>
+      <AddObject ObjectID="Action22" ObjectType="ActionSequence" SortOrder="28">
+        <ActionSequence Condition="area() = &quot;BusinessRoles&quot;" ItemUID="BUSINESSROLES" ScriptItemUID="RMBAction1">
+          <Insert ScriptItemUID="RMBInsert2" DataTable="LimitedValues">
+            <ActionSequence ScriptItemUID="RMBAction5" />
+            <InsertValue Value="&quot;Org&quot;" DataColumn="Value" />
+          </Insert>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="20">
+        <Control ID="NewOrg">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="RMBFormGroup1">
+              <Form ID="Detail2" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Create a new business role&quot;)" ScriptItemUID="RMBForm1">
+                <ActionSequence ScriptItemUID="RMBAction2" />
+                <PagePartContainer ID="Title" ScriptItemUID="RMBPagePartContainer1">
+                  <Label Text="translate(&quot;#LDS#Create a new business role&quot;)" ScriptItemUID="RMBLabel1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="RMBPagePartContainer2">
+                  <Container ScriptItemUID="RMBContainer2">
+                    <ContainerTemplate DataTable="OrgNew" ScriptItemUID="RMBContainerTemplate1">
+                      <Container ScriptItemUID="RMBContainer3">
+                        <ObjectSwitchContainer ScriptItemUID="RMBObjectSwitchContainer1" ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;Org&quot;))" ActionType="ObjectEdit">
+                          <VirtualTableMapping DataTable="OrgNew" VirtualTable="EditTable" ScriptItemUID="RMBVirtualTableMapping1" />
+                        </ObjectSwitchContainer>
+                      </Container>
+                    </ContainerTemplate>
+                    <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="RMBContainer4">
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" EnableCustomAttributes="true" ScriptItemUID="RMBButton1">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="RMBHtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="RMBServerActionCall1">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <Save DataTable="OrgNew" ScriptItemUID="RMBSave1" />
+                          <CallAction ActionID="Reinitialize" ScriptItemUID="RMBCall1" />
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="RMBCall2">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" ScriptItemUID="RMBVirtualFunctionMapping1" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="RMBVirtualFunctionMapping2" />
+                          </CallAction>
+                          <Redirect Target="ReturnLastForm" ScriptItemUID="RMBRedirect1" />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" ScriptItemUID="RMBButton2" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="RMBHtmlAttribute2" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="RMBServerActionCall2">
+                          <Redirect Target="ReturnLastForm" ScriptItemUID="RMBRedirect2" />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container7" ObjectType="Container" SortOrder="10">
+        <Container Layout="'VI_Styles_Container_Inline'" Condition="CanInsert ( &quot;Org&quot; ) and area()=&quot;BusinessRoles&quot;" ScriptItemUID="RMBContainer5" ItemUID="add businessrole">
+          <Button Text="translate(&quot;#LDS#New business role&quot;)" ScriptItemUID="RMBButton3" Layout="'VI_Styles_Button_Default'">
+            <ServerActionCall ScriptItemUID="RMBServerActionCall3">
+              <Delete DataTable="OrgNew" ScriptItemUID="RMBDelete1" />
+              <Insert DataTable="OrgNew" ScriptItemUID="RMBInsert1">
+                <ActionSequence ScriptItemUID="RMBAction3" />
+                <InsertValue DataColumn="UID_PersonHead" Value="getuser()" />
+              </Insert>
+              <Redirect Target="FormModule" ScriptItemUID="RMBRedirect3">
+                <RedirectFormModule ID="NewOrg" ScriptItemUID="RMBRedirectForm1" />
+              </Redirect>
+            </ServerActionCall>
+          </Button>
+        </Container>
+        <Container ScriptItemUID="RMBContainer1" Layout="'VI_Styles_Container_Inline'" Condition="area()=&quot;BusinessRoles&quot;" ItemUID="restore business role">
+          <Button Text="translate(&quot;#LDS#Restore a deleted role&quot;)" ScriptItemUID="RMBButton4" Layout="'VI_Styles_Button_Default'">
+            <ServerActionCall ScriptItemUID="RMBServerActionCall4">
+              <CallAction ScriptItemUID="RMBCall3" ActionID="QER_Roles_Restore">
+                <VirtualFunctionMapping ScriptItemUID="RMBVirtualFunctionMapping3" ID="TableNames()" Value="&quot;Org&quot;" />
+                <VirtualControlMapping ContainerType="ControlList" VirtualControl="HeaderControls">
+                  <ControlList ScriptItemUID="RMBControlList4">
+                    <Label ScriptItemUID="RMBLabel6" Text="translate(&quot;#LDS#You can use this wizard to restore a deleted role, if you were the owner of the deleted role.&quot;)" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <Property Name="TagName" Value="p" />
+                      </HtmlAttributes>
+                    </Label>
+                  </ControlList>
+                </VirtualControlMapping>
+              </CallAction>
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="20">
+        <DataTableDbObject Class="Org" Table="OrgNew" ScriptItemUID="RMBDataTableDbObject1">
+          <ActionSequence ScriptItemUID="RMBAction4" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="20">
+        <ConfigEntry Key="VI_Roles_Responsibility_Org" Value="&quot;uid_org in ( select orgc.uid_org from orgcollection orgc join org o1 on o1.uid_org = orgc.uid_org join helperheadorg hho on hho.uid_org = orgc.uid_parentorg and hho.uid_personhead = '%useruid%' join orgroot orgr on orgr.uid_orgroot = o1.uid_orgroot and orgr.istopdown=1 UNION ALL select orgc.uid_parentorg from orgcollection orgc join org o1 on o1.uid_org = orgc.uid_org join helperheadorg hho on hho.uid_org = orgc.uid_org and hho.uid_personhead = '%useruid%' join orgroot orgr on orgr.uid_orgroot = o1.uid_orgroot and orgr.istopdown=0 )&quot;" ScriptItemUID="RMBConfigEntry1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

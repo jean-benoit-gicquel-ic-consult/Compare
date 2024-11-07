@@ -1,0 +1,42 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_ChartContainer" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="Chart" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">/* Chart classes */
+
+.Chart { 
+  display: inline-block;
+  border: solid 1px %VI_Common_Color_LighterGray%;
+  background-color: %VI_Common_Color_ColorBase1%; 
+  background-repeat: repeat-x; 
+  padding-right: 10px;
+  padding-bottom: 15px; 
+  padding-top: 45px; 
+  padding-left: 10px; 
+  margin-right: 20px; 
+  margin-bottom: 15px; 
+  height: auto; 
+  position: relative; 
+  vertical-align: top;
+}
+/* returns in sum height: 250px; */
+
+.Chart .ChartTitle { 
+  z-Index: 3; 
+  font-size: 1.3em; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  padding: 5px 10px 0 10px;
+  overflow-y: hidden;
+  color: %QBM_Primary_Blue%;
+}
+
+.Chart .ChartTrafficLight { width: %VI_Dashboard_DefaultTrafficLightWidth%px; text-align: center;}
+
+.Chart .ChartTrafficLight .ChartTitle { position: static; border: 0; height: auto; padding-top: 8px; color: %VI_Common_Color_Font_Secondary%;}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

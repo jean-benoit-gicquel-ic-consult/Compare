@@ -1,0 +1,109 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="fbeda9e3-6600-9b8b-faa5-f1156b81fbe8">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Delegation_GridColums_FirstLevel" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action3">
+        <LoadTable DataTable="PersonL" RemoveDeleted="false" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
+      <GridColumnGroup DataTable="DE" ScriptItemUID="GridColumnGroup1">
+        <GridColumnSimple ScriptItemUID="Column7" ColumnType="Checkbox" Width="'100px'" Condition="not(readOnly())" Column="OrderThis" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;data-imx-exporthide&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;true&quot;" />
+          </HtmlAttributes>
+        </GridColumnSimple>
+        <GridColumn Width="'50%'" SortColumn="TargetDisplay" AutoFilterColumn="TargetDisplay" ScriptItemUID="GridColumn4">
+          <GridColumnHeader ScriptItemUID="wctl3">
+            <Label Text="datacaption(de, targetdisplay)" ScriptItemUID="Label7" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell4">
+            <ContainerTemplate DataTable="DO" WhereClause="primarykey() = (from DE select current sourcekey)" ScriptItemUID="ContainerTemplate1">
+              <Label Text="select current displaylong() from do" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-icon imx-table-&quot;+select current tablename from do" />
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label8title" Value="select current displaylong() from do" />
+                </HtmlAttributes>
+              </Label>
+            </ContainerTemplate>
+            <Container Condition="0 = (select count() from DO where PrimaryKey() = (from DE select current sourcekey))" ScriptItemUID="Container15">
+              <Label Text="from DE select current TargetDisplay" ScriptItemUID="Label9" />
+            </Container>
+          </Cell>
+        </GridColumn>
+        <GridColumn Width="'110px'" Condition="not(readOnly())" ScriptItemUID="GridColumn1" SortColumn="CountDelegations" AutoFilterColumn="CountDelegations">
+          <GridColumnHeader ScriptItemUID="wctl1">
+            <Label Text="datacaption(DE, CountDelegations)" ScriptItemUID="Label1" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell1">
+            <Label Text="select current displayvalue(countdelegations) from de" ScriptItemUID="Label2" />
+          </Cell>
+        </GridColumn>
+        <GridColumnSimple ScriptItemUID="Column3" Column="DelegationType" Width="&quot;110px&quot;" />
+        <GridColumnSimple ScriptItemUID="Column4" Column="ValidFrom" Width="&quot;90px&quot;" Condition="ShowAdditionalColumns()" />
+        <GridColumnSimple ScriptItemUID="Column5" Column="ValidUntil" Width="&quot;90px&quot;" Condition="ShowAdditionalColumns()" />
+        <GridColumn Width="'120px'" Condition="ShowAdditionalColumns()" ScriptItemUID="GridColumn7">
+          <GridColumnHeader ScriptItemUID="wctl4">
+            <Label Text="if(showreceiver()) then&#xA;   translate('#LDS#Delegated to')  &#xA;else&#xA;   translate('#LDS#Delegated from')" ScriptItemUID="Label14" />
+          </GridColumnHeader>
+          <Cell ScriptItemUID="Cell7">
+            <Label Text="if(showreceiver()) then(&#xA;   select display() from PersonL where uid_person = (select current uid_personreceiver from DE)&#xA;)&#xA;else(&#xA;   select display() from PersonL where uid_person = (select current uid_personsender from DE)&#xA;)" ScriptItemUID="Label15" />
+          </Cell>
+        </GridColumn>
+      </GridColumnGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="PersonL" Class="Person" WhereClauseSQL="if(showreceiver()) then&#xA;   format(&quot;uid_person in ({0})&quot;,listselect(de,uid_personreceiver))   &#xA;else&#xA;   format(&quot;uid_person in ({0})&quot;,listselect(de,uid_personsender))" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+        <DataTableGeneric Table="CurrentObject" PrimaryKeyColumn="" ScriptItemUID="DataTableGeneric1" />
+        <DataTableDbObject Class="PersonWantsOrg" Table="PWOS" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action5" />
+          <Column Name="PK" MaxLength="" DataType="System.String" ScriptItemUID="Column1" />
+          <Column Name="CheckStatus" DataType="System.Boolean" ScriptItemUID="Column8" DataSource="Expression" Expression="true" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler DataTable="DE" Operation="Bulk" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action6">
+            <LoadTable DataTable="PersonL" RemoveDeleted="false" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="UID_PersonReceiver" />
+          <DataEventHandlerColumn DataColumn="UID_PersonSender" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="DE" ScriptItemUID="VirtualTable1">
+        <Column Name="DelegationType" DataType="System.String" Expression="from de select current &#xA;(&#xA;if( tablename in ('HelperHeadPerson', 'HelperHeadOrg', 'QAMHelperHeadPoI' )) then translate(&quot;#LDS#Responsible&quot;)&#xA;else&#xA;if( tablename like 'PersonIn%' ) then translate(&quot;#LDS#Member&quot;)&#xA;else &quot;&quot;&#xA;)" DataSource="Expression" ScriptItemUID="Column2" Caption="translate('#LDS#Type')" />
+        <VirtualColumn Name="TargetDisplay" DataType="System.String" />
+        <VirtualColumn Name="OrderThis" DataType="System.Boolean" />
+        <VirtualColumn Name="sourcekey" DataType="System.String" />
+        <VirtualColumn Name="UID_PersonSender" DataType="System.String" />
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn Name="ObjectKeyToDelegate" Comment="Muß nur gesetzt werden wenn ReadOnly() = false " DataType="System.String" />
+        <VirtualColumn Name="ValidFrom" DataType="System.DateTime" />
+        <VirtualColumn Name="ValidUntil" DataType="System.DateTime" />
+        <VirtualColumn Name="UID_PersonReceiver" DataType="System.String" />
+        <Column Name="CountDelegations" DataType="System.Int32" ScriptItemUID="Column6" DataSource="Expression" Expression="select count() from SUBD where ObjectKeyDelegated = (from DE select current objectkeytodelegate)" Caption="translate(&quot;#LDS#Delegated&quot;)" DisplayValueExpression="from de select current if(0 = countdelegations)&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#Not delegated&quot;)&#xD;&#xA;else translate('#LDS#{0} delegations', countdelegations)" />
+      </VirtualTable>
+      <VirtualTable Name="DO" ScriptItemUID="VirtualTable2">
+        <VirtualColumn Name="sourcekey" DataType="System.String" />
+        <VirtualColumn Name="TableName" DataType="System.String" />
+        <VirtualColumn Name="XObjectKey" DataType="System.String" />
+      </VirtualTable>
+      <VirtualTable Name="SUBD" ScriptItemUID="VirtualTable3">
+        <VirtualColumn Name="ObjectKeyDelegated" DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="readOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="showreceiver()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="getUIDPerson()" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowAdditionalColumns()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

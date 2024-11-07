@@ -1,0 +1,206 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_BusinessOwnership_Assign_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container2" ObjectType="Container">
+        <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="TSBControlRef1" ItemUID="UNSGroup">
+          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping13" ID="Identifier()" Value="&quot;UNSGroup&quot;" />
+          <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+            <ActionComponent ScriptItemUID="TSBAction12">
+              <ActionSequence ScriptItemUID="TSBAction13" Condition="Exists(&#xD;&#xA;   &quot;AttestationPolicy&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Attestationpolicy&quot;,&quot;TSB-E4FF76B95FC84EE9842DBE782449C64D&quot;),&#xD;&#xA;      Sqlcompare(&quot;IsInActive&quot;, true, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;   )&#xD;&#xA;)" ItemUID="AttestationPolicy deactivated">
+                <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="TSBCall2">
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#System entitlement ownership attestation is deactivated.&quot;)&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="TSBVirtualFunctionMapping10" />
+                  <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="TSBVirtualFunctionMapping9" />
+                </CallAction>
+                <EndExecution />
+              </ActionSequence>
+              <Update DataColumn="ObjectKeyUNSGroup" DataTable="Vars" ScriptItemUID="TSBUpdate3" />
+              <Update DataColumn="UNSGroupUID_PersonOwner" DataTable="Vars" ScriptItemUID="TSBUpdate4" />
+              <Popup DisplayType="Controls">
+                <Container ScriptItemUID="TSBContainer15" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="TSBHtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-popup-large imx-popup-flex&quot;" />
+                  </HtmlAttributes>
+                  <Wizard ScriptItemUID="TSBWizard2">
+                    <OnCancel ScriptItemUID="TSBAction14">
+                      <ActionOnControl />
+                    </OnCancel>
+                    <WizardPage ScriptItemUID="TSBWizardPage6" Title="translate(&quot;#LDS#Select a system entitlement&quot;)" AllowBackAction="false">
+                      <OnNext ScriptItemUID="TSBAction18">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <LoadTable DataTable="PersonSuggestionUNSGroup" ScriptItemUID="TSBLoadTable5" WhereClause="format(getconfig(&quot;TSB_BusinessOwnership_Filter_UNSGroup_Suggestion&quot;),&#xD;&#xA;sqlformatvalue(from vars select objectkeyunsgroup, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+                          <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType5" LoadTypeForeignDisplaysForAllColumns="false" ConvertToInteractive="false" />
+                        </LoadTable>
+                        <ActionSequence ScriptItemUID="TSBAction19" Condition="0 = select count() from personsuggestionunsgroup&#xD;&#xA;-- none found? then try the second query">
+                          <LoadTable DataTable="PersonSuggestionUNSGroup" ScriptItemUID="TSBLoadTable4" WhereClause="format(getconfig(&quot;TSB_BusinessOwnership_Filter_UNSGroup_Suggestion_2&quot;),&#xD;&#xA;sqlformatvalue(from vars select objectkeyunsgroup, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
+                            <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType4" LoadTypeForeignDisplaysForAllColumns="false" ConvertToInteractive="false" />
+                          </LoadTable>
+                        </ActionSequence>
+                      </OnNext>
+                      <Label ScriptItemUID="TSBLabel14" Text="translate(&quot;#LDS#Assign an owner to a system entitlement&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h2" />
+                          <HtmlAttribute ScriptItemUID="TSBHtmlAttribute20" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-table-UNSGroup-large&quot;" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="TSBContainer28" EnableCustomAttributes="true" ItemUID="message container">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="TSBHtmlAttribute19" />
+                        </HtmlAttributes>
+                      </Container>
+                      <Container ScriptItemUID="TSBContainer27">
+                        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="TSBControlRef8">
+                          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping18" ID="PropertyList()" IsPropertyList="true">
+                            <ColumnList ScriptItemUID="TSBColumnList4">
+                              <SingleColumn ScriptItemUID="TSBSingleColumn2" DataColumn="ObjectKeyUNSGroup" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping ScriptItemUID="TSBVirtualTableMapping6" VirtualTable="EditTable" DataTable="Vars" />
+                        </ControlReferenceContainer>
+                        <ContainerTemplate DataTable="UNSGroup" ScriptItemUID="TSBContainerTemplate2" WhereClause="xobjectkey = ( from vars select objectkeyunsgroup)">
+                          <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="TSBControlRef7">
+                            <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping17" ID="Text()" Value="translate(&quot;#LDS#You have selected the following system entitlement.&quot;)" />
+                          </ControlReferenceContainer>
+                          <ObjectSwitchContainer ObjectKey="&quot;&lt;Key&gt;&lt;T&gt;DialogTable&lt;/T&gt;&lt;P&gt;TSB-T-UNSGroup&lt;/P&gt;&lt;/Key&gt;&quot;" ActionType="ObjectView" ScriptItemUID="TSBObjectSwitchContainer2">
+                            <VirtualTableMapping ScriptItemUID="TSBVirtualTableMapping5" VirtualTable="SourceObject" DataTable="UNSGroup" />
+                          </ObjectSwitchContainer>
+                        </ContainerTemplate>
+                      </Container>
+                    </WizardPage>
+                    <WizardPage ScriptItemUID="TSBWizardPage5" Title="translate(&quot;#LDS#Select the new owner&quot;)">
+                      <OnNext ScriptItemUID="TSBAction17">
+                        <ActionOnControl ActionType="PerformValidation" />
+                        <CodeLiteral ScriptItemUID="TSBCodeLiteral2">var key = new DbObjectKey(DataContext.Vars.SingleRow.GetValue("ObjectKeyUNSGroup")).ToXmlString();
+var uidPerson = DataContext.Vars.GetColumn("UNSGroupUID_PersonOwner").GetValue(DataContext.Vars.SingleRow);
+await DataContext.CreateAttestationAsync("TSB-E4FF76B95FC84EE9842DBE782449C64D", uidPerson, key, ct).ConfigureAwait(false);</CodeLiteral>
+                      </OnNext>
+                      <OnBack ScriptItemUID="TSBAction16" />
+                      <Label ScriptItemUID="TSBLabel13" Text="translate(&quot;#LDS#Assign an owner to a system entitlement&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h2" />
+                          <HtmlAttribute ScriptItemUID="TSBHtmlAttribute18" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-table-UNSGroup-large&quot;" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Container ScriptItemUID="TSBContainer26" EnableCustomAttributes="true" ItemUID="message container">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'data-imx-messagecontainer'" Value="'true'" ScriptItemUID="TSBHtmlAttribute17" />
+                        </HtmlAttributes>
+                      </Container>
+                      <Container ScriptItemUID="TSBContainer17">
+                        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="TSBControlRef3">
+                          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping11" ID="PropertyList()" IsPropertyList="true">
+                            <ColumnList ScriptItemUID="TSBColumnList1">
+                              <SingleColumn ScriptItemUID="TSBSingleColumn1" DataColumn="ObjectKeyUNSGroup" CannotEdit="true" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping ScriptItemUID="TSBVirtualTableMapping1" VirtualTable="EditTable" DataTable="Vars" />
+                        </ControlReferenceContainer>
+                        <LayoutPanel ScriptItemUID="TSBLayoutPanel2">
+                          <Container ScriptItemUID="TSBContainer25" />
+                          <Container ScriptItemUID="TSBContainer22" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <Property Name="TagName" Value="fieldset" />
+                            </HtmlAttributes>
+                            <Container ScriptItemUID="TSBContainer24">
+                              <RadioButton DataTable="Vars" ScriptItemUID="TSBRadioButton4" DataColumn="UNSGroupOwnerManual" DataValue="false" Text="translate(&quot;#LDS#Select one of the calculated possible owners&quot;)" />
+                            </Container>
+                            <Container ScriptItemUID="TSBContainer23">
+                              <RadioButton DataTable="Vars" ScriptItemUID="TSBRadioButton3" DataColumn="UNSGroupOwnerManual" DataValue="true" Text="translate(&quot;#LDS#Select another owner&quot;)" />
+                            </Container>
+                          </Container>
+                          <Container ScriptItemUID="TSBContainer21" />
+                          <Container ScriptItemUID="TSBContainer18">
+                            <Container ScriptItemUID="TSBContainer20" Condition="from vars select not(unsgroupownermanual)">
+                              <ComboBox DataColumn="UNSGroupUID_PersonOwner" DataTable="Vars" ScriptItemUID="TSBComboBox2" SourceTable="PersonSuggestionUNSGroup" SourceValueColumn="UID_Person" />
+                            </Container>
+                            <Container ScriptItemUID="TSBContainer19" Condition="from vars select unsgroupownermanual">
+                              <ColumnEditor DataColumn="UNSGroupUID_PersonOwner" DataTable="Vars" ScriptItemUID="TSBColumnEditor2" />
+                            </Container>
+                          </Container>
+                        </LayoutPanel>
+                        <Validator DataColumn="UNSGroupUID_PersonOwner" DataTable="Vars" ScriptItemUID="TSBValidator2" />
+                      </Container>
+                      <Container ScriptItemUID="TSBContainer16" Condition="from vars select not(isnullorempty(UNSGroupUID_PersonOwner))" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="TSBHtmlAttribute14" Name="&quot;class&quot;" Value="&quot;imx-message&quot;" />
+                        </HtmlAttributes>
+                        <Label ScriptItemUID="TSBLabel10" Text="translate('#LDS#Click &quot;Next&quot; to assign ownership for the system entitlement {0} to {1}.')" EnableSubControls="true">
+                          <ControlList ScriptItemUID="TSBControlList2">
+                            <Label ScriptItemUID="TSBLabel12" EnableCustomAttributes="true" Text="from vars select displayvalue(ObjectKeyUNSGroup)">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="TSBHtmlAttribute16" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                            <Label ScriptItemUID="TSBLabel11" EnableCustomAttributes="true" Text="from vars select displayvalue(UNSGroupUID_PersonOwner)">
+                              <HtmlAttributes>
+                                <HtmlAttribute ScriptItemUID="TSBHtmlAttribute15" Name="&quot;style&quot;" Value="&quot;font-weight: bold;&quot;" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                        </Label>
+                      </Container>
+                    </WizardPage>
+                    <WizardPage ScriptItemUID="TSBWizardPage4" Title="translate(&quot;#LDS#Results&quot;)" AllowBackAction="false" NextButtonCaption="translate(&quot;#LDS#Close&quot;)" AllowCancelAction="false">
+                      <OnNext ScriptItemUID="TSBAction15">
+                        <ActionOnControl />
+                      </OnNext>
+                      <Label ScriptItemUID="TSBLabel9" Text="translate(&quot;#LDS#Assign an owner to a system entitlement&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="h2" />
+                          <HtmlAttribute ScriptItemUID="TSBHtmlAttribute13" Name="&quot;class&quot;" Value="&quot;imx-icon-large imx-table-UNSGroup-large&quot;" />
+                        </HtmlAttributes>
+                      </Label>
+                      <Label ScriptItemUID="TSBLabel8" Text="translate(&quot;#LDS#Your changes have been saved. The changes may take a couple of minutes to take effect.&quot;)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <Property Name="TagName" Value="div" />
+                          <HtmlAttribute ScriptItemUID="TSBHtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
+                        </HtmlAttributes>
+                      </Label>
+                    </WizardPage>
+                  </Wizard>
+                </Container>
+              </Popup>
+            </ActionComponent>
+          </VirtualControlMapping>
+          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping6" ID="Caption()" Value="translate(&quot;#LDS#System entitlement&quot;)" />
+          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping14" ID="Image()" Value="&quot;UNSGroup&quot;" />
+          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping12" ID="ImageType()" Value="'TableName'" />
+          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping15" ID="ContentType()" Value="'Text'" />
+          <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping16" ID="Size()" Value="'Square'" />
+        </ControlReferenceContainer>
+      </AddObject>
+      <AddObject ObjectID="DataTableCustom1" ObjectType="DataTableCustom">
+        <Column DataType="System.String" Name="ObjectKeyUNSGroup" ScriptItemUID="TSBColumn1" ColumnDataSource="ForeignKey" Caption="translate(&quot;#LDS#System entitlement&quot;)" DBColumnName="&quot;XObjectKey&quot;" DBTableName="&quot;UNSGroup&quot;" FKWhereClause="getconfig(&quot;TSB_BusinessOwnership_Filter_UNSGroup&quot;)" MinLength="1" />
+        <Column DataType="System.String" Name="UNSGroupUID_PersonOwner" ScriptItemUID="TSBColumn2" Caption="translate(&quot;#LDS#Owner&quot;)" ColumnDataSource="ForeignKey" DBColumnName="&quot;UID_Person&quot;" DBTableName="&quot;Person&quot;" FKWhereClause="" MinLength="1" />
+        <Column DataType="System.Boolean" Name="UNSGroupOwnerManual" ScriptItemUID="TSBColumn3" />
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables">
+        <DataTableDbObject ScriptItemUID="TSBDataTableDbObject1" Table="UNSGroup" Class="UNSGroup">
+          <ActionSequence ScriptItemUID="TSBAction6" />
+        </DataTableDbObject>
+        <DataTableDbObject ScriptItemUID="TSBDataTableDbObject2" Table="PersonSuggestionUNSGroup" Class="Person">
+          <ActionSequence ScriptItemUID="TSBAction8" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition">
+        <ConfigParam Key="TSB_BusinessOwnership_Filter_UNSGroup" Description="translate(&quot;#LDS#Business ownership assignment: Filter for system entitlements&quot;)" Type="SQL" DatabaseTable="Hardware" />
+        <ConfigParam Key="TSB_BusinessOwnership_Filter_UNSGroup_Suggestion" Description="translate(&quot;#LDS#Business ownership assignment: System entitlement suggested owners&quot;)" Type="SQL" DatabaseTable="Person" />
+        <ConfigParam Key="TSB_BusinessOwnership_Filter_UNSGroup_Suggestion_2" Description="translate(&quot;#LDS#Business ownership assignment: System entitlement suggested owners&quot;)+&quot; (2)&quot;" Type="SQL" DatabaseTable="Person" />
+      </AddObject>
+      <AddObject ObjectID="ATTConfigSection1" ObjectType="ConfigSection">
+        <ConfigEntry ScriptItemUID="ATTConfigEntry2" Key="TSB_BusinessOwnership_Filter_UNSGroup" Value="format(&quot;UID_AccProduct in ( select uid_accproduct from accproduct where {0} union select acp.uid_accproduct from accproduct acp join AERole aer on aer.UID_AERole = acp.UID_OrgRuler where aer.UID_AERole not in (select UID_AERole from PersonInAERole))&quot;, sqlempty(&quot;UID_OrgRuler&quot;, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" />
+        <ConfigEntry ScriptItemUID="TSBConfigEntry1" Key="TSB_BusinessOwnership_Filter_UNSGroup_Suggestion" Value="&quot;isinactive=0 and UID_Person in (select p.UID_Person from PersonHasObject p join HelperHeadPerson hhp on hhp.UID_PersonHead = p.UID_Person where p.ObjectKey = {0})&quot;" />
+        <ConfigEntry ScriptItemUID="TSBConfigEntry2" Key="TSB_BusinessOwnership_Filter_UNSGroup_Suggestion_2" Value="&quot;isinactive=0 and UID_Person in (select hhp.UID_PersonHead from HelperHeadPerson hhp join PersonHasObject p on hhp.UID_Person = p.UID_Person where p.ObjectKey = {0})&quot;" />
+      </AddObject>
+      <AddObject ObjectID="DataEventHandlers1" ObjectType="DataEventHandlers">
+        <DataEventHandler DataTable="Vars" ScriptItemUID="TSBDataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="TSBAction10">
+            <LoadTable DataTable="UNSGroup" ScriptItemUID="TSBLoadTable3" WhereClause="sqlcompareuid(&quot;xobjectkey&quot;, from vars select objectkeyunsgroup)" RemoveDeleted="false">
+              <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType3" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="ObjectKeyUNSGroup" />
+        </DataEventHandler>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

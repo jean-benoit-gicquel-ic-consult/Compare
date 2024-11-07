@@ -1,0 +1,34 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="TSB_ObjectCollection_UNSAccount_GridColumns" MigrationNotes="DIALOGCONFIGPARM;" IncludeExtensionsFromReplacedDocuments="false">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
+      <GridColumnGroup DataTable="UNSAccount" ScriptItemUID="GridColumnGroup1">
+        <GridColumnColumnTemplate DataTable="UNSAccount" ScriptItemUID="GridColumnColumnTemplate1">
+          <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
+            <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectCollection_UNSAccount_Fields&quot;)" ScriptItemUID="ExpressionColumnList1" />
+          </ColumnList>
+          <GridColumnGroup DataTable="UNSAccount" ScriptItemUID="GridColumnGroup2">
+            <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" ScriptItemUID="GridColumn1">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label Text="datacaption(UNSAccount, currentcolumn)" ScriptItemUID="Label1" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1">
+                <Label Text="from UNSAccount select current displayvalue(currentcolumn)" ScriptItemUID="Label2" />
+              </Cell>
+            </GridColumn>
+          </GridColumnGroup>
+        </GridColumnColumnTemplate>
+      </GridColumnGroup>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="UNSAccount" Class="UNSAccount" ScriptItemUID="VirtualTable1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

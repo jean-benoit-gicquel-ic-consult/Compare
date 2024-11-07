@@ -1,0 +1,18 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_Edit_Int" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <NumberTextBox DataTable="EditTable" DataColumn="EditColumn" ScriptItemUID="NumberTextBox2" DecimalPlaces="0" UseSpinner="true" Delta="1" MinValue="" MaxValue="" />
+      </Container>
+      <ActionSequence ScriptItemUID="Action1" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+  </GlobalControl>
+</WebDesigner>

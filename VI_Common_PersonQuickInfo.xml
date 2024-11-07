@@ -1,0 +1,57 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <GlobalControl ID="VI_Common_PersonQuickInfo" MetamodelVersion="2016-01-01" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ActionComponent">
+      <ActionComponent ScriptItemUID="Action1">
+        <LoadTable DataTable="PersonSingle" WhereClause="format(&quot;uid_person = '{0}'&quot;, uidperson())" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <ForeachRow DataTable="PersonSingle" ScriptItemUID="ForeachRow1">
+          <ActionSequence ScriptItemUID="Action2">
+            <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
+              <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                <Container ScriptItemUID="Container1">
+                  <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, &quot;Person&quot;))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer1">
+                    <VirtualTableMapping VirtualTable="SourceObject" DataTable="PersonSingle" ScriptItemUID="VirtualTableMapping1" />
+                    <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualFunctionMapping ID="ShowHeading()" Value="false" ScriptItemUID="VirtualFunctionMapping2" />
+                  </ObjectSwitchContainer>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="PopupTitle()" Value="select current display() from PersonSingle" ScriptItemUID="VirtualFunctionMapping3" />
+              <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container2">
+                  <Button Text="translate(&quot;#LDS#Overview&quot;)" ScriptItemUID="Button1">
+                    <ServerActionCall ScriptItemUID="ServerActionCall1">
+                      <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect1">
+                        <RedirectParameter Name="'ObjectKey'" Value="from personsingle select current xobjectkey" />
+                      </Redirect>
+                    </ServerActionCall>
+                  </Button>
+                  <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef7">
+                    <VirtualFunctionMapping ID="MoreThanOneButton()" Value="True" ScriptItemUID="VirtualFunctionMapping4" />
+                  </ControlReferenceControlList>
+                </Container>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ID="TableName()" Value="&quot;Person&quot;" ScriptItemUID="VirtualFunctionMapping5" />
+            </CallAction>
+          </ActionSequence>
+        </ForeachRow>
+      </ActionComponent>
+      <ActionSequence ScriptItemUID="Action3" />
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Table="PersonSingle" Class="Person" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action4" />
+        </DataTableDbObject>
+      </Tables>
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="uidPerson()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,73 @@
+﻿<WebDesigner>
+  <Context MetamodelVersion="2016-05-08" ScriptItemUID="Context1" ID="QER_Request_Auditing" Comment="This module is used for auditing requests and approvals." HelpChapterUid="&quot;0EE1596E-DFCD-4BA3-81C6-2DE3E522DD59&quot;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableDbObject Table="PersonWantsOrg" Class="PersonWantsOrg" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action3" />
+      </DataTableDbObject>
+      <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="PWOWhereClause" DataType="System.String" ScriptItemUID="Column1" />
+      </DataTableSingleRow>
+      <DataTableDbObject Class="ShoppingCartOrder" Table="ShoppingCartOrder" ScriptItemUID="DataTableDbObject3">
+        <ActionSequence ScriptItemUID="Action5" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1" />
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    <ActionSequence ScriptItemUID="Action1" />
+    <Forms ScriptItemUID="Forms1">
+      <Form ScriptItemUID="Form1" ID="QER_Request_Auditing_Overview" NavigationTitle="translate(&quot;#LDS#Auditing&quot;)">
+        <ActionSequence ScriptItemUID="Action2" />
+        <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
+          <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#Auditing&quot;)" />
+        </PagePartContainer>
+        <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar" />
+        <PagePartContainer ScriptItemUID="PagePartContainer2" ID="Main">
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+            </HtmlAttributes>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container2" ItemUID="Request">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Identifier()" Value="&quot;Request&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action7">
+                  <Redirect ScriptItemUID="Redirect3" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_OrderHistory">
+                    <RedirectParameter Value="&quot;Requester&quot;" Name="'Form'" />
+                    <RedirectParameter Value="'YES'" Name="'AuditMode'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Caption()" Value="translate('#LDS#Request')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Shows all requests made by a specific employee.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Image()" Value="&quot;cux-icon cux-icon--shopping-cart&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ImageType()" Value="'IconFont'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="Container3" ItemUID="approval">
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="Identifier()" Value="&quot;approval&quot;" />
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="Action4">
+                  <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_OrderHistory">
+                    <RedirectParameter Value="&quot;Approver&quot;" Name="'Form'" />
+                    <RedirectParameter Value="'YES'" Name="'AuditMode'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Approval')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Image()" Value="'PersonWantsOrg'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Value()" Value="translate(&quot;#LDS#See all IT shop decisions made by a specific employee.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

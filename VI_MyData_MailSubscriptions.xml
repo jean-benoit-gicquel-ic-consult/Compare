@@ -1,0 +1,216 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ce30ea4d-145c-e293-3a63-084253f5bbdf">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_MyData_MailSubscriptions">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="My profile" Description="translate(&quot;#LDS#My profile&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_MyData_MailSubscription_Filter" Type="SQL" Description="translate(&quot;#LDS#Mail subscription: Filter for mail templates&quot;)" DatabaseTable="DialogRichMail" LongDescription="" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action4">
+        <LoadTable DataTable="DialogRichMail" WhereClause="sqland(&#xA;isnullorempty(getconfig(&quot;VI_MyData_MailSubscription_Filter&quot;), &quot;1=1&quot;),&#xA;sqlcompare(&quot;isinactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),&#xA;format(&quot;uid_dialogtablebaseobject in (select uid_dialogtable from DialogTable where IsDeactivatedByPreProcessor = 0)&quot;)&#xA;)" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+        <LoadTable DataTable="Person" WhereClause="SqlOr(&#xD;&#xA;sqlcompareuid(&quot;UID_Person&quot;, GetUser()),&#xD;&#xA;sqlcompareuid(&quot;UID_PersonMasterIdentity&quot;, GetUser())&#xD;&#xA;)" ScriptItemUID="LoadTable2">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+        </LoadTable>
+        <LoadTable DataTable="DialogMailNoSubscription" WhereClause="format(&quot;SMTPAddress in (select DefaultEmailAddress from Person where {0})&quot;,WhereClause(Person))" ScriptItemUID="LoadTable3">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" />
+        </LoadTable>
+        <ForeachRow DataTable="Person" ScriptItemUID="ForeachRow2">
+          <ForeachRow DataTable="DialogRichMail" ScriptItemUID="ForeachRow3">
+            <ActionSequence Condition="0 = (from MailAddressGetsEMail select count() where UID_DialogRichMail = (from DialogRichMail select current UID_DialogRichMail) and DefaultEMailAddress = (from Person select current DefaultEmailAddress))" ScriptItemUID="Action5">
+              <Insert DataTable="MailAddressGetsEMail" ScriptItemUID="Insert2">
+                <ActionSequence ScriptItemUID="Action6" />
+                <InsertValue DataColumn="DefaultEMailAddress" Value="from Person select current DefaultEmailAddress" />
+                <InsertValue DataColumn="UID_DialogRichMail" Value="from DialogRichMail select current UID_DialogRichMail" />
+                <InsertValue DataColumn="GetsEMail" Value="true" Condition="0 = (from DialogMailNoSubscription select count() where &#xD;&#xA;UID_DialogRichMail = (from DialogRichMail select current UID_DialogRichMail)&#xD;&#xA;and&#xD;&#xA;SMTPAddress = (from Person select current DefaultEmailAddress)&#xD;&#xA;)" />
+              </Insert>
+            </ActionSequence>
+          </ForeachRow>
+        </ForeachRow>
+        <ActionSequence Condition="not(isnullorempty(request(&quot;aeweb_uid_dialogrichmail&quot;)))" ScriptItemUID="Action7">
+          <Update DataTable="MailAddressGetsEMail" DataColumn="GetsEMail" WhereClause="uid_dialogrichmail = request(&quot;aeweb_uid_dialogrichmail&quot;)" Value="false" ScriptItemUID="Update1" />
+          <CallAction ActionID="SaveChanges" ScriptItemUID="Call1" />
+        </ActionSequence>
+        <ReadOnlyTableModifier DataTable="MailAddressGetsEMail" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="uid_dialogrichmail in ( select uid_dialogrichmail from DialogRichMail where not(AllowUnsubscribe))">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <SingleColumn DataColumn="GetsEMail" ScriptItemUID="SingleColumn1" CannotEdit="" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Grid ScriptItemUID="Grid1">
+          <GridBand DataTable="MailAddressGetsEMail" OrderBy="'DisplayEMail, DefaultEMailAddress'" WhereClause="uid_dialogrichmail in ( select uid_dialogrichmail from dialogrichmail)" ScriptItemUID="GridBand1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="ApplyFilledHeight" Value="true" />
+            </HtmlAttributes>
+            <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+              <ControlList ScriptItemUID="ControlList1">
+                <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef16">
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                    <ControlList ScriptItemUID="ControlList7">
+                      <LinkContainer ScriptItemUID="LinkContainer1">
+                        <ControlList ScriptItemUID="ControlList2">
+                          <Image Source="File" FileName="variable(&quot;%permanentlink%dialogimgTbl=DialogRichMail&quot;)" ScriptItemUID="Image2" Layout="'VI_Styles_Image_Baseline'" EnableCustomAttributes="true">
+                            <HtmlAttributes>
+                              <HtmlAttribute Name="'alt'" ScriptItemUID="HtmlAttribute1" Value="from dialogrichmail select DisplayValue(Description) where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" />
+                            </HtmlAttributes>
+                          </Image>
+                        </ControlList>
+                        <ServerActionCall ScriptItemUID="ServerActionCall2">
+                          <CallAction ActionID="MailInfoPopup" ScriptItemUID="Call4" />
+                        </ServerActionCall>
+                      </LinkContainer>
+                      <Label Text="from dialogrichmail select display() where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" ScriptItemUID="Label4" />
+                    </ControlList>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                    <ControlList ScriptItemUID="ControlList8">
+                      <ControlReferenceControlList ID="VI_Common_SelectControlListView" ScriptItemUID="ControlRef1">
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="IsReadOnly()" Value="not(from MailAddressGetsEMail select current CanEdit(GetsEMail))" />
+                        <VirtualTableMapping ScriptItemUID="VirtualTableMapping6" VirtualTable="EditTable" DataTable="MailAddressGetsEMail">
+                          <VirtualColumnMapping DataColumn="GetsEMail" VirtualColumn="DoSelect" />
+                        </VirtualTableMapping>
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                    <ControlList ScriptItemUID="ControlList9">
+                      <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef5">
+                        <VirtualTableMapping VirtualTable="EditTable" DataTable="MailAddressGetsEMail" ScriptItemUID="VirtualTableMapping8" />
+                        <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping11">
+                          <ColumnList ScriptItemUID="ColumnList3">
+                            <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="DisplayEMail" />
+                            <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="DefaultEMailAddress" />
+                          </ColumnList>
+                        </VirtualFunctionMapping>
+                      </ControlReferenceContainer>
+                    </ControlList>
+                  </VirtualControlMapping>
+                </ControlReferenceControlList>
+              </ControlList>
+            </GridBandListView>
+            <GridFilters ScriptItemUID="GridFilters1" />
+            <GridRows />
+            <GridColumn ScriptItemUID="Column7" SortColumn="DisplayEMail" AutoFilterColumn="DisplayEMail">
+              <GridColumnHeader ScriptItemUID="wctl1">
+                <Label Text="datacaptionsingle(&quot;dialogrichmail&quot;)" ScriptItemUID="Label1" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell1">
+                <Container ScriptItemUID="Container3">
+                  <LinkContainer ScriptItemUID="Image1Link">
+                    <ControlList ScriptItemUID="Image1Ctl">
+                      <Image Source="File" FileName="variable(&quot;%permanentlink%dialogimgTbl=DialogRichMail&quot;)" ScriptItemUID="Image1" Layout="'VI_Styles_Image_Baseline'" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="from dialogrichmail select DisplayValue(Description) where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" />
+                        </HtmlAttributes>
+                      </Image>
+                    </ControlList>
+                    <ServerActionCall ScriptItemUID="viewdescription">
+                      <CallAction ActionID="MailInfoPopup" ScriptItemUID="Call5" />
+                    </ServerActionCall>
+                  </LinkContainer>
+                  <Label Text="from dialogrichmail select display() where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" ScriptItemUID="Label5" />
+                </Container>
+              </Cell>
+            </GridColumn>
+            <GridColumn Width="&quot;300px&quot;" SortColumn="DefaultEMailAddress" AutoFilterColumn="DefaultEMailAddress" ScriptItemUID="Column8">
+              <GridColumnHeader ScriptItemUID="wctl2">
+                <Label Text="datacaption(&quot;person&quot;, &quot;defaultemailaddress&quot;)" ScriptItemUID="Label2" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell2">
+                <Container ScriptItemUID="Container6">
+                  <Label Text="from MailAddressGetsEMail select current DefaultEMailAddress" ScriptItemUID="Label6" />
+                </Container>
+              </Cell>
+            </GridColumn>
+            <GridColumn Width="&quot;200px&quot;" ScriptItemUID="Column9">
+              <GridColumnHeader ScriptItemUID="wctl3">
+                <Label Text="translate(&quot;#LDS#Notification&quot;)" ScriptItemUID="Label3" />
+              </GridColumnHeader>
+              <Cell ScriptItemUID="Cell3">
+                <CheckBox DataTable="MailAddressGetsEMail" DataColumn="GetsEMail" Text="translate(&quot;#LDS#Notify me&quot;)" ScriptItemUID="CheckBox1" />
+              </Cell>
+            </GridColumn>
+          </GridBand>
+        </Grid>
+        <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container9">
+          <Button Text="translate(&quot;#LDS#Save&quot;)" EnabledCondition="0 &lt; from Person select Count() where IsNull(DefaultEmailAddress,'') &lt;&gt; ''" ScriptItemUID="Button1">
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="SaveChanges" ScriptItemUID="Call3" />
+            </ServerActionCall>
+          </Button>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableDbObject Class="DialogRichMail" Table="DialogRichMail" ScriptItemUID="DataTableDbObject1">
+          <ActionSequence ScriptItemUID="Action1" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="Person" Table="Person" ScriptItemUID="DataTableDbObject2">
+          <ActionSequence ScriptItemUID="Action3" />
+        </DataTableDbObject>
+        <DataTableDbObject Class="DialogMailNoSubscription" Table="DialogMailNoSubscription" ScriptItemUID="DataTableDbObject3">
+          <ActionSequence ScriptItemUID="Action40" />
+        </DataTableDbObject>
+        <DataTableCustom Table="MailAddressGetsEMail" PrimaryKeyColumn="PK" ScriptItemUID="DataTableCustom1">
+          <Column Name="PK" DataType="System.String" ScriptItemUID="Column6" />
+          <Column Name="DefaultEMailAddress" DataType="System.String" ScriptItemUID="Column1" Caption="datacaption(&quot;person&quot;, &quot;defaultemailaddress&quot;)" />
+          <Column Name="UID_DialogRichMail" DataType="System.String" ScriptItemUID="Column2" />
+          <Column Name="uid_dialogmailnosubscription" DataType="System.String" DataSource="Expression" Expression="from DialogMailNoSubscription select UID_DialogMailNoSubscription where&#xD;&#xA;SMTPAddress = (from MailAddressGetsEMail select current DefaultEMailAddress)&#xD;&#xA;and&#xD;&#xA;UID_DialogRichMail = (from MailAddressGetsEMail select current UID_DialogRichMail)" ScriptItemUID="Column3" />
+          <Column Name="GetsEMail" DataType="System.Boolean" ScriptItemUID="Column4" />
+          <Column Name="DisplayEMail" DataType="System.String" Expression="from dialogrichmail select top 1 display() where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" DataSource="Expression" ScriptItemUID="Column5" Caption="datacaptionsingle(&quot;dialogrichmail&quot;)" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="SaveChanges">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action8">
+              <ActionSequence ItemUID="1) New subscriptions" ScriptItemUID="Action9">
+                <Delete DataTable="DialogMailNoSubscription" SetDeletionFlag="DeleteAndSave" WhereClause="UID_DialogMailNoSubscription in (from MailAddressGetsEMail select UID_DialogMailNoSubscription where getsemail and isnull(uid_dialogmailnosubscription,'')&lt;&gt;'')" ScriptItemUID="Delete1" />
+              </ActionSequence>
+              <ActionSequence ItemUID="2) Delete subscriptions" ScriptItemUID="Action10">
+                <ForeachRow DataTable="MailAddressGetsEMail" WhereClause="isnull( uid_dialogmailnosubscription, '')='' and not(getsemail)" ScriptItemUID="ForeachRow1">
+                  <Insert DataTable="DialogMailNoSubscription" ScriptItemUID="Insert1">
+                    <ActionSequence ScriptItemUID="Action11" />
+                    <InsertValue DataColumn="SMTPAddress" Value="from MailAddressGetsEMail select current DefaultEMailAddress" />
+                    <InsertValue DataColumn="UID_DialogRichMail" Value="from MailAddressGetsEMail select current UID_DialogRichMail" />
+                  </Insert>
+                </ForeachRow>
+                <Save DataTable="DialogMailNoSubscription" ScriptItemUID="Save1" />
+              </ActionSequence>
+              <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call2">
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The changes have been saved.&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping4" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="MailInfoPopup">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action13">
+              <CallAction ActionID="VI_Popup" ScriptItemUID="popup">
+                <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                  <Container ScriptItemUID="Container4">
+                    <Label Text="from dialogrichmail select DisplayValue(Description) where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" ScriptItemUID="label12" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                  <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container5">
+                    <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef7" />
+                  </Container>
+                </VirtualControlMapping>
+                <VirtualFunctionMapping ID="PopupTitle()" Value="from dialogrichmail select display() where uid_dialogrichmail = ( from mailaddressgetsemail select current uid_dialogrichmail)" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="TableName()" Value="&quot;DialogRichMail&quot;" ScriptItemUID="VirtualFunctionMapping6" />
+              </CallAction>
+            </ActionComponent>
+          </LocalControlContext>
+          <DataTableCursor DataTable="MailAddressGetsEMail" ScriptItemUID="DataTableCursor1" />
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
+  </GlobalControl>
+</WebDesigner>

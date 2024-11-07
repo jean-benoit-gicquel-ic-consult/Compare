@@ -1,0 +1,74 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="c40ca4a4-1d0a-e1e4-d595-ad703cae6fbd">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_ActionResultViewer">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="QBM.CompositionApi.UiAction" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ControlList ScriptItemUID="ControlList1">
+        <SwitchContainer ScriptItemUID="Switch2">
+          <SwitchContainerCase ScriptItemUID="Case2" Condition="0 &lt; select count() from actions where not(isnullorempty(exceptiontext))">
+            <Container ScriptItemUID="Container4">
+              <Label ScriptItemUID="Label9" Text="translate(&quot;#LDS#Some actions did not successfully complete.&quot;)&#xD;&#xA;+ &quot; &quot;&#xD;&#xA;+ (if (0 = select count() from actions where (state = &quot;Suceeded&quot;) ) then translate(&quot;#LDS#No changes have been made.&quot;))" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" />
+                </HtmlAttributes>
+              </Label>
+              <Grid ScriptItemUID="Grid3">
+                <GridBand DataTable="Actions" ScriptItemUID="GridBand4" EnableGridViewSetting="false" EnableCustomAttributes="true">
+                  <HtmlAttributes>
+                    <Property Name="ApplyFilledHeight" Value="true" />
+                  </HtmlAttributes>
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
+                  <GridFilters ScriptItemUID="GridFilters5" />
+                  <GridRows />
+                  <GridColumn ScriptItemUID="Column4" Width="&quot;130px&quot;" AutoFilterColumn="State">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Label ScriptItemUID="Label1" Text="datacaption(actions,state)" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label ScriptItemUID="Label2" Text="from actions select current displayvalue(state)" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;imx-icon &quot;+&#xD;&#xA;from actions select current &#xD;&#xA;(if(state = &quot;failed&quot;) then &quot;imx-icon-Error&quot;&#xD;&#xA;else if (state=&quot;Succeeded&quot;) then &quot;imx-icon-ok&quot;&#xD;&#xA;else &quot;imx-icon-AssignedNone&quot;&#xD;&#xA;)" />
+                        </HtmlAttributes>
+                      </Label>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumnSimple ScriptItemUID="Column28" Column="DisplayProxy" />
+                  <GridColumnSimple ScriptItemUID="Column27" Column="ObjectDisplayProxy" />
+                  <GridColumnSimple ScriptItemUID="Column29" Column="ExceptionText" />
+                </GridBand>
+              </Grid>
+            </Container>
+          </SwitchContainerCase>
+          <SwitchContainerCase ScriptItemUID="Case1">
+            <ControlReferenceControlList ID="Success" ScriptItemUID="ControlRef1" />
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="Results" ScriptItemUID="VirtualTable1" ElementType="QBM.CompositionApi.UiAction.UiActionResult, QBM.CompositionApi" />
+      <VirtualTable Name="Actions" ScriptItemUID="VirtualTable2" ElementType="QBM.CompositionApi.UiAction.IUiAction, QBM.CompositionApi">
+        <VirtualColumn Name="DisplayProxy" DataType="System.String" />
+        <VirtualColumn Name="ObjectDisplayProxy" DataType="System.String" />
+        <Column DataType="System.String" Name="ExceptionText" ScriptItemUID="Column1" DataSource="Expression" Expression="{{&#xD;&#xA;var result = Results.ObjectList.FirstOrDefault(r=&gt;r.Action == ((VI.WebRuntime.ObjectViewRow&lt;IUiAction&gt;) queryRow).TargetObject);&#xD;&#xA;var exc = result != null ? result.Exception : null;&#xD;&#xA;@return exc != null ? ViException.ErrorString(exc) : null;&#xD;&#xA;}}+&quot;&quot;" Caption="translate('#LDS#Error')" />
+        <Column DataType="System.String" Name="State" ScriptItemUID="Column2" DataSource="Expression" Expression="{{&#xD;&#xA;var result = Results.ObjectList.FirstOrDefault(r =&gt; r.Action == ((VI.WebRuntime.ObjectViewRow&lt;IUiAction&gt;) queryRow).TargetObject);&#xD;&#xA;@return result != null ? result.State.ToString() : &quot;NotExecuted&quot;;&#xD;&#xA;}}+&quot;&quot;" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Result&quot;)">
+          <ColumnLimitedValues ScriptItemUID="ColumnLimitedValues1">
+            <ColumnLimitedValue Name="NotExecuted" Display="translate(&quot;#LDS#Not executed&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Succeeded" Display="translate(&quot;#LDS#Success&quot;)" Comment="" />
+            <ColumnLimitedValue Name="RolledBack" Display="translate(&quot;#LDS#Not executed&quot;)" Comment="" />
+            <ColumnLimitedValue Name="Failed" Display="translate(&quot;#LDS#Error&quot;)" Comment="" />
+          </ColumnLimitedValues>
+        </Column>
+      </VirtualTable>
+      <VirtualControl ContainerType="ControlList" ID="Success" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

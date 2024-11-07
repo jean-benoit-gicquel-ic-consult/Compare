@@ -1,0 +1,42 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_AccProductGroupSingle">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <LinkContainer ScriptItemUID="LinkContainer2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" Value="&quot;dashboardDataItem dashboardDataItemLink dashboardDataItemUserImage&quot;  + if(from accproductgroup select current isnull(uid_accproductgroupparent,'')='' and IsSelected) then &quot; dashboardDataItemSelected&quot;" ScriptItemUID="HtmlAttribute1" />
+          </HtmlAttributes>
+          <ControlList ScriptItemUID="ControlList3">
+            <Label Text="from accproductgroup select current display()" ScriptItemUID="Label2" UseForeignWordsTagger="true" />
+            <CodeLiteral ScriptItemUID="CodeLiteral1">var productGroupRow = this.AccProductGroup_Current.Row;
+// If the service category has an icon, create a link URL
+var column = this.AccProductGroup.GetColumn("JPegPhoto", "AccProductGroup");
+if ((((byte[])(column.GetValue(productGroupRow))).Length &gt; 0))
+{
+	var imgSource = new VI.WebRuntime.WebControls.DataImageSource(productGroupRow, column);
+    LinkContainer2.CustomStyle += string.Format("background-image: url('{0}');", imgSource.GetUrl(Label2));
+}
+</CodeLiteral>
+          </ControlList>
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ActionID="AccProductGroupSelected" ScriptItemUID="Call1" />
+          </ServerActionCall>
+        </LinkContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="AccProductGroup" ScriptItemUID="VirtualTable1" Class="AccProductGroup" RequiresCursor="true">
+        <VirtualColumn Name="IsSelected" DataType="System.Boolean" IsMandatory="false" />
+      </VirtualTable>
+      <VirtualControl ID="AccProductGroupSelected" ContainerType="ActionComponent" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Start_Governance_Ext_Ext">
+    <Extensions>
+      <AddObject ObjectID="CPLConfigEntry1" ObjectType="ConfigEntryObjects" SortOrder="165">
+        <ConfigEntryObject ScriptItemUID="TSBConfigEntryObject7">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;UNSGroupInRuleViolations_By_UNSGroup&lt;/DisplayName&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;RpsReport&gt;Groups contributing to rule violations&lt;/RpsReport&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+      <AddObject ObjectID="CPLConfigEntry1" ObjectType="ConfigEntryObjects" SortOrder="165">
+        <ConfigEntryObject ScriptItemUID="TSBConfigEntryObject4">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;UNSGroupInRuleViolations_By_UNSRoot&lt;/DisplayName&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;RpsReport&gt;Groups contributing to rule violations&lt;/RpsReport&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;/Object&gt;</ConfigEntryObject>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

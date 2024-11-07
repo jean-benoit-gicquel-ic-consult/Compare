@@ -1,0 +1,25 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Details_PersonWantsOrg" MigrationNotes="DIALOGCONFIGPARM;" DataTableDebugDisplay="PersonWantsOrg">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ComponentInterfaceObject">
+      <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="PersonWantsOrg" Class="PersonWantsOrg" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
+        <VirtualColumn Name="DoApprove" DataType="System.Boolean" />
+        <VirtualColumn Name="DoNotAllowApprove" DataType="System.Boolean" />
+      </VirtualTable>
+      <VirtualTable Name="AccProduct" Class="AccProduct" RequiresCursor="true" ScriptItemUID="VirtualTable2" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualControl ID="TriggerRecalculateCompliance" ContainerType="ActionComponent" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

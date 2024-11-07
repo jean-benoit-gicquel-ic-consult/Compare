@@ -1,0 +1,29 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Responsibilities_MyResponsibilities_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="10">
+        <SwitchContainer ScriptItemUID="TileSystemEntitlements">
+          <SwitchContainerCase ScriptItemUID="TSBCase1" Condition="GetConfigParm(&quot;TargetSystem\UNS&quot;)=&quot;1&quot; and &#xD;&#xA;{{&#xD;&#xA;&#xD;&#xA;const string key = &quot;VI_Roles_Responsibility_UNSGroup_LimitedSQL&quot;;&#xD;&#xA;var statementId = _UserSession.ApplicationInfo.ConfigSettings[key] as string;&#xD;&#xA;if (string.IsNullOrEmpty(statementId))&#xD;&#xA;   throw new InvalidOperationException(&quot;Configuration setting not found: &quot; + key);&#xD;&#xA;   &#xD;&#xA;@return 0 &lt;  _Database.GetLimitedSqlScalarAsync&lt;int&gt;(statementId, new[]{&#xD;&#xA;VI.DB.Entities.QueryParameter.Create&lt;string&gt;(&quot;uidperson&quot;, _Connection.User.Uid)}).Result;&#xD;&#xA;&#xD;&#xA;}}">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="TSBContainer1" ItemUID="System Entitlements">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="TSBAction2">
+                  <Redirect Target="Context" AllowReturnToThisContext="true" ContextID="VI_ITShop_MyRoles" ScriptItemUID="TSBRedirect2">
+                    <RedirectParameter Name="&quot;Area&quot;" Value="&quot;SystemEntitlements&quot;" />
+                    <RedirectParameter Value="translate(&quot;#LDS#Heading System Entitlements&quot;)" Name="'Title'" />
+                  </Redirect>
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping3" ID="Caption()" Value="translate(&quot;#LDS#Heading System Entitlements&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping7" ID="Value()" Value="translate('#LDS#Shows your system entitlements and their members.')" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping8" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping9" ID="Identifier()" Value="&quot;System Entitlements&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping10" ID="Image()" Value="&quot;UNSGroup&quot;" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping11" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping12" ID="Size()" Value="'Overview'" />
+            </ControlReferenceContainer>
+          </SwitchContainerCase>
+        </SwitchContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

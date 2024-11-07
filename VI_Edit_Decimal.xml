@@ -1,0 +1,77 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Edit_Decimal" Comment="An editor component for a decimal value." MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <Container ScriptItemUID="Container1">
+        <ContainerTemplate DataTable="LocalVars" ScriptItemUID="ContainerTemplate1">
+          <Container ScriptItemUID="Container2">
+            <TextBox DataTable="LocalVars" DataColumn="RawValue" ItemUID="Value" CustomStyle="if (IsValidDecimal(RawValue()))&#xD;&#xA;then format(Variable(&quot;{0} background-color:%VI_Common_Color_ColorBase1%;&quot;), WidthStyle())&#xD;&#xA;else format(Variable(&quot;{0} background-color:%VI_Common_Color_SignaledOrMandatory%;&quot;), WidthStyle())" Layout="'VI_Styles_TextBox_Default'" ScriptItemUID="TextBox1" />
+          </Container>
+        </ContainerTemplate>
+      </Container>
+      <ActionSequence ScriptItemUID="Action1">
+        <CallAction ActionID="InitLocalVars" ScriptItemUID="Call1" />
+      </ActionSequence>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="LocalVars" ScriptItemUID="DataTableCustom1">
+          <Column Name="RawValue" DataType="System.String" ScriptItemUID="Column2" />
+          <Column Name="SkipEvents" DataType="System.Boolean" ScriptItemUID="Column3" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="InitLocalVars">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action2">
+              <Delete DataTable="LocalVars" ScriptItemUID="Delete1" />
+              <Insert DataTable="LocalVars" ScriptItemUID="Insert1">
+                <ActionSequence ScriptItemUID="Action3" />
+                <InsertValue DataColumn="RawValue" Value="ResultValue()" />
+              </Insert>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsDecimalBetween(string minValue, string maxValue, string stringValue)" Expression="Try(&#xA;Convert(minValue, &quot;decimal&quot;) &lt;= Convert(stringValue, &quot;decimal&quot;) &#xA;AND &#xA;Convert(maxValue, &quot;decimal&quot;) &gt;= Convert(stringValue, &quot;decimal&quot;), false)" Comment="Determines if a given string value can be parsed as an integer within a given range ([minValue;maxValue])." DataType="System.Boolean" ScriptItemUID="Function1" />
+        <Function Name="IsValidDecimal(string value)" Expression="IsDecimalBetween(&#xA;  IsNullOrEmpty(MinValue(), MinDecimal()), &#xA;  IsNullOrEmpty(MaxValue(), MaxDecimal()),&#xA;  value&#xA;)" DataType="System.Boolean" ScriptItemUID="Function2" />
+        <Function Name="MinDecimal()" Expression="&quot;-79228162514264337593543950335&quot;" DataType="System.String" ScriptItemUID="Function3" />
+        <Function Name="MaxDecimal()" Expression="&quot;79228162514264337593543950335&quot;" DataType="System.String" ScriptItemUID="Function4" />
+        <Function Name="RawValue()" Expression="IsNull(from LocalVars  select RawValue, &quot;&quot;)" Comment="Returns the raw string value currently set in the textbox (not necessarily a decimal at all)." DataType="System.String" ScriptItemUID="Function5" />
+        <Function Name="ParsedValue()" Expression="if (IsValidDecimal(RawValue()))&#xA;then RawValue()&#xA;else &quot;&quot;" DataType="System.String" ScriptItemUID="Function6" />
+        <Function Name="ResultValue()" Expression="IsNull(from Result select current Value, &quot;&quot;)" DataType="System.String" ScriptItemUID="Function7" />
+        <Function Name="WidthStyle()" Expression="if (IsNullOrEmpty(Width()))&#xA;then &quot;&quot;&#xA;else format(&quot;width:{0};&quot;, Width())" DataType="System.String" ScriptItemUID="Function8" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="LocalVars" ScriptItemUID="DataEventHandler1">
+          <ActionSequence Condition="-- ParsedValue() &lt;&gt; ResultValue()" ScriptItemUID="Action4">
+            <Update DataTable="LocalVars" DataColumn="SkipEvents" Value="true" ScriptItemUID="Update1" />
+            <ActionSequence Condition="IsValidDecimal(RawValue())&#xA;" ItemUID="if raw value is valid decimal take it as result" ScriptItemUID="Action5">
+              <Update DataTable="Result" DataColumn="Value" Value="ParsedValue()" WhereClause="primarykey() = (from Result select current primarykey())" ScriptItemUID="Update2" />
+            </ActionSequence>
+            <ActionSequence Condition="not IsValidDecimal(RawValue())&#xA;" ItemUID="else reset raw value" ScriptItemUID="Action6">
+              <Update DataTable="LocalVars" DataColumn="RawValue" Value="ResultValue()" ScriptItemUID="Update3" />
+            </ActionSequence>
+            <Update DataTable="LocalVars" DataColumn="SkipEvents" Value="false" ScriptItemUID="Update4" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="RawValue" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Update" DataTable="Result" ScriptItemUID="DataEventHandler2">
+          <ActionSequence Condition="not (select top 1 SkipEvents  from LocalVars )" ScriptItemUID="Action7">
+            <CallAction ActionID="InitLocalVars" ScriptItemUID="Call2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="Value" />
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface>
+      <VirtualFunction Signature="MinValue()" Comment="Specifies the minimum allowed value. &#xD;&#xA;The value gets specified as string, but must be convertible to decimal." DataType="System.String" />
+      <VirtualFunction Signature="MaxValue()" Comment="Specifies the maximum allowed value. &#xD;&#xA;The value gets specified as string, but must be convertible to decimal." DataType="System.String" />
+      <VirtualTable Name="Result" RequiresCursor="true" ScriptItemUID="VirtualTable1">
+        <VirtualColumn Name="Value" Comment="The string representaton of the decimal value set." DataType="System.String" />
+      </VirtualTable>
+      <VirtualFunction Signature="Width()" DataType="System.String" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

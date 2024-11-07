@@ -1,0 +1,97 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_History_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action4" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="TSBCodeLiteral1">/* find all group tables */
+
+var queryGroupTables = VI.DB.Entities.Query.From("DialogTable").SelectDisplays().Where("UID_DialogTableUnion = 'TSB-T-" + Type + "HasUNSGroup'");
+var groupTables = _Connection.Session.Source().GetCollection(queryGroupTables);
+foreach (var groupTable in groupTables)
+{
+	dataProvider.AddMemberRelationTable(groupTable.GetValue&lt;string&gt;("TableName"), "UID_" + Type, "AddPermission", "RemovePermission", "ObjectHasPermission");
+}
+</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="Action3" ObjectType="ActionSequence">
+        <CodeLiteral ScriptItemUID="TSBCodeLiteral2">/* find all account tables */
+
+var queryColumnAccounts = VI.DB.Entities.Query.From("DialogTable").SelectDisplays().Where("UID_DialogTable in ( select uid_DialogTable from DialogColumn where ColumnName = 'UID_Person' and UID_DialogColumnUnionView = 'TSB-AE6E9A043A6642A9A9BFCFB8BB383737')");
+var columnAccounts = _Connection.Session.Source().GetCollection(queryColumnAccounts);
+foreach (var columnAccount in columnAccounts)
+{
+	dataProvider.AddAssignmentColumn(columnAccount.GetValue&lt;string&gt;("TableName"), "UID_Person", "AddAccount", "RemoveAccount", "Account");
+}
+
+/* find all accounts that have belonged to the employee at one point */
+
+var queryAccounts = VI.DB.Entities.Query.From("UNSAccount").Select("XObjectKey").Where(_Connection.SqlFormatter.UidComparison("UID_Person", BaseUid));
+var accountKeys = _Connection.Session.Source().GetCollection(queryAccounts).Select(q =&gt; new DbObjectKey(q.GetValue&lt;string&gt;("XObjectKey")));
+
+foreach (var accountKey in accountKeys)
+{
+    // make a new data provider for this account
+	var childDataProvider = new QBM.CompositionApi.History.HistoryDataProvider(_Connection.Session, accountKey.Tablename, accountKey.Keys[0]);
+	AddGroupMembership(childDataProvider, accountKey);
+		
+	providers.Add(accountKey, childDataProvider);
+}</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="20">
+        <CodeLiteral ScriptItemUID="TSBCodeLiteral3">// add *AccountIn*Group tables -&gt; this runs even if the base object is not a group
+
+AddAccountMembership(dataProvider, new DbObjectKey(_Type, BaseUid));
+</CodeLiteral>
+      </AddObject>
+      <AddObject ObjectID="ColumnLimitedValues1" ObjectType="ColumnLimitedValues">
+        <ColumnLimitedValue Name="AddAccount" Display="translate(&quot;#LDS#Account created&quot;)" Comment="" />
+        <ColumnLimitedValue Name="RemoveAccount" Display="translate(&quot;#LDS#Account deleted&quot;)" Comment="" />
+      </AddObject>
+      <AddObject ObjectID="ColumnLimitedValues3" ObjectType="ColumnLimitedValues">
+        <ColumnLimitedValue Name="Account" Display="translate(&quot;#LDS#Account&quot;)" Comment="" />
+      </AddObject>
+      <AddObject ObjectID="CompilationSettings1" ObjectType="CompilationSettings">
+        <TypeMember>internal void AddGroupMembership(QBM.CompositionApi.History.HistoryDataProvider provider, IDbObjectKey accountKey)
+{
+	/* find *AccountIn*Group table for this account type */
+	AddMembershipHelper(provider, accountKey, "TSB-T-UNSAccount", "AddPermission", "RemovePermission", "ObjectHasPermission");
+}
+
+internal void AddAccountMembership(QBM.CompositionApi.History.HistoryDataProvider provider, IDbObjectKey groupKey)
+{
+	/* find *AccountIn*Group table for this group type */
+	AddMembershipHelper(provider, groupKey, "TSB-T-UNSGroup", "AddPermission", "RemovePermission", "ObjectHasPermission");
+}
+
+private void AddMembershipHelper(QBM.CompositionApi.History.HistoryDataProvider provider, IDbObjectKey key, string uidTable, string id1, string id2, string id3)
+{
+		var queryasgnTables = VI.DB.Entities.Query.From("DialogTable").SelectDisplays().Where("uid_dialogtable in ( select dt.uid_dialogtable from dialogtable dt"
+	   + " join QBM_VQBMRelation r on r.UID_DialogTableChild = dt.UID_DialogTable"
+	   + " join dialogtable dtparent on dtparent.UID_DialogTable = r.UID_DialogTableParent"
+       + " where dt.UID_DialogTableUnion = 'TSB-T-UNSAccountInUNSGroup' and dtparent.TableName = '"+ key.Tablename +"'"
+	   + " and dtparent.UID_DialogTableUnion = '" + uidTable + "')");
+
+	var tbls = _Connection.Session.Source().GetCollection(queryasgnTables);
+	foreach (var tbl in tbls)
+	{
+		var tableName = tbl.GetValue&lt;string&gt;("TableName");
+		var columnName = "UID_" + key.Tablename;
+		
+		// 26358: special handling for these tables
+		if (Equals("HelperSAPUserInSAPHRP", tableName))
+			tableName = "SAPUserInSAPHRP";
+		if (Equals("HelperSAPUserInSAPRole", tableName))
+			tableName = "SAPUserInSAPRole";
+		
+		if (Equals("SAPUserInSAPRole", tableName) &amp;&amp; Equals("UID_SAPRole", columnName))
+			columnName = "ObjectKeySAPRole";
+
+		if (Equals("SAPUserInSAPHRP", tableName) &amp;&amp; Equals("UID_SAPHRP", columnName))
+			columnName = "ObjectKeySAPHRP";
+				
+		provider.AddMemberRelationTable(tableName, columnName, id1, id2, id3);
+	}
+}</TypeMember>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

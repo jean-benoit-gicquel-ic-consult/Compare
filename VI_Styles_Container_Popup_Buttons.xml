@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Popup_Buttons" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="modal-footer" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.qui-modal-dialog .modal-footer {  background: inherit; padding: 10px 0 0 0;}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

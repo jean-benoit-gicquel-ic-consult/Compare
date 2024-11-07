@@ -1,0 +1,64 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="TSB_Audit_Responsibilities_Ext">
+    <Extensions>
+      <AddObject ObjectID="Action6" ObjectType="ActionSequence" SortOrder="100">
+        <ActionSequence ScriptItemUID="TSBAction1">
+          <LoadTable DataTable="TSBVUNSRoot" ScriptItemUID="TSBLoadTable1">
+            <DbObjectLoadType ScriptItemUID="TSBDbObjectLoadType1" ConvertToInteractive="false" />
+          </LoadTable>
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableDbObject Table="TSBVUNSRoot" Class="TSBVUNSRoot" ScriptItemUID="TSBDataTableDbObject1">
+          <ActionSequence ScriptItemUID="TSBAction3" />
+        </DataTableDbObject>
+      </AddObject>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="40">
+        <DataTableView Table="NameSpace" ViewExpression="select distinct (NamespaceIdentifier) from TSBVUNSRoot" ScriptItemUID="DataTableView1" PrimaryKeyColumn="pk">
+          <Column Name="NamespaceIdentifier" ScriptItemUID="Column8" DataType="System.String" />
+          <Column Name="pk" ScriptItemUID="Column9" DataType="System.String" />
+          <Column DataType="System.String" Name="Caption" ScriptItemUID="TSBColumn1" DataSource="Expression" Expression="IsNullOrEmpty(&#xD;&#xA;SingleProperty(&quot;dprnamespace&quot;,&quot;description&quot;,Format(&quot;UID_DPRNameSpace in(select UID_DPRNameSpace from unsroot where uid_unsroot = '{0}')&quot;, select top 1 uid_unsroot from TSBVUNSRoot where NamespaceIdentifier in(from NameSpace select current NamespaceIdentifier))),&#xD;&#xA;select top 1 NamespaceIdentifier from TSBVUNSRoot where NamespaceIdentifier in(from NameSpace select current NamespaceIdentifier)&#xD;&#xA;)" />
+        </DataTableView>
+      </AddObject>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="55">
+        <Label ScriptItemUID="TSBLabel1" Text="translate('#LDS#Target Systems')" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="TagName" Value="h3" />
+          </HtmlAttributes>
+        </Label>
+        <Container ScriptItemUID="TSBContainer1" ItemUID="Target Systems" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute ScriptItemUID="TSBHtmlAttribute1" Name="&quot;style&quot;" Value="&quot;max-width: 1480px; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;&quot;" />
+          </HtmlAttributes>
+          <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="NameSpace" OrderBy="'Caption'" WithoutParentContainer="true">
+            <ControlReferenceContainer ID="QBM_Common_Tile" ScriptItemUID="ControlRef17" ItemUID="System Entitlements">
+              <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="OnClick">
+                <ActionComponent ScriptItemUID="TSBAction2">
+                  <Update DataTable="Vars" DataColumn="Filter" Value="&quot;UNSGroup&quot;" ScriptItemUID="TSBUpdate2" />
+                  <Update DataTable="Vars" DataColumn="DbWhereClause" Value="SqlInWithFormat(&quot;UID_UNSRoot&quot;,&quot;String&quot;,&quot;NonUnicodeLiterals&quot;,select uid_unsroot from TSBVUNSRoot where NamespaceIdentifier in(from NameSpace select current NamespaceIdentifier))" ScriptItemUID="TSBUpdate3" />
+                  <Update DataColumn="NamespaceIdentifier" DataTable="Vars" ScriptItemUID="TSBUpdate1" Value="from NameSpace select current NamespaceIdentifier" />
+                  <Update DataTable="Vars" DataColumn="Title" Value="IsNullOrEmpty(&#xD;&#xA;SingleProperty(&quot;dprnamespace&quot;,&quot;description&quot;,Format(&quot;UID_DPRNameSpace in(select UID_DPRNameSpace from unsroot where uid_unsroot = '{0}')&quot;, select top 1 uid_unsroot from TSBVUNSRoot where NamespaceIdentifier in(from NameSpace select current NamespaceIdentifier))),&#xD;&#xA;select top 1 NamespaceIdentifier from TSBVUNSRoot where NamespaceIdentifier in(from NameSpace select current NamespaceIdentifier)&#xD;&#xA;)" ScriptItemUID="TSBUpdate4" />
+                  <Redirect FormID="F2" ScriptItemUID="TSBRedirect1" />
+                </ActionComponent>
+              </VirtualControlMapping>
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping3" ID="Caption()" Value="select current caption from namespace" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping7" ID="ImageType()" Value="'TableName'" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping8" ID="Identifier()" Value="from NameSpace select current NamespaceIdentifier" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping9" ID="Image()" Value="select top 1 GetObjectKeyTable(xobjectkey) from TSBVUNSRoot where NamespaceIdentifier in(from NameSpace select current NamespaceIdentifier)" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping10" ID="ContentType()" Value="'Text'" />
+              <VirtualFunctionMapping ScriptItemUID="TSBVirtualFunctionMapping11" ID="Size()" Value="'Square'" />
+            </ControlReferenceContainer>
+          </ContainerTemplate>
+        </Container>
+      </AddObject>
+      <AddObject ObjectID="DataTableSingleRow1" ObjectType="DataTableSingleRow" SortOrder="55">
+        <Column DataType="System.String" Name="NamespaceIdentifier" ScriptItemUID="TSBColumn3" />
+      </AddObject>
+      <AddObject ObjectID="Action15" ObjectType="ActionSequence" SortOrder="15">
+        <ActionSequence ScriptItemUID="TSBAction4" Condition="from Vars select Filter = &quot;UNSGroup&quot;">
+          <Update DataColumn="HelpChapterID" DataTable="Vars" Value="--Responsibilities &gt; Auditing &gt; SAP&#xD;&#xA;if(from Vars select NamespaceIdentifier = &quot;SAP&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Active Directory&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;ADS&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Privileged Account Management&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;PAG&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; G Suite&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;GoogleApps&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; LDAP&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;LDAP&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; IBM Notes&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;NDO&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Azure Active Directory&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;AzureAD&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; Unix&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;Unix&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;&#xD;&#xA;&#xD;&#xA;--Responsibilities &gt; Auditing &gt; CustomTargetSystemType&#xD;&#xA;else if(from Vars select NamespaceIdentifier = &quot;CustomTargetSystemType&quot;) then&#xD;&#xA;   &quot;F3B52713-34A2-4422-9BC4-4DCF8A802900&quot;" ScriptItemUID="TSBUpdate6" />
+        </ActionSequence>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

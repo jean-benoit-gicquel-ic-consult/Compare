@@ -1,0 +1,191 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="3cebb972-fae4-0607-0b4b-d818a5639d86">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_Search" MigrationNotes="DIALOGCONFIGPARM;" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <NamespaceImport Namespace="System.Collections.Generic" />
+        <TypeMember>internal VI.WebRuntime.Data.SearchHelper _helper;</TypeMember>
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action26">
+        <Update DataTable="Search" DataColumn="Text" Value="SearchTerm()" ScriptItemUID="Update3" />
+        <ActionSequence ScriptItemUID="Action2" ItemUID="Configure search tables">
+          <Delete DataTable="Tables" ScriptItemUID="Delete1" />
+        </ActionSequence>
+        <CodeLiteral ScriptItemUID="CodeLiteral1">_helper = new VI.WebRuntime.Data.SearchHelper();
+
+foreach (var entry in Tables)
+{
+    var dbWhere = entry.GetValue("DbWhereClause");
+	var name = entry.GetValue("Name");
+	_helper.Tables.Add(name);
+	if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(dbWhere)){
+		continue;}
+	
+	_helper.AdditionalWhereClauseByTable[name] = dbWhere;
+}</CodeLiteral>
+        <DataEventHandler DataTable="Search" ScriptItemUID="DataEventHandler1" Operation="Update">
+          <ActionSequence ScriptItemUID="Action3">
+            <CallAction ActionID="RunSearch" ScriptItemUID="Call2" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="Text" />
+        </DataEventHandler>
+      </ActionSequence>
+      <FormGroup ScriptItemUID="FormGroup1">
+        <Form ID="SearchResults" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Search results&quot;)" ScriptItemUID="Form1">
+          <ActionSequence ScriptItemUID="Action1" />
+          <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+            <Label Text="translate(&quot;#LDS#Search results&quot;)" ScriptItemUID="Label1" />
+          </PagePartContainer>
+          <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+            <Container ScriptItemUID="Container1">
+              <TextBox DataTable="Search" DataColumn="Text" ScriptItemUID="TextBox1" ImmediateChange="true" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot;autofocus&quot;" ScriptItemUID="HtmlAttribute2" Value="&quot;autofocus&quot;" />
+                </HtmlAttributes>
+              </TextBox>
+            </Container>
+            <Container ScriptItemUID="Container2" IsBeginRenderPart="true">
+              <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
+                <Action ScriptItemUID="ActionA">
+                  <CallAction ActionID="RunSearch" ScriptItemUID="Call1" />
+                </Action>
+              </Activator>
+            </Container>
+            <Container ScriptItemUID="Container3">
+              <Grid ScriptItemUID="Grid1">
+                <GridBand DataTable="Results" OrderBy="'MatchScore desc'" ScriptItemUID="GridBand1" DisplayHeader="Always" EnableCustomAttributes="true" EnableGridViewSetting="false" RowSelection="Action" RowSelectionActive="">
+                  <HtmlAttributes>
+                    <Property Name="ApplyFilledHeight" Value="true" />
+                  </HtmlAttributes>
+                  <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
+                    <ControlList ScriptItemUID="ControlList1">
+                      <ControlReferenceControlList ID="QBM_Common_ListViewItem" ScriptItemUID="ControlRef1">
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Title">
+                          <ControlList ScriptItemUID="ControlList2">
+                            <Label Text="translate(&quot;#LDS#Name&quot;)+': '" ScriptItemUID="Label7" />
+                            <Label Text="from results select current fulldisplay" ScriptItemUID="Label8" EnableCustomAttributes="true">
+                              <HtmlAttributes>
+                                <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute3" Value="&quot;imx-icon imx-table-&quot;+(from results select current dbtablename)" />
+                              </HtmlAttributes>
+                            </Label>
+                          </ControlList>
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Actions">
+                          <ControlList ScriptItemUID="ControlList3" />
+                        </VirtualControlMapping>
+                        <VirtualControlMapping ContainerType="ControlList" VirtualControl="Content">
+                          <ControlList ScriptItemUID="ControlList4">
+                            <LayoutPanel ScriptItemUID="LayoutPanel1">
+                              <Label Text="translate(&quot;#LDS#Type&quot;)" ScriptItemUID="Label9" />
+                              <Label Text="from results select current typename" ScriptItemUID="Label10" />
+                            </LayoutPanel>
+                          </ControlList>
+                        </VirtualControlMapping>
+                      </ControlReferenceControlList>
+                    </ControlList>
+                  </GridBandListView>
+                  <SelectionAction ScriptItemUID="ServerActionCall3">
+                    <Update DataTable="Search" DataColumn="ObjectKeySelected" Value="from results select current objectwalker(&quot;XObjectKey&quot;)" ScriptItemUID="Update4" />
+                    <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" ScriptItemUID="Redirect2">
+                      <RedirectParameter Name="'ObjectKey'" Value="from results select current objectwalker(&quot;XObjectKey&quot;)" />
+                    </Redirect>
+                  </SelectionAction>
+                  <GridFilters ScriptItemUID="GridFilters1" />
+                  <GridRows>
+                    <GridHeaderRow ScriptItemUID="GridHeaderRow1" Condition="from search select islimitreached">
+                      <Cell ScriptItemUID="Cell3" ColSpan="&quot;*&quot;">
+                        <Label ScriptItemUID="Label2" Text="{{ VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;ITranslator&gt;().TranslateControlText(VI.WebRuntime.TranslatableKeys.TooManySearchResults) }}" />
+                      </Cell>
+                    </GridHeaderRow>
+                  </GridRows>
+                  <GridColumn SortColumn="FullDisplay" AutoFilterColumn="FullDisplay" ScriptItemUID="Column5">
+                    <GridColumnHeader ScriptItemUID="wctl2">
+                      <Label Text="translate(&quot;#LDS#Name&quot;)" ScriptItemUID="Label5" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell2">
+                      <Label Text="from results select current fulldisplay" ScriptItemUID="Label6" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="&quot;imx-icon imx-table-&quot;+(from results select current dbtablename)" />
+                        </HtmlAttributes>
+                      </Label>
+                    </Cell>
+                  </GridColumn>
+                  <GridColumn SortColumn="TypeName" AutoFilterColumn="TypeName" Width="&quot;200px&quot;" ScriptItemUID="Column4">
+                    <GridColumnHeader ScriptItemUID="wctl1">
+                      <Label Text="translate(&quot;#LDS#Type&quot;)" ScriptItemUID="Label3" />
+                    </GridColumnHeader>
+                    <Cell ScriptItemUID="Cell1">
+                      <Label Text="from results select current typename" ScriptItemUID="Label4" />
+                    </Cell>
+                  </GridColumn>
+                </GridBand>
+              </Grid>
+            </Container>
+          </PagePartContainer>
+        </Form>
+      </FormGroup>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableSingleRow Table="Search" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="Text" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="ObjectKeySelected" ScriptItemUID="Column2" DataType="System.String" />
+          <Column Name="IsLimitReached" DataType="System.String" ScriptItemUID="Column11" />
+        </DataTableSingleRow>
+        <DataTableGeneric Table="Results" ScriptItemUID="DataTableGeneric1">
+          <Column Name="dbtablename" ScriptItemUID="Column3" DataType="System.String" DataSource="Expression" Expression="dbtable()" />
+          <Column Name="TypeName" Expression="datacaptionsingle(dbtablename+&quot;&quot;)" Caption="translate(&quot;#LDS#Type&quot;)" DataSource="Expression" ScriptItemUID="Column6" DataType="System.String" />
+          <Column Name="FullDisplay" Expression="displaylong()" DataSource="Expression" ScriptItemUID="Column7" DataType="System.String" Caption="translate(&quot;#LDS#Name&quot;)" />
+          <Column Name="MatchScore" DataType="System.Double" ScriptItemUID="Column8" MinLength="" MaxLength="" />
+        </DataTableGeneric>
+        <DataTableCustom Table="Tables" ScriptItemUID="DataTableCustom1" TriggerUpdates="Never">
+          <Column Name="Name" DataType="System.String" ScriptItemUID="Column9" />
+          <Column Name="DbWhereClause" DataType="System.String" ScriptItemUID="Column10" />
+        </DataTableCustom>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="RunSearch">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action11">
+              <CodeLiteral ScriptItemUID="CodeLiteral4">var searchTerm = DataContext.Search.GetColumn("Text").GetValue(DataContext.Search.SingleRow).String;
+
+var sResult = await DataContext._helper.SearchAsync(searchTerm, ct).ConfigureAwait(false);
+
+var whereClauses = DataContext._helper.GetWhereClausesByTable(sResult);
+
+DataContext.Results.Delete();
+var opts = new LoadTableOptions { RemoveDeleted = false };
+foreach (var tableName in whereClauses.Keys)
+{
+	await DataContext.Results.LoadAsync(new DbObjectLoadInfo(tableName, whereClauses[tableName]), opts, ct).ConfigureAwait(false);
+}
+
+var countRows = DataContext.Results.Count();
+var isLimitReached = DataContext._helper.Take &lt;= sResult.scoreDict.Count;
+DataContext.Search.GetColumn("IsLimitReached").SetValue(DataContext.Search.SingleRow, isLimitReached);
+</CodeLiteral>
+              <CodeLiteral ScriptItemUID="CodeLiteral3">// Set Results and matchscore
+var scoreColumn = TableStore.GetLocalColumn(this.DataContext.Results, "matchscore");
+
+foreach (var result in DataContext.Results)
+{
+	var _objectKey = ((IDbObjectRow) result).ObjectKey.ToString();
+	float score;
+
+	if (sResult.scoreDict.TryGetValue(_objectKey, out score)) {
+			 scoreColumn.SetValue(result, score);
+	}
+}
+
+</CodeLiteral>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualFunction Signature="SearchTerm()" DataType="System.String" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

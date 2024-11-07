@@ -1,0 +1,92 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b3p0hQLIPM6T+tU8n1ivHg==">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_PropertyEditor" MigrationNotes="DMLREPLACE;" DataTableDebugDisplay="EditTable" DoNotReuseData="true">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1">
+        <ObjectInclude ObjectIncludeID="VI_Styles_LayoutPanel_Default" />
+      </CompilationSettings>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <ReadOnlyTableModifier DataTable="EditTable" Condition="IsReadOnly()" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="primarykey()=(select current primarykey() from edittable)">
+          <ColumnList ScriptItemUID="ColumnList2">
+            <ExpressionColumnList ColumnList="PropertyList()" ScriptItemUID="ExpressionColumnList2" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </ActionSequence>
+      <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;LayoutpPropItems&quot;" />
+        </HtmlAttributes>
+        <ContainerColumnTemplate ScriptItemUID="ContainerColumnTemplate1" DataTable="EditTable">
+          <ColumnList ScriptItemUID="ColumnList1">
+            <ExpressionColumnList ColumnList="PropertyList()" ScriptItemUID="ExpressionColumnList1" />
+          </ColumnList>
+          <Container ScriptItemUID="Container2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute ScriptItemUID="HtmlAttribute4" Name="&quot;class&quot;" Value="&quot;LayoutpPropRow&quot;" />
+            </HtmlAttributes>
+            <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;class&quot;" Value="&quot;imx-layoutpanel-cell imx-layoutpanel-mobileblock LayoutpPropCol LayoutpPropCol0 imx-flex-row&quot;" />
+              </HtmlAttributes>
+              <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef1">
+                <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1">
+                  <VirtualColumnMapping VirtualColumn="EditColumn" DataColumn="currentcolumn" />
+                </VirtualTableMapping>
+                <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="CssClassName()" Value="&quot;imx-flex-child&quot;" />
+              </ControlReferenceContainer>
+              <Container ScriptItemUID="Container8" Condition="from edittable select current (getdatastate(currentcolumn)=&quot;Changed&quot;)" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <Property Name="TagName" Value="span" />
+                </HtmlAttributes>
+                <HoverPanel ScriptItemUID="Popover1" HoverMode="Hover">
+                  <Controls ScriptItemUID="Container9">
+                    <Container ScriptItemUID="Container11" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute ScriptItemUID="HtmlAttribute5" Name="&quot;class&quot;" Value="&quot;imx-icon imx-icon-data-changed&quot;" />
+                        <Property Name="TagName" Value="span" />
+                      </HtmlAttributes>
+                    </Container>
+                  </Controls>
+                  <ControlsHover ScriptItemUID="Container10">
+                    <Label ScriptItemUID="Label2" Text="translate(&quot;#LDS#The property value has been changed.&quot;)" />
+                  </ControlsHover>
+                </HoverPanel>
+              </Container>
+            </Container>
+            <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute ScriptItemUID="HtmlAttribute2" Name="&quot;class&quot;" Value="&quot;imx-layoutpanel-cell imx-layoutpanel-mobileblock LayoutpPropCol LayoutpPropCol1&quot;" />
+              </HtmlAttributes>
+              <Container Condition="select current not(cansee(currentcolumn)) from edittable" ScriptItemUID="Container5">
+                <Label Text="select current displayvalue(currentcolumn) from edittable" ScriptItemUID="Label1" />
+              </Container>
+              <Container Condition="from edittable select current&#xD;&#xA;(&#xD;&#xA;cansee(currentcolumn) and (canedit(currentcolumn) or not(ShowReadOnlyAsViewer()))&#xD;&#xA;)" ScriptItemUID="Container6">
+                <ColumnEditor DataTable="EditTable" DataColumn="currentcolumn" ScriptItemUID="ColumnEditor2">
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping1" />
+                </ColumnEditor>
+                <Validator DataTable="EditTable" DataColumn="currentcolumn" ScriptItemUID="Validator1" />
+              </Container>
+              <Container Condition="from edittable select current&#xD;&#xA;(&#xD;&#xA;cansee(currentcolumn) and (not(canedit(currentcolumn))) and ShowReadOnlyAsViewer()&#xD;&#xA;)&#xD;&#xA;" ScriptItemUID="Container7">
+                <ColumnEditor DataTable="EditTable" DataColumn="currentcolumn" ScriptItemUID="ColumnEditor1" Type="IsForView">
+                  <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping2" />
+                </ColumnEditor>
+              </Container>
+            </Container>
+          </Container>
+        </ContainerColumnTemplate>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="EditTable" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="PropertyList()" PropertyListForTable="EditTable" DataType="System.String" TriggerUpdates="Never" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="EnableNavigation()" DataType="System.Boolean" TriggerUpdates="Never" />
+      <VirtualFunction Signature="ShowReadOnlyAsViewer()" DataType="System.Boolean" Comment="When true, read-only fields will be displayed with a property viewer control. Otherwise, a read-only editor control will be displayed." TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

@@ -1,0 +1,10 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_Inline" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="TagName" Value="span" Comment="" />
+    <Property Name="CssClassName" Value="Inline" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.Inline div		{ display: inline; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

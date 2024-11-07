@@ -1,0 +1,217 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <Context ID="VI_Compliance_Report" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="&quot;9754C64C-00F6-429C-BC3C-89B890E0F7F4&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ContextParameters ScriptItemUID="ContextParameters1" />
+    </ContextConfiguration>
+    <Tables ScriptItemUID="Tables1">
+      <DataTableSingleRow Table="ReportParameters" ScriptItemUID="DataTableSingleRow1">
+        <Column Name="Area" ScriptItemUID="Column1" DataType="System.String" />
+        <Column Name="Group" ScriptItemUID="Column2" DataType="System.String" />
+        <Column Name="Rule" ScriptItemUID="Column3" DataType="System.String" />
+        <Column Name="Ruler" ScriptItemUID="Column4" DataType="System.String" />
+        <Column Name="RulerDisplay" ScriptItemUID="Column5" DataType="System.String" />
+        <Column Name="RuleResponsible" ScriptItemUID="Column6" DataType="System.String" />
+        <Column Name="RuleResponsibleDisplay" ScriptItemUID="Column7" DataType="System.String" />
+        <Column Name="DepartmentUID" ScriptItemUID="Column8" DataType="System.String" />
+        <Column Name="ReportName" ScriptItemUID="Column9" DataType="System.String" />
+        <Column Name="LastCompiledReportUID" ScriptItemUID="Column10" DataType="System.String" />
+      </DataTableSingleRow>
+      <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow2">
+        <Column Name="ComplianceRuleFilter" ScriptItemUID="Column11" DataType="System.String" />
+        <Column Name="GroupFilter" ScriptItemUID="Column12" DataType="System.String" />
+        <Column Name="AreaFilter" ScriptItemUID="Column13" DataType="System.String" />
+        <Column Name="Page" ScriptItemUID="Column14" DataType="System.String" />
+        <Column Name="FrameworkOwner" Expression="exists(&quot;compliancearea&quot;, format(&quot;uid_orgresponsible in ( select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where {0} )) &quot;, sqlcompareuid(&quot;uid_person&quot;, GetUser())))" DataSource="Expression" ScriptItemUID="Column15" DataType="System.Boolean" />
+        <Column Name="DepartmentOwner" Expression="exists(&quot;department&quot;, format(&quot;uid_department in (select uid_org from helperheadorg where uid_personhead = {0})&quot;, sqlformatvalue(getuser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;)))" DataSource="Expression" ScriptItemUID="Column16" DataType="System.Boolean" />
+        <Column Name="RuleOwner" Expression="exists(&quot;compliancerule&quot;, &quot;uid_compliancerule in (&#xD;&#xA;select cr.uid_compliancerule from compliancerule cr &#xD;&#xA;join aerolecollection col on col.uid_aerole = cr.uid_orgresponsible&#xD;&#xA;join personinaerole pio on pio.uid_aerole = col.uid_parentaerole where pio.uid_person = '&quot; +&#xD;&#xA;GetUser() + &quot;' and &quot;+&#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;cr.IsInactive&quot;,false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;cr.IsWorkingCopy&quot;, false, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;+&quot;)&quot;)" DataSource="Expression" ScriptItemUID="Column17" DataType="System.Boolean" />
+        <Column Name="ExceptionApprover" Expression="exists(&quot;compliancerule&quot;, &#xD;&#xA;sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsExceptionAllowed&quot;,true,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;&quot;uid_orgruler in&#xD;&#xA;(select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = '&quot; +&#xD;&#xA;GetUser() + &quot;'))&quot;))" DataSource="Expression" ScriptItemUID="Column18" DataType="System.Boolean" />
+        <Column Name="C_SOfficer" Expression="exists(&quot;personinaerole&quot;, format(&quot;uid_aerole = 'CAP-AEROLE-IAG-CISO' and uid_person = '{0}'&quot;,GetUser()))&#xD;&#xA;or&#xD;&#xA;exists(&quot;personinaerole&quot;, format(&quot;uid_aerole = 'CAP-AEROLE-AUDITING-AUDITOR' and uid_person = '{0}'&quot;,GetUser()))" DataSource="Expression" ScriptItemUID="Column19" DataType="System.Boolean" />
+        <Column Name="UID_SELECTED" DataType="System.String" ScriptItemUID="Column20" />
+      </DataTableSingleRow>
+      <DataTableDbObject Class="ComplianceRule" Table="ComplianceRule" ScriptItemUID="DataTableDbObject1">
+        <ActionSequence ScriptItemUID="Action1" />
+      </DataTableDbObject>
+    </Tables>
+    <Controls ScriptItemUID="Controls1">
+      <Control ID="ShowReport">
+        <LocalControlContext ContainerType="ActionComponent">
+          <ActionComponent ScriptItemUID="Action8">
+            <ActionSequence ScriptItemUID="Action9">
+              <Update DataTable="ReportParameters" DataColumn="LastCompiledReportUID" Value="newid()" ScriptItemUID="Update6" />
+              <PrepareReport ReportName="select current reportname from reportparameters" CompiledReportUID="select lastcompiledreportuid from reportparameters">
+                <ParameterFree Name="'Area'" Value="select area from reportparameters" ScriptItemUID="ParameterFree1" />
+                <ParameterFree Name="'CGroup'" Value="select group from reportparameters" ScriptItemUID="ParameterFree2" />
+                <ParameterFree Name="'Rule'" Value="select rule from reportparameters" ScriptItemUID="ParameterFree3" />
+                <ParameterFree Name="'Ruler'" Value="select ruler from reportparameters" ScriptItemUID="ParameterFree4" />
+                <ParameterFree Name="'RulerDisplay'" Value="select rulerdisplay from reportparameters" ScriptItemUID="ParameterFree5" />
+                <ParameterFree Name="'RuleResponsible'" Value="select ruleresponsible from reportparameters" ScriptItemUID="ParameterFree6" />
+                <ParameterFree Name="'RuleResponsibleDisplay'" Value="select ruleresponsibledisplay from reportparameters" ScriptItemUID="ParameterFree7" />
+                <ParameterFree Name="'DepartmentUID'" Value="select departmentuid from reportparameters" ScriptItemUID="ParameterFree8" />
+              </PrepareReport>
+              <Redirect Target="Context" InNewFrame="true" AbortExecution="false" PopupID="Report" Width="'800'" Height="'400'" AllowReturnToThisContext="true" ContextID="VI_Common_ShowReport" ScriptItemUID="Redirect1">
+                <RedirectParameter Name="'uid_compiledreport'" Value="from ReportParameters select LastCompiledReportUID" />
+              </Redirect>
+            </ActionSequence>
+          </ActionComponent>
+        </LocalControlContext>
+      </Control>
+    </Controls>
+    <Functions ScriptItemUID="Functions1" />
+    <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+      <DataEventHandler DataTable="Container" Operation="Update" ScriptItemUID="DataEventHandler1">
+        <ActionSequence ScriptItemUID="Action10">
+          <ActionSequence Condition="&quot;FrameworkOwner&quot; = from Container select Page" ItemUID="Framework" ScriptItemUID="Action11">
+            <LoadTable DataTable="ComplianceRule" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;&#xD;&#xA;UID_ComplianceRule in(&#xD;&#xA;   select UID_ComplianceRule from ComplianceRuleInArea where UID_ComplianceArea in(&#xD;&#xA;      select UID_ComplianceArea from ComplianceArea where uid_orgresponsible in(&#xD;&#xA;         select uid_aerole from aerolecollection where uid_parentaerole in(&#xD;&#xA;	        select pio.uid_aerole from personinaerole pio where pio.uid_person = '{0}'&#xD;&#xA;	     )&#xD;&#xA;      )&#xD;&#xA;   )&#xD;&#xA;)&#xD;&#xA;&quot;,GetUser())&#xD;&#xA;)" ScriptItemUID="LoadTable1">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;DepartmentOwner&quot; = from Container select Page" ItemUID="Department" ScriptItemUID="Action12">
+            <LoadTable DataTable="ComplianceRule" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;uid_noncompliance in (&#xD;&#xA;select pinc.uid_noncompliance from personinnoncompliance pinc &#xD;&#xA;join Person p on pinc.UID_Person = p.UID_Person&#xD;&#xA;join helperheadorg hho on p.UID_Department = hho.UID_Org and hho.uid_personhead = '{0}')&quot;,GetUser())&#xD;&#xA;) " ScriptItemUID="LoadTable2">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;RuleOwner&quot; = from Container select Page" ItemUID="Rule" ScriptItemUID="Action13">
+            <LoadTable DataTable="ComplianceRule" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;uid_orgresponsible in (select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = {0}))&quot;, sqlformatvalue(GetUser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable3">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;ExceptionApprover&quot; = from Container select Page" ItemUID="Approver" ScriptItemUID="Action14">
+            <LoadTable DataTable="ComplianceRule" WhereClause="sqland(&#xD;&#xA;sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),&#xD;&#xA;sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;),&#xD;&#xA;format(&quot;uid_orgruler in (select uid_aerole from aerolecollection where uid_parentaerole in (select uid_aerole from personinaerole where uid_person = {0}))&quot;, sqlformatvalue(GetUser(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable4">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType4" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+          <ActionSequence Condition="&quot;C_SOfficer&quot; = from Container select Page" ItemUID="C_SOfficer" ScriptItemUID="Action15">
+            <LoadTable DataTable="ComplianceRule" WhereClause="sqland(sqlcompare(&quot;IsInactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;),sqlcompare(&quot;IsWorkingCopy&quot;, false,&quot;bool&quot;,&quot;equal&quot;))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="LoadTable5">
+              <DbObjectLoadType ScriptItemUID="DbObjectLoadType5" ConvertToInteractive="false" />
+            </LoadTable>
+          </ActionSequence>
+        </ActionSequence>
+        <DataEventHandlerColumn DataColumn="Page" />
+      </DataEventHandler>
+    </DataEventHandlers>
+    <ActionSequence ScriptItemUID="Action2">
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where FrameworkOwner" ItemUID="Page not Set FrameworkOwner" ScriptItemUID="Action3">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;FrameworkOwner&quot;" ScriptItemUID="Update1" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where DepartmentOwner" ItemUID="Page not Set DepartmentOwner" ScriptItemUID="Action4">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;DepartmentOwner&quot;" ScriptItemUID="Update2" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where RuleOwner" ItemUID="Page not Set RuleOwner" ScriptItemUID="Action5">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;RuleOwner&quot;" ScriptItemUID="Update3" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where ExceptionApprover&#xA;" ItemUID="Page not Set ExceptionApprover" ScriptItemUID="Action6">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;ExceptionApprover&quot;" ScriptItemUID="Update4" />
+      </ActionSequence>
+      <ActionSequence Condition="from Container select IsNullOrEmpty(Page) where C_SOfficer" ScriptItemUID="Action7">
+        <Update DataTable="Container" DataColumn="Page" Value="&quot;C_SOfficer&quot;" ScriptItemUID="Update5" />
+      </ActionSequence>
+    </ActionSequence>
+    <Forms ScriptItemUID="Forms1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Rule Violations')" ScriptItemUID="Form1">
+        <ActionSequence ScriptItemUID="Action16" />
+        <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
+          <Container ScriptItemUID="Container1">
+            <Label Text="translate('#LDS#Rule Violations')" ScriptItemUID="Label1" />
+          </Container>
+        </PagePartContainer>
+        <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
+          <Container ScriptItemUID="Container2">
+            <Container Layout="'VI_Styles_Container_Paragraph'" Condition="1 &lt; &#xD;&#xA;(&#xD;&#xA;(isnull(from Container select 1 where ExceptionApprover,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where DepartmentOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where FrameworkOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where RuleOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where C_SOfficer,0))&#xD;&#xA;)" ScriptItemUID="Container3">
+              <Container Condition="from Container select FrameworkOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4">
+                <RadioButton DataTable="Container" DataColumn="Page" Text="translate('#LDS#By Framework')" ScriptItemUID="RadioButton5" DataValue="&quot;FrameworkOwner&quot;" />
+              </Container>
+              <Container Condition="from Container select DepartmentOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container5">
+                <RadioButton DataTable="Container" DataColumn="Page" Text="translate(&quot;#LDS#By department&quot;)" ScriptItemUID="RadioButton1" DataValue="&quot;DepartmentOwner&quot;" />
+              </Container>
+              <Container Condition="from Container select RuleOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container6">
+                <RadioButton DataTable="Container" DataColumn="Page" Text="translate(&quot;#LDS#By rule&quot;)" ScriptItemUID="RadioButton3" DataValue="&quot;RuleOwner&quot;" />
+              </Container>
+              <Container Condition="from Container select ExceptionApprover" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container7">
+                <RadioButton DataTable="Container" DataColumn="Page" Text="translate(&quot;#LDS#By approval role&quot;)" ScriptItemUID="RadioButton2" DataValue="&quot;ExceptionApprover&quot;" />
+              </Container>
+              <Container Condition="from Container select C_SOfficer" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container8">
+                <RadioButton DataTable="Container" DataColumn="Page" Text="translate('#LDS#All compliance rules')" ScriptItemUID="RadioButton4" DataValue="&quot;C_SOfficer&quot;" />
+              </Container>
+            </Container>
+            <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container9">
+              <Container Condition="&quot;FrameworkOwner&quot; = from Container select Page" ScriptItemUID="Container10">
+                <Label Text="translate('#LDS#The following rules are assigned to frameworks which you are responsible for.')" ScriptItemUID="Label13" />
+              </Container>
+              <Container Condition="&quot;DepartmentOwner&quot; = from Container select Page" ScriptItemUID="Container11">
+                <Label Text="translate('#LDS#The following rules have been violated by employees, which belong to departments for which you are responsible.')" ScriptItemUID="Label9" />
+              </Container>
+              <Container Condition="&quot;RuleOwner&quot; = from Container select Page" ScriptItemUID="Container12">
+                <Label Text="translate('#LDS#You are responsible for the following compliance rules.')" ScriptItemUID="Label10" />
+              </Container>
+              <Container Condition="&quot;ExceptionApprover&quot; = from Container select Page" ScriptItemUID="Container13">
+                <Label Text="translate('#LDS#You are authorized to grant exceptions to the following rules.')" ScriptItemUID="Label11" />
+              </Container>
+              <Container Condition="&quot;C_SOfficer&quot; = from Container select Page" ScriptItemUID="Container14">
+                <Label Text="translate('#LDS#The following compliance rules are available in the system.')" ScriptItemUID="Label2" />
+              </Container>
+            </Container>
+            <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+              <HtmlAttributes />
+              <MasterPane ScriptItemUID="MasterPane1">
+                <Container ScriptItemUID="Container16" Layout="'VI_Styles_Container_Paragraph'">
+                  <Grid ScriptItemUID="Grid9" AllowExport="true" ExportFileName="DataCaption(&quot;compliancerule&quot;)" ExportTitle="">
+                    <ControlReferenceGridBand ID="VI_Compliance_GridRule" ScriptItemUID="ControlRef1" DataTable="ComplianceRule">
+                      <VirtualControlMapping VirtualControl="ReportRequested" ContainerType="ActionComponent">
+                        <ActionComponent ScriptItemUID="Action17">
+                          <CallAction ActionID="ShowReport" ScriptItemUID="CallAction17" />
+                        </ActionComponent>
+                      </VirtualControlMapping>
+                      <VirtualTableMapping VirtualTable="ComplianceRule" DataTable="ComplianceRule" ScriptItemUID="VirtualTableMapping1" />
+                      <VirtualTableMapping VirtualTable="TargetTable" DataTable="Container" ScriptItemUID="VirtualTableMapping2">
+                        <VirtualColumnMapping VirtualColumn="UID_SELECTED" DataColumn="UID_SELECTED" />
+                      </VirtualTableMapping>
+                      <VirtualFunctionMapping ID="RuleFilter()" Value="1=1" ScriptItemUID="VirtualFunctionMapping1" />
+                    </ControlReferenceGridBand>
+                  </Grid>
+                </Container>
+              </MasterPane>
+              <DetailPane ScriptItemUID="DetailPane1">
+                <Container ScriptItemUID="Container17">
+                  <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="ComplianceRule" WhereClause="primarykey() = ( from container select UID_SELECTED)">
+                    <Container ScriptItemUID="Container18">
+                      <ObjectSwitchContainer ObjectKey="singleproperty('DialogTable', 'XObjectKey', format(&quot;TableName = '{0}'&quot;, select current dbtable() from ComplianceRule))" ActionType="ObjectView" ScriptItemUID="ObjectSwitchContainer">
+                        <VirtualFunctionMapping ID="ShowHeading()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+                        <VirtualTableMapping VirtualTable="SourceObject" DataTable="ComplianceRule" ScriptItemUID="VirtualTableMapping4" />
+                        <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping4" />
+                      </ObjectSwitchContainer>
+                    </Container>
+                    <Container ScriptItemUID="Container15" Layout="'VI_Styles_Container_ButtonBar'">
+                      <Button Text="translate(&quot;#LDS#Show details&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Default'">
+                        <ServerActionCall ScriptItemUID="ServerActionCall1">
+                          <Redirect Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true" AbortExecution="false" ScriptItemUID="Redirect3">
+                            <RedirectParameter Name="'ObjectKey'" Value="from ComplianceRule select current XObjectKey" />
+                          </Redirect>
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate(&quot;#LDS#Report&quot;)" ScriptItemUID="Button2">
+                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                          <Update DataTable="ReportParameters" DataColumn="Rule" Value="select current uid_compliancerule from compliancerule" ScriptItemUID="Update8" />
+                          <Update DataTable="ReportParameters" DataColumn="ReportName" Value="'VI_ComplianceRule_Overview_UID'" ScriptItemUID="Update7" />
+                          <CallAction ActionID="ShowReport" ScriptItemUID="CallAction1" />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </ContainerTemplate>
+                </Container>
+                <DetailPaneHeader ScriptItemUID="DetailPaneHeader1">
+                  <ControlList ScriptItemUID="ControlList1">
+                    <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef6">
+                      <VirtualFunctionMapping ID="Value1()" Value="from ComplianceRule select top 1 display() where primarykey() = ( from container select UID_SELECTED)" ScriptItemUID="VirtualFunctionMapping5" />
+                      <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-ComplianceRule&quot;" ScriptItemUID="VirtualFunctionMapping2" />
+                    </ControlReferenceControlList>
+                  </ControlList>
+                </DetailPaneHeader>
+              </DetailPane>
+            </MasterDetailControl>
+          </Container>
+        </PagePartContainer>
+      </Form>
+    </Forms>
+  </Context>
+</WebDesigner>

@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Container_SmallText" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassName" Value="smalltext" Comment="" />
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.smalltext      { font-size: 0.9em; font-style: italic; font-weight: 100; color: %VI_Common_Color_Font_Secondary%;}</CssDocument>
+  </LayoutObject>
+</WebDesigner>

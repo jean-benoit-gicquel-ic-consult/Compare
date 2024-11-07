@@ -1,0 +1,55 @@
+﻿<WebDesigner>
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QER_ObjectView_Person">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
+      <ControlList ScriptItemUID="ControlList1">
+        <Container ScriptItemUID="Container6" Layout="'VI_Styles_Container_Heading_2'" Condition="ShowHeading()" ItemUID="Heading">
+          <Label Text="from SourceObject select current display()" ScriptItemUID="Label2" />
+        </Container>
+        <LayoutPanel ScriptItemUID="LayoutPanel1">
+          <Container ScriptItemUID="Container2" ItemUID="Picture">
+            <Container ScriptItemUID="Container8" Condition="from sourceobject select current not(isnull(jpegphoto))" Layout="'VI_Styles_Container_Inline'">
+              <Image ScriptItemUID="Image2" Source="DataSet" DataTable="SourceObject" DataColumn="JPegPhoto" EnableCustomAttributes="true" Layout="'VI_Styles_Image_NoLayout'">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="&quot; class&quot;" ScriptItemUID="Container2style" Value="&quot;imx-PersonPortrait&quot;" />
+                </HtmlAttributes>
+              </Image>
+            </Container>
+            <Container ScriptItemUID="Container1" Condition="from sourceobject select current isnull(jpegphoto)">
+              <Container ScriptItemUID="Container4" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute ScriptItemUID="HtmlAttribute3" Name="&quot;style&quot;" Value="variable(&quot; width: 96px;&#xD;&#xA;  height: 96px;&#xD;&#xA;  margin-bottom: 6px;&#xD;&#xA;  border: solid 1px %VI_Common_Color_Gray%;&quot;)" />
+                </HtmlAttributes>
+                <Image ScriptItemUID="Image1" Source="File" FileName="variable(&quot;%link%img=User_48.png&quot;)" EnableCustomAttributes="true" Layout="'VI_Styles_Image_NoLayout'">
+                  <HtmlAttributes>
+                    <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot; width: 48px;&#xD;&#xA;  height: 37px;&#xD;&#xA;  border: none;&#xD;&#xA;  padding-top: 28px;&#xD;&#xA;  padding-left: 24px;&quot;" />
+                  </HtmlAttributes>
+                </Image>
+              </Container>
+            </Container>
+          </Container>
+          <Container ScriptItemUID="Container3" />
+        </LayoutPanel>
+        <ControlReferenceContainer ID="VI_Common_PropertyViewer" ScriptItemUID="ControlRef1">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+            <ColumnList ScriptItemUID="ColumnList2">
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectView_&quot;+ dbtable(sourceobject)+&quot;_Fields&quot;)" ScriptItemUID="ExpressionColumnList1" />
+            </ColumnList>
+          </VirtualFunctionMapping>
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="SourceObject" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="EnableNavigation()" ScriptItemUID="VirtualFunctionMapping2" />
+        </ControlReferenceContainer>
+      </ControlList>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectView" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="SourceObject" Class="Person" ScriptItemUID="VirtualTableExtension1" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

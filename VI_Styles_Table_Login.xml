@@ -1,0 +1,11 @@
+﻿<WebDesigner>
+  <LayoutObject ID="VI_Styles_Table_Login" Type="Table" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Property Name="CssClassNameTableRow" Value="tableLoginRow" Comment="" />
+    <Property Name="CssClassName" Value="tableLogin" Comment="" />
+    <CssDocument CssName="CSS">.tableLogin {width: 100%; text-align: center;}
+.tableLoginRow {width: 512px; }</CssDocument>
+  </LayoutObject>
+</WebDesigner>

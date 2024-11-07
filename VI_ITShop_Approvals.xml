@@ -1,4 +1,4 @@
-﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
   <Context ID="VI_ITShop_Approvals" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="if(IsEscalationApproval())&#xD;&#xA;then&#xD;&#xA;&quot;ca3f302c-7907-422f-80c6-d4202ec4bb62&quot;&#xD;&#xA;else&#xD;&#xA;&quot;20251F94-39DD-4B2C-82DD-FB382472DFBD&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1">
@@ -541,7 +541,7 @@ DataContext.PWODecisionHistory.Invalidate();
                               </HtmlAttributes>
                               <ToolbarButton Text="translate(&quot;#LDS#More&quot;)" Tooltip="translate(&quot;#LDS#More information about this request&quot;)" ScriptItemUID="ToolbarButton1" Layout="'VI_Styles_ToolbarButton_Dropup'">
                                 <Menu ScriptItemUID="Menu1">
-                                  <MenuElement Text="translate(&quot;#LDS#Send inquiry&quot;)" Tooltip="translate(&quot;#LDS#Send inquiry for this request to another employee&quot;)" Condition="convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')&#xD;&#xA;and&#xD;&#xA;0 = (from PWOHelperPWOForRecallQuery select count() where UID_PersonWantsOrg = (from pwotodecide select current UID_PersonWantsOrg))" ScriptItemUID="MenuElement2">
+                                  <MenuElement Text="translate(&quot;#LDS#Send inquiry&quot;)" Tooltip="translate(&quot;#LDS#Send inquiry for this request to another identity&quot;)" Condition="convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')&#xD;&#xA;and&#xD;&#xA;0 = (from PWOHelperPWOForRecallQuery select count() where UID_PersonWantsOrg = (from pwotodecide select current UID_PersonWantsOrg))" ScriptItemUID="MenuElement2">
                                     <ServerActionCall ScriptItemUID="ServerActionCall2">
                                       <ActionSequence ScriptItemUID="Action3">
                                         <CallAction ActionID="VI_ITShop_QueryToPerson" ScriptItemUID="CallAction3">

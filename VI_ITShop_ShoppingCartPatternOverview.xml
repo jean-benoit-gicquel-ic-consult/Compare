@@ -3,8 +3,8 @@
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ContextParameters ScriptItemUID="ContextParameters1" />
-      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Templates&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_ITShop_Template_ManagerCondition" Description="translate('#LDS#Employees authorized to approve shopping cart templates')" LongDescription="" Type="SQL" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" />
+      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Product bundles&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_Template_ManagerCondition" Description="translate('#LDS#Identities authorized to approve product bundles')" LongDescription="" Type="SQL" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">
@@ -48,11 +48,11 @@
       </LoadTable>
     </ActionSequence>
     <Forms ScriptItemUID="Forms1">
-      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Cart Templates')" ScriptItemUID="Form1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Product Bundles')" ScriptItemUID="Form1">
         <ActionSequence ScriptItemUID="Action7" />
         <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
           <Container ScriptItemUID="Container1">
-            <Label Text="translate('#LDS#Heading Cart Templates')" ScriptItemUID="Label1" />
+            <Label Text="translate('#LDS#Heading Product Bundles')" ScriptItemUID="Label1" />
           </Container>
         </PagePartContainer>
         <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
@@ -88,7 +88,7 @@
         <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
           <ControlList ScriptItemUID="ControlList5">
             <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef5">
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Text()" Value="translate('#LDS#This pages displays an overview of available templates.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping29" ID="Text()" Value="translate('#LDS#This pages displays an overview of available product bundles.')" />
             </ControlReferenceControlList>
           </ControlList>
         </PagePartContainer>

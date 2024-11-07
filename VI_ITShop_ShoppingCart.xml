@@ -151,7 +151,7 @@ private void SetProlongationDateFromMethodParameters(System.Collections.Generic.
         <ConfigParam Key="VI_ITShop_AsyncThreshold" Type="Text" Description="translate(&quot;#LDS#Threshold for asynchronous handling of shopping carts&quot;)" LongDescription="translate(&quot;#LDS#Specifies the number of products in the shopping cart from which on the shopping cart is processed asynchronously.&quot;)" />
       </ConfigSectionDefinition>
       <ConfigSectionDefinition Name="IT Shop" Description="translate(&quot;#LDS#IT Shop&quot;)" ScriptItemUID="ConfigSectionDefinition2">
-        <ConfigParam Key="VI_ITShop_Filter_PersonOrderFor" Type="SQL" Description="translate('#LDS#Employees for whom a request can be placed')" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Filter_PersonOrderFor" Type="SQL" Description="translate('#LDS#Identities for whom a request can be placed')" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
         <ConfigParam Key="VI_ITShop_DisablePWOPriorityChange" Description="translate(&quot;#LDS#Disable priority change by recipient&quot;)" LongDescription="" />
         <ConfigParam Key="VI_ITShop_DisableHideValidUntilQERReuse" Description="translate(&quot;#LDS#Enable ValidUntil for multi-request resources&quot;)" LongDescription="" />
         <ConfigParam Key="VI_ITShop_SubmitOrderImmediately" Description="translate(&quot;#LDS#Skip confirmation to submit shopping cart when there are no warnings&quot;)" LongDescription="" />
@@ -871,7 +871,7 @@ catch(Exception exc){
                               </CallAction>
                             </ServerActionCall>
                           </MenuElement>
-                          <MenuElement Text="translate(&quot;#LDS#Create template from shopping cart&quot;)" ScriptItemUID="MenuElement1" Condition="isnull(getconfig(&quot;VI_ITShop_ProductSelectionFromTemplate&quot;),&quot;true&quot;)=&quot;true&quot;&#xD;&#xA;and&#xD;&#xA;not(from Container select IsNullOrEmpty(UID_ShoppingCartOrder))" Tooltip="translate('#LDS#Creates a new template containing the products in your shopping cart.')">
+                          <MenuElement Text="translate(&quot;#LDS#Create product bundle from shopping cart&quot;)" ScriptItemUID="MenuElement1" Condition="isnull(getconfig(&quot;VI_ITShop_ProductSelectionFromTemplate&quot;),&quot;true&quot;)=&quot;true&quot;&#xD;&#xA;and&#xD;&#xA;not(from Container select IsNullOrEmpty(UID_ShoppingCartOrder))" Tooltip="translate('#LDS#Creates a new product bundle containing the products in your shopping cart.')">
                             <ServerActionCall ScriptItemUID="ServerActionCall5">
                               <ActionOnControl ActionType="PerformValidation" />
                               <Save DataTable="ShoppingCartItem" ScriptItemUID="Save3" />
@@ -1152,7 +1152,7 @@ catch(Exception exc){
         <PagePartContainer ScriptItemUID="PagePartContainer7" ID="TitleBar">
           <ControlList ScriptItemUID="ControlList7">
             <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef6">
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="Text()" Value="translate('#LDS#The following requests are currently in your shopping cart.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="Text()" Value="translate('#LDS#Here you can see all products that are currently in your shopping cart.')" />
             </ControlReferenceControlList>
           </ControlList>
         </PagePartContainer>
@@ -1215,8 +1215,19 @@ string[] productparametersstring = _pparameters.GetParameterString(_Connection,_
                                     <Update DataTable="Container" DataColumn="UID_ShoppingCartItemTemp" Value="from shoppingcartitem select current UID_ShoppingCartItem" ScriptItemUID="Update29" />
                                     <CodeLiteral ScriptItemUID="CodeLiteral9">AE.WebRuntime.AccProductParameterService _productparameters = _UserSession.Services.Get&lt;AE.WebRuntime.AccProductParameterService&gt;();
 VI.WebRuntime.IDataColumn _UID_AccProduct = this.DataContext.AccProduct.GetColumn("UID_AccProduct");
-string[] productparametersstring = _productparameters.GetParameterString(_Connection,_UID_AccProduct.GetValue(AccProduct_Current.Row).String,null).Split(',');</CodeLiteral>
+string[] productparametersstring = _productparameters.GetParameterString(_Connection,_UID_AccProduct.GetValue(AccProduct_Current.Row).String,null).Split(',');
+
+// Performance: Suspend events while doing the update
+var disp = DataContext.ShoppingCartItem.SuspendBulkEvents();
+try
+{
+</CodeLiteral>
                                     <Update DataTable="ShoppingCartItem" DataColumn="currentcolumn" Value="from shoppingcartitem select currentcolumn where UID_ShoppingCartItem = (from Container select top 1 UID_ShoppingCartItemTemp)" WhereClause="if(DataColumnName(ShoppingCartItem,currentcolumn) = &quot;UID_Department&quot; and {{!productparametersstring.Contains(&quot;UID_Department&quot;)}}) then(&#xD;&#xA;   ((UID_ITShopOrg = (from ShoppingCartItem select current UID_ITShopOrg)) and IsNullOrEmpty(Methodname))&#xD;&#xA;)&#xD;&#xA;else if(DataColumnName(ShoppingCartItem,currentcolumn) = &quot;UID_ProfitCenter&quot; and {{!productparametersstring.Contains(&quot;UID_ProfitCenter&quot;)}}) then(&#xD;&#xA;   ((UID_ITShopOrg = (from ShoppingCartItem select current UID_ITShopOrg)) and IsNullOrEmpty(Methodname))&#xD;&#xA;)&#xD;&#xA;else(&#xD;&#xA;   ((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;)&#xD;&#xA;or&#xD;&#xA;((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;)))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;--((UID_AccProduct = (from accproduct select current UID_AccProduct)) and IsNullOrEmpty(Methodname))&#xD;&#xA;--or&#xD;&#xA;--((not IsNullOrEmpty(Methodname)) and not(DataColumnName(ShoppingCartItem,currentcolumn) in (&quot;ValidFrom&quot;, &quot;ValidUntil&quot;)))&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="Update30" />
+                                    <CodeLiteral ScriptItemUID="CodeLiteral11">}
+finally
+{
+ SyncActions.Do(()=&gt; disp.EndAsync());
+}</CodeLiteral>
                                   </ServerActionCall>
                                 </Button>
                               </Container>

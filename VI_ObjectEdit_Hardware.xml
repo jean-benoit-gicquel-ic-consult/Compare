@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <Container ItemUID="Hardware - Fields" ScriptItemUID="Container5">
           <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef3">
@@ -23,7 +24,6 @@
           </ControlReferenceContainer>
         </Container>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">

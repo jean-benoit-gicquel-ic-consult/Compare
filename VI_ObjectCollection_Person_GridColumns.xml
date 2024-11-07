@@ -1,13 +1,14 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_ObjectCollection_Person_GridColumns" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_Person_GridColumns" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
       <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup1">
         <GridColumnColumnTemplate DataTable="Person" ScriptItemUID="GridColumnColumnTemplate1">
           <ColumnList ScriptItemUID="ColumnList1" IsWithoutRow="true">
-            <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectCollection_Person_Fields&quot;)" />
+            <ExpressionColumnList ColumnList="getconfig(&quot;VI_ObjectCollection_Person_Fields&quot;)" ScriptItemUID="ExpressionColumnList1" />
           </ColumnList>
           <GridColumnGroup DataTable="Person" ScriptItemUID="GridColumnGroup2">
             <GridColumn SortColumn="currentcolumn" AutoFilterColumn="currentcolumn" ScriptItemUID="GridColumn1">
@@ -21,13 +22,12 @@
           </GridColumnGroup>
         </GridColumnColumnTemplate>
       </GridColumnGroup>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="Person" Class="Person" ScriptItemUID="VirtualTable1" />
     </ComponentInterface>
   </GlobalControl>

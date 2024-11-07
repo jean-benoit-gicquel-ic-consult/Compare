@@ -1,9 +1,10 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_UNS_RequestNewGroup" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UNS_RequestNewGroup" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action6" />
       <ActionComponent ScriptItemUID="Action1">
         <LoadTable DataTable="AccProduct" RemoveDeleted="false" WhereClause="format( &quot;uid_accproduct = {0}&quot;, sqlformatvalue( uidaccproduct(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
@@ -44,7 +45,7 @@
                     </ForeachRow>
                     <ForeachRow DataTable="ShoppingCartItem" WhereClause="(uid_accproduct = uidaccproduct() and isnullorempty(OrderReason))" ScriptItemUID="ForeachRow1">
                       <Update DataTable="ShoppingCartItem" DataColumn="OrderReason" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" Value="from localvars select OrderReason" ScriptItemUID="Update3" />
-                      <Save DataTable="ShoppingCartItem" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" />
+                      <Save DataTable="ShoppingCartItem" WhereClause="primarykey() = select current primarykey() from shoppingcartitem" ScriptItemUID="Save1" />
                       <CallAction ActionID="VI_ITShop_ShoppingCartItem_Editor" ScriptItemUID="CallAction2">
                         <VirtualFunctionMapping ID="DeleteProductOnCancel()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
                         <VirtualTableMapping VirtualTable="ShoppingCartItem" DataTable="ShoppingCartItem" ScriptItemUID="VirtualTableMapping3" />
@@ -67,13 +68,13 @@
                 </ServerActionCall>
               </Button>
               <Button Text="translate(&quot;#LDS#Cancel&quot;)" ScriptItemUID="buttonCancel" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" EnableCustomAttributes="true" ItemUID="Default Button">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
+                </HtmlAttributes>
                 <ServerActionCall ScriptItemUID="cancelAction">
                   <CallAction ActionID="OnAfterInsertCancel" ScriptItemUID="CallAction3" />
                   <ActionOnControl />
                 </ServerActionCall>
-                <HtmlAttributes>
-                  <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute1" />
-                </HtmlAttributes>
               </Button>
             </Container>
           </VirtualControlMapping>
@@ -81,7 +82,6 @@
           <VirtualFunctionMapping ID="TableName()" Value="&quot;AccProduct&quot;" ScriptItemUID="VirtualFunctionMapping11" />
         </CallAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action6" />
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
           <Column Name="OrderReason" Caption="translate('#LDS#Group name')" DataType="System.String" ScriptItemUID="Column1" />

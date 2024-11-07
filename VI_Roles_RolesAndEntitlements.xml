@@ -9,7 +9,7 @@
         <ConfigParam Key="VI_Roles_Responsibility_Locality" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;Locality&quot;)" Type="SQL" DatabaseTable="Locality" LongDescription="" />
         <ConfigParam Key="VI_Roles_Responsibility_AERole" Description="translate(&quot;#LDS#Responsibility for objects of type&quot;)+&quot; &quot;+datacaptionsingle(&quot;AERole&quot;)" Type="SQL" DatabaseTable="AERole" LongDescription="" />
       </ConfigSectionDefinition>
-      <ConfigSectionDefinition Name="RoleLifecycle" ScriptItemUID="ConfigSectionDefinition2" Description="translate(&quot;#LDS#Role Lifecycle&quot;)">
+      <ConfigSectionDefinition Name="RoleLifecycle" ScriptItemUID="ConfigSectionDefinition2" Description="translate(&quot;#LDS#Role lifecycle&quot;)">
         <ConfigParam Key="Allow_Roles_Split_By_Business_Owner" Description="translate(&quot;#LDS#Allow role split by business owner&quot;)" LongDescription="" />
         <ConfigParam Key="Allow_Roles_Split_By_Admin" Description="translate(&quot;#LDS#Allow role split by an administrator&quot;)" />
         <ConfigParam Key="Allow_Roles_Split_Different_Organisation_Type" Description="translate(&quot;#LDS#Allow role split of different organisation types&quot;)" />

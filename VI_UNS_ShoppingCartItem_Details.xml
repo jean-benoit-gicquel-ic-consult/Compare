@@ -1,22 +1,22 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_UNS_ShoppingCartItem_Details" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UNS_ShoppingCartItem_Details" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="from shoppingcartitem select current uid_accproduct" ScriptItemUID="ProductRef1">
-          <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" />
+          <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
         </AccProductSwitchContainer>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_ShoppingCartItem">
-      <VirtualTableExtension Name="ShoppingCartItem" Class="ShoppingCartItem">
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_ShoppingCartItem" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTableExtension1">
         <Column Name="DoNotAllowApprove" DataType="System.Boolean" ScriptItemUID="Column1" />
       </VirtualTableExtension>
     </ComponentInterface>

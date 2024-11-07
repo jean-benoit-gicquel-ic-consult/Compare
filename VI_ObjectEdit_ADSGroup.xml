@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_ObjectEdit_ADSGroup" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectEdit_ADSGroup" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ConfigSectionDefinition Name="ObjectEdit" ScriptItemUID="ConfigSectionDefinition1" Description="">
@@ -7,25 +7,25 @@
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
-          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
             <ColumnList ScriptItemUID="ColumnList1">
-              <ExpressionColumnList ColumnList="getconfig(&quot;VI_Roles_Fields_ADSGroup&quot;)" />
+              <ExpressionColumnList ColumnList="getconfig(&quot;VI_Roles_Fields_ADSGroup&quot;)" ScriptItemUID="ExpressionColumnList1" />
             </ColumnList>
           </VirtualFunctionMapping>
-          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
-          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" />
-          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" />
+          <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
         </ControlReferenceContainer>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit">
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit" ScriptItemUID="ComponentInterface1">
       <VirtualTableExtension Name="EditTable" Class="ADSGroup" ScriptItemUID="VirtualTableExtension1" />
     </ComponentInterface>
   </GlobalControl>

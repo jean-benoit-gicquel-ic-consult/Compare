@@ -1,9 +1,10 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Verify_ShoppingCartItem_Default" MigrationNotes="DMLREPLACE;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Verify_ShoppingCartItem_Default" MigrationNotes="DMLREPLACE;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action3" />
       <ActionComponent ScriptItemUID="Action1">
         <ForeachColumn DataTable="ShoppingCartItem" ScriptItemUID="ForeachColumn1">
           <ColumnList ScriptItemUID="ColumnList1">
@@ -21,7 +22,6 @@
           </ActionSequence>
         </ForeachColumn>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action3" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

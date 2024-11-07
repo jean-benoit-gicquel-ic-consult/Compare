@@ -54,7 +54,7 @@
             <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
               <Container ScriptItemUID="Container1">
                 <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
-                  <Container Layout="'VI_Styles_Container_Paragraph'" Condition="not(isnullorempty(GetAccProductParams(select current uid_accproduct from shoppingcartitem)))" ScriptItemUID="Container3">
+                  <Container Layout="'VI_Styles_Container_Paragraph'" Condition="not(isnullorempty(GetAccProductParams(select current uid_accproduct from shoppingcartitem, sqlcompare(&quot;isreadonly&quot;, false, &quot;bool&quot;, &quot;equal&quot;))))" ScriptItemUID="Container3">
                     <Container Condition="not IsNullOrEmpty(from AccProductParamCategory select Description)" ItemUID="AccProductParamCategory has description" ScriptItemUID="Container4">
                       <Label Text="from AccProductParamCategory select DisplayValue(Description)" ScriptItemUID="Label2" />
                     </Container>
@@ -147,8 +147,8 @@
                         <ColumnList ScriptItemUID="ColumnList2">
                           <ExpressionColumnList ColumnList="GetAccProductParams(select current uid_accproduct from shoppingcartitem)" ScriptItemUID="ExpressionColumnList2" />
                         </ColumnList>
-                        <ActionSequence ScriptItemUID="Action14">
-                          <Update DataTable="ShoppingCartItem" DataColumn="currentcolumn" Value="from ShoppingCartItem select currentcolumn where UID_ShoppingCartItem = (from vars select top 1 tmpValue)" WhereClause="UID_AccProduct = (from ShoppingCartItem select current UID_AccProduct)&#xD;&#xA;and UID_ShoppingCartItem &lt;&gt; (from ShoppingCartItem select current UID_ShoppingCartItem)" ScriptItemUID="Update4" />
+                        <ActionSequence ScriptItemUID="Action14" Condition="from shoppingcartitem select current canedit(currentcolumn)">
+                          <Update DataTable="ShoppingCartItem" DataColumn="currentcolumn" Value="from ShoppingCartItem select currentcolumn where UID_ShoppingCartItem = (from vars select top 1 tmpValue)" WhereClause="UID_AccProduct = (from ShoppingCartItem select Current UID_AccProduct)&#xD;&#xA;and UID_ShoppingCartItem &lt;&gt; (from ShoppingCartItem select current UID_ShoppingCartItem)" ScriptItemUID="Update4" />
                         </ActionSequence>
                       </ForeachColumn>
                       <Save DataTable="ShoppingCartItem" WhereClause="UID_AccProduct = (from ShoppingCartItem select current UID_AccProduct)" ScriptItemUID="Save1" />

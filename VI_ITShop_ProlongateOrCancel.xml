@@ -47,7 +47,7 @@ col.MetadataProvider = (m, c, r) =&gt; {
                 <LayoutPanel ScriptItemUID="LayoutPanel1">
                   <Label Text="translate(&quot;#LDS#Requests for&quot;)" ScriptItemUID="Label2" />
                   <ColumnEditor DataTable="Container" DataColumn="UID_Person" ScriptItemUID="ColumnEditor1">
-                    <VirtualFunctionMapping ID="NullText()" Value="translate(&quot;#LDS#All employees&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                    <VirtualFunctionMapping ID="NullText()" Value="translate(&quot;#LDS#All identities&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
                   </ColumnEditor>
                 </LayoutPanel>
               </Container>
@@ -210,7 +210,7 @@ col.MetadataProvider = (m, c, r) =&gt; {
                           <Cell ScriptItemUID="Cell2">
                             <Container Condition="not(&#xA;0 &lt; (select count() from ShoppingCartItem where UID_ShoppingCartOrder = UIDShoppingCartOrder()&#xA;and&#xA;uid_personwantsorg = (from PersonWantsOrg select current uid_personwantsorg)))" ScriptItemUID="Container9">
                               <FormItemLabel DataTable="PersonWantsOrg" DataColumn="IsSelected" IsInvisible="true" ScriptItemUID="FormItemLabel1">
-                                <Label Text="translate('#LDS#select')" ScriptItemUID="Label5" />
+                                <Label Text="translate('#LDS#Select')" ScriptItemUID="Label5" />
                               </FormItemLabel>
                               <CheckBox DataTable="PersonWantsOrg" DataColumn="IsSelected" ScriptItemUID="CheckBox1" Text="" />
                             </Container>

@@ -129,7 +129,7 @@ xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
               <Label Text="DataCaption(&quot;Person&quot;)" ScriptItemUID="Label9" />
             </ControlsHeader>
             <ControlsBody ScriptItemUID="Container18">
-              <Label ScriptItemUID="Label10" Text="translate(&quot;#LDS#Employees cannot be assigned to this object.&quot;)" EnableCustomAttributes="true">
+              <Label ScriptItemUID="Label10" Text="translate(&quot;#LDS#Identities cannot be assigned to this object.&quot;)" EnableCustomAttributes="true">
                 <HtmlAttributes>
                   <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute6" Value="&quot;imx-message&quot;" />
                   <Property Name="TagName" Value="div" />
@@ -153,7 +153,7 @@ xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
                   <Label Text="translate(&quot;#LDS#Membership is controlled by a dynamic role.&quot;)+&quot; &quot;" ScriptItemUID="Label17" />
                 </Container>
                 <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container10">
-                  <Label Text="if(&#xD;&#xA;0 &lt; select count() from PersonHasObjectAndPWO where (not(isnullorempty(displayperson))))&#xD;&#xA;&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#The following employees have access to {0}. Click on an employee to see details about why the employee has been granted access.&quot;,&#xD;&#xA;select current Display() from AllObjects )&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#No memberships in {0} were found.&quot;, select current Display() from AllObjects)" ScriptItemUID="Label16" />
+                  <Label Text="if(&#xD;&#xA;0 &lt; select count() from PersonHasObjectAndPWO where (not(isnullorempty(displayperson))))&#xD;&#xA;&#xD;&#xA;then&#xD;&#xA;translate('#LDS#The following identities have access to &quot;{0}&quot;. Click an identity to see details about why the identity has been granted access.',&#xD;&#xA;select current Display() from AllObjects )&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#No memberships in {0} were found.&quot;, select current Display() from AllObjects)" ScriptItemUID="Label16" />
                 </Container>
               </Container>
               <Container ScriptItemUID="Container11">
@@ -302,7 +302,7 @@ xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
                           <SwitchContainer ScriptItemUID="Switch3">
                             <SwitchContainerCase ScriptItemUID="Case6" Condition="'Person' &lt;&gt; (select current TableName from allobjects)" ItemUID="For Persons">
                               <ControlReferenceControlList ID="VI_Common_DetailPaneHeader" ScriptItemUID="ControlRef2">
-                                <VirtualFunctionMapping ID="Caption1()" Value="translate(&quot;#LDS#Employee&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
+                                <VirtualFunctionMapping ID="Caption1()" Value="translate(&quot;#LDS#Identity&quot;)" ScriptItemUID="VirtualFunctionMapping5" />
                                 <VirtualFunctionMapping ID="Value1()" Value="from personhasobjectandpwo select current displayperson" ScriptItemUID="VirtualFunctionMapping6" />
                                 <VirtualFunctionMapping ID="Value1CssClass()" Value="&quot;imx-icon imx-table-Person&quot;" ScriptItemUID="VirtualFunctionMapping7" />
                               </ControlReferenceControlList>
@@ -333,7 +333,7 @@ xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
                         <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
                           <Container ScriptItemUID="Container40" IsBeginRenderPart="true">
                             <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container41">
-                              <Label Text="translate(&quot;#LDS#Please select the employees whom you wish to request a membership for.&quot;)+&quot; &quot;+translate(&quot;#LDS#The membership requests will be added to the shopping cart.&quot;)" ScriptItemUID="Label32" />
+                              <Label Text="translate(&quot;#LDS#Select the identities whom you wish to request a membership for.&quot;)+&quot; &quot;+translate(&quot;#LDS#The membership requests will be added to the shopping cart.&quot;)" ScriptItemUID="Label32" />
                             </Container>
                             <ControlReferenceContainer ID="VI_Edit_Multiselect" ScriptItemUID="ControlRef7">
                               <VirtualFunctionMapping ID="UidListTextQualifier()" Value="&quot;&quot;" ScriptItemUID="VirtualFunctionMapping13" />
@@ -458,7 +458,7 @@ xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
           <Column Name="IsPrimary" DataType="System.Boolean" ScriptItemUID="Column26" />
           <Column DataType="System.Int32" Name="XOriginExtended" ScriptItemUID="Column34" DataSource="Expression" Expression="xorigin + (if (ispending) then (2*GetMaxXOriginBit()))&#xD;&#xA;+ (if(isprimary) then (4*GetMaxXOriginBit()))&#xD;&#xA;+ (if(IsNested) then (8*GetMaxXOriginBit()))" Caption="datacaption(&quot;PersonInBasetree&quot;, &quot;XOrigin&quot;)" />
           <Column Name="RemoveThis" DataType="System.Boolean" ScriptItemUID="Column8" Caption="translate(&quot;#LDS#Heading Select&quot;)" TriggerUpdates="Updates" />
-          <Column Name="DisplayPerson" DataType="System.String" ScriptItemUID="Column9" DataSource="Expression" Expression="if(IsNullOrEmpty(UID_PersonObjectKeyAssignment))then&#xD;&#xA;   displayvalue(UID_Person)&#xD;&#xA;else&#xD;&#xA;   displayvalue(UID_PersonObjectKeyAssignment)" Caption="translate(&quot;#LDS#Employee&quot;)" />
+          <Column Name="DisplayPerson" DataType="System.String" ScriptItemUID="Column9" DataSource="Expression" Expression="if(IsNullOrEmpty(UID_PersonObjectKeyAssignment))then&#xD;&#xA;   displayvalue(UID_Person)&#xD;&#xA;else&#xD;&#xA;   displayvalue(UID_PersonObjectKeyAssignment)" Caption="translate(&quot;#LDS#Identity&quot;)" />
           <Column Name="DisplayEntitlement" DataType="System.String" ScriptItemUID="Column10" DataSource="Expression" Expression="isnullorempty(&#xD;&#xA;GetDisplayWithCache(from PersonHasObjectAndPWO select current PK),&#xD;&#xA;BuildMnDisplay(from PersonHasObjectAndPWO select current ObjectKeyTarget))" Caption="translate(&quot;#LDS#Entitlement&quot;)" />
           <Column Name="PK" DataType="System.String" ScriptItemUID="Column12" />
           <Column Name="TableNameSingle" DataType="System.String" ScriptItemUID="Column13" DataSource="Expression" Expression="GetTableNameDisplayWithCache(from PersonHasObjectAndPWO select current PK)" Caption="translate(&quot;#LDS#Object type&quot;)">
@@ -488,7 +488,7 @@ xoriginExtended.MetadataProvider = (vm,c,r) =&gt;
           <Column Name="ObjectKey" DataType="System.String" ScriptItemUID="Column22" />
           <Column Name="custompk" DataType="System.String" ScriptItemUID="Column19" />
         </DataTableGeneric>
-        <DataTableDbObject Table="PersonCandidate" ScriptItemUID="DataTableDbObject2" WhereClauseSQL="from allobjects select current&#xD;&#xA;sqland(&#xD;&#xA;getconfig(&quot;VI_ITShop_Filter_PersonMembershipRequestFor&quot;),&#xD;&#xA;&#xD;&#xA;-- do not filter on request permission here, too expensive to evaluate for a COUNT!&#xD;&#xA;&#xD;&#xA;Format(&quot;&#xD;&#xA;UID_Person not in(&#xD;&#xA;select UID_PersonOrdered from PersonWantsOrg where OrderState in (select OrderState from qer_vpwoorderstate where IsAssigned = 1 or IsOrder = 1)&#xD;&#xA;and (({1} and ObjectKeyElementUsedInAssign = Person.XObjectKey) or ObjectKeyOrdered = '{0}'))&quot;,&#xD;&#xA;GetObjectKey(),&#xD;&#xA;sqlcompareuid(&quot;ObjectKeyOrgUsedInAssign&quot;, getobjectkey(TableName, pk, &quot;&quot;))&#xD;&#xA;))" Class="Person">
+        <DataTableDbObject Table="PersonCandidate" ScriptItemUID="DataTableDbObject2" WhereClauseSQL="from allobjects select current&#xD;&#xA;sqland(&#xD;&#xA;getconfig(&quot;VI_ITShop_Filter_PersonMembershipRequestFor&quot;),&#xD;&#xA;&#xD;&#xA;-- do Not filter on request permission here, too expensive to evaluate for a COUNT!&#xD;&#xA;&#xD;&#xA;If not(select Current TableName from allobjects in ('QERReuseUS'))Then(&#xD;&#xA;Format(&quot;&#xD;&#xA;UID_Person not in(&#xD;&#xA;select UID_PersonOrdered from PersonWantsOrg where OrderState in (select OrderState from qer_vpwoorderstate where IsAssigned = 1 or IsOrder = 1)&#xD;&#xA;and (({1} and ObjectKeyElementUsedInAssign = Person.XObjectKey) or ObjectKeyOrdered = '{0}'))&quot;,&#xD;&#xA;GetObjectKey(),&#xD;&#xA;sqlcompareuid(&quot;ObjectKeyOrgUsedInAssign&quot;, getobjectkey(TableName, pk, &quot;&quot;))&#xD;&#xA;)))" Class="Person">
           <ActionSequence ScriptItemUID="Action5" />
         </DataTableDbObject>
         <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow2">

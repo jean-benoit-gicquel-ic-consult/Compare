@@ -1,10 +1,10 @@
 ﻿<WebDesigner>
-  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Container_TwoColumnLayout" Type="Container">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Container_TwoColumnLayout" Type="Container" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="CssClassName" Value="columnsContainer" Comment="" />
-    <CssDocument CssName="Css">.columnsContainer { position: relative; margin: 0; }
+    <CssDocument CssName="Css" ScriptItemUID="CssDocument1">.columnsContainer { position: relative; margin: 0; }
 
 .leftColumn { margin-bottom: .5em;}
 

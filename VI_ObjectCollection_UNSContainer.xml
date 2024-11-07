@@ -1,5 +1,5 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_ObjectCollection_UNSContainer" MigrationNotes="DIALOGCONFIGPARM;" AllowExtensions="false">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectCollection_UNSContainer" MigrationNotes="DIALOGCONFIGPARM;" AllowExtensions="false">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>

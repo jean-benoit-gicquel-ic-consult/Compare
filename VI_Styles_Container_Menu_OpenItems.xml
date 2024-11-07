@@ -1,5 +1,5 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
-  <LayoutObject ID="VI_Styles_Container_Menu_OpenItems" Type="Container" MetamodelVersion="2016-05-01" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
+  <LayoutObject ID="VI_Styles_Container_Menu_OpenItems" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>

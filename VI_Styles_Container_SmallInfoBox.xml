@@ -1,10 +1,10 @@
 ﻿<WebDesigner>
-  <LayoutObject ID="VI_Styles_Container_SmallInfoBox" Type="Container" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;">
+  <LayoutObject ID="VI_Styles_Container_SmallInfoBox" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="CssClassName" Value="smallinfobox" Comment="" />
-    <CssDocument CssName="CSS">.smallinfobox   {
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.smallinfobox   {
  max-width: 600px; 
  min-height:30px; 
  background-color: %VI_Common_Color_Blue_2%; 

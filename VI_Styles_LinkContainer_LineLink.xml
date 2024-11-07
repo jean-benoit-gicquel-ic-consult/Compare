@@ -1,5 +1,5 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ad9fdbe4-9dd4-b904-ba04-ec5b6936ebec">
-  <LayoutObject MetamodelVersion="2016-05-01" ID="VI_Styles_LinkContainer_LineLink" Type="LinkContainer" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_LinkContainer_LineLink" Type="LinkContainer" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>

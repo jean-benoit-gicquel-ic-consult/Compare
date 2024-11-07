@@ -160,7 +160,7 @@
                     </VirtualControlMapping>
                     <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping22" ID="DisplayNameDialogDashboardDef()" Value="&quot;QAMEmployeesByRiskIndex10&quot;" />
                     <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="ChartType()" Value="&quot;ChartBar&quot;" />
-                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Caption()" Value="translate('#LDS#Employees by risk index')" />
+                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Caption()" Value="translate('#LDS#Identities by risk index')" />
                     <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping12" ID="Identifier()" Value="&quot;Dashboard_EmployeesByRiskIndex&quot;" />
                     <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="UseHistogramStyle()" Value="true" />
                   </ControlReferenceControlList>

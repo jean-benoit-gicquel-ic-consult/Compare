@@ -1,5 +1,5 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
-  <Include ID="VI_UserRegistration_Web" SessionContextName="VI_UserRegistration_Session" StartupContextName="VI_UserRegistration_Start" MetamodelVersion="2016-01-01" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" AllowNoPersonLogin="true" ConfigKeysFromWebProject="VI_StandardWeb" Comment="">
+  <Include ID="VI_UserRegistration_Web" SessionContextName="VI_UserRegistration_Session" StartupContextName="VI_UserRegistration_Start" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" AllowNoPersonLogin="true" ConfigKeysFromWebProject="VI_StandardWeb" Comment="">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>

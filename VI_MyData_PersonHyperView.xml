@@ -5,8 +5,8 @@
       <ContextParameters ScriptItemUID="ContextParameters1" />
       <ConfigSectionDefinition Name="My profile" Description="translate(&quot;#LDS#My profile&quot;)" ScriptItemUID="ConfigSectionDefinition1">
         <ConfigParam Key="VI_PersonalData_Fields" Type="ColumnList" Description="translate('#LDS#Writable attributes')" DatabaseTable="Person" LongDescription="" />
-        <ConfigParam Key="VI_MyData_PersonalData_ReportName" Description="translate('#LDS#Edit employee data') +&quot; - &quot;+translate(&quot;#LDS#Name of report to use&quot;)" LongDescription="translate(&quot;#LDS#In case you wish to use a different report, you can select it here.&quot;)" Type="Text" />
-        <ConfigParam Key="VI_MyData_PersonalDataWithHistory_ReportName" Description="translate(&quot;#LDS#Employee data including history&quot;) +&quot; - &quot;+translate(&quot;#LDS#Name of report to use&quot;)" LongDescription="translate(&quot;#LDS#In case you wish to use a different report, you can select it here.&quot;)" Type="Text" />
+        <ConfigParam Key="VI_MyData_PersonalData_ReportName" Description="translate('#LDS#Edit identity data') +&quot; - &quot;+translate(&quot;#LDS#Name of report to use&quot;)" LongDescription="translate(&quot;#LDS#In case you wish to use a different report, you can select it here.&quot;)" Type="Text" />
+        <ConfigParam Key="VI_MyData_PersonalDataWithHistory_ReportName" Description="translate(&quot;#LDS#Identity data including history&quot;) +&quot; - &quot;+translate(&quot;#LDS#Name of report to use&quot;)" LongDescription="translate(&quot;#LDS#In case you wish to use a different report, you can select it here.&quot;)" Type="Text" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">
@@ -384,7 +384,7 @@ if (!string.IsNullOrEmpty(uidCulture))
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="SquareText()" Value="translate(&quot;#LDS#Overview&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Description()" Value="translate('#LDS#Shows the overview for the selected employee with assignments, entitlements and requests.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Description()" Value="translate('#LDS#Shows the overview for the selected identity with entitlements and requests.')" />
                     </ControlReferenceContainer>
                     <Container ScriptItemUID="Container25" ItemUID="Master Data" EnableCustomAttributes="true">
                       <HtmlAttributes>

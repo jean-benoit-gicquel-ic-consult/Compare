@@ -6,8 +6,8 @@
         <Parameter Name="UID_ShoppingCartOrder" IsMandatory="false" />
         <Parameter Name="UID_Person_ReferenceUser" IsMandatory="false" />
       </ContextParameters>
-      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Templates&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_ITShop_AccProductCanAddToPattern" Description="translate(&quot;#LDS#Condition for adding products to templates&quot;)" LongDescription="" />
+      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Product bundles&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_AccProductCanAddToPattern" Description="translate(&quot;#LDS#Condition for adding products to product bundles&quot;)" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">
@@ -151,17 +151,17 @@
       </LoadTable>
     </ActionSequence>
     <Forms ScriptItemUID="Forms1">
-      <Form ID="Main" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Cart templates&quot;)" ScriptItemUID="Form1">
+      <Form ID="Main" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Product bundles&quot;)" ScriptItemUID="Form1">
         <ActionSequence ScriptItemUID="Action15" />
         <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
           <Container ScriptItemUID="Container1">
-            <Label Text="translate(&quot;#LDS#Cart templates&quot;)" ScriptItemUID="Label1" />
+            <Label Text="translate(&quot;#LDS#Product bundles&quot;)" ScriptItemUID="Label1" />
           </Container>
         </PagePartContainer>
         <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
           <Container ScriptItemUID="Container2">
             <Container ItemUID="Head" ScriptItemUID="Container3">
-              <Label Text="translate('#LDS#The following products in your shopping cart may be added to a template.')" ScriptItemUID="Label2" />
+              <Label Text="translate('#LDS#The following products in your shopping cart may be added to a product bundle.')" ScriptItemUID="Label2" />
               <Grid ScriptItemUID="Grid1">
                 <GridBand DataTable="ProductsAndFiles" WhereClause="CanAddToPattern = true" OrderBy="'__Display'" ScriptItemUID="GridBand1">
                   <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="Auto" />
@@ -238,12 +238,12 @@
                       <DbObjectLoadType ScriptItemUID="DbObjectLoadType7" />
                     </LoadTable>
                     <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call3">
-                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Selected products has been successfully added to template.')" ScriptItemUID="VirtualFunctionMapping4" />
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The selected products have been successfully added to the product bundle.')" ScriptItemUID="VirtualFunctionMapping4" />
                       <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping5" />
                     </CallAction>
                   </ActionComponent>
                 </VirtualControlMapping>
-                <VirtualFunctionMapping ID="Heading()" Value="translate('#LDS#To add products to a template, please select a template or enter a name for a new template.')" ScriptItemUID="VirtualFunctionMapping6" />
+                <VirtualFunctionMapping ID="Heading()" Value="translate('#LDS#To add products to a product bundle, select a product bundle or enter a name for a new product bundle.')" ScriptItemUID="VirtualFunctionMapping6" />
                 <VirtualFunctionMapping ID="isExpanded()" Value="true" ScriptItemUID="VirtualFunctionMapping7" />
                 <VirtualFunctionMapping ID="IsShowPersonalTemplates()" Value="true" ScriptItemUID="VirtualFunctionMapping8" />
               </ControlReferenceContainer>
@@ -256,7 +256,7 @@
                       <HtmlAttribute Name="'style'" ScriptItemUID="Container15style" Value="&quot;width:180px&quot;" />
                     </HtmlAttributes>
                     <FormItemLabel DataTable="Container" DataColumn="NewPatternName" ScriptItemUID="FormItemLabel1">
-                      <Label Text="translate('#LDS#Name of the new template')" ScriptItemUID="Label10" />
+                      <Label Text="translate('#LDS#Name of the new product bundle')" ScriptItemUID="Label10" />
                     </FormItemLabel>
                   </Container>
                 </Container>
@@ -267,14 +267,14 @@
                 </Container>
                 <Container ScriptItemUID="LayoutPanelItem3">
                   <Container ScriptItemUID="Container17">
-                    <Button Text="translate('#LDS#Create template')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                    <Button Text="translate('#LDS#Create product bundle')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1" EnableCustomAttributes="true">
                       <HtmlAttributes>
                         <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;style&quot;" Value="&quot;margin-left: 10px;&quot;" />
                       </HtmlAttributes>
                       <ServerActionCall ScriptItemUID="ServerActionCall1">
                         <ActionSequence ItemUID="Kein Name eingegeben" Condition="IsNull(from Container select NewPatternName, '') = ''" ScriptItemUID="Action17">
                           <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
-                            <VirtualFunctionMapping ID="MessageText()" Value="Translate(&quot;#LDS#Please enter a name for the template.&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
+                            <VirtualFunctionMapping ID="MessageText()" Value="Translate(&quot;#LDS#Please enter a name for the product bundle.&quot;)" ScriptItemUID="VirtualFunctionMapping9" />
                             <VirtualFunctionMapping ID="MessageType()" Value="'Error'" ScriptItemUID="VirtualFunctionMapping10" />
                           </CallAction>
                         </ActionSequence>
@@ -284,7 +284,7 @@
                             <DbObjectLoadType ScriptItemUID="DbObjectLoadType8" />
                           </LoadTable>
                           <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call6">
-                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Selected products has been successfully added to template.')" ScriptItemUID="VirtualFunctionMapping11" />
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The selected products have been successfully added to the product bundle.')" ScriptItemUID="VirtualFunctionMapping11" />
                             <VirtualFunctionMapping ID="MessageType()" Value="'Success'" ScriptItemUID="VirtualFunctionMapping12" />
                           </CallAction>
                         </ActionSequence>

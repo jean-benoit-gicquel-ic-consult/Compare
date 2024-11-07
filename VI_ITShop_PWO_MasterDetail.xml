@@ -101,7 +101,7 @@ col.MetadataProvider = (m, c, r) =&gt; {
       </Tables>
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">
-        <Function Name="GetProlongationSuffix()" Expression="select current&#xA;(if(orderstate=&quot;OrderProlongate&quot;) then (&quot; &quot;+translate(&quot;#LDS#until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)))&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
+        <Function Name="GetProlongationSuffix()" Expression="select current&#xA;(if(orderstate=&quot;OrderProlongate&quot;) then (&quot; &quot;+translate(&quot;#LDS#Until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)))&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
           <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor1" />
         </Function>
         <Function ScriptItemUID="Function2" Name="IsLogicallyAssigned()" DataType="System.Boolean" Expression="-- the orderstate is &quot;Unsubscribed&quot; but the request should be displayed as being &quot;assigned&quot;&#xD;&#xA;&#xD;&#xA;orderstate=&quot;Assigned&quot; or (orderstate='Unsubscribed' and uid_accproduct in (select uid_accproduct from accproduct where (helperisreusable and not(helperisreusablewithunsubscribe))))" TriggerUpdates="Never" FilterForTable="PersonWantsOrg" />

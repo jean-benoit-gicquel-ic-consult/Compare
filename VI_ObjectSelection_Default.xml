@@ -1,16 +1,16 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_ObjectSelection_Default" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectSelection_Default" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
-      <Container ScriptItemUID="Container1" />
       <ActionSequence ScriptItemUID="Action3" />
+      <Container ScriptItemUID="Container1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSelection" />
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSelection" ScriptItemUID="ComponentInterface1" />
   </GlobalControl>
 </WebDesigner>

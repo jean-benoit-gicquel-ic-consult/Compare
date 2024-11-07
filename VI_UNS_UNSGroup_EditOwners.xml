@@ -1,9 +1,14 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_UNS_UNSGroup_EditOwners" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_UNS_UNSGroup_EditOwners" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <LoadTable DataTable="AccProductForGroup" RemoveDeleted="false" WhereClause="format(&quot;uid_accproduct = {0}&quot;, sqlformatvalue( from groupobject select current uid_accproduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable1">
+          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+        </LoadTable>
+      </ActionSequence>
       <Container ScriptItemUID="Container1">
         <ContainerTemplate DataTable="AccProductForGroup" WhereClause="uid_accproduct = ( from groupobject select current UID_AccProduct )" ScriptItemUID="ContainerTemplate1">
           <Container ScriptItemUID="Container2">
@@ -13,11 +18,6 @@
           </Container>
         </ContainerTemplate>
       </Container>
-      <ActionSequence ScriptItemUID="Action1">
-        <LoadTable DataTable="AccProductForGroup" RemoveDeleted="false" WhereClause="format(&quot;uid_accproduct = {0}&quot;, sqlformatvalue( from groupobject select current uid_accproduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;))" ScriptItemUID="LoadTable1">
-          <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
-        </LoadTable>
-      </ActionSequence>
       <Tables ScriptItemUID="Tables1">
         <DataTableDbObject Class="AccProduct" Table="AccProductForGroup" ScriptItemUID="DataTableDbObject1">
           <ActionSequence ScriptItemUID="Action2" />

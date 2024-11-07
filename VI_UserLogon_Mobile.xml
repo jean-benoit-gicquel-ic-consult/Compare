@@ -83,7 +83,7 @@ foreach (var bookmark in bookmarks)
               <Redirect Target="Context" NoLinkObjectID="true" ContextID="VI_MyData_PersonHyperView" AllowReturnToThisContext="true" NoLinkBackToThisForm="true" ScriptItemUID="Redirect6" />
             </ServerActionCall>
           </Label>
-          <Label Text="translate(&quot;#LDS#Heading Log Off&quot;)" ScriptItemUID="Label4" Action="Redirect" EnableCustomAttributes="true" ItemUID="Logout-Button">
+          <Label Text="translate(&quot;#LDS#Heading Log Out&quot;)" ScriptItemUID="Label4" Action="Redirect" EnableCustomAttributes="true" ItemUID="Logout-Button">
             <HtmlAttributes>
               <HtmlAttribute Name="'class'" Value="'ui-btn ui-btn-b ui-icon-power ui-btn-icon-notext ui-btn-inline'" ScriptItemUID="HtmlAttribute22" />
             </HtmlAttributes>
@@ -116,9 +116,9 @@ else
 }</CodeLiteral>
                   </ActionComponent>
                 </VirtualControlMapping>
-                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log off?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log out?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
                 <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
-                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log off&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log out&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
               </CallAction>
             </ServerActionCall>
           </Label>

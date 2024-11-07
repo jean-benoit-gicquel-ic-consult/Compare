@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_GridColumn_Header" Type="GridColumn" MigrationNotes="DIALOGCONFIGPARM;">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_GridColumn_Header" Type="GridColumn" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>

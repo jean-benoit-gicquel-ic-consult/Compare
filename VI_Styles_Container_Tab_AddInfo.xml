@@ -1,10 +1,10 @@
 ﻿<WebDesigner>
-  <LayoutObject ID="VI_Styles_Container_Tab_AddInfo" Type="Container" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
+  <LayoutObject ID="VI_Styles_Container_Tab_AddInfo" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="CssClassName" Value="tabAddInfo" Comment="" />
-    <CssDocument CssName="MenuOpenItemsSmall">.tabAddInfo {
+    <CssDocument CssName="MenuOpenItemsSmall" ScriptItemUID="CssDocument1">.tabAddInfo {
   display: inline; 
   float: none; 
   position: relative;  

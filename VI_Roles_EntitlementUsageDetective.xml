@@ -17,7 +17,7 @@
         <Container ScriptItemUID="Container2">
           <Container Condition="not(hidedescription())" ScriptItemUID="Container3">
             <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">
-              <VirtualFunctionMapping ID="Text()" Value="(if (TableName() like '%group%') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected system entitlement belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Locality') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Department') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'ProfitCenter') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Org') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected business role belongs to.&quot;) &#xD;&#xA;else if (TableName() = 'QERResource') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected service belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Application') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected service belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'ESet') then translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected system role belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'AERole') then translate(&quot;#LDS#This page shows you whether employees of the selected application role are members in roles.&quot;) &#xD;&#xA;else translate(&quot;#LDS#This page shows which roles of a role class the employees of the selected business role belongs to.&quot;) ) &#xD;&#xA;+ &quot; &quot; + &#xD;&#xA;translate(&quot;#LDS#Please select the role class for the employee assignments you want to display.&quot;)&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping1" />
+              <VirtualFunctionMapping ID="Text()" Value="(if (TableName() like '%group%') then translate(&quot;#LDS#This page shows the various role classes of identities who are members of the selected system entitlement.&quot;)&#xD;&#xA;else if (TableName() = 'Locality') then translate(&quot;#LDS#This page shows which roles of a role class the identities of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Department') then translate(&quot;#LDS#This page shows which roles of a role class the identities of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'ProfitCenter') then translate(&quot;#LDS#This page shows which roles of a role class the identities of the selected organization belongs to.&quot;)&#xD;&#xA;else if (TableName() = 'Org') then translate(&quot;#LDS#This page shows which roles of a role class the identities of the selected business role belongs to.&quot;) &#xD;&#xA;else if (TableName() = 'QERResource') then translate(&quot;#LDS#This page shows the various role classes of identities who are members of the selected service.&quot;)&#xD;&#xA;else if (TableName() = 'Application') then translate(&quot;#LDS#This page shows the various role classes of identities who are members of the selected service.&quot;)&#xD;&#xA;else if (TableName() = 'ESet') then translate(&quot;#LDS#This page shows the various role classes of identities who are members of the selected system role.&quot;)&#xD;&#xA;else if (TableName() = 'AERole') then translate(&quot;#LDS#This page shows you whether identities of the selected application role are members in roles.&quot;) &#xD;&#xA;else translate(&quot;#LDS#This page shows which roles of a role class the identities of the selected business role belongs to.&quot;) ) &#xD;&#xA;+ &quot; &quot; + &#xD;&#xA;translate(&quot;#LDS#Select the role class for the identity assignments you want to display.&quot;)&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping1" />
             </ControlReferenceContainer>
           </Container>
           <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
@@ -144,7 +144,7 @@
                                   <ControlList ScriptItemUID="Image4Ctl">
                                     <Image StockImage="Information" ScriptItemUID="Image4" EnableCustomAttributes="true">
                                       <HtmlAttributes>
-                                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" />
+                                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="translate(&quot;#LDS#Identities assigned to this root object are members of this role.&quot;)" />
                                       </HtmlAttributes>
                                     </Image>
                                   </ControlList>
@@ -159,7 +159,7 @@
                                             <HtmlAttributes>
                                               <Property Name="TagName" Value="p" />
                                             </HtmlAttributes>
-                                            <Label Text="format(isnullorempty( PersonInfoText(), translate(&quot;#LDS#The following employees were found.&quot;)),&#xD;&#xA;select current displayname from structuredata)" ScriptItemUID="Label1" />
+                                            <Label Text="format(isnullorempty( PersonInfoText(), translate(&quot;#LDS#The following identities were found.&quot;)),&#xD;&#xA;select current displayname from structuredata)" ScriptItemUID="Label1" />
                                           </Container>
                                           <Grid ScriptItemUID="Grid1">
                                             <GridBand DataTable="PersonInConflict" ScriptItemUID="GridBand1" DisplayHeader="Always" EnableGridViewSetting="false" EnableCustomAttributes="true">
@@ -180,7 +180,7 @@
                                           <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef3" />
                                         </Container>
                                       </VirtualControlMapping>
-                                      <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Assigned employees&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                                      <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Assigned identities&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
                                       <VirtualFunctionMapping ID="TableName()" Value="&quot;Person&quot;" ScriptItemUID="VirtualFunctionMapping3" />
                                       <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping4" />
                                     </CallAction>
@@ -193,7 +193,7 @@
                                 </HtmlAttributes>
                                 <Image Source="DialogImage" DialogImage="Tree Root Node" ScriptItemUID="Image5" EnableCustomAttributes="true">
                                   <HtmlAttributes>
-                                    <HtmlAttribute Name="'alt'" ScriptItemUID="Image5alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" />
+                                    <HtmlAttribute Name="'alt'" ScriptItemUID="Image5alt" Value="translate(&quot;#LDS#Identities assigned to this root object are members of at least one child role.&quot;)" />
                                   </HtmlAttributes>
                                 </Image>
                               </Container>
@@ -265,7 +265,7 @@
                 <HtmlAttribute Name="'style'" ScriptItemUID="Container41style" Value="variable(&quot;width: 350px; height: 350px; text-align: center; margin: 0 auto; background-color: %VI_Common_Color_LightGray%; padding: 10px;&quot;)" />
               </HtmlAttributes>
               <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container42" ItemUID="none">
-                <Label Text="translate(&quot;#LDS#None of the employees assigned to this root object are a member of this role or any of its child roles.&quot;)" ScriptItemUID="Label15" />
+                <Label Text="translate(&quot;#LDS#None of the identities assigned to this root object are a member of this role or any of its child roles.&quot;)" ScriptItemUID="Label15" />
               </Container>
               <RoundedCorners Width="250" ColorStart="variable(&quot;%VI_Common_Color_LighterGray%&quot;)" AlphaStart="255" ColorEnd="variable(&quot;%VI_Common_Color_LighterGray%&quot;)" AlphaEnd="255" ScriptItemUID="RoundedCorners5" EnableCustomAttributes="true">
                 <HtmlAttributes>
@@ -288,7 +288,7 @@
                 <HtmlAttributes>
                   <HtmlAttribute Name="'style'" ScriptItemUID="Container45style" Value="&quot;margin-top: 16px;&quot;" />
                 </HtmlAttributes>
-                <Label Text="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" ScriptItemUID="Label17" />
+                <Label Text="translate(&quot;#LDS#Identities assigned to this root object are members of at least one child role.&quot;)" ScriptItemUID="Label17" />
               </Container>
               <RoundedCorners Width="250" ColorStart="Variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // der Org ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedSub = 2, // einer der ChildOrgs ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedAndSub = 3 // In der Org und in den ChildOrgs sind Personen zugewiesen" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners6" EnableCustomAttributes="true">
                 <HtmlAttributes>
@@ -317,7 +317,7 @@
                       </HtmlAttributes>
                       <Image Source="DialogImage" DialogImage="Tree Root Node" ScriptItemUID="Image6" EnableCustomAttributes="true">
                         <HtmlAttributes>
-                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image6alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" />
+                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image6alt" Value="translate(&quot;#LDS#Identities assigned to this root object are members of at least one child role.&quot;)" />
                         </HtmlAttributes>
                       </Image>
                     </Container>
@@ -328,7 +328,7 @@
                 <HtmlAttributes>
                   <HtmlAttribute Name="'style'" ScriptItemUID="Container51style" Value="&quot;margin-top: 16px;&quot;" />
                 </HtmlAttributes>
-                <Label Text="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" ScriptItemUID="Label19" />
+                <Label Text="translate(&quot;#LDS#Identities assigned to this root object are members of this role.&quot;)" ScriptItemUID="Label19" />
               </Container>
               <RoundedCorners Width="250" ColorStart="Variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // der Org ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedSub = 2, // einer der ChildOrgs ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedAndSub = 3 // In der Org und in den ChildOrgs sind Personen zugewiesen" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners7" EnableCustomAttributes="true">
                 <HtmlAttributes>
@@ -359,7 +359,7 @@
                         <ControlList ScriptItemUID="Image7Ctl">
                           <Image StockImage="Information" ScriptItemUID="Image7" EnableCustomAttributes="true">
                             <HtmlAttributes>
-                              <HtmlAttribute Name="'alt'" ScriptItemUID="Image7alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" />
+                              <HtmlAttribute Name="'alt'" ScriptItemUID="Image7alt" Value="translate(&quot;#LDS#Identities assigned to this root object are members of this role.&quot;)" />
                             </HtmlAttributes>
                           </Image>
                         </ControlList>
@@ -373,7 +373,7 @@
                 <HtmlAttributes>
                   <HtmlAttribute Name="'style'" ScriptItemUID="Container57style" Value="&quot;margin-top: 16px;&quot;" />
                 </HtmlAttributes>
-                <Label Text="translate(&quot;#LDS#Employees assigned to this root object are members of this role and at least one child role.&quot;)" ScriptItemUID="Label21" />
+                <Label Text="translate(&quot;#LDS#identities assigned to this root object are members of this role and at least one child role.&quot;)" ScriptItemUID="Label21" />
               </Container>
               <RoundedCorners Width="250" ColorStart="Variable(&quot;%QBM_Primary_Orange%&quot;)&#xD;&#xA;&#xD;&#xA;--	None = 0,&#xD;&#xA;-- PersonAssigned = 1, // der Org ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedSub = 2, // einer der ChildOrgs ist eine Person zugewiesen&#xD;&#xA;-- PersonAssignedAndSub = 3 // In der Org und in den ChildOrgs sind Personen zugewiesen" AlphaStart="255" ColorEnd="" AlphaEnd="255" ScriptItemUID="RoundedCorners8" EnableCustomAttributes="true">
                 <HtmlAttributes>
@@ -404,7 +404,7 @@
                         <ControlList ScriptItemUID="Image8Ctl">
                           <Image StockImage="Information" ScriptItemUID="Image8" EnableCustomAttributes="true">
                             <HtmlAttributes>
-                              <HtmlAttribute Name="'alt'" ScriptItemUID="Image8alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of this role.&quot;)" />
+                              <HtmlAttribute Name="'alt'" ScriptItemUID="Image8alt" Value="translate(&quot;#LDS#Identities assigned to this root object are members of this role.&quot;)" />
                             </HtmlAttributes>
                           </Image>
                         </ControlList>
@@ -417,7 +417,7 @@
                       </HtmlAttributes>
                       <Image Source="DialogImage" DialogImage="Tree Root Node" ScriptItemUID="Image9" EnableCustomAttributes="true">
                         <HtmlAttributes>
-                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image9alt" Value="translate(&quot;#LDS#Employees assigned to this root object are members of at least one child role.&quot;)" />
+                          <HtmlAttribute Name="'alt'" ScriptItemUID="Image9alt" Value="translate(&quot;#LDS#Identities assigned to this root object are members of at least one child role.&quot;)" />
                         </HtmlAttributes>
                       </Image>
                     </Container>

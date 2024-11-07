@@ -120,7 +120,7 @@
         <DataTableFKView Table="MitigatingControl" ViewFKDataTable="QERPolicyHasMControl" ViewFKDataColumn="UID_MitigatingControl" ScriptItemUID="DataTableFKView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
         </DataTableFKView>
-        <DataTableCRView Class="QERPolicyInArea" Table="QERPolicyInArea" CRDataColumn="UID_QERPolicy" ViewFKDataTable="SourceObject" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+        <DataTableCRView Class="QERPolicyInArea" Table="QERPolicyInArea" CRDataColumn="UID_QERPolicy" ViewFKDataTable="SourceObject" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
         </DataTableCRView>
       </Tables>

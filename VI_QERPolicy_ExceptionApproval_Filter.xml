@@ -9,13 +9,13 @@
         <CallAction ActionID="LoadData" ScriptItemUID="Call7" />
         <SwitchAction ScriptItemUID="Switch1">
           <SwitchActionCase ScriptItemUID="case2" Condition="showaudit()" ItemUID="AUDIT">
-            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update15" Value="translate('#LDS#The page displays all approvable policy violations in the selected period. Select an employee to show only the policy violations edited by the selected employee.')" />
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update15" Value="translate('#LDS#The page displays all approvable policy violations. Select an identity to show only the policy violations edited by the selected identity.')" />
           </SwitchActionCase>
           <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search person, with preselected User in tabs">
-            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update16" Value="translate('#LDS#The page displays all policy violations in the selected period which have been edited by the selected employee.')" />
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update16" Value="translate('#LDS#The page displays all policy violations which have been edited by the selected identity.')" />
           </SwitchActionCase>
           <SwitchActionCase ScriptItemUID="case1" Condition="not(showaudit()) and not(showhistory()) and isnull(setuseraudit(),'') = ''&#xD;&#xA;and from vars select isnullorempty(uid_qerpolicyhasobject)" ItemUID="NoAudit - History">
-            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update12" Value="translate('#LDS#The page displays all policy violations you are entitled to approve or deny  in the selected period.')" />
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update12" Value="translate('#LDS#The page displays all policy violations you are entitled to approve or deny in the selected period.')" />
           </SwitchActionCase>
           <SwitchActionCase ScriptItemUID="Case1" Condition="not(showaudit()) and showhistory() and isnull(setuseraudit(),'') = ''" ItemUID="NOAUDIT AND HISTORY">
             <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update19" Value="translate('#LDS#This page shows policy violations you have edited.')" />

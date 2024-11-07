@@ -81,7 +81,7 @@
         <DataTableFKView Table="MitigatingControl" ViewFKDataTable="ComplianceRuleHasMControl" ViewFKDataColumn="UID_MitigatingControl" ScriptItemUID="DataTableFKView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType2" ConvertToInteractive="false" />
         </DataTableFKView>
-        <DataTableCRView Class="ComplianceRuleInArea" Table="ComplianceRuleInArea" CRDataColumn="UID_ComplianceRule" ViewFKDataTable="SourceObject" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+        <DataTableCRView Class="ComplianceRuleInArea" Table="ComplianceRuleInArea" CRDataColumn="UID_ComplianceRule" ViewFKDataTable="SourceObject" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
         </DataTableCRView>
       </Tables>

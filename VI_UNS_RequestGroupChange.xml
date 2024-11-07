@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action12" />
       <ActionComponent ScriptItemUID="Action1">
         <LoadTable DataTable="AccProduct" RemoveDeleted="false" WhereClause="SqlCompareUid(&quot;uid_accproduct&quot;,uidaccproduct())" ScriptItemUID="LoadTable1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
@@ -109,12 +110,12 @@
                 </ServerActionCall>
               </Button>
               <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" AssociatedWithEscapeKey="true" ItemUID="Default Button" ScriptItemUID="Button2" EnableCustomAttributes="true">
-                <ServerActionCall ScriptItemUID="ServerActionCall2">
-                  <ActionOnControl />
-                </ServerActionCall>
                 <HtmlAttributes>
                   <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
                 </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                </ServerActionCall>
               </Button>
             </Container>
           </VirtualControlMapping>
@@ -122,7 +123,6 @@
           <VirtualFunctionMapping ID="TableName()" Value="&quot;AccProduct&quot;" ScriptItemUID="VirtualFunctionMapping17" />
         </CallAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action12" />
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
           <Column Name="Scope" ColumnDataSource="LimitedValues" Caption="translate(&quot;#LDS#Group scope&quot;)" ScriptItemUID="Column1" DataType="System.String">

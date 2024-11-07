@@ -1,9 +1,10 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="18dd120b-1dbc-1d04-3402-88ef0a261276">
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_ITShop_PWOOverviewForShoppingCartOrder">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_PWOOverviewForShoppingCartOrder">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="FormGroup">
+      <ActionSequence ScriptItemUID="Action2" />
       <FormGroup ScriptItemUID="FormGroup1">
         <Form ID="ShoppingCartOrderOverviewForm" ScriptItemUID="Form1" NavigationTitle="translate(&quot;#LDS#Request overview&quot;)">
           <ActionSequence ScriptItemUID="Action8" />
@@ -27,7 +28,6 @@
           </PagePartContainer>
         </Form>
       </FormGroup>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1">
         <DataTableDbObject Class="PersonWantsOrg" Table="PWOShoppingCartOrder" ScriptItemUID="DataTableDbObject1">
           <ActionSequence ScriptItemUID="Action1" />

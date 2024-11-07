@@ -4,7 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ConfigSectionDefinition Name="Report Subscriptions" Description="translate(&quot;#LDS#Report Subscriptions&quot;)" ScriptItemUID="ConfigSectionDefinition1">
         <ConfigParam Key="VI_Reporting_Subscription_FilterRPSSubscription" Description="translate(&quot;#LDS#Filter for subscribable reports&quot;)" Type="ColumnList" DatabaseTable="RPSSubscription" LongDescription="" />
-        <ConfigParam Key="VI_Reporting_Subscription_FilterPersonCC" Description="translate(&quot;#LDS#Filter for employees that can receive copies of subscribed reports&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_Reporting_Subscription_FilterPersonCC" Description="translate(&quot;#LDS#Filter for identities that can receive copies of subscribed reports&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="Container">
@@ -95,7 +95,7 @@
                         </HtmlAttributes>
                         <ToolbarButton Text="translate(&quot;#LDS#Actions&quot;)" Tooltip="translate(&quot;#LDS#Actions&quot;)" ScriptItemUID="ToolbarButton1" Layout="'VI_Styles_ToolbarButton_Dropup'">
                           <Menu ScriptItemUID="Menu1">
-                            <MenuElement Text="translate('#LDS#Additional subscribers')" Tooltip="translate('#LDS#Remove or add employees to this subscription')" ScriptItemUID="MenuElement1">
+                            <MenuElement Text="translate('#LDS#Additional subscribers')" Tooltip="translate('#LDS#Add identities to this subscription')" ScriptItemUID="MenuElement1">
                               <ServerActionCall ScriptItemUID="ServerActionCall37">
                                 <CallAction ActionID="AddSubscribers" ScriptItemUID="Call42" />
                               </ServerActionCall>
@@ -283,7 +283,7 @@
                       <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
                         <Action ScriptItemUID="Action23" Condition="isnullorempty(from User select DefaultEmailAddress,'')=''">
                           <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call6">
-                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#There is no e-mail address associated with your employee record. Please contact your system administrator to assign an e-mail address.')" ScriptItemUID="VirtualFunctionMapping16" />
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#There is no email address associated with your identity record. Contact your system administrator to assign an email address.')" ScriptItemUID="VirtualFunctionMapping16" />
                             <VirtualFunctionMapping ID="MessageType()" Value="'Warning'" ScriptItemUID="VirtualFunctionMapping17" />
                           </CallAction>
                         </Action>
@@ -830,7 +830,7 @@ TableStore.GetLocalColumn(RPSSubscription_Current.Row.Table, "UID_DialogParamete
               </ForeachRow>
               <ActionSequence ItemUID="Check for email address" Condition="false and isnullorempty(from User select DefaultEmailAddress,'')=''" ScriptItemUID="Action29">
                 <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call16">
-                  <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#There is no e-mail address associated with your employee record. Please contact your system administrator to assign an e-mail address.')" ScriptItemUID="VirtualFunctionMapping36" />
+                  <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#There is no email address associated with your identity record. Contact your system administrator to assign an email address.')" ScriptItemUID="VirtualFunctionMapping36" />
                   <VirtualFunctionMapping ID="ShowOK()" Value="true" ScriptItemUID="VirtualFunctionMapping6" />
                   <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Missing e-mail address')" ScriptItemUID="VirtualFunctionMapping5" />
                   <VirtualFunctionMapping ID="MessageBoxType()" Value="'Warning'" ScriptItemUID="VirtualFunctionMapping4" />

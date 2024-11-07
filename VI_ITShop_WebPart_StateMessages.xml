@@ -1,9 +1,10 @@
 ﻿<WebDesigner>
-  <GlobalControl ID="VI_ITShop_WebPart_StateMessages" MetamodelVersion="2015-01-01" MigrationNotes="DMLREPLACE;">
+  <GlobalControl ID="VI_ITShop_WebPart_StateMessages" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <Table CustomStyle="variable('width: %WebPartWidth%px;')" ScriptItemUID="Table1">
           <Row ItemUID="Header" ScriptItemUID="Row1">
@@ -27,7 +28,7 @@
                   <Container ScriptItemUID="Container5">
                     <Table CustomStyle="'width: 100%;'" ScriptItemUID="Table2">
                       <ControlReferenceRowGroup ID="VI_ITShop_WebPart_StateMessagesOrders" ScriptItemUID="ControlRef1">
-                        <VirtualFunctionMapping ID="validuntilorders()" Value="true" />
+                        <VirtualFunctionMapping ID="validuntilorders()" Value="true" ScriptItemUID="VirtualFunctionMapping1" />
                       </ControlReferenceRowGroup>
                     </Table>
                   </Container>
@@ -49,7 +50,7 @@
                   <Container ScriptItemUID="Container8">
                     <Table CustomStyle="'width: 100%;'" ScriptItemUID="Table3">
                       <ControlReferenceRowGroup ID="VI_ITShop_WebPart_StateMessagesOrders" ScriptItemUID="ControlRef2">
-                        <VirtualFunctionMapping ID="openorders()" Value="true" />
+                        <VirtualFunctionMapping ID="openorders()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
                       </ControlReferenceRowGroup>
                     </Table>
                   </Container>
@@ -79,13 +80,12 @@
           </Row>
         </Table>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualFunction Signature="OptionalShowOnlyLastOrders()" DataType="System.Boolean" />
     </ComponentInterface>
   </GlobalControl>

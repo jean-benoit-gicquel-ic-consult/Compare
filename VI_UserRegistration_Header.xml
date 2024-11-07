@@ -85,7 +85,7 @@
           <Container ItemUID="User" ScriptItemUID="Container10" Layout="'VI_Styles_Container_Inline'">
             <ToolbarButton Layout="'VI_Styles_ToolbarButton_Heading'" ScriptItemUID="ToolbarButton3" DisplayType="Controls">
               <Menu ScriptItemUID="Menu3">
-                <MenuElement Text="translate(&quot;#LDS#Heading Log Off&quot;)" ScriptItemUID="MenuElement8">
+                <MenuElement Text="translate(&quot;#LDS#Heading Log Out&quot;)" ScriptItemUID="MenuElement8">
                   <ServerActionCall ScriptItemUID="ServerActionCall13">
                     <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction3">
                       <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
@@ -115,9 +115,9 @@ else
 }</CodeLiteral>
                         </ActionComponent>
                       </VirtualControlMapping>
-                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log off?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to log out?&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
                       <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
-                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log off&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Log out&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
                     </CallAction>
                   </ServerActionCall>
                 </MenuElement>

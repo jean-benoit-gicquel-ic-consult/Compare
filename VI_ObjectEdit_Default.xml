@@ -1,10 +1,11 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="381c8d42-9022-7775-5b2d-1bd1ccce99d5">
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_ObjectEdit_Default">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectEdit_Default">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ConfigSectionDefinition Name="ObjectEdit" ScriptItemUID="ConfigSectionDefinition1" Description="" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
           <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
@@ -27,7 +28,6 @@ if (!ColumnList1_columns.Any() &amp;&amp; table != null &amp;&amp; table.IsMNTab
           <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
         </ControlReferenceContainer>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

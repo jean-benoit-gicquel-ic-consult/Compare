@@ -16,7 +16,7 @@
           <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
             <Container ScriptItemUID="Container1">
               <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container4">
-                <Label Text="translate(&quot;#LDS#Please select the employee you wish to submit a question for.&quot;)" ScriptItemUID="Label1" />
+                <Label Text="translate(&quot;#LDS#Select the identity you want to submit a question for.&quot;)" ScriptItemUID="Label1" />
               </Container>
               <Grid ScriptItemUID="Grid1">
                 <GridBand DataTable="PersonReferenceL" DisplayHeader="Always" ScriptItemUID="GridBand1" DataSourceType="Database" DBWhereClause="sqland( &#xD;&#xA;   sqlcompare(&quot;isinactive&quot;, false, &quot;bool&quot;, &quot;equal&quot;), &#xD;&#xA;   sqlcompare(&quot;uid_person&quot;, getuser(), &quot;string&quot;, &quot;notequal&quot;, &quot;NonUnicodeLiterals&quot;)&#xD;&#xA;)" RowSelection="Action" EnableCustomAttributes="true">

@@ -1,9 +1,9 @@
 ﻿<WebDesigner>
-  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Image_Image3232" Type="Image" MigrationNotes="DIALOGCONFIGPARM;">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Image_Image3232" Type="Image" MigrationNotes="DIALOGCONFIGPARM;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="CssClassName" Value="img3232 IconImage" Comment="32x32 pixel picture" />
-    <CssDocument CssName="CSS">.img3232 { width: 32px; height: 32px; }</CssDocument>
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.img3232 { width: 32px; height: 32px; }</CssDocument>
   </LayoutObject>
 </WebDesigner>

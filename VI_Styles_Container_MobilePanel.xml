@@ -1,9 +1,9 @@
 ﻿<WebDesigner>
-  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Container_MobilePanel" Type="Container" ScriptItemUID="LayoutObject1">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Container_MobilePanel" Type="Container" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
-    <CssDocument CssName="CSS (jQuery Mobile 1.4)">.ui-panel {
+    <CssDocument CssName="CSS (jQuery Mobile 1.4)" ScriptItemUID="CssDocument1">.ui-panel {
 	width: %MobilePanelWidth%em;	
 }
 

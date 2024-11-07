@@ -137,7 +137,7 @@
         </GridColumn>
       </GridBand>
       <Tables ScriptItemUID="Tables1">
-        <DataTableCRView Class="QERPolicyInArea" Table="QERPolicyInArea" CRDataColumn="UID_QERPolicy" ViewFKDataTable="QERPolicy" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+        <DataTableCRView Class="QERPolicyInArea" Table="QERPolicyInArea" CRDataColumn="UID_QERPolicy" ViewFKDataTable="QERPolicy" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
         </DataTableCRView>
         <DataTableSQL Table="QERPolicyHasObject" PrimaryKeyColumn="" DisplayColumn="" ScriptItemUID="DataTableLimitedSQL1">

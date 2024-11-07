@@ -5,7 +5,7 @@
         <AssemblyReference Assembly="QER.CompositionApi.dll" />
       </CompilationSettings>
       <ConfigSectionDefinition Name="My profile" Description="translate(&quot;#LDS#My profile&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_MyData_ChallengeLossRoleMembership_MaxDays" Description="translate(&quot;#LDS#Maximum number of days for possible renewal on role loss&quot;)" LongDescription="translate(&quot;#LDS#In the event of loss of a primary role membership, the employee is allowed to request an extension for a maximum of &lt;n&gt; days.&quot;)" Type="Text" />
+        <ConfigParam Key="VI_MyData_ChallengeLossRoleMembership_MaxDays" Description="translate(&quot;#LDS#Maximum number of days for possible renewal on role loss&quot;)" LongDescription="translate(&quot;#LDS#In the event of loss of a primary role membership, the identity is allowed to request an extension for a maximum of &lt;n&gt; days.&quot;)" Type="Text" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="Container">

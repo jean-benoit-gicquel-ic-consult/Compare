@@ -1,11 +1,11 @@
 ﻿<WebDesigner>
-  <LayoutObject ID="VI_Styles_Table_Login" Type="Table" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;">
+  <LayoutObject ID="VI_Styles_Table_Login" Type="Table" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="CssClassNameTableRow" Value="tableLoginRow" Comment="" />
     <Property Name="CssClassName" Value="tableLogin" Comment="" />
-    <CssDocument CssName="CSS">.tableLogin {width: 100%; text-align: center;}
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.tableLogin {width: 100%; text-align: center;}
 .tableLoginRow {width: 512px; }</CssDocument>
   </LayoutObject>
 </WebDesigner>

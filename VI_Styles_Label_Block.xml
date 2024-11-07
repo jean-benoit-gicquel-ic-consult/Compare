@@ -1,10 +1,10 @@
 ﻿<WebDesigner>
-  <LayoutObject MetamodelVersion="2012-02-14" ID="VI_Styles_Label_Block" Type="Label">
+  <LayoutObject MetamodelVersion="2016-05-08" ID="VI_Styles_Label_Block" Type="Label" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="CssClassName" Value="LabelBlock" Comment="" />
-    <CssDocument CssName="CSS">.LabelBlock{
+    <CssDocument CssName="CSS" ScriptItemUID="CssDocument1">.LabelBlock{
  display: block;
 }</CssDocument>
   </LayoutObject>

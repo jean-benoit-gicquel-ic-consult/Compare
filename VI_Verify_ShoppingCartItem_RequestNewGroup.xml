@@ -1,9 +1,10 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="b49fc2de-b6f6-3e6a-5523-8a2d47c2b7c5">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Verify_ShoppingCartItem_RequestNewGroup" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Verify_ShoppingCartItem_RequestNewGroup" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
       <ActionComponent ScriptItemUID="Action1">
         <ActionSequence Condition="from ShoppingCartItem select current IsNullOrEmpty(orderdetail1) and exists(&quot;Personinaerole&quot;, variable(&quot;uid_person = '%useruid%' and uid_aerole = 'ADS-AEROLE-NAMESPACEADMIN-ADS'&quot;))&#xA;-- AD target system administrators must enter additional information on ShoppingCartItem&#xA;" ScriptItemUID="Action2">
           <Update DataTable="ShoppingCartItem" DataColumn="CheckStatus" Value="-- Mark request as invalid&#xD;&#xA;&quot;Invalid&quot;" WhereClause="primarykey()=select current primarykey() from ShoppingCartItem" ScriptItemUID="Update1" />
@@ -33,7 +34,6 @@
           <VirtualFunctionMapping ID="hideMessages()" Value="hideMessages()" ScriptItemUID="VirtualFunctionMapping5" />
         </CallAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action4" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

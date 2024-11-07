@@ -1,7 +1,7 @@
 ﻿<WebDesigner>
-  <LayoutObject ID="VI_Styles_Container_Heading_3" Type="Container" MetamodelVersion="2012-02-14" MigrationNotes="DMLREPLACE;">
+  <LayoutObject ID="VI_Styles_Container_Heading_3" Type="Container" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" ScriptItemUID="LayoutObject1">
     <ContextConfiguration>
-      <ContextParameters />
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Property Name="TagName" Value="h3" Comment="" />
   </LayoutObject>

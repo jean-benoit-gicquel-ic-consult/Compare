@@ -23,7 +23,7 @@
       </ConfigSectionDefinition>
       <ConfigSectionDefinition Name="Authentication" ScriptItemUID="ConfigSectionDefinition2" Description="translate(&quot;#LDS#Authentication&quot;)">
         <ConfigParam Key="VI_Common_RequiresAccessControl" Description="translate(&quot;#LDS#Multi-factor authentication is required after login&quot;)" LongDescription="translate(&quot;#LDS#Specify whether you want to generally enable multi-factor authentication. Before you can use certain multi-factor authentication methods, you must activate this parameter.&quot;)" />
-        <ConfigParam Key="VI_Common_AccessControl_Filter" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Filter condition for employees requiring multi-factor authentication&quot;)" />
+        <ConfigParam Key="VI_Common_AccessControl_Filter" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Filter condition for identities who require multi-factor authentication&quot;)" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">

@@ -17,13 +17,13 @@
       <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
         <ConfigParam Key="VI_ITShop_Filter_AccProduct" Description="translate('#LDS#Products to display for a given recipient')" Type="SQL" DatabaseTable="AccProduct" LongDescription="translate(&quot;#LDS#The parameter {0} can be used as a placeholder for the UID_Person of the request recipient.&quot;)" EmptySQLWhereClauseEquivalent="false" />
         <ConfigParam Key="VI_ITShop_Filter_AccProductMultiUser" Description="translate('#LDS#Products to display for a given list of recipients')" Type="SQL" DatabaseTable="AccProduct" LongDescription="translate(&quot;#LDS#The parameter {0} can be used as a place holder for the list of UID_Person.&quot;)" EmptySQLWhereClauseEquivalent="false" />
-        <ConfigParam Key="VI_ITShop_Filter_PersonReference" Description="translate('#LDS#Selectable reference employees')" Type="SQL" DatabaseTable="Person" LongDescription="" />
-        <ConfigParam Key="VI_ITShop_ProductSelectionByReferenceUser" Description="translate(&quot;#LDS#Creating requests by reference employees is allowed&quot;)" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Filter_PersonReference" Description="translate('#LDS#Selectable reference identities')" Type="SQL" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_ProductSelectionByReferenceUser" Description="translate(&quot;#LDS#Creating requests by reference identities is allowed&quot;)" LongDescription="" />
         <ConfigParam Key="VI_ITShop_AccProduct_Tags" Description="translate('#LDS#Service items tags enabled')" LongDescription="translate(&quot;#LDS#If this parameter is enabled, the web portal supports tagging of service items.&quot;)" />
         <ConfigParam Key="VI_ITShop_Employee_Preselected" Description="translate('#LDS#Requests: Logged in user is recipient')" LongDescription="translate('#LDS#The logged in user is always preselected as a recipient of a new request.')" />
       </ConfigSectionDefinition>
-      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Templates&quot;)" ScriptItemUID="ConfigSectionDefinition2">
-        <ConfigParam Key="VI_ITShop_ProductSelectionFromTemplate" Description="translate(&quot;#LDS#Cart templates enabled&quot;)" LongDescription="" />
+      <ConfigSectionDefinition Name="IT Shop Templates" Description="translate(&quot;#LDS#IT Shop&quot;)+&quot; - &quot;+translate(&quot;#LDS#Product bundles&quot;)" ScriptItemUID="ConfigSectionDefinition2">
+        <ConfigParam Key="VI_ITShop_ProductSelectionFromTemplate" Description="translate(&quot;#LDS#Product bundles enabled&quot;)" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">
@@ -138,7 +138,7 @@
                         <Redirect AbortExecution="false" FormID="ShowHistory" ScriptItemUID="Redirect2" />
                       </ServerActionCall>
                     </MenuElement>
-                    <MenuElement Text="translate('#LDS#Select a request template')" ScriptItemUID="MenuElement2" Condition="getconfig(&quot;VI_ITSHOP_ProductSelectionFromTemplate&quot;) = &quot;true&quot;">
+                    <MenuElement Text="translate('#LDS#Select a product bundle')" ScriptItemUID="MenuElement2" Condition="getconfig(&quot;VI_ITSHOP_ProductSelectionFromTemplate&quot;) = &quot;true&quot;">
                       <ServerActionCall ScriptItemUID="ServerActionCall3">
                         <LoadTable DataTable="ShoppingCartPattern" ScriptItemUID="LoadTable19">
                           <DbObjectLoadType ScriptItemUID="DbObjectLoadType6" ConvertToInteractive="false" />
@@ -147,7 +147,7 @@
                           <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
                             <Container ScriptItemUID="Container31">
                               <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="wctl12">
-                                <VirtualFunctionMapping ID="HeadLine()" Value="translate('#LDS#You created the following templates.')" ScriptItemUID="VirtualFunctionMapping1" />
+                                <VirtualFunctionMapping ID="HeadLine()" Value="translate('#LDS#The following product bundles have been created by you and are available.')" ScriptItemUID="VirtualFunctionMapping1" />
                               </ControlReferenceContainer>
                               <ControlReferenceContainer ID="VI_ITShop_CartPatternApply" ScriptItemUID="ControlReferenceContainer3">
                                 <VirtualTableMapping VirtualTable="ShoppingCartPattern" DataTable="ShoppingCartPattern" ScriptItemUID="VirtualTableMapping1" />
@@ -196,7 +196,7 @@
                                 </VirtualControlMapping>
                               </ControlReferenceContainer>
                               <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="PageDescription1">
-                                <VirtualFunctionMapping ID="HeadLine()" Value="translate('#LDS#The following system-wide templates are available.')" ScriptItemUID="VirtualFunctionMapping5" />
+                                <VirtualFunctionMapping ID="HeadLine()" Value="translate('#LDS#The following system-wide product bundles are available.')" ScriptItemUID="VirtualFunctionMapping5" />
                               </ControlReferenceContainer>
                               <ControlReferenceContainer ID="VI_ITShop_CartPatternApply" ScriptItemUID="ControlReferenceContainer4">
                                 <VirtualTableMapping VirtualTable="ShoppingCartPattern" DataTable="ShoppingCartPatternPublic" ScriptItemUID="VirtualTableMapping5" />
@@ -251,7 +251,7 @@
                               <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ControlRef3" />
                             </Container>
                           </VirtualControlMapping>
-                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Choose a template')" ScriptItemUID="VirtualFunctionMapping9" />
+                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate('#LDS#Select product bundle')" ScriptItemUID="VirtualFunctionMapping9" />
                           <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping10" />
                         </CallAction>
                       </ServerActionCall>
@@ -282,11 +282,11 @@
                           </VirtualControlMapping>
                           <VirtualFunctionMapping ID="CssClass()" Value="&quot;imx-popup-large&quot;" ScriptItemUID="VirtualFunctionMapping41" />
                           <VirtualFunctionMapping ID="TableName()" Value="&quot;Person&quot;" ScriptItemUID="VirtualFunctionMapping42" />
-                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Select an employee&quot;)" ScriptItemUID="VirtualFunctionMapping55" />
+                          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Select an identity&quot;)" ScriptItemUID="VirtualFunctionMapping55" />
                         </CallAction>
                       </ServerActionCall>
                     </MenuElement>
-                    <MenuElement ScriptItemUID="MenuElement4" Text="translate('#LDS#Show products other employees requested')" Condition="(1 = from PersonsForOrder select count())&#xD;&#xA;and(&#xD;&#xA;   (getconfig(&quot;VI_ITShop_Manager_Find_Products_By_Peer_Group&quot;)=&quot;True&quot; and (personfororder() &lt;&gt; GetUser()))&#xD;&#xA;   or&#xD;&#xA;   ((getconfig(&quot;VI_ITShop_Find_Products_By_Peer_Group&quot;)=&quot;True&quot;) and (personfororder() = GetUser()))&#xD;&#xA;)">
+                    <MenuElement ScriptItemUID="MenuElement4" Text="translate('#LDS#Show products other identities requested')" Condition="(1 = from PersonsForOrder select count())&#xD;&#xA;and(&#xD;&#xA;   (getconfig(&quot;VI_ITShop_Manager_Find_Products_By_Peer_Group&quot;)=&quot;True&quot; and (personfororder() &lt;&gt; GetUser()))&#xD;&#xA;   or&#xD;&#xA;   ((getconfig(&quot;VI_ITShop_Find_Products_By_Peer_Group&quot;)=&quot;True&quot;) and (personfororder() = GetUser()))&#xD;&#xA;)">
                       <ServerActionCall ScriptItemUID="ServerActionCall7">
                         <Redirect Target="FormModule" ScriptItemUID="Redirect9">
                           <RedirectFormModule ScriptItemUID="RedirectForm2" ID="VI_ITShop_ProductSelection_PeerGroupMember">
@@ -560,7 +560,7 @@
       </ActionSequence>
     </ActionSequence>
     <Forms ScriptItemUID="Forms1">
-      <Form ID="FindProduct" PageFileName="VI_FormTemplate_Standard" NavigationTitle="if(from container select IsForMyself) then&#xD;&#xA;   translate('#LDS#Request')&#xD;&#xA;else &#xD;&#xA;   translate(&quot;#LDS#Request For {0}&quot;, personfororderdisplay())" SkipNavigation="false" ScriptItemUID="Form1">
+      <Form ID="FindProduct" PageFileName="VI_FormTemplate_Standard" NavigationTitle="if(from container select IsForMyself) then&#xD;&#xA;   translate('#LDS#Request')&#xD;&#xA;else &#xD;&#xA;   translate(&quot;#LDS#Request for {0}&quot;, personfororderdisplay())" SkipNavigation="false" ScriptItemUID="Form1">
         <ActionSequence ScriptItemUID="Action41" />
         <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
           <Label Text="if( from container select IsForMyself or not(isSinglePersonRequest()))&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Request')&#xD;&#xA;else (&#xD;&#xA;if (request(&quot;addingToExistingCart&quot;)=true)&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#Request {1} For {0}&quot;, personfororderdisplay(), request (&quot;ShoppingCartOrderDocumentNumber&quot;))&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#Request For {0}&quot;, personfororderdisplay()))&#xD;&#xA;" ScriptItemUID="Label6" />
@@ -572,7 +572,7 @@
             </HtmlAttributes>
             <Container ScriptItemUID="Container22" Condition="not(requesterSelected())">
               <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef20">
-                <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Please select at least one employee.')" ScriptItemUID="VirtualFunctionMapping56" />
+                <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Select at least one identity.')" ScriptItemUID="VirtualFunctionMapping56" />
               </ControlReferenceContainer>
             </Container>
             <Container ScriptItemUID="Container23" ItemUID="extra layout container required for Chrome 767691">

@@ -1,9 +1,10 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="RAibPEJqu9V6ZuB3VszcpA==">
-  <GlobalControl MetamodelVersion="2014-01-03" ID="VI_ObjectEdit_Person" MigrationNotes="DMLREPLACE;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ObjectEdit_Person" MigrationNotes="DMLREPLACE;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <Container ItemUID="Personal Data - Fields" ScriptItemUID="Container5">
           <Label Text="translate('#LDS#Personal data')" ScriptItemUID="Label1" EnableCustomAttributes="true">
@@ -12,12 +13,12 @@
             </HtmlAttributes>
           </Label>
           <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef4">
-            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
               <ColumnList ScriptItemUID="ColumnList7">
-                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_attributes&quot;)" />
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_attributes&quot;)" ScriptItemUID="ExpressionColumnList1" />
               </ColumnList>
             </VirtualFunctionMapping>
-            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
           </ControlReferenceContainer>
         </Container>
         <Container ItemUID="Organisational data - Fields" ScriptItemUID="Container18">
@@ -27,12 +28,12 @@
             </HtmlAttributes>
           </Label>
           <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef5">
-            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping2">
               <ColumnList ScriptItemUID="ColumnList2">
-                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_OrganizationalAttributes&quot;)" />
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_OrganizationalAttributes&quot;)" ScriptItemUID="ExpressionColumnList2" />
               </ColumnList>
             </VirtualFunctionMapping>
-            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping2" />
           </ControlReferenceContainer>
         </Container>
         <Container ItemUID="Location data - Fields" ScriptItemUID="Container11">
@@ -42,22 +43,21 @@
             </HtmlAttributes>
           </Label>
           <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
-            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping3">
               <ColumnList ScriptItemUID="ColumnList1">
-                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_localityattributes&quot;)" />
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Employee_MasterData_localityattributes&quot;)" ScriptItemUID="ExpressionColumnList3" />
               </ColumnList>
             </VirtualFunctionMapping>
-            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" />
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping3" />
           </ControlReferenceContainer>
         </Container>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit">
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectEdit" ScriptItemUID="ComponentInterface1">
       <VirtualTableExtension Name="EditTable" Class="Person" ScriptItemUID="VirtualTableExtension1" />
     </ComponentInterface>
   </GlobalControl>

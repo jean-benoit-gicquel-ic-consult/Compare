@@ -9,7 +9,7 @@
       </ActionSequence>
       <Container ScriptItemUID="Container1">
         <Container Condition="isnull(setuseraudit(),'') &lt;&gt; ''" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container2">
-          <Label Text="translate('#LDS#The selected employee is responsible for the following roles, permissions and resources.')" ScriptItemUID="Label1" />
+          <Label Text="translate('#LDS#The selected identity is responsible for the following roles, permissions and resources.')" ScriptItemUID="Label1" />
         </Container>
         <Container ScriptItemUID="Container7" Condition="isnull(setuseraudit(),'') = '' and DbTableName() &lt;&gt; 'AERole'">
           <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
@@ -73,7 +73,7 @@
       </Container>
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
-          <Column Name="uid_personaudit" ScriptItemUID="Column1" DataType="System.String" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" Caption="translate('#LDS#Select an employee')" TriggerUpdates="Updates" FKWhereClause="" />
+          <Column Name="uid_personaudit" ScriptItemUID="Column1" DataType="System.String" ColumnDataSource="ForeignKey" DBTableName="&quot;Person&quot;" DBColumnName="&quot;UID_Person&quot;" Caption="translate('#LDS#Select an identity')" TriggerUpdates="Updates" FKWhereClause="" />
         </DataTableSingleRow>
         <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow2">
           <Column Name="UID_ObjectSelected" ScriptItemUID="Column34" DataType="System.String" />
@@ -238,7 +238,7 @@
                                       </ActionComponent>
                                     </VirtualControlMapping>
                                     <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
-                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this organizational unit belong to.')" />
+                                    <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles and organizations that the identities assigned to this company resource belong to.')" />
                                   </ControlReferenceContainer>
                                 </Container>
                               </Container>

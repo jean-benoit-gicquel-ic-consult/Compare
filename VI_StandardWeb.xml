@@ -74,10 +74,10 @@
         <ConfigParam Key="VI_Common_DefaultModuleTimeout" Type="Text" Description="translate(&quot;#LDS#Default module timeout (minutes)&quot;)" />
         <ConfigParam Key="VI_Common_AutoCompletePrefixOnly" Description="translate(&quot;#LDS#Autocomplete: Search matches must begin with search term&quot;)" LongDescription="translate(&quot;#LDS#For autocomplete, only search matches that begin with the search term are displayed. If you disable this setting, more search matches are displayed, but the search may be slower.&quot;)" />
       </ConfigSectionDefinition>
-      <ConfigSectionDefinition Name="QPM Integration" Description="translate(&quot;#LDS#QPM Integration&quot;)" ScriptItemUID="ConfigSectionDefinition3">
+      <ConfigSectionDefinition Name="QPM Integration" Description="translate(&quot;#LDS#QPM integration&quot;)" ScriptItemUID="ConfigSectionDefinition3">
         <ConfigParam Key="VI_MyData_MyPassword_QPM" Description="translate(&quot;#LDS#Display QPM links in menu&quot;)" LongDescription="" />
         <ConfigParam Key="VI_MyData_MyPassword_QPM_Version" Description="translate(&quot;#LDS#Use QPM version 5.0&quot;)" LongDescription="translate(&quot;#LDS#Determines if version QPM 4.7 or QPM 5.0 is used.&quot;)" />
-        <ConfigParam Key="VI_PersonalData_MyPassword_Filter" Description="translate(&quot;#LDS#Employees who can access QPM links&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_PersonalData_MyPassword_Filter" Description="translate(&quot;#LDS#Identities who can access QPM links&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
         <ConfigParam Key="VI_MyData_MyPassword_QPM_IdentificationDomain" Description="translate(&quot;#LDS#Identification domain&quot;)" Type="Text" LongDescription="" />
         <ConfigParam Key="VI_MyData_MyPassword_QPM_BaseURL" Description="translate(&quot;#LDS#Base URL of QPM portal&quot;)" Type="Text" LongDescription="" />
         <ConfigParam Key="VI_MyData_MyPassword_QPM_PortalLink" Description="translate(&quot;#LDS#Base URL of web portal (for back links)&quot;)" LongDescription="translate(&quot;#LDS#Base URL of web portal like http://exampleserver/IdentityManager, or use standard value of configuration parameter 'QER\WebPortal\BaseURL'.&quot;)" Type="Text" />

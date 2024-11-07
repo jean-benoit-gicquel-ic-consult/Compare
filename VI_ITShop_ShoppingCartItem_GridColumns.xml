@@ -1,19 +1,19 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="XNf8yIEmRtNeoHqwiynyTQ==">
-  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_ITShop_ShoppingCartItem_GridColumns" MigrationNotes="DMLREPLACE;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_ShoppingCartItem_GridColumns" MigrationNotes="DMLREPLACE;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="GridColumnGroup">
+      <ActionSequence ScriptItemUID="Action1" />
       <GridColumnGroup DataTable="ShoppingCartItem" ScriptItemUID="GridColumnGroup1">
         <GridColumnSimple ScriptItemUID="Column1" Column="UID_PersonOrdered" Width="&quot;170px&quot;" Condition="not(hidepersonordered())" />
       </GridColumnGroup>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTable1" />
       <VirtualFunction Signature="HidePersonOrdered()" DataType="System.Boolean" TriggerUpdates="Never" />
     </ComponentInterface>

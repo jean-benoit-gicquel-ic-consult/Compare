@@ -153,6 +153,11 @@ foreach (var item in checkResult.Items)
 		ShoppingCartItem_CheckStatus.SetValue(sci, "Right");
 	}
 
+	if (qerResult.HasInvalidParameters)
+	{
+		ShoppingCartItem_CheckStatus.SetValue(sci, "Invalid");
+	}
+	
 	foreach (var exclusion in qerResult.Exclusions)
 	{
 		ShoppingCartItem_CheckStatus.SetValue(sci, "PermissionExclusion");

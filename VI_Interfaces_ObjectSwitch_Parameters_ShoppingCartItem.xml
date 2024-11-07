@@ -1,11 +1,11 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Interfaces_ObjectSwitch_Parameters_ShoppingCartItem" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Parameters_ShoppingCartItem" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ComponentInterfaceObject">
-      <ComponentInterfaceObject ContainerType="Container" />
       <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

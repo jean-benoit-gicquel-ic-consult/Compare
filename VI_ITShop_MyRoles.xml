@@ -9,9 +9,9 @@
         <Parameter Name="Title" IsMandatory="false" />
         <Parameter Name="HideObjectTypSelect" IsMandatory="false" Type="Boolean" />
       </ContextParameters>
-      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_ITShop_Filter_PersonMembershipInAERole" Type="SQL" Description="translate('#LDS#Employees who can be member of a application role as owner or attestor')" DatabaseTable="Person" LongDescription="" />
-        <ConfigParam Key="VI_ITShop_Filter_PersonMembershipRequestFor" Type="SQL" Description="translate('#LDS#Employees for whom a membership can be requested')" DatabaseTable="Person" LongDescription="" />
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Identities&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_ITShop_Filter_PersonMembershipInAERole" Type="SQL" Description="translate('#LDS#You can assign these identities as owners or attestors.')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Filter_PersonMembershipRequestFor" Type="SQL" Description="translate('#LDS#Identities for whom a membership can be requested')" DatabaseTable="Person" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">

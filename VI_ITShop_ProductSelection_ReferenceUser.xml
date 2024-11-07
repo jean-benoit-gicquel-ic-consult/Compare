@@ -5,7 +5,7 @@
         <AssemblyReference Assembly="QER.CompositionApi.dll" />
       </CompilationSettings>
       <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
-        <ConfigParam Key="VI_ITShop_Filter_AccProduct_Copy" Description="translate(&quot;#LDS#Filter for requests which can be copied from a reference employee&quot;)" Type="SQL" DatabaseTable="AccProduct" LongDescription="" />
+        <ConfigParam Key="VI_ITShop_Filter_AccProduct_Copy" Description="translate(&quot;#LDS#Filter for requests which can be copied from a reference identity&quot;)" Type="SQL" DatabaseTable="AccProduct" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="FormGroup">
@@ -268,7 +268,7 @@
                     <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCart" ScriptItemUID="Redirect3" AllowReturnToThisContext="false" />
                   </ServerActionCall>
                 </Button>
-                <Button Text="translate(&quot;#LDS#Create template&quot;)" ScriptItemUID="Button4">
+                <Button Text="translate(&quot;#LDS#Create product bundle&quot;)" ScriptItemUID="Button4">
                   <ServerActionCall ScriptItemUID="ServerActionCall7">
                     <Redirect Target="Context" ContextID="VI_ITShop_ShoppingCartPatternAddOrMerge" AllowReturnToThisContext="true" ScriptItemUID="Redirect5">
                       <RedirectParameter Name="'UID_Person_ReferenceUser'" Value="from PersonReference select top 1 UID_Person" />

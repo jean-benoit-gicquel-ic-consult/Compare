@@ -1,17 +1,17 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Interfaces_ObjectSwitch_GroupOwnerEdit" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_GroupOwnerEdit" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ComponentInterfaceObject">
-      <ComponentInterfaceObject ContainerType="Container" />
       <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="GroupObject" RequiresCursor="true" ScriptItemUID="VirtualTable1">
         <VirtualColumn Name="UID_AccProduct" DataType="System.String" />
       </VirtualTable>

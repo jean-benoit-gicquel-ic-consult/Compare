@@ -1,5 +1,5 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6644f01e-17bd-61d8-97a5-cf4d01153fad">
-  <GlobalControl MetamodelVersion="2016-05-01" ID="VI_ITShop_CalculatePWOComplianceCheck" MigrationNotes="DMLREPLACE;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ITShop_CalculatePWOComplianceCheck" MigrationNotes="DMLREPLACE;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1">
         <AssemblyReference Assembly="CPL.Customizer.dll" />
@@ -10,6 +10,7 @@
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action6" />
       <ActionComponent ScriptItemUID="Action1">
         <ActionSequence Condition="convert(isnull(getconfig(&quot;VI_ITShop_CalculateComplianceCheckPostOrder&quot;),'false'), 'Boolean')&#xA;and getconfigparm(&quot;QER\ComplianceCheck\SimpleMode&quot;)=&quot;1&quot;" ScriptItemUID="Action2">
           <Comment Comment="Delete results from a previous compliance check" />
@@ -17,7 +18,7 @@
           <Delete DataTable="ComplianceCheckSimpleObjects" ScriptItemUID="Delete2" />
           <ActionSequence Condition="0 = from ComplianceCheckSimple select count()" ItemUID="From PWODecisionHistory" ScriptItemUID="Action3">
             <LoadTable DataTable="ComplianceCheckByPWODecisionHistory" Type="LimitedSQL" ScriptItemUID="LoadTable1" IdentLimitedSQL="&quot;Webportal.VI_ITShop_CalculatePWOComplianceCheck.CCByPWOHistory1&quot;">
-              <ParameterFree Name="&quot;uidpersonwantsorg&quot;" Value="from PersonWantsOrg select current UID_PersonWantsOrg" />
+              <ParameterFree Name="&quot;uidpersonwantsorg&quot;" Value="from PersonWantsOrg select current UID_PersonWantsOrg" ScriptItemUID="ParameterFree1" />
             </LoadTable>
           </ActionSequence>
           <ActionSequence Condition="0 = from ComplianceCheckSimple select count()" ScriptItemUID="Action4">
@@ -48,7 +49,7 @@
           </ActionSequence>
           <ActionSequence Condition="0 = from ComplianceCheckSimple select count()" ScriptItemUID="Action5">
             <LoadTable DataTable="ComplianceCheckByPWODecisionHistory" Type="LimitedSQL" ScriptItemUID="LoadTable2" IdentLimitedSQL="&quot;Webportal.VI_ITShop_CalculatePWOComplianceCheck.CCByPWOHistory2&quot;">
-              <ParameterFree Name="&quot;uid_personwantsorg&quot;" Value="from PersonWantsOrg select current UID_PersonWantsOrg" />
+              <ParameterFree Name="&quot;uid_personwantsorg&quot;" Value="from PersonWantsOrg select current UID_PersonWantsOrg" ScriptItemUID="ParameterFree2" />
             </LoadTable>
           </ActionSequence>
           <Comment Comment="Retrieve objects from the object keys" />
@@ -57,7 +58,6 @@
           </FillTable>
         </ActionSequence>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action6" />
       <Tables ScriptItemUID="Tables1">
         <DataTableSQL Table="ComplianceCheckByPWODecisionHistory" PrimaryKeyColumn="pk" ScriptItemUID="DataTableLimitedSQL1">
           <ActionSequence ScriptItemUID="Action7">

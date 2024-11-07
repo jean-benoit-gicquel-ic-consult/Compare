@@ -61,7 +61,7 @@
                         <Property Name="TagName" Value="li" Comment="" />
                       </HtmlAttributes>
                       <Container ScriptItemUID="Container10">
-                        <Label Text="translate(&quot;#LDS#The following employees are currently entitled to approve this request.&quot;)" ScriptItemUID="Label4" />
+                        <Label Text="translate(&quot;#LDS#The following identities are currently entitled to approve this request.&quot;)" ScriptItemUID="Label4" />
                       </Container>
                       <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber = 1)">
                         <Container ScriptItemUID="Container11">
@@ -79,7 +79,7 @@
                         <Property Name="TagName" Value="li" Comment="" />
                       </HtmlAttributes>
                       <Container ScriptItemUID="Container16">
-                        <Label Text="translate(&quot;#LDS#The following employees are entitled to approve this request after the current workflow step.&quot;)" ScriptItemUID="Label10" />
+                        <Label Text="translate(&quot;#LDS#The following identities are presumably entitled to approve this request after the current workflow step.&quot;)" ScriptItemUID="Label10" />
                       </Container>
                       <ContainerTemplate ScriptItemUID="ContainerTemplate2" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2PWO2OrderNumber where OrderNumber &gt; 1)">
                         <Container ScriptItemUID="Container9">

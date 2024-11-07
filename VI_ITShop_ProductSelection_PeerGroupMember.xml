@@ -6,7 +6,7 @@
       </CompilationSettings>
       <ConfigSectionDefinition Name="IT Shop" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#IT Shop&quot;)">
         <ConfigParam Key="VI_ITShop_Find_Products_By_Peer_Group" Description="translate('#LDS#Peer group requests')" LongDescription="translate('#LDS#Activates requests via peer groups. All users can view and request products of their own peer group.')" />
-        <ConfigParam Key="VI_ITShop_Manager_Find_Products_By_Peer_Group" Description="translate('#LDS#Peer group requests for others')" LongDescription="translate('#LDS#Activates requests via peer groups. Managers can view and request products of the peer group of an employee they are responsible for.')" />
+        <ConfigParam Key="VI_ITShop_Manager_Find_Products_By_Peer_Group" Description="translate('#LDS#Peer group requests for others')" LongDescription="translate('#LDS#Activates requests via peer groups. Managers can view and request products of the peer group of an identity they are responsible for.')" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="FormGroup">
@@ -16,7 +16,7 @@
           <ActionSequence ScriptItemUID="Action1" />
           <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
             <Container ScriptItemUID="Container3" RefreshTriggerExpression="from Person select Count()">
-              <Label Text="translate('#LDS#Products other employees requested',from Person select top 1 display())" ScriptItemUID="Label1" />
+              <Label Text="translate('#LDS#Products other identities requested',from Person select top 1 display())" ScriptItemUID="Label1" />
             </Container>
           </PagePartContainer>
           <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
@@ -33,7 +33,7 @@
             </Activator>
             <Container Condition="0 &lt; select count() from AccProduct" ScriptItemUID="Container1">
               <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlReferenceContainer1">
-                <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Other employees of the peer group of {0} requested the following products. Please select the products you would also like to request.&quot;, from Person select top 1 display())" ScriptItemUID="VirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="Text()" Value="translate('#LDS#Other identities of the peer group of &quot;{0}&quot; requested the following products. Please select the products you would also like to request.', from Person select top 1 display())" ScriptItemUID="VirtualFunctionMapping1" />
               </ControlReferenceContainer>
               <Container Layout="'VI_Styles_Container_Paragraph'" ItemUID="PRODUCTS" ScriptItemUID="Container2">
                 <Grid ScriptItemUID="Grid1">
@@ -135,7 +135,7 @@
                         <Label ScriptItemUID="Label2" Text="DataCaption(AccProduct,Counter)" />
                       </GridColumnHeader>
                       <Cell ScriptItemUID="Cell2">
-                        <Label ScriptItemUID="Label3" Text="if(1 = from AccProduct select current Counter)then&#xD;&#xA;   Translate(&quot;#LDS#Assigned to {0} other employee&quot;, from AccProduct select current Counter)&#xD;&#xA;else&#xD;&#xA;   Translate(&quot;#LDS#Assigned to {0} other employees&quot;, from AccProduct select current Counter)" />
+                        <Label ScriptItemUID="Label3" Text="if(1 = from AccProduct select current Counter)then&#xD;&#xA;   Translate(&quot;#LDS#Assigned to {0} other identities&quot;, from AccProduct select current Counter)&#xD;&#xA;else&#xD;&#xA;   Translate(&quot;#LDS#Assigned to {0} other identities&quot;, from AccProduct select current Counter)" />
                       </Cell>
                     </GridColumn>
                     <GridColumn ScriptItemUID="Column7" Width="&quot;150px&quot;" AutoFilterColumn="Percent" SortColumn="Percent">
@@ -147,7 +147,7 @@
                           <VirtualFunctionMapping ID="Progress()" Value="from AccProduct select current Progress" ScriptItemUID="VirtualFunctionMapping49" />
                           <VirtualFunctionMapping ID="LowerLimit()" Value="0" ScriptItemUID="VirtualFunctionMapping48" />
                           <VirtualFunctionMapping ID="UpperLimit()" Value="0" ScriptItemUID="VirtualFunctionMapping47" />
-                          <VirtualFunctionMapping ID="Tooltip()" Value="Translate(&quot;#LDS# {0} % of the other employees&quot;,format(&quot;{0:0.0}&quot;,from AccProduct select current Percent))" ScriptItemUID="VirtualFunctionMapping46" />
+                          <VirtualFunctionMapping ID="Tooltip()" Value="Translate(&quot;#LDS#{0}% of the other identities&quot;,format(&quot;{0:0.0}&quot;,from AccProduct select current Percent))" ScriptItemUID="VirtualFunctionMapping46" />
                           <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="OverWriteColor()" Value="variable('%VI_Common_Color_Blue_2%')" />
                         </ControlReferenceContainer>
                       </Cell>
@@ -210,7 +210,7 @@
           <Column Name="RequestThis" DataType="System.Boolean" ScriptItemUID="Column1" />
           <Column Name="OrderableStatus" Expression="exists(&quot;AccProduct&quot;,format(&quot;uid_accproduct in (select uid_accproduct from {0})&quot;,sqlfunctioncalltable(&quot;QER&quot;,&quot;GGetInfo&quot;, &quot;FTPWOOrderPerson&quot;,sqlformatvalue(OrderPerson(), &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,sqlformatvalue(UID_AccProduct, &quot;string&quot;, &quot;NonUnicodeLiterals&quot;),&quot;null&quot;,&quot;null&quot;)))" DataSource="Expression" ScriptItemUID="Column14" DataType="System.Boolean" />
           <Column Name="TableName" DataType="System.String" ScriptItemUID="Column27" DataSource="Expression" Expression="{{ QER.CompositionApi.ITShop.AccProductUsageCache.Instance.GetAsync(_Database, queryRow.GetValue(&quot;UID_AccProduct&quot;)).Result.TableName }}+&quot;&quot;" />
-          <Column DataType="System.Int32" Name="Counter" ScriptItemUID="Column2" DataSource="Expression" Expression="IsNullOrEmpty(&#xD;&#xA;	DbCount(&#xD;&#xA;		&quot;Person&quot;,&#xD;&#xA;		format(&#xD;&#xA;			&quot;UID_Person in(&#xD;&#xA;			   select pho.UID_Person from QER_VPWOProductNodes p&#xD;&#xA;			   join personhasobject pho on pho.ObjectKey = p.ObjectKeyOrdered&#xD;&#xA;			   join AccProduct A on A.UID_ACCProduct = p.UID_ACCProduct and {2}&#xD;&#xA;			   where p.uid_accproduct = '{1}' and pho.UID_Person in ({0})&#xD;&#xA;			   UNION&#xD;&#xA;			   select pho.UID_Person from QER_VPWOProductNodes p&#xD;&#xA;			   join QERAssign Q on Q.UID_AccProduct = p.UID_AccProduct&#xD;&#xA;			   join personhasobject pho on pho.ObjectKey = Q.ObjectKeyAssignTarget&#xD;&#xA;			   join AccProduct A on A.UID_ACCProduct = p.UID_ACCProduct and {2}&#xD;&#xA;			   where p.uid_accproduct = '{1}' and pho.UID_Person in ({0})&#xD;&#xA;			)&quot;,&#xD;&#xA;			QER_PeerGroupSelect(&#xD;&#xA;				OrderPerson(),&#xD;&#xA;				&quot;QER\ITShop\PeerGroupAnalysis&quot;&#xD;&#xA;			),&#xD;&#xA;			UID_ACCProduct,&#xD;&#xA;			variable(&#xD;&#xA;				getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;)&#xD;&#xA;			)&#xD;&#xA;		),&#xD;&#xA;		false&#xD;&#xA;	),&#xD;&#xA;	0&#xD;&#xA;)	" Caption="translate('#LDS#Number of employees')" />
+          <Column DataType="System.Int32" Name="Counter" ScriptItemUID="Column2" DataSource="Expression" Expression="IsNullOrEmpty(&#xD;&#xA;	DbCount(&#xD;&#xA;		&quot;Person&quot;,&#xD;&#xA;		format(&#xD;&#xA;			&quot;UID_Person in(&#xD;&#xA;			   select pho.UID_Person from QER_VPWOProductNodes p&#xD;&#xA;			   join personhasobject pho on pho.ObjectKey = p.ObjectKeyOrdered&#xD;&#xA;			   join AccProduct A on A.UID_ACCProduct = p.UID_ACCProduct and {2}&#xD;&#xA;			   where p.uid_accproduct = '{1}' and pho.UID_Person in ({0})&#xD;&#xA;			   UNION&#xD;&#xA;			   select pho.UID_Person from QER_VPWOProductNodes p&#xD;&#xA;			   join QERAssign Q on Q.UID_AccProduct = p.UID_AccProduct&#xD;&#xA;			   join personhasobject pho on pho.ObjectKey = Q.ObjectKeyAssignTarget&#xD;&#xA;			   join AccProduct A on A.UID_ACCProduct = p.UID_ACCProduct and {2}&#xD;&#xA;			   where p.uid_accproduct = '{1}' and pho.UID_Person in ({0})&#xD;&#xA;			)&quot;,&#xD;&#xA;			QER_PeerGroupSelect(&#xD;&#xA;				OrderPerson(),&#xD;&#xA;				&quot;QER\ITShop\PeerGroupAnalysis&quot;&#xD;&#xA;			),&#xD;&#xA;			UID_ACCProduct,&#xD;&#xA;			variable(&#xD;&#xA;				getconfig(&quot;VI_ITShop_Filter_AccProduct_Copy&quot;)&#xD;&#xA;			)&#xD;&#xA;		),&#xD;&#xA;		false&#xD;&#xA;	),&#xD;&#xA;	0&#xD;&#xA;)	" Caption="translate('#LDS#Number of identities')" />
           <Column DataType="System.Double" Name="Percent" ScriptItemUID="Column5" DataSource="Expression" Expression="((from AccProduct select current Convert(Counter,&quot;System.Double&quot;)) * 100) / (from Vars select PeerGroupCount)" Caption="translate('#LDS#Distribution in the peer group')" />
           <Column DataType="System.Double" Name="Progress" ScriptItemUID="Column6" DataSource="Expression" Expression="from AccProduct select current (Round(Percent)/100) " />
         </DataTableDbObject>

@@ -45,7 +45,7 @@
                 <GridRows />
                 <GridColumn ScriptItemUID="GridColumn9" SortColumn="__Display" AutoFilterColumn="__Display">
                   <GridColumnHeader ScriptItemUID="wctl7">
-                    <Label Text="translate(&quot;#LDS#Employee&quot;)" ScriptItemUID="Label21" />
+                    <Label Text="translate(&quot;#LDS#Identity&quot;)" ScriptItemUID="Label21" />
                   </GridColumnHeader>
                   <Cell ScriptItemUID="Cell10">
                     <Label Text="from person select current __display" ScriptItemUID="Label22" />

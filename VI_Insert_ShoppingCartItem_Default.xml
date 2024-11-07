@@ -57,7 +57,7 @@
       </Tables>
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">
-        <Function Name="AccProductAllowsCopyParameter(string uid_accproduct)" Expression="If(IsNullOrEmpty(IsNoCopyParametersPerson()))Then(&#xD;&#xA;Exists(&quot;AccProduct&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompareuid(&quot;UID_AccProduct&quot;, uid_accproduct),&#xD;&#xA;sqlcompare(&quot;IsNoCopyParametersPerson&quot;, 0, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;Else(&#xD;&#xA;IsNoCopyParametersPerson()&#xD;&#xA;)" DataType="System.Boolean" ScriptItemUID="Function2" />
+        <Function Name="AccProductAllowsCopyParameter(string uid_accproduct)" Expression="Not(&#xD;&#xA;If(IsNullOrEmpty(IsNoCopyParametersPerson()))Then(&#xD;&#xA;Exists(&quot;AccProduct&quot;,&#xD;&#xA;SqlAnd(&#xD;&#xA;sqlcompareuid(&quot;UID_AccProduct&quot;, uid_accproduct),&#xD;&#xA;sqlcompare(&quot;IsNoCopyParametersPerson&quot;, 1, &quot;bool&quot;, &quot;equal&quot;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;)&#xD;&#xA;Else(&#xD;&#xA;convert(IsNoCopyParametersPerson(), &quot;System.Boolean&quot;)&#xD;&#xA;)&#xD;&#xA;)" DataType="System.Boolean" ScriptItemUID="Function2" />
       </Functions>
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>

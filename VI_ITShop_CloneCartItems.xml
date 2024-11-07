@@ -8,7 +8,7 @@
       <ActionComponent ScriptItemUID="Action1">
         <Update DataTable="LocalVars" DataColumn="UID_SelectedPerson" ScriptItemUID="Update1" />
         <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
-          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Request for multiple employees&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Request for multiple identities&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
           <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
             <Container ScriptItemUID="Container1">
               <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ControlRef1">

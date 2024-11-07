@@ -85,7 +85,7 @@
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">
-        <Function Name="GetProlongationSuffix()" Expression="select current&#xA;(if(orderstate=&quot;OrderProlongate&quot;) then (&quot; &quot;+translate(&quot;#LDS#until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)))&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
+        <Function Name="GetProlongationSuffix()" Expression="select current&#xA;(if(orderstate=&quot;OrderProlongate&quot;) then (&quot; &quot;+translate(&quot;#LDS#Until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)))&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
           <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor1" />
         </Function>
       </Functions>

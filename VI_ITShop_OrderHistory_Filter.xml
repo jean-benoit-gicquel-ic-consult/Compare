@@ -33,10 +33,10 @@
           <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search description if auditor is preselected in the Tab control">
             <SwitchAction ScriptItemUID="Switch3">
               <SwitchActionCase ScriptItemUID="Case4" ItemUID="Requester" Condition="showfor('Requester')">
-                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update19" Value="translate('#LDS#The page displays all requests of the selected employee.')" />
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update19" Value="translate('#LDS#This page displays all requests of the selected identity.')" />
               </SwitchActionCase>
               <SwitchActionCase ScriptItemUID="Case1" ItemUID="Approver" Condition="showfor('Approver')">
-                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update18" Value="translate('#LDS#The page displays all approvals of the selected employee where the selected employee was involved in the approval process.')" />
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update18" Value="translate('#LDS#The page displays all approvals of the selected identity where the selected identity was involved in the approval process.')" />
               </SwitchActionCase>
             </SwitchAction>
           </SwitchActionCase>
@@ -63,7 +63,7 @@ catch{}
                 <Container ScriptItemUID="Container3">
                   <Container Condition="showaudit()" ItemUID="Audit person search control" ScriptItemUID="Container9">
                     <LayoutPanel Columns="2" Layout="'VI_Styles_LayoutPanel_WidePropertyList'" ScriptItemUID="LayoutPanel1">
-                      <Label Text="if(showfor('Requester')) then&#xD;&#xA;translate('#LDS#Select employee') + ':'&#xD;&#xA;else if(showfor('Approver')) then&#xD;&#xA;translate('#LDS#Select approver') + ':'" ScriptItemUID="Label1" />
+                      <Label Text="if(showfor('Requester')) then&#xD;&#xA;translate('#LDS#Select identity') + ':'&#xD;&#xA;else if(showfor('Approver')) then&#xD;&#xA;translate('#LDS#Select approver') + ':'" ScriptItemUID="Label1" />
                       <ColumnEditor DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="ColumnEditor1" />
                     </LayoutPanel>
                   </Container>
@@ -88,16 +88,16 @@ catch{}
                             </Label>
                           </Container>
                           <Container ScriptItemUID="Container15">
-                            <CheckBox DataTable="Vars" DataColumn="ShowSelfOrder" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by the selected employee for himself')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by you for yourself')" ScriptItemUID="CheckBox1" />
+                            <CheckBox DataTable="Vars" DataColumn="ShowSelfOrder" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by the selected identity for itself')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by you for yourself')" ScriptItemUID="CheckBox1" />
                           </Container>
                           <Container ScriptItemUID="Container16">
-                            <CheckBox DataTable="Vars" DataColumn="ShowOrderForOthers" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by the selected employee for others')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by you for others')&#xD;&#xA;" ScriptItemUID="CheckBox2" />
+                            <CheckBox DataTable="Vars" DataColumn="ShowOrderForOthers" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by the selected identity for others')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by you for others')&#xD;&#xA;" ScriptItemUID="CheckBox2" />
                           </Container>
                           <Container ScriptItemUID="Container17">
-                            <CheckBox DataTable="Vars" DataColumn="ShowOrderByOthers" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by others for the selected employee')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by others for you')" ScriptItemUID="CheckBox3" />
+                            <CheckBox DataTable="Vars" DataColumn="ShowOrderByOthers" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate('#LDS#Requests submitted by others for the selected identity')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by others for you')" ScriptItemUID="CheckBox3" />
                           </Container>
                           <Container Condition="exists(&quot;person&quot;, variable( getconfig(&quot;VI_Employee_Person_Filter&quot;)))" ScriptItemUID="Container18">
-                            <CheckBox DataTable="Vars" DataColumn="ShowOrdersInScope" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate(&quot;#LDS#Submitted requests in the selected employee's organization&quot;)&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by other users')" ScriptItemUID="CheckBox4" />
+                            <CheckBox DataTable="Vars" DataColumn="ShowOrdersInScope" Text="if(auditmode() or showaudit()) then&#xD;&#xA;translate(&quot;#LDS#Submitted requests in the selected identity's organization&quot;)&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Requests submitted by identities you are responsible for')" ScriptItemUID="CheckBox4" />
                           </Container>
                         </Container>
                       </Container>

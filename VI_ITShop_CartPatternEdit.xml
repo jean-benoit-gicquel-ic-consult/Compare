@@ -10,10 +10,10 @@
           <Tab Layout="'VI_Styles_Tab_AccordeonMultiselect'" ScriptItemUID="Tab1">
             <TabPage ExpandedCondition="isExpanded()" ScriptItemUID="TabPage1">
               <ControlsHeader ScriptItemUID="Container3">
-                <Label Text="(if(IsShowPersonalTemplates())&#xD;&#xA;then translate(&quot;#LDS#Personal templates&quot;)&#xD;&#xA;else translate(&quot;#LDS#System-wide templates&quot;))&#xD;&#xA;&#xD;&#xA;+&quot; (&quot;+(from ShoppingCartPattern select count())+&quot;)&quot;" ScriptItemUID="Label1" />
+                <Label Text="(if(IsShowPersonalTemplates())&#xD;&#xA;then translate(&quot;#LDS#Personal product bundles&quot;)&#xD;&#xA;else translate(&quot;#LDS#System-wide product bundles&quot;))&#xD;&#xA;&#xD;&#xA;+&quot; (&quot;+(from ShoppingCartPattern select count())+&quot;)&quot;" ScriptItemUID="Label1" />
               </ControlsHeader>
               <ControlsBody ScriptItemUID="Container4" RefreshTriggerExpression="from ShoppingCartPatternItem select count()">
-                <Label Text="isnull(heading(),&#xD;&#xA;if(IsShowPersonalTemplates()) then&#xD;&#xA;translate('#LDS#You created the following templates.')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#The following templates are available.'))" ScriptItemUID="Label2" />
+                <Label Text="isnull(heading(),&#xD;&#xA;if(IsShowPersonalTemplates()) then&#xD;&#xA;translate('#LDS#The following product bundles have been created by you and are available.')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#The following product bundles are available.'))" ScriptItemUID="Label2" />
                 <Grid ScriptItemUID="Grid1">
                   <GridBand DataTable="ShoppingCartPattern" DisplayHeader="Always" OrderBy="'Ident_ShoppingCartPattern'" ScriptItemUID="GridBand1" ConsolidateTables="true">
                     <GridBandListView ScriptItemUID="GridBandListView1" EnableListView="true">
@@ -38,8 +38,8 @@
                                     <ExpressionColumnList ScriptItemUID="ExpressionColumnList1" />
                                     <SingleColumn ScriptItemUID="SingleColumn6" DataColumn="UID_Person" Caption="translate('#LDS#Inserted by')" />
                                     <SingleColumn ScriptItemUID="SingleColumn3" DataColumn="Description" />
-                                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsPublicPattern" Caption="translate('#LDS#Template is available to other employees')" />
-                                    <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="IsQualified" Caption="translate('#LDS#Template has been approved')" />
+                                    <SingleColumn ScriptItemUID="SingleColumn2" DataColumn="IsPublicPattern" Caption="translate('#LDS#Product bundle is available to other identities')" />
+                                    <SingleColumn ScriptItemUID="SingleColumn5" DataColumn="IsQualified" Caption="translate('#LDS#Product bundle has been approved')" />
                                   </ColumnList>
                                   <Container ScriptItemUID="Container23">
                                     <ControlReferenceContainer ID="VI_Edit_PropertyCaption" ScriptItemUID="ControlRef6">
@@ -243,7 +243,7 @@
               </ForeachRow>
               <Delete DataTable="ShoppingCartPattern" WhereClause="uid_shoppingcartpattern = (select current uid_shoppingcartpattern from shoppingcartpattern)" ScriptItemUID="Delete3" SetDeletionFlag="DeleteAndSave" />
               <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call7">
-                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The selected template has been deleted.')" ScriptItemUID="VirtualFunctionMapping12" />
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The selected product bundle has been deleted.')" ScriptItemUID="VirtualFunctionMapping12" />
                 <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping13" />
               </CallAction>
             </ActionComponent>
@@ -260,7 +260,7 @@
                     <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container33">
                       <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
                         <FormItemLabel DataTable="ShoppingCartPattern" DataColumn="Ident_ShoppingCartPattern" ScriptItemUID="FormItemLabel1">
-                          <Label Text="translate('#LDS#Template name')" ScriptItemUID="Label18" />
+                          <Label Text="translate('#LDS#Product bundle name')" ScriptItemUID="Label18" />
                         </FormItemLabel>
                         <Container ScriptItemUID="Container35">
                           <Container Condition="AllowEdit()" ScriptItemUID="Container36">
@@ -287,20 +287,20 @@
                         <Container ScriptItemUID="Container45">
                           <Container ScriptItemUID="Container46">
                             <Container Condition="AllowEdit()" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container47">
-                              <CheckBox DataTable="ShoppingCartPattern" DataColumn="IsPublicPattern" Text="translate('#LDS#Template is available to other employees')" ScriptItemUID="CheckBox1" />
+                              <CheckBox DataTable="ShoppingCartPattern" DataColumn="IsPublicPattern" Text="translate('#LDS#Product bundle is available to other identities')" ScriptItemUID="CheckBox1" />
                             </Container>
                             <Container Condition="AllowEdit() = false" Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container48">
-                              <Label Text="translate('#LDS#Template is available to other employees')" ScriptItemUID="Label24" />
+                              <Label Text="translate('#LDS#Product bundle is available to other identities')" ScriptItemUID="Label24" />
                               <Label Text="': '" ScriptItemUID="Label25" />
                               <Label Text="if (select current IsPublicPattern from ShoppingCartPattern = true)&#xD;&#xA;then&#xD;&#xA;  translate('#LDS#yes')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#no')&#xD;&#xA;" ScriptItemUID="Label26" />
                             </Container>
                           </Container>
                           <Container ScriptItemUID="Container49">
                             <Container Condition="IsTemplateManager()" ScriptItemUID="Container50">
-                              <CheckBox DataTable="ShoppingCartPattern" DataColumn="IsQualified" Text="translate('#LDS#Template has been approved')" ScriptItemUID="CheckBox2" />
+                              <CheckBox DataTable="ShoppingCartPattern" DataColumn="IsQualified" Text="translate('#LDS#Product bundle has been approved')" ScriptItemUID="CheckBox2" />
                             </Container>
                             <Container Condition="not(IsTemplateManager())" ScriptItemUID="Container51">
-                              <Label Text="translate('#LDS#Template has been approved')" ScriptItemUID="Label27" />
+                              <Label Text="translate('#LDS#Product bundle has been approved')" ScriptItemUID="Label27" />
                               <Label Text="': '" ScriptItemUID="Label28" />
                               <Label Text="if (select current IsQualified from ShoppingCartPattern = true)&#xD;&#xA;then&#xD;&#xA;  translate('#LDS#yes')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#no')&#xD;&#xA;" ScriptItemUID="Label29" />
                             </Container>
@@ -310,7 +310,7 @@
                     </Container>
                   </Container>
                 </VirtualControlMapping>
-                <VirtualFunctionMapping ID="PopupTitle()" Value="if (AllowEdit() = true or AllowDelete() = true) then&#xD;&#xA;  translate(&quot;#LDS#Edit template&quot;)&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Template details&quot;)" ScriptItemUID="VirtualFunctionMapping14" />
+                <VirtualFunctionMapping ID="PopupTitle()" Value="if (AllowEdit() = true or AllowDelete() = true) then&#xD;&#xA;  translate(&quot;#LDS#Edit product bundle&quot;)&#xD;&#xA;else&#xD;&#xA;  translate(&quot;#LDS#Product bundle details&quot;)" ScriptItemUID="VirtualFunctionMapping14" />
                 <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
                   <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container52">
                     <Container Condition="(AllowEdit() = false) and&#xA;(Not(IsTemplateManager()))" ItemUID="Default Button" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container53">
@@ -373,9 +373,9 @@
                             <Delete DataTable="ShoppingCartPatternItem" SetDeletionFlag="DeleteAndSave" WhereClause="UID_ShoppingCartPatternItem = from ShoppingCartPatternItem select current UID_ShoppingCartPatternItem" ScriptItemUID="Delete4" />
                           </ActionComponent>
                         </VirtualControlMapping>
-                        <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you want to delete the product &quot;{0}&quot; from the current template?', from ShoppingCartPatternItem select current DisplayProduct) + if ((from ShoppingCartPattern select current IsQualified = 1) and (from ShoppingCartPattern select current IsPublicPattern = 1) and ((IsNull(GetConfigParm(&quot;QER\ITShop\ShoppingCartPattern\AutoQualified&quot;), &quot;0&quot;) = &quot;0&quot;))) then translate('#LDS#The template is publicly available. Changing this template requires a new approval by an authorized employee.')&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping4" />
+                        <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you want to delete the product &quot;{0}&quot; from the current product bundle?', from ShoppingCartPatternItem select current DisplayProduct) + if ((from ShoppingCartPattern select current IsQualified = 1) and (from ShoppingCartPattern select current IsPublicPattern = 1) and ((IsNull(GetConfigParm(&quot;QER\ITShop\ShoppingCartPattern\AutoQualified&quot;), &quot;0&quot;) = &quot;0&quot;))) then translate('#LDS#The product bundle this product is assigned to is publicly available. Changing this product bundle makes re-approval necessary.')&#xD;&#xA;" ScriptItemUID="VirtualFunctionMapping4" />
                         <VirtualFunctionMapping ID="ShowYesNo()" Value="True" ScriptItemUID="VirtualFunctionMapping5" />
-                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Change template')" ScriptItemUID="VirtualFunctionMapping6" />
+                        <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Change product bundle')" ScriptItemUID="VirtualFunctionMapping6" />
                       </CallAction>
                     </ActionSequence>
                   </ServerActionCall>
@@ -395,7 +395,7 @@
                   <ControlList ScriptItemUID="Image4Ctl">
                     <Image ScriptItemUID="Image4" StockImage="Edit" EnableCustomAttributes="true">
                       <HtmlAttributes>
-                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="if (AllowEdit() = true or AllowDelete() = true) then&#xA;  translate(&quot;#LDS#Edit template&quot;)&#xA;else&#xA;  translate(&quot;#LDS#Template details&quot;)" />
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image4alt" Value="if (AllowEdit() = true or AllowDelete() = true) then&#xA;  translate(&quot;#LDS#Edit product bundle&quot;)&#xA;else&#xA;  translate(&quot;#LDS#Product bundle details&quot;)" />
                       </HtmlAttributes>
                     </Image>
                   </ControlList>
@@ -423,13 +423,13 @@
                   <ControlList ScriptItemUID="Image6Ctl">
                     <Image StockImage="DeleteDocument" ScriptItemUID="Image6" EnableCustomAttributes="true">
                       <HtmlAttributes>
-                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image6alt" Value="translate('#LDS#Delete template')" />
+                        <HtmlAttribute Name="'alt'" ScriptItemUID="Image6alt" Value="translate('#LDS#Delete product bundle')" />
                       </HtmlAttributes>
                     </Image>
                   </ControlList>
                   <ServerActionCall ScriptItemUID="ServerActionCall3">
                     <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call3">
-                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure that you wish to delete the template &quot;{0}&quot;?', from ShoppingCartPattern select current Ident_ShoppingCartPattern)" ScriptItemUID="VirtualFunctionMapping1" />
+                      <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#Are you sure you want to delete the product bundle &quot;{0}&quot;?', from ShoppingCartPattern select current Ident_ShoppingCartPattern)" ScriptItemUID="VirtualFunctionMapping1" />
                       <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
                       <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
                         <ActionComponent ScriptItemUID="Action1">
@@ -440,7 +440,7 @@
                       <VirtualControlMapping VirtualControl="OnNo" ContainerType="ActionComponent">
                         <ActionComponent ScriptItemUID="Action2" />
                       </VirtualControlMapping>
-                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Delete template')" ScriptItemUID="VirtualFunctionMapping3" />
+                      <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate('#LDS#Delete product bundle')" ScriptItemUID="VirtualFunctionMapping3" />
                     </CallAction>
                   </ServerActionCall>
                 </LinkContainer>
@@ -456,21 +456,21 @@
                 <Container Condition="from ShoppingCartPattern select current IsQualified and IsPublicPattern" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container8">
                   <Image StockImage="LightGreen" ScriptItemUID="Image1" EnableCustomAttributes="true">
                     <HtmlAttributes>
-                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate('#LDS#This template has been approved for use.')" />
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate('#LDS#This product bundle has been approved for use.')" />
                     </HtmlAttributes>
                   </Image>
                 </Container>
                 <Container Condition="from ShoppingCartPattern select current IsQualified = false and IsPublicPattern = true" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container9">
                   <Image StockImage="LightYellow" ScriptItemUID="Image2" EnableCustomAttributes="true">
                     <HtmlAttributes>
-                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate('#LDS#This template has been marked for public use, but has not been approved yet.')" />
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image2alt" Value="translate('#LDS#This product bundle has been marked for public use, but has not been approved yet.')" />
                     </HtmlAttributes>
                   </Image>
                 </Container>
                 <Container Condition="from ShoppingCartPattern select current IsPublicPattern = false" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container10">
                   <Image StockImage="LightGrey" ScriptItemUID="Image3" EnableCustomAttributes="true">
                     <HtmlAttributes>
-                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="translate('#LDS#The template has not yet been approved.')" />
+                      <HtmlAttribute Name="'alt'" ScriptItemUID="Image3alt" Value="translate('#LDS#The product bundle has not yet been approved.')" />
                     </HtmlAttributes>
                   </Image>
                 </Container>
@@ -484,7 +484,7 @@
           <LocalControlContext ContainerType="ControlList">
             <ControlList ScriptItemUID="ControlList12">
               <Container ScriptItemUID="Container18" Condition="AllowMergeShoppingCartItemsToPattern()" Layout="'VI_Styles_Container_Inline'">
-                <Button Text="translate('#LDS#select')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1">
+                <Button Text="translate('#LDS#Select')" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1">
                   <ServerActionCall ScriptItemUID="ServerActionCall4">
                     <ActionSequence ScriptItemUID="Action3">
                       <LoadTable DataTable="ShoppingCartPatternItem" WhereClause="format(&quot;uid_shoppingcartpattern = '{0}'&quot;,select current uid_shoppingcartpattern from ShoppingCartPattern)" ScriptItemUID="LoadTable1">

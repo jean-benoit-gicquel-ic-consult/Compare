@@ -19,7 +19,7 @@
             <HtmlAttributes>
               <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute2" />
             </HtmlAttributes>
-            <Label Text="translate(&quot;#LDS#The employee {0} is currently not authorized to request the product {1}.&quot;, ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))" ScriptItemUID="Label1" />
+            <Label Text="translate('#LDS#The identity &quot;{0}&quot; is currently not authorized to request the product &quot;{1}&quot;.', ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))" ScriptItemUID="Label1" />
             <Container Condition="from accproductforshoppingcartitem select top 1 hasblockingpersonwantsorg where uid_accproduct = (select current uid_accproduct from shoppingcartitem)" ItemUID="ErrorMsg - already ordered or assigned" ScriptItemUID="Container7">
               <Label Text="translate('#LDS#Either the product is a already assigned or currently requested.')" ScriptItemUID="Label2" />
             </Container>
@@ -28,7 +28,7 @@
             <HtmlAttributes>
               <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute3" />
             </HtmlAttributes>
-            <Label Text="translate(&quot;#LDS#The product {1} is already assigned to employee {0}.&quot;, ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))  " ScriptItemUID="Label3" />
+            <Label Text="translate('#LDS#The product &quot;{1}&quot; is already assigned to identity &quot;{0}&quot;.', ( from ShoppingCartItem select current displayvalue(uid_personordered)), ( from shoppingcartitem select current displayvalue(uid_accproduct)))  " ScriptItemUID="Label3" />
           </Container>
           <Container Condition="from ShoppingCartItem select current CheckStatus='Time'" ItemUID="Checkstatus = Time" ScriptItemUID="Container4">
             <Container ScriptItemUID="Container10" EnableCustomAttributes="true">
@@ -66,7 +66,7 @@
             <HtmlAttributes>
               <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-exception&quot;" ScriptItemUID="HtmlAttribute4" />
             </HtmlAttributes>
-            <Label Text="translate(&quot;#LDS#The product can only be requested once per employee, but it is placed in the shopping cart several times.&quot;)" ScriptItemUID="Label13" />
+            <Label Text="translate(&quot;#LDS#The product can be requested only once for each identity, but is included in the shopping cart multiple times.&quot;)" ScriptItemUID="Label13" />
           </Container>
           <Container Condition="from ShoppingCartItem select current CheckStatus='OK'" ItemUID="Checkstatus = OK" ScriptItemUID="Container13" EnableCustomAttributes="true">
             <HtmlAttributes>
@@ -78,13 +78,13 @@
             <HtmlAttributes>
               <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" ScriptItemUID="HtmlAttribute6" />
             </HtmlAttributes>
-            <Label Text="translate(&quot;#LDS#The product {0} does not belong to the same functional area as the employee {1}.&quot;,&#xD;&#xA;( from shoppingcartitem select current displayvalue(uid_accproduct)),&#xD;&#xA; ( from ShoppingCartItem select current displayvalue(uid_personordered)))" ScriptItemUID="Label5" />
+            <Label Text="translate('#LDS#The product &quot;{0}&quot; does not belong to the same functional area as the identity &quot;{1}&quot;.',&#xD;&#xA;( from shoppingcartitem select current displayvalue(uid_accproduct)),&#xD;&#xA; ( from ShoppingCartItem select current displayvalue(uid_personordered)))" ScriptItemUID="Label5" />
           </Container>
           <Container Condition="from ShoppingCartItem select current CheckStatus='OrgForeign'" ItemUID="Checkstatus = OrgForeign" ScriptItemUID="Container21" EnableCustomAttributes="true">
             <HtmlAttributes>
               <HtmlAttribute Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" ScriptItemUID="HtmlAttribute7" />
             </HtmlAttributes>
-            <Label Text="translate(&quot;#LDS#The product {0} does not belong to the same organizational unit as the employee {1}.&quot;,&#xD;&#xA;( from shoppingcartitem select current displayvalue(uid_accproduct)),&#xD;&#xA; ( from ShoppingCartItem select current displayvalue(uid_personordered)))" ScriptItemUID="Label6" />
+            <Label Text="translate('#LDS#The product &quot;{0}&quot; does not belong to the same organizational unit as the identity &quot;{1}&quot;.',&#xD;&#xA;( from shoppingcartitem select current displayvalue(uid_accproduct)),&#xD;&#xA; ( from ShoppingCartItem select current displayvalue(uid_personordered)))" ScriptItemUID="Label6" />
           </Container>
           <Container Condition="from ShoppingCartItem select current CheckStatus='ExistingAssignment'" ItemUID="Checkstatus = ExistingAssignment" ScriptItemUID="Container25" EnableCustomAttributes="true">
             <HtmlAttributes>

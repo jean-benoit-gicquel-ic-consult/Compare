@@ -1,17 +1,17 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Interfaces_ObjectSwitch_Detail_DialogDashboardDef">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Interfaces_ObjectSwitch_Detail_DialogDashboardDef">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ComponentInterfaceObject">
-      <ComponentInterfaceObject ContainerType="ControlList" />
       <ActionSequence ScriptItemUID="Action2" />
+      <ComponentInterfaceObject ContainerType="ControlList" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="HeatmapInfo" ElementType="VI.WebRuntime.WebControls.HeatmapControlInfo, VI.WebRuntime" ScriptItemUID="VirtualTable4" />
       <VirtualTable Name="DashboardDef" Class="DialogDashBoardDef" RequiresCursor="true" ScriptItemUID="VirtualTable2">
         <VirtualColumn Name="ValueForRed" DataType="System.String" />

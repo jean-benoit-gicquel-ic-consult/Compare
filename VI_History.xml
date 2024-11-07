@@ -267,7 +267,7 @@ TableStore.UserData["HistoryObjectData"] = historyDataList;</CodeLiteral>
                         <Label ScriptItemUID="Label12" Text="datacaption(stateoverview, dateendproxy)" />
                       </GridColumnHeader>
                       <Cell ScriptItemUID="Cell3">
-                        <Label ScriptItemUID="Label13" Text="from stateoverview select current isnullorempty(displayvalue(dateendproxy), &quot;(&quot;+ translate(&quot;#LDS#current&quot;)+&quot;)&quot;)" EnableCustomAttributes="true">
+                        <Label ScriptItemUID="Label13" Text="from stateoverview select current isnullorempty(displayvalue(dateendproxy), &quot;(&quot;+ translate(&quot;#LDS#Current&quot;)+&quot;)&quot;)" EnableCustomAttributes="true">
                           <HtmlAttributes>
                             <HtmlAttribute Name="&quot;style&quot;" ScriptItemUID="HtmlAttribute2" Value="if(from stateoverview select current isnullorempty(displayvalue(dateend))) then &quot;font-style: italic;&quot;" />
                           </HtmlAttributes>
@@ -551,7 +551,7 @@ foreach (var result in results)
               <ColumnLimitedValue Name="ObjectHasPermission" Display="translate(&quot;#LDS#Entitlement assignment&quot;)" Comment="" />
               <ColumnLimitedValue Name="Property" Display="translate(&quot;#LDS#Property change&quot;)" Comment="" />
               <ColumnLimitedValue Name="LinkedDynamicGroup" Display="translate(&quot;#LDS#LinkedDynamicGroup&quot;)" Comment="" />
-              <ColumnLimitedValue Name="PersonIsMember" Display="translate(&quot;#LDS#Employee membership&quot;)" Comment="" />
+              <ColumnLimitedValue Name="PersonIsMember" Display="translate(&quot;#LDS#Identity membership&quot;)" Comment="" />
             </ColumnLimitedValues>
           </ColumnProxy>
           <ColumnProxy DataColumn="Property" Name="PropertyProxy" ScriptItemUID="ColumnProxy17" Caption="translate(&quot;#LDS#Property&quot;)" />
@@ -586,7 +586,7 @@ foreach (var result in results)
               <ColumnLimitedValue Name="MemberOf" Display="translate(&quot;#LDS#Membership&quot;)" Comment="" />
               <ColumnLimitedValue Name="ObjectHasPermission" Display="translate(&quot;#LDS#Entitlement assignment&quot;)" Comment="" />
               <ColumnLimitedValue Name="Property" Display="translate(&quot;#LDS#Property&quot;)" Comment="" />
-              <ColumnLimitedValue Name="PersonIsMember" Display="translate(&quot;#LDS#Employee membership&quot;)" Comment="" />
+              <ColumnLimitedValue Name="PersonIsMember" Display="translate(&quot;#LDS#Identity membership&quot;)" Comment="" />
               <ColumnLimitedValue Name="Responsibility" Display="translate(&quot;#LDS#Responsibility&quot;)" Comment="" />
             </ColumnLimitedValues>
           </ColumnProxy>

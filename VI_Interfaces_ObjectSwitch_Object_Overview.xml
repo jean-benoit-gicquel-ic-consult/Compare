@@ -4,8 +4,8 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ComponentInterfaceObject">
-      <ComponentInterfaceObject ContainerType="Container" />
       <ActionSequence ScriptItemUID="Action1" />
+      <ComponentInterfaceObject ContainerType="Container" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

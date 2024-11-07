@@ -72,7 +72,7 @@
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">
-        <Function Name="GetProlongationSuffix()" Expression="select current(if(orderstate=&quot;OrderProlongate&quot;)then(&#xD;&#xA;   if(IsNull(validuntilprolongation,#1899-12-30#) &gt; #1900-01-01#) then&#xD;&#xA;      &quot; &quot;+translate(&quot;#LDS#until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)&#xD;&#xA;   else&#xD;&#xA;      &quot; &quot;+translate(&quot;#LDS#unlimited&quot;)&#xD;&#xA;))&#xD;&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
+        <Function Name="GetProlongationSuffix()" Expression="select current(if(orderstate=&quot;OrderProlongate&quot;)then(&#xD;&#xA;   if(IsNull(validuntilprolongation,#1899-12-30#) &gt; #1900-01-01#) then&#xD;&#xA;      &quot; &quot;+translate(&quot;#LDS#Until&quot;)+&quot; &quot;+formatdate(validuntilprolongation,&quot;d&quot;)&#xD;&#xA;   else&#xD;&#xA;      &quot; &quot;+translate(&quot;#LDS#unlimited&quot;)&#xD;&#xA;))&#xD;&#xA;from personwantsorg" DataType="System.String" ScriptItemUID="Function1">
           <DataTableCursor DataTable="PersonWantsOrg" ScriptItemUID="DataTableCursor1" />
         </Function>
       </Functions>

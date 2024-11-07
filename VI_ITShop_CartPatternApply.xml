@@ -69,7 +69,7 @@
                           <Container ScriptItemUID="Container5">
                             <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container6">
                               <LayoutPanel Columns="2" ScriptItemUID="LayoutPanel1">
-                                <Label Text="translate('#LDS#Template name')" ScriptItemUID="Label4" />
+                                <Label Text="translate('#LDS#Product bundle name')" ScriptItemUID="Label4" />
                                 <Container ScriptItemUID="Container9">
                                   <Label Text="from ShoppingCartPattern select current ident_shoppingcartpattern" ScriptItemUID="Label5" />
                                 </Container>
@@ -81,7 +81,7 @@
                                 </Container>
                                 <Container ScriptItemUID="Container15" />
                                 <Container ScriptItemUID="Container17">
-                                  <Label Text="translate('#LDS#Template is available to other employees')" ScriptItemUID="Label10" />
+                                  <Label Text="translate('#LDS#Product bundle is available to other identities')" ScriptItemUID="Label10" />
                                   <Label Text="': '" ScriptItemUID="Label11" />
                                   <Label Text="if (select current IsPublicPattern from ShoppingCartPattern = true)&#xD;&#xA;then&#xD;&#xA;  translate('#LDS#yes')&#xD;&#xA;else&#xD;&#xA;  translate('#LDS#no')&#xD;&#xA;" ScriptItemUID="Label12" />
                                 </Container>
@@ -89,7 +89,7 @@
                             </Container>
                           </Container>
                         </VirtualControlMapping>
-                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Template details&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                        <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Product bundle details&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
                         <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
                           <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container18">
                             <Button Text="translate(&quot;#LDS#OK&quot;)" ItemUID="Default Button" ScriptItemUID="Button1">

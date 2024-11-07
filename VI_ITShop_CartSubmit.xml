@@ -30,7 +30,6 @@
       </CompilationSettings>
       <ConfigSectionDefinition Name="IT Shop" Description="translate(&quot;#LDS#IT Shop&quot;)" ScriptItemUID="ConfigSectionDefinition1">
         <ConfigParam Key="VI_ITShop_TermsOfUseRequireADAuthentication" Description="translate(&quot;#LDS#Requester must authenticate in Active Directory before submitting the shopping cart&quot;)" LongDescription="" />
-        <ConfigParam Key="VI_ITShop_TermsOfUseRequireMFA" Description="translate(&quot;#LDS#Requester must authenticate to Starling 2FA when accepting terms of use&quot;)" LongDescription="translate(&quot;#LDS#When this setting is active and Starling 2FA integration is active, accepting terms of use will require a multi-factor authentication.&quot;)" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">

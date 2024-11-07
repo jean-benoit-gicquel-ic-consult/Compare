@@ -88,15 +88,11 @@ foreach (var procRow in this.PendingItems.Where(p =&gt; "NewProcesses".Equals(Pe
         </DataTableSingleRow>
       </AddObject>
       <AddObject ObjectID="ConfigSectionDefinition2" ObjectType="ConfigSectionDefinition" SortOrder="15">
-        <ConfigParam Key="VI_Common_AccessControl_StarlingEnabled" Description="translate(&quot;#LDS#Enable Starling two-factor authentication&quot;)" />
-        <ConfigParam Key="VI_Common_AccessControl_Starling_AllowUnregistered" Description="translate(&quot;#LDS#Allow access for users who are not registered with Starling two-factor authentication&quot;)" />
         <ConfigParam Key="VI_Common_AccessControl_Webauthn_2FA" Description="translate(&quot;#LDS#Webauthn: Enable Webauthn two-factor authentication&quot;)" LongDescription="translate(&quot;#LDS#Specify whether you want to enable Webauthn two-factor authentication.&quot;)" />
         <ConfigParam Key="VI_Common_AccessControl_Webauthn_2FAID" Type="Text" Description="translate(&quot;#LDS#Webauthn: Secondary authentication provider ID&quot;)" LongDescription="translate(&quot;#LDS#Enter the ID of the secondary authentication provider for Webauthn two-factor authentication. The ID can be found in your RSTS configuration.&quot;)" />
         <ConfigParam Key="VI_Common_AccessControl_Webauthn_2FA_VisibleControls" Description="translate(&quot;#LDS#Webauthn: Manage security keys in web application&quot;)" LongDescription="translate(&quot;#LDS#Specify whether users can manage Webauthn security keys in the web application.&quot;)" />
       </AddObject>
       <AddObject ObjectID="QBMConfigSection1" ObjectType="ConfigSection">
-        <ConfigEntry ScriptItemUID="QERConfigEntry1" Key="VI_Common_AccessControl_StarlingEnabled" Value="False" />
-        <ConfigEntry ScriptItemUID="QERConfigEntry2" Key="VI_Common_AccessControl_Starling_AllowUnregistered" Value="True" />
         <ConfigEntry ScriptItemUID="QERConfigEntry3" Key="VI_Common_AccessControl_Webauthn_2FA" Value="False" />
         <ConfigEntry ScriptItemUID="QERConfigEntry4" Key="VI_Common_AccessControl_Webauthn_2FAID" Value="fido" />
         <ConfigEntry ScriptItemUID="QERConfigEntry5" Key="VI_Common_AccessControl_Webauthn_2FA_VisibleControls" Value="False" />

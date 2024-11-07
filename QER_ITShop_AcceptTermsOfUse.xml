@@ -82,7 +82,7 @@ Container6.Controls.Add(lbl);</CodeLiteral>
                 </ContainerTemplate>
               </Container>
             </Container>
-            <Container ScriptItemUID="Container4" ItemUID="NO MFA" Condition="not(IsAcceptByMfa())">
+            <Container ScriptItemUID="Container4" ItemUID="NO MFA">
               <Container ScriptItemUID="Container2">
                 <Container ScriptItemUID="Container7" EnableCustomAttributes="true">
                   <HtmlAttributes>
@@ -129,52 +129,6 @@ if (loginData != null)
                 </Button>
               </Container>
             </Container>
-            <Container ScriptItemUID="Container9" Condition="IsAcceptByMfa()" ItemUID="MFA">
-              <Container ScriptItemUID="Container12" EnableCustomAttributes="true">
-                <HtmlAttributes>
-                  <HtmlAttribute Name="'style'" ScriptItemUID="HtmlAttribute3" Value="&quot;font-weight: bold; height: 4em;&quot;" />
-                </HtmlAttributes>
-                <CheckBox DataTable="Vars" DataColumn="Accepted" Text="translate(&quot;#LDS#I have read and understood the terms of use.&quot;)" ScriptItemUID="CheckBox2" />
-              </Container>
-              <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_ButtonBar'">
-                <Button Text="translate(&quot;#LDS#Decline&quot;)" ScriptItemUID="Button4" Layout="'VI_Styles_Button_Default'">
-                  <ServerActionCall ScriptItemUID="ServerActionCall4">
-                    <Redirect ScriptItemUID="Redirect1" Target="ReturnLastForm" NoLinkBackToThisForm="true" />
-                  </ServerActionCall>
-                </Button>
-                <Button Text="translate(&quot;#LDS#Accept&quot;)" ScriptItemUID="Button3" EnabledCondition="from vars select accepted" ItemUID="Default Button">
-                  <ServerActionCall ScriptItemUID="ServerActionCall3">
-                    <CallAction ScriptItemUID="Call2" ActionID="VI_Popup">
-                      <VirtualControlMapping ContainerType="Container" VirtualControl="PopupContent">
-                        <Container ScriptItemUID="Container13">
-                          <ControlReferenceControlList ID="QER_DefenderAuthentication" ScriptItemUID="ControlRef2">
-                            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="CodeVerified">
-                              <ActionComponent ScriptItemUID="Action1">
-                                <ActionOnControl />
-                                <CallAction ScriptItemUID="Call3" ActionID="OnTermsOfUseAccepted" />
-                              </ActionComponent>
-                            </VirtualControlMapping>
-                            <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate(&quot;#LDS#An authentication is required to request this product.&quot;)+&quot; &quot;+&#xD;&#xA;translate(&quot;#LDS#Get the token response from the Starling 2FA Cloud app. If you do not have the app, request a token response through SMS or phone call.&quot;)" />
-                            <VirtualTableMapping ScriptItemUID="VirtualTableMapping1" VirtualTable="MfaResponse" DataTable="Vars">
-                              <VirtualColumnMapping DataColumn="CodeCorrect" VirtualColumn="CodeCorrect" />
-                            </VirtualTableMapping>
-                          </ControlReferenceControlList>
-                        </Container>
-                      </VirtualControlMapping>
-                      <VirtualControlMapping ContainerType="Container" VirtualControl="PopupBottom">
-                        <Container ScriptItemUID="Container14">
-                          <ControlReferenceControlList ID="QBM_Common_PopupCloseButton" ScriptItemUID="ATTControlRef1">
-                            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping5" ID="TriggerValidation()" Value="false" />
-                            <VirtualFunctionMapping ScriptItemUID="ATTVirtualFunctionMapping3" ID="MoreThanOneButton()" Value="true" />
-                          </ControlReferenceControlList>
-                        </Container>
-                      </VirtualControlMapping>
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping3" ID="PopupTitle()" Value="translate(&quot;#LDS#Authentication required&quot;)" />
-                    </CallAction>
-                  </ServerActionCall>
-                </Button>
-              </Container>
-            </Container>
           </PagePartContainer>
         </Form>
       </FormGroup>
@@ -188,7 +142,7 @@ if (loginData != null)
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">
         <Function Name="GetLoginAsUserMessage()" Expression="translate(&quot;#LDS#The supplied login does not match the current user.&quot;)" DataType="System.String" ScriptItemUID="Function1" />
-        <Function ScriptItemUID="Function2" Name="IsAcceptByMfa()" DataType="System.Boolean" Expression="not(isnullorempty(getconfigparm(&quot;QER\Person\Defender\ApiKey&quot;)) and isnullorempty(getconfigparm(&quot;QER\Person\Defender\CredentialString&quot;)) and&#xD;&#xA;isnullorempty(getconfigparm(&quot;QER\Person\Starling\ApiEndpoint&quot;)))&#xD;&#xA;and&#xD;&#xA;&quot;true&quot;=getconfig(&quot;VI_ITShop_TermsOfUseRequireMFA&quot;)" TriggerUpdates="Never" />
+        <Function ScriptItemUID="Function2" Name="IsAcceptByMfa()" DataType="System.Boolean" Expression="false" TriggerUpdates="Never" />
       </Functions>
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>

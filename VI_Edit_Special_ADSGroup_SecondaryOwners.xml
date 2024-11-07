@@ -1,0 +1,211 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="6082b716-1d2b-24a6-7f2a-323eb672202b">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_Special_ADSGroup_SecondaryOwners" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action3">
+        <CallAction ActionID="ReadBulk" ScriptItemUID="Call2" />
+      </ActionSequence>
+      <Container ScriptItemUID="Container1">
+        <Container Condition="from edittable select current not(canedit(editcolumn))" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container2">
+          <ContainerTemplate DataTable="ValueList" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)" OrderBy="'Index'" ScriptItemUID="ContainerTemplate1">
+            <Container ScriptItemUID="Container3">
+              <Label Text="select current result from valuelist" ScriptItemUID="Label1" />
+            </Container>
+          </ContainerTemplate>
+        </Container>
+        <Container Condition="from edittable select current canedit(editcolumn)" ScriptItemUID="Container4">
+          <ContainerTemplate DataTable="ValueList" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)" OrderBy="'Index'" ScriptItemUID="ContainerTemplate2">
+            <Container ScriptItemUID="Container5">
+              <LinkContainer ScriptItemUID="Image1Link">
+                <ControlList ScriptItemUID="Image1Ctl">
+                  <Image StockImage="DeleteDocument" ScriptItemUID="Image1" />
+                </ControlList>
+                <ServerActionCall ScriptItemUID="ServerActionCall1">
+                  <ActionOnControl ActionType="PerformValidation" />
+                  <Delete DataTable="ValueList" WhereClause="primarykey() = ( select current primarykey() from valuelist)" ScriptItemUID="Delete1" />
+                  <CallAction ActionID="WriteToObject" ScriptItemUID="Call1" />
+                </ServerActionCall>
+              </LinkContainer>
+              <Label Text="select current result from valuelist" ScriptItemUID="Label2" />
+            </Container>
+          </ContainerTemplate>
+          <Container Layout="'VI_Styles_Container_ButtonBar'" ScriptItemUID="Container6" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container6style" Value="'margin-top: 8px;'" />
+            </HtmlAttributes>
+            <Button Text="translate(&quot;#LDS#Add account&quot;)" ScriptItemUID="Button3" Layout="'VI_Styles_Button_Pill'">
+              <ServerActionCall ScriptItemUID="ServerActionCall2">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction3">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ItemUIDReference="Default Button" ScriptItemUID="Container7">
+                      <LayoutPanel ScriptItemUID="LayoutPanel1">
+                        <ControlList ScriptItemUID="ControlList1">
+                          <Label Text="translate(&quot;#LDS#Account&quot;)" ScriptItemUID="Label4" />
+                        </ControlList>
+                        <ControlList ScriptItemUID="ControlList2">
+                          <ColumnEditor DataTable="Container" DataColumn="UID_ADSAccount" ScriptItemUID="ColumnEditor4">
+                            <VirtualFunctionMapping ID="NullText()" Value="translate(&quot;#LDS#Select an account&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+                          </ColumnEditor>
+                        </ControlList>
+                      </LayoutPanel>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container10">
+                      <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" ScriptItemUID="Button6" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Apply&quot;)" ScriptItemUID="HtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall3">
+                          <Insert DataTable="ValueList" ScriptItemUID="Insert1">
+                            <ActionSequence ScriptItemUID="Action1" />
+                            <InsertValue DataColumn="UID_SourceObject" Value="select current primarykey() from edittable" />
+                            <InsertValue DataColumn="Index" Value="(select max(index) from valuelist where uid_sourceobject = ( select current primarykey() from edittable))+1" />
+                            <InsertValue DataColumn="result" Value="from container select uid_adsaccount" />
+                          </Insert>
+                          <Update DataTable="ValueList" DataColumn="Index" Value="0" WhereClause="isnull(index)" ScriptItemUID="Update1" />
+                          <CallAction ActionID="WriteToObject" ScriptItemUID="CallAction4" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Cancel')" ScriptItemUID="Button5" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute2" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall4">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Add new owner account&quot;)" ScriptItemUID="VirtualFunctionMapping2" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+            <Button Text="translate(&quot;#LDS#Add group&quot;)" ScriptItemUID="Button4" Layout="'VI_Styles_Button_Pill'">
+              <ServerActionCall ScriptItemUID="Action42">
+                <CallAction ActionID="VI_Popup" ScriptItemUID="CallAction5">
+                  <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
+                    <Container ItemUIDReference="Default Button" ScriptItemUID="Container11">
+                      <LayoutPanel ScriptItemUID="LayoutPanel2">
+                        <ControlList ScriptItemUID="ControlList3">
+                          <Container ScriptItemUID="Container12">
+                            <Label Text="translate(&quot;#LDS#Group&quot;)" ScriptItemUID="Label5" />
+                          </Container>
+                        </ControlList>
+                        <ControlList ScriptItemUID="ControlList4">
+                          <Container ScriptItemUID="Container13">
+                            <ColumnEditor DataTable="Container" DataColumn="UID_ADSGroup" ScriptItemUID="ColumnEditor5">
+                              <VirtualFunctionMapping ID="NullText()" Value="translate(&quot;#LDS#Select a group&quot;)" ScriptItemUID="VirtualFunctionMapping3" />
+                            </ColumnEditor>
+                          </Container>
+                        </ControlList>
+                      </LayoutPanel>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
+                    <Container Layout="'VI_Styles_Container_ButtonPanel'" ItemUIDReference="Default Button" ScriptItemUID="Container14">
+                      <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" ScriptItemUID="Button8">
+                        <ServerActionCall ScriptItemUID="ServerActionCall5">
+                          <Insert DataTable="ValueList" ScriptItemUID="Insert2">
+                            <ActionSequence ScriptItemUID="Action2" />
+                            <InsertValue DataColumn="UID_SourceObject" Value="select current primarykey() from edittable" />
+                            <InsertValue DataColumn="Index" Value="(select max(index) from valuelist where uid_sourceobject = ( select current primarykey() from edittable))+1" />
+                            <InsertValue DataColumn="result" Value="from container select uid_adsgroup" />
+                          </Insert>
+                          <Update DataTable="ValueList" DataColumn="Index" Value="0" WhereClause="isnull(index)" ScriptItemUID="Update2" />
+                          <CallAction ActionID="WriteToObject" ScriptItemUID="CallAction6" />
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                      <Button Text="translate('#LDS#Cancel')" ScriptItemUID="Button7" Layout="'VI_Styles_Button_LabelOnly'" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ServerActionCall6">
+                          <ActionOnControl />
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </VirtualControlMapping>
+                  <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Add new owner group&quot;)" ScriptItemUID="VirtualFunctionMapping4" />
+                </CallAction>
+              </ServerActionCall>
+            </Button>
+          </Container>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1">
+        <DataTableCustom Table="ValueList" ScriptItemUID="DataTableCustom1">
+          <Column Name="result" ScriptItemUID="Column1" DataType="System.String" />
+          <Column Name="Index" DataType="System.Int32" ScriptItemUID="Column2" />
+          <Column Name="UID_SourceObject" ScriptItemUID="Column3" DataType="System.String" />
+        </DataTableCustom>
+        <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
+          <Column Name="UID_ADSGroup" ColumnDataSource="ForeignKey" DBTableName="&quot;ADSGroup&quot;" DBColumnName="&quot;DistinguishedName&quot;" Caption="datacaptionsingle(&quot;ADSGroup&quot;)" ScriptItemUID="Column4" DataType="System.String" FKWhereClause="" />
+          <Column Name="UID_ADSAccount" ColumnDataSource="ForeignKey" DBTableName="&quot;ADSAccount&quot;" DBColumnName="&quot;DistinguishedName&quot;" Caption="datacaptionsingle(&quot;ADSAccount&quot;)" ScriptItemUID="Column5" DataType="System.String" FKWhereClause="" />
+          <Column Name="ObjectType" ScriptItemUID="Column6" DataType="System.String" />
+        </DataTableSingleRow>
+      </Tables>
+      <Controls ScriptItemUID="Controls1">
+        <Control ID="WriteToObject">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action4">
+              <ActionSequence ScriptItemUID="Action5">
+                <Update DataTable="EditTable" DataColumn="EditColumn" Value="concat( (select distinct result from valuelist where uid_sourceobject = ( select current primarykey() from edittable) order by Index), char(7))&#xD;&#xA;&#xD;&#xA;-- 17567" WhereClause="primarykey() = ( select current primarykey() from edittable)" ScriptItemUID="Update3" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ReadFromObject">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action6">
+              <ActionSequence ScriptItemUID="Action7">
+                <ActionSequence Condition="select current isnull(editcolumn,'')&lt;&gt;'' from edittable" ScriptItemUID="Action8">
+                  <FillTable DataTable="ValueList" DataColumn="result" Expression="select current split(editcolumn, char(7), true) from edittable" ScriptItemUID="FillTable1">
+                    <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
+                  </FillTable>
+                </ActionSequence>
+                <Update DataTable="ValueList" DataColumn="UID_SourceObject" Value="select current primarykey() from edittable" WhereClause="isnull(uid_sourceobject,'')=''" ScriptItemUID="Update4" />
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+        <Control ID="ReadBulk">
+          <LocalControlContext ContainerType="ActionComponent">
+            <ActionComponent ScriptItemUID="Action9">
+              <ActionSequence ScriptItemUID="Action10">
+                <Delete DataTable="ValueList" ScriptItemUID="Delete2" />
+                <ForeachRow DataTable="EditTable" WhereClause="primarykey() = select current primarykey() from edittable" ScriptItemUID="ForeachRow1">
+                  <CallAction ActionID="ReadFromObject" ScriptItemUID="Call3" />
+                </ForeachRow>
+              </ActionSequence>
+            </ActionComponent>
+          </LocalControlContext>
+        </Control>
+      </Controls>
+      <Functions ScriptItemUID="Functions1" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1">
+        <DataEventHandler Operation="Update" DataTable="EditTable" ScriptItemUID="DataEventHandler1">
+          <ActionSequence ScriptItemUID="Action11">
+            <Delete DataTable="ValueList" WhereClause="uid_sourceobject = ( select current primarykey() from edittable)" ScriptItemUID="Delete3" />
+            <CallAction ActionID="ReadFromObject" ScriptItemUID="Call4" />
+          </ActionSequence>
+          <DataEventHandlerColumn DataColumn="EditColumn" />
+        </DataEventHandler>
+        <DataEventHandler Operation="Bulk" DataTable="EditTable" ScriptItemUID="DataEventHandler2">
+          <ActionSequence ScriptItemUID="Action12">
+            <CallAction ActionID="ReadBulk" ScriptItemUID="Call5" />
+          </ActionSequence>
+        </DataEventHandler>
+      </DataEventHandlers>
+    </Context>
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension1">
+        <VirtualColumnExtension Name="EditColumn" DataType="System.String" />
+      </VirtualTableExtension>
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

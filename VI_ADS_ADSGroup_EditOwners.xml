@@ -1,0 +1,37 @@
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="ee72d379-b5f3-2d7f-73df-adfaea6b6f2c">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_ADS_ADSGroup_EditOwners" MigrationNotes="DIALOGCONFIGPARM;">
+    <ContextConfiguration>
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
+      <ConfigSectionDefinition Name="ObjectEdit" ScriptItemUID="ConfigSectionDefinition1" Description="">
+        <ConfigParam Key="VI_Roles_Fields_ADSGroup_ARS" Description="translate(&quot;#LDS#Editable fields for the table&quot;)+&quot; &quot;+datacaption(&quot;ADSGroup&quot;) + &quot; (&quot; + DataCaption(&quot;ADSDomain&quot;,&quot;IsArsWorkflowsEnabled&quot;) + &quot;)&quot;" LongDescription="translate(&quot;#LDS#This property list is used for edit views for objects of the given database table.&quot;) + &quot; (&quot; + DataCaption(&quot;ADSDomain&quot;,&quot;IsArsWorkflowsEnabled&quot;) + &quot;)&quot;" Type="ColumnList" DatabaseTable="ADSGroup" />
+      </ConfigSectionDefinition>
+    </ContextConfiguration>
+    <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ScriptItemUID="Container1">
+        <Container ItemUID="Display attributes for ARS-synched domain" ScriptItemUID="Container2" Condition="IsDomainArsSynced()">
+          <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
+            <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
+              <ColumnList ScriptItemUID="ColumnList1">
+                <ExpressionColumnList ColumnList="getconfig(&quot;VI_Roles_Fields_ADSGroup_ARS&quot;)" ScriptItemUID="ExpressionColumnList1" />
+              </ColumnList>
+            </VirtualFunctionMapping>
+            <VirtualTableMapping VirtualTable="EditTable" DataTable="GroupObject" ScriptItemUID="VirtualTableMapping1" />
+            <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping2" />
+            <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="VirtualFunctionMapping3" />
+          </ControlReferenceContainer>
+        </Container>
+      </Container>
+      <Tables ScriptItemUID="Tables1" />
+      <Controls ScriptItemUID="Controls1" />
+      <Functions ScriptItemUID="Functions1">
+        <Function Name="IsDomainArsSynced()" Expression="ispreprop(&quot;ARS_SSM&quot;) and Exists(&quot;ADSDomain&quot;,SqlAnd(SqlCompare(&quot;IsArsWorkflowsEnabled&quot;, true, &quot;bool&quot;, &quot;equal&quot;),SqlCompare(&quot;UID_ADSDomain&quot;, from GroupObject select objectwalker(&quot;FK(UID_ADSContainer).UID_ADSDomain&quot;), &quot;string&quot;, &quot;equal&quot;, &quot;NonUnicodeLiterals&quot;)))" DataType="System.Boolean" ScriptItemUID="Function1" />
+      </Functions>
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
+    </Context>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
+      <VirtualTable Name="GroupObject" Class="ADSGroup" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
+      <VirtualFunction Signature="IsReadOnly()" DataType="System.Boolean" TriggerUpdates="Never" />
+    </ComponentInterface>
+  </GlobalControl>
+</WebDesigner>

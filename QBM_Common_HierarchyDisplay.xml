@@ -1,37 +1,39 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="96e7497e-cdeb-9bbd-5866-cdd55b07ca3b">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="QBM_Common_HierarchyDisplay">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="QBM_Common_HierarchyDisplay">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
-      <ControlList ScriptItemUID="ControlList1">
-        <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="Objects" OrderBy="'TreeLevel'" EnableCustomAttributes="true" CustomStyle="&quot;padding-left: 15px;&quot;">
-          <HtmlAttributes>
-            <Property Name="TagName" Value="ul" Comment="" />
-          </HtmlAttributes>
-          <Container ScriptItemUID="Container1" EnableCustomAttributes="true" CustomStyle="format( &quot;margin-left: {0}px;&quot;, from objects select current (treelevel*16))">
-            <HtmlAttributes>
-              <Property Name="TagName" Value="li" Comment="" />
-            </HtmlAttributes>
-            <LinkContainer ScriptItemUID="LinkContainer1">
-              <ServerActionCall ScriptItemUID="ServerActionCall1">
-                <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
-                  <RedirectParameter Name="'ObjectKey'" Value="from objects select current objectwalker(&quot;xobjectkey&quot;)" />
-                </Redirect>
-              </ServerActionCall>
-              <ControlList ScriptItemUID="ControlList2">
-                <Label Text="from objects select current display()" ScriptItemUID="Label1" />
-              </ControlList>
-            </LinkContainer>
-          </Container>
-        </ContainerTemplate>
-      </ControlList>
       <ActionSequence ScriptItemUID="Action2">
         <LoadTable DataTable="Objects" ScriptItemUID="LoadTable1" WhereClause="format(&quot;uid_{0} in ( select uid_parentorg from basetreecollection where uid_org = {1})&quot;,&#xA;dbtable(object),&#xA;sqlformatvalue(from object select current primaryKey(),&quot;string&quot;, &quot;NonUnicodeLiterals&quot;))">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
           <FillTableDisplayColumn DataColumn="TreeLevel" />
         </LoadTable>
       </ActionSequence>
+      <ControlList ScriptItemUID="ControlList1">
+        <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="Objects" OrderBy="'TreeLevel'" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <Property Name="TagName" Value="ul" Comment="" />
+            <HtmlAttribute Name="'style'" ScriptItemUID="ContainerTemplate1style" Value="&quot;padding-left: 15px;&quot;" />
+          </HtmlAttributes>
+          <Container ScriptItemUID="Container1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <Property Name="TagName" Value="li" Comment="" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="format( &quot;margin-left: {0}px;&quot;, from objects select current (treelevel*16))" />
+            </HtmlAttributes>
+            <LinkContainer ScriptItemUID="LinkContainer1">
+              <ControlList ScriptItemUID="ControlList2">
+                <Label Text="from objects select current display()" ScriptItemUID="Label1" />
+              </ControlList>
+              <ServerActionCall ScriptItemUID="ServerActionCall1">
+                <Redirect ScriptItemUID="Redirect1" Target="Context" ContextID="VI_Common_ObjectSheet" AllowReturnToThisContext="true">
+                  <RedirectParameter Name="'ObjectKey'" Value="from objects select current objectwalker(&quot;xobjectkey&quot;)" />
+                </Redirect>
+              </ServerActionCall>
+            </LinkContainer>
+          </Container>
+        </ContainerTemplate>
+      </ControlList>
       <Tables ScriptItemUID="Tables1">
         <DataTableDbObject Table="Objects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="dbtable(object)" TriggerUpdates="Never">
           <ActionSequence ScriptItemUID="Action1" />

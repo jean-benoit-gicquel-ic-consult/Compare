@@ -1,14 +1,19 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Common_CompactLabel" MigrationNotes="DIALOGCONFIGPARM;" Comment="A label displaying multiple items from a given collection with the option to switch between collapsed and expanded display mode.&#xD;&#xA;In collapsed mode only a certain number (i.e. the first x) of items will be displayed in addition to a &quot;expand&quot; link.&#xD;&#xA;When expanded all items will be displayed in addition to an &quot;collapse&quot; link.">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_CompactLabel" MigrationNotes="DIALOGCONFIGPARM;" Comment="A label displaying multiple items from a given collection with the option to switch between collapsed and expanded display mode.&#xD;&#xA;In collapsed mode only a certain number (i.e. the first x) of items will be displayed in addition to a &quot;expand&quot; link.&#xD;&#xA;When expanded all items will be displayed in addition to an &quot;collapse&quot; link.">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ItemUID="compact string label" ScriptItemUID="Container1">
         <ContainerTemplate DataTable="AvailableItems" WhereClause="  IsExpanded() OR&#xD;&#xA;  &#xD;&#xA;  primarykey() in ( from availableitems select select top CountItemsVisibleCollapsed() primarykey() order by __Display)" ScriptItemUID="ContainerTemplate1">
           <SwitchContainer ScriptItemUID="Switch1">
             <SwitchContainerCase ScriptItemUID="Case1" Condition="not MultiLine()">
-              <Label Text="from AvailableItems select current format(&quot;{0}{1}&quot;, display(), Separator(IterationIndex(), IterationCount()))" Tooltip="from AvailableItems select current ToolTip()" ScriptItemUID="Label1" />
+              <Label Text="from AvailableItems select current format(&quot;{0}{1}&quot;, display(), Separator(IterationIndex(), IterationCount()))" ScriptItemUID="Label1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Label1title" Value="from AvailableItems select current ToolTip()" />
+                </HtmlAttributes>
+              </Label>
             </SwitchContainerCase>
             <SwitchContainerCase ScriptItemUID="Case2">
               <Label Text="from AvailableItems select current display()" ScriptItemUID="Label2" />
@@ -17,21 +22,26 @@
         </ContainerTemplate>
         <Container ItemUID="Toggle Expanded" ScriptItemUID="Container5">
           <LinkContainer ScriptItemUID="LinkContainer1">
-            <ServerActionCall ScriptItemUID="ServerActionCall1">
-              <CallAction ActionID="ToggleExpanded" ScriptItemUID="Call1" />
-            </ServerActionCall>
             <ControlList ScriptItemUID="ControlList1">
-              <Container ItemUID="expand label" Condition="(not IsExpanded()) AND (UsedItems() &gt; CountItemsVisibleCollapsed())" Tooltip="translate(&quot;#LDS#Expand&quot;)" ScriptItemUID="Container6">
+              <Container ItemUID="expand label" Condition="(not IsExpanded()) AND (UsedItems() &gt; CountItemsVisibleCollapsed())" ScriptItemUID="Container6" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Container6title" Value="translate(&quot;#LDS#Expand&quot;)" />
+                </HtmlAttributes>
                 <Label Text="translate(&quot;#LDS#and {0} more...&quot;,  UsedItems()- CountItemsVisibleCollapsed())" ScriptItemUID="ctl5" />
               </Container>
-              <Container ItemUID="collapse label" Condition="IsExpanded()" ScriptItemUID="Container8" Tooltip="translate(&quot;#LDS#Close&quot;)">
+              <Container ItemUID="collapse label" Condition="IsExpanded()" ScriptItemUID="Container8" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Container8title" Value="translate(&quot;#LDS#Close&quot;)" />
+                </HtmlAttributes>
                 <Label Text="&quot;&lt;&lt;&quot;" ScriptItemUID="Label4" />
               </Container>
             </ControlList>
+            <ServerActionCall ScriptItemUID="ServerActionCall1">
+              <CallAction ActionID="ToggleExpanded" ScriptItemUID="Call1" />
+            </ServerActionCall>
           </LinkContainer>
         </Container>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="LocalVars" ScriptItemUID="DataTableSingleRow1">
           <Column Name="Expanded" DataType="System.Boolean" ScriptItemUID="Column1" />
@@ -54,7 +64,7 @@
       </Functions>
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="AvailableItems" Comment="The items that are available for display.&#xD;&#xA;The actual items to displayed are defined (and ordered) in UIDList()." ScriptItemUID="VirtualTable1" />
       <VirtualFunction Signature="CountItemsVisibleCollapsed()" DataType="System.Int32" Comment="Optional: the number of items that will be displayed in collapsed mode.&#xD;&#xA;If not specified the default value is 3." DefaultValue="3" TriggerUpdates="Never" />
       <VirtualFunction Signature="MultiLine()" DataType="System.Boolean" Comment="Optional: determines whether the label should display each item in a separate line (MuliLine=True)&#xD;&#xA;or all items in a single line (MultiLine=false).&#xD;&#xA;If not specified the default value is MultiLine=false." DefaultValue="false" TriggerUpdates="Never" />

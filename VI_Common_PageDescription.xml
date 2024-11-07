@@ -1,21 +1,30 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Common_PageDescription" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_PageDescription" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
-        <Container CustomStyle="'margin-bottom: 6px;'" ItemUID="Header" Condition="getHeadLine() &lt;&gt; ''" ScriptItemUID="Container2" EnableCustomAttributes="true">
+        <Container ItemUID="Header" Condition="getHeadLine() &lt;&gt; ''" ScriptItemUID="Container2" EnableCustomAttributes="true">
           <HtmlAttributes>
             <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute1" Value="CssClass()" />
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="'margin-bottom: 6px;'" />
           </HtmlAttributes>
-          <Label Text="getHeadLine()" CustomStyle="'font-size: 1.0em; font-weight: bolder;'" ScriptItemUID="Label1" />
+          <Label Text="getHeadLine()" ScriptItemUID="Label1" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Label1style" Value="'font-size: 1.0em; font-weight: bolder;'" />
+            </HtmlAttributes>
+          </Label>
         </Container>
         <Container Layout="'VI_Styles_Container_ParagraphLargeMarging'" ItemUID="Text" Condition="getText() &lt;&gt; ''" ScriptItemUID="Container4">
-          <Label Text="getText()" CustomStyle="'font-size: 1.0em;'" ScriptItemUID="Label2" />
+          <Label Text="getText()" ScriptItemUID="Label2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Label2style" Value="'font-size: 1.0em;'" />
+            </HtmlAttributes>
+          </Label>
         </Container>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">
@@ -24,7 +33,7 @@
       </Functions>
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualFunction Signature="HeadLine()" DataType="System.String" TriggerUpdates="Never" />
       <VirtualFunction Signature="Text()" DataType="System.String" TriggerUpdates="Never" />
       <VirtualFunction Signature="CssClass()" DataType="System.String" TriggerUpdates="Never" />

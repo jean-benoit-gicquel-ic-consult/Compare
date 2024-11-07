@@ -1,0 +1,9 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ARS_StandardWeb_Ext">
+    <Extensions>
+      <AddObject ObjectID="QERConfigSection9" ObjectType="ConfigSection" SortOrder="31">
+        <ConfigEntry Key="ColumnEditor_ADSGroup.edsvaSecondaryOwners" Value="VI_Edit_Special_ADSGroup_SecondaryOwners" ScriptItemUID="ARSConfigEntry1" />
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

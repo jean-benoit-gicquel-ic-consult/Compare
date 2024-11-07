@@ -1,0 +1,136 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ARS_MyData_PersonHyperView_Ext">
+    <Extensions>
+      <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="20">
+        <DataTableCRView Class="ADSAccount" Table="ADSAccount" CRDataColumn="UID_Person" ViewFKDataTable="Person" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="ARSDataTableCRView1">
+          <DbObjectLoadType ScriptItemUID="ARSDbObjectLoadType1" />
+        </DataTableCRView>
+      </AddObject>
+      <AddObject ObjectID="Action4" ObjectType="ActionSequence" ExtensionPosition="After" ReferenceObjectID="LoadTable1">
+        <ActionSequence Condition="ispreprop(&quot;ARS_SSM&quot;)" ScriptItemUID="ARSAction2">
+          <Update DataTable="Container" DataColumn="UID_ADSAccount" Value="from ADSAccount select top 1 UID_ADSAccount" ScriptItemUID="ARSUpdate1" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="QERConfigSection1" ObjectType="ConfigSection" SortOrder="30">
+        <ConfigEntry Key="VI_PersonalData_Fields_ADSAccount" Type="ConfigEntryObjects" ObjectType="ColumnList" ScriptItemUID="ARSConfigEntry1">
+          <SingleColumn DataColumn="TelephoneNumber" ScriptItemUID="ARSSingleColumn1" />
+          <SingleColumn DataColumn="HomePhone" ScriptItemUID="ARSSingleColumn2" />
+          <SingleColumn DataColumn="ipPhone" ScriptItemUID="ARSSingleColumn3" />
+          <SingleColumn DataColumn="Mobile" ScriptItemUID="ARSSingleColumn4" />
+          <SingleColumn DataColumn="Fax" ScriptItemUID="ARSSingleColumn5" />
+          <SingleColumn DataColumn="OtherTelephoneNumber" ScriptItemUID="ARSSingleColumn6" />
+          <SingleColumn DataColumn="OtherHomePhone" ScriptItemUID="ARSSingleColumn7" />
+          <SingleColumn DataColumn="OtherIPPhone" ScriptItemUID="ARSSingleColumn8" />
+          <SingleColumn DataColumn="OtherMobile" ScriptItemUID="ARSSingleColumn9" />
+          <SingleColumn DataColumn="OtherFax" ScriptItemUID="ARSSingleColumn10" />
+        </ConfigEntry>
+      </AddObject>
+      <AddObject ObjectID="DataTableSingleRow1" ObjectType="DataTableSingleRow" SortOrder="20">
+        <Column Name="UID_ADSAccount" ScriptItemUID="ARSColumn1" DataType="System.String" />
+      </AddObject>
+      <AddObject ObjectID="ServerActionCall1" ObjectType="ServerActionCall" SortOrder="20">
+        <ActionSequence Condition="ispreprop(&quot;ARS_SSM&quot;)" ScriptItemUID="ARSAction3">
+          <Save DataTable="ADSAccount" WhereClause="IsChanged()" ScriptItemUID="ARSSave2" />
+        </ActionSequence>
+      </AddObject>
+      <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="30">
+        <ConfigParam Key="VI_PersonalData_Fields_ADSAccount" Type="ColumnList" Description="translate('#LDS#Writable attributes for Active Directory accounts')" DatabaseTable="ADSAccount" LongDescription="" />
+      </AddObject>
+      <AddObject ObjectID="Controls1" ObjectType="Controls" SortOrder="35">
+        <Control ID="FormARS">
+          <LocalControlContext ContainerType="FormGroup">
+            <FormGroup ScriptItemUID="ARSFormGroup1">
+              <Form ID="FormARS" ScriptItemUID="ARSForm1">
+                <ActionSequence ScriptItemUID="ARSAction5" />
+                <PagePartContainer ID="Title" ScriptItemUID="ARSPagePartContainer1">
+                  <Label Text="translate( '#LDS#Active Directory Accounts' ) + &quot; - &quot; + from Person select Display() where uid_person = (from container select uid_person) " ScriptItemUID="ARSLabel1" />
+                </PagePartContainer>
+                <PagePartContainer ID="Main" ScriptItemUID="ARSPagePartContainer2">
+                  <Container Condition="ispreprop(&quot;ARS_SSM&quot;) and (0 &lt; from ADSAccount select count())" ScriptItemUID="ARSContainer3" EnableCustomAttributes="true">
+                    <HtmlAttributes>
+                      <HtmlAttribute Name="'style'" ScriptItemUID="ARSContainer3style" Value="'padding-top: 9px;'" />
+                    </HtmlAttributes>
+                    <ControlReferenceContainer ID="VI_Common_PageDescription" ScriptItemUID="ARSControlRef1">
+                      <VirtualFunctionMapping ID="Text()" Value="translate(&quot;#LDS#Please review the following data and correct them if needed.&quot;)" ScriptItemUID="ARSVirtualFunctionMapping1" />
+                    </ControlReferenceContainer>
+                    <LayoutPanel Columns="2" ScriptItemUID="ARSLayoutPanel1">
+                      <Label Text="DataCaptionSingle(&quot;ADSAccount&quot;) + &quot;:&quot;" ScriptItemUID="ARSLabel2" />
+                      <Container ScriptItemUID="ARSContainer5">
+                        <Container Condition="1 &lt; select count() from ADSAccount" ScriptItemUID="ARSContainer6">
+                          <ContainerTemplate DataTable="ADSAccount" ScriptItemUID="ARSContainerTemplate1">
+                            <Container ScriptItemUID="ARSContainer7">
+                              <RadioButton DataTable="Container" DataColumn="UID_ADSAccount" Text="from ADSAccount select current Display()" ScriptItemUID="ARSRadioButton1" DataValue="from ADSAccount select current UID_ADSAccount" />
+                            </Container>
+                          </ContainerTemplate>
+                        </Container>
+                        <Container Condition="1 = select count() from ADSAccount" ScriptItemUID="ARSContainer8">
+                          <Label Text="select Display() from ADSAccount where UID_ADSAccount = (from Container select UID_ADSAccount)" ScriptItemUID="ARSLabel3" />
+                        </Container>
+                      </Container>
+                    </LayoutPanel>
+                    <ContainerTemplate DataTable="ADSAccount" WhereClause="UID_ADSAccount = from Container select UID_ADSAccount" ScriptItemUID="ARSContainerTemplate2" EnableCustomAttributes="true">
+                      <HtmlAttributes>
+                        <HtmlAttribute Name="'style'" ScriptItemUID="ARSContainerTemplate2style" Value="'padding-top:3px;'" />
+                      </HtmlAttributes>
+                      <Activator ScriptItemUID="ARSActivator1">
+                        <Action ScriptItemUID="ARSAction4">
+                          <ConvertInteractiveEntity DataTable="ADSAccount" />
+                        </Action>
+                      </Activator>
+                      <Container ScriptItemUID="ARSContainer9">
+                        <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ARSControlRef2">
+                          <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="ARSVirtualFunctionMapping2">
+                            <ColumnList ScriptItemUID="ARSColumnList1">
+                              <ExpressionColumnList ColumnList="getconfig(&quot;VI_PersonalData_Fields_ADSAccount&quot;)" ScriptItemUID="ARSExpressionColumnList1" />
+                            </ColumnList>
+                          </VirtualFunctionMapping>
+                          <VirtualTableMapping VirtualTable="EditTable" DataTable="ADSAccount" ScriptItemUID="ARSVirtualTableMapping1" />
+                          <VirtualFunctionMapping ID="EnableNavigation()" Value="true" ScriptItemUID="ARSVirtualFunctionMapping3" />
+                        </ControlReferenceContainer>
+                      </Container>
+                    </ContainerTemplate>
+                    <Container Layout="'VI_Styles_Container_ButtonBar'" ItemUID="Buttonpanel" ScriptItemUID="ARSContainer10">
+                      <Button Text="translate(&quot;#LDS#Save&quot;)" ItemUID="SAVE" ScriptItemUID="ARSButton1" EnableCustomAttributes="true">
+                        <HtmlAttributes>
+                          <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Save&quot;)" ScriptItemUID="ARSHtmlAttribute1" />
+                        </HtmlAttributes>
+                        <ServerActionCall ScriptItemUID="ARSServerActionCall1">
+                          <ActionOnControl ActionType="PerformValidation" />
+                          <ActionSequence Condition="ispreprop(&quot;ARS_SSM&quot;)" ScriptItemUID="ARSAction1">
+                            <Save DataTable="ADSAccount" WhereClause="IsChanged()" ScriptItemUID="ARSSave1" />
+                          </ActionSequence>
+                          <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="ARSCall1">
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The changes have been successfully saved.')" ScriptItemUID="ARSVirtualFunctionMapping4" />
+                            <VirtualFunctionMapping ID="MessageType()" Value="&quot;Information&quot;" ScriptItemUID="ARSVirtualFunctionMapping5" />
+                          </CallAction>
+                        </ServerActionCall>
+                      </Button>
+                    </Container>
+                  </Container>
+                </PagePartContainer>
+              </Form>
+            </FormGroup>
+          </LocalControlContext>
+        </Control>
+      </AddObject>
+      <AddObject ObjectID="Container19" ObjectType="Container" SortOrder="85">
+        <Container Condition="ispreprop(&quot;ARS_SSM&quot;) and (0 &lt; from ADSAccount select count())" ItemUID="ARS" EnableCustomAttributes="true" ScriptItemUID="ARSContainer4">
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;style&quot;" Value="&quot;display: inline;&quot;" ScriptItemUID="ARSHtmlAttribute2" />
+          </HtmlAttributes>
+          <ControlReferenceContainer ID="QER_BusinessOwner_AddOn_Tile" ItemUID="request" ScriptItemUID="ARSControlRef3">
+            <VirtualControlMapping ContainerType="ActionComponent" VirtualControl="SquareAction">
+              <ActionComponent ScriptItemUID="ARSAction6">
+                <Redirect Target="FormModule" ScriptItemUID="ARSRedirect1">
+                  <RedirectFormModule ID="FormARS" ScriptItemUID="ARSRedirectForm1" />
+                </Redirect>
+              </ActionComponent>
+            </VirtualControlMapping>
+            <VirtualFunctionMapping ID="SquareText()" Value="translate('#LDS#Active Directory Accounts')" ScriptItemUID="ARSVirtualFunctionMapping6" />
+            <VirtualFunctionMapping ID="Description()" Value="translate('#LDS#Review you active directory account data.')" ScriptItemUID="ARSVirtualFunctionMapping7" />
+          </ControlReferenceContainer>
+        </Container>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

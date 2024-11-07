@@ -1,0 +1,12 @@
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ARS_ObjectEdit_ADSGroup_Ext">
+    <Extensions>
+      <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="10">
+        <ControlReferenceContainer ID="VI_ADS_ADSGroup_EditOwners" ScriptItemUID="ARSControlRef1">
+          <VirtualTableMapping VirtualTable="GroupObject" DataTable="EditTable" ScriptItemUID="ARSVirtualTableMapping1" />
+          <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="ARSVirtualFunctionMapping1" />
+        </ControlReferenceContainer>
+      </AddObject>
+    </Extensions>
+  </ConfigurationRoot>
+</WebDesigner>

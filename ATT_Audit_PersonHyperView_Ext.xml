@@ -71,7 +71,7 @@
               </ActionComponent>
             </VirtualControlMapping>
             <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Attestation&quot;)" ScriptItemUID="ATTVirtualFunctionMapping8" />
-            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows the attestation status for this employee.')" ScriptItemUID="ATTVirtualFunctionMapping9" />
+            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows the attestation status for this identity.')" ScriptItemUID="ATTVirtualFunctionMapping9" />
           </ControlReferenceContainer>
         </Container>
       </AddObject>

@@ -70,7 +70,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="SquareText()" Value="translate(&quot;#LDS#Memberships&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the employees who are members of this entitlement.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the identities to whom this system entitlement is assigned.')" />
                     </ControlReferenceContainer>
                   </Container>
                   <Container ScriptItemUID="Container19" EnableCustomAttributes="true" ItemUID="Subgroups" Condition="(from Object select current DBTable()) in (TableNameSupportSubGroups())">
@@ -134,7 +134,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this entitlement belong to.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles and organizations that the identities assigned to this system entitlement belong to.')" />
                     </ControlReferenceContainer>
                   </Container>
                 </Container>

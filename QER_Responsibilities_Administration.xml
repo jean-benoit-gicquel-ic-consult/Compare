@@ -54,9 +54,9 @@
                       <Redirect ScriptItemUID="Redirect1" Target="Context" AllowReturnToThisContext="true" ContextID="QER_Person_Admin" />
                     </ActionComponent>
                   </VirtualControlMapping>
-                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Heading Employees&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate(&quot;#LDS#Heading Identities&quot;)" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Image()" Value="&quot;Person&quot;" />
-                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Value()" Value="translate('#LDS#Shows all employees and their entitlements.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="Value()" Value="translate('#LDS#Shows all identities and their entitlements.')" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="ImageType()" Value="'TableName'" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="ContentType()" Value="'Text'" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="Size()" Value="'Overview'" />

@@ -9,7 +9,7 @@
         <Update DataTable="PersonReference" DataColumn="IsSelected" Value="0" ScriptItemUID="Update1" />
         <Delete DataTable="PersonReference" ScriptItemUID="Delete1" />
         <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
-          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Select an employee who should approve instead&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="PopupTitle()" Value="translate(&quot;#LDS#Select an identity that is allowed to approve&quot;)" ScriptItemUID="VirtualFunctionMapping1" />
           <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
             <Container ScriptItemUID="Container1">
               <Container Condition="0 = from PersonReference select count() where IsSelected" ItemUID="Person search and question Popup" ScriptItemUID="Container5">

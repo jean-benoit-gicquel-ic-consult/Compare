@@ -16,7 +16,7 @@
       </DataTableSingleRow>
       <DataTableDbObject ScriptItemUID="DataTableDbObject1" Table="DialogTable" Class="DialogTable">
         <ActionSequence ScriptItemUID="Action3" />
-        <Column DataType="System.String" Name="LocalDisplay" ScriptItemUID="Column4" DataSource="Expression" Expression="if(&quot;Person&quot; = from DialogTable select current TableName)then&#xD;&#xA;   translate(&quot;#LDS#Employees&quot;)&#xD;&#xA;else&#xD;&#xA;   DataCaption(from DialogTable select current TableName)&#xD;&#xA;&#xD;&#xA;" />
+        <Column DataType="System.String" Name="LocalDisplay" ScriptItemUID="Column4" DataSource="Expression" Expression="if(&quot;Person&quot; = from DialogTable select current TableName)then&#xD;&#xA;   translate(&quot;#LDS#Identities&quot;)&#xD;&#xA;else&#xD;&#xA;   DataCaption(from DialogTable select current TableName)&#xD;&#xA;&#xD;&#xA;" />
       </DataTableDbObject>
     </Tables>
     <Controls ScriptItemUID="Controls1">

@@ -19,7 +19,7 @@
                         <HtmlAttribute Name="'alt'" ScriptItemUID="Image1alt" Value="translate(&quot;#LDS#Information&quot;)" />
                       </HtmlAttributes>
                     </Image>
-                    <Label Text="translate(&quot;#LDS#Please select the employee you wish to submit a question for.&quot;)" ScriptItemUID="Label1" />
+                    <Label Text="translate(&quot;#LDS#Select the identity you want to submit a question for.&quot;)" ScriptItemUID="Label1" />
                   </Container>
                   <Container Condition="0 = from PersonReference select count() where isnull(IsSelected,false) = True" ItemUID="Person Suchen und Fragen Popup" ScriptItemUID="Container5">
                     <Container ScriptItemUID="Container6" EnableCustomAttributes="true">

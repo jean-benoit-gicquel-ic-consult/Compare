@@ -6,8 +6,8 @@
         <AssemblyReference Assembly="VI.Web.ConfigBase.dll" />
         <NamespaceImport Namespace="QER.CompositionApi.Auth" />
       </CompilationSettings>
-      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_Employee_QERWebAuthnKey_Filter" Type="SQL" Description="translate('#LDS#Webauthn: Employees who can manage their security keys')" DatabaseTable="Person" LongDescription="translate('#LDS#Specify which employees are allowed to manage their Webauthn security keys.')" />
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Identities&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Employee_QERWebAuthnKey_Filter" Type="SQL" Description="translate('#LDS#Webauthn: Identities who can manage their security keys')" DatabaseTable="Person" LongDescription="translate('#LDS#Specify which identities are allowed to manage their Webauthn security keys.')" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="ControlList">

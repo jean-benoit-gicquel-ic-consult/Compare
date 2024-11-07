@@ -5,7 +5,7 @@
       <ContextParameters ScriptItemUID="ContextParameters1" />
       <ConfigSectionDefinition Name="Reports" ScriptItemUID="ConfigSectionDefinition1" Description="translate(&quot;#LDS#Reports&quot;)">
         <ConfigParam Key="VI_Roles_Responsibility_RPSReport" Type="SQL" DatabaseTable="RPSReport" Description="translate(&quot;#LDS#Reports that can be viewed and edited in the web portal.&quot;)" />
-        <ConfigParam Key="RPS_Resp_ListReports_Condition" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Employees authorized to edit and create reports in the web portal.&quot;)" />
+        <ConfigParam Key="RPS_Resp_ListReports_Condition" Type="SQL" DatabaseTable="Person" Description="translate(&quot;#LDS#Identities authorized to edit and create reports in the Web Portal.&quot;)" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">

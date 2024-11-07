@@ -1,5 +1,5 @@
-﻿<WebDesigner TdnsHash="4da96f52-cf84-6bf4-64a8-a37adc5c1c3d">
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMB_History_Ext">
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_History_Ext">
     <Extensions>
       <AddObject ObjectID="Action3" ObjectType="ActionSequence">
         <CodeLiteral ScriptItemUID="RMBCodeLiteral1">dataProvider.AddMemberRelationTable("PersonInOrg", "UID_Person", "AddMembership", "RemoveMembership", "MemberOf");

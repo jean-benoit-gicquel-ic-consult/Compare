@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="ADS_Start_Governance_Ext_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_Start_Governance_Ext_Ext">
     <Extensions>
       <AddObject ObjectID="TSBConfigEntry2" ObjectType="ConfigEntryObjects" SortOrder="245">
         <ConfigEntryObject ScriptItemUID="ADSConfigEntryObject1">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ADSAccountCountDisabledWithActivePerson&lt;/DisplayName&gt;&lt;FilterByObject&gt;False&lt;/FilterByObject&gt;&lt;SortOrder&gt;24&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;False&lt;/Invert&gt;&lt;ClickMode&gt;NoClick&lt;/ClickMode&gt;&lt;SumByElementName&gt;False&lt;/SumByElementName&gt;&lt;FilterByElementName&gt;False&lt;/FilterByElementName&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;/Object&gt;</ConfigEntryObject>

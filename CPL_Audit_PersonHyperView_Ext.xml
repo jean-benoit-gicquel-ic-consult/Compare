@@ -152,7 +152,7 @@
               </ActionComponent>
             </VirtualControlMapping>
             <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Rule violations&quot;)" ScriptItemUID="CPLVirtualFunctionMapping11" />
-            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows all rule violations by this employee.')" ScriptItemUID="CPLVirtualFunctionMapping12" />
+            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows all rule violations by this identity.')" ScriptItemUID="CPLVirtualFunctionMapping12" />
           </ControlReferenceContainer>
         </Container>
         <Container ItemUID="Compliance" EnableCustomAttributes="true" Condition="GetConfigParm(&quot;QER\ComplianceCheck&quot;) = &quot;1&quot;" ScriptItemUID="CPLContainer1">
@@ -168,7 +168,7 @@
               </ActionComponent>
             </VirtualControlMapping>
             <VirtualFunctionMapping ID="SquareText()" Value="translate(&quot;#LDS#Compliance&quot;)" ScriptItemUID="CPLVirtualFunctionMapping13" />
-            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows all compliance violations of the selected employee.')" ScriptItemUID="CPLVirtualFunctionMapping14" />
+            <VirtualFunctionMapping ID="Description()" Value="Translate('#LDS#Shows all compliance violations of the selected identity.')" ScriptItemUID="CPLVirtualFunctionMapping14" />
           </ControlReferenceContainer>
         </Container>
       </AddObject>

@@ -16,7 +16,7 @@
     <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     <ActionSequence ScriptItemUID="Action1" />
     <Forms ScriptItemUID="Forms1">
-      <Form ScriptItemUID="Form1" ID="ATT_Attestation_MyAttestations" NavigationTitle="translate(&quot;#LDS#My Attestations&quot;)">
+      <Form ScriptItemUID="Form1" ID="ATT_Attestation_MyAttestations" NavigationTitle="translate(&quot;#LDS#My attestations&quot;)">
         <ActionSequence ScriptItemUID="Action2" />
         <PagePartContainer ScriptItemUID="PagePartContainer1" ID="Title">
           <Label ScriptItemUID="Label1" Text="translate(&quot;#LDS#My Attestation Status&quot;)" />

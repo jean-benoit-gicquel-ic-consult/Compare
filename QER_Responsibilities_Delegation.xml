@@ -30,7 +30,7 @@
               </VirtualControlMapping>
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="Caption()" Value="translate('#LDS#Heading Delegation')" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Image()" Value="&quot;Delegation&quot;" />
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate('#LDS#Shows all responsibilities that you can delegate to other employees.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate('#LDS#Shows all responsibilities that you can delegate to other identities.')" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ImageType()" Value="'TableName'" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping15" ID="Size()" Value="'Overview'" />

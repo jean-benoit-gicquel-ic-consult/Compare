@@ -69,7 +69,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="SquareText()" Value="translate(&quot;#LDS#Memberships&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="if(select current dbtable() from object in (&quot;QERReuseUS&quot;, &quot;QERResource&quot;)) then&#xD;&#xA;   translate('#LDS#Shows the employees who are members of this entitlement.')&#xD;&#xA;else&#xD;&#xA;   translate(&quot;#LDS#Employees cannot be assigned to this object.&quot;)" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="if(select current dbtable() from object in (&quot;QERReuseUS&quot;, &quot;QERResource&quot;)) then&#xD;&#xA;   translate('#LDS#Shows the identities to whom this system entitlement is assigned.')&#xD;&#xA;else&#xD;&#xA;   translate(&quot;#LDS#Identities cannot be assigned to this object.&quot;)" />
                     </ControlReferenceContainer>
                   </Container>
                   <Container ScriptItemUID="Container20" EnableCustomAttributes="true" ItemUID="Usage" Condition="(from object select Current IsOwnerOrAdmin)&#xD;&#xA;And&#xD;&#xA;(&quot;QERResource&quot; = (from object select Current dbtable()))">
@@ -85,7 +85,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this resource belong to.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles and organizations that the identities assigned to this company resource belong to.')" />
                     </ControlReferenceContainer>
                   </Container>
                 </Container>

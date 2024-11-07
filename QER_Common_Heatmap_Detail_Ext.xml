@@ -3,7 +3,7 @@
     <Extensions>
       <AddObject ObjectID="Container4" ObjectType="Container" SortOrder="35">
         <Container ScriptItemUID="Container51" Condition=" ((select count() from RiskyPersons where riskindexcalculated&gt;0)&gt;0) and&#xD;&#xA; (from dashboarddef select current ident_dialogdashboarddef like '%PersonRiskIndex%' )">
-          <Label Text="translate(&quot;#LDS#Top 5 employees with the highest risk index:&quot;)&#xD;&#xA;" ScriptItemUID="Label40" EnableCustomAttributes="true">
+          <Label Text="translate(&quot;#LDS#Top 5 identities with the highest risk index:&quot;)&#xD;&#xA;" ScriptItemUID="Label40" EnableCustomAttributes="true">
             <HtmlAttributes>
               <HtmlAttribute Name="'style'" ScriptItemUID="Label40style" Value="'font-size: 1.0em; font-weight: bolder;'" />
             </HtmlAttributes>

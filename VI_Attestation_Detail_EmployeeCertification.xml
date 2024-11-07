@@ -56,7 +56,7 @@
                           <Label Text="translate(&quot;#LDS#If you are not the manager of {0}, please supply the correct information.&quot;, from person select current display())" ScriptItemUID="Label6" />
                         </Container>
                         <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container16">
-                          <Label Text="translate(&quot;#LDS#Please click here if you do not know who this employee's manager is.&quot;, from person select current display())" Action="Redirect" ScriptItemUID="Label7">
+                          <Label Text="translate('#LDS#If you do not know who the manager of &quot;{0}&quot; is, click here.', from person select current display())" Action="Redirect" ScriptItemUID="Label7">
                             <ServerActionCall ScriptItemUID="ServerActionCall6">
                               <ActionSequence ScriptItemUID="Action1">
                                 <CallAction ActionID="VI_MessageBox" ScriptItemUID="CallAction5">

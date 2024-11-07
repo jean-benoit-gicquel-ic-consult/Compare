@@ -42,13 +42,13 @@
                         <LayoutPanel ScriptItemUID="LayoutPanel1">
                           <Label Text="translate(&quot;#LDS#Pending&quot;)" ScriptItemUID="Label8" EnableCustomAttributes="true">
                             <HtmlAttributes>
-                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="translate(&quot;#LDS#Number of run's pending cases which can be approved by the employee&quot;)" />
+                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute10" Value="translate(&quot;#LDS#Number of run's pending cases which can be approved by the identity&quot;)" />
                             </HtmlAttributes>
                           </Label>
                           <Label Text="from Approvers select current PendingCases()" ScriptItemUID="Label9" />
                           <Label Text="translate(&quot;#LDS#Closed&quot;)" ScriptItemUID="Label10" EnableCustomAttributes="true">
                             <HtmlAttributes>
-                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute11" Value="translate(&quot;#LDS#Number of the run's cases which have been closed by the employee&quot;)" />
+                              <HtmlAttribute Name="'title'" ScriptItemUID="HtmlAttribute11" Value="translate(&quot;#LDS#Number of the run's cases which have been closed by the identity&quot;)" />
                             </HtmlAttributes>
                           </Label>
                           <Label Text="from Approvers select current PendingCases()" ScriptItemUID="Label11" />
@@ -94,7 +94,7 @@
                 <GridColumnHeader ScriptItemUID="wctl3">
                   <Label Text="translate(&quot;#LDS#Pending&quot;)" ScriptItemUID="Label3" EnableCustomAttributes="true">
                     <HtmlAttributes>
-                      <HtmlAttribute Name="'title'" ScriptItemUID="Label3title" Value="translate(&quot;#LDS#Number of run's pending cases which can be approved by the employee&quot;)" />
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Label3title" Value="translate(&quot;#LDS#Number of run's pending cases which can be approved by the identity&quot;)" />
                     </HtmlAttributes>
                   </Label>
                 </GridColumnHeader>
@@ -106,7 +106,7 @@
                 <GridColumnHeader ScriptItemUID="wctl4">
                   <Label Text="translate(&quot;#LDS#Closed&quot;)" ScriptItemUID="Label5" EnableCustomAttributes="true">
                     <HtmlAttributes>
-                      <HtmlAttribute Name="'title'" ScriptItemUID="Label5title" Value="translate(&quot;#LDS#Number of the run's cases which have been closed by the employee&quot;)" />
+                      <HtmlAttribute Name="'title'" ScriptItemUID="Label5title" Value="translate(&quot;#LDS#Number of the run's cases which have been closed by the identity&quot;)" />
                     </HtmlAttributes>
                   </Label>
                 </GridColumnHeader>

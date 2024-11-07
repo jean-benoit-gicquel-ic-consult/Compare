@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action5" />
       <ActionComponent ScriptItemUID="Action1">
         <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
           <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to delete {0}?&quot;, (from Items select top 1 display() where PrimaryKey() = UidOfItemToDelete()))" ScriptItemUID="VirtualFunctionMapping1" />
@@ -29,7 +30,6 @@
           </VirtualControlMapping>
         </CallAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action5" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

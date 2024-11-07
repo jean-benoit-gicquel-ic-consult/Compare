@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="RMB_Responsibilities_Memberships_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Responsibilities_Memberships_Ext">
     <Extensions>
       <AddObject ObjectID="FunctionValueList1" ObjectType="FunctionValueList">
         <FunctionValue Expression="'Org'" />

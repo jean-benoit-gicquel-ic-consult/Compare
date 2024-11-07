@@ -28,7 +28,7 @@
                     </CallAction>
                   </ActionComponent>
                 </VirtualControlMapping>
-                <VirtualFunctionMapping ID="MessageText()" Value="if(from PersonsForOrder select current (UID_Person=getuser()))&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#You do not currently have an account in the system {0}. Would you like to request an account?&quot;, from unsgroup select top 1 displayvalue(uid_unsroot))&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The employee {0} does not have an account in the system {1}. Would you like to request an account for {0}?&quot;, from PersonsForOrder select current display(), from unsgroup select top 1 displayvalue(uid_unsroot))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="TSBVirtualFunctionMapping15" />
+                <VirtualFunctionMapping ID="MessageText()" Value="if(from PersonsForOrder select current (UID_Person=getuser()))&#xD;&#xA;then&#xD;&#xA;translate(&quot;#LDS#You do not currently have an account in the system {0}. Would you like to request an account?&quot;, from unsgroup select top 1 displayvalue(uid_unsroot))&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The identity {0} does not have an account in the system {1}. Would you like to request an account for {0}?&quot;, from PersonsForOrder select current display(), from unsgroup select top 1 displayvalue(uid_unsroot))&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" ScriptItemUID="TSBVirtualFunctionMapping15" />
                 <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="TSBVirtualFunctionMapping14" />
                 <VirtualFunctionMapping ID="MessageBoxTitle()" Value="translate(&quot;#LDS#Missing user account&quot;)" ScriptItemUID="TSBVirtualFunctionMapping13" />
               </CallAction>

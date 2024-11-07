@@ -185,7 +185,7 @@
                           </Redirect>
                         </ServerActionCall>
                       </MenuElement>
-                      <MenuElement Text="translate(&quot;#LDS#Send inquiry&quot;)" Tooltip="translate(&quot;#LDS#Send inquiry for this attestation case to another employee&quot;)" Condition="not(IsReadOnly())&#xA;and&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')&#xA;and&#xA;0 = (from AttestationHelperForRecallQuery select count() )" ScriptItemUID="MenuElement2">
+                      <MenuElement Text="translate(&quot;#LDS#Send inquiry&quot;)" Tooltip="translate(&quot;#LDS#Send inquiry for this attestation case to another identity&quot;)" Condition="not(IsReadOnly())&#xA;and&#xA;convert(isnull(getconfig(&quot;VI_ITShop_WantSeeQueryToPerson&quot;),'false'), 'Boolean')&#xA;and&#xA;0 = (from AttestationHelperForRecallQuery select count() )" ScriptItemUID="MenuElement2">
                         <ServerActionCall ScriptItemUID="ServerActionCall13">
                           <ActionSequence ScriptItemUID="Action12">
                             <CallAction ActionID="VI_Attestation_QueryToPerson" ScriptItemUID="Call1">
@@ -397,7 +397,7 @@
                         <Property Name="TagName" Value="li" Comment="" />
                       </HtmlAttributes>
                       <Container ScriptItemUID="Container10" Layout="'VI_Styles_Container_Paragraph'">
-                        <Label Text="translate(&quot;#LDS#The following employees are currently entitled to approve this attestation case.&quot;)" ScriptItemUID="Label3" />
+                        <Label Text="translate(&quot;#LDS#The following identities are currently entitled to approve this attestation case.&quot;)" ScriptItemUID="Label3" />
                       </Container>
                       <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( from AttestationCase select current UID_AttestationCase) and OrderNumber = 1)">
                         <Container ScriptItemUID="Container22">
@@ -415,7 +415,7 @@
                         <Property Name="TagName" Value="li" Comment="" />
                       </HtmlAttributes>
                       <Container ScriptItemUID="Container11" Layout="'VI_Styles_Container_Paragraph'">
-                        <Label Text="translate(&quot;#LDS#The following employees are entitled to approve this attestation case after the current workflow step.&quot;)" ScriptItemUID="Label9" />
+                        <Label Text="translate(&quot;#LDS#The following identities are entitled to approve this attestation case after the current approval step.&quot;)" ScriptItemUID="Label9" />
                       </Container>
                       <ContainerTemplate ScriptItemUID="ContainerTemplate4" DataTable="PersonNextDecision" WhereClause="uid_person in ( select uid_person from Person2Attestation2OrderNumber where UID_AttestationCase = ( select current UID_AttestationCase from AttestationCase) and OrderNumber &gt; 1)">
                         <Container ScriptItemUID="Container23">

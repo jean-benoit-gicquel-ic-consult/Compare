@@ -1,5 +1,5 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="2c6bb4c4-a28e-17ce-d676-e8ec419a853e">
-  <ConfigurationRoot MetamodelVersion="2016-05-01" ID="RMB_Common_Search_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMB_Common_Search_Ext">
     <Extensions>
       <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="15">
         <Insert DataTable="Tables" ScriptItemUID="RMBInsert1">

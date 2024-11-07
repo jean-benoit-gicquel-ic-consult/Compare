@@ -11,10 +11,10 @@
           <SwitchActionCase ScriptItemUID="case2" Condition="showaudit() and (from vars select isnull(uid_personaudit,'') = '')" ItemUID="ShowAudit">
             <SwitchAction ScriptItemUID="Switch2">
               <SwitchActionCase ScriptItemUID="Case2" Condition="not(showpersonnoncompliance())" ItemUID="all rule violations">
-                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update18" Value="translate('#LDS#The page displays all approveable rule violations in the selected period. Select an employee to show only the rule violations which have been edited by the employee.') " />
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update18" Value="translate('#LDS#The page displays all approvable rule violations. Select an identity to show only the rule violations which have been edited by the identity.') " />
               </SwitchActionCase>
               <SwitchActionCase ScriptItemUID="Case3" Condition="showpersonnoncompliance()" ItemUID="all exception approvals">
-                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update21" Value="translate('#LDS#The page displays all rule violations in the selected period. Select an employee to show only the rule violations which have been edited by the employee.')" />
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update21" Value="translate('#LDS#The page displays all rule violations. Select an identity to show only the rule violations which have been edited by the identity.')" />
               </SwitchActionCase>
             </SwitchAction>
           </SwitchActionCase>
@@ -24,7 +24,7 @@
                 <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update23" Value="translate('#LDS#The page displays all rule violations in the selected period.')" />
               </SwitchActionCase>
               <SwitchActionCase ScriptItemUID="Case4" Condition="not showpersonnoncompliance()" ItemUID="all exception approvals">
-                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update22" Value="translate('#LDS#The page displays all rule violations which were edited by the selected employee in the selected period.')" />
+                <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update22" Value="translate('#LDS#The page displays all rule violations which were edited by the selected identity.')" />
               </SwitchActionCase>
             </SwitchAction>
           </SwitchActionCase>
@@ -51,7 +51,7 @@ catch{}
         </Container>
         <Container ScriptItemUID="Container12" Condition="not(IsRestrictToSingleObject()) and showaudit()">
           <LayoutPanel ScriptItemUID="LayoutPanel2">
-            <Label Text="if(showpersonnoncompliance())then&#xA;translate('#LDS#Select employee')&#xA;else&#xA;translate('#LDS#Select approver')" ScriptItemUID="Label1" />
+            <Label Text="if(showpersonnoncompliance())then&#xA;translate('#LDS#Select identity')&#xA;else&#xA;translate('#LDS#Select approver')" ScriptItemUID="Label1" />
             <ColumnEditor DataTable="Vars" DataColumn="UID_PersonAudit" ScriptItemUID="ColumnEditor1" />
           </LayoutPanel>
         </Container>

@@ -4,12 +4,12 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action1" />
       <ControlList ScriptItemUID="ControlList1">
         <ControlReferenceControlList ID="TSB_Common_ObjectSheet_CommonGroup" ScriptItemUID="ControlRef2">
           <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="VirtualFunctionMapping1" />
         </ControlReferenceControlList>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1">
         <DataTableFKView Table="AccProduct" ViewFKDataTable="Object" ViewFKDataColumn="UID_AccProduct" ViewFKWhereClause="" ScriptItemUID="DataTableFKView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" />

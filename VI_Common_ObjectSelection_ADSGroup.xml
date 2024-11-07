@@ -1,9 +1,10 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="7aa3a917-2f15-3a1f-bdd2-b7b5de3d4b5d">
-  <GlobalControl MetamodelVersion="2016-01-01" ID="VI_Common_ObjectSelection_ADSGroup" MigrationNotes="DIALOGCONFIGPARM;" Comment="Caution: This component is also used for ADSAccount selection.">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_ObjectSelection_ADSGroup" MigrationNotes="DIALOGCONFIGPARM;" Comment="Caution: This component is also used for ADSAccount selection.">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action2" />
       <Container ScriptItemUID="Container1">
         <ControlReferenceContainer ID="VI_Common_PropertyEditor" ScriptItemUID="ControlRef1">
           <VirtualFunctionMapping ID="PropertyList()" IsPropertyList="true" ScriptItemUID="VirtualFunctionMapping1">
@@ -14,7 +15,6 @@
           <VirtualTableMapping VirtualTable="EditTable" DataTable="LocalVars" ScriptItemUID="VirtualTableMapping1" />
         </ControlReferenceContainer>
       </Container>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="LocalVars" DisplayColumn="" ScriptItemUID="DataTableSingleRow1">
           <Column Name="UID_ADSContainer" MaxLength="" ColumnDataSource="ForeignKey" DBTableName="&quot;adscontainer&quot;" DBColumnName="&quot;uid_adscontainer&quot;" Caption="datacaption(&quot;adscontainer&quot;, &quot;uid_adscontainer&quot;)" ScriptItemUID="Column1" DataType="System.String" FKWhereClause="" />

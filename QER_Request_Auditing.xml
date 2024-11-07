@@ -42,7 +42,7 @@
                 </ActionComponent>
               </VirtualControlMapping>
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping7" ID="Caption()" Value="translate('#LDS#Request')" />
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Shows all requests made by a specific employee.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Shows all requests made by a specific identity.&quot;)" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="Image()" Value="&quot;cux-icon cux-icon--shopping-cart&quot;" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping11" ID="ImageType()" Value="'IconFont'" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="ContentType()" Value="'Text'" />
@@ -60,7 +60,7 @@
               </VirtualControlMapping>
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Caption()" Value="translate('#LDS#Approval')" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping17" ID="Image()" Value="'PersonWantsOrg'" />
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Value()" Value="translate(&quot;#LDS#See all IT shop decisions made by a specific employee.&quot;)" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping8" ID="Value()" Value="translate(&quot;#LDS#See all IT shop decisions made by a specific identity.&quot;)" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping9" ID="ImageType()" Value="'TableName'" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping18" ID="ContentType()" Value="'Text'" />
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping19" ID="Size()" Value="'Overview'" />

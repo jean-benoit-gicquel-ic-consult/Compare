@@ -4,8 +4,10 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <MasterDetailControl ScriptItemUID="MasterDetailControl1">
+          <HtmlAttributes />
           <MasterPane ScriptItemUID="MasterPane1">
             <Container ScriptItemUID="Container1">
               <Grid AllowExport="true" ScriptItemUID="Grid1" ExportFileName="" ExportTitle="">
@@ -63,7 +65,6 @@
           </DetailPane>
         </MasterDetailControl>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1">
         <DataTableDbObject Table="Delegation" Class="Delegation" ScriptItemUID="DataTableDbObject2">
           <ActionSequence ScriptItemUID="Action1">

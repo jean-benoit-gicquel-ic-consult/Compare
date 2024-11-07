@@ -11,8 +11,8 @@
       <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="25">
         <Insert DataTable="Compliance" ScriptItemUID="CPLInsert2">
           <ActionSequence ScriptItemUID="CPLAction2" />
-          <InsertValue Value="translate(&quot;#LDS#{0} employees with rule violations&quot;)" DataColumn="Message" />
-          <InsertValue Value="&quot;Compliance rule violations by direct reports&quot;" DataColumn="IdentRpsReport" />
+          <InsertValue Value="translate(&quot;#LDS#{0} rule violations by identities you are directly responsible for&quot;)" DataColumn="Message" />
+          <InsertValue Value="&quot;Compliance rule violations by identities you are directly responsible for&quot;" DataColumn="IdentRpsReport" />
         </Insert>
       </AddObject>
     </Extensions>

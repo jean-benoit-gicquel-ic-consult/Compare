@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
           <Action ScriptItemUID="Action1">
@@ -26,7 +27,6 @@
           </ObjectSwitchContainer>
         </ContainerTemplate>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1">
         <DataTableGeneric Table="Obj" ScriptItemUID="DataTableGeneric1" />
         <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">

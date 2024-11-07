@@ -1,9 +1,10 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_Common_ObjectSheet_ADSAccount" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_ObjectSheet_ADSAccount" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <Tab ScriptItemUID="Tab1">
           <TabPage ItemUID="Overview" ScriptItemUID="TabPage1">
@@ -16,14 +17,13 @@
           </TabPage>
         </Tab>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSheet">
-      <VirtualTableExtension Name="Object" Class="ADSAccount" />
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_ObjectSheet" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="Object" Class="ADSAccount" ScriptItemUID="VirtualTableExtension1" />
     </ComponentInterface>
   </GlobalControl>
 </WebDesigner>

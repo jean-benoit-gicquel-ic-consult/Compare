@@ -4,7 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ContextParameters ScriptItemUID="ContextParameters1" />
       <ConfigSectionDefinition Name="General settings" ScriptItemUID="ConfigSectionDefinition1" Description="">
-        <ConfigParam Key="VI_BusinessOwnership_ClaimOwnership_FilterPerson" Description="translate(&quot;#LDS#Employees who can claim ownership of a business object&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_BusinessOwnership_ClaimOwnership_FilterPerson" Description="translate(&quot;#LDS#Identities who can claim ownership of a business object&quot;)" Type="SQL" DatabaseTable="Person" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Tables ScriptItemUID="Tables1">

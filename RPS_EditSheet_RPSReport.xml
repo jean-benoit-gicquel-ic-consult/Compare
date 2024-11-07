@@ -34,7 +34,7 @@ foreach (var person in await mr.Candidates.LoadAsync(loadInfo, ct: ct).Configure
             </VirtualFunctionMapping>
             <VirtualTableMapping VirtualTable="EditTable" DataTable="EditTable" ScriptItemUID="VirtualTableMapping1" />
           </ControlReferenceContainer>
-          <Label ScriptItemUID="Label1" EnableCustomAttributes="true" Text=" translate(&quot;#LDS#To manage who can view this report, you can assign it to employees and organizational units here.&quot;)">
+          <Label ScriptItemUID="Label1" EnableCustomAttributes="true" Text=" translate(&quot;#LDS#To manage who can view this report, you can assign it to identities and organizational units here.&quot;)">
             <HtmlAttributes>
               <Property Name="TagName" Value="p" />
             </HtmlAttributes>
@@ -71,7 +71,7 @@ foreach (var person in await mr.Candidates.LoadAsync(loadInfo, ct: ct).Configure
     </Context>
     <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="EditTable" ScriptItemUID="VirtualTable1" RequiresCursor="true" Class="RPSReport">
-        <ColumnMemberRelation Name="PersonHasRPSReport" ScriptItemUID="ColumnMemberRelation1" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to employees&quot;)" RelationTableName="&quot;PersonHasRPSReport&quot;" />
+        <ColumnMemberRelation Name="PersonHasRPSReport" ScriptItemUID="ColumnMemberRelation1" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to identities&quot;)" RelationTableName="&quot;PersonHasRPSReport&quot;" />
         <ColumnMemberRelation Name="DepartmentHasRPSReport" ScriptItemUID="ColumnMemberRelation2" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to departments&quot;)" RelationTableName="&quot;DepartmentHasRPSReport&quot;" Description="translate(&quot;#LDS#This report will be available to members of the assigned organizational units.&quot;)" />
         <ColumnMemberRelation Name="LocalityHasRPSReport" ScriptItemUID="ColumnMemberRelation3" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to locations&quot;)" RelationTableName="&quot;LocalityHasRPSReport&quot;" Description="translate(&quot;#LDS#This report will be available to members of the assigned organizational units.&quot;)" />
         <ColumnMemberRelation Name="ProfitCenterHasRPSReport" ScriptItemUID="ColumnMemberRelation4" ColumnNameLeft="&quot;UID_RPSReport&quot;" Caption="translate(&quot;#LDS#Assign to cost centers&quot;)" RelationTableName="&quot;ProfitCenterHasRPSReport&quot;" Description="translate(&quot;#LDS#This report will be available to members of the assigned organizational units.&quot;)" />

@@ -420,7 +420,7 @@ System.Web.HttpContext.Current.Response.Redirect("", false);</CodeLiteral>
                 <HtmlAttributes>
                   <HtmlAttribute ScriptItemUID="HtmlAttribute8" Name="&quot;class&quot;" Value="&quot;imx-loginButtonpanel&quot;" />
                 </HtmlAttributes>
-                <Button Text="translate(&quot;#LDS#Heading Log Off&quot;)" ItemUID="LoginButton" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Default'">
+                <Button Text="translate(&quot;#LDS#Heading Log Out&quot;)" ItemUID="LoginButton" ScriptItemUID="Button2" Layout="'VI_Styles_Button_Default'">
                   <ServerActionCall ScriptItemUID="ServerActionCall1">
                     <CodeLiteral ScriptItemUID="CodeLiteral6">	var client = (VI.WebRuntime.Communication.OAuth2Client)_UserSession.SessionObjects["OAuth"];
 		var url = client.GetLogoutUrl(_Database);

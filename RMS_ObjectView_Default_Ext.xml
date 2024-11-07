@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMS_ObjectView_Default_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_ObjectView_Default_Ext">
     <Extensions>
       <AddObject ObjectID="ConfigSectionDefinition1" ObjectType="ConfigSectionDefinition" SortOrder="290">
         <ConfigParam Key="VI_ObjectView_ESet_Fields" Type="ColumnList" Description="translate('#LDS#Display columns of table {0}', datacaption(&quot;ESet&quot;))" DatabaseTable="ESet" LongDescription="translate(&quot;#LDS#This property list is used for read-only views of objects of the given database table.&quot;)" />

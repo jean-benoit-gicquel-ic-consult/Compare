@@ -16,10 +16,10 @@
     <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     <ActionSequence ScriptItemUID="Action2" />
     <Forms ScriptItemUID="Forms1">
-      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Employee Details')" ScriptItemUID="Form1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Identity Details')" ScriptItemUID="Form1">
         <ActionSequence ScriptItemUID="Action3" />
         <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
-          <Label Text="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Employee Details')" ScriptItemUID="Label1" />
+          <Label Text="translate('#LDS#Heading Auditing') + &quot; - &quot; + translate('#LDS#Heading Identity Details')" ScriptItemUID="Label1" />
         </PagePartContainer>
         <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
           <Grid ScriptItemUID="Grid1">
@@ -47,7 +47,7 @@
         <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
           <ControlList ScriptItemUID="ControlList1">
             <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef2">
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate('#LDS#Please choose an employee to view his/her data.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping2" ID="Text()" Value="translate('#LDS#Select an identity.')" />
             </ControlReferenceControlList>
           </ControlList>
         </PagePartContainer>

@@ -22,7 +22,7 @@
         <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
           <ControlList ScriptItemUID="ControlList1">
             <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate('#LDS#On this page you can view and edit employees you are responsible for.')+&quot; &quot;+translate('#LDS#Please choose an employee to view his/her data.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate('#LDS#On this page you can view and edit identities you are responsible for.')+&quot; &quot;+translate('#LDS#Select an identity.')" />
             </ControlReferenceControlList>
           </ControlList>
         </PagePartContainer>
@@ -62,7 +62,7 @@
                 <HtmlAttributes>
                   <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
                 </HtmlAttributes>
-                <Button Text="translate('#LDS#Add a new employee')" ScriptItemUID="Button2" EnabledCondition="caninsert(&quot;persoN&quot;)">
+                <Button Text="translate('#LDS#Add a new identity')" ScriptItemUID="Button2" EnabledCondition="caninsert(&quot;persoN&quot;)">
                   <ServerActionCall ScriptItemUID="ServerActionCall3">
                     <Redirect ScriptItemUID="Redirect3" Target="Context" ContextID="VI_Employee_Edit" AllowReturnToThisContext="true" AbortExecution="false" />
                   </ServerActionCall>

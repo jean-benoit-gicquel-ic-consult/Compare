@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="ATT_BusinessOwner_ChartSummary_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_BusinessOwner_ChartSummary_Ext">
     <Extensions>
       <AddObject ObjectID="QERConfigEntry3" ObjectType="ConfigEntryObjects" SortOrder="40">
         <ConfigEntryObject ScriptItemUID="ATTConfigEntryObject1">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;AttestationOpenCasesInOverLimit_By_Department&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Pending attestation cases within/ over the limit")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;SortOrder&gt;5&lt;/SortOrder&gt;&lt;ControlType&gt;ChartPie&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;noclick&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;&lt;/DashboardDefHistoric&gt;&lt;/Object&gt;</ConfigEntryObject>

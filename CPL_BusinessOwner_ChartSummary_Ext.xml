@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="CPL_BusinessOwner_ChartSummary_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_BusinessOwner_ChartSummary_Ext">
     <Extensions>
       <AddObject ObjectID="QERConfigEntry5" ObjectType="ConfigEntryObjects" SortOrder="20">
         <ConfigEntryObject ScriptItemUID="CPLConfigEntryObject1">&lt;Object Type="DialogDashboardDef"&gt;&lt;DisplayName&gt;ComplianceRuleViolationsByProfitCenter&lt;/DisplayName&gt;&lt;Title&gt;translate("#LDS#Compliance rule violations")&lt;/Title&gt;&lt;Tooltip&gt;&lt;/Tooltip&gt;&lt;RedLimit&gt;10&lt;/RedLimit&gt;&lt;GreenLimit&gt;5&lt;/GreenLimit&gt;&lt;SortOrder&gt;2&lt;/SortOrder&gt;&lt;ControlType&gt;ChartValueAndTrend&lt;/ControlType&gt;&lt;Invert&gt;false&lt;/Invert&gt;&lt;ClickMode&gt;clickglobal&lt;/ClickMode&gt;&lt;DashboardDefHistoric&gt;ComplianceRuleViolationsByProfitCenterMonthly&lt;/DashboardDefHistoric&gt;&lt;RpsReport&gt;Compliance rule violations by structure members&lt;/RpsReport&gt;&lt;/Object&gt;</ConfigEntryObject>

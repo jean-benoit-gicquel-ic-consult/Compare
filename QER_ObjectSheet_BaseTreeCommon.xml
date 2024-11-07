@@ -76,7 +76,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping26" ID="SquareText()" Value="translate(&quot;#LDS#Memberships&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the employees assigned to this organizational unit.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the identities assigned to this company structure.')" />
                     </ControlReferenceContainer>
                   </Container>
                   <Container ScriptItemUID="Container15" EnableCustomAttributes="true" ItemUID="Entitlements" Condition="from object select current IsOwnerOrAdmin">
@@ -140,7 +140,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this organizational unit belong to.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Description()" Value="translate('#LDS#Shows the roles and organizations that the identities assigned to this company resource belong to.')" />
                     </ControlReferenceContainer>
                   </Container>
                   <Container ScriptItemUID="Container19" EnableCustomAttributes="true" ItemUID="Compliance reports" Condition="-- only for Compliance Officers, auditors, and the object responsible&#xD;&#xA;&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;uid_aerole in ('CAP-AEROLE-IAG-CISO', 'CAP-AEROLE-AUDITING-AUDITOR') and uid_person = '%useruid%'&quot;))&#xD;&#xA;or from object select current IsOwnerOrAdmin">

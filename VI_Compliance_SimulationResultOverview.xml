@@ -55,7 +55,7 @@
                         <HtmlAttributes>
                           <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute5" Value="&quot;imx-message imx-message-info&quot;" />
                         </HtmlAttributes>
-                        <Label Text="translate(&quot;#LDS#The role inheritance for employees is currently disabled for this role.&quot;)" ScriptItemUID="Label8" />
+                        <Label Text="translate(&quot;#LDS#The role inheritance for identities is currently disabled for this role.&quot;)" ScriptItemUID="Label8" />
                       </Container>
                       <ContainerTemplate ScriptItemUID="ContainerTemplate3" DataTable="ComplianceCheckSimpleObjects" WhereClause="xobjectkey = ( select current dbobjectkey from compliancechecksimple)">
                         <LinkContainer ScriptItemUID="LinkContainer1">

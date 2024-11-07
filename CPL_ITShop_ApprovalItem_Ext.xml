@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2014-01-03" ID="CPL_ITShop_ApprovalItem_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_ITShop_ApprovalItem_Ext">
     <Extensions>
       <AddObject ObjectID="VirtualTable3" ObjectType="VirtualTable">
         <VirtualColumn Name="CheckStatus" DataType="System.Boolean" />

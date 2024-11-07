@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <Tab ScriptItemUID="Tab1">
           <TabPage ScriptItemUID="TabPage1" ItemUID="Overview" Condition="from Object select current isloaded()">
@@ -42,7 +43,6 @@
           </TabPage>
         </Tab>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">

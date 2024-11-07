@@ -1,5 +1,5 @@
-﻿<WebDesigner TdnsHash="1c34f547-8aee-31f3-791e-ba5bfca1c37f">
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="CPL_History_Ext">
+﻿<WebDesigner>
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_History_Ext">
     <Extensions>
       <AddObject ObjectID="Action3" ObjectType="ActionSequence">
         <CodeLiteral ScriptItemUID="CPLCodeLiteral1">dataProvider.AddMemberRelationTable("PersonInNonCompliance", "UID_Person", "AddNonCompliance", "RemoveNonCompliance", "ComplianceViolation");</CodeLiteral>

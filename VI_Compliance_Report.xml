@@ -119,7 +119,7 @@
           <Container ScriptItemUID="Container2">
             <Container Layout="'VI_Styles_Container_Paragraph'" Condition="1 &lt; &#xD;&#xA;(&#xD;&#xA;(isnull(from Container select 1 where ExceptionApprover,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where DepartmentOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where FrameworkOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where RuleOwner,0))&#xD;&#xA;+&#xD;&#xA;(isnull(from Container select 1 where C_SOfficer,0))&#xD;&#xA;)" ScriptItemUID="Container3">
               <Container Condition="from Container select FrameworkOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4">
-                <RadioButton DataTable="Container" DataColumn="Page" Text="translate('#LDS#By Framework')" ScriptItemUID="RadioButton5" DataValue="&quot;FrameworkOwner&quot;" />
+                <RadioButton DataTable="Container" DataColumn="Page" Text="translate('#LDS#By framework')" ScriptItemUID="RadioButton5" DataValue="&quot;FrameworkOwner&quot;" />
               </Container>
               <Container Condition="from Container select DepartmentOwner" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container5">
                 <RadioButton DataTable="Container" DataColumn="Page" Text="translate(&quot;#LDS#By department&quot;)" ScriptItemUID="RadioButton1" DataValue="&quot;DepartmentOwner&quot;" />
@@ -139,7 +139,7 @@
                 <Label Text="translate('#LDS#The following rules are assigned to frameworks which you are responsible for.')" ScriptItemUID="Label13" />
               </Container>
               <Container Condition="&quot;DepartmentOwner&quot; = from Container select Page" ScriptItemUID="Container11">
-                <Label Text="translate('#LDS#The following rules have been violated by employees, which belong to departments for which you are responsible.')" ScriptItemUID="Label9" />
+                <Label Text="translate('#LDS#The following rules have been violated by identities, which belong to departments for which you are responsible.')" ScriptItemUID="Label9" />
               </Container>
               <Container Condition="&quot;RuleOwner&quot; = from Container select Page" ScriptItemUID="Container12">
                 <Label Text="translate('#LDS#You are responsible for the following compliance rules.')" ScriptItemUID="Label10" />

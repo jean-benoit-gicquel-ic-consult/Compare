@@ -3,7 +3,7 @@
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ContextParameters ScriptItemUID="ContextParameters1" />
-      <ConfigSectionDefinition Name="VI_Compliance_HighRiskOverview" Description="translate(&quot;#LDS#High Risk Overview&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+      <ConfigSectionDefinition Name="VI_Compliance_HighRiskOverview" Description="translate(&quot;#LDS#Heading High Risk Overview&quot;)" ScriptItemUID="ConfigSectionDefinition1">
         <ConfigParam Key="VI_Compliance_RiskIndex_MaxCount" Description="translate('#LDS#Number of high risk objects to display')" LongDescription="translate('#LDS#A value of 10 means that the top 10 high risk objects will be displayed.')" Type="Text" />
         <ConfigParam Key="VI_Compliance_RiskIndex_Threshold" Description="translate('#LDS#Risk threshold')" LongDescription="translate('#LDS#Only objects with an associated risk index higher than this threshold value will be displayed.')" Type="Text" />
       </ConfigSectionDefinition>

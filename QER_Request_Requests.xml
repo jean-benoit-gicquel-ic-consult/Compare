@@ -74,9 +74,9 @@
                       </Redirect>
                     </ActionComponent>
                   </VirtualControlMapping>
-                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Caption()" Value="translate('#LDS#Heading Maintain Templates')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="Caption()" Value="translate('#LDS#Heading Maintain Product Bundles')" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping35" ID="Image()" Value="&quot;cux-icon cux-icon--cogs&quot;" />
-                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Shopping cart templates help with the creation of requests.&quot;)" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Value()" Value="translate(&quot;#LDS#Product bundles help with the creation of requests.&quot;)" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="ImageType()" Value="'IconFont'" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping36" ID="ContentType()" Value="'Text'" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping37" ID="Size()" Value="'Overview'" />

@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2013-01-23" ID="CPL_Roles_RoleAssignments_Ext_Ext" RequiredDbModules="CPL,RMS">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="CPL_Roles_RoleAssignments_Ext_Ext" RequiredDbModules="CPL,RMS">
     <Extensions />
   </ConfigurationRoot>
 </WebDesigner>

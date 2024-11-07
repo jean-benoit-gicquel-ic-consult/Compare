@@ -137,7 +137,7 @@
         </GridColumn>
       </GridBand>
       <Tables ScriptItemUID="Tables1">
-        <DataTableCRView Class="ComplianceRuleInArea" Table="ComplianceRuleInArea" CRDataColumn="UID_ComplianceRule" ViewFKDataTable="ComplianceRule" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1" DataColumn="">
+        <DataTableCRView Class="ComplianceRuleInArea" Table="ComplianceRuleInArea" CRDataColumn="UID_ComplianceRule" ViewFKDataTable="ComplianceRule" ViewFKWhereClause="" RelationDBWhereClause="" ScriptItemUID="DataTableCRView1">
           <DbObjectLoadType ScriptItemUID="DbObjectLoadType1" ConvertToInteractive="false" />
         </DataTableCRView>
         <DataTableSQL Table="PersonInNonCompliance" PrimaryKeyColumn="" DisplayColumn="" ScriptItemUID="DataTableLimitedSQL1" Comment="-- BACK format(&quot;select count(*) as Anzahl,UID_NonCompliance,IsDecisionMade from PersonInNonCompliance group by UID_NonCompliance,IsDecisionMade&quot;)">

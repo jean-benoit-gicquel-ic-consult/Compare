@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2015-01-01" ID="RMS_Audit_PersonHyperView_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="RMS_Audit_PersonHyperView_Ext">
     <Extensions>
       <AddObject ObjectID="ColumnLimitedValues1" ObjectType="ColumnLimitedValues" SortOrder="90">
         <ColumnLimitedValue Name="ESet" Display="datacaption(&quot;ESet&quot;)" Comment="" />

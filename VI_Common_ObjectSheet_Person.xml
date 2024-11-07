@@ -45,7 +45,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping4" ID="SquareText()" Value="translate(&quot;#LDS#Overview&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Description()" Value="translate('#LDS#Shows the overview for the selected employee with assignments, entitlements and requests.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping10" ID="Description()" Value="translate('#LDS#Shows the overview for the selected identity with entitlements and requests.')" />
                     </ControlReferenceContainer>
                     <Container ScriptItemUID="Container15" Condition="from object select current isowneroradmin" ItemUID="Master Data" EnableCustomAttributes="true">
                       <HtmlAttributes>
@@ -60,7 +60,7 @@
                           </ActionComponent>
                         </VirtualControlMapping>
                         <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping23" ID="SquareText()" Value="translate(&quot;#LDS#Main data&quot;)" />
-                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Description()" Value="Translate('#LDS#Shows the main data for this employee.')" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Description()" Value="Translate('#LDS#Shows the main data for this identity.')" />
                       </ControlReferenceContainer>
                     </Container>
                     <Container ScriptItemUID="Container17" Condition="ispreprop(&quot;ITSHOP&quot;)&#xD;&#xA;and&#xD;&#xA;from object select current isowneroradmin" ItemUID="Request" EnableCustomAttributes="true">
@@ -76,7 +76,7 @@
                           </ActionComponent>
                         </VirtualControlMapping>
                         <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="SquareText()" Value="translate('#LDS#Requests')" />
-                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="Description()" Value="translate('#LDS#The selected employee has submitted {0} requests in the last 30 days.', CountLastPWOs())" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="Description()" Value="translate('#LDS#The selected identity has submitted {0} requests in the last 30 days.', CountLastPWOs())" />
                       </ControlReferenceContainer>
                     </Container>
                     <Container ScriptItemUID="Container16" Condition="from object select current isowneroradmin" ItemUID="Entitlements" EnableCustomAttributes="true">
@@ -92,7 +92,7 @@
                           </ActionComponent>
                         </VirtualControlMapping>
                         <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping28" ID="SquareText()" Value="translate(&quot;#LDS#Entitlements&quot;)" />
-                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the entitlements assigned to this employee.')" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping25" ID="Description()" Value="translate('#LDS#Shows the entitlements assigned to this identity.')" />
                       </ControlReferenceContainer>
                     </Container>
                     <Container ScriptItemUID="Container5" ItemUID="Delegation" Condition="IsPreProp(&quot;Delegation&quot;)&#xD;&#xA;and&#xD;&#xA;from object select current isowneroradmin" EnableCustomAttributes="true">
@@ -108,7 +108,7 @@
                           </ActionComponent>
                         </VirtualControlMapping>
                         <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping13" ID="SquareText()" Value="translate(&quot;#LDS#Delegations&quot;)" />
-                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Description()" Value="translate('#LDS#The selected employee has {0} active delegations.', CountDelegations())" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping6" ID="Description()" Value="translate('#LDS#The selected identity has {0} active delegations.', CountDelegations())" />
                       </ControlReferenceContainer>
                     </Container>
                     <Container ScriptItemUID="Container14" Condition="getconfigparm(&quot;QER\CalculateRiskIndex&quot;)=&quot;1&quot;&#xD;&#xA;and&#xD;&#xA;(from object select current isowneroradmin OR (&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;uid_aerole in ('ATT-AEROLE-ATTESTATIONADMIN-ADMIN', 'POL-AEROLE-QERPOLICY-ADMIN', 'CPL-AEROLE-RULEADMIN-ADMIN') and uid_person = '%useruid%'&quot;))))" ItemUID="Risk" EnableCustomAttributes="true">
@@ -140,7 +140,7 @@
                           </ActionComponent>
                         </VirtualControlMapping>
                         <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping38" ID="SquareText()" Value="translate(&quot;#LDS#History&quot;)" />
-                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping35" ID="Description()" Value="translate('#LDS#Shows historical data for the selected employee.')" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping35" ID="Description()" Value="translate('#LDS#Shows historical data for the selected identity.')" />
                       </ControlReferenceContainer>
                     </Container>
                     <Container ScriptItemUID="Container7" ItemUID="Passcode" Condition="from object select current isowneroradmin" EnableCustomAttributes="true">
@@ -157,10 +157,10 @@
                               <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
                                 <Container ScriptItemUID="Container21">
                                   <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container24">
-                                    <Label Text="translate(&quot;#LDS#The employee can log on with this passcode.&quot;)" ScriptItemUID="Label10" />
+                                    <Label Text="translate(&quot;#LDS#The identity can log in with this passcode.&quot;)" ScriptItemUID="Label10" />
                                   </Container>
                                   <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container9" Condition="not(isnullorempty(getconfig(&quot;VI_Common_PasswordWebLink&quot;)))">
-                                    <Label Text="translate(&quot;#LDS#The employee can use the following URL:&quot;) + &quot; &quot;" ScriptItemUID="Label12" />
+                                    <Label Text="translate(&quot;#LDS#The identity can use the following URL:&quot;) + &quot; &quot;" ScriptItemUID="Label12" />
                                     <Label Text="getconfig(&quot;VI_Common_PasswordWebLink&quot;)" ScriptItemUID="Label13" EnableCustomAttributes="true">
                                       <HtmlAttributes>
                                         <HtmlAttribute ScriptItemUID="HtmlAttribute10" Name="&quot;style&quot;" Value="&quot;margin-left: 3px; font-weight: bold;&quot;" />
@@ -190,7 +190,7 @@
                           </ActionComponent>
                         </VirtualControlMapping>
                         <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping16" ID="SquareText()" Value="translate(&quot;#LDS#Passcode&quot;)" />
-                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="Description()" Value="translate('#LDS#Create a passcode for the selected employee.')" />
+                        <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping14" ID="Description()" Value="translate('#LDS#Creates a passcode for the selected identity.')" />
                       </ControlReferenceContainer>
                     </Container>
                   </Container>

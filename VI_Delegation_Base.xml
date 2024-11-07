@@ -2,8 +2,8 @@
   <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Delegation_Base" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
-      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_Delegation_Filter_PersonDelegationFor" Description="translate('#LDS#Employees for whom a delegation can be requested')" Type="SQL" DatabaseTable="Person" LongDescription="" />
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Identities&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Delegation_Filter_PersonDelegationFor" Description="translate('#LDS#You can request delegations for these identities.')" Type="SQL" DatabaseTable="Person" LongDescription="" />
         <ConfigParam Key="VI_Delegation_Async_Min_Value" Description="translate(&quot;#LDS#Save as background task if more than &lt;x&gt; delegations are saved&quot;)" Type="Text" />
         <ConfigParam Key="VI_Delegation_DeleteAsync_Min_Value" Description="translate(&quot;#LDS#Run as background task if more than &lt;x&gt; delegations are deleted&quot;)" Type="Text" />
       </ConfigSectionDefinition>

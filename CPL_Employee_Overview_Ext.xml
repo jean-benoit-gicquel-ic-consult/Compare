@@ -6,7 +6,7 @@
           <ServerActionCall ScriptItemUID="CPLServerActionCall1">
             <Redirect ScriptItemUID="CPLRedirect1" Target="Context" ContextID="RPS_ListReport_Form" AllowReturnToThisContext="true">
               <RedirectParameter Name="'ElementObjectKey'" Value="getobjectkey(&quot;Person&quot;, getuser(), &quot;&quot;)" />
-              <RedirectParameter Name="'IdentRpsReport'" Value="&quot;Compliance rule violations by direct reports&quot;" />
+              <RedirectParameter Name="'IdentRpsReport'" Value="&quot;Compliance rule violations by identities you are directly responsible for&quot;" />
             </Redirect>
           </ServerActionCall>
         </Button>

@@ -11,10 +11,10 @@
         </ActionSequence>
         <SwitchAction ScriptItemUID="Switch1">
           <SwitchActionCase ScriptItemUID="case2" Condition="showaudit() and isnull(getuseraudit(),'') = ''" ItemUID="ShowAudit">
-            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update6" Value="translate('#LDS#Select an attestor to show only decisions by the selected employee. The view also includes pending approvals by the employee.')" />
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update6" Value="translate('#LDS#Select an attestor to show only decisions by the selected identity. The view also includes pending approvals by the identity.')" />
           </SwitchActionCase>
           <SwitchActionCase ScriptItemUID="case3" Condition="isnull(setuseraudit(),'') &lt;&gt; ''" ItemUID="Simple search description">
-            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update7" Value="translate('#LDS#The page displays all approvals of the selected employee where the selected employee was involved in the approval process.')" />
+            <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update7" Value="translate('#LDS#The page displays all approvals of the selected identity where the selected identity was involved in the approval process.')" />
           </SwitchActionCase>
           <SwitchActionCase ScriptItemUID="case1" Condition="not(showaudit()) and isnull(setuseraudit(),'') = ''" ItemUID="NoAudit">
             <Update DataColumn="HeadLine" DataTable="Vars" ScriptItemUID="Update11" Value="translate('#LDS#This page shows the history of your attestation decisions.') + &quot; &quot;" />

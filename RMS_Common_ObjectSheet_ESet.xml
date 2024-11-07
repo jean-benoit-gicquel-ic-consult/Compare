@@ -82,7 +82,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping21" ID="SquareText()" Value="translate(&quot;#LDS#Memberships&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Description()" Value="translate('#LDS#Shows the employees assigned to this system role.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping20" ID="Description()" Value="translate('#LDS#Shows the identities assigned to this system role.')" />
                     </ControlReferenceContainer>
                   </Container>
                   <Container ScriptItemUID="Container19" ItemUID="Risk" Condition="ispreprop(&quot;RISKINDEX&quot;) and from object select current IsOwnerOrAdmin" EnableCustomAttributes="true">
@@ -130,7 +130,7 @@
                         </ActionComponent>
                       </VirtualControlMapping>
                       <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="SquareText()" Value="translate(&quot;#LDS#Usage&quot;)" />
-                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="Description()" Value="translate('#LDS#Shows the roles that the employees assigned to this system role belong to.')" />
+                      <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping30" ID="Description()" Value="translate('#LDS#Shows the roles and organizations that the identities assigned to this system role belong to.')" />
                     </ControlReferenceContainer>
                   </Container>
                   <Container ScriptItemUID="Container20" Condition="-- only for Compliance Officers, auditors, and the object responsible&#xD;&#xA;&#xD;&#xA;exists(&quot;personinaerole&quot;, variable(&quot;uid_aerole in ('CAP-AEROLE-IAG-CISO', 'CAP-AEROLE-AUDITING-AUDITOR') and uid_person = '%useruid%'&quot;))&#xD;&#xA;or from object select current IsOwnerOrAdmin" ItemUID="Compliance reports" EnableCustomAttributes="true">

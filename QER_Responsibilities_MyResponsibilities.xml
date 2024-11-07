@@ -30,7 +30,7 @@
                     </ActionComponent>
                   </VirtualControlMapping>
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping28" ID="Caption()" Value="translate('#LDS#People')" />
-                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Value()" Value="translate('#LDS#Shows the list of your direct reports. You can also add a new employee.')" />
+                  <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping31" ID="Value()" Value="translate('#LDS#Shows the list of your direct reports. You can also add new identities.')" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping32" ID="ImageType()" Value="'TableName'" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping33" ID="Identifier()" Value="&quot;Employees&quot;" />
                   <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping34" ID="Image()" Value="&quot;Person&quot;" />

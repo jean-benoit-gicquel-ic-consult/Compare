@@ -153,7 +153,9 @@ foreach (var grp in groups)
 	using (var u = _Database.StartUnitOfWork())
 	{
 		var dict = new System.Collections.Generic.Dictionary&lt;string, object&gt;();
-        dict["ObjectKey"] = key;
+		dict["UID_PersonTriggered"] = _Database.User().Uid;
+		dict["UnsubscribeReason"] = "";
+		dict["ObjectKey"] = key;
 		dict["ActionIDs"] = actions;
 		dict["Culture"] = LanguageManager.Culture.Name;
 		var personinnoncpl = await _Database.Source().GetAsync(pinckey, EntityLoadType.DelayedLogic).ConfigureAwait(false);
@@ -175,7 +177,7 @@ foreach (var grp in groups)
                   </HtmlAttributes>
                 </Container>
                 <Container ScriptItemUID="Container5" Condition="0 = select count() from EntitlementsLoseAlso">
-                  <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#The employee will not lose any additional entitlements.&quot;)" EnableCustomAttributes="true">
+                  <Label ScriptItemUID="Label6" Text="translate(&quot;#LDS#The identity will not lose any additional permissions.&quot;)" EnableCustomAttributes="true">
                     <HtmlAttributes>
                       <Property Name="TagName" Value="div" />
                       <HtmlAttribute ScriptItemUID="HtmlAttribute11" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-ok&quot;" />
@@ -183,7 +185,7 @@ foreach (var grp in groups)
                   </Label>
                 </Container>
                 <Container ScriptItemUID="Container10" Condition="0 &lt; select count() from EntitlementsLoseAlso">
-                  <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#The employee will lose the following entitlements when the selected actions take effect. Review the list to avoid unintentional loss of access. Go back to the previous page to change the selection.&quot;)" EnableCustomAttributes="true">
+                  <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#The identity will lose the following permissions when the selected actions take effect. Review the list to avoid unintentional loss of access. Go back to the previous page to change the selection.&quot;)" EnableCustomAttributes="true">
                     <HtmlAttributes>
                       <Property Name="TagName" Value="div" />
                       <HtmlAttribute ScriptItemUID="HtmlAttribute12" Name="&quot;class&quot;" Value="&quot;imx-message imx-message-warning&quot;" />

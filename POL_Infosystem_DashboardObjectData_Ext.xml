@@ -1,14 +1,17 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="POL_Infosystem_DashboardObjectData_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Infosystem_DashboardObjectData_Ext">
     <Extensions>
       <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="30">
         <Container Condition="from option  select selected = &quot;PolicyViolations&quot;" ScriptItemUID="POLContainer1">
-          <Container CustomStyle="'padding-bottom: 7px; padding-top: 7px;'" ScriptItemUID="POLContainer2">
+          <Container ScriptItemUID="POLContainer2" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="POLContainer2style" Value="'padding-bottom: 7px; padding-top: 7px;'" />
+            </HtmlAttributes>
             <Label Text="translate('#LDS#This view shows all current policy violations detected for {0}.', select current displaylong() from object)" ScriptItemUID="POLLabel1" />
           </Container>
           <ControlReferenceControlList ID="POL_Policy_MasterDetail" ScriptItemUID="POLControlRef2">
-            <VirtualFunctionMapping ID="QERPolicyWhereClause()" Value="format(&quot;ObjectKey ='{0}'&quot;,from Object select XObjectKey)" />
-            <VirtualFunctionMapping ID="IsReadOnly()" Value="true" />
+            <VirtualFunctionMapping ID="QERPolicyWhereClause()" Value="format(&quot;ObjectKey ='{0}'&quot;,from Object select XObjectKey)" ScriptItemUID="POLVirtualFunctionMapping1" />
+            <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="POLVirtualFunctionMapping2" />
           </ControlReferenceControlList>
         </Container>
       </AddObject>

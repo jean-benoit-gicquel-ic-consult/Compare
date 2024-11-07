@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action5" />
       <ActionComponent ScriptItemUID="Action1">
         <CallAction ActionID="VI_Popup" ScriptItemUID="Call1">
           <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
@@ -24,6 +25,9 @@
           <VirtualControlMapping VirtualControl="PopupBottom" ContainerType="Container">
             <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container6">
               <Button Text="translate(&quot;#LDS#Revoke last decision&quot;)" ScriptItemUID="Button1" EnableCustomAttributes="true">
+                <HtmlAttributes>
+                  <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Revoke last decision&quot;)" />
+                </HtmlAttributes>
                 <ServerActionCall ScriptItemUID="ServerActionCall1">
                   <ActionSequence ScriptItemUID="Action2">
                     <ActionSequence Condition="DBTable(PersonWantsOrg) = 'PersonWantsOrg'" ScriptItemUID="Action3">
@@ -44,17 +48,14 @@ PersonWantsOrg.TableStore.Invalidate();</CodeLiteral>
                     <ActionOnControl />
                   </ActionSequence>
                 </ServerActionCall>
-                <HtmlAttributes>
-                  <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="translate(&quot;#LDS#Revoke last decision&quot;)" />
-                </HtmlAttributes>
               </Button>
               <Button Text="translate(&quot;#LDS#Cancel&quot;)" Layout="'VI_Styles_Button_LabelOnly'" ItemUID="Default Button" ScriptItemUID="Button2" EnableCustomAttributes="true" AssociatedWithEscapeKey="true">
-                <ServerActionCall ScriptItemUID="ServerActionCall2">
-                  <ActionOnControl />
-                </ServerActionCall>
                 <HtmlAttributes>
                   <HtmlAttribute Name="if(getconfig(&quot;VI_Common_AccessKeys&quot;)=&quot;true&quot;) then &quot;accesskey&quot; else &quot;&quot;" Value="getconfig(&quot;VI_Common_AccessKey_Cancel&quot;)" ScriptItemUID="HtmlAttribute3" />
                 </HtmlAttributes>
+                <ServerActionCall ScriptItemUID="ServerActionCall2">
+                  <ActionOnControl />
+                </ServerActionCall>
               </Button>
             </Container>
           </VirtualControlMapping>
@@ -62,7 +63,6 @@ PersonWantsOrg.TableStore.Invalidate();</CodeLiteral>
           <VirtualFunctionMapping ID="TableName()" Value="DBTable(PersonWantsOrg)" ScriptItemUID="VirtualFunctionMapping4" />
         </CallAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action5" />
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="Container" ScriptItemUID="DataTableSingleRow1">
           <Column Name="ReasonText" DataType="System.String" ScriptItemUID="Column1" />

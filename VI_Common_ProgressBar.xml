@@ -1,20 +1,32 @@
-﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="Dr/gLPBSWzS4wuO2FREumA==" TdnsHash="4da96f52-cf84-6bf4-64a8-a37adc5c1c3d">
-  <GlobalControl ID="VI_Common_ProgressBar" MetamodelVersion="2015-01-01" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" Comment="A component showing a horizontal progress bar.&#xD;&#xA;The filling of the bar can be adjusted by specifying a double (virtual function Progress()) between 0.0 (0%) and 1.0 (100%).&#xD;&#xA;&#xD;&#xA;The filling will be colored in one of three colors depending on the progress.&#xD;&#xA;The colors itself are fix but user configurable. &#xD;&#xA;&#xD;&#xA;Default coloring:&#xD;&#xA;- low progress: %VI_Common_Color_Badge_Important%&#xD;&#xA;- medium progress: %VI_Common_Color_Badge_Warning%&#xD;&#xA;- high progress: %VI_Common_Color_Badge_Success%&#xD;&#xA;&#xD;&#xA;You can interchange the coloring for low and high progress by specifying WarningOnHighValues() = true.&#xD;&#xA;This can be useful when low values are better than high values (e.g. RiskIndex).&#xD;&#xA;&#xD;&#xA;By default &quot;low progress&quot; means progress values less than or equal to 0.25 - specify LowerLimit() to override this default.&#xD;&#xA;By default &quot;high progress&quot; means progress value greater than 0.5 - specify UpperLimit() to override this default.&#xD;&#xA;Values that are in between, i.e. neither low nor high are regarded &quot;medium&quot;.&#xD;&#xA;&#xD;&#xA;Right next to the progress bar a label is shown that displays the percantage of the progress by default.&#xD;&#xA;You can use Label() to specify a different text to display.&#xD;&#xA;By default the width reserved for the label is 35px. If you need a different width you can specify LabelWidth().&#xD;&#xA;The width of the progress bar is always flexible. You can specify a fixed width using HasFlexibleProgressbar()=false and optionally ProgressbarWidth() (the default is 50px, so the total width will be 50+LabelWidth() +2*ProgressbarBorderWidth() px (normally 87px).&#xD;&#xA;&#xD;&#xA;By default no tooltip will be shown but you can specify a tooltip using Tooltip().">
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="Dr/gLPBSWzS4wuO2FREumA==">
+  <GlobalControl ID="VI_Common_ProgressBar" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;DIALOGCONFIGPARM;" Comment="A component showing a horizontal progress bar.&#xD;&#xA;The filling of the bar can be adjusted by specifying a double (virtual function Progress()) between 0.0 (0%) and 1.0 (100%).&#xD;&#xA;&#xD;&#xA;The filling will be colored in one of three colors depending on the progress.&#xD;&#xA;The colors itself are fix but user configurable. &#xD;&#xA;&#xD;&#xA;Default coloring:&#xD;&#xA;- low progress: %VI_Common_Color_Badge_Important%&#xD;&#xA;- medium progress: %VI_Common_Color_Badge_Warning%&#xD;&#xA;- high progress: %VI_Common_Color_Badge_Success%&#xD;&#xA;&#xD;&#xA;You can interchange the coloring for low and high progress by specifying WarningOnHighValues() = true.&#xD;&#xA;This can be useful when low values are better than high values (e.g. RiskIndex).&#xD;&#xA;&#xD;&#xA;By default &quot;low progress&quot; means progress values less than or equal to 0.25 - specify LowerLimit() to override this default.&#xD;&#xA;By default &quot;high progress&quot; means progress value greater than 0.5 - specify UpperLimit() to override this default.&#xD;&#xA;Values that are in between, i.e. neither low nor high are regarded &quot;medium&quot;.&#xD;&#xA;&#xD;&#xA;Right next to the progress bar a label is shown that displays the percantage of the progress by default.&#xD;&#xA;You can use Label() to specify a different text to display.&#xD;&#xA;By default the width reserved for the label is 35px. If you need a different width you can specify LabelWidth().&#xD;&#xA;The width of the progress bar is always flexible. You can specify a fixed width using HasFlexibleProgressbar()=false and optionally ProgressbarWidth() (the default is 50px, so the total width will be 50+LabelWidth() +2*ProgressbarBorderWidth() px (normally 87px).&#xD;&#xA;&#xD;&#xA;By default no tooltip will be shown but you can specify a tooltip using Tooltip().">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
-      <Container ItemUID="Progress Bar and Label" ScriptItemUID="Container1" CustomStyle="format('{0}', if (HasFlexibleProgressbar())&#xD;&#xA;then ''&#xD;&#xA;else format('display: inline-block; min-width:{0}px;', TotalWidth())&#xD;&#xA;)">
-        <Container CustomStyle="variable(format('width: calc(100% - {0}px); height: 14px; border: solid {1}px %VI_Common_Color_Gray%; display:inline-block;', LabelWidth()+(2*ProgressbarBorderWidth()), ProgressbarBorderWidth() ))" Tooltip="Tooltip()" ItemUID="Progress bar outer frame" ScriptItemUID="Container2">
-          <Container CustomStyle="format('background-color: {0}; color: {0}; display: block; overflow: hidden; width: {1}%; height: 14px;', &#xA;ColorFilling(), convert(100*EffectiveProgress(), 'System.Int32'))" ItemUID="Progress bar inner filling" ScriptItemUID="Container3" EnableCustomAttributes="true">
+      <ActionSequence ScriptItemUID="Action1" />
+      <Container ItemUID="Progress Bar and Label" ScriptItemUID="Container1" EnableCustomAttributes="true">
+        <HtmlAttributes>
+          <HtmlAttribute Name="'style'" ScriptItemUID="Container1style" Value="format('{0}', if (HasFlexibleProgressbar())&#xD;&#xA;then ''&#xD;&#xA;else format('display: inline-block; min-width:{0}px;', TotalWidth())&#xD;&#xA;)" />
+        </HtmlAttributes>
+        <Container ItemUID="Progress bar outer frame" ScriptItemUID="Container2" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'title'" ScriptItemUID="Container2title" Value="Tooltip()" />
+            <HtmlAttribute Name="'style'" ScriptItemUID="Container2style" Value="variable(format('width: calc(100% - {0}px); height: 14px; border: solid {1}px %VI_Common_Color_Gray%; display:inline-block;', LabelWidth()+(2*ProgressbarBorderWidth()), ProgressbarBorderWidth() ))" />
+          </HtmlAttributes>
+          <Container ItemUID="Progress bar inner filling" ScriptItemUID="Container3" EnableCustomAttributes="true">
             <HtmlAttributes>
               <Property Name="TagName" Value="span" />
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="format('background-color: {0}; color: {0}; display: block; overflow: hidden; width: {1}%; height: 14px;', &#xA;ColorFilling(), convert(100*EffectiveProgress(), 'System.Int32'))" />
             </HtmlAttributes>
           </Container>
         </Container>
-        <Label Text="EffectiveLabel()" CustomStyle="format(&quot;vertical-align: top; text-align:right; float:right; width:{0}px;&quot;, LabelWidth())" ItemUID="Progress label" ScriptItemUID="Label1" />
+        <Label Text="EffectiveLabel()" ItemUID="Progress label" ScriptItemUID="Label1" EnableCustomAttributes="true">
+          <HtmlAttributes>
+            <HtmlAttribute Name="'style'" ScriptItemUID="Label1style" Value="format(&quot;vertical-align: top; text-align:right; float:right; width:{0}px;&quot;, LabelWidth())" />
+          </HtmlAttributes>
+        </Label>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1">

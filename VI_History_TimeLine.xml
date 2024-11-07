@@ -1,26 +1,39 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_History_TimeLine" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_History_TimeLine" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <Container Condition="HasChangeTimes()" ItemUID="Select change time" ScriptItemUID="Container2">
-          <Container CustomStyle="'padding-bottom: 5px;'" ScriptItemUID="Container3">
+          <Container ScriptItemUID="Container3" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container3style" Value="'padding-bottom: 5px;'" />
+            </HtmlAttributes>
             <FormItemLabel DataTable="LocalVars" DataColumn="SelectedPk" IsInvisible="true" ScriptItemUID="FormItemLabel1">
               <Label Text="translate(&quot;#LDS#Select change time&quot;)" ScriptItemUID="Label1" />
             </FormItemLabel>
             <ComboBox SourceTable="View_ChangeTimes" DataTable="LocalVars" DataColumn="SelectedPk" ScriptItemUID="ComboBox1" OrderBy="'ChangeTime'" SourceValueColumn="pk" SourceDisplay="DateDisplay" />
           </Container>
-          <Container CustomStyle="'padding-right: 10px;'" Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4">
-            <Button Text="&quot;&lt;&lt;&quot;" Tooltip="Translate(&quot;#LDS#Previous&quot;)" EnabledCondition="CanSelectPrevious()" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1">
+          <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container4" EnableCustomAttributes="true">
+            <HtmlAttributes>
+              <HtmlAttribute Name="'style'" ScriptItemUID="Container4style" Value="'padding-right: 10px;'" />
+            </HtmlAttributes>
+            <Button Text="&quot;&lt;&lt;&quot;" EnabledCondition="CanSelectPrevious()" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button1" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button1title" Value="Translate(&quot;#LDS#Previous&quot;)" />
+              </HtmlAttributes>
               <ServerActionCall ScriptItemUID="ServerActionCall1">
                 <Update DataTable="LocalVars" DataColumn="SelectedPk" Value="isnull(&#xA;(select top 1 pk from View_ChangeTimes where ChangeTime &lt; SelectedChangeTime() order by changetime desc),&#xA;select top 1 pk from View_ChangeTimes order by changetime desc)" ScriptItemUID="Update1" />
               </ServerActionCall>
             </Button>
           </Container>
           <Container Layout="'VI_Styles_Container_Inline'" ScriptItemUID="Container5">
-            <Button Text="&quot;&gt;&gt;&quot;" Tooltip="Translate(&quot;#LDS#Next&quot;)" EnabledCondition="CanSelectNext()" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button2">
+            <Button Text="&quot;&gt;&gt;&quot;" EnabledCondition="CanSelectNext()" Layout="'VI_Styles_Button_Pill'" ScriptItemUID="Button2" EnableCustomAttributes="true">
+              <HtmlAttributes>
+                <HtmlAttribute Name="'title'" ScriptItemUID="Button2title" Value="Translate(&quot;#LDS#Next&quot;)" />
+              </HtmlAttributes>
               <ServerActionCall ScriptItemUID="ServerActionCall2">
                 <Update DataTable="LocalVars" DataColumn="SelectedPk" Value="isnull(&#xA;(select top 1 pk from View_ChangeTimes where ChangeTime &gt; SelectedChangeTime() order by changetime),&#xA;select top 1 pk from View_ChangeTimes order by changetime)" ScriptItemUID="Update2" />
               </ServerActionCall>
@@ -31,7 +44,6 @@
           <Label Text="translate(&quot;#LDS#No changes found.&quot;)" ScriptItemUID="Label2" />
         </Container>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1">
         <DataTableView Table="View_ChangeTimes" ViewExpression="select distinct ChangeTime from ChangeTimes" DisplayColumn="DateDisplay" PrimaryKeyColumn="pk" ScriptItemUID="DataTableView1">
           <Column Name="ChangeTime" DataType="System.DateTime" ScriptItemUID="Column1" />
@@ -68,7 +80,7 @@
         </DataEventHandler>
       </DataEventHandlers>
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="ChangeTimes" ScriptItemUID="VirtualTable1">
         <VirtualColumn Name="ChangeTime" DataType="System.DateTime" />
       </VirtualTable>

@@ -8,7 +8,20 @@ var queryGroupTables = VI.DB.Entities.Query.From("DialogTable").SelectDisplays()
 var groupTables = _Connection.Session.Source().GetCollection(queryGroupTables);
 foreach (var groupTable in groupTables)
 {
-	dataProvider.AddMemberRelationTable(groupTable.GetValue&lt;string&gt;("TableName"), "UID_" + Type, "AddPermission", "RemovePermission", "ObjectHasPermission");
+	var tableName = groupTable.GetValue&lt;string&gt;("TableName");
+    var tbl = _Connection.Session.MetaData().GetTable(tableName);
+    foreach (var pkCol in tbl.PrimaryKeyColumns)
+    {
+        if (!pkCol.IsFK)
+           continue;
+
+		var fkRel = pkCol.GetFKRelation();
+		if (fkRel.ParentTableName != Type)
+    	   continue;
+  
+		dataProvider.AddMemberRelationTable(tableName, pkCol.Columnname, "AddPermission",
+                        "RemovePermission", "ObjectHasPermission");
+    }
 }
 </CodeLiteral>
       </AddObject>
@@ -75,6 +88,17 @@ private void AddMembershipHelper(QBM.CompositionApi.History.HistoryDataProvider 
 	{
 		var tableName = tbl.GetValue&lt;string&gt;("TableName");
 		var columnName = "UID_" + key.Tablename;
+		
+		        var metaTable = _Connection.Session.MetaData().GetTable(tableName);
+                foreach (var pkCol in metaTable.PrimaryKeyColumns)
+                {
+                    if (!pkCol.IsFK)
+                        continue;
+
+                    var fkRel = pkCol.GetFKRelation();
+                    if (fkRel.ParentTableName == key.Tablename)
+                        columnName = pkCol.Columnname;
+                }
 		
 		// 26358: special handling for these tables
 		if (Equals("HelperSAPUserInSAPHRP", tableName))

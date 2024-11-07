@@ -44,7 +44,7 @@
           <SwitchContainer ScriptItemUID="Switch1">
             <SwitchContainerCase ScriptItemUID="Case1" Condition="from vars select not(isshowasflat)" ItemUID="Tree">
               <Tree ScriptItemUID="Tree1">
-                <TreeBand DataTable="OrgRoot" ScriptItemUID="TreeBand2" DataSourceType="Database" DBWhereClause="sqlcompare(&quot;uid_orgroot&quot;, &quot;*-V-*&quot;, &quot;string&quot;, &quot;notlike&quot;,&quot;NonUnicodeLiterals&quot;)">
+                <TreeBand DataTable="OrgRoot" ScriptItemUID="TreeBand2" DataSourceType="Database" DBWhereClause="if(isnullorempty(dbwhereclause())) then &#xD;&#xA;  &quot;uid_orgroot in (select uid_orgroot from org)&quot;&#xD;&#xA;else&#xD;&#xA;  format(&quot;uid_orgroot in (select uid_orgroot from org where {0})&quot;, DbWhereClause())">
                   <DbObjectLoadType ScriptItemUID="DbObjectLoadType3" ConvertToInteractive="false" />
                   <ControlList ScriptItemUID="ControlList5">
                     <Label Text="select current display() from orgroot" ScriptItemUID="Label4" EnableCustomAttributes="true">

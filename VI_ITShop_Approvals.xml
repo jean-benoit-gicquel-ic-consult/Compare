@@ -1,4 +1,4 @@
-<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
+﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="a8610b8a-8560-6c1e-9dcf-110fcc293a2c">
   <Context ID="VI_ITShop_Approvals" MetamodelVersion="2016-05-08" MigrationNotes="DMLREPLACE;" HelpChapterUid="if(IsEscalationApproval())&#xD;&#xA;then&#xD;&#xA;&quot;ca3f302c-7907-422f-80c6-d4202ec4bb62&quot;&#xD;&#xA;else&#xD;&#xA;&quot;20251F94-39DD-4B2C-82DD-FB382472DFBD&quot;" AllowUrlNavigation="true" ScriptItemUID="Context1">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1">
@@ -398,6 +398,14 @@
             </LoadTable>
             <ActionSequence ScriptItemUID="Action5" Condition="(1= from pwotodecide select count())&#xD;&#xA;and&#xD;&#xA;-- interactive approval allowed?&#xD;&#xA;from pwotodecide select top 1 AllowAutoApprove()">
               <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="true" ScriptItemUID="Update2" />
+              <ActionSequence ScriptItemUID="Action43" ItemUID="Set ValidUntilNew">
+                <ActionSequence ItemUID="SetValidUntilNew" ScriptItemUID="Action45">
+                  <Update DataTable="PWOToDecide" DataColumn="ValidUntilNew" Value="if (not DateEmpty(validuntilprolongation)) then&#xD;&#xA;  validuntilprolongation&#xD;&#xA;else if (not DateEmpty(validuntil)) then&#xD;&#xA;  validuntil&#xD;&#xA;-- else leave the validuntilnew empty&#xD;&#xA; " WhereClause="not (IsNullOrEmpty(validuntil) and IsNullOrEmpty(validuntilprolongation))" ScriptItemUID="Update23" />
+                </ActionSequence>
+                <ActionSequence ItemUID="SetValidFromNew" ScriptItemUID="Action44">
+                  <Update DataTable="PWOToDecide" DataColumn="ValidFromNew" Value="if (not DateEmpty(validfrom)) then&#xD;&#xA;  validfrom&#xD;&#xA; " WhereClause="not IsNullOrEmpty(validfrom)" ScriptItemUID="Update22" />
+                </ActionSequence>
+              </ActionSequence>
               <Redirect FormID="Approvals_Detail" ScriptItemUID="Redirect1" />
             </ActionSequence>
           </ActionSequence>
@@ -436,6 +444,14 @@
                 <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping5" />
               </CallAction>
               <Redirect Target="Context" NoLinkBackToThisForm="true" ContextID="VI_ITShop_Approvals" ScriptItemUID="Redirect3" AllowReturnToThisContext="false" />
+            </ActionSequence>
+            <ActionSequence ScriptItemUID="Action46" ItemUID="Set ValidUntilNew">
+              <ActionSequence ItemUID="SetValidUntilNew" ScriptItemUID="Action48">
+                <Update DataTable="PWOToDecide" DataColumn="ValidUntilNew" Value="if (not DateEmpty(validuntilprolongation)) then&#xD;&#xA;  validuntilprolongation&#xD;&#xA;else if (not DateEmpty(validuntil)) then&#xD;&#xA;  validuntil&#xD;&#xA;-- else leave the validuntilnew empty&#xD;&#xA; " WhereClause="not (IsNullOrEmpty(validuntil) and IsNullOrEmpty(validuntilprolongation))" ScriptItemUID="Update25" />
+              </ActionSequence>
+              <ActionSequence ItemUID="SetValidFromNew" ScriptItemUID="Action47">
+                <Update DataTable="PWOToDecide" DataColumn="ValidFromNew" Value="if (not DateEmpty(validfrom)) then&#xD;&#xA;  validfrom&#xD;&#xA; " WhereClause="not IsNullOrEmpty(validfrom)" ScriptItemUID="Update24" />
+              </ActionSequence>
             </ActionSequence>
             <ActionSequence Condition="isnull(request(&quot;aeweb_decision&quot;),&quot;&quot;) in ('Deny')&#xD;&#xA;and&#xD;&#xA;&quot;true&quot; = getconfig(&quot;VI_ITShop_ApproverReasonMandatoryOnDeny&quot;)" ScriptItemUID="Action78">
               <Update DataTable="PWOToDecide" DataColumn="DoApprove" Value="false" ScriptItemUID="Update35" />

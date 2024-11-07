@@ -4,6 +4,9 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1">
         <AssemblyReference Assembly="VI.Web.ConfigBase.dll" />
         <AssemblyReference Assembly="System.Configuration.dll" />
+        <TypeMember>private static IConnection _serviceConnection;
+private static DateTime _lastTimeSet;
+private static readonly object _lockObj = new Object();</TypeMember>
       </CompilationSettings>
     </ContextConfiguration>
     <Context ContainerType="Container">
@@ -46,7 +49,22 @@
               <Delete DataTable="QBMCulture" ScriptItemUID="Delete1" />
               <CodeLiteral ScriptItemUID="CodeLiteral4">var conn = _Connection;
 if(!_UserSession.IsAuthenticated){
-   conn = new VI.WebRuntime.ServiceConnection(VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IConfigDocument&gt;()).Get();
+	
+	lock(_lockObj) {
+		
+		// clear cached value if it's too old
+		if (_serviceConnection != null &amp;&amp; DateTime.UtcNow.Subtract(_lastTimeSet).TotalMilliseconds &gt; 60000) {
+			_serviceConnection.Dispose();
+            _serviceConnection = null;
+		}
+
+		if (_serviceConnection == null) {
+			_serviceConnection = new VI.WebRuntime.ServiceConnection(VI.WebRuntime.IoC.UnitySingleton.Container.Resolve&lt;IConfigDocument&gt;()).Get();
+			_lastTimeSet = DateTime.UtcNow;
+		}
+		
+        conn = _serviceConnection;
+	}
 }
 var session = System.Web.HttpContext.Current.Session;
 var key = VI.WebRuntime.ThreadCultureModule.CultureUrlParameter;

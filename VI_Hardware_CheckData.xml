@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action7" />
       <ActionComponent ScriptItemUID="Action1">
         <Delete DataTable="Hardware_Exists" ScriptItemUID="Delete2" />
         <ActionSequence Condition="isnull(request(&quot;uid_hardware&quot;),'')=''" ScriptItemUID="Action10">
@@ -44,7 +45,6 @@
           </SwitchActionCase>
         </SwitchAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action7" />
       <Tables ScriptItemUID="Tables1">
         <DataTableDbObject Table="Hardware_Exists" Class="Hardware" WhereClauseSQL="sqlcompare(&quot;Ident_Hardwarelist&quot;, from Hardware select current Ident_Hardwarelist,&quot;string&quot;,&quot;equal&quot;)" ScriptItemUID="DataTableDbObject1">
           <ActionSequence ScriptItemUID="Action8" />

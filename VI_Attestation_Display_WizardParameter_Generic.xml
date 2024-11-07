@@ -1,9 +1,10 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Attestation_Display_WizardParameter_Generic" DataTableDebugDisplay="Parameter" DoNotReuseData="true">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_Display_WizardParameter_Generic" DataTableDebugDisplay="Parameter" DoNotReuseData="true">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <Activator ScriptItemUID="Activator1" ExecuteAlways="true">
           <Action ScriptItemUID="Action3">
@@ -16,10 +17,9 @@ Objects.Load(new DbObjectLoadInfo(DBTableName, inClause, null));
           </Action>
         </Activator>
         <ControlReferenceContainer ID="VI_Common_CompactLabel" ScriptItemUID="ControlRef1">
-          <VirtualTableMapping VirtualTable="AvailableItems" DataTable="Objects" />
+          <VirtualTableMapping VirtualTable="AvailableItems" DataTable="Objects" ScriptItemUID="VirtualTableMapping1" />
         </ControlReferenceContainer>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1">
         <DataTableDbObject Table="Objects" ScriptItemUID="DataTableDbObject1" DbObjectTypeDynamic="true" DynamicClass="DBTableName()">
           <ActionSequence ScriptItemUID="Action1" />

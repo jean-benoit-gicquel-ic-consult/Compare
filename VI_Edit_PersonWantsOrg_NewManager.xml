@@ -22,9 +22,10 @@
               </VirtualFunctionMapping>
               <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping5" ID="EnableNavigation()" Value="false" />
               <VirtualTableMapping ScriptItemUID="VirtualTableMapping2" VirtualTable="EditTable" DataTable="PersonWantsOrg" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="IsReadOnly()" Value="IsReadOnly() or not(select current canedit(orderdetail1) from personwantsorg)" />
             </ControlReferenceContainer>
           </Container>
-          <Container ScriptItemUID="Container9" Layout="'VI_Styles_Container_Paragraph'">
+          <Container ScriptItemUID="Container9" Layout="'VI_Styles_Container_Paragraph'" Condition="select current canedit(orderdetail1) from personwantsorg">
             <Button Text="translate(&quot;#LDS#View user's entitlements&quot;)" ScriptItemUID="Button1" Layout="'VI_Styles_Button_Pill'">
               <ServerActionCall ScriptItemUID="ServerActionCall1">
                 <CallAction ActionID="QER_PersonWantsOrg_EditActionGroupPopup" ScriptItemUID="Call1">

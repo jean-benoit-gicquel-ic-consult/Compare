@@ -4,6 +4,7 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <Container Condition="from edittable select current not(AllowClearSelection())" ScriptItemUID="Container2">
           <ComboBox SourceTable="SourceTable" DataTable="EditTable" DataColumn="EditColumn" WhereClause="sourcetablefilter()" SourceDisplay="DisplayValue(sourcedisplay)" SourceValueColumn="SourceColumn" OrderBy="'SourceDisplay'" Layout="'VI_Styles_DropDownList_Default'" ScriptItemUID="ComboBox1" />
@@ -12,7 +13,6 @@
           <ComboBox SourceTable="SourceTable" DataTable="EditTable" DataColumn="EditColumn" WhereClause="sourcetablefilter()" SourceDisplay="DisplayValue(sourcedisplay)" SourceValueColumn="SourceColumn" OrderBy="'SourceDisplay'" Layout="'VI_Styles_DropDownList_Default'" AllowNull="true" ScriptItemUID="ComboBox2" />
         </Container>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />

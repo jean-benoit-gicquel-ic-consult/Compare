@@ -5,9 +5,9 @@
         <ObjectInclude ObjectIncludeID="VI_Employee_Edit" />
       </CompilationSettings>
       <ContextParameters ScriptItemUID="ContextParameters1" />
-      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Employees&quot;)" ScriptItemUID="ConfigSectionDefinition1">
-        <ConfigParam Key="VI_Employee_Person_Filter" Type="SQL" Description="translate('#LDS#Employees which can be edited by the current user')" DatabaseTable="Person" LongDescription="" />
-        <ConfigParam Key="VI_Employee_Person_ManagerCondition" Type="SQL" Description="translate('#LDS#Employees authorized to add and edit employees')" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+      <ConfigSectionDefinition Name="Mitarbeiter" Description="translate(&quot;#LDS#Identities&quot;)" ScriptItemUID="ConfigSectionDefinition1">
+        <ConfigParam Key="VI_Employee_Person_Filter" Type="SQL" Description="translate('#LDS#Identities which can be edited by the current user')" DatabaseTable="Person" LongDescription="" />
+        <ConfigParam Key="VI_Employee_Person_ManagerCondition" Type="SQL" Description="translate('#LDS#Identities authorized to add and edit identities')" DatabaseTable="Person" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
         <ConfigParam Key="VI_Employee_Person_ResultAttributes" Type="ColumnList" Description="translate('#LDS#Fields displayed in the result list')" DatabaseTable="Person" LongDescription="" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
@@ -36,7 +36,7 @@
         <PagePartContainer ScriptItemUID="PagePartContainer3" ID="TitleBar">
           <ControlList ScriptItemUID="ControlList1">
             <ControlReferenceControlList ID="VI_Common_PageDescription_Header" ScriptItemUID="ControlRef1">
-              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate('#LDS#On this page you can view and edit employees you are responsible for.')+&quot; &quot;+translate('#LDS#Please choose an employee to view his/her data.')" />
+              <VirtualFunctionMapping ScriptItemUID="VirtualFunctionMapping1" ID="Text()" Value="translate('#LDS#On this page you can view and edit identities you are responsible for.')+&quot; &quot;+translate('#LDS#Select an identity.')" />
             </ControlReferenceControlList>
           </ControlList>
         </PagePartContainer>
@@ -46,7 +46,7 @@
               <HtmlAttributes>
                 <HtmlAttribute Name="'style'" ScriptItemUID="Container29style" Value="&quot;padding-bottom: +10px;&quot;" />
               </HtmlAttributes>
-              <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#Here you can see the employees you are responsible for. To view all employees, click this note.&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Action="Redirect" EnableCustomAttributes="true">
+              <Label ScriptItemUID="Label7" Text="translate(&quot;#LDS#Here you can see the identities you are responsible for. To view all identities, click this note.&quot;)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" Action="Redirect" EnableCustomAttributes="true">
                 <HtmlAttributes>
                   <HtmlAttribute Name="&quot;class&quot;" ScriptItemUID="HtmlAttribute10" Value="&quot;imx-message&quot;" />
                 </HtmlAttributes>
@@ -97,7 +97,7 @@
                 <HtmlAttributes>
                   <HtmlAttribute ScriptItemUID="HtmlAttribute1" Name="&quot;class&quot;" Value="&quot;ButtonBar&quot;" />
                 </HtmlAttributes>
-                <Button Text="translate('#LDS#Add a new employee')" ScriptItemUID="Button2" EnabledCondition="caninsert(&quot;persoN&quot;)">
+                <Button Text="translate('#LDS#Add a new identity')" ScriptItemUID="Button2" EnabledCondition="caninsert(&quot;persoN&quot;)">
                   <ServerActionCall ScriptItemUID="ServerActionCall3">
                     <Redirect ScriptItemUID="Redirect3" Target="Context" ContextID="VI_Employee_Edit" AllowReturnToThisContext="true" AbortExecution="false" />
                   </ServerActionCall>

@@ -54,7 +54,7 @@
             <ActionComponent ScriptItemUID="Action9">
               <Save DataTable="Person" ScriptItemUID="Save1" />
               <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call5">
-                <VirtualFunctionMapping ID="MessageText()" Value="if(isnull(request(&quot;uid_person&quot;),'')='') then&#xD;&#xA;translate(&quot;#LDS#The new employee {0} was successfully added.&quot;, from person select current display())&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The employee data for {0} have been updated.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping5" />
+                <VirtualFunctionMapping ID="MessageText()" Value="if(isnull(request(&quot;uid_person&quot;),'')='') then&#xD;&#xA;translate('#LDS#The new identity &quot;{0}&quot; was successfully added.', from person select Current display())&#xD;&#xA;else&#xD;&#xA;translate('#LDS#The data for the identity &quot;{0}&quot; have been updated.', from person select Current display())" ScriptItemUID="VirtualFunctionMapping5" />
                 <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping6" />
               </CallAction>
             </ActionComponent>

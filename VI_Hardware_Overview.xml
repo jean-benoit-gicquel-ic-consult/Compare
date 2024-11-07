@@ -5,7 +5,7 @@
       <ContextParameters ScriptItemUID="ContextParameters1" />
       <ConfigSectionDefinition Name="Hardware" Description="datacaption(&quot;Hardware&quot;)" ScriptItemUID="ConfigSectionDefinition1">
         <ConfigParam Key="VI_Hardware_Person_Filter" Type="SQL" Description="translate('#LDS#Devices which can be edited by the current user')" DatabaseTable="Hardware" LongDescription="" />
-        <ConfigParam Key="VI_Hardware_Person_ManagerCondition" Type="SQL" Description="translate('#LDS#Employees authorized to add and edit devices')" DatabaseTable="Hardware" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
+        <ConfigParam Key="VI_Hardware_Person_ManagerCondition" Type="SQL" Description="translate('#LDS#Identities authorized to add and edit devices')" DatabaseTable="Hardware" EmptySQLWhereClauseEquivalent="false" LongDescription="" />
         <ConfigParam Key="VI_Hardware_Person_ResultAttributes" Type="ColumnList" Description="translate('#LDS#Fields displayed in the result list')" DatabaseTable="Hardware" LongDescription="" />
         <ConfigParam Key="VI_Allowed_Ident_HardwareBasicType" Type="Text" Description="translate('#LDS#Comma separated list of device types')" />
         <ConfigParam Key="Vi_Allow_Hardware_Registration" Description="translate('#LDS#Allow creation of new devices')" LongDescription="translate('#LDS#Allows users to create new devices.')" />

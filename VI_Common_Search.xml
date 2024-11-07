@@ -159,9 +159,7 @@ foreach (var tableName in whereClauses.Keys)
 	await DataContext.Results.LoadAsync(new DbObjectLoadInfo(tableName, whereClauses[tableName]), opts, ct).ConfigureAwait(false);
 }
 
-var countRows = DataContext.Results.Count();
-var isLimitReached = DataContext._helper.Take &lt;= sResult.scoreDict.Count;
-DataContext.Search.GetColumn("IsLimitReached").SetValue(DataContext.Search.SingleRow, isLimitReached);
+DataContext.Search.GetColumn("IsLimitReached").SetValue(DataContext.Search.SingleRow, sResult.IsLimitReached);
 </CodeLiteral>
               <CodeLiteral ScriptItemUID="CodeLiteral3">// Set Results and matchscore
 var scoreColumn = TableStore.GetLocalColumn(this.DataContext.Results, "matchscore");

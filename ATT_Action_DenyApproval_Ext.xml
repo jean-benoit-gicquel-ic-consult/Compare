@@ -1,9 +1,11 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2013-01-23" ID="ATT_Action_DenyApproval_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_Action_DenyApproval_Ext">
     <Extensions>
       <AddObject ObjectID="Action8" ObjectType="ActionSequence" SortOrder="10">
         <ActionSequence ItemUID="AttestationCase" Condition="DBTable(Action) = 'AttestationCase'" ScriptItemUID="ATTAction1">
-          <LoadTable DataTable="AttestationCase" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from Action select current XObjectKey)" ScriptItemUID="ATTLoadTable1" />
+          <LoadTable DataTable="AttestationCase" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from Action select current XObjectKey)" ScriptItemUID="ATTLoadTable1">
+            <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType1" />
+          </LoadTable>
           <Method DataTable="AttestationCase" WhereClause="PrimaryKey() in (select current PrimaryKey() from Action)" Method="DenyDecision">
             <MethodParameter Name="'strUID_PersonDecision'" Value="getuser()" />
             <MethodParameter Name="'strReasonText'" Value="from Vars select Notice" />

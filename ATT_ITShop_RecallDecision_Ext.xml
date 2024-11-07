@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2013-01-23" ID="ATT_ITShop_RecallDecision_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ATT_ITShop_RecallDecision_Ext">
     <Extensions>
       <AddObject ObjectID="Tables1" ObjectType="Tables" SortOrder="20">
         <DataTableDbObject Table="ATC" Class="AttestationCase" ScriptItemUID="ATTDataTableDbObject1">
@@ -8,7 +8,9 @@
       </AddObject>
       <AddObject ObjectID="Action2" ObjectType="ActionSequence" SortOrder="10">
         <ActionSequence Condition="DBTable(PersonWantsOrg) = 'AttestationCase'" ScriptItemUID="ATTAction2">
-          <LoadTable DataTable="ATC" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from PersonWantsOrg select current XObjectKey)" ScriptItemUID="ATTLoadTable1" />
+          <LoadTable DataTable="ATC" WhereClause="format(&quot;XObjectKey = '{0}'&quot;,from PersonWantsOrg select current XObjectKey)" ScriptItemUID="ATTLoadTable1">
+            <DbObjectLoadType ScriptItemUID="ATTDbObjectLoadType1" />
+          </LoadTable>
           <Method DataTable="ATC" Method="RecallDecision" WhereClause="&#xA;&#xA;">
             <MethodParameter Name="&quot;strUID_PersonHead&quot;" Value="getuser()" />
             <MethodParameter Name="&quot;strReasonText&quot;" Value="from container select isnull(reasontext,'')" />

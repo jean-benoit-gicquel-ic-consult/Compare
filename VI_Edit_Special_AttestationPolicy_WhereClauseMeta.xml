@@ -34,12 +34,12 @@
           <Insert DataTable="PARAMETER_ConcatenationType" ScriptItemUID="Insert1">
             <ActionSequence ScriptItemUID="Action7" />
             <InsertValue DataColumn="id" Value="&quot;AND&quot;" />
-            <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#AND&quot;)" />
+            <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#Condition_And&quot;)" />
           </Insert>
           <Insert DataTable="PARAMETER_ConcatenationType" ScriptItemUID="Insert2">
             <ActionSequence ScriptItemUID="Action8" />
             <InsertValue DataColumn="id" Value="&quot;OR&quot;" />
-            <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#OR&quot;)" />
+            <InsertValue DataColumn="Display" Value="translate(&quot;#LDS#Condition_Or&quot;)" />
           </Insert>
         </ActionSequence>
         <CallAction ActionID="WhereClauseMeta_Parse" ScriptItemUID="Call2" />

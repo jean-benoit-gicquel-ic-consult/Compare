@@ -1,14 +1,15 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Delete_AttestationPolicy" Comment="Komponente zum Löschen einer Attestierungsrichtlinie (mit Bestätigungsdialog)" MigrationNotes="DIALOGCONFIGPARM;" MultipartAction="true">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Delete_AttestationPolicy" Comment="Komponente zum Löschen einer Attestierungsrichtlinie (mit Bestätigungsdialog)" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action4" />
       <ActionComponent ScriptItemUID="Action1">
         <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call1">
-          <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to delete {0}&quot;, (from Items select top 1 display() where PrimaryKey() = UidOfItemToDelete()))" />
-          <VirtualFunctionMapping ID="ShowYesNo()" Value="true" />
-          <VirtualFunctionMapping ID="MessageBoxTitle()" Value="DataCaption(Items)" />
+          <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Are you sure that you wish to delete {0}&quot;, (from Items select top 1 display() where PrimaryKey() = UidOfItemToDelete()))" ScriptItemUID="VirtualFunctionMapping1" />
+          <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping2" />
+          <VirtualFunctionMapping ID="MessageBoxTitle()" Value="DataCaption(Items)" ScriptItemUID="VirtualFunctionMapping3" />
           <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">
             <ActionComponent ScriptItemUID="Action2">
               <WriteLog Text="&quot;UidOfItemToDelete = &quot; + UidOfItemToDelete()" />
@@ -18,13 +19,12 @@
           </VirtualControlMapping>
         </CallAction>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action4" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="Items" Comment="" Class="AttestationPolicy" ScriptItemUID="VirtualTable1" />
       <VirtualFunction Signature="UidOfItemToDelete()" Comment="Uid of Item To Delete" DataType="System.String" TriggerUpdates="Never" />
     </ComponentInterface>

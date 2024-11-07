@@ -19,6 +19,7 @@
                 </HtmlAttributes>
               </Label>
             </ControlList>
+            <OnPrepareRow ScriptItemUID="Action4" />
             <ServerActionCall ScriptItemUID="ServerActionCall2" />
           </TreeBand>
           <TreeBand DataTable="HierarchyTable" Layout="'VI_Styles_TreeBand_SelectionTreeBand'" ScriptItemUID="TreeBand1" DataSourceType="Database" DBWhereClause="sqland(DbWhereClause(), format(&quot;UID_AttestationType='{0}'&quot;, from attestationtype select current uid_attestationtype))">

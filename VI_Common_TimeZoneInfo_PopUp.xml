@@ -37,8 +37,10 @@ foreach(var tzi in li.GetValidTimeZones())
             <Container Layout="'VI_Styles_Container_ButtonPanel'" ScriptItemUID="Container4">
               <Button Text="translate(&quot;#LDS#Apply&quot;)" ItemUID="Default Button" ScriptItemUID="Button1">
                 <ServerActionCall ScriptItemUID="ServerActionCall2">
-                  <CodeLiteral ScriptItemUID="CodeLiteral1">	var newTimeZone = DataContext.TimeZones.ObjectList.First(tz =&gt; tz.Display.Equals(DataContext.timeZoneId.SingleRow.GetValue("id").String));
-	_UserSession.UserDataConnection.TimeZone = newTimeZone.TimeZone;
+                  <CodeLiteral ScriptItemUID="CodeLiteral1">	var newTimeZone = DataContext.TimeZones.ObjectList.FirstOrDefault(tz =&gt; tz.Display.Equals(DataContext.timeZoneId.SingleRow.GetValue("id").String));
+	if (newTimeZone != null) {
+	   _UserSession.UserDataConnection.TimeZone = newTimeZone.TimeZone;
+	}
 	
 	// close popups
 int y = _Form.PopupHost.OpenedPopups.Count();

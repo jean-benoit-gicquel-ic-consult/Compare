@@ -4,13 +4,6 @@
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
-      <ActionComponent ScriptItemUID="Action1">
-        <ReadOnlyTableModifier DataTable="AttestationCase" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="uid_attestationcase = ( select current uid_attestationcase from attestationcase)" Condition="from vars select isvalid">
-          <ColumnList ScriptItemUID="ColumnList3">
-            <SingleColumn ScriptItemUID="SingleColumn15" DataColumn="DoApprove" />
-          </ColumnList>
-        </ReadOnlyTableModifier>
-      </ActionComponent>
       <ActionSequence ScriptItemUID="Action2">
         <CodeLiteral ScriptItemUID="CodeLiteral1">	var dict = (System.Collections.Generic.Dictionary&lt;IDataRow, IDbObjectRow&gt;)
 	_AttestationCase_Current.Row.Table.ExtendedProperties
@@ -61,6 +54,13 @@
 
 	act();</CodeLiteral>
       </ActionSequence>
+      <ActionComponent ScriptItemUID="Action1">
+        <ReadOnlyTableModifier DataTable="AttestationCase" ScriptItemUID="ReadOnlyTableModifier1" WhereClause="uid_attestationcase = ( select current uid_attestationcase from attestationcase)" Condition="from vars select isvalid">
+          <ColumnList ScriptItemUID="ColumnList3">
+            <SingleColumn ScriptItemUID="SingleColumn15" DataColumn="DoApprove" />
+          </ColumnList>
+        </ReadOnlyTableModifier>
+      </ActionComponent>
       <Tables ScriptItemUID="Tables1">
         <DataTableSingleRow Table="Vars" ScriptItemUID="DataTableSingleRow1">
           <Column Name="IsValid" DataType="System.Boolean" ScriptItemUID="Column1" TriggerUpdates="Updates" />

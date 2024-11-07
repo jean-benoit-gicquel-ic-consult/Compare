@@ -1,21 +1,21 @@
 ﻿<WebDesigner xmlns:ns0="http://www.vi-net.de/aeds" ns0:tdnsHash="JdkMlAaCa9Dgk/b0/DmfGg==">
-  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Details_ShoppingCartItem_Default" MigrationNotes="DMLREPLACE;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Details_ShoppingCartItem_Default" MigrationNotes="DMLREPLACE;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <AccProductSwitchContainer ActionType="Details_AccProduct" ReferenceType="AccProduct" UIDAccProduct="from shoppingcartitem select current uid_accproduct" ScriptItemUID="AccProductSwitchContainer1">
-          <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" />
+          <VirtualTableMapping VirtualTable="AccProduct" DataTable="AccProduct" ScriptItemUID="VirtualTableMapping1" />
         </AccProductSwitchContainer>
       </Container>
-      <ActionSequence ScriptItemUID="Action1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_ShoppingCartItem">
+    <ComponentInterface InterfaceName="VI_Interfaces_ObjectSwitch_Details_ShoppingCartItem" ScriptItemUID="ComponentInterface1">
       <VirtualTableExtension Name="AccProduct" Class="AccProduct" ScriptItemUID="VirtualTableExtension1" />
       <VirtualTableExtension Name="ShoppingCartItem" Class="ShoppingCartItem" ScriptItemUID="VirtualTableExtension2" />
     </ComponentInterface>

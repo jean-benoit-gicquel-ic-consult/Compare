@@ -13,7 +13,7 @@
           <CheckBox DataTable="EditTable" DataColumn="EditColumn" Text="translate(&quot;#LDS#Temporarily disable until&quot;)" ScriptItemUID="CheckBox1" />
         </Container>
         <FormItemLabel DataTable="EditTable" DataColumn="DeactivationEnd" IsInvisible="true" ScriptItemUID="FormItemLabel1">
-          <Label Text="translate(&quot;#LDS#until&quot;)" ScriptItemUID="Label1" />
+          <Label Text="translate(&quot;#LDS#Until&quot;)" ScriptItemUID="Label1" />
         </FormItemLabel>
         <DateControl DataTable="EditTable" DataColumn="DeactivationEndProxy" ScriptItemUID="DateControl1" Type="DateTime" DefaultDate="AddDays(getdate(),1)" />
       </Container>

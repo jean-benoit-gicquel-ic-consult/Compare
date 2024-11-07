@@ -4,7 +4,7 @@
       <AddObject ObjectID="Action9" ObjectType="ActionSequence" SortOrder="15">
         <ActionSequence ItemUID="ESet" ScriptItemUID="Action11" Condition="ispreprop( 'ESET' )">
           <LoadTable DataTable="PersonHasObjectAndPWO" RemoveDeleted="false" Type="LimitedSQL" ScriptItemUID="LoadTable9" IdentLimitedSQL="&quot;Webportal.VI_Roles_Membership.PersonToESet&quot;">
-            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" />
+            <ParameterFree Name="&quot;uidperson&quot;" Value="select current pk from AllObjects" ScriptItemUID="RMSParameterFree1" />
           </LoadTable>
         </ActionSequence>
       </AddObject>

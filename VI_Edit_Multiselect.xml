@@ -55,7 +55,7 @@
                         </ControlList>
                         <ServerActionCall ScriptItemUID="wctl1">
                           <ActionSequence ItemUID="Item is selected" ScriptItemUID="Action4" Condition="not(&#xD;&#xA;-- mandatory field, and removing last element?&#xD;&#xA;1= select count() from selecteditemscollection&#xD;&#xA;and (0 &lt; from selecteditems select current getminlen(uidlist)))">
-                            <Delete DataTable="SelectedItemsCollection" WhereClause="primarykey() = select current primarykey() from selecteditemscollection" ScriptItemUID="Delete1" />
+                            <Delete DataTable="SelectedItemsCollection" WhereClause="targetvalue = select current targetvalue from selecteditemscollection" ScriptItemUID="Delete1" />
                             <CallAction ActionID="UpdateSelectedItemsString" ScriptItemUID="CallAction5" />
                             <CallAction ActionID="OnDeSelectItem" ScriptItemUID="CallAction6" />
                             <EndExecution AlsoAbortWaitingThreads="false" />

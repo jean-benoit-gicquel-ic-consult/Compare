@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="POL_Audit_PersonHyperView_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="POL_Audit_PersonHyperView_Ext">
     <Extensions>
       <AddObject ObjectID="Tab2" ObjectType="Tab" SortOrder="30">
         <TabPage ItemUID="POLICY VIOLATIONS" Condition="GetConfigParm(&quot;QER\Policy&quot;) = &quot;1&quot;" ScriptItemUID="POLTabPage1">
@@ -9,15 +9,15 @@
           <ControlsBody ScriptItemUID="POLContainer2">
             <Container ScriptItemUID="POLContainer3">
               <ControlReferenceContainer ID="VI_QERPolicy_ExceptionApproval_Filter" ScriptItemUID="POLControlRef1">
-                <VirtualFunctionMapping ID="setuseraudit()" Value="from Container select UID_Person" />
-                <VirtualFunctionMapping ID="popuptitle()" Value="translate(&quot;#LDS#Heading Policy Violations&quot;)" />
-                <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars">
+                <VirtualFunctionMapping ID="setuseraudit()" Value="from Container select UID_Person" ScriptItemUID="POLVirtualFunctionMapping1" />
+                <VirtualFunctionMapping ID="popuptitle()" Value="translate(&quot;#LDS#Heading Policy Violations&quot;)" ScriptItemUID="POLVirtualFunctionMapping2" />
+                <VirtualTableMapping VirtualTable="TargetTable" DataTable="Vars" ScriptItemUID="POLVirtualTableMapping1">
                   <VirtualColumnMapping VirtualColumn="QERPolicyWhereClause" DataColumn="QERPolicyWhereClause" />
                 </VirtualTableMapping>
               </ControlReferenceContainer>
               <ControlReferenceControlList ID="POL_Policy_MasterDetail" ScriptItemUID="POLControlRef3">
-                <VirtualFunctionMapping ID="QERPolicyWhereClause()" Value="from vars select qerpolicywhereclause" />
-                <VirtualFunctionMapping ID="IsReadOnly()" Value="true" />
+                <VirtualFunctionMapping ID="QERPolicyWhereClause()" Value="from vars select qerpolicywhereclause" ScriptItemUID="POLVirtualFunctionMapping3" />
+                <VirtualFunctionMapping ID="IsReadOnly()" Value="true" ScriptItemUID="POLVirtualFunctionMapping4" />
               </ControlReferenceControlList>
             </Container>
           </ControlsBody>

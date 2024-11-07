@@ -45,7 +45,7 @@
                   <VirtualControlMapping VirtualControl="PopupContent" ContainerType="Container">
                     <Container ScriptItemUID="Container13">
                       <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container14">
-                        <Label Text="translate(&quot;#LDS#Click the following button to view a detailed report of this employee.&quot;)" ScriptItemUID="Label5" />
+                        <Label Text="translate(&quot;#LDS#Click the following button to view a detailed report of this identity.&quot;)" ScriptItemUID="Label5" />
                       </Container>
                       <Container Layout="'VI_Styles_Container_Paragraph'" ScriptItemUID="Container15">
                         <CheckBox DataTable="Container" DataColumn="IncludeHistory" Text="translate(&quot;#LDS#Generate report including history&quot;)" ScriptItemUID="CheckBox1" />
@@ -136,7 +136,7 @@
               <Update DataTable="Container" DataColumn="IsNew" Value="IsNewEmployee()" ScriptItemUID="Update3" />
               <Save DataTable="Person" ScriptItemUID="Save1" />
               <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call4">
-                <VirtualFunctionMapping ID="MessageText()" Value="if(from Container select IsNew) then&#xD;&#xA;translate(&quot;#LDS#The new employee {0} was successfully added.&quot;, from person select current display())&#xD;&#xA;else&#xD;&#xA;translate(&quot;#LDS#The employee data for {0} have been updated.&quot;, from person select current display())" ScriptItemUID="VirtualFunctionMapping6" />
+                <VirtualFunctionMapping ID="MessageText()" Value="If(from Container select IsNew) Then&#xD;&#xA;translate('#LDS#The new identity &quot;{0}&quot; was successfully added.', from person select Current display())&#xD;&#xA;else&#xD;&#xA;translate('#LDS#The data for the identity &quot;{0}&quot; have been updated.', from person select Current display())" ScriptItemUID="VirtualFunctionMapping6" />
                 <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping15" />
               </CallAction>
             </ActionComponent>
@@ -166,7 +166,7 @@ for (int _columnIndex7 = 0; _enumerating7.MoveNext(); _columnIndex7 = (_columnIn
               </ForeachColumn>
               <Save DataTable="PersonExists" WhereClause="uid_person = from Container select UID_PersonSelected" HandleDeleteDeferred="false" ScriptItemUID="Save2" ReloadAfterSave="NoReload" />
               <CallAction ActionID="VI_Common_UserMessageAdd" ScriptItemUID="Call10">
-                <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#The employee data for {0} have been updated.&quot;, from PersonExists select display() where uid_person = from Container select UID_PersonSelected)" ScriptItemUID="VirtualFunctionMapping26" />
+                <VirtualFunctionMapping ID="MessageText()" Value="translate('#LDS#The data for the identity &quot;{0}&quot; have been updated.', from PersonExists select display() where uid_person = from Container select UID_PersonSelected)" ScriptItemUID="VirtualFunctionMapping26" />
                 <VirtualFunctionMapping ID="MessageType()" Value="'Information'" ScriptItemUID="VirtualFunctionMapping27" />
               </CallAction>
               <Redirect ScriptItemUID="Redirect8" Target="Context" AllowReturnToThisContext="false" ContextID="VI_Common_ObjectSheet" AbortExecution="false">
@@ -211,10 +211,10 @@ for (int _columnIndex7 = 0; _enumerating7.MoveNext(); _columnIndex7 = (_columnIn
         <Control ID="Form2">
           <LocalControlContext ContainerType="FormGroup">
             <FormGroup ScriptItemUID="FormGroup1">
-              <Form ID="F2" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#More employees with comparable properties&quot;)" ScriptItemUID="Form2">
+              <Form ID="F2" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Other identities with similar properties&quot;)" ScriptItemUID="Form2">
                 <ActionSequence ScriptItemUID="Action11" />
                 <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer3">
-                  <Label Text="translate(&quot;#LDS#More employees with comparable properties&quot;)" ScriptItemUID="Label3" />
+                  <Label Text="translate(&quot;#LDS#Other identities with similar properties&quot;)" ScriptItemUID="Label3" />
                 </PagePartContainer>
                 <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer4">
                   <Activator ScriptItemUID="Activator1">
@@ -271,7 +271,7 @@ for (int _columnIndex7 = 0; _enumerating7.MoveNext(); _columnIndex7 = (_columnIn
                           <Redirect Target="Context" ContextID="VI_Employee_Overview" AllowReturnToThisContext="false" NoLinkBackToThisForm="true" ScriptItemUID="Redirect3" />
                         </ServerActionCall>
                       </Button>
-                      <Button Text="translate('#LDS#Update employee data')" Layout="'VI_Styles_Button_Default'" EnabledCondition="Exists(&quot;Person&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;,from Container select UID_PersonSelected),&#xD;&#xA;      variable(getconfig(&quot;VI_Employee_Person_Filter&quot;))&#xD;&#xA;   )&#xD;&#xA;)" ScriptItemUID="Button6">
+                      <Button Text="translate('#LDS#Update identity data')" Layout="'VI_Styles_Button_Default'" EnabledCondition="Exists(&quot;Person&quot;,&#xD;&#xA;   SqlAnd(&#xD;&#xA;      SqlCompareUid(&quot;UID_Person&quot;,from Container select UID_PersonSelected),&#xD;&#xA;      variable(getconfig(&quot;VI_Employee_Person_Filter&quot;))&#xD;&#xA;   )&#xD;&#xA;)" ScriptItemUID="Button6">
                         <ServerActionCall ScriptItemUID="ServerActionCall6">
                           <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call6">
                             <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to save your changes?&quot;)" ScriptItemUID="VirtualFunctionMapping18" />
@@ -285,10 +285,10 @@ for (int _columnIndex7 = 0; _enumerating7.MoveNext(); _columnIndex7 = (_columnIn
                           </CallAction>
                         </ServerActionCall>
                       </Button>
-                      <Button Text="translate('#LDS#Add a new employee')" Layout="'VI_Styles_Button_Primary'" ScriptItemUID="Button7">
+                      <Button Text="translate('#LDS#Add a new identity')" Layout="'VI_Styles_Button_Primary'" ScriptItemUID="Button7">
                         <ServerActionCall ScriptItemUID="ServerActionCall7">
                           <CallAction ActionID="VI_MessageBox" ScriptItemUID="Call8">
-                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to add the new employee?&quot;)" ScriptItemUID="VirtualFunctionMapping21" />
+                            <VirtualFunctionMapping ID="MessageText()" Value="translate(&quot;#LDS#Would you like to add the new identity?&quot;)" ScriptItemUID="VirtualFunctionMapping21" />
                             <VirtualFunctionMapping ID="ShowYesNo()" Value="true" ScriptItemUID="VirtualFunctionMapping22" />
                             <VirtualFunctionMapping ID="MessageBoxTitle()" Value="from Person select current display()" ScriptItemUID="VirtualFunctionMapping23" />
                             <VirtualControlMapping VirtualControl="OnYes" ContainerType="ActionComponent">

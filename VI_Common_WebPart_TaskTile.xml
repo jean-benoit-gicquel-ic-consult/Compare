@@ -1,14 +1,15 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Common_WebPart_TaskTile">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Common_WebPart_TaskTile">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <LinkContainer ScriptItemUID="LinkContainer1" EnableCustomAttributes="true">
-          <ServerActionCall ScriptItemUID="ServerActionCall1">
-            <CallAction ActionID="Clicked" ScriptItemUID="Call1" />
-          </ServerActionCall>
+          <HtmlAttributes>
+            <HtmlAttribute Name="&quot;class&quot;" Value="&quot;sidebarItem withInfo&quot;" ScriptItemUID="HtmlAttribute3" />
+          </HtmlAttributes>
           <ControlList ScriptItemUID="ControlList2">
             <Label Text="HeadText()" ScriptItemUID="Label1" />
             <Label Text="SecondaryText()" ScriptItemUID="Label2" EnableCustomAttributes="true">
@@ -26,18 +27,17 @@
               </Code>
             </Container>
           </ControlList>
-          <HtmlAttributes>
-            <HtmlAttribute Name="&quot;class&quot;" Value="&quot;sidebarItem withInfo&quot;" ScriptItemUID="HtmlAttribute3" />
-          </HtmlAttributes>
+          <ServerActionCall ScriptItemUID="ServerActionCall1">
+            <CallAction ActionID="Clicked" ScriptItemUID="Call1" />
+          </ServerActionCall>
         </LinkContainer>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualControl ID="Clicked" ContainerType="ActionComponent" />
       <VirtualFunction Signature="TimeStamp()" DataType="System.DateTime" TriggerUpdates="Never" />
       <VirtualFunction Signature="HeadText()" DataType="System.String" TriggerUpdates="Never" />

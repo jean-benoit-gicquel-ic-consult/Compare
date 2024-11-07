@@ -1,21 +1,21 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Attestation_Edit_Global" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Attestation_Edit_Global" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ConfigSectionDefinition Name="Attestation" Description="translate('#LDS#Attestation')" ScriptItemUID="ConfigSectionDefinition1">
         <ConfigParam Key="VI_Attestation_Edit_AdditionalToApprover" Description="translate('#LDS#Add additional approver')" LongDescription="translate('#LDS#Add additional approvers to an attestation case')" Type="SQL" DatabaseTable="Person" />
-        <ConfigParam Key="VI_Attestation_Edit_InsteadOfApprover" Description="translate('#LDS#Assign approver instead of original approver')" LongDescription="translate('#LDS#Delegate attestation decisions to other employees')" Type="SQL" DatabaseTable="Person" />
+        <ConfigParam Key="VI_Attestation_Edit_InsteadOfApprover" Description="translate('#LDS#Assign approver instead of original approver')" LongDescription="translate('#LDS#Delegate attestation approval decisions to other identities')" Type="SQL" DatabaseTable="Person" />
         <ConfigParam Key="VI_Attestation_AttestationHistory_CanRecallDecision" Description="translate('#LDS#Attestation decisions can be recalled')" LongDescription="translate('#LDS#Attestation decisions can be recalled by the approver')" />
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="Container">
-      <Container ScriptItemUID="Container1" />
       <ActionSequence ScriptItemUID="Action5" />
+      <Container ScriptItemUID="Container1" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface />
+    <ComponentInterface ScriptItemUID="ComponentInterface1" />
   </GlobalControl>
 </WebDesigner>

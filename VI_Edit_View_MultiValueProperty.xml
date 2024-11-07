@@ -1,15 +1,15 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2013-01-23" ID="VI_Edit_View_MultiValueProperty">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_View_MultiValueProperty">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <ContainerTemplate ScriptItemUID="ContainerTemplate1" DataTable="Keys" Layout="'VI_Styles_Container_Inline'" OrderBy="'Index'">
           <Label Text="(from keys select current if (index &gt; 0) then &quot;, &quot; else &quot;&quot;) + from keys select current key" ScriptItemUID="Label2" />
         </ContainerTemplate>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1">
         <DataTableView Table="Keys" ScriptItemUID="DataTableView1" ViewExpression="from edittable select current split(editcolumn, char(7), true)" PrimaryKeyColumn="pk">
           <Column Name="Key" DataType="System.String" ScriptItemUID="Column1" />
@@ -21,8 +21,8 @@
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View">
-      <VirtualTableExtension Name="EditTable">
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_View" ScriptItemUID="ComponentInterface1">
+      <VirtualTableExtension Name="EditTable" ScriptItemUID="VirtualTableExtension1">
         <VirtualColumnExtension Name="EditColumn" DataType="System.String" />
       </VirtualTableExtension>
     </ComponentInterface>

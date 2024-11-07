@@ -1,5 +1,5 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2014-01-04" ID="ADS_Person_LyncPresence">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="ADS_Person_LyncPresence">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
       <ConfigSectionDefinition Name="Lync" Description="translate(&quot;#LDS#Lync settings&quot;)" ScriptItemUID="ConfigSectionDefinition1">
@@ -8,6 +8,7 @@
       </ConfigSectionDefinition>
     </ContextConfiguration>
     <Context ContainerType="ControlList">
+      <ActionSequence ScriptItemUID="Action2" />
       <ControlList ScriptItemUID="ControlList1">
         <Code ClassName="VI.WebRuntime.WebControls.Angular.LyncPresenceControl, VI.WebRuntime" ScriptItemUID="Control1">
           <ControlList ScriptItemUID="ControlList4" />
@@ -15,13 +16,12 @@
           <CodeParameter Name="DisplayName" Value="from person select current display()" ScriptItemUID="CodeParameter2" />
         </Code>
       </ControlList>
-      <ActionSequence ScriptItemUID="Action2" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="Person" Class="Person" RequiresCursor="true" ScriptItemUID="VirtualTable1" />
     </ComponentInterface>
   </GlobalControl>

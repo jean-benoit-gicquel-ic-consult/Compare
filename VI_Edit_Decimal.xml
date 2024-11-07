@@ -1,9 +1,12 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2015-01-01" ID="VI_Edit_Decimal" Comment="An editor component for a decimal value." MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_Decimal" Comment="An editor component for a decimal value." MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1">
+        <CallAction ActionID="InitLocalVars" ScriptItemUID="Call1" />
+      </ActionSequence>
       <Container ScriptItemUID="Container1">
         <ContainerTemplate DataTable="LocalVars" ScriptItemUID="ContainerTemplate1">
           <Container ScriptItemUID="Container2">
@@ -11,9 +14,6 @@
           </Container>
         </ContainerTemplate>
       </Container>
-      <ActionSequence ScriptItemUID="Action1">
-        <CallAction ActionID="InitLocalVars" ScriptItemUID="Call1" />
-      </ActionSequence>
       <Tables ScriptItemUID="Tables1">
         <DataTableCustom Table="LocalVars" ScriptItemUID="DataTableCustom1">
           <Column Name="RawValue" DataType="System.String" ScriptItemUID="Column2" />
@@ -65,7 +65,7 @@
         </DataEventHandler>
       </DataEventHandlers>
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualFunction Signature="MinValue()" Comment="Specifies the minimum allowed value. &#xD;&#xA;The value gets specified as string, but must be convertible to decimal." DataType="System.String" />
       <VirtualFunction Signature="MaxValue()" Comment="Specifies the maximum allowed value. &#xD;&#xA;The value gets specified as string, but must be convertible to decimal." DataType="System.String" />
       <VirtualTable Name="Result" RequiresCursor="true" ScriptItemUID="VirtualTable1">

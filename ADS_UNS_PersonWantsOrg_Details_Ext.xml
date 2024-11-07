@@ -1,14 +1,14 @@
 ﻿<WebDesigner>
-  <ConfigurationRoot MetamodelVersion="2014-01-04" ID="ADS_UNS_PersonWantsOrg_Details_Ext">
+  <ConfigurationRoot MetamodelVersion="2016-05-08" ID="ADS_UNS_PersonWantsOrg_Details_Ext">
     <Extensions>
       <AddObject ObjectID="Container1" ObjectType="Container" SortOrder="10">
-        <Container ScriptItemUID="ADSContainer1" IsSetFocus="false">
+        <Container ScriptItemUID="ADSContainer1">
           <ControlReferenceContainer ID="VI_UNS_CommonRequestDetails" ScriptItemUID="ADSControlRef1">
-            <VirtualFunctionMapping ID="UIDAccProduct()" Value="from personwantsorg select current uid_accproduct" />
-            <VirtualTableMapping VirtualTable="BASETABLE" DataTable="PersonWantsOrg">
+            <VirtualFunctionMapping ID="UIDAccProduct()" Value="from personwantsorg select current uid_accproduct" ScriptItemUID="ADSVirtualFunctionMapping1" />
+            <VirtualTableMapping VirtualTable="BASETABLE" DataTable="PersonWantsOrg" ScriptItemUID="ADSVirtualTableMapping1">
               <VirtualColumnMapping VirtualColumn="DoNotAllowApprove" DataColumn="DoNotAllowApprove" />
             </VirtualTableMapping>
-            <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" />
+            <VirtualFunctionMapping ID="IsReadOnly()" Value="IsReadOnly()" ScriptItemUID="ADSVirtualFunctionMapping2" />
           </ControlReferenceContainer>
         </Container>
       </AddObject>

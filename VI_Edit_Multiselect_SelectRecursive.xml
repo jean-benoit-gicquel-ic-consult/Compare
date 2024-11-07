@@ -1,9 +1,10 @@
 ﻿<WebDesigner>
-  <GlobalControl MetamodelVersion="2014-01-04" ID="VI_Edit_Multiselect_SelectRecursive" MigrationNotes="DIALOGCONFIGPARM;">
+  <GlobalControl MetamodelVersion="2016-05-08" ID="VI_Edit_Multiselect_SelectRecursive" MigrationNotes="DIALOGCONFIGPARM;">
     <ContextConfiguration>
       <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="ActionComponent">
+      <ActionSequence ScriptItemUID="Action6" />
       <ActionComponent ScriptItemUID="Action1">
         <ActionSequence Condition="IsDeSelect()" ItemUID="Deselect" ScriptItemUID="Action2">
           <Delete DataTable="SelectedItemsCollection" WhereClause="uid_selecteditem in&#xA;( select primarykey() from candidate where&#xA;isconnectable(primarykey(), parentkey,&#xA;-- start values: the current value&#xA;((primarykey() = (from candidate select current primarykey()))))&#xA;)" ScriptItemUID="Delete1" />
@@ -21,13 +22,12 @@
           </ForeachRow>
         </ActionSequence>
       </ActionComponent>
-      <ActionSequence ScriptItemUID="Action6" />
       <Tables ScriptItemUID="Tables1" />
       <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
       <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface>
+    <ComponentInterface ScriptItemUID="ComponentInterface1">
       <VirtualTable Name="Candidate" Comment="Collection of objects that are available for de/selection." RequiresCursor="true" ScriptItemUID="VirtualTable1">
         <Column Name="Display" DataType="System.String" Expression="displaylong()" DataSource="Expression" ScriptItemUID="Column1" />
         <Column Name="ParentKey" DataType="System.String" Expression="getparentkey()" DataSource="Expression" ScriptItemUID="Column2" />

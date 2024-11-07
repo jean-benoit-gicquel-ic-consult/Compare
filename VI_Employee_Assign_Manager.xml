@@ -113,10 +113,10 @@ foreach (var pho in PersonHasObject)
 PWOReassignment.First().SetValue("AdditionalData", group.GetXmlAsync(_Database).Result);</CodeLiteral>
       </ActionSequence>
       <FormGroup ScriptItemUID="FormGroup1">
-        <Form ID="AssignToNew" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Heading Assign To New Manager&quot;)" ScriptItemUID="Form1">
+        <Form ID="AssignToNew" PageFileName="VI_FormTemplate_Standard" NavigationTitle="translate(&quot;#LDS#Heading Assign to New Manager&quot;)" ScriptItemUID="Form1">
           <ActionSequence ScriptItemUID="Action1" />
           <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
-            <Label Text="translate(&quot;#LDS#Heading Assign To New Manager&quot;)" ScriptItemUID="Label1" />
+            <Label Text="translate(&quot;#LDS#Heading Assign to New Manager&quot;)" ScriptItemUID="Label1" />
           </PagePartContainer>
           <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
             <Container ScriptItemUID="Container2" EnableCustomAttributes="true">

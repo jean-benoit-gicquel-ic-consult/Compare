@@ -31,7 +31,7 @@
             </Container>
           </Container>
           <Container Condition="select current (uid_aerole in (GetLogicallyEmptyRoles())) from aerole" ItemUID="NOBODY ROLE" ScriptItemUID="Container7">
-            <Label Text="translate(&quot;#LDS#In order to assign employees as owners, please select an owner role first.&quot;)" ScriptItemUID="Label2" />
+            <Label Text="translate(&quot;#LDS#In order to assign identities as owners, select an owner role first.&quot;)" ScriptItemUID="Label2" />
           </Container>
         </ContainerTemplate>
         <Container Condition="IsNoPermission()" ScriptItemUID="Container8">

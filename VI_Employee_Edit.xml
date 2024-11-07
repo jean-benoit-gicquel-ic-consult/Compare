@@ -28,12 +28,12 @@
       </ActionSequence>
     </ActionSequence>
     <Forms ScriptItemUID="Forms1">
-      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="if ( isnull(request(&quot;uid_person&quot;),'')='')&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Heading Add a New Employee')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Employee Data For {0}', from person select top 1 display())" ScriptItemUID="Form1">
+      <Form ID="Form" PageFileName="VI_FormTemplate_Standard" NavigationTitle="if ( isnull(request(&quot;uid_person&quot;),'')='')&#xD;&#xA;then&#xD;&#xA;translate('#LDS#Heading Add a New Identity')&#xD;&#xA;else&#xD;&#xA;translate('#LDS#Identity Data For {0}', from person select top 1 display())" ScriptItemUID="Form1">
         <ActionSequence ScriptItemUID="Action4">
           <CallAction ActionID="VI_Employee_PreEdit" ScriptItemUID="Call1" />
         </ActionSequence>
         <PagePartContainer ID="Title" ScriptItemUID="PagePartContainer1">
-          <Label Text="translate('#LDS#Heading Add a New Employee')" ScriptItemUID="Label1" />
+          <Label Text="translate('#LDS#Heading Add a New Identity')" ScriptItemUID="Label1" />
         </PagePartContainer>
         <PagePartContainer ID="Main" ScriptItemUID="PagePartContainer2">
           <ContainerTemplate DataTable="Person" ScriptItemUID="ContainerTemplate1" WithoutParentContainer="true">

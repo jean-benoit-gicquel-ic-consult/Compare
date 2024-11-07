@@ -33,7 +33,7 @@
               <Tab ScriptItemUID="Tab1">
                 <TabPage ScriptItemUID="TabPage1" ItemUID="Delegated to other employees">
                   <ControlsHeader ScriptItemUID="Container4">
-                    <Label Text="translate('#LDS#Delegated to other employees')" ScriptItemUID="Label2" />
+                    <Label Text="translate('#LDS#Delegated to other identities')" ScriptItemUID="Label2" />
                   </ControlsHeader>
                   <ControlsBody ScriptItemUID="Container5">
                     <ControlReferenceControlList ID="QER_DelegationHistory_MasterDetail" ScriptItemUID="ControlRef6">

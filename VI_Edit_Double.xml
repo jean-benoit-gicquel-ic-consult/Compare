@@ -1,19 +1,18 @@
 ﻿<WebDesigner>
-  <GlobalControl ID="VI_Edit_Double" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2013-01-09">
+  <GlobalControl ID="VI_Edit_Double" MigrationNotes="DIALOGCONFIGPARM;" MetamodelVersion="2016-05-08">
     <ContextConfiguration>
-      <CompilationSettings ScriptItemUID="wctl1" />
-      <ContextParameters />
+      <CompilationSettings ScriptItemUID="CompilationSettings1" />
     </ContextConfiguration>
     <Context ContainerType="Container">
+      <ActionSequence ScriptItemUID="Action1" />
       <Container ScriptItemUID="Container1">
         <NumberTextBox DataTable="EditTable" DataColumn="EditColumn" MinValue="" MaxValue="" ScriptItemUID="NumberTextBox2" DecimalPlaces="15" />
       </Container>
-      <ActionSequence ScriptItemUID="wctl2" />
       <Tables ScriptItemUID="Tables1" />
-      <Controls />
+      <Controls ScriptItemUID="Controls1" />
       <Functions ScriptItemUID="Functions1" />
-      <DataEventHandlers ScriptItemUID="wctl3" />
+      <DataEventHandlers ScriptItemUID="DataEventHandlers1" />
     </Context>
-    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" />
+    <ComponentInterface InterfaceName="VI_Interfaces_ColumnEditor_Edit" ScriptItemUID="ComponentInterface1" />
   </GlobalControl>
 </WebDesigner>
